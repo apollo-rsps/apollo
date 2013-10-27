@@ -1,0 +1,5 @@
+<services>
+  <service>org.apollo.game.GameService</service>
+  <service>org.apollo.login.LoginService</service>
+  <service>org.apollo.update.UpdateService</service>
+</services>

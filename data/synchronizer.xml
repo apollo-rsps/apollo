@@ -1,0 +1,3 @@
+<synchronizer>
+  <active>org.apollo.game.sync.ParallelClientSynchronizer</active>
+</synchronizer>

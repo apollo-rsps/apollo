@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<project name="apollo" default="build" xmlns:ivy="antlib:org.apache.ivy.ant">
+  <property name="root" location="." />
+  <property name="src" location="src" />
+  <property name="test" location="test" />
+  <property name="bin" location="bin" />
+  <property name="lib" location="lib" />
+  <property name="doc" location="doc" />
+  <property name="version" value="377" />
+
+  <path id="binaries">
+    <pathelement path="${bin}" />
+  </path>
+
+  <path id="libraries">
+    <fileset dir="${lib}">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+
+  <path id="master">
+    <path refid="binaries" />
+    <path refid="libraries" />
+  </path>
+
+  <fileset id="sources" dir="${src}">
+    <include name="**/*.java" />
+  </fileset>
+
+  <fileset id="tests" dir="${bin}">
+    <include name="**/*Test*.class" />
+    <exclude name="**/*$*.class" />
+  </fileset>
+
+  <target name="init">
+    <mkdir dir="${bin}" />
+    <mkdir dir="${lib}" />
+    <mkdir dir="${doc}" />
+  </target>
+
+  <target name="resolve" depends="init">
+    <ivy:retrieve pattern="${lib}/[artifact]-[revision].[ext]" sync="true" />
+  </target>
+
+  <target name="build" depends="init">
+    <javac srcdir="${src}:${test}" destdir="${bin}" includeantruntime="false">
+      <classpath refid="libraries" />
+    </javac>
+  </target>
+
+  <target name="clean">
+    <delete dir="${bin}" />
+    <delete dir="${doc}" />
+  </target>
+
+  <target name="rebuild" depends="clean, build" />
+
+  <target name="test" depends="build">
+    <junit fork="true" haltonfailure="true">
+      <classpath refid="master" />
+      <formatter type="plain" usefile="false" />
+      <batchtest>
+        <fileset refid="tests" />
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="doc" depends="build">
+    <javadoc sourcepath="${src}" classpathref="libraries" access="private" destdir="${doc}" windowtitle="Apollo">
+      <doclet name="org.jboss.apiviz.APIviz" pathref="libraries">
+        <param name="-sourceclasspath" value="${bin}" />
+        <param name="-author" />
+        <param name="-version" />
+        <param name="-use" />
+        <param name="-nopackagediagram" />
+      </doclet>
+      <doctitle><![CDATA[<h1>Apollo</h1>]]></doctitle>
+      <link href="http://download.oracle.com/javase/6/docs/api/" />
+      <link href="http://docs.jboss.org/netty/3.2/api/" />
+      <link href="http://guava-libraries.googlecode.com/svn/trunk/javadoc/" />
+      <link href="http://www.junit.org/apidocs/" />
+      <link href="http://commons.apache.org/compress/apidocs/" />
+      <link href="http://jruby.org/apidocs/" />
+    </javadoc>
+  </target>
+
+  <target name="run" depends="build">
+    <java classpathref="master" fork="true" classname="org.apollo.Server">
+      <arg value="org.apollo.net.release.r${version}.Release${version}" />
+      <jvmarg value="-Xbootclasspath/a:${lib}/jsr166-1.0.0.jar" />
+    </java>
+  </target>
+</project>
