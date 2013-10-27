@@ -10,6 +10,7 @@ import org.apollo.util.ByteBufferUtil;
 
 /**
  * A class which parses item definitions.
+ * 
  * @author Graham
  */
 public final class ItemDefinitionParser {
@@ -21,7 +22,9 @@ public final class ItemDefinitionParser {
 
 	/**
 	 * Creates the item definition parser.
-	 * @param fs The indexed file system.
+	 * 
+	 * @param fs
+	 *            The indexed file system.
 	 */
 	public ItemDefinitionParser(IndexedFileSystem fs) {
 		this.fs = fs;
@@ -29,8 +32,10 @@ public final class ItemDefinitionParser {
 
 	/**
 	 * Parses the item definitions.
+	 * 
 	 * @return The item definitions.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException
+	 *             if an I/O error occurs.
 	 */
 	public ItemDefinition[] parse() throws IOException {
 		Archive config = Archive.decode(fs.getFile(0, 2));
@@ -56,65 +61,54 @@ public final class ItemDefinitionParser {
 
 	/**
 	 * Parses a single definition.
-	 * @param id The item's id.
-	 * @param buffer The buffer.
+	 * 
+	 * @param id
+	 *            The item's id.
+	 * @param buffer
+	 *            The buffer.
 	 * @return The definition.
 	 */
 	private ItemDefinition parseDefinition(int id, ByteBuffer buffer) {
 		ItemDefinition def = new ItemDefinition(id);
-
 		while (true) {
 			int code = buffer.get() & 0xFF;
 
 			if (code == 0) {
 				return def;
 			} else if (code == 1) {
-				@SuppressWarnings("unused")
-				int modelId = buffer.getShort() & 0xFFFF;
+				buffer.getShort();// & 0xFFFF; // model Id
 			} else if (code == 2) {
 				def.setName(ByteBufferUtil.readString(buffer));
 			} else if (code == 3) {
 				def.setDescription(ByteBufferUtil.readString(buffer));
 			} else if (code == 4) {
-				@SuppressWarnings("unused")
-				int modelScale = buffer.getShort() & 0xFFFF;
+				buffer.getShort();// & 0xFFFF; // sprite scale
 			} else if (code == 5) {
-				@SuppressWarnings("unused")
-				int modelRotationX = buffer.getShort() & 0xFFFF;
+				buffer.getShort();// & 0xFFFF; // sprite pitch
 			} else if (code == 6) {
-				@SuppressWarnings("unused")
-				int modelRotationY = buffer.getShort() & 0xFFFF;
+				buffer.getShort();// & 0xFFFF; //sprite camera roll
 			} else if (code == 7) {
-				@SuppressWarnings("unused")
-				int modelTransformationX = buffer.getShort();
+				buffer.getShort(); // sprite dX
 			} else if (code == 8) {
-				@SuppressWarnings("unused")
-				int modelTransformationY = buffer.getShort();
+				buffer.getShort(); // sprite dY
 			} else if (code == 10) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort();// & 0xFFFF;
 			} else if (code == 11) {
 				def.setStackable(true);
 			} else if (code == 12) {
-				def.setValue(buffer.getInt());
+				buffer.getInt(); // model height
 			} else if (code == 16) {
 				def.setMembersOnly(true);
 			} else if (code == 23) {
-				@SuppressWarnings("unused")
-				int unknownShort = buffer.getShort() & 0xFFFF;
-				@SuppressWarnings("unused")
-				int unknownByte = buffer.get();
+				buffer.getShort(); // & 0xFFFF; //primaryMaleEquipModelId
+				buffer.get(); // maleEquipYTranslation
 			} else if (code == 24) {
-				@SuppressWarnings("unused")
-				int unknownShort = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // secondaryMaleEquipModelId
 			} else if (code == 25) {
-				@SuppressWarnings("unused")
-				int unknownShort = buffer.getShort() & 0xFFFF;
-				@SuppressWarnings("unused")
-				int unknownByte = buffer.get();
+				buffer.getShort(); // & 0xFFFF; // primaryFemaleEquipModelId
+				buffer.get(); // femaleEquipYTranslation
 			} else if (code == 26) {
-				@SuppressWarnings("unused")
-				int unknownShort = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // secondaryFemaleEquipModelId
 			} else if (code >= 30 && code < 35) {
 				String str = ByteBufferUtil.readString(buffer);
 				if (str.equalsIgnoreCase("hidden")) {
@@ -125,34 +119,25 @@ public final class ItemDefinitionParser {
 				String str = ByteBufferUtil.readString(buffer);
 				def.setInventoryAction(code - 35, str);
 			} else if (code == 40) {
-				int colorCount = buffer.get() & 0xFF;
-				for (int i = 0; i < colorCount; i++) {
-					@SuppressWarnings("unused")
-					int oldColor = buffer.getShort() & 0xFFFF;
-					@SuppressWarnings("unused")
-					int newColor = buffer.getShort() & 0xFFFF;
+				int colourCount = buffer.get() & 0xFF;
+				for (int i = 0; i < colourCount; i++) {
+					buffer.getShort(); // & 0xFFFF; // original colour
+					buffer.getShort(); // & 0xFFFF; // replacement colour
 				}
 			} else if (code == 78) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // tertiaryMaleEquipModelId
 			} else if (code == 79) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // tertiaryFemaleEquipModelId
 			} else if (code == 90) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // primaryMaleHeadPiece
 			} else if (code == 91) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // primaryFemaleHeadPiece
 			} else if (code == 92) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // secondaryMaleHeadPiece
 			} else if (code == 93) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // secondaryFemaleHeadPiece
 			} else if (code == 95) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // spriteCameraYaw
 			} else if (code == 97) {
 				int noteInfoId = buffer.getShort() & 0xFFFF;
 				def.setNoteInfoId(noteInfoId);
@@ -160,25 +145,20 @@ public final class ItemDefinitionParser {
 				int noteGraphicId = buffer.getShort() & 0xFFFF;
 				def.setNoteGraphicId(noteGraphicId);
 			} else if (code >= 100 && code < 110) {
-				@SuppressWarnings("unused")
-				int stackId = buffer.getShort() & 0xFFFF;
-				@SuppressWarnings("unused")
-				int stackAmount = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // stack id
+				buffer.getShort(); // & 0xFFFF; // stack size
 			} else if (code == 110) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // groundScaleX
 			} else if (code == 111) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // groundScaleY
 			} else if (code == 112) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() & 0xFFFF;
+				buffer.getShort(); // & 0xFFFF; // groundScaleZ
+			} else if (code == 113) {
+				buffer.get(); // light ambiance
 			} else if (code == 114) {
-				@SuppressWarnings("unused")
-				int unknown = buffer.getShort() * 5;
+				buffer.getShort(); // * 5; // light diffusion
 			} else if (code == 115) {
-				@SuppressWarnings("unused")
-				int team = buffer.get() & 0xFF;
+				buffer.get(); // & 0xFF; // team
 			}
 		}
 	}

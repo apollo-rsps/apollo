@@ -10,15 +10,28 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
  * An event handler which removes equipped items.
+ * 
  * @author Graham
  */
 public final class RemoveEventHandler extends EventHandler<ItemActionEvent> {
 
 	@Override
-	public void handle(EventHandlerContext ctx, Player player, ItemActionEvent event) {
-		if (event.getOption() == 1 && event.getInterfaceId() == SynchronizationInventoryListener.EQUIPMENT_ID) {
+	public void handle(EventHandlerContext ctx, Player player,
+			ItemActionEvent event) {
+
+		if (event.getOption() == 1
+				&& event.getInterfaceId() == SynchronizationInventoryListener.EQUIPMENT_ID) {
 			Inventory inventory = player.getInventory();
 			Inventory equipment = player.getEquipment();
+
+			if (inventory.freeSlots() < 1) { // TODO what if the item is
+												// stackable and the player has
+												// the item in his inventory
+												// already.
+				inventory.forceCapacityExceeded();
+				ctx.breakHandlerChain();
+				return;
+			}
 
 			int slot = event.getSlot();
 			if (slot < 0 || slot >= equipment.capacity()) {
@@ -39,10 +52,11 @@ public final class RemoveEventHandler extends EventHandler<ItemActionEvent> {
 
 			try {
 				equipment.set(slot, null);
-				Item tmp = inventory.add(item);
-				if (tmp != null) {
+				Item copy = item;
+				inventory.add(item.getId(), item.getAmount());
+				if (copy != null) {
 					removed = false;
-					equipment.set(slot, tmp);
+					equipment.set(slot, copy);
 				}
 			} finally {
 				inventory.startFiringEvents();
@@ -50,8 +64,9 @@ public final class RemoveEventHandler extends EventHandler<ItemActionEvent> {
 			}
 
 			if (removed) {
-				inventory.forceRefresh(); // TODO find out the specific slot that got used?
-				equipment.forceRefresh(slot);
+				inventory.forceRefresh(); // TODO find out the specific slot
+											// that got used?
+				equipment.forceRefresh();
 			} else {
 				inventory.forceCapacityExceeded();
 			}

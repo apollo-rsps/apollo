@@ -45,7 +45,7 @@ class MiningAction < DistancedAction
 
   def executeAction
     skills = character.skill_set
-    level = skills.get_skill(Skill::MINING).maximum_level # TODO: is using max level correct?
+    level = skills.get_skill(Skill::MINING).current_level
     pickaxe = find_pickaxe
 
     # verify the player can mine with their pickaxe

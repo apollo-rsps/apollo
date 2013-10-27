@@ -1,0 +1,19 @@
+This version of Apollo contains code from the following people:
+	Graham and the rest of the Apollo team
+	Chris Fletcher (http://www.rune-server.org/members/chris%20fletcher)
+	Major (http://www.rune-server.org/members/major)
+	The Wanderer (http://www.rune-server.org/members/the%20wanderer)
+
+Current fixes include:
+	317 ChatEventDecoder fix (data read incorrectly) - http://www.rune-server.org/runescape-development/rs2-server/snippets/420815-apollo-317-chat-event-decoder-bug-fix.html.
+	Player region changing fix (appeared to teleport) - http://www.rune-server.org/runescape-development/rs2-server/snippets/420865-apollo-players-changing-regions-appear-teleport-bug.html
+	Walking height level fix (always set to 0)
+	ThirdObjectActionEvent fix (data read incorrectly)
+	Combat level formula fix (calculated incorrectly)
+	Item equipping fix (wasn't removing them correctly)
+	2-handed weapon equip fix
+	SwitchItemEventDecoder fix (data read incorrectly)
+	SetInterfaceTextEventencoder fix (entire class was missing from 317)
+	317 and 377 packet length fixes.
+	Archive decoding fix (data wasn't being extracted properly)
+	Mining plugin: JRuby name clash with 'Gem'

@@ -1,6 +1,6 @@
-GEMS = {}
+GEMSTONES = {}
 
-class Gem
+class Gemstone
   attr_reader :id, :chance
 
   def initialize(id, chance)
@@ -10,10 +10,10 @@ class Gem
 end
 
 def append_gem(gem)
-  GEMS[gem.id] = gem
+  GEMSTONES[gem.id] = gem
 end
 
-append_gem(Gem.new(1623, 0)) # uncut sapphire
-append_gem(Gem.new(1605, 0)) # uncut emerald
-append_gem(Gem.new(1619, 0)) # uncut ruby
-append_gem(Gem.new(1617, 0)) # uncut diamond
+append_gem(Gemstone.new(1623, 0)) # uncut sapphire
+append_gem(Gemstone.new(1605, 0)) # uncut emerald
+append_gem(Gemstone.new(1619, 0)) # uncut ruby
+append_gem(Gemstone.new(1617, 0)) # uncut diamond

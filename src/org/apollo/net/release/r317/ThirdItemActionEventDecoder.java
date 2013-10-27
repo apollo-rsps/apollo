@@ -10,16 +10,21 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link ThirdItemActionEvent}.
+ * 
  * @author Graham
  */
-public final class ThirdItemActionEventDecoder extends EventDecoder<ThirdItemActionEvent> {
+public final class ThirdItemActionEventDecoder extends
+		EventDecoder<ThirdItemActionEvent> {
 
 	@Override
 	public ThirdItemActionEvent decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		int interfaceId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-		int id = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
-		int slot = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
+		int interfaceId = (int) reader.getUnsigned(DataType.SHORT,
+				DataOrder.LITTLE);
+		int id = (int) reader.getUnsigned(DataType.SHORT,
+				DataTransformation.ADD);
+		int slot = (int) reader.getUnsigned(DataType.SHORT,
+				DataTransformation.ADD);
 		return new ThirdItemActionEvent(interfaceId, id, slot);
 	}
 

@@ -10,6 +10,7 @@ import org.apollo.util.TextUtil;
 
 /**
  * An {@link EventDecoder} for the {@link ChatEvent}.
+ * 
  * @author Graham
  */
 public final class ChatEventDecoder extends EventDecoder<ChatEvent> {
@@ -18,8 +19,10 @@ public final class ChatEventDecoder extends EventDecoder<ChatEvent> {
 	public ChatEvent decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
-		int effects = (int) reader.getUnsigned(DataType.BYTE, DataTransformation.ADD);
-		int color = (int) reader.getUnsigned(DataType.BYTE, DataTransformation.ADD);
+		int effects = (int) reader.getUnsigned(DataType.BYTE,
+				DataTransformation.SUBTRACT);
+		int color = (int) reader.getUnsigned(DataType.BYTE,
+				DataTransformation.SUBTRACT);
 		int length = packet.getLength() - 2;
 
 		byte[] originalCompressed = new byte[length];
@@ -30,7 +33,8 @@ public final class ChatEventDecoder extends EventDecoder<ChatEvent> {
 		uncompressed = TextUtil.capitalize(uncompressed);
 
 		byte[] recompressed = new byte[length];
-		TextUtil.compress(uncompressed, recompressed); // in case invalid data gets sent, this effectively verifies it
+		TextUtil.compress(uncompressed, recompressed);
+		// in case invalid data gets sent, this effectively verifies it
 
 		return new ChatEvent(uncompressed, recompressed, color, effects);
 	}
