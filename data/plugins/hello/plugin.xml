@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<plugin>
+  <id>hello</id>
+  <version>1</version>
+  <name>Hello World Command</name>
+  <description>Adds a ::hello command which simply prints 'Hello, World!'.</description>
+  <authors>
+    <author>Graham</author>
+  </authors>
+  <scripts>
+    <script>hello.rb</script>
+  </scripts>
+  <dependencies />
+</plugin>

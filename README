@@ -1,0 +1,55 @@
+Apollo is a RuneScape emulator which aims to encourage a fundamentally-different alternative to the way in which private server development is done today. It consists of a high-performance, modular server written in Java as well as a collection of utilities for managing the data files and plugins.
+
+Currently people download a server, read through tutorials and apply their modifications or write their own code on top of it. They'll then host it or release it. The result is we currently have a complete mess of servers (this includes every current base - Hyperion, rs2hd, winterlove) all created from cobbled-together code.
+
+Apollo is going to change that through its plugin system. Instead of throwing everything into one big application, Apollo consists of:
+
+    A small 'core' application which provides features necessary for the server to operate.
+    A set of plugins, and the tools to manage them (install, uninstall, publish, download, etc).
+    Some additional tools and utilities for managing the data files.
+
+
+This will make it much easier for everyone to develop a private server, no longer restricting it to people who can (or can't as the case is here) program. Instead of messing around copying and pasting lines of code from a woodcutting tutorial, people will simply have to download and install a woodcutting plugin.
+
+There is also a plan to have a plugin repository (or maybe multiple repositories) and a set of tools to make the experience very much like a package manager on Linux.
+
+It also means updates can be provided for the core server (e.g. security, stability, optimizations) very easily. Users will just have to download the new jar, overwrite the current one with the new one, and reboot their server.
+
+And best of all, inexperienced users are protected from making fatal mistakes in the core and are kept away from stuff that they shouldn't be editing at their experience level.
+
+Plugins are currently written in Ruby, however, in the future other languages could be added.
+
+Core Features
+
+Some of the significant (technically) current core features include:
+
+    Packet encoding/decoding has been split from the representations of the packets themselves. This allows the potential for encoding/decoding to go on in parallel and also allows multiple revisions to be supported. Currently 317 and 377 are both completely supported.
+    Update server support (JAGGRAB, ondemand and HTTP).
+    Packet handler chaining: this allows multiple plugins to be able to intercept a single packet and deal with it appropriately. For example, a quest plugin could intercept searching a bookshelf for instance, if the behaviour needed to change in certain cases.
+    Parallel execution of player updating for multi-core machines - this has a significant benefit on my dual core machine used to test the server.
+
+
+As well as that, it has the bog standard stuff:
+
+    Login
+    Appearance updating
+    Multiplayer
+    Walking/running
+    Rights management
+    Travel back algorithm for movement
+    Character design
+    Chatting
+    Commands
+    Inventory support
+    Equipment support
+    Animations
+    Graphics
+    Facing/turn to
+    Action system
+    Working distanced actions
+    All data types implemented
+    Task scheduler based on game ticks
+    Saving/loading with a custom binary format
+    Skill levels/experiences
+    Plugin management
+    Reads item information from the cache
