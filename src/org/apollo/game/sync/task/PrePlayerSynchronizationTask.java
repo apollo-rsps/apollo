@@ -38,7 +38,6 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		}
 
 		if (!player.hasLastKnownRegion() || isRegionUpdateRequired()) {
-			player.setTeleporting(true);
 			player.setRegionChanged(true);
 
 			Position position = player.getPosition();

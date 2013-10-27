@@ -32,13 +32,16 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link PlayerSynchronizationEvent}.
+ * 
  * @author Graham
  */
-public final class PlayerSynchronizationEventEncoder extends EventEncoder<PlayerSynchronizationEvent> {
+public final class PlayerSynchronizationEventEncoder extends
+		EventEncoder<PlayerSynchronizationEvent> {
 
 	@Override
 	public GamePacket encode(PlayerSynchronizationEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(81, PacketType.VARIABLE_SHORT);
+		GamePacketBuilder builder = new GamePacketBuilder(81,
+				PacketType.VARIABLE_SHORT);
 		builder.switchToBitAccess();
 
 		GamePacketBuilder blockBuilder = new GamePacketBuilder();
@@ -53,7 +56,8 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			if (type == SegmentType.REMOVE_CHARACTER) {
 				putRemoveCharacterUpdate(builder);
 			} else if (type == SegmentType.ADD_CHARACTER) {
-				putAddCharacterUpdate((AddCharacterSegment) segment, event, builder);
+				putAddCharacterUpdate((AddCharacterSegment) segment, event,
+						builder);
 				putBlocks(segment, blockBuilder);
 			} else {
 				putMovementUpdate(segment, event, builder);
@@ -74,7 +78,9 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts a remove character update.
-	 * @param builder The builder.
+	 * 
+	 * @param builder
+	 *            The builder.
 	 */
 	private void putRemoveCharacterUpdate(GamePacketBuilder builder) {
 		builder.putBits(1, 1);
@@ -83,11 +89,16 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts an add character update.
-	 * @param seg The segment.
-	 * @param event The event.
-	 * @param builder The builder.
+	 * 
+	 * @param seg
+	 *            The segment.
+	 * @param event
+	 *            The event.
+	 * @param builder
+	 *            The builder.
 	 */
-	private void putAddCharacterUpdate(AddCharacterSegment seg, PlayerSynchronizationEvent event, GamePacketBuilder builder) {
+	private void putAddCharacterUpdate(AddCharacterSegment seg,
+			PlayerSynchronizationEvent event, GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		Position player = event.getPosition();
 		Position other = seg.getPosition();
@@ -100,11 +111,16 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts a movement update for the specified segment.
-	 * @param seg The segment.
-	 * @param event The event.
-	 * @param builder The builder.
+	 * 
+	 * @param seg
+	 *            The segment.
+	 * @param event
+	 *            The event.
+	 * @param builder
+	 *            The builder.
 	 */
-	private void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationEvent event, GamePacketBuilder builder) {
+	private void putMovementUpdate(SynchronizationSegment seg,
+			PlayerSynchronizationEvent event, GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		if (seg.getType() == SegmentType.TELEPORT) {
 			Position pos = ((TeleportSegment) seg).getDestination();
@@ -140,10 +156,14 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts the blocks for the specified segment.
-	 * @param segment The segment.
-	 * @param blockBuilder The block builder.
+	 * 
+	 * @param segment
+	 *            The segment.
+	 * @param blockBuilder
+	 *            The block builder.
 	 */
-	private void putBlocks(SynchronizationSegment segment, GamePacketBuilder blockBuilder) {
+	private void putBlocks(SynchronizationSegment segment,
+			GamePacketBuilder blockBuilder) {
 		SynchronizationBlockSet blockSet = segment.getBlockSet();
 		if (blockSet.size() > 0) {
 			int mask = 0;
@@ -152,7 +172,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 				mask |= 0x100;
 			}
 
-			if (blockSet.contains(AnimationBlock.class)){
+			if (blockSet.contains(AnimationBlock.class)) {
 				mask |= 0x8;
 			}
 
@@ -180,7 +200,8 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			}
 
 			if (blockSet.contains(AnimationBlock.class)) {
-				putAnimationBlock(blockSet.get(AnimationBlock.class), blockBuilder);
+				putAnimationBlock(blockSet.get(AnimationBlock.class),
+						blockBuilder);
 			}
 
 			if (blockSet.contains(ChatBlock.class)) {
@@ -188,67 +209,93 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			}
 
 			if (blockSet.contains(AppearanceBlock.class)) {
-				putAppearanceBlock(blockSet.get(AppearanceBlock.class), blockBuilder);
+				putAppearanceBlock(blockSet.get(AppearanceBlock.class),
+						blockBuilder);
 			}
 
 			if (blockSet.contains(TurnToPositionBlock.class)) {
-				putTurnToPositionBlock(blockSet.get(TurnToPositionBlock.class), blockBuilder);
+				putTurnToPositionBlock(blockSet.get(TurnToPositionBlock.class),
+						blockBuilder);
 			}
 		}
 	}
 
 	/**
 	 * Puts a turn to position block into the specified builder.
-	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * 
+	 * @param block
+	 *            The block.
+	 * @param blockBuilder
+	 *            The builder.
 	 */
-	private void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder blockBuilder) {
+	private void putTurnToPositionBlock(TurnToPositionBlock block,
+			GamePacketBuilder blockBuilder) {
 		Position pos = block.getPosition();
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, pos.getX() * 2 + 1);
+		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE,
+				DataTransformation.ADD, pos.getX() * 2 + 1);
 		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, pos.getY() * 2 + 1);
 	}
 
 	/**
 	 * Puts a graphic block into the specified builder.
-	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * 
+	 * @param block
+	 *            The block.
+	 * @param blockBuilder
+	 *            The builder.
 	 */
-	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder blockBuilder) {
+	private void putGraphicBlock(GraphicBlock block,
+			GamePacketBuilder blockBuilder) {
 		Graphic graphic = block.getGraphic();
 		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, graphic.getId());
-		blockBuilder.put(DataType.INT, ((graphic.getHeight() >> 16) & 0x0000FFFF) | (graphic.getDelay() & 0xFFFF));
+		blockBuilder.put(DataType.INT,
+				(graphic.getHeight() << 16) | (graphic.getDelay() & 0xFFFF));
 	}
 
 	/**
 	 * Puts an animation block into the specified builder.
-	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * 
+	 * @param block
+	 *            The block.
+	 * @param blockBuilder
+	 *            The builder.
 	 */
-	private void putAnimationBlock(AnimationBlock block, GamePacketBuilder blockBuilder) {
+	private void putAnimationBlock(AnimationBlock block,
+			GamePacketBuilder blockBuilder) {
 		Animation animation = block.getAnimation();
 		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, animation.getId());
-		blockBuilder.put(DataType.BYTE, DataTransformation.NEGATE, animation.getDelay());
+		blockBuilder.put(DataType.BYTE, DataTransformation.NEGATE,
+				animation.getDelay());
 	}
 
 	/**
 	 * Puts a chat block into the specified builder.
-	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * 
+	 * @param block
+	 *            The block.
+	 * @param blockBuilder
+	 *            The builder.
 	 */
 	private void putChatBlock(ChatBlock block, GamePacketBuilder blockBuilder) {
 		byte[] bytes = block.getCompressedMessage();
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, (block.getTextColor() << 8) | block.getTextEffects());
+		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE,
+				(block.getTextColor() << 8) | block.getTextEffects());
 		blockBuilder.put(DataType.BYTE, block.getPrivilegeLevel().toInteger());
-		blockBuilder.put(DataType.BYTE, DataTransformation.NEGATE, bytes.length);
+		blockBuilder
+				.put(DataType.BYTE, DataTransformation.NEGATE, bytes.length);
 		blockBuilder.putBytesReverse(bytes);
 	}
 
 	/**
 	 * Puts an appearance block into the specified builder.
-	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * 
+	 * @param block
+	 *            The block.
+	 * @param blockBuilder
+	 *            The builder.
 	 */
-	private void putAppearanceBlock(AppearanceBlock block, GamePacketBuilder blockBuilder) {
+	private void putAppearanceBlock(AppearanceBlock block,
+			GamePacketBuilder blockBuilder) {
 		Appearance appearance = block.getAppearance();
 		GamePacketBuilder playerProperties = new GamePacketBuilder();
 
@@ -323,7 +370,8 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 		if (helm != null) {
 			def = EquipmentDefinition.forId(helm.getId());
 		}
-		if ((def != null && (def.isFullHat() || def.isFullMask())) || appearance.getGender() == Gender.FEMALE) {
+		if ((def != null && (def.isFullHat() || def.isFullMask()))
+				|| appearance.getGender() == Gender.FEMALE) {
 			playerProperties.put(DataType.BYTE, 0);
 		} else {
 			playerProperties.put(DataType.SHORT, 0x100 + style[1]);
@@ -343,10 +391,14 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 		playerProperties.put(DataType.SHORT, 0x338); // run
 
 		playerProperties.put(DataType.LONG, block.getName());
-		playerProperties.put(DataType.BYTE, block.getCombatLevel()); // combat level
-		playerProperties.put(DataType.SHORT, block.getSkillLevel()); // total skill level
+		playerProperties.put(DataType.BYTE, block.getCombatLevel()); // combat
+																		// level
+		playerProperties.put(DataType.SHORT, block.getSkillLevel()); // total
+																		// skill
+																		// level
 
-		blockBuilder.put(DataType.BYTE, DataTransformation.NEGATE, playerProperties.getLength());
+		blockBuilder.put(DataType.BYTE, DataTransformation.NEGATE,
+				playerProperties.getLength());
 		blockBuilder.putRawBuilder(playerProperties);
 	}
 

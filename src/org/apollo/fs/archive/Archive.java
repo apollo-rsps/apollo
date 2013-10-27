@@ -9,21 +9,24 @@ import org.apollo.util.CompressionUtil;
 
 /**
  * Represents an archive.
+ * 
  * @author Graham
  */
 public final class Archive {
 
 	/**
 	 * Decodes the archive in the specified buffer.
-	 * @param buffer The buffer.
+	 * 
+	 * @param buffer
+	 *            The buffer.
 	 * @return The archive.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException
+	 *             if an I/O error occurs.
 	 */
 	public static Archive decode(ByteBuffer buffer) throws IOException {
 		int extractedSize = ByteBufferUtil.readUnsignedTriByte(buffer);
 		int size = ByteBufferUtil.readUnsignedTriByte(buffer);
 		boolean extracted = false;
-
 		if (size != extractedSize) {
 			byte[] compressed = new byte[size];
 			byte[] uncompressed = new byte[extractedSize];
@@ -32,32 +35,31 @@ public final class Archive {
 			buffer = ByteBuffer.wrap(uncompressed);
 			extracted = true;
 		}
-
 		int entries = buffer.getShort() & 0xFFFF;
 		int[] identifiers = new int[entries];
 		int[] extractedSizes = new int[entries];
 		int[] sizes = new int[entries];
-
 		for (int i = 0; i < entries; i++) {
 			identifiers[i] = buffer.getInt();
 			extractedSizes[i] = ByteBufferUtil.readUnsignedTriByte(buffer);
 			sizes[i] = ByteBufferUtil.readUnsignedTriByte(buffer);
 		}
-
 		ArchiveEntry[] entry = new ArchiveEntry[entries];
-
 		for (int i = 0; i < entries; i++) {
-			ByteBuffer entryBuffer = ByteBuffer.allocate(extractedSizes[i]);
+			ByteBuffer entryBuffer;
 			if (!extracted) {
 				byte[] compressed = new byte[sizes[i]];
 				byte[] uncompressed = new byte[extractedSizes[i]];
 				buffer.get(compressed);
 				CompressionUtil.unbzip2(compressed, uncompressed);
 				entryBuffer = ByteBuffer.wrap(uncompressed);
+			} else {
+				byte[] buf = new byte[extractedSizes[i]];
+				buffer.get(buf);
+				entryBuffer = ByteBuffer.wrap(buf);
 			}
 			entry[i] = new ArchiveEntry(identifiers[i], entryBuffer);
 		}
-
 		return new Archive(entry);
 	}
 
@@ -68,7 +70,9 @@ public final class Archive {
 
 	/**
 	 * Creates a new archive.
-	 * @param entries The entries in this archive.
+	 * 
+	 * @param entries
+	 *            The entries in this archive.
 	 */
 	public Archive(ArchiveEntry[] entries) {
 		this.entries = entries;
@@ -76,9 +80,12 @@ public final class Archive {
 
 	/**
 	 * Gets an entry by its name.
-	 * @param name The name.
+	 * 
+	 * @param name
+	 *            The name.
 	 * @return The entry.
-	 * @throws FileNotFoundException if the file could not be found.
+	 * @throws FileNotFoundException
+	 *             if the file could not be found.
 	 */
 	public ArchiveEntry getEntry(String name) throws FileNotFoundException {
 		int hash = 0;

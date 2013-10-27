@@ -77,16 +77,12 @@ public final class EquipEventHandler extends EventHandler<EquipEvent> {
 			// TODO: put all this into another method somewhere
 
 			// check if there is enough space for a two handed weapon
-			if (equipDef.isTwoHanded()) {
-				Item currentShield = equipment.get(EquipmentConstants.SHIELD);
-				if (currentShield != null) {
-					if (inventory.freeSlots() < 1) {
-						inventory.forceCapacityExceeded();
-						ctx.breakHandlerChain();
-						return;
-					}
-				}
-			}
+            if (equipDef.isTwoHanded()) {
+                if(equipment.get(EquipmentConstants.SHIELD) != null){
+                    Item shield = equipment.reset(EquipmentConstants.SHIELD);
+                    inventory.add(shield);
+                }
+            }
 
 			// check if a shield is being added with a two handed weapon
 			boolean removeWeapon = false;

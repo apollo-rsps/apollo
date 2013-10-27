@@ -21,6 +21,7 @@ public final class EventHandlerChain<E extends Event> {
 	 * Creates the event handler chain.
 	 * @param handlers The handlers.
 	 */
+	@SafeVarargs
 	public EventHandlerChain(EventHandler<E>... handlers) {
 		this.handlers = handlers;
 	}

@@ -4,6 +4,7 @@ import org.apollo.game.model.def.StaticObjectDefinition;
 
 /**
  * Represents a static object in the game world.
+ * 
  * @author Graham
  */
 public final class StaticObject {
@@ -11,14 +12,25 @@ public final class StaticObject {
 	/**
 	 * The object definition.
 	 */
-	private final StaticObjectDefinition def;
+	private final StaticObjectDefinition definition;
 
 	/**
 	 * Creates the game object.
-	 * @param def The object's definition.
+	 * 
+	 * @param definition
+	 *            The object's definition.
 	 */
-	public StaticObject(StaticObjectDefinition def) {
-		this.def = def;
+	public StaticObject(StaticObjectDefinition definition) {
+		this.definition = definition;
+	}
+
+	/**
+	 * Gets the object's definition.
+	 * 
+	 * @return The definition.
+	 */
+	public StaticObjectDefinition getDefinition() {
+		return definition;
 	}
 
 }
