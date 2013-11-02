@@ -7,6 +7,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link LogoutEvent}.
+ * 
  * @author Graham
  */
 public final class LogoutEventEncoder extends EventEncoder<LogoutEvent> {

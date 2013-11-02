@@ -6,6 +6,7 @@ import org.jboss.netty.channel.Channel;
 
 /**
  * The base class for request workers.
+ * 
  * @author Graham
  * @param <T> The type of request.
  * @param <P> The type of provider.
@@ -29,6 +30,7 @@ public abstract class RequestWorker<T, P> implements Runnable {
 
 	/**
 	 * Creates the request worker with the specified file system.
+	 * 
 	 * @param dispatcher The update dispatcher.
 	 * @param provider The resource provider.
 	 */
@@ -75,6 +77,7 @@ public abstract class RequestWorker<T, P> implements Runnable {
 
 	/**
 	 * Gets the next request.
+	 * 
 	 * @param dispatcher The dispatcher.
 	 * @return The next request.
 	 * @throws InterruptedException if the thread is interrupted.
@@ -83,6 +86,7 @@ public abstract class RequestWorker<T, P> implements Runnable {
 
 	/**
 	 * Services a request.
+	 * 
 	 * @param provider The resource provider.
 	 * @param channel The channel.
 	 * @param request The request to service.

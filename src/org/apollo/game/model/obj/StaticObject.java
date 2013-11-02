@@ -17,8 +17,7 @@ public final class StaticObject {
 	/**
 	 * Creates the game object.
 	 * 
-	 * @param definition
-	 *            The object's definition.
+	 * @param definition The object's definition.
 	 */
 	public StaticObject(StaticObjectDefinition definition) {
 		this.definition = definition;

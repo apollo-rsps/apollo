@@ -2,6 +2,7 @@ package org.apollo.update;
 
 /**
  * Holds update-related constants.
+ * 
  * @author Graham
  */
 public final class UpdateConstants {

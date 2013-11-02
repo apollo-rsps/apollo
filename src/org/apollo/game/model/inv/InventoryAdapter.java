@@ -5,6 +5,7 @@ import org.apollo.game.model.Item;
 
 /**
  * An adapter for the {@link InventoryListener}.
+ * 
  * @author Graham
  */
 public abstract class InventoryAdapter implements InventoryListener {

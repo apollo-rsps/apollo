@@ -4,6 +4,7 @@ import org.apollo.game.event.Event;
 
 /**
  * An event sent by the client when the player has entered an amount.
+ * 
  * @author Graham
  */
 public final class EnteredAmountEvent extends Event {
@@ -15,6 +16,7 @@ public final class EnteredAmountEvent extends Event {
 
 	/**
 	 * Creates the entered amount event.
+	 * 
 	 * @param amount The amount.
 	 */
 	public EnteredAmountEvent(int amount) {
@@ -23,6 +25,7 @@ public final class EnteredAmountEvent extends Event {
 
 	/**
 	 * Gets the amount.
+	 * 
 	 * @return The amount.
 	 */
 	public int getAmount() {

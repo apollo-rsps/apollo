@@ -22,6 +22,7 @@ import org.apollo.util.StreamUtil;
 
 /**
  * A {@link PlayerLoader} implementation that loads data from a binary file.
+ * 
  * @author Graham
  */
 public final class BinaryPlayerLoader implements PlayerLoader {
@@ -104,6 +105,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 
 	/**
 	 * Reads an inventory from the input stream.
+	 * 
 	 * @param in The input stream.
 	 * @param inventory The inventory.
 	 * @throws IOException if an I/O error occurs.

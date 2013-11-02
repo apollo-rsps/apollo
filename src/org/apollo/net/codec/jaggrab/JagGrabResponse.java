@@ -4,6 +4,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
  * Represents a single JAGGRAB reponse.
+ * 
  * @author Graham
  */
 public final class JagGrabResponse {
@@ -15,6 +16,7 @@ public final class JagGrabResponse {
 
 	/**
 	 * Creates the response.
+	 * 
 	 * @param fileData The file data.
 	 */
 	public JagGrabResponse(ChannelBuffer fileData) {
@@ -23,6 +25,7 @@ public final class JagGrabResponse {
 
 	/**
 	 * Gets the file data.
+	 * 
 	 * @return The file data.
 	 */
 	public ChannelBuffer getFileData() {

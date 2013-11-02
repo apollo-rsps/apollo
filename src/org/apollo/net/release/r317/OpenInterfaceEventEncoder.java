@@ -8,6 +8,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link OpenInterfaceEvent}.
+ * 
  * @author Graham
  */
 public final class OpenInterfaceEventEncoder extends EventEncoder<OpenInterfaceEvent> {

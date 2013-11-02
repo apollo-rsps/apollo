@@ -16,8 +16,8 @@ import org.apollo.io.player.PlayerSaver;
 import org.apollo.util.StreamUtil;
 
 /**
- * A {@link PlayerSaver} implementation that saves player data to a binary
- * file.
+ * A {@link PlayerSaver} implementation that saves player data to a binary file.
+ * 
  * @author Graham
  */
 public final class BinaryPlayerSaver implements PlayerSaver {
@@ -73,6 +73,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 
 	/**
 	 * Writes an inventory to the specified output stream.
+	 * 
 	 * @param out The output stream.
 	 * @param inventory The inventory.
 	 * @throws IOException if an I/O error occurs.

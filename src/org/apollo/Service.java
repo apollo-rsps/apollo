@@ -2,6 +2,7 @@ package org.apollo;
 
 /**
  * Represents a service that the server provides.
+ * 
  * @author Graham
  */
 public abstract class Service {
@@ -13,6 +14,7 @@ public abstract class Service {
 
 	/**
 	 * Gets the server context.
+	 * 
 	 * @return The context.
 	 */
 	public final ServerContext getContext() {
@@ -21,6 +23,7 @@ public abstract class Service {
 
 	/**
 	 * Sets the server context.
+	 * 
 	 * @param ctx The context.
 	 */
 	public final void setContext(ServerContext ctx) {

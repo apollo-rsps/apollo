@@ -9,6 +9,7 @@ import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
 /**
  * A {@link OneToOneEncoder} for the 'on-demand' protocol.
+ * 
  * @author Graham
  */
 public final class UpdateEncoder extends OneToOneEncoder {

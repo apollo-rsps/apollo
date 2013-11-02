@@ -4,8 +4,8 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
- * A session which is used as the attachment of a {@link ChannelHandlerContext}
- * in Netty.
+ * A session which is used as the attachment of a {@link ChannelHandlerContext} in Netty.
+ * 
  * @author Graham
  */
 public abstract class Session {
@@ -17,6 +17,7 @@ public abstract class Session {
 
 	/**
 	 * Creates a session for the specified channel.
+	 * 
 	 * @param channel The channel.
 	 */
 	public Session(Channel channel) {
@@ -25,6 +26,7 @@ public abstract class Session {
 
 	/**
 	 * Gets the channel.
+	 * 
 	 * @return The channel.
 	 */
 	protected final Channel getChannel() {
@@ -33,6 +35,7 @@ public abstract class Session {
 
 	/**
 	 * Processes a message received from the channel.
+	 * 
 	 * @param message The message.
 	 * @throws Exception if an error occurs.
 	 */
@@ -40,6 +43,7 @@ public abstract class Session {
 
 	/**
 	 * Destroys this session.
+	 * 
 	 * @throws Exception if an error occurs.
 	 */
 	public abstract void destroy() throws Exception;

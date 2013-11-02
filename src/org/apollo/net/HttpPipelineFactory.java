@@ -11,6 +11,7 @@ import org.jboss.netty.util.Timer;
 
 /**
  * A {@link ChannelPipelineFactory} for the HTTP protocol.
+ * 
  * @author Graham
  */
 public final class HttpPipelineFactory implements ChannelPipelineFactory {
@@ -32,6 +33,7 @@ public final class HttpPipelineFactory implements ChannelPipelineFactory {
 
 	/**
 	 * Creates the HTTP pipeline factory.
+	 * 
 	 * @param handler The file server event handler.
 	 * @param timer The timer used for idle checking.
 	 */

@@ -16,6 +16,7 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * A {@link StatefulFrameDecoder} which decodes the login request frames.
+ * 
  * @author Graham
  */
 public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> {
@@ -53,8 +54,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel,
-			ChannelBuffer buffer, LoginDecoderState state) throws Exception {
+	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, LoginDecoderState state)
+			throws Exception {
 		switch (state) {
 		case LOGIN_HANDSHAKE:
 			return decodeHandshake(ctx, channel, buffer);
@@ -69,14 +70,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 	/**
 	 * Decodes in the handshake state.
+	 * 
 	 * @param ctx The channel handler context.
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
 	 * @throws Exception if an error occurs.
 	 */
-	private Object decodeHandshake(ChannelHandlerContext ctx, Channel channel,
-			ChannelBuffer buffer) throws Exception {
+	private Object decodeHandshake(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readable()) {
 			usernameHash = buffer.readUnsignedByte();
 			serverSeed = random.nextLong();
@@ -94,14 +95,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 	/**
 	 * Decodes in the header state.
+	 * 
 	 * @param ctx The channel handler context.
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
 	 * @throws Exception if an error occurs.
 	 */
-	private Object decodeHeader(ChannelHandlerContext ctx, Channel channel,
-			ChannelBuffer buffer) throws Exception {
+	private Object decodeHeader(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readableBytes() >= 2) {
 			int loginType = buffer.readUnsignedByte();
 
@@ -120,14 +121,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 	/**
 	 * Decodes in the payload state.
+	 * 
 	 * @param ctx The channel handler context.
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
 	 * @throws Exception if an error occurs.
 	 */
-	private Object decodePayload(ChannelHandlerContext ctx, Channel channel,
-			ChannelBuffer buffer) throws Exception {
+	private Object decodePayload(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readableBytes() >= loginLength) {
 			ChannelBuffer payload = buffer.readBytes(loginLength);
 			if (payload.readUnsignedByte() != 0xFF) {
@@ -190,7 +191,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid);
 			IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
-			LoginRequest req = new LoginRequest(credentials, randomPair, reconnecting, lowMemory, releaseNumber, archiveCrcs);
+			LoginRequest req = new LoginRequest(credentials, randomPair, reconnecting, lowMemory, releaseNumber,
+					archiveCrcs);
 
 			if (buffer.readable()) {
 				return new Object[] { req, buffer.readBytes(buffer.readableBytes()) };

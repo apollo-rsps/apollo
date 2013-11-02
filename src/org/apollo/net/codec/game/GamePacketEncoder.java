@@ -11,6 +11,7 @@ import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
 /**
  * A {@link OneToOneEncoder} which encodes in-game packets.
+ * 
  * @author Graham
  */
 public final class GamePacketEncoder extends OneToOneEncoder {
@@ -22,6 +23,7 @@ public final class GamePacketEncoder extends OneToOneEncoder {
 
 	/**
 	 * Creates the {@link GamePacketEncoder}.
+	 * 
 	 * @param random The random number generator.
 	 */
 	public GamePacketEncoder(IsaacRandom random) {

@@ -32,6 +32,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link PlayerSynchronizationEvent}.
+ * 
  * @author Graham
  */
 public final class PlayerSynchronizationEventEncoder extends EventEncoder<PlayerSynchronizationEvent> {
@@ -74,6 +75,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts a remove character update.
+	 * 
 	 * @param builder The builder.
 	 */
 	private void putRemoveCharacterUpdate(GamePacketBuilder builder) {
@@ -83,11 +85,13 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts an add character update.
+	 * 
 	 * @param seg The segment.
 	 * @param event The event.
 	 * @param builder The builder.
 	 */
-	private void putAddCharacterUpdate(AddCharacterSegment seg, PlayerSynchronizationEvent event, GamePacketBuilder builder) {
+	private void putAddCharacterUpdate(AddCharacterSegment seg, PlayerSynchronizationEvent event,
+			GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		Position player = event.getPosition();
 		Position other = seg.getPosition();
@@ -100,11 +104,13 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts a movement update for the specified segment.
+	 * 
 	 * @param seg The segment.
 	 * @param event The event.
 	 * @param builder The builder.
 	 */
-	private void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationEvent event, GamePacketBuilder builder) {
+	private void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationEvent event,
+			GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		if (seg.getType() == SegmentType.TELEPORT) {
 			Position pos = ((TeleportSegment) seg).getDestination();
@@ -140,6 +146,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts the blocks for the specified segment.
+	 * 
 	 * @param segment The segment.
 	 * @param blockBuilder The block builder.
 	 */
@@ -156,7 +163,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 				mask |= 0x40;
 			}
 
-			if (blockSet.contains(GraphicBlock.class)){
+			if (blockSet.contains(GraphicBlock.class)) {
 				mask |= 0x200;
 			}
 
@@ -175,7 +182,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 				blockBuilder.put(DataType.BYTE, mask);
 			}
 
-			if (blockSet.contains(AnimationBlock.class)){
+			if (blockSet.contains(AnimationBlock.class)) {
 				putAnimationBlock(blockSet.get(AnimationBlock.class), blockBuilder);
 			}
 
@@ -199,6 +206,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts a turn to position block into the specified builder.
+	 * 
 	 * @param block The block.
 	 * @param blockBuilder The builder.
 	 */
@@ -210,17 +218,20 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts a graphic block into the specified builder.
+	 * 
 	 * @param block The block.
 	 * @param blockBuilder The builder.
 	 */
 	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder blockBuilder) {
 		Graphic graphic = block.getGraphic();
 		blockBuilder.put(DataType.SHORT, DataTransformation.ADD, graphic.getId());
-		blockBuilder.put(DataType.INT, DataOrder.MIDDLE, ((graphic.getHeight() << 16) & 0xFFFF0000) | (graphic.getDelay() & 0x0000FFFF));
+		blockBuilder.put(DataType.INT, DataOrder.MIDDLE,
+				((graphic.getHeight() << 16) & 0xFFFF0000) | (graphic.getDelay() & 0x0000FFFF));
 	}
 
 	/**
 	 * Puts an animation block into the specified builder.
+	 * 
 	 * @param block The block.
 	 * @param blockBuilder The builder.
 	 */
@@ -232,6 +243,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts a chat block into the specified builder.
+	 * 
 	 * @param block The block.
 	 * @param blockBuilder The builder.
 	 */
@@ -245,6 +257,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 	/**
 	 * Puts an appearance block into the specified builder.
+	 * 
 	 * @param block The block.
 	 * @param blockBuilder The builder.
 	 */

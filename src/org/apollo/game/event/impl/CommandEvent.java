@@ -4,6 +4,7 @@ import org.apollo.game.event.Event;
 
 /**
  * An event issued by the client to send a {@code ::} command/
+ * 
  * @author Graham
  */
 public final class CommandEvent extends Event {
@@ -15,6 +16,7 @@ public final class CommandEvent extends Event {
 
 	/**
 	 * Creates the command event.
+	 * 
 	 * @param command The command.
 	 */
 	public CommandEvent(String command) {
@@ -23,6 +25,7 @@ public final class CommandEvent extends Event {
 
 	/**
 	 * Gets the command.
+	 * 
 	 * @return The command.
 	 */
 	public String getCommand() {

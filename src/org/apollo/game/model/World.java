@@ -19,11 +19,10 @@ import org.apollo.util.CharacterRepository;
 import org.apollo.util.plugin.PluginManager;
 
 /**
- * The world class is a singleton which contains objects like the
- * {@link CharacterRepository} for players and NPCs. It should only contain
- * things relevant to the in-game world and not classes which deal with I/O and
- * such (these may be better off inside some custom {@link Service} or other
- * code, however, the circumstances are rare).
+ * The world class is a singleton which contains objects like the {@link CharacterRepository} for players and NPCs. It
+ * should only contain things relevant to the in-game world and not classes which deal with I/O and such (these may be
+ * better off inside some custom {@link Service} or other code, however, the circumstances are rare).
+ * 
  * @author Graham
  */
 public final class World {
@@ -40,6 +39,7 @@ public final class World {
 
 	/**
 	 * Represents the different status codes for registering a player.
+	 * 
 	 * @author Graham
 	 */
 	public enum RegistrationStatus {
@@ -62,6 +62,7 @@ public final class World {
 
 	/**
 	 * Gets the world.
+	 * 
 	 * @return The world.
 	 */
 	public static World getWorld() {
@@ -86,7 +87,8 @@ public final class World {
 	/**
 	 * The {@link CharacterRepository} of {@link Player}s.
 	 */
-	private final CharacterRepository<Player> playerRepository = new CharacterRepository<Player>(WorldConstants.MAXIMUM_PLAYERS);
+	private final CharacterRepository<Player> playerRepository = new CharacterRepository<Player>(
+			WorldConstants.MAXIMUM_PLAYERS);
 
 	/**
 	 * Creates the world.
@@ -96,8 +98,8 @@ public final class World {
 	}
 
 	/**
-	 * Initialises the world by loading definitions from the specified file
-	 * system.
+	 * Initialises the world by loading definitions from the specified file system.
+	 * 
 	 * @param release The release number.
 	 * @param fs The file system.
 	 * @param mgr The plugin manager. TODO move this.
@@ -131,15 +133,13 @@ public final class World {
 	}
 
 	/**
-	 * Gets the character repository. NOTE:
-	 * {@link CharacterRepository#add(Character)} and
-	 * {@link CharacterRepository#remove(Character)} should not be called
-	 * directly! These mutation methods are not guaranteed to work in future
-	 * releases!
+	 * Gets the character repository. NOTE: {@link CharacterRepository#add(Character)} and
+	 * {@link CharacterRepository#remove(Character)} should not be called directly! These mutation methods are not
+	 * guaranteed to work in future releases!
 	 * <p>
-	 * Instead, use the {@link World#register(Player)} and
-	 * {@link World#unregister(Player)} methods which do the same thing and
-	 * will continue to work as normal in future releases.
+	 * Instead, use the {@link World#register(Player)} and {@link World#unregister(Player)} methods which do the same
+	 * thing and will continue to work as normal in future releases.
+	 * 
 	 * @return The character repository.
 	 */
 	public CharacterRepository<Player> getPlayerRepository() {
@@ -148,6 +148,7 @@ public final class World {
 
 	/**
 	 * Registers the specified player.
+	 * 
 	 * @param player The player.
 	 * @return A {@link RegistrationStatus}.
 	 */
@@ -161,13 +162,15 @@ public final class World {
 			logger.info("Registered player: " + player + " [online=" + playerRepository.size() + "]");
 			return RegistrationStatus.OK;
 		} else {
-			logger.warning("Failed to register player (server full): " + player + " [online=" + playerRepository.size() + "]");
+			logger.warning("Failed to register player (server full): " + player + " [online=" + playerRepository.size()
+					+ "]");
 			return RegistrationStatus.WORLD_FULL;
 		}
 	}
 
 	/**
 	 * Checks if the specified player is online.
+	 * 
 	 * @param name The player's name.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -183,6 +186,7 @@ public final class World {
 
 	/**
 	 * Unregisters the specified player.
+	 * 
 	 * @param player The player.
 	 */
 	public void unregister(Player player) {
@@ -195,6 +199,7 @@ public final class World {
 
 	/**
 	 * Schedules a new task.
+	 * 
 	 * @param task The {@link ScheduledTask}.
 	 */
 	public void schedule(ScheduledTask task) {
@@ -210,6 +215,7 @@ public final class World {
 
 	/**
 	 * Gets the command dispatcher. TODO should this be here?
+	 * 
 	 * @return The command dispatcher.
 	 */
 	public CommandDispatcher getCommandDispatcher() {
@@ -218,6 +224,7 @@ public final class World {
 
 	/**
 	 * Gets the plugin manager. TODO should this be here?
+	 * 
 	 * @return The plugin manager.
 	 */
 	public PluginManager getPluginManager() {

@@ -5,6 +5,7 @@ import org.apollo.game.model.Position;
 
 /**
  * An event which indicates that the client should load the specified region.
+ * 
  * @author Graham
  */
 public final class RegionChangeEvent extends Event {
@@ -16,6 +17,7 @@ public final class RegionChangeEvent extends Event {
 
 	/**
 	 * Creates the region changed event.
+	 * 
 	 * @param position The position of the region.
 	 */
 	public RegionChangeEvent(Position position) {
@@ -24,6 +26,7 @@ public final class RegionChangeEvent extends Event {
 
 	/**
 	 * Gets the position of the region to load.
+	 * 
 	 * @return The position of the region to load.
 	 */
 	public Position getPosition() {

@@ -2,6 +2,7 @@ package org.apollo.game.model;
 
 /**
  * Represents an animation.
+ * 
  * @author Graham
  */
 public final class Animation {
@@ -77,7 +78,7 @@ public final class Animation {
 	public static final Animation PANIC = new Animation(2105);
 
 	/**
-	 * The jig  animation.
+	 * The jig animation.
 	 */
 	public static final Animation JIG = new Animation(2106);
 
@@ -163,6 +164,7 @@ public final class Animation {
 
 	/**
 	 * Creates a new animation with no delay.
+	 * 
 	 * @param id The id.
 	 */
 	public Animation(int id) {
@@ -171,6 +173,7 @@ public final class Animation {
 
 	/**
 	 * Creates a new animation.
+	 * 
 	 * @param id The id.
 	 * @param delay The delay.
 	 */
@@ -181,6 +184,7 @@ public final class Animation {
 
 	/**
 	 * Gets the animation's id.
+	 * 
 	 * @return The animation's id.
 	 */
 	public int getId() {
@@ -189,6 +193,7 @@ public final class Animation {
 
 	/**
 	 * Gets the animation's delay.
+	 * 
 	 * @return The animation's delay.
 	 */
 	public int getDelay() {

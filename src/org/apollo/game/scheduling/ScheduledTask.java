@@ -2,6 +2,7 @@ package org.apollo.game.scheduling;
 
 /**
  * A game-related task that is scheduled to run in the future.
+ * 
  * @author Graham
  */
 public abstract class ScheduledTask {
@@ -23,11 +24,11 @@ public abstract class ScheduledTask {
 
 	/**
 	 * Creates a new scheduled task.
+	 * 
 	 * @param delay The delay between executions of the task, in pulses.
-	 * @param immediate A flag indicating if this task should (for the first
-	 * execution) be ran immediately, or after the {@code delay}.
-	 * @throws IllegalArgumentException if the delay is less than or equal to
-	 * zero.
+	 * @param immediate A flag indicating if this task should (for the first execution) be ran immediately, or after the
+	 *            {@code delay}.
+	 * @throws IllegalArgumentException if the delay is less than or equal to zero.
 	 */
 	public ScheduledTask(int delay, boolean immediate) {
 		setDelay(delay);
@@ -36,6 +37,7 @@ public abstract class ScheduledTask {
 
 	/**
 	 * Checks if this task is running.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public final boolean isRunning() {
@@ -44,9 +46,9 @@ public abstract class ScheduledTask {
 
 	/**
 	 * Sets the delay.
+	 * 
 	 * @param delay The delay.
-	 * @throws IllegalArgumentException if the delay is less than or equal to
-	 * zero.
+	 * @throws IllegalArgumentException if the delay is less than or equal to zero.
 	 */
 	public void setDelay(int delay) {
 		if (delay < 0) {
@@ -63,8 +65,7 @@ public abstract class ScheduledTask {
 	}
 
 	/**
-	 * Pulses this task: updates the delay and calls {@link #execute()} if
-	 * necessary.
+	 * Pulses this task: updates the delay and calls {@link #execute()} if necessary.
 	 */
 	final void pulse() {
 		if (running && pulses-- == 0) {

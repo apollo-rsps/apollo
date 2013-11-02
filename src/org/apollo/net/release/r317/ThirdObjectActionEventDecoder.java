@@ -11,6 +11,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link ThirdObjectActionEvent}.
+ * 
  * @author Graham
  */
 public final class ThirdObjectActionEventDecoder extends EventDecoder<ThirdObjectActionEvent> {

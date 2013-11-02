@@ -4,14 +4,16 @@ import org.apollo.net.NetworkConstants;
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
- * A utility class which provides extra {@link ChannelBuffer}-related methods
- * which deal with data types used in the protocol.
+ * A utility class which provides extra {@link ChannelBuffer}-related methods which deal with data types used in the
+ * protocol.
+ * 
  * @author Graham
  */
 public final class ChannelBufferUtil {
 
 	/**
 	 * Reads a string from the specified buffer.
+	 * 
 	 * @param buffer The buffer.
 	 * @return The string.
 	 */

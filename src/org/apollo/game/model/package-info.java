@@ -3,3 +3,4 @@
  * players and NPCs.
  */
 package org.apollo.game.model;
+

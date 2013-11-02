@@ -2,6 +2,7 @@ package org.apollo.game.model.region;
 
 /**
  * Represents an 8x8 region.
+ * 
  * @author Graham
  */
 public final class Region {

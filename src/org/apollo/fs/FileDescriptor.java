@@ -2,6 +2,7 @@ package org.apollo.fs;
 
 /**
  * A class which points to a file in the cache.
+ * 
  * @author Graham
  */
 public final class FileDescriptor {
@@ -18,6 +19,7 @@ public final class FileDescriptor {
 
 	/**
 	 * Creates the file descriptor.
+	 * 
 	 * @param type The file type.
 	 * @param file The file id.
 	 */
@@ -28,6 +30,7 @@ public final class FileDescriptor {
 
 	/**
 	 * Gets the file type.
+	 * 
 	 * @return The file type.
 	 */
 	public int getType() {
@@ -36,6 +39,7 @@ public final class FileDescriptor {
 
 	/**
 	 * Gets the file id.
+	 * 
 	 * @return The file id.
 	 */
 	public int getFile() {

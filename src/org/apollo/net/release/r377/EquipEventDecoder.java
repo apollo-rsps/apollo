@@ -10,6 +10,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link EquipEvent}.
+ * 
  * @author Graham
  */
 public final class EquipEventDecoder extends EventDecoder<EquipEvent> {

@@ -6,6 +6,7 @@ import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
 /**
  * A {@link OneToOneEncoder} for the JAGGRAB protocol.
+ * 
  * @author Graham
  */
 public final class JagGrabResponseEncoder extends OneToOneEncoder {

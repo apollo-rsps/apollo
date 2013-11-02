@@ -2,6 +2,7 @@ package org.apollo.net.codec.game;
 
 /**
  * Represents the different ways data values can be transformed.
+ * 
  * @author Graham
  */
 public enum DataTransformation {
@@ -12,8 +13,7 @@ public enum DataTransformation {
 	NONE,
 
 	/**
-	 * Adds 128 to the value when it is written, takes 128 from the value when
-	 * it is read (also known as type-A).
+	 * Adds 128 to the value when it is written, takes 128 from the value when it is read (also known as type-A).
 	 */
 	ADD,
 

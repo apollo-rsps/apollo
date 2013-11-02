@@ -4,6 +4,7 @@ import org.apollo.game.event.Event;
 
 /**
  * An event sent when the client clicks a button.
+ * 
  * @author Graham
  */
 public final class ButtonEvent extends Event {
@@ -15,6 +16,7 @@ public final class ButtonEvent extends Event {
 
 	/**
 	 * Creates the button event.
+	 * 
 	 * @param interfaceId The interface id.
 	 */
 	public ButtonEvent(int interfaceId) {
@@ -23,6 +25,7 @@ public final class ButtonEvent extends Event {
 
 	/**
 	 * Gets the interface id.
+	 * 
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {

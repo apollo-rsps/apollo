@@ -9,6 +9,7 @@ import org.apollo.game.model.Player;
 
 /**
  * A handler which verifies {@link CharacterDesignEvent}s.
+ * 
  * @author Graham
  */
 public final class CharacterDesignVerificationHandler extends EventHandler<CharacterDesignEvent> {
@@ -22,6 +23,7 @@ public final class CharacterDesignVerificationHandler extends EventHandler<Chara
 
 	/**
 	 * Checks if an appearance combination is valid.
+	 * 
 	 * @param appearance The appearance combination.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -46,6 +48,7 @@ public final class CharacterDesignVerificationHandler extends EventHandler<Chara
 
 	/**
 	 * Checks if a {@link Gender#MALE} style combination is valid.
+	 * 
 	 * @param appearance The appearance combination.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -63,6 +66,7 @@ public final class CharacterDesignVerificationHandler extends EventHandler<Chara
 
 	/**
 	 * Checks if a {@link Gender#FEMALE} style combination is valid.
+	 * 
 	 * @param appearance The appearance combination.
 	 * @return {@code true} if so, {@code false} if not.
 	 */

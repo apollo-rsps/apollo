@@ -12,6 +12,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link UpdateItemsEvent}.
+ * 
  * @author Graham
  */
 public final class UpdateItemsEventEncoder extends EventEncoder<UpdateItemsEvent> {

@@ -8,8 +8,8 @@ import org.jboss.netty.handler.timeout.IdleStateHandler;
 import org.jboss.netty.util.Timer;
 
 /**
- * A {@link ChannelPipelineFactory} which creates {@link ChannelPipeline}s for
- * the service pipeline.
+ * A {@link ChannelPipelineFactory} which creates {@link ChannelPipeline}s for the service pipeline.
+ * 
  * @author Graham
  */
 public final class ServicePipelineFactory implements ChannelPipelineFactory {
@@ -26,6 +26,7 @@ public final class ServicePipelineFactory implements ChannelPipelineFactory {
 
 	/**
 	 * Creates the service pipeline factory.
+	 * 
 	 * @param handler The networking event handler.
 	 * @param timer The timer used for idle checking.
 	 */

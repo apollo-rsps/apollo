@@ -10,6 +10,7 @@ import org.apollo.security.PlayerCredentials;
 
 /**
  * A dummy {@link PlayerLoader} implementation used for testing purposes.
+ * 
  * @author Graham
  */
 public final class DummyPlayerLoader implements PlayerLoader {

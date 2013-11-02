@@ -2,6 +2,7 @@ package org.apollo.game.model;
 
 /**
  * Represents the different types of interfaces.
+ * 
  * @author Graham
  */
 public enum InterfaceType {
@@ -12,8 +13,8 @@ public enum InterfaceType {
 	WINDOW,
 
 	/**
-	 * An overlay is an interface which occupies the game screen like a window,
-	 * however, you can walk around and perform actions still.
+	 * An overlay is an interface which occupies the game screen like a window, however, you can walk around and perform
+	 * actions still.
 	 */
 	OVERLAY,
 

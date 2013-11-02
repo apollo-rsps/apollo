@@ -9,6 +9,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link OpenInterfaceSidebarEvent}.
+ * 
  * @author Graham
  */
 public final class OpenInterfaceSidebarEventEncoder extends EventEncoder<OpenInterfaceSidebarEvent> {

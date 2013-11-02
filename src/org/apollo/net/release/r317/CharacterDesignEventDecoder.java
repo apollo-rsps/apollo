@@ -10,6 +10,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link CharacterDesignEvent}.
+ * 
  * @author Graham
  */
 public final class CharacterDesignEventDecoder extends EventDecoder<CharacterDesignEvent> {

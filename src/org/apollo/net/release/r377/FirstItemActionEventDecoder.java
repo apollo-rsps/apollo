@@ -9,6 +9,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link FirstItemActionEvent}.
+ * 
  * @author Graham
  */
 public final class FirstItemActionEventDecoder extends EventDecoder<FirstItemActionEvent> {

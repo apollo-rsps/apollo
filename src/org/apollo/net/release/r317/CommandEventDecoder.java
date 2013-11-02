@@ -7,6 +7,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link CommandEvent}.
+ * 
  * @author Graham
  */
 public final class CommandEventDecoder extends EventDecoder<CommandEvent> {

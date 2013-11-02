@@ -6,8 +6,8 @@ import java.util.NoSuchElementException;
 import org.apollo.game.model.Character;
 
 /**
- * A {@link CharacterRepository} is a repository of {@link Character}s that are
- * currently active in the game world.
+ * A {@link CharacterRepository} is a repository of {@link Character}s that are currently active in the game world.
+ * 
  * @author Graham
  * @param <T> The type of character.
  */
@@ -30,8 +30,8 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 
 	/**
 	 * Creates a new character repository with the specified capacity.
-	 * @param capacity The maximum number of characters that can be present in
-	 * the repository.
+	 * 
+	 * @param capacity The maximum number of characters that can be present in the repository.
 	 */
 	public CharacterRepository(int capacity) {
 		this.characters = new Character[capacity];
@@ -39,6 +39,7 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 
 	/**
 	 * Gets the size of this repository.
+	 * 
 	 * @return The number of characters in this repository.
 	 */
 	public int size() {
@@ -47,6 +48,7 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 
 	/**
 	 * Gets the capacity of this repository.
+	 * 
 	 * @return The maximum size of this repository.
 	 */
 	public int capacity() {
@@ -55,9 +57,10 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 
 	/**
 	 * Adds a character to the repository.
+	 * 
 	 * @param character The character to add.
-	 * @return {@code true} if the character was added, {@code false} if the
-	 * size has reached the capacity of this repository.
+	 * @return {@code true} if the character was added, {@code false} if the size has reached the capacity of this
+	 *         repository.
 	 */
 	public boolean add(T character) {
 		if (size == characters.length) {
@@ -94,9 +97,10 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 
 	/**
 	 * Removes a character from the repository.
+	 * 
 	 * @param character The character to remove.
-	 * @return {@code true} if the character was removed, {@code false} if it
-	 * was not (e.g. if it was never added or has been removed already).
+	 * @return {@code true} if the character was removed, {@code false} if it was not (e.g. if it was never added or has
+	 *         been removed already).
 	 */
 	public boolean remove(T character) {
 		int index = character.getIndex() - 1;
@@ -119,8 +123,8 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 	}
 
 	/**
-	 * The {@link Iterator} implementation for the {@link CharacterRepository}
-	 * class.
+	 * The {@link Iterator} implementation for the {@link CharacterRepository} class.
+	 * 
 	 * @author Graham
 	 */
 	private final class CharacterRepositoryIterator implements Iterator<T> {

@@ -7,6 +7,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link CloseInterfaceEvent}.
+ * 
  * @author Graham
  */
 public final class CloseInterfaceEventEncoder extends EventEncoder<CloseInterfaceEvent> {

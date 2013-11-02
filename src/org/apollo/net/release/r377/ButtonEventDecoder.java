@@ -8,6 +8,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link ButtonEvent}.
+ * 
  * @author Graham
  */
 public final class ButtonEventDecoder extends EventDecoder<ButtonEvent> {

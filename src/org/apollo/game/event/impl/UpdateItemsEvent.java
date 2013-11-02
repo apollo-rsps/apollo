@@ -5,6 +5,7 @@ import org.apollo.game.model.Item;
 
 /**
  * An event which updates all the items in an interface.
+ * 
  * @author Graham
  */
 public final class UpdateItemsEvent extends Event {
@@ -21,6 +22,7 @@ public final class UpdateItemsEvent extends Event {
 
 	/**
 	 * Creates the update inventory interface event.
+	 * 
 	 * @param interfaceId The interface id.
 	 * @param items The items.
 	 */
@@ -31,6 +33,7 @@ public final class UpdateItemsEvent extends Event {
 
 	/**
 	 * Gets the interface id.
+	 * 
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
@@ -39,6 +42,7 @@ public final class UpdateItemsEvent extends Event {
 
 	/**
 	 * Gets the items.
+	 * 
 	 * @return The items.
 	 */
 	public Item[] getItems() {

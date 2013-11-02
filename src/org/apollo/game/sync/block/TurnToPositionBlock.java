@@ -4,6 +4,7 @@ import org.apollo.game.model.Position;
 
 /**
  * The turn to position {@link SynchronizationBlock}.
+ * 
  * @author Graham
  */
 public final class TurnToPositionBlock extends SynchronizationBlock {
@@ -15,6 +16,7 @@ public final class TurnToPositionBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates the turn to position block.
+	 * 
 	 * @param position The position to turn to.
 	 */
 	public TurnToPositionBlock(Position position) {
@@ -23,6 +25,7 @@ public final class TurnToPositionBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the position to turn to.
+	 * 
 	 * @return The position to turn to.
 	 */
 	public Position getPosition() {

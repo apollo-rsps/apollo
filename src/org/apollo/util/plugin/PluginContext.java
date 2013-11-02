@@ -13,9 +13,9 @@ import org.apollo.net.release.EventEncoder;
 import org.apollo.net.release.Release;
 
 /**
- * The {@link PluginContext} contains methods a plugin can use to interface
- * with the server, for example, by adding {@link EventHandler}s to
- * {@link EventHandlerChain}s.
+ * The {@link PluginContext} contains methods a plugin can use to interface with the server, for example, by adding
+ * {@link EventHandler}s to {@link EventHandlerChain}s.
+ * 
  * @author Graham
  */
 public final class PluginContext {
@@ -27,6 +27,7 @@ public final class PluginContext {
 
 	/**
 	 * Creates the plugin context.
+	 * 
 	 * @param context The server context.
 	 */
 	public PluginContext(ServerContext context) {
@@ -35,6 +36,7 @@ public final class PluginContext {
 
 	/**
 	 * Adds a command listener.
+	 * 
 	 * @param name The name of the listener.
 	 * @param listener The listener.
 	 */
@@ -44,6 +46,7 @@ public final class PluginContext {
 
 	/**
 	 * Adds an event encoder.
+	 * 
 	 * @param <T> The type of encoder.
 	 * @param releaseNo The release number.
 	 * @param event The event.
@@ -60,6 +63,7 @@ public final class PluginContext {
 
 	/**
 	 * Adds an event decoder.
+	 * 
 	 * @param <T> The type of decoder.
 	 * @param releaseNo The release number.
 	 * @param opcode The opcode.
@@ -76,6 +80,7 @@ public final class PluginContext {
 
 	/**
 	 * Adds an event handler to the end of the chain.
+	 * 
 	 * @param <T> The type of event.
 	 * @param event The event.
 	 * @param handler The handler.

@@ -10,6 +10,7 @@ import org.apollo.util.TextUtil;
 
 /**
  * An {@link EventDecoder} for the {@link ChatEvent}.
+ * 
  * @author Graham
  */
 public final class ChatEventDecoder extends EventDecoder<ChatEvent> {

@@ -7,8 +7,8 @@ import org.apollo.game.model.SkillSet;
 import org.apollo.game.sync.block.SynchronizationBlock;
 
 /**
- * A {@link SkillListener} which synchronizes the state of a {@link SkillSet}
- * with a client.
+ * A {@link SkillListener} which synchronizes the state of a {@link SkillSet} with a client.
+ * 
  * @author Graham
  */
 public final class SynchronizationSkillListener extends SkillAdapter {
@@ -20,6 +20,7 @@ public final class SynchronizationSkillListener extends SkillAdapter {
 
 	/**
 	 * Creates the skill synchronization listener.
+	 * 
 	 * @param player The player.
 	 */
 	public SynchronizationSkillListener(Player player) {

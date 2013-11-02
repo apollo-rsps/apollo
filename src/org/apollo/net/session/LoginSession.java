@@ -23,6 +23,7 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * A login session.
+ * 
  * @author Graham
  */
 public final class LoginSession extends Session {
@@ -39,6 +40,7 @@ public final class LoginSession extends Session {
 
 	/**
 	 * Creates a login session for the specified channel.
+	 * 
 	 * @param channel The channel.
 	 * @param channelContext The context of the {@link ApolloHandler}.
 	 * @param serverContext The server context.
@@ -58,6 +60,7 @@ public final class LoginSession extends Session {
 
 	/**
 	 * Gets the release.
+	 * 
 	 * @return The release.
 	 */
 	public Release getRelease() {
@@ -66,6 +69,7 @@ public final class LoginSession extends Session {
 
 	/**
 	 * Handles a login request.
+	 * 
 	 * @param request The login request.
 	 */
 	private void handleLoginRequest(LoginRequest request) {
@@ -75,6 +79,7 @@ public final class LoginSession extends Session {
 
 	/**
 	 * Handles a response from the login service.
+	 * 
 	 * @param request The request this response corresponds to.
 	 * @param response The response.
 	 */
@@ -113,9 +118,11 @@ public final class LoginSession extends Session {
 			Release release = serverContext.getRelease();
 
 			channel.getPipeline().addFirst("eventEncoder", new GameEventEncoder(release));
-			channel.getPipeline().addBefore("eventEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
+			channel.getPipeline().addBefore("eventEncoder", "gameEncoder",
+					new GamePacketEncoder(randomPair.getEncodingRandom()));
 
-			channel.getPipeline().addBefore("handler", "gameDecoder", new GamePacketDecoder(randomPair.getDecodingRandom(), serverContext.getRelease()));
+			channel.getPipeline().addBefore("handler", "gameDecoder",
+					new GamePacketDecoder(randomPair.getDecodingRandom(), serverContext.getRelease()));
 			channel.getPipeline().addAfter("gameDecoder", "eventDecoder", new GameEventDecoder(release));
 
 			channel.getPipeline().remove("loginDecoder");

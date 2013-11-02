@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel.MapMode;
 
 /**
  * A {@link ResourceProvider} which provides additional hypertext resources.
+ * 
  * @author Graham
  */
 public final class HypertextResourceProvider extends ResourceProvider {
@@ -19,8 +20,8 @@ public final class HypertextResourceProvider extends ResourceProvider {
 	private final File base;
 
 	/**
-	 * Creates a new hypertext resource provider with the specified base
-	 * directory.
+	 * Creates a new hypertext resource provider with the specified base directory.
+	 * 
 	 * @param base The base directory.
 	 */
 	public HypertextResourceProvider(File base) {

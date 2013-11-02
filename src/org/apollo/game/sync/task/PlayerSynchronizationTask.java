@@ -20,17 +20,15 @@ import org.apollo.game.sync.seg.TeleportSegment;
 import org.apollo.util.CharacterRepository;
 
 /**
- * A {@link SynchronizationTask} which synchronizes the specified {@link Player}
- * .
+ * A {@link SynchronizationTask} which synchronizes the specified {@link Player} .
  * 
  * @author Graham
  */
 public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 	/**
-	 * The maximum number of players to load per cycle. This prevents the update
-	 * packet from becoming too large (the client uses a 5000 byte buffer) and
-	 * also stops old spec PCs from crashing when they login or teleport.
+	 * The maximum number of players to load per cycle. This prevents the update packet from becoming too large (the
+	 * client uses a 5000 byte buffer) and also stops old spec PCs from crashing when they login or teleport.
 	 */
 	private static final int NEW_PLAYERS_PER_CYCLE = 20;
 
@@ -42,8 +40,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	/**
 	 * Creates the {@link PlayerSynchronizationTask} for the specified player.
 	 * 
-	 * @param player
-	 *            The player.
+	 * @param player The player.
 	 */
 	public PlayerSynchronizationTask(Player player) {
 		this.player = player;
@@ -73,22 +70,18 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext();) {
 			Player p = it.next();
-			if (!p.isActive()
-					|| p.isTeleporting()
-					|| p.getPosition().getLongestDelta(player.getPosition()) > player
-							.getViewingDistance()) {
+			if (!p.isActive() || p.isTeleporting()
+					|| p.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
 				it.remove();
 				segments.add(new RemoveCharacterSegment());
 			} else {
-				segments.add(new MovementSegment(p.getBlockSet(), p
-						.getDirections()));
+				segments.add(new MovementSegment(p.getBlockSet(), p.getDirections()));
 			}
 		}
 
 		int added = 0;
 
-		CharacterRepository<Player> repository = World.getWorld()
-				.getPlayerRepository();
+		CharacterRepository<Player> repository = World.getWorld().getPlayerRepository();
 		for (Iterator<Player> it = repository.iterator(); it.hasNext();) {
 			Player p = it.next();
 			if (localPlayers.size() >= 255) {
@@ -99,9 +92,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 			}
 			// we do not check p.isActive() here, since if they are active they
 			// must be in the repository
-			if (p != player
-					&& p.getPosition().isWithinDistance(player.getPosition(),
-							player.getViewingDistance())
+			if (p != player && p.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
 					&& !localPlayers.contains(p)) {
 				localPlayers.add(p);
 				added++;
@@ -113,14 +104,12 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 					blockSet.add(SynchronizationBlock.createAppearanceBlock(p));
 				}
 
-				segments.add(new AddCharacterSegment(blockSet, p.getIndex(), p
-						.getPosition()));
+				segments.add(new AddCharacterSegment(blockSet, p.getIndex(), p.getPosition()));
 			}
 		}
 
-		PlayerSynchronizationEvent event = new PlayerSynchronizationEvent(
-				lastKnownRegion, player.getPosition(), regionChanged, segment,
-				oldLocalPlayers, segments);
+		PlayerSynchronizationEvent event = new PlayerSynchronizationEvent(lastKnownRegion, player.getPosition(),
+				regionChanged, segment, oldLocalPlayers, segments);
 		player.send(event);
 	}
 

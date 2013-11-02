@@ -11,8 +11,9 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 /**
- * A {@link FrameDecoder} which decodes the handshake and makes changes to the
- * pipeline as appropriate for the selected service.
+ * A {@link FrameDecoder} which decodes the handshake and makes changes to the pipeline as appropriate for the selected
+ * service.
+ * 
  * @author Graham
  */
 public final class HandshakeDecoder extends FrameDecoder {
@@ -25,8 +26,7 @@ public final class HandshakeDecoder extends FrameDecoder {
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel,
-			ChannelBuffer buffer) throws Exception {
+	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readable()) {
 			int id = buffer.readUnsignedByte();
 

@@ -8,8 +8,8 @@ import org.apollo.net.meta.PacketMetaData;
 import org.apollo.net.meta.PacketMetaDataGroup;
 
 /**
- * A {@link Release} is a distinct client version, for example 317 is a common
- * release used in server emulators.
+ * A {@link Release} is a distinct client version, for example 317 is a common release used in server emulators.
+ * 
  * @author Graham
  */
 public abstract class Release {
@@ -36,6 +36,7 @@ public abstract class Release {
 
 	/**
 	 * Creates the release.
+	 * 
 	 * @param releaseNumber The release number.
 	 * @param incomingPacketMetaData The incoming packet meta data.
 	 */
@@ -46,6 +47,7 @@ public abstract class Release {
 
 	/**
 	 * Gets the release number.
+	 * 
 	 * @return The release number.
 	 */
 	public final int getReleaseNumber() {
@@ -54,6 +56,7 @@ public abstract class Release {
 
 	/**
 	 * Registers a {@link EventDecoder} for the specified opcode.
+	 * 
 	 * @param opcode The opcode, between 0 and 255 inclusive.
 	 * @param decoder The {@link EventDecoder}.
 	 */
@@ -66,6 +69,7 @@ public abstract class Release {
 
 	/**
 	 * Registers a {@link EventEncoder} for the specified event type.
+	 * 
 	 * @param type The event type.
 	 * @param encoder The {@link EventEncoder}.
 	 */
@@ -75,6 +79,7 @@ public abstract class Release {
 
 	/**
 	 * Gets meta data for the specified incoming packet.
+	 * 
 	 * @param opcode The opcode of the incoming packet.
 	 * @return The {@link PacketMetaData} object.
 	 */
@@ -84,6 +89,7 @@ public abstract class Release {
 
 	/**
 	 * Gets the {@link EventDecoder} for the specified opcode.
+	 * 
 	 * @param opcode The opcode.
 	 * @return The {@link EventDecoder}.
 	 */
@@ -96,6 +102,7 @@ public abstract class Release {
 
 	/**
 	 * Gets an {@link EventEncoder} for the specified event type.
+	 * 
 	 * @param type The type of event.
 	 * @return The {@link EventEncoder}.
 	 */

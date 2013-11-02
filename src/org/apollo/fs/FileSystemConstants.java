@@ -2,6 +2,7 @@ package org.apollo.fs;
 
 /**
  * Holds file system related constants.
+ * 
  * @author Graham
  */
 public final class FileSystemConstants {

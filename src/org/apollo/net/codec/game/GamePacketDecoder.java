@@ -13,6 +13,7 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * A {@link StatefulFrameDecoder} which decodes game packets.
+ * 
  * @author Graham
  */
 public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderState> {
@@ -44,6 +45,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	/**
 	 * Creates the {@link GamePacketDecoder}.
+	 * 
 	 * @param random The random number generator.
 	 * @param release The current release.
 	 */
@@ -54,7 +56,8 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, GameDecoderState state) throws Exception {
+	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, GameDecoderState state)
+			throws Exception {
 		switch (state) {
 		case GAME_OPCODE:
 			return decodeOpcode(ctx, channel, buffer);
@@ -69,6 +72,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	/**
 	 * Decodes in the opcode state.
+	 * 
 	 * @param ctx The channel handler context.
 	 * @param channel The channel.
 	 * @param buffer The buffer.
@@ -84,7 +88,6 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 			if (metaData == null) {
 				throw new Exception("Illegal opcode: " + opcode);
 			}
-
 
 			type = metaData.getType();
 			switch (type) {
@@ -108,6 +111,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	/**
 	 * Decodes in the length state.
+	 * 
 	 * @param ctx The channel handler context.
 	 * @param channel The channel.
 	 * @param buffer The buffer.
@@ -128,6 +132,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	/**
 	 * Decodes in the payload state.
+	 * 
 	 * @param ctx The channel handler context.
 	 * @param channel The channel.
 	 * @param buffer The buffer.
@@ -144,15 +149,17 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	/**
-	 * Decodes a zero length packet. This hackery is required as Netty will
-	 * throw an exception if we return a frame but have read nothing!
+	 * Decodes a zero length packet. This hackery is required as Netty will throw an exception if we return a frame but
+	 * have read nothing!
+	 * 
 	 * @param ctx The channel handler context.
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
 	 * @throws Exception if an error occurs.
 	 */
-	private Object decodeZeroLengthPacket(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	private Object decodeZeroLengthPacket(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer)
+			throws Exception {
 		ChannelBuffer payload = ChannelBuffers.buffer(0);
 		setState(GameDecoderState.GAME_OPCODE);
 		return new GamePacket(opcode, type, payload);

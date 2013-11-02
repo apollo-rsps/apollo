@@ -5,8 +5,8 @@ import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inv.InventoryListener;
 
 /**
- * An {@link InterfaceListener} which removes the {@link InventoryListener}s
- * when the bank is closed.
+ * An {@link InterfaceListener} which removes the {@link InventoryListener}s when the bank is closed.
+ * 
  * @author Graham
  */
 public final class BankInterfaceListener implements InterfaceListener {
@@ -28,6 +28,7 @@ public final class BankInterfaceListener implements InterfaceListener {
 
 	/**
 	 * Creates the bank interface listener.
+	 * 
 	 * @param player The player.
 	 * @param invListener The inventory listener.
 	 * @param bankListener The bank listener.

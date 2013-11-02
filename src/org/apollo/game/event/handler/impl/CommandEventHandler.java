@@ -9,6 +9,7 @@ import org.apollo.game.model.World;
 
 /**
  * An {@link EventHandler} which dispatches {@link CommandEvent}s.
+ * 
  * @author Graham
  */
 public final class CommandEventHandler extends EventHandler<CommandEvent> {

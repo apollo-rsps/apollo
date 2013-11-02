@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 
 /**
  * A resource provider composed of multiple resource providers.
+ * 
  * @author Graham
  */
 public final class CombinedResourceProvider extends ResourceProvider {
@@ -16,6 +17,7 @@ public final class CombinedResourceProvider extends ResourceProvider {
 
 	/**
 	 * Creates the combined resource providers.
+	 * 
 	 * @param providers The providers this provider delegates to.
 	 */
 	public CombinedResourceProvider(ResourceProvider... providers) {

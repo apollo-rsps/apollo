@@ -7,6 +7,7 @@ import org.apollo.game.model.Player;
 
 /**
  * An {@link EventHandler} for the {@link ClosedInterfaceEvent}.
+ * 
  * @author Graham
  */
 public final class ClosedInterfaceEventHandler extends EventHandler<ClosedInterfaceEvent> {

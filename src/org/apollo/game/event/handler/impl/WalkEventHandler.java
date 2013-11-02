@@ -9,6 +9,7 @@ import org.apollo.game.model.WalkingQueue;
 
 /**
  * A handler for the {@link WalkEvent}.
+ * 
  * @author Graham
  */
 public final class WalkEventHandler extends EventHandler<WalkEvent> {

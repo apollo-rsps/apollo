@@ -11,6 +11,7 @@ import org.apollo.util.xml.XmlParser;
 
 /**
  * A class which manages {@link Service}s.
+ * 
  * @author Graham
  */
 public final class ServiceManager {
@@ -27,6 +28,7 @@ public final class ServiceManager {
 
 	/**
 	 * Creates and initializes the {@link ServiceManager}.
+	 * 
 	 * @throws Exception if an error occurs.
 	 */
 	public ServiceManager() throws Exception {
@@ -35,6 +37,7 @@ public final class ServiceManager {
 
 	/**
 	 * Initializes this service manager.
+	 * 
 	 * @throws Exception if an error occurs.
 	 */
 	@SuppressWarnings("unchecked")
@@ -71,6 +74,7 @@ public final class ServiceManager {
 
 	/**
 	 * Registers a service.
+	 * 
 	 * @param <S> The type of service.
 	 * @param clazz The service's class.
 	 * @param service The service.
@@ -82,6 +86,7 @@ public final class ServiceManager {
 
 	/**
 	 * Gets a service.
+	 * 
 	 * @param <S> The type of service.
 	 * @param clazz The service class.
 	 * @return The service.
@@ -104,6 +109,7 @@ public final class ServiceManager {
 
 	/**
 	 * Sets the context of all services.
+	 * 
 	 * @param ctx The server context.
 	 */
 	public void setContext(ServerContext ctx) {

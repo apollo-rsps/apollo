@@ -3,12 +3,12 @@ package org.apollo.game.sync.task;
 import java.util.concurrent.Phaser;
 
 /**
- * A {@link SynchronizationTask} which wraps around another
- * {@link SynchronizationTask} and notifies the specified {@link Phaser} when
- * the task has completed by calling {@link Phaser#arriveAndDeregister()}.
+ * A {@link SynchronizationTask} which wraps around another {@link SynchronizationTask} and notifies the specified
+ * {@link Phaser} when the task has completed by calling {@link Phaser#arriveAndDeregister()}.
  * <p>
- * The phaser must have already registered this task. This can be done using
- * the {@link Phaser#register()} or {@link Phaser#bulkRegister(int)} methods.
+ * The phaser must have already registered this task. This can be done using the {@link Phaser#register()} or
+ * {@link Phaser#bulkRegister(int)} methods.
+ * 
  * @author Graham
  */
 public final class PhasedSynchronizationTask extends SynchronizationTask {
@@ -25,6 +25,7 @@ public final class PhasedSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Creates the phased synchronization task.
+	 * 
 	 * @param phaser The phaser.
 	 * @param task The task.
 	 */

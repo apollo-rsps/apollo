@@ -11,6 +11,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link FirstObjectActionEvent}.
+ * 
  * @author Graham
  */
 public final class FirstObjectActionEventDecoder extends EventDecoder<FirstObjectActionEvent> {

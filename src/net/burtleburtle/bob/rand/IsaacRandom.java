@@ -1,9 +1,11 @@
 package net.burtleburtle.bob.rand;
 
 /**
- * <p>An implementation of the
- * <a href="http://www.burtleburtle.net/bob/rand/isaacafa.html">ISAAC</a>
- * psuedorandom number generator.</p>
+ * <p>
+ * An implementation of the <a href="http://www.burtleburtle.net/bob/rand/isaacafa.html">ISAAC</a> psuedorandom number
+ * generator.
+ * </p>
+ * 
  * <pre>
  * ------------------------------------------------------------------------------
  * Rand.java: By Bob Jenkins.  My random number generator, ISAAC.
@@ -15,8 +17,10 @@ package net.burtleburtle.bob.rand;
  *   980224: Translate to Java
  * ------------------------------------------------------------------------------
  * </pre>
- * <p>This class has been changed to be more conformant to Java and javadoc
- * conventions.</p>
+ * <p>
+ * This class has been changed to be more conformant to Java and javadoc conventions.
+ * </p>
+ * 
  * @author Bob Jenkins
  */
 public final class IsaacRandom {
@@ -82,6 +86,7 @@ public final class IsaacRandom {
 
 	/**
 	 * Creates the random number generator with the specified seed.
+	 * 
 	 * @param seed The seed.
 	 */
 	public IsaacRandom(int[] seed) {
@@ -155,6 +160,7 @@ public final class IsaacRandom {
 
 	/**
 	 * Initialises this random number generator.
+	 * 
 	 * @param flag Set to {@code true} if a seed was passed to the constructor.
 	 */
 	private void init(boolean flag) {
@@ -285,6 +291,7 @@ public final class IsaacRandom {
 
 	/**
 	 * Gets the next random value.
+	 * 
 	 * @return The next random value.
 	 */
 	public int nextInt() {

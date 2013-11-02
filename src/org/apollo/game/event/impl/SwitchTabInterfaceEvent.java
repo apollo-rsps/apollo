@@ -4,6 +4,7 @@ import org.apollo.game.event.Event;
 
 /**
  * An event sent to the client to change the interface of a tab.
+ * 
  * @author Graham
  */
 public final class SwitchTabInterfaceEvent extends Event {
@@ -20,6 +21,7 @@ public final class SwitchTabInterfaceEvent extends Event {
 
 	/**
 	 * Creates the switch interface event.
+	 * 
 	 * @param tab The tab id.
 	 * @param interfaceId The interface id.
 	 */
@@ -30,6 +32,7 @@ public final class SwitchTabInterfaceEvent extends Event {
 
 	/**
 	 * Gets the tab id.
+	 * 
 	 * @return The tab id.
 	 */
 	public int getTabId() {
@@ -38,6 +41,7 @@ public final class SwitchTabInterfaceEvent extends Event {
 
 	/**
 	 * Gets the interface id.
+	 * 
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {

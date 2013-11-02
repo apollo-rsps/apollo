@@ -10,12 +10,14 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
  * Contains bank-related utility methods.
+ * 
  * @author Graham
  */
 public final class BankUtils {
 
 	/**
 	 * Opens a player's bank.
+	 * 
 	 * @param player The player.
 	 */
 	public static void openBank(Player player) {
@@ -30,11 +32,13 @@ public final class BankUtils {
 
 		InterfaceListener interListener = new BankInterfaceListener(player, invListener, bankListener);
 
-		player.getInterfaceSet().openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID, BankConstants.SIDEBAR_ID);
+		player.getInterfaceSet().openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID,
+				BankConstants.SIDEBAR_ID);
 	}
 
 	/**
 	 * Deposits an item into the player's bank.
+	 * 
 	 * @param player The player.
 	 * @param slot The slot.
 	 * @param id The id.
@@ -86,6 +90,7 @@ public final class BankUtils {
 
 	/**
 	 * Withdraws an item from a player's bank.
+	 * 
 	 * @param player The player.
 	 * @param slot The slot.
 	 * @param id The id.

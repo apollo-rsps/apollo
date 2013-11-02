@@ -2,6 +2,7 @@ package org.apollo.net;
 
 /**
  * Holds various network-related constants such as port numbers.
+ * 
  * @author Graham
  */
 public final class NetworkConstants {

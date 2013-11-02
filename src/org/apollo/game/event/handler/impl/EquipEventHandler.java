@@ -15,6 +15,7 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
  * An event handler which equips items.
+ * 
  * @author Graham
  */
 public final class EquipEventHandler extends EventHandler<EquipEvent> {
@@ -48,7 +49,8 @@ public final class EquipEventHandler extends EventHandler<EquipEvent> {
 				return;
 			}
 			if (skillSet.getSkill(Skill.STRENGTH).getMaximumLevel() < equipDef.getStrengthLevel()) {
-				player.sendMessage("You need a Strength level of " + equipDef.getStrengthLevel() + " to equip this item.");
+				player.sendMessage("You need a Strength level of " + equipDef.getStrengthLevel()
+						+ " to equip this item.");
 				ctx.breakHandlerChain();
 				return;
 			}
@@ -77,12 +79,12 @@ public final class EquipEventHandler extends EventHandler<EquipEvent> {
 			// TODO: put all this into another method somewhere
 
 			// check if there is enough space for a two handed weapon
-            if (equipDef.isTwoHanded()) {
-                if(equipment.get(EquipmentConstants.SHIELD) != null){
-                    Item shield = equipment.reset(EquipmentConstants.SHIELD);
-                    inventory.add(shield);
-                }
-            }
+			if (equipDef.isTwoHanded()) {
+				if (equipment.get(EquipmentConstants.SHIELD) != null) {
+					Item shield = equipment.reset(EquipmentConstants.SHIELD);
+					inventory.add(shield);
+				}
+			}
 
 			// check if a shield is being added with a two handed weapon
 			boolean removeWeapon = false;

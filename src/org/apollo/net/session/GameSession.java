@@ -19,6 +19,7 @@ import org.jboss.netty.channel.ChannelFutureListener;
 
 /**
  * A game session.
+ * 
  * @author Graham
  */
 public final class GameSession extends Session {
@@ -45,6 +46,7 @@ public final class GameSession extends Session {
 
 	/**
 	 * Creates a login session for the specified channel.
+	 * 
 	 * @param channel The channel.
 	 * @param context The server context.
 	 * @param player The player.
@@ -67,6 +69,7 @@ public final class GameSession extends Session {
 
 	/**
 	 * Encodes and dispatches the specified event.
+	 * 
 	 * @param event The event.
 	 */
 	public void dispatchEvent(Event event) {
@@ -81,6 +84,7 @@ public final class GameSession extends Session {
 
 	/**
 	 * Handles pending events for this session.
+	 * 
 	 * @param chainGroup The event chain group.
 	 */
 	@SuppressWarnings("unchecked")
@@ -115,6 +119,7 @@ public final class GameSession extends Session {
 
 	/**
 	 * Handles a player saver response.
+	 * 
 	 * @param success A flag indicating if the save was successful.
 	 */
 	public void handlePlayerSaverResponse(boolean success) {

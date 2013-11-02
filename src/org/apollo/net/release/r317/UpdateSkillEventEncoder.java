@@ -10,6 +10,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link UpdateSkillEvent}.
+ * 
  * @author Graham
  */
 public final class UpdateSkillEventEncoder extends EventEncoder<UpdateSkillEvent> {

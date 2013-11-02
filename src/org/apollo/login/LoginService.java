@@ -21,6 +21,7 @@ import org.apollo.util.xml.XmlParser;
 
 /**
  * The {@link LoginService} manages {@link LoginRequest}s.
+ * 
  * @author Graham
  */
 public final class LoginService extends Service {
@@ -42,6 +43,7 @@ public final class LoginService extends Service {
 
 	/**
 	 * Creates the login service.
+	 * 
 	 * @throws Exception if an error occurs.
 	 */
 	public LoginService() throws Exception {
@@ -50,6 +52,7 @@ public final class LoginService extends Service {
 
 	/**
 	 * Initialises the login service.
+	 * 
 	 * @throws Exception if an error occurs.
 	 */
 	private void init() throws Exception {
@@ -86,6 +89,7 @@ public final class LoginService extends Service {
 
 	/**
 	 * Submits a login request.
+	 * 
 	 * @param session The session submitting this request.
 	 * @param request The login request.
 	 */
@@ -101,6 +105,7 @@ public final class LoginService extends Service {
 
 	/**
 	 * Submits a save request.
+	 * 
 	 * @param session The session submitting this request.
 	 * @param player The player to save.
 	 */

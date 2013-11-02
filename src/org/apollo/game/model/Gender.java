@@ -2,6 +2,7 @@ package org.apollo.game.model;
 
 /**
  * An enumeration containing the two genders (male and female).
+ * 
  * @author Graham
  */
 public enum Gender {
@@ -23,6 +24,7 @@ public enum Gender {
 
 	/**
 	 * Creates the gender.
+	 * 
 	 * @param intValue The integer representation.
 	 */
 	private Gender(int intValue) {
@@ -31,6 +33,7 @@ public enum Gender {
 
 	/**
 	 * Converts this gender to an integer.
+	 * 
 	 * @return The integer representation used by the client.
 	 */
 	public int toInteger() {

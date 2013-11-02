@@ -6,6 +6,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link ClosedInterfaceEvent}.
+ * 
  * @author Graham
  */
 public final class ClosedInterfaceEventDecoder extends EventDecoder<ClosedInterfaceEvent> {

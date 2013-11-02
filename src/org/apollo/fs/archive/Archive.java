@@ -17,11 +17,9 @@ public final class Archive {
 	/**
 	 * Decodes the archive in the specified buffer.
 	 * 
-	 * @param buffer
-	 *            The buffer.
+	 * @param buffer The buffer.
 	 * @return The archive.
-	 * @throws IOException
-	 *             if an I/O error occurs.
+	 * @throws IOException if an I/O error occurs.
 	 */
 	public static Archive decode(ByteBuffer buffer) throws IOException {
 		int extractedSize = ByteBufferUtil.readUnsignedTriByte(buffer);
@@ -71,8 +69,7 @@ public final class Archive {
 	/**
 	 * Creates a new archive.
 	 * 
-	 * @param entries
-	 *            The entries in this archive.
+	 * @param entries The entries in this archive.
 	 */
 	public Archive(ArchiveEntry[] entries) {
 		this.entries = entries;
@@ -81,11 +78,9 @@ public final class Archive {
 	/**
 	 * Gets an entry by its name.
 	 * 
-	 * @param name
-	 *            The name.
+	 * @param name The name.
 	 * @return The entry.
-	 * @throws FileNotFoundException
-	 *             if the file could not be found.
+	 * @throws FileNotFoundException if the file could not be found.
 	 */
 	public ArchiveEntry getEntry(String name) throws FileNotFoundException {
 		int hash = 0;

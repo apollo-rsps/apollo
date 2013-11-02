@@ -7,6 +7,7 @@ import org.apollo.game.model.Player;
 
 /**
  * An {@link EventHandler} for the {@link EnteredAmountEvent}.
+ * 
  * @author Graham
  */
 public final class EnteredAmountEventHandler extends EventHandler<EnteredAmountEvent> {

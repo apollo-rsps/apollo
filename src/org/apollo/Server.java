@@ -28,6 +28,7 @@ import org.jboss.netty.util.Timer;
 
 /**
  * The core class of the Apollo server.
+ * 
  * @author Graham
  */
 public final class Server {
@@ -39,6 +40,7 @@ public final class Server {
 
 	/**
 	 * The entry point of the Apollo server application.
+	 * 
 	 * @param args The command-line arguments passed to the application.
 	 */
 	public static void main(String[] args) {
@@ -74,8 +76,8 @@ public final class Server {
 	private final ServerBootstrap jagGrabBootstrap = new ServerBootstrap();
 
 	/**
-	 * The {@link ExecutorService} used for network events. The named thread
-	 * factory is unused as Netty names threads itself.
+	 * The {@link ExecutorService} used for network events. The named thread factory is unused as Netty names threads
+	 * itself.
 	 */
 	private final ExecutorService networkExecutor = Executors.newCachedThreadPool();
 
@@ -96,6 +98,7 @@ public final class Server {
 
 	/**
 	 * Creates the Apollo server.
+	 * 
 	 * @throws Exception if an error occurs whilst creating services.
 	 */
 	public Server() throws Exception {
@@ -105,13 +108,14 @@ public final class Server {
 
 	/**
 	 * Initialises the server.
-	 * @param releaseClassName The class name of the current active
-	 * {@link Release}.
+	 * 
+	 * @param releaseClassName The class name of the current active {@link Release}.
 	 * @throws ClassNotFoundException if the release class could not be found.
 	 * @throws IllegalAccessException if the release class could not be accessed.
 	 * @throws InstantiationException if the release class could not be instantiated.
 	 */
-	public void init(String releaseClassName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public void init(String releaseClassName) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
 		Class<?> clazz = Class.forName(releaseClassName);
 		Release release = (Release) clazz.newInstance();
 
@@ -137,6 +141,7 @@ public final class Server {
 
 	/**
 	 * Binds the server to the specified address.
+	 * 
 	 * @param serviceAddress The service address to bind to.
 	 * @param httpAddress The HTTP address to bind to.
 	 * @param jagGrabAddress The JAGGRAB address to bind to.
@@ -149,7 +154,8 @@ public final class Server {
 		try {
 			httpBootstrap.bind(httpAddress);
 		} catch (Throwable t) {
-			logger.log(Level.WARNING, "Binding to HTTP failed: client will use JAGGRAB as a fallback (not reccomended)!", t);
+			logger.log(Level.WARNING,
+					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not reccomended)!", t);
 		}
 
 		logger.info("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
@@ -160,6 +166,7 @@ public final class Server {
 
 	/**
 	 * Starts the server.
+	 * 
 	 * @throws Exception if an error occurs.
 	 */
 	public void start() throws Exception {

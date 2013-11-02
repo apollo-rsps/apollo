@@ -10,6 +10,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link SwitchItemEvent}.
+ * 
  * @author Graham
  */
 public final class SwitchItemEventDecoder extends EventDecoder<SwitchItemEvent> {

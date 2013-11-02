@@ -94,22 +94,17 @@ public final class Release377 extends Release {
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
 		register(RegionChangeEvent.class, new RegionChangeEventEncoder());
 		register(ServerMessageEvent.class, new ServerMessageEventEncoder());
-		register(PlayerSynchronizationEvent.class,
-				new PlayerSynchronizationEventEncoder());
+		register(PlayerSynchronizationEvent.class, new PlayerSynchronizationEventEncoder());
 		register(OpenInterfaceEvent.class, new OpenInterfaceEventEncoder());
 		register(CloseInterfaceEvent.class, new CloseInterfaceEventEncoder());
-		register(SwitchTabInterfaceEvent.class,
-				new SwitchTabInterfaceEventEncoder());
+		register(SwitchTabInterfaceEvent.class, new SwitchTabInterfaceEventEncoder());
 		register(LogoutEvent.class, new LogoutEventEncoder());
 		register(UpdateItemsEvent.class, new UpdateItemsEventEncoder());
-		register(UpdateSlottedItemsEvent.class,
-				new UpdateSlottedItemsEventEncoder());
+		register(UpdateSlottedItemsEvent.class, new UpdateSlottedItemsEventEncoder());
 		register(UpdateSkillEvent.class, new UpdateSkillEventEncoder());
-		register(OpenInterfaceSidebarEvent.class,
-				new OpenInterfaceSidebarEventEncoder());
+		register(OpenInterfaceSidebarEvent.class, new OpenInterfaceSidebarEventEncoder());
 		register(EnterAmountEvent.class, new EnterAmountEventEncoder());
-		register(SetInterfaceTextEvent.class,
-				new SetInterfaceTextEventEncoder());
+		register(SetInterfaceTextEvent.class, new SetInterfaceTextEventEncoder());
 	}
 
 }

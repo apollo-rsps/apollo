@@ -5,8 +5,8 @@ import org.apollo.game.model.Player;
 import org.apollo.game.model.Position;
 
 /**
- * A {@link SynchronizationTask} which does pre-synchronization work for the
- * specified {@link Player}.
+ * A {@link SynchronizationTask} which does pre-synchronization work for the specified {@link Player}.
+ * 
  * @author Graham
  */
 public final class PrePlayerSynchronizationTask extends SynchronizationTask {
@@ -17,8 +17,8 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	private final Player player;
 
 	/**
-	 * Creates the {@link PrePlayerSynchronizationTask} for the specified
-	 * player.
+	 * Creates the {@link PrePlayerSynchronizationTask} for the specified player.
+	 * 
 	 * @param player The player.
 	 */
 	public PrePlayerSynchronizationTask(Player player) {
@@ -49,6 +49,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Checks if a region update is required.
+	 * 
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
 	private boolean isRegionUpdateRequired() {

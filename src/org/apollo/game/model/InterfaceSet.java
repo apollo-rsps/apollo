@@ -13,25 +13,20 @@ import org.apollo.game.model.inter.InterfaceListener;
 /**
  * Represents the set of interfaces the player has open.
  * <p>
- * This class manages all six distinct types of interface (the last two are not
- * present on 317 servers).
+ * This class manages all six distinct types of interface (the last two are not present on 317 servers).
  * <p>
  * <ul>
- *   <li><strong>Windows:</strong> the ones people mostly associate with the
- *   word interfaces. Things like your bank, the wildy warning screen, the
- *   trade screen, etc.</li>
- *   <li><strong>Overlays:</strong> display in the same place as windows, but
- *   don't prevent you from moving. For example, the wilderness level
- *   indicator.</li>
- *   <li><strong>Dialogues:</strong> interfaces which are displayed over the
- *   chat box.</li>
- *   <li><strong>Sidebars:</strong> an interface which displays over the
- *   inventory area.</li>
- *   <li><strong>Fullscreen windows:</strong> a window which displays over the
- *   whole screen e.g. the 377 welcome screen.</li>
- *   <li><strong>Fullscreen background:</strong> an interface displayed behind
- *   the fullscreen window, typically a blank, black screen.</li>
+ * <li><strong>Windows:</strong> the ones people mostly associate with the word interfaces. Things like your bank, the
+ * wildy warning screen, the trade screen, etc.</li>
+ * <li><strong>Overlays:</strong> display in the same place as windows, but don't prevent you from moving. For example,
+ * the wilderness level indicator.</li>
+ * <li><strong>Dialogues:</strong> interfaces which are displayed over the chat box.</li>
+ * <li><strong>Sidebars:</strong> an interface which displays over the inventory area.</li>
+ * <li><strong>Fullscreen windows:</strong> a window which displays over the whole screen e.g. the 377 welcome screen.</li>
+ * <li><strong>Fullscreen background:</strong> an interface displayed behind the fullscreen window, typically a blank,
+ * black screen.</li>
  * </ul>
+ * 
  * @author Graham
  */
 public final class InterfaceSet {
@@ -59,6 +54,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Creates an interface set.
+	 * 
 	 * @param player The player.
 	 */
 	public InterfaceSet(Player player) {
@@ -83,6 +79,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens the enter amount dialog.
+	 * 
 	 * @param listener The enter amount listener.
 	 */
 	public void openEnterAmountDialog(EnterAmountListener listener) {
@@ -93,6 +90,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a window and inventory sidebar.
+	 * 
 	 * @param windowId The window's id.
 	 * @param sidebarId The sidebar's id.
 	 */
@@ -102,6 +100,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a window and inventory sidebar with the specified listener.
+	 * 
 	 * @param listener The listener for this interface.
 	 * @param windowId The window's id.
 	 * @param sidebarId The sidebar's id.
@@ -118,6 +117,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a window.
+	 * 
 	 * @param windowId The window's id.
 	 */
 	public void openWindow(int windowId) {
@@ -126,6 +126,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a window with the specified listener.
+	 * 
 	 * @param listener The listener for this interface.
 	 * @param windowId The window's id.
 	 */
@@ -140,6 +141,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Checks if this interface sets contains the specified interface.
+	 * 
 	 * @param id The interface's id.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -148,8 +150,7 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * An internal method for closing the interface, notifying the listener if
-	 * appropriate, but not sending any events.
+	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any events.
 	 */
 	private void closeAndNotify() {
 		amountListener = null; // TODO should we notify??
@@ -162,8 +163,8 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * Called when the client has entered the specified amount. Notifies the
-	 * current listener.
+	 * Called when the client has entered the specified amount. Notifies the current listener.
+	 * 
 	 * @param amount The amount.
 	 */
 	public void enteredAmount(int amount) {

@@ -16,8 +16,7 @@ import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
 
 /**
- * A class which parses the {@code events.xml} file to produce
- * {@link EventHandlerChainGroup}s.
+ * A class which parses the {@code events.xml} file to produce {@link EventHandlerChainGroup}s.
  * 
  * @author Graham
  */
@@ -36,10 +35,8 @@ public final class EventHandlerChainParser {
 	/**
 	 * Creates the event chain parser.
 	 * 
-	 * @param is
-	 *            The source {@link InputStream}.
-	 * @throws SAXException
-	 *             if a SAX error occurs.
+	 * @param is The source {@link InputStream}.
+	 * @throws SAXException if a SAX error occurs.
 	 */
 	public EventHandlerChainParser(InputStream is) throws SAXException {
 		this.parser = new XmlParser();
@@ -49,22 +46,16 @@ public final class EventHandlerChainParser {
 	/**
 	 * Parses the XML and produces a group of {@link EventHandlerChain}s.
 	 * 
-	 * @throws IOException
-	 *             if an I/O error occurs.
-	 * @throws SAXException
-	 *             if a SAX error occurs.
-	 * @throws ClassNotFoundException
-	 *             if a class was not found.
-	 * @throws IllegalAccessException
-	 *             if a class was accessed illegally.
-	 * @throws InstantiationException
-	 *             if a class could not be instantiated.
+	 * @throws IOException if an I/O error occurs.
+	 * @throws SAXException if a SAX error occurs.
+	 * @throws ClassNotFoundException if a class was not found.
+	 * @throws IllegalAccessException if a class was accessed illegally.
+	 * @throws InstantiationException if a class could not be instantiated.
 	 * @return An {@link EventHandlerChainGroup}.
 	 */
 	@SuppressWarnings("unchecked")
-	public EventHandlerChainGroup parse() throws IOException, SAXException,
-			ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
+	public EventHandlerChainGroup parse() throws IOException, SAXException, ClassNotFoundException,
+			InstantiationException, IllegalAccessException {
 		XmlNode rootNode = parser.parse(is);
 		if (!rootNode.getName().equals("events")) {
 			throw new IOException("root node name is not 'events'");
@@ -74,19 +65,16 @@ public final class EventHandlerChainParser {
 
 		for (XmlNode eventNode : rootNode) {
 			if (!eventNode.getName().equals("event")) {
-				throw new IOException(
-						"only expected nodes named 'event' beneath the root node");
+				throw new IOException("only expected nodes named 'event' beneath the root node");
 			}
 
 			XmlNode typeNode = eventNode.getChild("type");
 			if (typeNode == null) {
-				throw new IOException(
-						"no node named 'type' beneath current event node");
+				throw new IOException("no node named 'type' beneath current event node");
 			}
 			XmlNode chainNode = eventNode.getChild("chain");
 			if (chainNode == null) {
-				throw new IOException(
-						"no node named 'chain' beneath current event node");
+				throw new IOException("no node named 'chain' beneath current event node");
 			}
 
 			String eventClassName = typeNode.getValue();
@@ -94,14 +82,12 @@ public final class EventHandlerChainParser {
 				throw new IOException("type node must have a value");
 			}
 
-			Class<? extends Event> eventClass = (Class<? extends Event>) Class
-					.forName(eventClassName);
+			Class<? extends Event> eventClass = (Class<? extends Event>) Class.forName(eventClassName);
 			List<EventHandler<?>> handlers = new ArrayList<EventHandler<?>>();
 
 			for (XmlNode handlerNode : chainNode) {
 				if (!handlerNode.getName().equals("handler")) {
-					throw new IOException(
-							"only expected nodes named 'handler' beneath the root node");
+					throw new IOException("only expected nodes named 'handler' beneath the root node");
 				}
 
 				String handlerClassName = handlerNode.getValue();
@@ -115,8 +101,7 @@ public final class EventHandlerChainParser {
 				handlers.add(handler);
 			}
 
-			EventHandler<?>[] handlersArray = handlers
-					.toArray(new EventHandler<?>[handlers.size()]);
+			EventHandler<?>[] handlersArray = handlers.toArray(new EventHandler<?>[handlers.size()]);
 			@SuppressWarnings("rawtypes")
 			EventHandlerChain<?> chain = new EventHandlerChain(handlersArray);
 
