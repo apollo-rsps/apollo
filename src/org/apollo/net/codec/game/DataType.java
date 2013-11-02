@@ -2,6 +2,7 @@ package org.apollo.net.codec.game;
 
 /**
  * Represents the different simple data types.
+ * 
  * @author Graham
  */
 public enum DataType {
@@ -38,6 +39,7 @@ public enum DataType {
 
 	/**
 	 * Creates a data type.
+	 * 
 	 * @param bytes The number of bytes it occupies.
 	 */
 	private DataType(int bytes) {
@@ -46,6 +48,7 @@ public enum DataType {
 
 	/**
 	 * Gets the number of bytes the data type occupies.
+	 * 
 	 * @return The number of bytes.
 	 */
 	public int getBytes() {

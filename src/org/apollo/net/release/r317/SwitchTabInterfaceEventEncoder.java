@@ -9,6 +9,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link SwitchTabInterfaceEvent}.
+ * 
  * @author Graham
  */
 public final class SwitchTabInterfaceEventEncoder extends EventEncoder<SwitchTabInterfaceEvent> {

@@ -4,6 +4,7 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
  * A {@link SynchronizationSegment} which removes a character.
+ * 
  * @author Graham
  */
 public final class RemoveCharacterSegment extends SynchronizationSegment {

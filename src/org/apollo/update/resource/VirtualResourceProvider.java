@@ -6,8 +6,9 @@ import java.nio.ByteBuffer;
 import org.apollo.fs.IndexedFileSystem;
 
 /**
- * A {@link ResourceProvider} which maps virtual resources (such as
- * {@code /media}) to files in an {@link IndexedFileSystem}.
+ * A {@link ResourceProvider} which maps virtual resources (such as {@code /media}) to files in an
+ * {@link IndexedFileSystem}.
+ * 
  * @author Graham
  */
 public final class VirtualResourceProvider extends ResourceProvider {
@@ -15,10 +16,8 @@ public final class VirtualResourceProvider extends ResourceProvider {
 	/**
 	 * An array of valid prefixes.
 	 */
-	private static final String[] VALID_PREFIXES = {
-		"crc", "title", "config", "interface", "media", "versionlist",
-		"textures", "wordenc", "sounds"
-	};
+	private static final String[] VALID_PREFIXES = { "crc", "title", "config", "interface", "media", "versionlist",
+			"textures", "wordenc", "sounds" };
 
 	/**
 	 * The file system.
@@ -27,6 +26,7 @@ public final class VirtualResourceProvider extends ResourceProvider {
 
 	/**
 	 * Creates a new virtual resource provider with the specified file system.
+	 * 
 	 * @param fs The file system.
 	 */
 	public VirtualResourceProvider(IndexedFileSystem fs) {

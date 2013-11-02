@@ -22,23 +22,23 @@ import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 
 /**
- * The {@link GameService} class schedules and manages the execution of the
- * {@link GamePulseHandler} class.
+ * The {@link GameService} class schedules and manages the execution of the {@link GamePulseHandler} class.
+ * 
  * @author Graham
  */
 public final class GameService extends Service {
 
 	/**
-	 * The number of times to unregister players per cycle. This is to ensure
-	 * the saving threads don't get swamped with requests and slow everything
-	 * down.
+	 * The number of times to unregister players per cycle. This is to ensure the saving threads don't get swamped with
+	 * requests and slow everything down.
 	 */
 	private static final int UNREGISTERS_PER_CYCLE = 50;
 
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
+	private final ScheduledExecutorService scheduledExecutor = Executors
+			.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
 
 	/**
 	 * A queue of players to remove.
@@ -57,6 +57,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Creates the game service.
+	 * 
 	 * @throws Exception if an error occurs during initialization.
 	 */
 	public GameService() throws Exception {
@@ -65,6 +66,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Gets the event handler chains.
+	 * 
 	 * @return The event handler chains.
 	 */
 	public EventHandlerChainGroup getEventHandlerChains() {
@@ -73,6 +75,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Initializes the game service.
+	 * 
 	 * @throws Exception if an error occurs.
 	 */
 	private void init() throws Exception {
@@ -110,7 +113,8 @@ public final class GameService extends Service {
 	 */
 	@Override
 	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
+		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY,
+				GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -143,6 +147,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Registers a player (may block!).
+	 * 
 	 * @param player The player.
 	 * @return A {@link RegistrationStatus}.
 	 */
@@ -153,8 +158,8 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Unregisters a player. Returns immediately. The player is unregistered
-	 * at the start of the next cycle.
+	 * Unregisters a player. Returns immediately. The player is unregistered at the start of the next cycle.
+	 * 
 	 * @param player The player.
 	 */
 	public void unregisterPlayer(Player player) {
@@ -163,6 +168,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Finalizes the unregistration of a player.
+	 * 
 	 * @param player The player.
 	 */
 	public void finalizePlayerUnregistration(Player player) {

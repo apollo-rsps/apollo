@@ -1,8 +1,8 @@
 package org.apollo.net.codec.game;
 
 /**
- * Represents the order of bytes in a {@link DataType} when
- * {@code {@link DataType#getBytes()} > 1}.
+ * Represents the order of bytes in a {@link DataType} when {@code {@link DataType#getBytes()} > 1}.
+ * 
  * @author Graham
  */
 public enum DataOrder {

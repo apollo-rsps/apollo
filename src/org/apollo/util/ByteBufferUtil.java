@@ -6,12 +6,14 @@ import org.apollo.net.NetworkConstants;
 
 /**
  * A utility class which contains {@link ByteBuffer}-related methods.
+ * 
  * @author Graham
  */
 public final class ByteBufferUtil {
 
 	/**
 	 * Reads an unsigned tri byte from the specified buffer.
+	 * 
 	 * @param buffer The buffer.
 	 * @return The tri byte.
 	 */
@@ -21,6 +23,7 @@ public final class ByteBufferUtil {
 
 	/**
 	 * Reads a string from the specified buffer.
+	 * 
 	 * @param buffer The buffer.
 	 * @return The string.
 	 */

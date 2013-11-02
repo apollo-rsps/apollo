@@ -8,32 +8,32 @@ import org.apollo.game.model.inv.InventoryListener;
 
 /**
  * Represents an inventory - a collection of {@link Item}s.
+ * 
  * @author Graham
  */
 public final class Inventory implements Cloneable {
 
 	/**
-	 * An enumeration containing the different 'stacking modes' of an
-	 * {@link Inventory}.
+	 * An enumeration containing the different 'stacking modes' of an {@link Inventory}.
+	 * 
 	 * @author Graham
 	 */
 	public enum StackMode {
 
 		/**
-		 * When in {@link #STACK_ALWAYS} mode, an {@link Inventory} will stack
-		 * every single item, regardless of the settings of individual items.
+		 * When in {@link #STACK_ALWAYS} mode, an {@link Inventory} will stack every single item, regardless of the
+		 * settings of individual items.
 		 */
 		STACK_ALWAYS,
 
 		/**
-		 * When in {@link #STACK_STACKABLE_ITEMS} mode, an {@link Inventory}
-		 * will stack items depending on their settings.
+		 * When in {@link #STACK_STACKABLE_ITEMS} mode, an {@link Inventory} will stack items depending on their
+		 * settings.
 		 */
 		STACK_STACKABLE_ITEMS,
 
 		/**
-		 * When in {@link #STACK_NEVER} mode, an {@link Inventory} will never
-		 * stack items.
+		 * When in {@link #STACK_NEVER} mode, an {@link Inventory} will never stack items.
 		 */
 		STACK_NEVER;
 
@@ -71,6 +71,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Creates an inventory.
+	 * 
 	 * @param capacity The capacity.
 	 * @throws IllegalArgumentException if the capacity is negative.
 	 */
@@ -80,6 +81,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Creates an inventory.
+	 * 
 	 * @param capacity The capacity.
 	 * @param mode The stacking mode.
 	 * @throws IllegalArgumentException if the capacity is negative.
@@ -98,9 +100,8 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Creates a copy of this inventory. Listeners are not copied, they must be
-	 * added again yourself! This is so cloned copies don't send updates to
-	 * their counterparts.
+	 * Creates a copy of this inventory. Listeners are not copied, they must be added again yourself! This is so cloned
+	 * copies don't send updates to their counterparts.
 	 */
 	@Override
 	public Inventory clone() {
@@ -112,6 +113,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Checks if this inventory contains an item with the specified id.
+	 * 
 	 * @param id The item's id.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -127,6 +129,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Gets the number of free slots.
+	 * 
 	 * @return The number of free slots.
 	 */
 	public int freeSlots() {
@@ -144,6 +147,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Gets the capacity of this inventory.
+	 * 
 	 * @return The capacity.
 	 */
 	public int capacity() {
@@ -152,6 +156,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Gets the size of this inventory - the number of used slots.
+	 * 
 	 * @return The size.
 	 */
 	public int size() {
@@ -160,6 +165,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Gets the item in the specified slot.
+	 * 
 	 * @param slot The slot.
 	 * @return The item, or {@code null} if the slot is empty.
 	 * @throws IndexOutOfBoundsException if the slot is out of bounds.
@@ -171,9 +177,9 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Sets the item that is in the specified slot.
+	 * 
 	 * @param slot The slot.
-	 * @param item The item, or {@code null} to remove the item that is in the
-	 * slot.
+	 * @param item The item, or {@code null} to remove the item that is in the slot.
 	 * @return The item that was in the slot.
 	 * @throws IndexOutOfBoundsException if the slot is out of bounds.
 	 */
@@ -194,6 +200,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Removes the item (if any) that is in the specified slot.
+	 * 
 	 * @param slot
 	 * @return The item that was in the slot.
 	 * @throws IndexOutOfBoundsException if the slot is out of bounds.
@@ -212,9 +219,9 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * An alias for {@code add(id, 1)}.
+	 * 
 	 * @param id The id.
-	 * @return {@code true} if the item was added, {@code false} if there was
-	 * not enough room.
+	 * @return {@code true} if the item was added, {@code false} if there was not enough room.
 	 */
 	public boolean add(int id) {
 		return add(id, 1) == 0;
@@ -222,6 +229,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * An alias for {@code add(new Item(id, amount)}.
+	 * 
 	 * @param id The id.
 	 * @param amount The amount.
 	 * @return The amount that remains.
@@ -235,15 +243,13 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Adds an item to this inventory. This will attempt to add as much of the
-	 * item that is possible. If the item remains, it will be returned (in the
-	 * case of stackable items, any quantity that remains in the stack is
-	 * returned). If nothing remains, the method will return {@code null}. If
-	 * something remains, the listener will also be notified which could be
-	 * used, for example, to send a message to the player.
+	 * Adds an item to this inventory. This will attempt to add as much of the item that is possible. If the item
+	 * remains, it will be returned (in the case of stackable items, any quantity that remains in the stack is
+	 * returned). If nothing remains, the method will return {@code null}. If something remains, the listener will also
+	 * be notified which could be used, for example, to send a message to the player.
+	 * 
 	 * @param item The item to add to this inventory.
-	 * @return The item that remains if there is not enough room in the
-	 * inventory. If nothing remains, {@code null}.
+	 * @return The item that remains if there is not enough room in the inventory. If nothing remains, {@code null}.
 	 */
 	public Item add(Item item) {
 		int id = item.getId();
@@ -264,7 +270,7 @@ public final class Inventory implements Cloneable {
 						remaining = 0;
 					}
 					set(slot, new Item(id, amount));
-					return remaining > 0 ? new Item(id, remaining): null;
+					return remaining > 0 ? new Item(id, remaining) : null;
 				}
 			}
 			for (int slot = 0; slot < capacity; slot++) {
@@ -308,6 +314,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Removes one item with the specified id.
+	 * 
 	 * @param id The id.
 	 * @return {@code true} if the item was removed, {@code false} otherwise.
 	 */
@@ -317,6 +324,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * An alias for {@code remove(item.getId(), item.getAmount())}.
+	 * 
 	 * @param item The item to remove.
 	 * @return The amount that was removed.
 	 */
@@ -325,9 +333,9 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Removes {@code amount} of the item with the specified {@code id}. If the
-	 * item is stackable, it will remove it from the stack. If not, it'll
-	 * remove {@code amount} items.
+	 * Removes {@code amount} of the item with the specified {@code id}. If the item is stackable, it will remove it
+	 * from the stack. If not, it'll remove {@code amount} items.
+	 * 
 	 * @param id The id.
 	 * @param amount The amount.
 	 * @return The amount that was removed.
@@ -383,6 +391,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Swaps the two items at the specified slots.
+	 * 
 	 * @param oldSlot The old slot.
 	 * @param newSlot The new slot.
 	 * @throws IndexOutOufBoundsException if the slot is out of bounds.
@@ -393,6 +402,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Swaps the two items at the specified slots.
+	 * 
 	 * @param insert If the swap should be done in insertion mode.
 	 * @param oldSlot The old slot.
 	 * @param newSlot The new slot.
@@ -422,6 +432,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Adds a listener.
+	 * 
 	 * @param listener The listener to add.
 	 */
 	public void addListener(InventoryListener listener) {
@@ -430,6 +441,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Removes a listener.
+	 * 
 	 * @param listener The listener to remove.
 	 */
 	public void removeListener(InventoryListener listener) {
@@ -444,8 +456,7 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Notifies listeners that the capacity of this inventory has been
-	 * exceeded.
+	 * Notifies listeners that the capacity of this inventory has been exceeded.
 	 */
 	private void notifyCapacityExceeded() {
 		if (firingEvents) {
@@ -468,6 +479,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Notifies listeners that the specified slot has been updated.
+	 * 
 	 * @param slot The slot.
 	 */
 	private void notifyItemUpdated(int slot) {
@@ -481,6 +493,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Checks the bounds of the specified slot.
+	 * 
 	 * @param slot The slot.
 	 * @throws IndexOutOfBoundsException if the slot is out of bounds.
 	 */
@@ -492,9 +505,9 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Checks if the item specified by the definition should be stacked.
+	 * 
 	 * @param def The definition.
-	 * @return {@code true} if the item should be stacked, {@code false}
-	 * otherwise.
+	 * @return {@code true} if the item should be stacked, {@code false} otherwise.
 	 */
 	private boolean isStackable(ItemDefinition def) {
 		if (mode == StackMode.STACK_ALWAYS) {
@@ -508,6 +521,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Gets a clone of the items array.
+	 * 
 	 * @return A clone of the items array.
 	 */
 	public Item[] getItems() {
@@ -537,6 +551,7 @@ public final class Inventory implements Cloneable {
 
 	/**
 	 * Forces a refresh of a specific slot.
+	 * 
 	 * @param slot The slot.
 	 */
 	public void forceRefresh(int slot) {

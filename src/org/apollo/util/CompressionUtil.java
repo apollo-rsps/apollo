@@ -13,12 +13,14 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream
 
 /**
  * A utility class for performing compression/uncompression.
+ * 
  * @author Graham
  */
 public final class CompressionUtil {
 
 	/**
 	 * Ungzips the compressed array and places the results into the uncompressed array.
+	 * 
 	 * @param compressed The compressed array.
 	 * @param uncompressed The uncompressed array.
 	 * @throws IOException if an I/O error occurs.
@@ -34,6 +36,7 @@ public final class CompressionUtil {
 
 	/**
 	 * Unbzip2s the compressed array and places the result into the uncompressed array.
+	 * 
 	 * @param compressed The compressed array.
 	 * @param uncompressed The uncompressed array.
 	 * @throws IOException if an I/O error occurs.
@@ -46,7 +49,8 @@ public final class CompressionUtil {
 		newCompressed[3] = '1';
 		System.arraycopy(compressed, 0, newCompressed, 4, compressed.length);
 
-		DataInputStream is = new DataInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(newCompressed)));
+		DataInputStream is = new DataInputStream(
+				new BZip2CompressorInputStream(new ByteArrayInputStream(newCompressed)));
 		try {
 			is.readFully(uncompressed);
 		} finally {
@@ -56,6 +60,7 @@ public final class CompressionUtil {
 
 	/**
 	 * Gzips the specified array.
+	 * 
 	 * @param bytes The uncompressed array.
 	 * @return The compressed array.
 	 * @throws IOException if an I/O error occurs.
@@ -74,6 +79,7 @@ public final class CompressionUtil {
 
 	/**
 	 * Bzip2s the specified array.
+	 * 
 	 * @param bytes The uncompressed array.
 	 * @return The compressed array.
 	 * @throws IOException if an I/O error occurs.

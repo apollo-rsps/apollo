@@ -11,6 +11,7 @@ import org.apollo.net.session.LoginSession;
 
 /**
  * A class which processes a single login request.
+ * 
  * @author Graham
  */
 public final class PlayerLoaderWorker implements Runnable {
@@ -36,8 +37,8 @@ public final class PlayerLoaderWorker implements Runnable {
 	private final LoginRequest request;
 
 	/**
-	 * Creates a {@link PlayerLoaderWorker} which will do the work for a single
-	 * player load request.
+	 * Creates a {@link PlayerLoaderWorker} which will do the work for a single player load request.
+	 * 
 	 * @param loader The current player loader.
 	 * @param session The {@link LoginSession} which initiated the request.
 	 * @param request The {@link LoginRequest} object.
@@ -55,7 +56,8 @@ public final class PlayerLoaderWorker implements Runnable {
 			session.handlePlayerLoaderResponse(request, response);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Unable to load player's game.", e);
-			session.handlePlayerLoaderResponse(request, new PlayerLoaderResponse(LoginConstants.STATUS_COULD_NOT_COMPLETE));
+			session.handlePlayerLoaderResponse(request, new PlayerLoaderResponse(
+					LoginConstants.STATUS_COULD_NOT_COMPLETE));
 		}
 	}
 

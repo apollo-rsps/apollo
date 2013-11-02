@@ -13,14 +13,15 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * A simple XML parser which uses the internal {@link org.xml.sax} API to
- * create a tree of {@link XmlNode} objects.
+ * A simple XML parser which uses the internal {@link org.xml.sax} API to create a tree of {@link XmlNode} objects.
+ * 
  * @author Graham
  */
 public final class XmlParser {
 
 	/**
 	 * A class which handles SAX events.
+	 * 
 	 * @author Graham
 	 */
 	private final class XmlHandler extends DefaultHandler {
@@ -81,13 +82,13 @@ public final class XmlParser {
 	private XmlNode currentNode;
 
 	/**
-	 * The stack of nodes, which is used when traversing the document and going
-	 * through child nodes.
+	 * The stack of nodes, which is used when traversing the document and going through child nodes.
 	 */
 	private Stack<XmlNode> nodeStack = new Stack<XmlNode>();
 
 	/**
 	 * Creates a new xml parser.
+	 * 
 	 * @throws SAXException if a SAX error occurs.
 	 */
 	public XmlParser() throws SAXException {
@@ -108,6 +109,7 @@ public final class XmlParser {
 
 	/**
 	 * Parses XML data from the given {@link InputStream}.
+	 * 
 	 * @param is The {@link InputStream}.
 	 * @return The root {@link XmlNode}.
 	 * @throws IOException if an I/O error occurs.
@@ -121,6 +123,7 @@ public final class XmlParser {
 
 	/**
 	 * Parses XML data from the given {@link Reader}.
+	 * 
 	 * @param reader The {@link Reader}.
 	 * @return The root {@link XmlNode}.
 	 * @throws IOException if an I/O error occurs.
@@ -134,6 +137,7 @@ public final class XmlParser {
 
 	/**
 	 * Parses XML data from the {@link InputSource}.
+	 * 
 	 * @param source The {@link InputSource}.
 	 * @return The root {@link XmlNode}.
 	 * @throws IOException if an I/O error occurs.

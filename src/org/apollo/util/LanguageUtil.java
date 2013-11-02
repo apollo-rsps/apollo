@@ -2,12 +2,14 @@ package org.apollo.util;
 
 /**
  * A utility class which contains language-related methods.
+ * 
  * @author Graham
  */
 public final class LanguageUtil {
 
 	/**
 	 * Gets the indefinite article of a 'thing'.
+	 * 
 	 * @param thing The thing.
 	 * @return The indefinite article.
 	 */

@@ -12,8 +12,7 @@ import java.util.Queue;
 public final class WalkingQueue {
 
 	/**
-	 * The maximum size of the queue. If any additional steps are added, they
-	 * are discarded.
+	 * The maximum size of the queue. If any additional steps are added, they are discarded.
 	 */
 	private static final int MAXIMUM_SIZE = 128;
 
@@ -37,10 +36,8 @@ public final class WalkingQueue {
 		/**
 		 * Creates a point.
 		 * 
-		 * @param position
-		 *            The position.
-		 * @param direction
-		 *            The direction.
+		 * @param position The position.
+		 * @param direction The direction.
 		 */
 		public Point(Position position, Direction direction) {
 			this.position = position;
@@ -49,8 +46,7 @@ public final class WalkingQueue {
 
 		@Override
 		public String toString() {
-			return Point.class.getName() + " [direction=" + direction
-					+ ", position=" + position + "]";
+			return Point.class.getName() + " [direction=" + direction + ", position=" + position + "]";
 		}
 
 	}
@@ -78,8 +74,7 @@ public final class WalkingQueue {
 	/**
 	 * Creates a walking queue for the specified character.
 	 * 
-	 * @param character
-	 *            The character.
+	 * @param character The character.
 	 */
 	public WalkingQueue(Character character) {
 		this.character = character;
@@ -115,21 +110,18 @@ public final class WalkingQueue {
 	/**
 	 * Sets the running queue flag.
 	 * 
-	 * @param running
-	 *            The running queue flag.
+	 * @param running The running queue flag.
 	 */
 	public void setRunningQueue(boolean running) {
 		this.runningQueue = running;
 	}
 
 	/**
-	 * Adds the first step to the queue, attempting to connect the server and
-	 * client position by looking at the previous queue.
+	 * Adds the first step to the queue, attempting to connect the server and client position by looking at the previous
+	 * queue.
 	 * 
-	 * @param clientConnectionPosition
-	 *            The first step.
-	 * @return {@code true} if the queues could be connected correctly,
-	 *         {@code false} if not.
+	 * @param clientConnectionPosition The first step.
+	 * @return {@code true} if the queues could be connected correctly, {@code false} if not.
 	 */
 	public boolean addFirstStep(Position clientConnectionPosition) {
 		Position serverPosition = character.getPosition();
@@ -176,8 +168,7 @@ public final class WalkingQueue {
 	/**
 	 * Adds a step to the queue.
 	 * 
-	 * @param step
-	 *            The step to add.
+	 * @param step The step to add.
 	 */
 	public void addStep(Position step) {
 		Point last = getLast();
@@ -210,10 +201,8 @@ public final class WalkingQueue {
 	/**
 	 * Adds a step.
 	 * 
-	 * @param x
-	 *            The x coordinate of this step.
-	 * @param y
-	 *            The y coordinate of this step.
+	 * @param x The x coordinate of this step.
+	 * @param y The y coordinate of this step.
 	 */
 	private void addStep(int x, int y) {
 		if (points.size() >= MAXIMUM_SIZE) {
@@ -228,8 +217,7 @@ public final class WalkingQueue {
 		Direction direction = Direction.fromDeltas(deltaX, deltaY);
 
 		if (direction != Direction.NONE) {
-			Point p = new Point(new Position(x, y, character.getPosition()
-					.getHeight()), direction);
+			Point p = new Point(new Position(x, y, character.getPosition().getHeight()), direction);
 			points.add(p);
 			oldPoints.add(p);
 		}

@@ -4,6 +4,7 @@ import org.apollo.game.event.Event;
 
 /**
  * An {@link Event} which represents some sort of action on an item.
+ * 
  * @author Graham
  */
 public abstract class ItemActionEvent extends Event {
@@ -30,6 +31,7 @@ public abstract class ItemActionEvent extends Event {
 
 	/**
 	 * Creates the item action event.
+	 * 
 	 * @param option The option number.
 	 * @param interfaceId The interface id.
 	 * @param id The id.
@@ -44,6 +46,7 @@ public abstract class ItemActionEvent extends Event {
 
 	/**
 	 * Gets the option number.
+	 * 
 	 * @return The option number.
 	 */
 	public int getOption() {
@@ -52,6 +55,7 @@ public abstract class ItemActionEvent extends Event {
 
 	/**
 	 * Gets the interface id.
+	 * 
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
@@ -60,6 +64,7 @@ public abstract class ItemActionEvent extends Event {
 
 	/**
 	 * Gets the item id.
+	 * 
 	 * @return The item id.
 	 */
 	public int getId() {
@@ -68,6 +73,7 @@ public abstract class ItemActionEvent extends Event {
 
 	/**
 	 * Gets the slot.
+	 * 
 	 * @return The slot.
 	 */
 	public int getSlot() {

@@ -5,6 +5,7 @@ import org.apollo.game.model.Position;
 
 /**
  * An event which the client sends to request that the player walks somewhere.
+ * 
  * @author Graham
  */
 public final class WalkEvent extends Event {
@@ -21,6 +22,7 @@ public final class WalkEvent extends Event {
 
 	/**
 	 * Creates the event.
+	 * 
 	 * @param steps The steps array.
 	 * @param run The run flag.
 	 */
@@ -34,6 +36,7 @@ public final class WalkEvent extends Event {
 
 	/**
 	 * Gets the steps array.
+	 * 
 	 * @return An array of steps.
 	 */
 	public Position[] getSteps() {
@@ -42,6 +45,7 @@ public final class WalkEvent extends Event {
 
 	/**
 	 * Checks if the steps should be ran (ctrl+click).
+	 * 
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
 	public boolean isRunning() {

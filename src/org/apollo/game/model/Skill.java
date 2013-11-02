@@ -2,6 +2,7 @@ package org.apollo.game.model;
 
 /**
  * Represents a single skill.
+ * 
  * @author Graham
  */
 public final class Skill {
@@ -115,11 +116,12 @@ public final class Skill {
 	 * The skill names.
 	 */
 	private static final String SKILL_NAMES[] = { "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer",
-		"Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining",
-		"Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecraft" };
+			"Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining",
+			"Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecraft" };
 
 	/**
 	 * Gets the name of a skill.
+	 * 
 	 * @param id The skill's id.
 	 * @return The skill's name.
 	 */
@@ -144,6 +146,7 @@ public final class Skill {
 
 	/**
 	 * Creates a skill.
+	 * 
 	 * @param experience The experience.
 	 * @param currentLevel The current level.
 	 * @param maximumLevel The maximum level.
@@ -156,6 +159,7 @@ public final class Skill {
 
 	/**
 	 * Gets the experience.
+	 * 
 	 * @return The experience.
 	 */
 	public double getExperience() {
@@ -164,6 +168,7 @@ public final class Skill {
 
 	/**
 	 * Gets the current level.
+	 * 
 	 * @return The current level.
 	 */
 	public int getCurrentLevel() {
@@ -172,6 +177,7 @@ public final class Skill {
 
 	/**
 	 * Gets the maximum level.
+	 * 
 	 * @return The maximum level.
 	 */
 	public int getMaximumLevel() {

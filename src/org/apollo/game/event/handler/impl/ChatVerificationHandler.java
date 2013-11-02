@@ -7,6 +7,7 @@ import org.apollo.game.model.Player;
 
 /**
  * An event handler which verifies chat events.
+ * 
  * @author Graham
  */
 public final class ChatVerificationHandler extends EventHandler<ChatEvent> {

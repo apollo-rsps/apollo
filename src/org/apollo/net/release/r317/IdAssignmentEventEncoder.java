@@ -10,6 +10,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link IdAssignmentEvent}.
+ * 
  * @author Graham
  */
 public final class IdAssignmentEventEncoder extends EventEncoder<IdAssignmentEvent> {

@@ -9,6 +9,7 @@ import org.apollo.net.release.EventEncoder;
 
 /**
  * An {@link EventEncoder} for the {@link RegionChangeEvent}.
+ * 
  * @author Graham
  */
 public final class RegionChangeEventEncoder extends EventEncoder<RegionChangeEvent> {

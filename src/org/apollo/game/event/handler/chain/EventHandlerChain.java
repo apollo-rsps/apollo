@@ -7,6 +7,7 @@ import org.apollo.game.model.Player;
 
 /**
  * A chain of event handlers.
+ * 
  * @author Graham
  * @param <E> The type of event the handlers in this chain handle.
  */
@@ -19,6 +20,7 @@ public final class EventHandlerChain<E extends Event> {
 
 	/**
 	 * Creates the event handler chain.
+	 * 
 	 * @param handlers The handlers.
 	 */
 	@SafeVarargs
@@ -28,6 +30,7 @@ public final class EventHandlerChain<E extends Event> {
 
 	/**
 	 * Dynamically adds an event handler to the end of the chain.
+	 * 
 	 * @param handler The handler.
 	 */
 	@SuppressWarnings("unchecked")
@@ -39,8 +42,8 @@ public final class EventHandlerChain<E extends Event> {
 	}
 
 	/**
-	 * Handles the event, passing it down the chain until the chain is broken
-	 * or the event reaches the end of the chain.
+	 * Handles the event, passing it down the chain until the chain is broken or the event reaches the end of the chain.
+	 * 
 	 * @param player The player.
 	 * @param event The event.
 	 */

@@ -8,6 +8,7 @@ import org.jboss.netty.buffer.ChannelBuffers;
 
 /**
  * An {@link EventEncoder} for the {@link EnterAmountEvent}.
+ * 
  * @author Graham
  */
 public final class EnterAmountEventEncoder extends EventEncoder<EnterAmountEvent> {

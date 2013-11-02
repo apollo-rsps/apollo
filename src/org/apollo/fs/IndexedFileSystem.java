@@ -9,9 +9,9 @@ import java.nio.ByteBuffer;
 import java.util.zip.CRC32;
 
 /**
- * A file system based on top of the operating system's file system. It
- * consists of a data file and index files. Index files point to blocks in the
- * data file, which contains the actual data.
+ * A file system based on top of the operating system's file system. It consists of a data file and index files. Index
+ * files point to blocks in the data file, which contains the actual data.
+ * 
  * @author Graham
  */
 public final class IndexedFileSystem implements Closeable {
@@ -38,6 +38,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Creates the file system with the specified base directory.
+	 * 
 	 * @param base The base directory.
 	 * @param readOnly A flag indicating if the file system will be read only.
 	 * @throws Exception if the file system is invalid.
@@ -49,6 +50,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Checks if this {@link IndexedFileSystem} is read only.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isReadOnly() {
@@ -57,6 +59,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Automatically detect the layout of the specified directory.
+	 * 
 	 * @param base The base directory.
 	 * @throws Exception if the file system is invalid.
 	 */
@@ -86,6 +89,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets the index of a file.
+	 * 
 	 * @param fd The {@link FileDescriptor} which points to the file.
 	 * @return The {@link Index}.
 	 * @throws IOException if an I/O error occurs.
@@ -113,6 +117,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets the number of files with the specified type.
+	 * 
 	 * @param type The type.
 	 * @return The number of files.
 	 * @throws IOException if an I/O error occurs.
@@ -130,6 +135,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets the CRC table.
+	 * 
 	 * @return The CRC table.
 	 * @throws IOException if an I/O erorr occurs.
 	 */
@@ -185,6 +191,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets a file.
+	 * 
 	 * @param type The file type.
 	 * @param file The file id.
 	 * @return A {@link ByteBuffer} which contains the contents of the file.
@@ -196,6 +203,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets a file.
+	 * 
 	 * @param fd The {@link FileDescriptor} which points to the file.
 	 * @return A {@link ByteBuffer} which contains the contents of the file.
 	 * @throws IOException if an I/O error occurs.

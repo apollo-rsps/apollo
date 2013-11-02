@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 
 /**
  * A class which manages plugins.
+ * 
  * @author Graham
  */
 public final class PluginManager {
@@ -36,6 +37,7 @@ public final class PluginManager {
 
 	/**
 	 * Creates the plugin manager.
+	 * 
 	 * @param context The plugin context.
 	 */
 	public PluginManager(PluginContext context) {
@@ -63,6 +65,7 @@ public final class PluginManager {
 
 	/**
 	 * Creates an iterator for the set of authors.
+	 * 
 	 * @return The iterator.
 	 */
 	public Iterator<String> createAuthorsIterator() {
@@ -71,6 +74,7 @@ public final class PluginManager {
 
 	/**
 	 * Starts the plugin system by finding and loading all the plugins.
+	 * 
 	 * @throws SAXException if a SAX error occurs.
 	 * @throws IOException if an I/O error occurs.
 	 * @throws DependencyException if a dependency could not be resolved.
@@ -89,6 +93,7 @@ public final class PluginManager {
 
 	/**
 	 * Finds plugins and loads their meta data.
+	 * 
 	 * @return A collection of plugin meta data objects.
 	 * @throws IOException if an I/O error occurs.
 	 * @throws SAXException if a SAX error occurs.
@@ -119,6 +124,7 @@ public final class PluginManager {
 
 	/**
 	 * Starts a specific plugin.
+	 * 
 	 * @param env The environment.
 	 * @param plugin The plugin.
 	 * @param plugins The plugin map.
@@ -126,7 +132,8 @@ public final class PluginManager {
 	 * @throws DependencyException if a dependency error occurs.
 	 * @throws IOException if an I/O error occurs.
 	 */
-	private void start(PluginEnvironment env, PluginMetaData plugin, Map<String, PluginMetaData> plugins, Set<PluginMetaData> started) throws DependencyException, IOException {
+	private void start(PluginEnvironment env, PluginMetaData plugin, Map<String, PluginMetaData> plugins,
+			Set<PluginMetaData> started) throws DependencyException, IOException {
 		// TODO check for cyclic dependencies! this way just won't cut it, we need an exception
 		if (started.contains(plugin)) {
 			return;
@@ -153,6 +160,7 @@ public final class PluginManager {
 
 	/**
 	 * Creates a plugin map from a collection.
+	 * 
 	 * @param plugins The plugin collection.
 	 * @return The plugin map.
 	 */

@@ -3,8 +3,8 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event which specifies the local id and membership status of the current
- * player.
+ * An event which specifies the local id and membership status of the current player.
+ * 
  * @author Graham
  */
 public final class IdAssignmentEvent extends Event {
@@ -21,6 +21,7 @@ public final class IdAssignmentEvent extends Event {
 
 	/**
 	 * Creates the local id event.
+	 * 
 	 * @param id The id.
 	 * @param members The membership flag.
 	 */
@@ -31,6 +32,7 @@ public final class IdAssignmentEvent extends Event {
 
 	/**
 	 * Gets the id.
+	 * 
 	 * @return The id.
 	 */
 	public int getId() {
@@ -39,6 +41,7 @@ public final class IdAssignmentEvent extends Event {
 
 	/**
 	 * Gets the membership flag.
+	 * 
 	 * @return The membership flag.
 	 */
 	public boolean isMembers() {

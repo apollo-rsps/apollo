@@ -8,6 +8,7 @@ import org.apollo.game.sync.block.SynchronizationBlock;
 
 /**
  * An event handler which broadcasts public chat messages.
+ * 
  * @author Graham
  */
 public final class ChatEventHandler extends EventHandler<ChatEvent> {

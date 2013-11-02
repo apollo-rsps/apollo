@@ -2,6 +2,7 @@ package org.apollo.game.model;
 
 /**
  * Represents the appearance of a player.
+ * 
  * @author Graham
  */
 public final class Appearance {
@@ -9,7 +10,8 @@ public final class Appearance {
 	/**
 	 * The default appearance.
 	 */
-	public static final Appearance DEFAULT_APPEARANCE = new Appearance(Gender.MALE, new int[] { 0, 10, 18, 26, 33, 36, 42 }, new int[5]);
+	public static final Appearance DEFAULT_APPEARANCE = new Appearance(Gender.MALE, new int[] { 0, 10, 18, 26, 33, 36,
+			42 }, new int[5]);
 
 	/**
 	 * The player's gender.
@@ -28,6 +30,7 @@ public final class Appearance {
 
 	/**
 	 * Creates the appearance with the specified gender, style and colors.
+	 * 
 	 * @param gender The gender.
 	 * @param style The style.
 	 * @param colors The colors.
@@ -49,6 +52,7 @@ public final class Appearance {
 
 	/**
 	 * Gets the gender of the player.
+	 * 
 	 * @return The gender of the player.
 	 */
 	public Gender getGender() {
@@ -57,6 +61,7 @@ public final class Appearance {
 
 	/**
 	 * Checks if the player is male.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isMale() {
@@ -65,6 +70,7 @@ public final class Appearance {
 
 	/**
 	 * Checks if the player is female.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isFemale() {
@@ -73,25 +79,21 @@ public final class Appearance {
 
 	/**
 	 * Gets the player's styles.
+	 * 
 	 * @return The player's styles.
 	 */
 	public int[] getStyle() {
 		/*
 		 * Info on the elements of the array itself:
-		 *
-		 *  0 = head
-		 *  1 = chin/beard
-		 *  2 = chest
-		 *  3 = arms
-		 *  4 = hands
-		 *  5 = legs
-		 *  6 = feet
+		 * 
+		 * 0 = head 1 = chin/beard 2 = chest 3 = arms 4 = hands 5 = legs 6 = feet
 		 */
 		return style;
 	}
 
 	/**
 	 * Gets the player's colors.
+	 * 
 	 * @return The player's colors.
 	 */
 	public int[] getColors() {

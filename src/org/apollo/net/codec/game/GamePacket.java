@@ -5,6 +5,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
  * Represents a single packet used in the in-game protocol.
+ * 
  * @author Graham
  */
 public final class GamePacket {
@@ -31,6 +32,7 @@ public final class GamePacket {
 
 	/**
 	 * Creates the game packet.
+	 * 
 	 * @param opcode The opcode.
 	 * @param type The packet type.
 	 * @param payload The payload.
@@ -44,6 +46,7 @@ public final class GamePacket {
 
 	/**
 	 * Gets the opcode.
+	 * 
 	 * @return The opcode.
 	 */
 	public int getOpcode() {
@@ -52,6 +55,7 @@ public final class GamePacket {
 
 	/**
 	 * Gets the payload length.
+	 * 
 	 * @return The payload length.
 	 */
 	public int getLength() {
@@ -60,6 +64,7 @@ public final class GamePacket {
 
 	/**
 	 * Gets the payload.
+	 * 
 	 * @return The payload.
 	 */
 	public ChannelBuffer getPayload() {
@@ -68,6 +73,7 @@ public final class GamePacket {
 
 	/**
 	 * Gets the packet type.
+	 * 
 	 * @return The packet type.
 	 */
 	public PacketType getType() {

@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Represents a single entry in an {@link Archive}.
+ * 
  * @author Graham
  */
 public final class ArchiveEntry {
@@ -20,6 +21,7 @@ public final class ArchiveEntry {
 
 	/**
 	 * Creates a new archive entry.
+	 * 
 	 * @param identifier The identifier.
 	 * @param buffer The buffer.
 	 */
@@ -30,6 +32,7 @@ public final class ArchiveEntry {
 
 	/**
 	 * Gets the identifier of this entry.
+	 * 
 	 * @return The identifier of this entry.
 	 */
 	public int getIdentifier() {
@@ -38,6 +41,7 @@ public final class ArchiveEntry {
 
 	/**
 	 * Gets the buffer of this entry.
+	 * 
 	 * @return This buffer of this entry.
 	 */
 	public ByteBuffer getBuffer() {

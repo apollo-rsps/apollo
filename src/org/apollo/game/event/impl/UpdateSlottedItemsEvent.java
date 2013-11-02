@@ -5,6 +5,7 @@ import org.apollo.game.model.SlottedItem;
 
 /**
  * An event which updates a single item in an interface.
+ * 
  * @author Graham
  */
 public final class UpdateSlottedItemsEvent extends Event {
@@ -21,6 +22,7 @@ public final class UpdateSlottedItemsEvent extends Event {
 
 	/**
 	 * Creates the update item in interface event.
+	 * 
 	 * @param interfaceId The interface id.
 	 * @param items The slotted items.
 	 */
@@ -31,6 +33,7 @@ public final class UpdateSlottedItemsEvent extends Event {
 
 	/**
 	 * Gets the interface id.
+	 * 
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
@@ -39,6 +42,7 @@ public final class UpdateSlottedItemsEvent extends Event {
 
 	/**
 	 * Gets an array of slotted items.
+	 * 
 	 * @return The slotted items.
 	 */
 	public SlottedItem[] getSlottedItems() {

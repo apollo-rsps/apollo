@@ -2,6 +2,7 @@ package org.apollo.net.meta;
 
 /**
  * An enumeration which contains the different types of packets.
+ * 
  * @author Graham
  */
 public enum PacketType {
@@ -12,8 +13,7 @@ public enum PacketType {
 	RAW,
 
 	/**
-	 * A packet where the length is known by both the client and server
-	 * already.
+	 * A packet where the length is known by both the client and server already.
 	 */
 	FIXED,
 

@@ -4,6 +4,7 @@ import org.apollo.game.event.Event;
 
 /**
  * An event sent to the client to update an interface's text.
+ * 
  * @author Graham
  */
 public final class SetInterfaceTextEvent extends Event {
@@ -20,6 +21,7 @@ public final class SetInterfaceTextEvent extends Event {
 
 	/**
 	 * Creates the set interface text event.
+	 * 
 	 * @param interfaceId The interface's id.
 	 * @param text The interface's text.
 	 */
@@ -30,6 +32,7 @@ public final class SetInterfaceTextEvent extends Event {
 
 	/**
 	 * Gets the interface id.
+	 * 
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
@@ -38,6 +41,7 @@ public final class SetInterfaceTextEvent extends Event {
 
 	/**
 	 * Gets the interface's text.
+	 * 
 	 * @return The interface's text.
 	 */
 	public String getText() {

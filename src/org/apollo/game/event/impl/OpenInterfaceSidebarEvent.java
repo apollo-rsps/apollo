@@ -4,6 +4,7 @@ import org.apollo.game.event.Event;
 
 /**
  * An {@link Event} sent to open an interface and temporary sidebar overlay.
+ * 
  * @author Graham
  */
 public final class OpenInterfaceSidebarEvent extends Event {
@@ -20,6 +21,7 @@ public final class OpenInterfaceSidebarEvent extends Event {
 
 	/**
 	 * Creates the open interface sidebar event.
+	 * 
 	 * @param interfaceId The interface id.
 	 * @param sidebarId The sidebar id.
 	 */
@@ -30,6 +32,7 @@ public final class OpenInterfaceSidebarEvent extends Event {
 
 	/**
 	 * Gets the interface id.
+	 * 
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
@@ -38,6 +41,7 @@ public final class OpenInterfaceSidebarEvent extends Event {
 
 	/**
 	 * Gets the sidebar id.
+	 * 
 	 * @return The sidebar id.
 	 */
 	public int getSidebarId() {

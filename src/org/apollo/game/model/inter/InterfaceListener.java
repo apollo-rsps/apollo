@@ -2,6 +2,7 @@ package org.apollo.game.model.inter;
 
 /**
  * Listens to interface-related events.
+ * 
  * @author Graham
  */
 public interface InterfaceListener {

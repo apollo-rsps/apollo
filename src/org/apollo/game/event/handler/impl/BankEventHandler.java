@@ -10,14 +10,15 @@ import org.apollo.game.model.inter.bank.BankUtils;
 import org.apollo.game.model.inter.bank.BankWithdrawEnterAmountListener;
 
 /**
- * An event handler which handles withdrawing and depositing items from/to a
- * player's bank.
+ * An event handler which handles withdrawing and depositing items from/to a player's bank.
+ * 
  * @author Graham
  */
 public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 
 	/**
 	 * Converts an option to an amount.
+	 * 
 	 * @param option The option.
 	 * @return The amount.
 	 * @throws IllegalArgumentException if the option is not legal.
@@ -53,6 +54,7 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 
 	/**
 	 * Handles a withdraw action.
+	 * 
 	 * @param ctx The event handler context.
 	 * @param player The player.
 	 * @param event The event.
@@ -60,7 +62,8 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 	private void withdraw(EventHandlerContext ctx, Player player, ItemActionEvent event) {
 		int amount = optionToAmount(event.getOption());
 		if (amount == -1) {
-			player.getInterfaceSet().openEnterAmountDialog(new BankWithdrawEnterAmountListener(player, event.getSlot(), event.getId()));
+			player.getInterfaceSet().openEnterAmountDialog(
+					new BankWithdrawEnterAmountListener(player, event.getSlot(), event.getId()));
 		} else {
 			if (!BankUtils.withdraw(player, event.getSlot(), event.getId(), amount)) {
 				ctx.breakHandlerChain();
@@ -70,6 +73,7 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 
 	/**
 	 * Handles a deposit action.
+	 * 
 	 * @param ctx The event handler context.
 	 * @param player The player.
 	 * @param event The event.
@@ -77,7 +81,8 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 	private void deposit(EventHandlerContext ctx, Player player, ItemActionEvent event) {
 		int amount = optionToAmount(event.getOption());
 		if (amount == -1) {
-			player.getInterfaceSet().openEnterAmountDialog(new BankDepositEnterAmountListener(player, event.getSlot(), event.getId()));
+			player.getInterfaceSet().openEnterAmountDialog(
+					new BankDepositEnterAmountListener(player, event.getSlot(), event.getId()));
 		} else {
 			if (!BankUtils.deposit(player, event.getSlot(), event.getId(), amount)) {
 				ctx.breakHandlerChain();

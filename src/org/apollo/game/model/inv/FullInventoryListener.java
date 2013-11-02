@@ -6,8 +6,8 @@ import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Player;
 
 /**
- * An {@link InventoryListener} which sends a message to a player when an
- * inventory has run out of space.
+ * An {@link InventoryListener} which sends a message to a player when an inventory has run out of space.
+ * 
  * @author Graham
  */
 public final class FullInventoryListener extends InventoryAdapter {
@@ -39,6 +39,7 @@ public final class FullInventoryListener extends InventoryAdapter {
 
 	/**
 	 * Creates the empty inventory listener.
+	 * 
 	 * @param player The player.
 	 * @param message The message to send when the inventory is empty.
 	 */

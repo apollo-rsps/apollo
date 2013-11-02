@@ -8,13 +8,13 @@ import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
 /**
  * A class which encodes login response messsages.
+ * 
  * @author Graham
  */
 public final class LoginEncoder extends OneToOneEncoder {
 
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel channel,
-			Object message) throws Exception {
+	protected Object encode(ChannelHandlerContext ctx, Channel channel, Object message) throws Exception {
 		if (!(message instanceof LoginResponse)) {
 			return message;
 		}

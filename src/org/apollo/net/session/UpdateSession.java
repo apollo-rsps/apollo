@@ -10,6 +10,7 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 
 /**
  * An update session.
+ * 
  * @author Graham
  */
 public final class UpdateSession extends Session {
@@ -21,6 +22,7 @@ public final class UpdateSession extends Session {
 
 	/**
 	 * Creates an update session for the specified channel.
+	 * 
 	 * @param channel The channel.
 	 * @param context The server context.
 	 */

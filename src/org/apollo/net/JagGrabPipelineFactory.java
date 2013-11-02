@@ -16,6 +16,7 @@ import org.jboss.netty.util.Timer;
 
 /**
  * A {@link ChannelPipelineFactory} for the JAGGRAB protocol.
+ * 
  * @author Graham
  */
 public final class JagGrabPipelineFactory implements ChannelPipelineFactory {
@@ -55,6 +56,7 @@ public final class JagGrabPipelineFactory implements ChannelPipelineFactory {
 
 	/**
 	 * Creates a {@code JAGGRAB} pipeline factory.
+	 * 
 	 * @param handler The file server event handler.
 	 * @param timer The timer used for idle checking.
 	 */

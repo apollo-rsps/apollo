@@ -4,12 +4,14 @@ import org.apollo.game.model.Position;
 
 /**
  * An event sent when the first option at an object is used.
+ * 
  * @author Graham
  */
 public final class FirstObjectActionEvent extends ObjectActionEvent {
 
 	/**
 	 * Creates the first object action event.
+	 * 
 	 * @param id The id.
 	 * @param position The position.
 	 */

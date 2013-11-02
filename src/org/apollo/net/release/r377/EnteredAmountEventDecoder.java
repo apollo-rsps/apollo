@@ -8,6 +8,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link EnteredAmountEvent}.
+ * 
  * @author Graham
  */
 public final class EnteredAmountEventDecoder extends EventDecoder<EnteredAmountEvent> {

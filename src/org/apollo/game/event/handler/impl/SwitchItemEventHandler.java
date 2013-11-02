@@ -9,8 +9,9 @@ import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
- * An {@link EventHandler} which updates an {@link Inventory} when the client
- * sends a {@link SwitchItemEvent} to the server.
+ * An {@link EventHandler} which updates an {@link Inventory} when the client sends a {@link SwitchItemEvent} to the
+ * server.
+ * 
  * @author Graham
  */
 public final class SwitchItemEventHandler extends EventHandler<SwitchItemEvent> {
@@ -37,7 +38,8 @@ public final class SwitchItemEventHandler extends EventHandler<SwitchItemEvent> 
 			return; // not a known inventory, ignore
 		}
 
-		if (event.getOldSlot() >= 0 && event.getNewSlot() >= 0 && event.getOldSlot() < inventory.capacity() && event.getNewSlot() < inventory.capacity()) {
+		if (event.getOldSlot() >= 0 && event.getNewSlot() >= 0 && event.getOldSlot() < inventory.capacity()
+				&& event.getNewSlot() < inventory.capacity()) {
 			// events must be fired for it to work if a sidebar inv overlay is used
 			inventory.swap(insertPermitted ? event.isInserting() : false, event.getOldSlot(), event.getNewSlot());
 		}

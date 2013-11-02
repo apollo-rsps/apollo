@@ -13,15 +13,14 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.util.CharacterRepository;
 
 /**
- * A {@link Character} is a living creature in the world, such as a player or
- * NPC.
+ * A {@link Character} is a living creature in the world, such as a player or NPC.
+ * 
  * @author Graham
  */
 public abstract class Character {
 
 	/**
-	 * The index of this character in the {@link CharacterRepository} it
-	 * belongs to.
+	 * The index of this character in the {@link CharacterRepository} it belongs to.
 	 */
 	private int index = -1;
 
@@ -87,6 +86,7 @@ public abstract class Character {
 
 	/**
 	 * Creates a new character with the specified initial position.
+	 * 
 	 * @param position The initial position of this character.
 	 */
 	public Character(Position position) {
@@ -103,6 +103,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the character's inventory.
+	 * 
 	 * @return The character's inventory.
 	 */
 	public Inventory getInventory() {
@@ -111,6 +112,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the character's equipment.
+	 * 
 	 * @return The character's equipment.
 	 */
 	public Inventory getEquipment() {
@@ -119,6 +121,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the character's bank.
+	 * 
 	 * @return The character's bank.
 	 */
 	public Inventory getBank() {
@@ -127,6 +130,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the local player list.
+	 * 
 	 * @return The local player list.
 	 */
 	public List<Player> getLocalPlayerList() {
@@ -135,6 +139,7 @@ public abstract class Character {
 
 	/**
 	 * Checks if this player is currently teleporting.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isTeleporting() {
@@ -143,8 +148,8 @@ public abstract class Character {
 
 	/**
 	 * Sets the teleporting flag.
-	 * @param teleporting {@code true} if the player is teleporting,
-	 * {@code false} if not.
+	 * 
+	 * @param teleporting {@code true} if the player is teleporting, {@code false} if not.
 	 */
 	public void setTeleporting(boolean teleporting) {
 		this.teleporting = teleporting;
@@ -152,6 +157,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the walking queue.
+	 * 
 	 * @return The walking queue.
 	 */
 	public WalkingQueue getWalkingQueue() {
@@ -160,6 +166,7 @@ public abstract class Character {
 
 	/**
 	 * Sets the next directions for this character.
+	 * 
 	 * @param first The first direction.
 	 * @param second The second direction.
 	 */
@@ -170,6 +177,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the first direction.
+	 * 
 	 * @return The first direction.
 	 */
 	public Direction getFirstDirection() {
@@ -178,6 +186,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the second direction.
+	 * 
 	 * @return The second direction.
 	 */
 	public Direction getSecondDirection() {
@@ -186,8 +195,8 @@ public abstract class Character {
 
 	/**
 	 * Gets the directions as an array.
-	 * @return A zero, one or two element array containing the directions (in
-	 * order).
+	 * 
+	 * @return A zero, one or two element array containing the directions (in order).
 	 */
 	public Direction[] getDirections() {
 		if (firstDirection != Direction.NONE) {
@@ -203,6 +212,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the position of this character.
+	 * 
 	 * @return The position of this character.
 	 */
 	public Position getPosition() {
@@ -211,6 +221,7 @@ public abstract class Character {
 
 	/**
 	 * Sets the position of this character.
+	 * 
 	 * @param position The position of this character.
 	 */
 	public void setPosition(Position position) {
@@ -219,6 +230,7 @@ public abstract class Character {
 
 	/**
 	 * Checks if this character is active.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isActive() {
@@ -227,6 +239,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the index of this character.
+	 * 
 	 * @return The index of this character.
 	 */
 	public int getIndex() {
@@ -237,6 +250,7 @@ public abstract class Character {
 
 	/**
 	 * Sets the index of this character.
+	 * 
 	 * @param index The index of this character.
 	 */
 	public void setIndex(int index) {
@@ -247,6 +261,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the {@link SynchronizationBlockSet}.
+	 * 
 	 * @return The block set.
 	 */
 	public SynchronizationBlockSet getBlockSet() {
@@ -263,16 +278,17 @@ public abstract class Character {
 	/**
 	 * Sends an {@link Event} to either:
 	 * <ul>
-	 *   <li>The client if this {@link Character} is a {@link Player}.</li>
-	 *   <li>The AI routines if this {@link Character} is an NPC</li>
+	 * <li>The client if this {@link Character} is a {@link Player}.</li>
+	 * <li>The AI routines if this {@link Character} is an NPC</li>
 	 * </ul>
+	 * 
 	 * @param event The event.
 	 */
 	public abstract void send(Event event);
 
 	/**
-	 * Teleports this character to the specified position, setting the
-	 * appropriate flags and clearing the walking queue.
+	 * Teleports this character to the specified position, setting the appropriate flags and clearing the walking queue.
+	 * 
 	 * @param position The position.
 	 */
 	public void teleport(Position position) {
@@ -284,6 +300,7 @@ public abstract class Character {
 
 	/**
 	 * Plays the specified animation.
+	 * 
 	 * @param animation The animation.
 	 */
 	public void playAnimation(Animation animation) {
@@ -299,6 +316,7 @@ public abstract class Character {
 
 	/**
 	 * Plays the specified graphic.
+	 * 
 	 * @param graphic The graphic.
 	 */
 	public void playGraphic(Graphic graphic) {
@@ -314,6 +332,7 @@ public abstract class Character {
 
 	/**
 	 * Gets the character's skill set.
+	 * 
 	 * @return The character's skill set.
 	 */
 	public SkillSet getSkillSet() {
@@ -322,6 +341,7 @@ public abstract class Character {
 
 	/**
 	 * Starts a new action, stopping the current one if it exists.
+	 * 
 	 * @param action The new action.
 	 * @return A flag indicating if the action was started.
 	 */
@@ -349,6 +369,7 @@ public abstract class Character {
 
 	/**
 	 * Turns the character to face the specified position.
+	 * 
 	 * @param position The position to face.
 	 */
 	public void turnTo(Position position) {
@@ -357,6 +378,7 @@ public abstract class Character {
 
 	/**
 	 * Sends a message to the character.
+	 * 
 	 * @param message The message.
 	 */
 	public void sendMessage(String message) {

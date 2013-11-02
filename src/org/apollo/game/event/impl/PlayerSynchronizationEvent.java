@@ -8,6 +8,7 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**
  * An event which is sent to synchronize the players.
+ * 
  * @author Graham
  */
 public final class PlayerSynchronizationEvent extends Event {
@@ -44,6 +45,7 @@ public final class PlayerSynchronizationEvent extends Event {
 
 	/**
 	 * Creates the player synchronization event.
+	 * 
 	 * @param lastKnownRegion The last known region.
 	 * @param position The player's current position.
 	 * @param regionChanged A flag indicating if the region has changed.
@@ -51,7 +53,8 @@ public final class PlayerSynchronizationEvent extends Event {
 	 * @param localPlayers The number of local players.
 	 * @param segments A list of segments.
 	 */
-	public PlayerSynchronizationEvent(Position lastKnownRegion, Position position, boolean regionChanged, SynchronizationSegment segment, int localPlayers, List<SynchronizationSegment> segments) {
+	public PlayerSynchronizationEvent(Position lastKnownRegion, Position position, boolean regionChanged,
+			SynchronizationSegment segment, int localPlayers, List<SynchronizationSegment> segments) {
 		this.lastKnownRegion = lastKnownRegion;
 		this.position = position;
 		this.regionChanged = regionChanged;
@@ -62,6 +65,7 @@ public final class PlayerSynchronizationEvent extends Event {
 
 	/**
 	 * Gets the last known region.
+	 * 
 	 * @return The last known region.
 	 */
 	public Position getLastKnownRegion() {
@@ -70,6 +74,7 @@ public final class PlayerSynchronizationEvent extends Event {
 
 	/**
 	 * Gets the player's position.
+	 * 
 	 * @return The player's position.
 	 */
 	public Position getPosition() {
@@ -78,6 +83,7 @@ public final class PlayerSynchronizationEvent extends Event {
 
 	/**
 	 * Checks if the region has changed.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasRegionChanged() {
@@ -86,6 +92,7 @@ public final class PlayerSynchronizationEvent extends Event {
 
 	/**
 	 * Gets the current player's segment.
+	 * 
 	 * @return The current player's segment.
 	 */
 	public SynchronizationSegment getSegment() {
@@ -94,6 +101,7 @@ public final class PlayerSynchronizationEvent extends Event {
 
 	/**
 	 * Gets the number of local players.
+	 * 
 	 * @return The number of local players.
 	 */
 	public int getLocalPlayers() {
@@ -102,6 +110,7 @@ public final class PlayerSynchronizationEvent extends Event {
 
 	/**
 	 * Gets the synchronization segments.
+	 * 
 	 * @return The segments.
 	 */
 	public List<SynchronizationSegment> getSegments() {

@@ -8,6 +8,7 @@ import java.util.Queue;
 
 /**
  * A class which manages {@link ScheduledTask}s.
+ * 
  * @author Graham
  */
 public final class Scheduler {
@@ -24,6 +25,7 @@ public final class Scheduler {
 
 	/**
 	 * Schedules a new task.
+	 * 
 	 * @param task The task to schedule.
 	 */
 	public void schedule(ScheduledTask task) {
@@ -31,8 +33,7 @@ public final class Scheduler {
 	}
 
 	/**
-	 * Called every pulse: executes tasks that are still pending, adds new
-	 * tasks and stops old tasks.
+	 * Called every pulse: executes tasks that are still pending, adds new tasks and stops old tasks.
 	 */
 	public void pulse() {
 		ScheduledTask task;
@@ -40,7 +41,7 @@ public final class Scheduler {
 			tasks.add(task);
 		}
 
-		for (Iterator<ScheduledTask> it = tasks.iterator(); it.hasNext(); ) {
+		for (Iterator<ScheduledTask> it = tasks.iterator(); it.hasNext();) {
 			task = it.next();
 			task.pulse();
 			if (!task.isRunning()) {

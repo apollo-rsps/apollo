@@ -9,6 +9,7 @@ import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 /**
  * A {@link FrameDecoder} for the 'on-demand' protocol.
+ * 
  * @author Graham
  */
 public final class UpdateDecoder extends FrameDecoder {

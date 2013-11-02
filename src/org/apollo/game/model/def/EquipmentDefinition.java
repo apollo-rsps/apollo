@@ -7,6 +7,7 @@ import org.apollo.game.model.Item;
 
 /**
  * Represents a type of {@link Item} which may be equipped.
+ * 
  * @author Graham
  */
 public final class EquipmentDefinition {
@@ -18,6 +19,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Initialises the equipment definitions.
+	 * 
 	 * @param definitions The definitions.
 	 */
 	public static void init(EquipmentDefinition[] definitions) {
@@ -34,9 +36,9 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Gets an equipment definition by its id.
+	 * 
 	 * @param id The id.
-	 * @return {@code null} if the item is not equipment, the definition
-	 * otherwise.
+	 * @return {@code null} if the item is not equipment, the definition otherwise.
 	 * @throws IndexOutOfBoundsException if the id is out of bounds.
 	 */
 	public static EquipmentDefinition forId(int id) {
@@ -68,6 +70,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Creates a new equipment definition.
+	 * 
 	 * @param id The id.
 	 */
 	public EquipmentDefinition(int id) {
@@ -76,6 +79,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Gets the id.
+	 * 
 	 * @return The id.
 	 */
 	public int getId() {
@@ -84,6 +88,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Sets the required levels.
+	 * 
 	 * @param attack The required attack level.
 	 * @param strength The required strength level.
 	 * @param defence The required defence level.
@@ -100,6 +105,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Gets the minimum attack level.
+	 * 
 	 * @return The minimum attack level.
 	 */
 	public int getAttackLevel() {
@@ -108,6 +114,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Gets the minimum strength level.
+	 * 
 	 * @return The minimum strength level.
 	 */
 	public int getStrengthLevel() {
@@ -116,6 +123,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Gets the minimum defence level.
+	 * 
 	 * @return The minimum defence level.
 	 */
 	public int getDefenceLevel() {
@@ -124,6 +132,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Gets the minimum ranged level.
+	 * 
 	 * @return The minimum ranged level.
 	 */
 	public int getRangedLevel() {
@@ -132,6 +141,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Gets the minimum magic level.
+	 * 
 	 * @return The minimum magic level.
 	 */
 	public int getMagicLevel() {
@@ -140,6 +150,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Sets the target slot.
+	 * 
 	 * @param slot The target slot.
 	 */
 	public void setSlot(int slot) {
@@ -148,6 +159,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Gets the target slot.
+	 * 
 	 * @return The target slot.
 	 */
 	public int getSlot() {
@@ -156,6 +168,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Checks if this equipment is two-handed.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isTwoHanded() {
@@ -164,6 +177,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Checks if this equipment is a full body.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isFullBody() {
@@ -172,6 +186,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Checks if this equipment is a full hat.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isFullHat() {
@@ -180,6 +195,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Checks if this equipment is a full mask.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isFullMask() {
@@ -188,6 +204,7 @@ public final class EquipmentDefinition {
 
 	/**
 	 * Sets the flags.
+	 * 
 	 * @param twoHanded The two handed flag.
 	 * @param fullBody The full body flag.
 	 * @param fullHat The full hat flag.

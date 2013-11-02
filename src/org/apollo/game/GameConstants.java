@@ -2,6 +2,7 @@ package org.apollo.game;
 
 /**
  * Contains game-related constants.
+ * 
  * @author Graham
  */
 public final class GameConstants {

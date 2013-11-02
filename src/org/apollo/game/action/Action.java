@@ -4,14 +4,12 @@ import org.apollo.game.model.Character;
 import org.apollo.game.scheduling.ScheduledTask;
 
 /**
- * An action is a specialised {@link ScheduledTask} which is specific to a
- * character.
+ * An action is a specialised {@link ScheduledTask} which is specific to a character.
  * <p>
- * <strong>ALL</strong> actions <strong>MUST</strong> implement the
- * {@link #equals(Object)} method. This is to check if two actions are
- * identical: if they are, then the new action does not replace the old one (so
- * spam/accidental clicking won't cancel your action, and start another from
- * scratch).
+ * <strong>ALL</strong> actions <strong>MUST</strong> implement the {@link #equals(Object)} method. This is to check if
+ * two actions are identical: if they are, then the new action does not replace the old one (so spam/accidental clicking
+ * won't cancel your action, and start another from scratch).
+ * 
  * @author Graham
  */
 public abstract class Action<T extends Character> extends ScheduledTask {
@@ -28,9 +26,9 @@ public abstract class Action<T extends Character> extends ScheduledTask {
 
 	/**
 	 * Creates a new action.
+	 * 
 	 * @param delay The delay in pulses.
-	 * @param immediate A flag indicating if the action should happen
-	 * immediately.
+	 * @param immediate A flag indicating if the action should happen immediately.
 	 * @param character The character performing the action.
 	 */
 	public Action(int delay, boolean immediate, T character) {
@@ -40,6 +38,7 @@ public abstract class Action<T extends Character> extends ScheduledTask {
 
 	/**
 	 * Gets the character which performed the action.
+	 * 
 	 * @return The character.
 	 */
 	public T getCharacter() {

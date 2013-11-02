@@ -4,41 +4,40 @@ import org.apollo.fs.FileDescriptor;
 
 /**
  * Represents a single 'on-demand' request.
+ * 
  * @author Graham
  */
 public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 	/**
 	 * An enumeration containing the different request priorities.
+	 * 
 	 * @author Graham
 	 */
 	public enum Priority {
 
 		/**
-		 * High priority - used in-game when data is required immediately but
-		 * has not yet been received.
+		 * High priority - used in-game when data is required immediately but has not yet been received.
 		 */
 		HIGH(0),
 
 		/**
-		 * Medium priority - used while loading the 'bare minimum' required to
-		 * run the game.
+		 * Medium priority - used while loading the 'bare minimum' required to run the game.
 		 */
 		MEDIUM(1),
 
 		/**
-		 * Low priority - used when a file is not required urgently. The client
-		 * login screen says "loading extra files.." when low priority loading
-		 * is being performed.
+		 * Low priority - used when a file is not required urgently. The client login screen says
+		 * "loading extra files.." when low priority loading is being performed.
 		 */
 		LOW(2);
 
 		/**
 		 * Converts the integer value to a priority.
+		 * 
 		 * @param v The integer value.
 		 * @return The priority.
-		 * @throws IllegalArgumentException if the value is outside of the
-		 * range 1-3 inclusive.
+		 * @throws IllegalArgumentException if the value is outside of the range 1-3 inclusive.
 		 */
 		public static Priority valueOf(int v) {
 			switch (v) {
@@ -60,6 +59,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 		/**
 		 * Creates a priority.
+		 * 
 		 * @param intValue The integer value.
 		 */
 		private Priority(int intValue) {
@@ -68,6 +68,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 		/**
 		 * Converts the priority to an integer.
+		 * 
 		 * @return The integer value.
 		 */
 		public int toInteger() {
@@ -88,6 +89,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 	/**
 	 * Creates the 'on-demand' request.
+	 * 
 	 * @param fileDescriptor The file descriptor.
 	 * @param priority The priority.
 	 */
@@ -98,6 +100,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 	/**
 	 * Gets the file descriptor.
+	 * 
 	 * @return The file descriptor.
 	 */
 	public FileDescriptor getFileDescriptor() {
@@ -106,6 +109,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 	/**
 	 * Gets the priority.
+	 * 
 	 * @return The priority.
 	 */
 	public Priority getPriority() {

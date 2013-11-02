@@ -6,8 +6,8 @@ import org.apollo.game.model.SkillSet;
 import org.apollo.util.LanguageUtil;
 
 /**
- * A {@link SkillListener} which notifies the player when they have levelled up
- * a skill.
+ * A {@link SkillListener} which notifies the player when they have levelled up a skill.
+ * 
  * @author Graham
  */
 public final class LevelUpSkillListener extends SkillAdapter {
@@ -19,6 +19,7 @@ public final class LevelUpSkillListener extends SkillAdapter {
 
 	/**
 	 * Creates the level up listener for the specified player.
+	 * 
 	 * @param player The player.
 	 */
 	public LevelUpSkillListener(Player player) {
@@ -30,7 +31,8 @@ public final class LevelUpSkillListener extends SkillAdapter {
 		// TODO show the interface
 		String name = Skill.getName(id);
 		String article = LanguageUtil.getIndefiniteArticle(name);
-		player.sendMessage("You've just advanced " + article + " " + name + " level! You have reached level " + skill.getMaximumLevel() + ".");
+		player.sendMessage("You've just advanced " + article + " " + name + " level! You have reached level "
+				+ skill.getMaximumLevel() + ".");
 	}
 
 }

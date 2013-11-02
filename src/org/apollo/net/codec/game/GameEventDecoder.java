@@ -8,8 +8,8 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 
 /**
- * A {@link OneToOneDecoder} that decodes {@link GamePacket}s into
- * {@link Event}s.
+ * A {@link OneToOneDecoder} that decodes {@link GamePacket}s into {@link Event}s.
+ * 
  * @author Graham
  */
 public final class GameEventDecoder extends OneToOneDecoder {
@@ -21,6 +21,7 @@ public final class GameEventDecoder extends OneToOneDecoder {
 
 	/**
 	 * Creates the game event decoder with the specified release.
+	 * 
 	 * @param release The release.
 	 */
 	public GameEventDecoder(Release release) {

@@ -5,6 +5,7 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
  * A {@link SynchronizationSegment} where the character is moved (or doesn't move!).
+ * 
  * @author Graham
  */
 public final class MovementSegment extends SynchronizationSegment {
@@ -16,6 +17,7 @@ public final class MovementSegment extends SynchronizationSegment {
 
 	/**
 	 * Creates the movement segment.
+	 * 
 	 * @param blockSet The block set.
 	 * @param directions The directions array.
 	 * @throws IllegalArgumentException if there are not 0, 1 or 2 directions.
@@ -30,6 +32,7 @@ public final class MovementSegment extends SynchronizationSegment {
 
 	/**
 	 * Gets the directions.
+	 * 
 	 * @return The directions.
 	 */
 	public Direction[] getDirections() {

@@ -21,12 +21,14 @@ import org.apollo.security.PlayerCredentials;
 
 /**
  * A {@link Player} is a {@link Character} that a user is controlling.
+ * 
  * @author Graham
  */
 public final class Player extends Character {
 
 	/**
 	 * An enumeration with the different privilege levels a player can have.
+	 * 
 	 * @author Graham
 	 */
 	public enum PrivilegeLevel {
@@ -48,6 +50,7 @@ public final class Player extends Character {
 
 		/**
 		 * Gets the privilege level for the specified numerical level.
+		 * 
 		 * @param numericalLevel The numerical level.
 		 * @return The privilege level.
 		 * @throws IllegalArgumentException if the numerical level is invalid.
@@ -68,6 +71,7 @@ public final class Player extends Character {
 
 		/**
 		 * Creates a privilege level.
+		 * 
 		 * @param numericalLevel The numerical level.
 		 */
 		private PrivilegeLevel(int numericalLevel) {
@@ -76,6 +80,7 @@ public final class Player extends Character {
 
 		/**
 		 * Gets the numerical level.
+		 * 
 		 * @return The numerical level used in the protocol.
 		 */
 		public int toInteger() {
@@ -151,6 +156,7 @@ public final class Player extends Character {
 
 	/**
 	 * Creates the {@link Player}.
+	 * 
 	 * @param credentials The player's credentials.
 	 * @param position The initial position.
 	 */
@@ -162,6 +168,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets this player's interface set.
+	 * 
 	 * @return The interface set for this player.
 	 */
 	public InterfaceSet getInterfaceSet() {
@@ -170,6 +177,7 @@ public final class Player extends Character {
 
 	/**
 	 * Checks if there are excessive players.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isExcessivePlayersSet() {
@@ -199,6 +207,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets this player's viewing distance.
+	 * 
 	 * @return The viewing distance.
 	 */
 	public int getViewingDistance() {
@@ -206,8 +215,7 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Increments this player's viewing distance if it is less than the maximum
-	 * viewing distance.
+	 * Increments this player's viewing distance if it is less than the maximum viewing distance.
 	 */
 	public void incrementViewingDistance() {
 		if (viewingDistance < Position.MAX_DISTANCE) {
@@ -226,6 +234,7 @@ public final class Player extends Character {
 
 	/**
 	 * Checks if this player has ever known a region.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasLastKnownRegion() {
@@ -234,8 +243,8 @@ public final class Player extends Character {
 
 	/**
 	 * Gets the last known region.
-	 * @return The last known region, or {@code null} if the player has never
-	 * known a region.
+	 * 
+	 * @return The last known region, or {@code null} if the player has never known a region.
 	 */
 	public Position getLastKnownRegion() {
 		return lastKnownRegion;
@@ -243,6 +252,7 @@ public final class Player extends Character {
 
 	/**
 	 * Sets the last known region.
+	 * 
 	 * @param lastKnownRegion The last known region.
 	 */
 	public void setLastKnownRegion(Position lastKnownRegion) {
@@ -251,6 +261,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets the privilege level.
+	 * 
 	 * @return The privilege level.
 	 */
 	public PrivilegeLevel getPrivilegeLevel() {
@@ -259,6 +270,7 @@ public final class Player extends Character {
 
 	/**
 	 * Sets the privilege level.
+	 * 
 	 * @param privilegeLevel The privilege level.
 	 */
 	public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
@@ -267,6 +279,7 @@ public final class Player extends Character {
 
 	/**
 	 * Checks if this player account has membership.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isMembers() {
@@ -275,6 +288,7 @@ public final class Player extends Character {
 
 	/**
 	 * Changes the membership status of this player.
+	 * 
 	 * @param members The new membership flag.
 	 */
 	public void setMembers(boolean members) {
@@ -283,6 +297,7 @@ public final class Player extends Character {
 
 	/**
 	 * Sets the player's {@link GameSession}.
+	 * 
 	 * @param session The player's {@link GameSession}.
 	 * @param reconnecting The reconnecting flag.
 	 */
@@ -296,6 +311,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets the player's credentials.
+	 * 
 	 * @return The player's credentials.
 	 */
 	public PlayerCredentials getCredentials() {
@@ -353,17 +369,21 @@ public final class Player extends Character {
 		// TODO only add bank listener when it is open? (like Hyperion)
 
 		// inventory full listeners
-		InventoryListener fullInventoryListener = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
+		InventoryListener fullInventoryListener = new FullInventoryListener(this,
+				FullInventoryListener.FULL_INVENTORY_MESSAGE);
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
-		InventoryListener fullEquipmentListener = new FullInventoryListener(this, FullInventoryListener.FULL_EQUIPMENT_MESSAGE);
+		InventoryListener fullEquipmentListener = new FullInventoryListener(this,
+				FullInventoryListener.FULL_EQUIPMENT_MESSAGE);
 
 		// equipment appearance listener
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 
 		// synchronization listeners
-		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.INVENTORY_ID);
+		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
+				SynchronizationInventoryListener.INVENTORY_ID);
 		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
-		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.EQUIPMENT_ID);
+		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
+				SynchronizationInventoryListener.EQUIPMENT_ID);
 
 		// add the listeners
 		inventory.addListener(syncInventoryListener);
@@ -390,11 +410,10 @@ public final class Player extends Character {
 
 		// tabs TODO make a constant? look at player settings
 		int[] tabs = {
-			// 6299 = music tab, music disabled
-			// 4445 = settings tab, music disabled
-			// 12855 = ancients magic
-			2423, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 904, 147, 962,
-		};
+				// 6299 = music tab, music disabled
+				// 4445 = settings tab, music disabled
+				// 12855 = ancients magic
+				2423, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 904, 147, 962, };
 		for (int i = 0; i < tabs.length; i++) {
 			send(new SwitchTabInterfaceEvent(i, tabs[i]));
 		}
@@ -410,11 +429,13 @@ public final class Player extends Character {
 
 	@Override
 	public String toString() {
-		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel=" + privilegeLevel +"]";
+		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel="
+				+ privilegeLevel + "]";
 	}
 
 	/**
 	 * Sets the region changed flag.
+	 * 
 	 * @param regionChanged A flag indicating if the region has changed.
 	 */
 	public void setRegionChanged(boolean regionChanged) {
@@ -423,6 +444,7 @@ public final class Player extends Character {
 
 	/**
 	 * Checks if the region has changed.
+	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasRegionChanged() {
@@ -431,6 +453,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets the player's appearance.
+	 * 
 	 * @return The appearance.
 	 */
 	public Appearance getAppearance() {
@@ -439,6 +462,7 @@ public final class Player extends Character {
 
 	/**
 	 * Sets the player's appearance.
+	 * 
 	 * @param appearance The new appearance.
 	 */
 	public void setAppearance(Appearance appearance) {
@@ -448,6 +472,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets the player's name.
+	 * 
 	 * @return The player's name.
 	 */
 	public String getName() {
@@ -456,6 +481,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets the player's name, encoded as a long.
+	 * 
 	 * @return The encoded player name.
 	 */
 	public long getEncodedName() {
@@ -471,6 +497,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets the game session.
+	 * 
 	 * @return The game session.
 	 */
 	public GameSession getSession() {
@@ -479,8 +506,8 @@ public final class Player extends Character {
 
 	/**
 	 * Sets the character design flag.
-	 * @param designedCharacter A flag indicating if the character has been
-	 * designed.
+	 * 
+	 * @param designedCharacter A flag indicating if the character has been designed.
 	 */
 	public void setDesignedCharacter(boolean designedCharacter) {
 		this.designedCharacter = designedCharacter;
@@ -488,6 +515,7 @@ public final class Player extends Character {
 
 	/**
 	 * Checks if the player has designed their character.
+	 * 
 	 * @return A flag indicating if the player has designed their character.
 	 */
 	public boolean hasDesignedCharacter() {
@@ -496,6 +524,7 @@ public final class Player extends Character {
 
 	/**
 	 * Gets the withdrawing notes flag.
+	 * 
 	 * @return The flag.
 	 */
 	public boolean isWithdrawingNotes() {
@@ -504,6 +533,7 @@ public final class Player extends Character {
 
 	/**
 	 * Sets the withdrawing notes flag.
+	 * 
 	 * @param withdrawingNotes The flag.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {

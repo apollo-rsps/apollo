@@ -21,8 +21,8 @@ import org.jboss.netty.handler.timeout.IdleStateAwareChannelUpstreamHandler;
 import org.jboss.netty.handler.timeout.IdleStateEvent;
 
 /**
- * An implementation of {@link SimpleChannelUpstreamHandler} which handles
- * incoming upstream events from Netty.
+ * An implementation of {@link SimpleChannelUpstreamHandler} which handles incoming upstream events from Netty.
+ * 
  * @author Graham
  */
 public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
@@ -39,6 +39,7 @@ public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
 
 	/**
 	 * Creates the Apollo event handler.
+	 * 
 	 * @param context The server context.
 	 */
 	public ApolloHandler(ServerContext context) {

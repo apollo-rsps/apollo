@@ -8,6 +8,7 @@ import org.apollo.game.model.Player;
 
 /**
  * A handler which handles {@link CharacterDesignEvent}s.
+ * 
  * @author Graham
  */
 public final class CharacterDesignEventHandler extends EventHandler<CharacterDesignEvent> {

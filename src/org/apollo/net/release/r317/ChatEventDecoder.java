@@ -19,10 +19,8 @@ public final class ChatEventDecoder extends EventDecoder<ChatEvent> {
 	public ChatEvent decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
-		int effects = (int) reader.getUnsigned(DataType.BYTE,
-				DataTransformation.SUBTRACT);
-		int color = (int) reader.getUnsigned(DataType.BYTE,
-				DataTransformation.SUBTRACT);
+		int effects = (int) reader.getUnsigned(DataType.BYTE, DataTransformation.SUBTRACT);
+		int color = (int) reader.getUnsigned(DataType.BYTE, DataTransformation.SUBTRACT);
 		int length = packet.getLength() - 2;
 
 		byte[] originalCompressed = new byte[length];

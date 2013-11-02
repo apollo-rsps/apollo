@@ -7,6 +7,7 @@ import org.apollo.game.model.Player;
 
 /**
  * A class which dispatches {@link Command}s to {@link CommandListener}s.
+ * 
  * @author Graham
  */
 public final class CommandDispatcher {
@@ -17,8 +18,7 @@ public final class CommandDispatcher {
 	private final Map<String, CommandListener> listeners = new HashMap<String, CommandListener>();
 
 	/**
-	 * Creates the command dispatcher and registers a listener for the credits
-	 * command.
+	 * Creates the command dispatcher and registers a listener for the credits command.
 	 */
 	public CommandDispatcher() {
 		// not in a plugin so it is harder for people to remove!
@@ -27,6 +27,7 @@ public final class CommandDispatcher {
 
 	/**
 	 * Registers a listener with the
+	 * 
 	 * @param command The command's name.
 	 * @param listener The listener.
 	 */
@@ -36,6 +37,7 @@ public final class CommandDispatcher {
 
 	/**
 	 * Dispatches a command to the appropriate listener.
+	 * 
 	 * @param player The player.
 	 * @param command The command.
 	 */

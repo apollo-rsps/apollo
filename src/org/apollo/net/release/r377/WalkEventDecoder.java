@@ -11,6 +11,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link WalkEvent}.
+ * 
  * @author Graham
  */
 public final class WalkEventDecoder extends EventDecoder<WalkEvent> {

@@ -4,3 +4,4 @@
  * character.
  */
 package org.apollo.game.sync.seg;
+

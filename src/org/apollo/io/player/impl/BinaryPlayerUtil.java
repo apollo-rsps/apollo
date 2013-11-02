@@ -5,8 +5,8 @@ import java.io.File;
 import org.apollo.util.NameUtil;
 
 /**
- * A utility class with common functionality used by the binary player loader/
- * savers.
+ * A utility class with common functionality used by the binary player loader/ savers.
+ * 
  * @author Graham
  */
 public final class BinaryPlayerUtil {
@@ -27,6 +27,7 @@ public final class BinaryPlayerUtil {
 
 	/**
 	 * Gets the file for the specified player.
+	 * 
 	 * @param name The name of the player.
 	 * @return The file.
 	 */

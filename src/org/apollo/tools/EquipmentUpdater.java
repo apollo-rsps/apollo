@@ -11,6 +11,7 @@ import org.apollo.game.model.def.ItemDefinition;
 
 /**
  * A tool for updating the equipment data.
+ * 
  * @author Graham
  * @author Palidino76
  */
@@ -18,6 +19,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * The entry point of the application.
+	 * 
 	 * @param args The command line arguments.
 	 * @throws Exception if an error occurs.
 	 */
@@ -29,7 +31,8 @@ public final class EquipmentUpdater {
 		}
 		String release = args[0];
 
-		DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release + ".dat")));
+		DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-"
+				+ release + ".dat")));
 		try {
 			IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true);
 			try {
@@ -64,6 +67,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Checks if the item is two handed.
+	 * 
 	 * @param def The item.
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
@@ -116,6 +120,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Gets the ranged requirement.
+	 * 
 	 * @param def The item.
 	 * @return The required level.
 	 */
@@ -228,6 +233,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Gets the magic requirement.
+	 * 
 	 * @param def The item.
 	 * @return The required level.
 	 */
@@ -302,6 +308,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Gets the strength requirement.
+	 * 
 	 * @param def The item.
 	 * @return The required level.
 	 */
@@ -312,20 +319,21 @@ public final class EquipmentUpdater {
 		if (name.equals("Torags hammers"))
 			return 70;
 		if (name.equals("Dharoks greataxe"))
-		   return 70;
+			return 70;
 		if (name.equals("Granite maul"))
-		   return 50;
+			return 50;
 		if (name.equals("Granite legs"))
-		   return 99;
+			return 99;
 		if (name.equals("Tzhaar-ket-om"))
-		   return 60;
+			return 60;
 		if (name.equals("Granite shield"))
-		   return 50;
-	   return 1;
+			return 50;
+		return 1;
 	}
 
 	/**
 	 * Gets the attack requirement.
+	 * 
 	 * @param def The item.
 	 * @return The required level.
 	 */
@@ -468,6 +476,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Gets the defence requirement.
+	 * 
 	 * @param def The item.
 	 * @return The required level.
 	 */
@@ -771,6 +780,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Gets the weapon type.
+	 * 
 	 * @param def The item.
 	 * @return The weapon type, or {@code -1} if it is not a weapon.
 	 */
@@ -827,6 +837,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Checks if the item is a full body item.
+	 * 
 	 * @param def The item.
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
@@ -844,6 +855,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Checks if the item is a full hat item.
+	 * 
 	 * @param def The item.
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
@@ -861,6 +873,7 @@ public final class EquipmentUpdater {
 
 	/**
 	 * Checks if the item is a full mask item.
+	 * 
 	 * @param def The item.
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */

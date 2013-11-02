@@ -13,12 +13,14 @@ import org.apollo.game.model.def.ItemDefinition;
 
 /**
  * A tool for updating the note data.
+ * 
  * @author Graham
  */
 public final class NoteUpdater {
 
 	/**
 	 * The entry point of the application.
+	 * 
 	 * @param args The command line arguments.
 	 * @throws Exception if an error occurs.
 	 */
@@ -30,7 +32,8 @@ public final class NoteUpdater {
 		}
 		String release = args[0];
 
-		DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/note-" + release + ".dat")));
+		DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/note-" + release
+				+ ".dat")));
 		try {
 			IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true);
 			try {

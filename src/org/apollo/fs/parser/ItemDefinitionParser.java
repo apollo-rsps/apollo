@@ -23,8 +23,7 @@ public final class ItemDefinitionParser {
 	/**
 	 * Creates the item definition parser.
 	 * 
-	 * @param fs
-	 *            The indexed file system.
+	 * @param fs The indexed file system.
 	 */
 	public ItemDefinitionParser(IndexedFileSystem fs) {
 		this.fs = fs;
@@ -34,8 +33,7 @@ public final class ItemDefinitionParser {
 	 * Parses the item definitions.
 	 * 
 	 * @return The item definitions.
-	 * @throws IOException
-	 *             if an I/O error occurs.
+	 * @throws IOException if an I/O error occurs.
 	 */
 	public ItemDefinition[] parse() throws IOException {
 		Archive config = Archive.decode(fs.getFile(0, 2));
@@ -62,10 +60,8 @@ public final class ItemDefinitionParser {
 	/**
 	 * Parses a single definition.
 	 * 
-	 * @param id
-	 *            The item's id.
-	 * @param buffer
-	 *            The buffer.
+	 * @param id The item's id.
+	 * @param buffer The buffer.
 	 * @return The definition.
 	 */
 	private ItemDefinition parseDefinition(int id, ByteBuffer buffer) {

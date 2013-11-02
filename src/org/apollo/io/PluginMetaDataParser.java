@@ -9,8 +9,8 @@ import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
 
 /**
- * A class which parses {@code plugin.xml} files into {@link PluginMetaData}
- * objects.
+ * A class which parses {@code plugin.xml} files into {@link PluginMetaData} objects.
+ * 
  * @author Graham
  */
 public final class PluginMetaDataParser {
@@ -32,6 +32,7 @@ public final class PluginMetaDataParser {
 
 	/**
 	 * Creates the plugin meta data parser.
+	 * 
 	 * @param is The input stream.
 	 * @throws SAXException if a SAX error occurs.
 	 */
@@ -42,6 +43,7 @@ public final class PluginMetaDataParser {
 
 	/**
 	 * Parses the XML and creates a meta data object.
+	 * 
 	 * @return The meta data object.
 	 * @throws SAXException if a SAX error occurs.
 	 * @throws IOException if an I/O error occurs.
@@ -103,6 +105,7 @@ public final class PluginMetaDataParser {
 
 	/**
 	 * Gets the specified child element, if it exists.
+	 * 
 	 * @param node The root node.
 	 * @param name The element name.
 	 * @return The node object.

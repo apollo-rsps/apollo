@@ -22,6 +22,7 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * A worker which services HTTP requests.
+ * 
  * @author Graham
  */
 public final class HttpRequestWorker extends RequestWorker<HttpRequest, ResourceProvider> {
@@ -43,11 +44,13 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 
 	/**
 	 * Creates the HTTP request worker.
+	 * 
 	 * @param dispatcher The dispatcher.
 	 * @param fs The file system.
 	 */
 	public HttpRequestWorker(UpdateDispatcher dispatcher, IndexedFileSystem fs) {
-		super(dispatcher, new CombinedResourceProvider(new VirtualResourceProvider(fs), new HypertextResourceProvider(WWW_DIRECTORY)));
+		super(dispatcher, new CombinedResourceProvider(new VirtualResourceProvider(fs), new HypertextResourceProvider(
+				WWW_DIRECTORY)));
 	}
 
 	@Override
@@ -91,6 +94,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 
 	/**
 	 * Gets the MIME type of a file by its name.
+	 * 
 	 * @param name The file name.
 	 * @return The MIME type.
 	 */
@@ -118,6 +122,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 
 	/**
 	 * Creates an error page.
+	 * 
 	 * @param status The HTTP status.
 	 * @param description The error description.
 	 * @return The error page as a buffer.

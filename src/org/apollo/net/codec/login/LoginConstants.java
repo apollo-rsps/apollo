@@ -2,6 +2,7 @@ package org.apollo.net.codec.login;
 
 /**
  * Holds login-related constants.
+ * 
  * @author Graham
  */
 public final class LoginConstants {
