@@ -75,29 +75,34 @@ public final class Release377 extends Release {
 	 */
 	private void init() {
 		// register decoders
-		register(248, new KeepAliveEventDecoder());
-		register(163, new CharacterDesignEventDecoder());
 		WalkEventDecoder walkEventDecoder = new WalkEventDecoder();
 		register(213, walkEventDecoder);
 		register(28, walkEventDecoder);
 		register(247, walkEventDecoder);
+
+		register(248, new KeepAliveEventDecoder());
+		register(163, new CharacterDesignEventDecoder());
 		register(49, new ChatEventDecoder());
-		register(79, new ButtonEventDecoder());
 		register(56, new CommandEventDecoder());
 		register(123, new SwitchItemEventDecoder());
+
 		register(181, new FirstObjectActionEventDecoder());
 		register(241, new SecondObjectActionEventDecoder());
 		register(50, new ThirdObjectActionEventDecoder());
+
 		register(203, new FirstItemOptionEventDecoder());
 		register(24, new SecondItemOptionEventDecoder());
 		register(161, new ThirdItemOptionEventDecoder());
 		register(228, new FourthItemOptionEventDecoder());
 		register(4, new FifthItemOptionEventDecoder());
+
 		register(3, new FirstItemActionEventDecoder());
 		register(177, new SecondItemActionEventDecoder());
 		register(91, new ThirdItemActionEventDecoder());
 		register(231, new FourthItemActionEventDecoder());
 		register(158, new FifthItemActionEventDecoder());
+
+		register(79, new ButtonEventDecoder());
 		register(110, new ClosedInterfaceEventDecoder());
 		register(75, new EnteredAmountEventDecoder());
 		register(1, new ItemOnItemEventDecoder());

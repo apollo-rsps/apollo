@@ -39,7 +39,7 @@ public final class CommandDispatcher {
 	}
 
 	/**
-	 * Registers a listener with the
+	 * Registers a listener with the dispatcher.
 	 * 
 	 * @param command The command's name.
 	 * @param listener The listener.

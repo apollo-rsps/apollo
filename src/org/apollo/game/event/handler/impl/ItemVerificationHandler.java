@@ -5,9 +5,9 @@ import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.InventoryItemEvent;
 import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
+import org.apollo.game.model.Player;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
-import org.apollo.game.model.Player;
 
 /**
  * An {@link EventHandler} which verifies {@link InventoryItemEvent}s.

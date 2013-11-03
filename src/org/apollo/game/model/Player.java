@@ -1,12 +1,15 @@
 package org.apollo.game.model;
 
 import java.util.ArrayDeque;
+import java.util.List;
 import java.util.Queue;
 
 import org.apollo.game.event.Event;
+import org.apollo.game.event.impl.ConfigEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
 import org.apollo.game.event.impl.LogoutEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
+import org.apollo.game.event.impl.SetWidgetTextEvent;
 import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.AppearanceInventoryListener;
@@ -106,6 +109,11 @@ public final class Player extends Character {
 	private boolean designedCharacter = false;
 
 	/**
+	 * The player's run energy.
+	 */
+	private int runEnergy = 100;
+
+	/**
 	 * A flag which indicates there are npcs that couldn't be added.
 	 */
 	private boolean excessiveNpcs = false;
@@ -173,7 +181,7 @@ public final class Player extends Character {
 	/**
 	 * A flag indicating if the player is withdrawing items as notes.
 	 */
-	private boolean withdrawingNotes = false; // TODO find a better place!
+	private boolean withdrawingNotes = false;
 
 	/**
 	 * Creates the {@link Player}.
@@ -191,7 +199,7 @@ public final class Player extends Character {
 	 * Decrements this player's viewing distance if it is greater than 1.
 	 */
 	public void decrementViewingDistance() {
-		if (viewingDistance > 1) { // TODO should it be 0?
+		if (viewingDistance > 1) {
 			viewingDistance--;
 		}
 	}
@@ -496,27 +504,19 @@ public final class Player extends Character {
 		send(new IdAssignmentEvent(getIndex(), members)); // TODO should this be sent when we reconnect?
 		sendMessage("Welcome to RuneScape.");
 
-		// character design screen
 		if (!designedCharacter) {
-			interfaceSet.openWindow(3559); // TODO make the interface id a constant or something?
+			interfaceSet.openWindow(InterfaceConstants.CHARACTER_DESIGN);
 		}
 
-		// tabs TODO make a constant? look at player settings
-		int[] tabs = {
-				// 6299 = music tab, music disabled
-				// 4445 = settings tab, music disabled
-				// 12855 = ancients magic
-				2423, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 904, 147, 962, };
+		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
 		for (int i = 0; i < tabs.length; i++) {
 			send(new SwitchTabInterfaceEvent(i, tabs[i]));
 		}
 
-		// force inventories to update
 		getInventory().forceRefresh();
 		getEquipment().forceRefresh();
 		getBank().forceRefresh();
 
-		// force skills to update
 		getSkillSet().forceRefresh();
 	}
 
@@ -527,6 +527,23 @@ public final class Player extends Character {
 	 */
 	public void sendMessage(String message) {
 		send(new ServerMessageEvent(message));
+	}
+
+	/**
+	 * Sends the quest interface
+	 * 
+	 * @param text The text to display on the interface.
+	 */
+	public void sendQuestInterface(List<String> text) {
+		int size = text.size(), lines = InterfaceConstants.QUEST_TEXT.length;
+		if (size > lines) {
+			throw new IllegalArgumentException("List contains too much text for the interface.");
+		}
+
+		for (int pos = 0; pos < lines; pos++) {
+			send(new SetWidgetTextEvent(InterfaceConstants.QUEST_TEXT[pos], pos < size ? text.get(pos) : ""));
+		}
+		interfaceSet.openWindow(InterfaceConstants.QUEST_INTERFACE);
 	}
 
 	/**
@@ -603,16 +620,6 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Sets whether the running toggle is enabled.
-	 * 
-	 * @param running The toggle.
-	 */
-	public void setRunning(boolean running) {
-		this.running = running;
-		getWalkingQueue().setRunningQueue(running);
-	}
-
-	/**
 	 * Sets the player's {@link GameSession}.
 	 * 
 	 * @param session The player's {@link GameSession}.
@@ -638,13 +645,42 @@ public final class Player extends Character {
 	@Override
 	public void teleport(Position position) {
 		super.teleport(position); // TODO put this in the same place as Character#teleport and WalkEventHandler!!
-		interfaceSet.close(); // TODO: should this be done if size == 0?
+		if (interfaceSet.size() > 0) {
+			interfaceSet.close();
+		}
+	}
+
+	/**
+	 * Toggles whether the player is running or not.
+	 */
+	public void toggleRunning() {
+		running = !running;
+		getWalkingQueue().setRunningQueue(running);
+		send(new ConfigEvent(173, running ? 1 : 0));
 	}
 
 	@Override
 	public String toString() {
 		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel="
 				+ privilegeLevel + "]";
+	}
+
+	/**
+	 * Gets the player's run energy.
+	 * 
+	 * @return The run energy.
+	 */
+	public int getRunEnergy() {
+		return runEnergy;
+	}
+
+	/**
+	 * Sets the player's run energy.
+	 * 
+	 * @param runEnergy The energy.
+	 */
+	public void setRunEnergy(int runEnergy) {
+		this.runEnergy = runEnergy;
 	}
 
 }

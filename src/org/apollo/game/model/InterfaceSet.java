@@ -36,7 +36,6 @@ public final class InterfaceSet {
 	 */
 	private EnterAmountListener amountListener;
 
-	// TODO: maybe store the current inventory tab ids here??
 	/**
 	 * A map of open interfaces.
 	 */
@@ -172,6 +171,15 @@ public final class InterfaceSet {
 		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
 
 		player.send(new OpenInterfaceSidebarEvent(windowId, sidebarId));
+	}
+
+	/**
+	 * Gets the size of the interface set.
+	 * 
+	 * @return The size.
+	 */
+	public int size() {
+		return interfaces.size();
 	}
 
 }
