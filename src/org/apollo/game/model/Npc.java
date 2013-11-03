@@ -41,7 +41,7 @@ public class Npc extends Character {
 	 * 
 	 * @return The definition.
 	 */
-	public NpcDefinition getDefinition() {
+	public NpcDefinition getNpcDefinition() {
 		return definition;
 	}
 
