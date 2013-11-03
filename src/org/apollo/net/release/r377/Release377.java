@@ -82,7 +82,11 @@ public final class Release377 extends Release {
 		register(181, new FirstObjectActionEventDecoder());
 		register(241, new SecondObjectActionEventDecoder());
 		register(50, new ThirdObjectActionEventDecoder());
-		register(24, new EquipEventDecoder());
+		register(203, new FirstItemOptionEventDecoder());
+		register(24, new SecondItemOptionEventDecoder());
+		register(161, new ThirdItemOptionEventDecoder());
+		register(228, new FourthItemOptionEventDecoder());
+		register(4, new FifthItemOptionEventDecoder());
 		register(3, new FirstItemActionEventDecoder());
 		register(177, new SecondItemActionEventDecoder());
 		register(91, new ThirdItemActionEventDecoder());

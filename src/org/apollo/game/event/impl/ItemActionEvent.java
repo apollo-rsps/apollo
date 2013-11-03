@@ -5,29 +5,9 @@ import org.apollo.game.event.Event;
 /**
  * An {@link Event} which represents some sort of action on an item.
  * 
- * @author Graham
+ * @author Chris Fletcher
  */
-public abstract class ItemActionEvent extends Event {
-
-	/**
-	 * The option number (1-5).
-	 */
-	private final int option;
-
-	/**
-	 * The interface id.
-	 */
-	private final int interfaceId;
-
-	/**
-	 * The item id.
-	 */
-	private final int id;
-
-	/**
-	 * The item's slot.
-	 */
-	private final int slot;
+public abstract class ItemActionEvent extends InventoryItemEvent {
 
 	/**
 	 * Creates the item action event.
@@ -38,46 +18,7 @@ public abstract class ItemActionEvent extends Event {
 	 * @param slot The slot.
 	 */
 	public ItemActionEvent(int option, int interfaceId, int id, int slot) {
-		this.option = option;
-		this.interfaceId = interfaceId;
-		this.id = id;
-		this.slot = slot;
-	}
-
-	/**
-	 * Gets the item id.
-	 * 
-	 * @return The item id.
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Gets the interface id.
-	 * 
-	 * @return The interface id.
-	 */
-	public int getInterfaceId() {
-		return interfaceId;
-	}
-
-	/**
-	 * Gets the option number.
-	 * 
-	 * @return The option number.
-	 */
-	public int getOption() {
-		return option;
-	}
-
-	/**
-	 * Gets the slot.
-	 * 
-	 * @return The slot.
-	 */
-	public int getSlot() {
-		return slot;
+		super(option, interfaceId, id, slot);
 	}
 
 }

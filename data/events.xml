@@ -46,7 +46,7 @@
     <chain />
   </event>
   <event>
-    <type>org.apollo.game.event.impl.EquipEvent</type>
+    <type>org.apollo.game.event.impl.ItemOptionEvent</type>
     <chain>
       <handler>org.apollo.game.event.handler.impl.EquipEventHandler</handler>
     </chain>

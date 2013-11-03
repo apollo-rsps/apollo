@@ -2,7 +2,7 @@ package org.apollo.game.event.handler.impl;
 
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
-import org.apollo.game.event.impl.EquipEvent;
+import org.apollo.game.event.impl.ItemOptionEvent;
 import org.apollo.game.model.EquipmentConstants;
 import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
@@ -15,13 +15,14 @@ import org.apollo.util.LanguageUtil;
 /**
  * An event handler which equips items.
  * 
+ * @author Major
  * @author Graham
  */
-public final class EquipEventHandler extends EventHandler<EquipEvent> {
+public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 
 	@Override
-	public void handle(EventHandlerContext ctx, Player player, EquipEvent event) {
-		if (event.getInterfaceId() == SynchronizationInventoryListener.INVENTORY_ID) {
+	public void handle(EventHandlerContext ctx, Player player, ItemOptionEvent event) {
+		if (event.getOption() == 2 && event.getInterfaceId() == SynchronizationInventoryListener.INVENTORY_ID) {
 			int inventorySlot = event.getSlot();
 			Item equipping = player.getInventory().get(inventorySlot);
 			int equippingId = equipping.getId();

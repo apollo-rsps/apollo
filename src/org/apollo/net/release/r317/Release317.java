@@ -82,7 +82,11 @@ public final class Release317 extends Release {
 		register(132, new FirstObjectActionEventDecoder());
 		register(252, new SecondObjectActionEventDecoder());
 		register(70, new ThirdObjectActionEventDecoder());
-		register(41, new EquipEventDecoder());
+		register(122, new FirstItemOptionEventDecoder());
+		register(41, new SecondItemOptionEventDecoder());
+		register(16, new ThirdItemOptionEventDecoder());
+		register(75, new FourthItemOptionEventDecoder());
+		register(87, new FifthItemOptionEventDecoder());
 		register(145, new FirstItemActionEventDecoder());
 		register(117, new SecondItemActionEventDecoder());
 		register(43, new ThirdItemActionEventDecoder());
