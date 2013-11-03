@@ -3,7 +3,7 @@
   <id>cmd-item</id>
   <version>1</version>
   <name>Item Commands</name>
-  <description>Adds ::item, ::destroy and ::empty commands.</description>
+  <description>Adds ::item, ::remove and ::empty commands.</description>
   <authors>
     <author>Graham</author>
   </authors>

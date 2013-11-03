@@ -24,6 +24,15 @@ public final class NpcDefinition {
 	}
 
 	/**
+	 * Gets the array of npc definitions.
+	 * 
+	 * @return The definitions.
+	 */
+	public static NpcDefinition[] getDefinitions() {
+		return definitions;
+	}
+
+	/**
 	 * Initialises the class with the specified set of definitions.
 	 * 
 	 * @param definitions The definitions.

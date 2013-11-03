@@ -67,93 +67,90 @@ public final class ItemDefinitionDecoder {
 	private ItemDefinition decode(int id, ByteBuffer buffer) {
 		ItemDefinition definition = new ItemDefinition(id);
 		while (true) {
-			int code = buffer.get() & 0xFF;
+			int opcode = buffer.get() & 0xFF;
 
-			if (code == 0) {
+			if (opcode == 0) {
 				return definition;
-			} else if (code == 1) {
+			} else if (opcode == 1) {
 				buffer.getShort();// & 0xFFFF; // model Id
-			} else if (code == 2) {
+			} else if (opcode == 2) {
 				definition.setName(ByteBufferUtil.readString(buffer));
-			} else if (code == 3) {
+			} else if (opcode == 3) {
 				definition.setDescription(ByteBufferUtil.readString(buffer));
-			} else if (code == 4) {
+			} else if (opcode == 4) {
 				buffer.getShort();// & 0xFFFF; // sprite scale
-			} else if (code == 5) {
+			} else if (opcode == 5) {
 				buffer.getShort();// & 0xFFFF; // sprite pitch
-			} else if (code == 6) {
+			} else if (opcode == 6) {
 				buffer.getShort();// & 0xFFFF; //sprite camera roll
-			} else if (code == 7) {
+			} else if (opcode == 7) {
 				buffer.getShort(); // sprite dX
-			} else if (code == 8) {
+			} else if (opcode == 8) {
 				buffer.getShort(); // sprite dY
-			} else if (code == 10) {
+			} else if (opcode == 10) {
 				buffer.getShort();
-			} else if (code == 11) {
+			} else if (opcode == 11) {
 				definition.setStackable(true);
-			} else if (code == 12) {
-				buffer.getInt(); // model height
-			} else if (code == 16) {
+			} else if (opcode == 12) {
+				definition.setValue(buffer.getInt());
+			} else if (opcode == 16) {
 				definition.setMembersOnly(true);
-			} else if (code == 23) {
+			} else if (opcode == 23) {
 				buffer.getShort(); // & 0xFFFF; //primaryMaleEquipModelId
 				buffer.get(); // maleEquipYTranslation
-			} else if (code == 24) {
+			} else if (opcode == 24) {
 				buffer.getShort(); // & 0xFFFF; // secondaryMaleEquipModelId
-			} else if (code == 25) {
+			} else if (opcode == 25) {
 				buffer.getShort(); // & 0xFFFF; // primaryFemaleEquipModelId
 				buffer.get(); // femaleEquipYTranslation
-			} else if (code == 26) {
+			} else if (opcode == 26) {
 				buffer.getShort(); // & 0xFFFF; // secondaryFemaleEquipModelId
-			} else if (code >= 30 && code < 35) {
+			} else if (opcode >= 30 && opcode < 35) {
 				String str = ByteBufferUtil.readString(buffer);
 				if (str.equalsIgnoreCase("hidden")) {
 					str = null;
 				}
-				definition.setGroundAction(code - 30, str);
-			} else if (code >= 35 && code < 40) {
-				String str = ByteBufferUtil.readString(buffer);
-				definition.setInventoryAction(code - 35, str);
-			} else if (code == 40) {
+				definition.setGroundAction(opcode - 30, str);
+			} else if (opcode >= 35 && opcode < 40) {
+				definition.setInventoryAction(opcode - 35, ByteBufferUtil.readString(buffer));
+			} else if (opcode == 40) {
 				int colourCount = buffer.get() & 0xFF;
 				for (int i = 0; i < colourCount; i++) {
 					buffer.getShort(); // & 0xFFFF; // original colour
 					buffer.getShort(); // & 0xFFFF; // replacement colour
 				}
-			} else if (code == 78) {
+			} else if (opcode == 78) {
 				buffer.getShort(); // & 0xFFFF; // tertiaryMaleEquipModelId
-			} else if (code == 79) {
+			} else if (opcode == 79) {
 				buffer.getShort(); // & 0xFFFF; // tertiaryFemaleEquipModelId
-			} else if (code == 90) {
+			} else if (opcode == 90) {
 				buffer.getShort(); // & 0xFFFF; // primaryMaleHeadPiece
-			} else if (code == 91) {
+			} else if (opcode == 91) {
 				buffer.getShort(); // & 0xFFFF; // primaryFemaleHeadPiece
-			} else if (code == 92) {
+			} else if (opcode == 92) {
 				buffer.getShort(); // & 0xFFFF; // secondaryMaleHeadPiece
-			} else if (code == 93) {
+			} else if (opcode == 93) {
 				buffer.getShort(); // & 0xFFFF; // secondaryFemaleHeadPiece
-			} else if (code == 95) {
+			} else if (opcode == 95) {
 				buffer.getShort(); // & 0xFFFF; // spriteCameraYaw
-			} else if (code == 97) {
-				int noteInfoId = buffer.getShort() & 0xFFFF;
-				definition.setNoteInfoId(noteInfoId);
-			} else if (code == 98) {
-				int noteGraphicId = buffer.getShort() & 0xFFFF;
-				definition.setNoteGraphicId(noteGraphicId);
-			} else if (code >= 100 && code < 110) {
+			} else if (opcode == 97) {
+				definition.setNoteInfoId(buffer.getShort() & 0xFFFF);
+			} else if (opcode == 98) {
+				definition.setNoteGraphicId(buffer.getShort() & 0xFFFF);
+			} else if (opcode >= 100 && opcode < 110) {
 				buffer.getShort(); // & 0xFFFF; // stack id
 				buffer.getShort(); // & 0xFFFF; // stack size
-			} else if (code == 110) {
+			} else if (opcode == 110) {
 				buffer.getShort(); // & 0xFFFF; // groundScaleX
-			} else if (code == 111) {
+			} else if (opcode == 111) {
 				buffer.getShort(); // & 0xFFFF; // groundScaleY
-			} else if (code == 112) {
+			} else if (opcode == 112) {
 				buffer.getShort(); // & 0xFFFF; // groundScaleZ
-			} else if (code == 113) {
+			} else if (opcode == 113) {
 				buffer.get(); // light ambiance
-			} else if (code == 114) {
+			} else if (opcode == 114) {
 				buffer.getShort(); // * 5; // light diffusion
-			} else if (code == 115) {
+			} else if (opcode == 115) {
 				definition.setTeam(buffer.get() & 0xFF);
 			}
 		}
