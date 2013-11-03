@@ -26,14 +26,14 @@ public final class Index {
 	}
 
 	/**
-	 * The size of the file.
-	 */
-	private final int size;
-
-	/**
 	 * The first block of the file.
 	 */
 	private final int block;
+
+	/**
+	 * The size of the file.
+	 */
+	private final int size;
 
 	/**
 	 * Creates the index.

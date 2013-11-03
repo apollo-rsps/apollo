@@ -8,14 +8,14 @@ package org.apollo.game.command;
 public final class Command {
 
 	/**
-	 * The name of the command.
-	 */
-	private final String name;
-
-	/**
 	 * The command's arguments.
 	 */
 	private final String[] arguments;
+
+	/**
+	 * The name of the command.
+	 */
+	private final String name;
 
 	/**
 	 * Creates the command.

@@ -11,9 +11,9 @@ import org.apollo.game.event.Event;
 public abstract class InventoryItemEvent extends Event {
 
 	/**
-	 * The option number (1-5).
+	 * The item id.
 	 */
-	private final int option;
+	private final int id;
 
 	/**
 	 * The interface id.
@@ -21,9 +21,9 @@ public abstract class InventoryItemEvent extends Event {
 	private final int interfaceId;
 
 	/**
-	 * The item id.
+	 * The option number (1-5).
 	 */
-	private final int id;
+	private final int option;
 
 	/**
 	 * The item's slot.
@@ -46,12 +46,12 @@ public abstract class InventoryItemEvent extends Event {
 	}
 
 	/**
-	 * Gets the option number.
+	 * Gets the item id.
 	 * 
-	 * @return The option number.
+	 * @return The item id.
 	 */
-	public final int getOption() {
-		return option;
+	public final int getId() {
+		return id;
 	}
 
 	/**
@@ -64,12 +64,12 @@ public abstract class InventoryItemEvent extends Event {
 	}
 
 	/**
-	 * Gets the item id.
+	 * Gets the option number.
 	 * 
-	 * @return The item id.
+	 * @return The option number.
 	 */
-	public final int getId() {
-		return id;
+	public final int getOption() {
+		return option;
 	}
 
 	/**

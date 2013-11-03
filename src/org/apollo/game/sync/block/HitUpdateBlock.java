@@ -9,24 +9,24 @@ package org.apollo.game.sync.block;
 public class HitUpdateBlock extends SynchronizationBlock {
 
 	/**
-	 * The amount of damage the hit will do.
-	 */
-	private final int damage;
-
-	/**
-	 * The type of hit (e.g. normal, poison).
-	 */
-	private final int type;
-
-	/**
 	 * The {@link org.apollo.game.model.Character}'s current health.
 	 */
 	private final int currentHealth;
 
 	/**
+	 * The amount of damage the hit will do.
+	 */
+	private final int damage;
+
+	/**
 	 * The {@link org.apollo.game.model.Character}'s maximum health.
 	 */
 	private final int maximumHealth;
+
+	/**
+	 * The type of hit (e.g. normal, poison).
+	 */
+	private final int type;
 
 	/**
 	 * Creates a new Hit Update block.

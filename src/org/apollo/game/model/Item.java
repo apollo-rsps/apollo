@@ -10,14 +10,14 @@ import org.apollo.game.model.def.ItemDefinition;
 public final class Item {
 
 	/**
-	 * The item's id.
-	 */
-	private final int id;
-
-	/**
 	 * The amount of items in the stack.
 	 */
 	private final int amount;
+
+	/**
+	 * The item's id.
+	 */
+	private final int id;
 
 	/**
 	 * Creates an item with an amount of {@code 1}.

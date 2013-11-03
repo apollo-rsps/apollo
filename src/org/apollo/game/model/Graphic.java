@@ -13,11 +13,6 @@ public final class Graphic {
 	public static final Graphic STOP_GRAPHIC = new Graphic(-1);
 
 	/**
-	 * The id.
-	 */
-	private final int id;
-
-	/**
 	 * The delay.
 	 */
 	private final int delay;
@@ -26,6 +21,11 @@ public final class Graphic {
 	 * The height.
 	 */
 	private final int height;
+
+	/**
+	 * The id.
+	 */
+	private final int id;
 
 	/**
 	 * Creates a new graphic with no delay and a height of zero.

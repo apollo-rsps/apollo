@@ -10,24 +10,24 @@ import org.apollo.game.event.Event;
 public final class SwitchItemEvent extends Event {
 
 	/**
-	 * The interface id.
-	 */
-	private final int interfaceId;
-
-	/**
 	 * A flag indicating if insertion mode is enabled.
 	 */
 	private final boolean inserting;
 
 	/**
-	 * The old slot.
+	 * The interface id.
 	 */
-	private final int oldSlot;
+	private final int interfaceId;
 
 	/**
 	 * The new slot.
 	 */
 	private final int newSlot;
+
+	/**
+	 * The old slot.
+	 */
+	private final int oldSlot;
 
 	/**
 	 * Creates a new switch item event.

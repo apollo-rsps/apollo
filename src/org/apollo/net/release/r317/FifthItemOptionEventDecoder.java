@@ -9,6 +9,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link FifthItemOptionEvent}.
+ * 
  * @author Chris Fletcher
  */
 final class FifthItemOptionEventDecoder extends EventDecoder<FifthItemOptionEvent> {

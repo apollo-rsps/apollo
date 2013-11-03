@@ -23,14 +23,14 @@ import org.xml.sax.SAXException;
 public final class EventHandlerChainParser {
 
 	/**
-	 * The {@link XmlParser} instance.
-	 */
-	private final XmlParser parser;
-
-	/**
 	 * The source {@link InputStream}.
 	 */
 	private final InputStream is;
+
+	/**
+	 * The {@link XmlParser} instance.
+	 */
+	private final XmlParser parser;
 
 	/**
 	 * Creates the event chain parser.

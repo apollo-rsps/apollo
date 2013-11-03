@@ -9,33 +9,6 @@ package org.apollo.tools;
 public final class EquipmentConstants {
 
 	/**
-	 * Capes.
-	 */
-	public static final String[] CAPES = { "cape", "Cape" };
-
-	/**
-	 * Hats.
-	 */
-	public static final String[] HATS = { "helm", "hood", "coif", "Coif", "hat", "partyhat", "Hat", "full helm (t)",
-			"full helm (g)", "hat (t)", "hat (g)", "cav", "boater", "helmet", "mask", "Helm of neitiznot" };
-
-	/**
-	 * Boots.
-	 */
-	public static final String[] BOOTS = { "boots", "Boots" };
-
-	/**
-	 * Gloves.
-	 */
-	public static final String[] GLOVES = { "gloves", "gauntlets", "Gloves", "vambraces", "vamb", "bracers" };
-
-	/**
-	 * Shields.
-	 */
-	public static final String[] SHIELDS = { "kiteshield", "sq shield", "Toktz-ket", "books", "book", "kiteshield (t)",
-			"kiteshield (g)", "kiteshield(h)", "defender", "shield" };
-
-	/**
 	 * Amulets.
 	 */
 	public static final String[] AMULETS = { "amulet", "necklace", "Amulet of" };
@@ -47,11 +20,6 @@ public final class EquipmentConstants {
 			"Opal bolts", "Dragon bolts" };
 
 	/**
-	 * Rings.
-	 */
-	public static final String[] RINGS = { "ring", "Ring of" };
-
-	/**
 	 * Bodies.
 	 */
 	public static final String[] BODY = { "platebody", "chainbody", "robetop", "leathertop", "platemail", "top",
@@ -59,20 +27,14 @@ public final class EquipmentConstants {
 			"torso", "shirt" };
 
 	/**
-	 * Legs.
+	 * Boots.
 	 */
-	public static final String[] LEGS = { "platelegs", "plateskirt", "skirt", "bottoms", "chaps", "platelegs (t)",
-			"platelegs (g)", "bottom", "skirt", "skirt (g)", "skirt (t)", "chaps (g)", "chaps (t)", "tassets", "legs",
-			"Flared trousers" };
+	public static final String[] BOOTS = { "boots", "Boots" };
 
 	/**
-	 * Weapons.
+	 * Capes.
 	 */
-	public static final String[] WEAPONS = { "scimitar", "longsword", "sword", "longbow", "shortbow", "dagger", "mace",
-			"halberd", "spear", "Abyssal whip", "axe", "flail", "crossbow", "Torags hammers", "dagger(p)", "dagger(+)",
-			"dagger(s)", "spear(p)", "spear(+)", "spear(s)", "spear(kp)", "maul", "dart", "dart(p)", "javelin",
-			"javelin(p)", "knife", "knife(p)", "Longbow", "Shortbow", "Crossbow", "Toktz-xil", "Toktz-mej",
-			"Tzhaar-ket", "staff", "Staff", "godsword", "c'bow", "Crystal bow", "Dark bow", "Magic butterfly net" };
+	public static final String[] CAPES = { "cape", "Cape" };
 
 	/**
 	 * Full bodies.
@@ -91,6 +53,44 @@ public final class EquipmentConstants {
 	 */
 	public static final String[] FULL_MASKS = { "full helm", "mask", "Veracs helm", "Guthans helm", "Torags helm",
 			"Karils coif", "full helm (t)", "full helm (g)", "mask" };
+
+	/**
+	 * Gloves.
+	 */
+	public static final String[] GLOVES = { "gloves", "gauntlets", "Gloves", "vambraces", "vamb", "bracers" };
+
+	/**
+	 * Hats.
+	 */
+	public static final String[] HATS = { "helm", "hood", "coif", "Coif", "hat", "partyhat", "Hat", "full helm (t)",
+			"full helm (g)", "hat (t)", "hat (g)", "cav", "boater", "helmet", "mask", "Helm of neitiznot" };
+
+	/**
+	 * Legs.
+	 */
+	public static final String[] LEGS = { "platelegs", "plateskirt", "skirt", "bottoms", "chaps", "platelegs (t)",
+			"platelegs (g)", "bottom", "skirt", "skirt (g)", "skirt (t)", "chaps (g)", "chaps (t)", "tassets", "legs",
+			"Flared trousers" };
+
+	/**
+	 * Rings.
+	 */
+	public static final String[] RINGS = { "ring", "Ring of" };
+
+	/**
+	 * Shields.
+	 */
+	public static final String[] SHIELDS = { "kiteshield", "sq shield", "Toktz-ket", "books", "book", "kiteshield (t)",
+			"kiteshield (g)", "kiteshield(h)", "defender", "shield" };
+
+	/**
+	 * Weapons.
+	 */
+	public static final String[] WEAPONS = { "scimitar", "longsword", "sword", "longbow", "shortbow", "dagger", "mace",
+			"halberd", "spear", "Abyssal whip", "axe", "flail", "crossbow", "Torags hammers", "dagger(p)", "dagger(+)",
+			"dagger(s)", "spear(p)", "spear(+)", "spear(s)", "spear(kp)", "maul", "dart", "dart(p)", "javelin",
+			"javelin(p)", "knife", "knife(p)", "Longbow", "Shortbow", "Crossbow", "Toktz-xil", "Toktz-mej",
+			"Tzhaar-ket", "staff", "Staff", "godsword", "c'bow", "Crystal bow", "Dark bow", "Magic butterfly net" };
 
 	/**
 	 * Default private construcotr to prevent instantiation.

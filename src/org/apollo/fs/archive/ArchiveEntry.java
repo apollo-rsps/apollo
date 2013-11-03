@@ -10,14 +10,14 @@ import java.nio.ByteBuffer;
 public final class ArchiveEntry {
 
 	/**
-	 * The identifier of this entry.
-	 */
-	private final int identifier;
-
-	/**
 	 * The buffer of this entry.
 	 */
 	private final ByteBuffer buffer;
+
+	/**
+	 * The identifier of this entry.
+	 */
+	private final int identifier;
 
 	/**
 	 * Creates a new archive entry.

@@ -46,21 +46,6 @@ public final class IsaacRandom {
 	private static int MASK = SIZE - 1 << 2;
 
 	/**
-	 * The count through the results in the results array.
-	 */
-	private int count;
-
-	/**
-	 * The results given to the user.
-	 */
-	private int[] rsl;
-
-	/**
-	 * The internal state.
-	 */
-	private int[] mem;
-
-	/**
 	 * The accumulator.
 	 */
 	private int a;
@@ -74,6 +59,21 @@ public final class IsaacRandom {
 	 * The counter.
 	 */
 	private int c;
+
+	/**
+	 * The count through the results in the results array.
+	 */
+	private int count;
+
+	/**
+	 * The internal state.
+	 */
+	private int[] mem;
+
+	/**
+	 * The results given to the user.
+	 */
+	private int[] rsl;
 
 	/**
 	 * Creates the random number generator without an initial seed.

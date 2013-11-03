@@ -13,11 +13,6 @@ import org.apollo.game.model.Player;
 public final class FullInventoryListener extends InventoryAdapter {
 
 	/**
-	 * The inventory full message.
-	 */
-	public static final String FULL_INVENTORY_MESSAGE = "Not enough inventory space.";
-
-	/**
 	 * The bank full message.
 	 */
 	public static final String FULL_BANK_MESSAGE = "Not enough bank space.";
@@ -28,14 +23,19 @@ public final class FullInventoryListener extends InventoryAdapter {
 	public static final String FULL_EQUIPMENT_MESSAGE = "Not enough equipment space."; // TODO confirm if possible
 
 	/**
-	 * The player.
+	 * The inventory full message.
 	 */
-	private final Player player;
+	public static final String FULL_INVENTORY_MESSAGE = "Not enough inventory space.";
 
 	/**
 	 * The event to send when the capacity has been exceeded.
 	 */
 	private final Event event;
+
+	/**
+	 * The player.
+	 */
+	private final Player player;
 
 	/**
 	 * Creates the empty inventory listener.

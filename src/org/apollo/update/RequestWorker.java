@@ -14,14 +14,14 @@ import org.jboss.netty.channel.Channel;
 public abstract class RequestWorker<T, P> implements Runnable {
 
 	/**
-	 * The resource provider.
-	 */
-	private final P provider;
-
-	/**
 	 * The update dispatcher.
 	 */
 	private final UpdateDispatcher dispatcher;
+
+	/**
+	 * The resource provider.
+	 */
+	private final P provider;
 
 	/**
 	 * A flag indicating if the worker should be running.

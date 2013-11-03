@@ -35,10 +35,9 @@ public final class GameService extends Service {
 	private static final int UNREGISTERS_PER_CYCLE = 50;
 
 	/**
-	 * The scheduled executor service.
+	 * The {@link EventHandlerChainGroup}.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors
-			.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
+	private EventHandlerChainGroup chainGroup;
 
 	/**
 	 * A queue of players to remove.
@@ -46,9 +45,10 @@ public final class GameService extends Service {
 	private final Queue<Player> oldPlayers = new ConcurrentLinkedQueue<Player>();
 
 	/**
-	 * The {@link EventHandlerChainGroup}.
+	 * The scheduled executor service.
 	 */
-	private EventHandlerChainGroup chainGroup;
+	private final ScheduledExecutorService scheduledExecutor = Executors
+			.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
 
 	/**
 	 * The {@link ClientSynchronizer}.

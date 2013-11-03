@@ -10,24 +10,24 @@ package org.apollo.game.sync.block;
 public class SecondHitUpdateBlock extends SynchronizationBlock {
 
 	/**
-	 * The amount of damage the hit will do.
-	 */
-	private final int damage;
-
-	/**
-	 * The type of hit (e.g. normal, poison).
-	 */
-	private final int type;
-
-	/**
 	 * The character's current health.
 	 */
 	private final int currentHealth;
 
 	/**
+	 * The amount of damage the hit will do.
+	 */
+	private final int damage;
+
+	/**
 	 * The character's maximum health.
 	 */
 	private final int maximumHealth;
+
+	/**
+	 * The type of hit (e.g. normal, poison).
+	 */
+	private final int type;
 
 	/**
 	 * Creates a new Second Hit Update block.

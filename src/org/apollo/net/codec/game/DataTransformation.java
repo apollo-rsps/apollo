@@ -8,11 +8,6 @@ package org.apollo.net.codec.game;
 public enum DataTransformation {
 
 	/**
-	 * No transformation is done.
-	 */
-	NONE,
-
-	/**
 	 * Adds 128 to the value when it is written, takes 128 from the value when it is read (also known as type-A).
 	 */
 	ADD,
@@ -21,6 +16,11 @@ public enum DataTransformation {
 	 * Negates the value (also known as type-C).
 	 */
 	NEGATE,
+
+	/**
+	 * No transformation is done.
+	 */
+	NONE,
 
 	/**
 	 * Subtracts the value from 128 (also known as type-S).

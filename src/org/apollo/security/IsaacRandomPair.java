@@ -11,14 +11,14 @@ import net.burtleburtle.bob.rand.IsaacRandom;
 public final class IsaacRandomPair {
 
 	/**
-	 * The random number generator used to encode data.
-	 */
-	private final IsaacRandom encodingRandom;
-
-	/**
 	 * The random number generator used to decode data.
 	 */
 	private final IsaacRandom decodingRandom;
+
+	/**
+	 * The random number generator used to encode data.
+	 */
+	private final IsaacRandom encodingRandom;
 
 	/**
 	 * Creates the pair of random number generators.

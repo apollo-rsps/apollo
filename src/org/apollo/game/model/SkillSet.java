@@ -13,14 +13,14 @@ import org.apollo.game.model.skill.SkillListener;
 public final class SkillSet {
 
 	/**
-	 * The number of skills.
-	 */
-	private static final int SKILL_COUNT = 21;
-
-	/**
 	 * The maximum allowed experience.
 	 */
 	public static final double MAXIMUM_EXP = 200000000;
+
+	/**
+	 * The number of skills.
+	 */
+	private static final int SKILL_COUNT = 21;
 
 	/**
 	 * Gets the minimum experience required for the specified level.
@@ -61,6 +61,11 @@ public final class SkillSet {
 	}
 
 	/**
+	 * A flag indicating if events are being fired.
+	 */
+	private boolean firingEvents = true;
+
+	/**
 	 * A list of skill listeners.
 	 */
 	private final List<SkillListener> listeners = new ArrayList<SkillListener>();
@@ -69,11 +74,6 @@ public final class SkillSet {
 	 * The skills.
 	 */
 	private final Skill[] skills = new Skill[SKILL_COUNT];
-
-	/**
-	 * A flag indicating if events are being fired.
-	 */
-	private boolean firingEvents = true;
 
 	/**
 	 * Creates the skill set.

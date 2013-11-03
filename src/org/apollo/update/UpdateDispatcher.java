@@ -22,9 +22,9 @@ public final class UpdateDispatcher {
 	private static final int MAXIMUM_QUEUE_SIZE = 1024;
 
 	/**
-	 * A queue for pending 'on-demand' requests.
+	 * A queue for pending HTTP requests.
 	 */
-	private final BlockingQueue<ChannelRequest<OnDemandRequest>> onDemandQueue = new PriorityBlockingQueue<ChannelRequest<OnDemandRequest>>();
+	private final BlockingQueue<ChannelRequest<HttpRequest>> httpQueue = new LinkedBlockingQueue<ChannelRequest<HttpRequest>>();
 
 	/**
 	 * A queue for pending JAGGRAB requests.
@@ -32,9 +32,9 @@ public final class UpdateDispatcher {
 	private final BlockingQueue<ChannelRequest<JagGrabRequest>> jagGrabQueue = new LinkedBlockingQueue<ChannelRequest<JagGrabRequest>>();
 
 	/**
-	 * A queue for pending HTTP requests.
+	 * A queue for pending 'on-demand' requests.
 	 */
-	private final BlockingQueue<ChannelRequest<HttpRequest>> httpQueue = new LinkedBlockingQueue<ChannelRequest<HttpRequest>>();
+	private final BlockingQueue<ChannelRequest<OnDemandRequest>> onDemandQueue = new PriorityBlockingQueue<ChannelRequest<OnDemandRequest>>();
 
 	/**
 	 * Dispatches a HTTP request.

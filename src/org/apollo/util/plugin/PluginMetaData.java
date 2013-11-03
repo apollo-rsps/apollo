@@ -8,6 +8,21 @@ package org.apollo.util.plugin;
 public final class PluginMetaData {
 
 	/**
+	 * The plugin's authors.
+	 */
+	private final String[] authors;
+
+	/**
+	 * The plugin's dependencies.
+	 */
+	private final String[] dependencies;
+
+	/**
+	 * The plugin's description.
+	 */
+	private final String description;
+
+	/**
 	 * The plugin's id.
 	 */
 	private final String id;
@@ -18,24 +33,9 @@ public final class PluginMetaData {
 	private final String name;
 
 	/**
-	 * The plugin's description.
-	 */
-	private final String description;
-
-	/**
-	 * The plugin's authors.
-	 */
-	private final String[] authors;
-
-	/**
 	 * The plugin's scripts.
 	 */
 	private final String[] scripts;
-
-	/**
-	 * The plugin's dependencies.
-	 */
-	private final String[] dependencies;
 
 	/**
 	 * The plugin's version.

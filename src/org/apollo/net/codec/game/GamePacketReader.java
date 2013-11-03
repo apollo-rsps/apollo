@@ -11,6 +11,11 @@ import org.jboss.netty.buffer.ChannelBuffer;
 public final class GamePacketReader {
 
 	/**
+	 * The current bit index.
+	 */
+	private int bitIndex;
+
+	/**
 	 * The buffer.
 	 */
 	private final ChannelBuffer buffer;
@@ -19,11 +24,6 @@ public final class GamePacketReader {
 	 * The current mode.
 	 */
 	private AccessMode mode = AccessMode.BYTE_ACCESS;
-
-	/**
-	 * The current bit index.
-	 */
-	private int bitIndex;
 
 	/**
 	 * Creates the reader.

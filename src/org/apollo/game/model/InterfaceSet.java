@@ -32,9 +32,9 @@ import org.apollo.game.model.inter.InterfaceListener;
 public final class InterfaceSet {
 
 	/**
-	 * The player whose interfaces are being managed.
+	 * The current enter amount listener.
 	 */
-	private final Player player; // TODO: maybe switch to a listener system like the inventory?
+	private EnterAmountListener amountListener;
 
 	// TODO: maybe store the current inventory tab ids here??
 	/**
@@ -48,9 +48,9 @@ public final class InterfaceSet {
 	private InterfaceListener listener;
 
 	/**
-	 * The current enter amount listener.
+	 * The player whose interfaces are being managed.
 	 */
-	private EnterAmountListener amountListener;
+	private final Player player; // TODO: maybe switch to a listener system like the inventory?
 
 	/**
 	 * Creates an interface set.

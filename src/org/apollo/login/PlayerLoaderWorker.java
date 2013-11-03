@@ -27,14 +27,14 @@ public final class PlayerLoaderWorker implements Runnable {
 	private final PlayerLoader loader;
 
 	/**
-	 * The session that submitted the request.
-	 */
-	private final LoginSession session;
-
-	/**
 	 * The request.
 	 */
 	private final LoginRequest request;
+
+	/**
+	 * The session that submitted the request.
+	 */
+	private final LoginSession session;
 
 	/**
 	 * Creates a {@link PlayerLoaderWorker} which will do the work for a single player load request.

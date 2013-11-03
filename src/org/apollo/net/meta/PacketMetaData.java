@@ -40,14 +40,14 @@ public final class PacketMetaData {
 	}
 
 	/**
-	 * The type of packet.
-	 */
-	private final PacketType type;
-
-	/**
 	 * The length of this packet.
 	 */
 	private final int length;
+
+	/**
+	 * The type of packet.
+	 */
+	private final PacketType type;
 
 	/**
 	 * Creates the packet meta data object. This should not be called directy. Use the {@link #createFixed(int)},

@@ -8,14 +8,14 @@ package org.apollo.game.model;
 public final class SlottedItem {
 
 	/**
-	 * The slot.
-	 */
-	private final int slot;
-
-	/**
 	 * The item.
 	 */
 	private final Item item;
+
+	/**
+	 * The slot.
+	 */
+	private final int slot;
 
 	/**
 	 * Creates a new slotted item.

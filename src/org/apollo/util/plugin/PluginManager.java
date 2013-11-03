@@ -26,14 +26,14 @@ import org.xml.sax.SAXException;
 public final class PluginManager {
 
 	/**
-	 * The plugin context.
-	 */
-	private final PluginContext context;
-
-	/**
 	 * A set of all author names.
 	 */
 	private SortedSet<String> authors = new TreeSet<String>();
+
+	/**
+	 * The plugin context.
+	 */
+	private final PluginContext context;
 
 	/**
 	 * Creates the plugin manager.

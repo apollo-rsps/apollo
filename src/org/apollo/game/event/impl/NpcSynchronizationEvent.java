@@ -15,6 +15,11 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
 public class NpcSynchronizationEvent extends Event {
 
 	/**
+	 * The amount of local npcs.
+	 */
+	private final int localNpcs;
+
+	/**
 	 * The npc's position.
 	 */
 	private final Position position;
@@ -23,11 +28,6 @@ public class NpcSynchronizationEvent extends Event {
 	 * A list of segments.
 	 */
 	private final List<SynchronizationSegment> segments;
-
-	/**
-	 * The amount of local npcs.
-	 */
-	private final int localNpcs;
 
 	/**
 	 * Creates a new {@link NpcSynchronizationEvent}.

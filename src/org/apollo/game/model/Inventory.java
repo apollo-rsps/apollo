@@ -27,22 +27,17 @@ public final class Inventory implements Cloneable {
 		STACK_ALWAYS,
 
 		/**
+		 * When in {@link #STACK_NEVER} mode, an {@link Inventory} will never stack items.
+		 */
+		STACK_NEVER,
+
+		/**
 		 * When in {@link #STACK_STACKABLE_ITEMS} mode, an {@link Inventory} will stack items depending on their
 		 * settings.
 		 */
-		STACK_STACKABLE_ITEMS,
-
-		/**
-		 * When in {@link #STACK_NEVER} mode, an {@link Inventory} will never stack items.
-		 */
-		STACK_NEVER;
+		STACK_STACKABLE_ITEMS;
 
 	}
-
-	/**
-	 * A list of inventory listeners.
-	 */
-	private final List<InventoryListener> listeners = new ArrayList<InventoryListener>();
 
 	/**
 	 * The capacity of this inventory.
@@ -50,9 +45,19 @@ public final class Inventory implements Cloneable {
 	private final int capacity;
 
 	/**
+	 * A flag indicating if events are being fired.
+	 */
+	private boolean firingEvents = true; // TODO: make this reentrant
+
+	/**
 	 * The items in this inventory.
 	 */
 	private Item[] items;
+
+	/**
+	 * A list of inventory listeners.
+	 */
+	private final List<InventoryListener> listeners = new ArrayList<InventoryListener>();
 
 	/**
 	 * The stacking mode.
@@ -63,11 +68,6 @@ public final class Inventory implements Cloneable {
 	 * The size of this inventory - the number of 'used slots'.
 	 */
 	private int size = 0;
-
-	/**
-	 * A flag indicating if events are being fired.
-	 */
-	private boolean firingEvents = true; // TODO: make this reentrant
 
 	/**
 	 * Creates an inventory.

@@ -27,14 +27,9 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	private static final SecureRandom random = new SecureRandom();
 
 	/**
-	 * The username hash.
+	 * The login packet length.
 	 */
-	private int usernameHash;
-
-	/**
-	 * The server-side session key.
-	 */
-	private long serverSeed;
+	private int loginLength;
 
 	/**
 	 * The reconnecting flag.
@@ -42,9 +37,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	private boolean reconnecting;
 
 	/**
-	 * The login packet length.
+	 * The server-side session key.
 	 */
-	private int loginLength;
+	private long serverSeed;
+
+	/**
+	 * The username hash.
+	 */
+	private int usernameHash;
 
 	/**
 	 * Creates the login decoder with the default initial state.

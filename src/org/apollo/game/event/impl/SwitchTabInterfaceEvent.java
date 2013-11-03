@@ -10,14 +10,14 @@ import org.apollo.game.event.Event;
 public final class SwitchTabInterfaceEvent extends Event {
 
 	/**
-	 * The tab id.
-	 */
-	private final int tab;
-
-	/**
 	 * The interface id.
 	 */
 	private final int interfaceId;
+
+	/**
+	 * The tab id.
+	 */
+	private final int tab;
 
 	/**
 	 * Creates the switch interface event.

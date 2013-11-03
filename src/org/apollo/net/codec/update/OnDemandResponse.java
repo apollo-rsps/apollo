@@ -11,6 +11,16 @@ import org.jboss.netty.buffer.ChannelBuffer;
 public final class OnDemandResponse {
 
 	/**
+	 * The chunk data.
+	 */
+	private final ChannelBuffer chunkData;
+
+	/**
+	 * The chunk id.
+	 */
+	private final int chunkId;
+
+	/**
 	 * The file descriptor.
 	 */
 	private final FileDescriptor fileDescriptor;
@@ -19,16 +29,6 @@ public final class OnDemandResponse {
 	 * The file size.
 	 */
 	private final int fileSize;
-
-	/**
-	 * The chunk id.
-	 */
-	private final int chunkId;
-
-	/**
-	 * The chunk data.
-	 */
-	private final ChannelBuffer chunkData;
 
 	/**
 	 * Creates the 'on-demand' response.

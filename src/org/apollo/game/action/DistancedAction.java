@@ -12,9 +12,9 @@ import org.apollo.game.model.Position;
 public abstract class DistancedAction<T extends Character> extends Action<T> {
 
 	/**
-	 * The position to distance check with.
+	 * The delay once the threshold is reached.
 	 */
-	private final Position position;
+	private final int delay;
 
 	/**
 	 * The minimum distance before the action fires.
@@ -22,14 +22,14 @@ public abstract class DistancedAction<T extends Character> extends Action<T> {
 	private final int distance;
 
 	/**
-	 * The delay once the threshold is reached.
-	 */
-	private final int delay;
-
-	/**
 	 * A flag indicating if this action fires immediately after the threshold is reached.
 	 */
 	private final boolean immediate;
+
+	/**
+	 * The position to distance check with.
+	 */
+	private final Position position;
 
 	/**
 	 * A flag indicating if the distance has been reached yet.

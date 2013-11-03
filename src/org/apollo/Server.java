@@ -61,9 +61,9 @@ public final class Server {
 	}
 
 	/**
-	 * The {@link ServerBootstrap} for the service listener.
+	 * The server's context.
 	 */
-	private final ServerBootstrap serviceBootstrap = new ServerBootstrap();
+	private ServerContext context;
 
 	/**
 	 * The {@link ServerBootstrap} for the HTTP listener.
@@ -82,6 +82,11 @@ public final class Server {
 	private final ExecutorService networkExecutor = Executors.newCachedThreadPool();
 
 	/**
+	 * The {@link ServerBootstrap} for the service listener.
+	 */
+	private final ServerBootstrap serviceBootstrap = new ServerBootstrap();
+
+	/**
 	 * The service manager.
 	 */
 	private final ServiceManager serviceManager;
@@ -90,11 +95,6 @@ public final class Server {
 	 * The timer used for idle checking.
 	 */
 	private final Timer timer = new HashedWheelTimer();
-
-	/**
-	 * The server's context.
-	 */
-	private ServerContext context;
 
 	/**
 	 * Creates the Apollo server.

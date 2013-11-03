@@ -18,16 +18,6 @@ import java.util.Set;
 public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
-	 * The name of this node.
-	 */
-	private String name;
-
-	/**
-	 * The value of this node, or {@code null} if it has no value.
-	 */
-	private String value;
-
-	/**
 	 * The attribute map.
 	 */
 	private final Map<String, String> attributes = new HashMap<String, String>();
@@ -36,6 +26,16 @@ public final class XmlNode implements Iterable<XmlNode> {
 	 * The list of child nodes.
 	 */
 	private final List<XmlNode> children = new ArrayList<XmlNode>();
+
+	/**
+	 * The name of this node.
+	 */
+	private String name;
+
+	/**
+	 * The value of this node, or {@code null} if it has no value.
+	 */
+	private String value;
 
 	/**
 	 * Creates a new {@link XmlNode} with the specified name.

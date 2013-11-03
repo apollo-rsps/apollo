@@ -8,11 +8,6 @@ package org.apollo.net.codec.login;
 public final class LoginResponse {
 
 	/**
-	 * The login status.
-	 */
-	private final int status;
-
-	/**
 	 * The flagged flag.
 	 */
 	private final boolean flagged;
@@ -21,6 +16,11 @@ public final class LoginResponse {
 	 * The rights level.
 	 */
 	private final int rights;
+
+	/**
+	 * The login status.
+	 */
+	private final int status;
 
 	/**
 	 * Creates the login response.

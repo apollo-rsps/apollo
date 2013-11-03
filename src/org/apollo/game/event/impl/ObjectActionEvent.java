@@ -11,14 +11,14 @@ import org.apollo.game.model.Position;
 public abstract class ObjectActionEvent extends Event {
 
 	/**
-	 * The option number (1-3).
-	 */
-	private final int option;
-
-	/**
 	 * The object's id.
 	 */
 	private final int id;
+
+	/**
+	 * The option number (1-3).
+	 */
+	private final int option;
 
 	/**
 	 * The object's position.
