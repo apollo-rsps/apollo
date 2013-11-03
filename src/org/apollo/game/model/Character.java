@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apollo.game.action.Action;
 import org.apollo.game.event.Event;
-import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.model.Inventory.StackMode;
+import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.scheduling.impl.SkillNormalizationTask;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
@@ -83,6 +83,12 @@ public abstract class Character {
 	 * The character's skill set.
 	 */
 	private final SkillSet skillSet = new SkillSet();
+
+	/**
+	 * The character's {@link NpcDefinition). This is only used by an instance of the {@link Player} class if they are
+	 * appearing as an npc in-game.
+	 */
+	private NpcDefinition definition;
 
 	/**
 	 * Creates a new character with the specified initial position.
@@ -377,12 +383,30 @@ public abstract class Character {
 	}
 
 	/**
-	 * Sends a message to the character.
+	 * Updates the character's interacting character.
 	 * 
-	 * @param message The message.
+	 * @param index The index of the interacting character.
 	 */
-	public void sendMessage(String message) {
-		send(new ServerMessageEvent(message));
+	public void updateInteractingCharacter(int index) {
+		blockSet.add(SynchronizationBlock.createInteractingCharacterBlock(index));
+	}
+
+	/**
+	 * Gets this character's {@link NpcDefinition}.
+	 * 
+	 * @param definition The definition.
+	 */
+	public NpcDefinition getNpcDefinition() {
+		return definition;
+	}
+
+	/**
+	 * Sets this character's {@link NpcDefinition}.
+	 * 
+	 * @param definition The definition.
+	 */
+	public void setDefinition(NpcDefinition definition) {
+		this.definition = definition;
 	}
 
 }

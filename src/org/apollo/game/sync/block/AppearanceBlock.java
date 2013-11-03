@@ -1,7 +1,7 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Inventory;
+import org.apollo.game.model.Appearance;
 
 /**
  * The appearance {@link SynchronizationBlock}.
@@ -9,8 +9,6 @@ import org.apollo.game.model.Inventory;
  * @author Graham
  */
 public final class AppearanceBlock extends SynchronizationBlock {
-
-	// TODO head icons support
 
 	/**
 	 * The player's name.
@@ -38,6 +36,21 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	private final Inventory equipment;
 
 	/**
+	 * The player's prayer icon.
+	 */
+	private final int prayerIcon;
+
+	/**
+	 * The player's head icon.
+	 */
+	private final int headIcon;
+
+	/**
+	 * The npc id this player is appearing as, if any.
+	 */
+	private final int npcId;
+
+	/**
 	 * Creates the appearance block.
 	 * 
 	 * @param name The player's name.
@@ -46,21 +59,25 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 * @param skill The player's skill, or 0 if showing the combat level.
 	 * @param equipment The player's equipment.
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment) {
+	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int prayerIcon,
+			int headIcon, int npcId) {
 		this.name = name;
 		this.appearance = appearance;
 		this.combat = combat;
 		this.skill = skill;
 		this.equipment = equipment.clone();
+		this.prayerIcon = prayerIcon;
+		this.headIcon = headIcon;
+		this.npcId = npcId;
 	}
 
 	/**
-	 * Gets the player's name.
+	 * If the player is appearing as an npc or not.
 	 * 
-	 * @return The player's name.
+	 * @return {@code true} if the player is appearing as an npc, otherwise {@code false}.
 	 */
-	public long getName() {
-		return name;
+	public boolean appearingAsNpc() {
+		return npcId != -1;
 	}
 
 	/**
@@ -82,21 +99,57 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the player's skill level.
-	 * 
-	 * @return The player's skill level.
-	 */
-	public int getSkillLevel() {
-		return skill;
-	}
-
-	/**
 	 * Gets the player's equipment.
 	 * 
 	 * @return The player's equipment.
 	 */
 	public Inventory getEquipment() {
 		return equipment;
+	}
+
+	/**
+	 * Gets the player's head icon.
+	 * 
+	 * @return The head icon.
+	 */
+	public int getHeadIcon() {
+		return headIcon;
+	}
+
+	/**
+	 * Gets the player's name.
+	 * 
+	 * @return The player's name.
+	 */
+	public long getName() {
+		return name;
+	}
+
+	/**
+	 * Gets the npc id the player is appearing as, if any.
+	 * 
+	 * @return The npc id.
+	 */
+	public int getNpcId() {
+		return npcId;
+	}
+
+	/**
+	 * Gets the player's prayer icon.
+	 * 
+	 * @return The prayer icon.
+	 */
+	public int getPrayerIcon() {
+		return prayerIcon;
+	}
+
+	/**
+	 * Gets the player's skill level.
+	 * 
+	 * @return The player's skill level.
+	 */
+	public int getSkillLevel() {
+		return skill;
 	}
 
 }

@@ -29,12 +29,12 @@ public final class ChatBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the privilege level of the player who said the message.
+	 * Gets the compressed message.
 	 * 
-	 * @return The privilege level.
+	 * @return The compressed message.
 	 */
-	public PrivilegeLevel getPrivilegeLevel() {
-		return privilegeLevel;
+	public byte[] getCompressedMessage() {
+		return chatEvent.getCompressedMessage();
 	}
 
 	/**
@@ -44,6 +44,15 @@ public final class ChatBlock extends SynchronizationBlock {
 	 */
 	public String getMessage() {
 		return chatEvent.getMessage();
+	}
+
+	/**
+	 * Gets the privilege level of the player who said the message.
+	 * 
+	 * @return The privilege level.
+	 */
+	public PrivilegeLevel getPrivilegeLevel() {
+		return privilegeLevel;
 	}
 
 	/**
@@ -62,15 +71,6 @@ public final class ChatBlock extends SynchronizationBlock {
 	 */
 	public int getTextEffects() {
 		return chatEvent.getTextEffects();
-	}
-
-	/**
-	 * Gets the compressed message.
-	 * 
-	 * @return The compressed message.
-	 */
-	public byte[] getCompressedMessage() {
-		return chatEvent.getCompressedMessage();
 	}
 
 }

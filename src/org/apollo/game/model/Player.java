@@ -6,6 +6,7 @@ import java.util.Queue;
 import org.apollo.game.event.Event;
 import org.apollo.game.event.impl.IdAssignmentEvent;
 import org.apollo.game.event.impl.LogoutEvent;
+import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.AppearanceInventoryListener;
@@ -143,6 +144,16 @@ public final class Player extends Character {
 	 * A flag which indicates there are players that couldn't be added.
 	 */
 	private boolean excessivePlayers = false;
+
+	/**
+	 * This player's head icon.
+	 */
+	private int headIcon = -1;
+
+	/**
+	 * This player's prayer icon.
+	 */
+	private int prayerIcon = -1;
 
 	/**
 	 * This player's interface set.
@@ -544,6 +555,51 @@ public final class Player extends Character {
 	public void teleport(Position position) {
 		super.teleport(position); // TODO put this in the same place as Character#teleport and WalkEventHandler!!
 		interfaceSet.close(); // TODO: should this be done if size == 0?
+	}
+
+	/**
+	 * Gets the player's prayer icon.
+	 * 
+	 * @return The prayer icon.
+	 */
+	public int getPrayerIcon() {
+		return prayerIcon;
+	}
+
+	/**
+	 * Gets the player's head icon.
+	 * 
+	 * @return The head icon.
+	 */
+	public int getHeadIcon() {
+		return headIcon;
+	}
+
+	/**
+	 * Sends a message to the character.
+	 * 
+	 * @param message The message.
+	 */
+	public void sendMessage(String message) {
+		send(new ServerMessageEvent(message));
+	}
+
+	/**
+	 * Sets the player's head icon.
+	 * 
+	 * @param headIcon The head icon.
+	 */
+	public void setHeadIcon(int headIcon) {
+		this.headIcon = headIcon;
+	}
+
+	/**
+	 * Sets the player's prayer icon.
+	 * 
+	 * @param prayerIcon The prayer icon.
+	 */
+	public void setPrayerIcon(int prayerIcon) {
+		this.prayerIcon = prayerIcon;
 	}
 
 }
