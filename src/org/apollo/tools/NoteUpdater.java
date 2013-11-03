@@ -46,7 +46,7 @@ public final class NoteUpdater {
 				Map<Integer, Integer> itemToNote = new HashMap<Integer, Integer>();
 
 				for (int id = 0; id < defs.length; id++) {
-					ItemDefinition def = ItemDefinition.forId(id);
+					ItemDefinition def = ItemDefinition.lookup(id);
 					if (def.isNote()) {
 						itemToNote.put(def.getNoteInfoId(), def.getId());
 					}

@@ -10,6 +10,11 @@ import org.apollo.game.model.obj.GameObject;
 public final class ObjectDefinition {
 
 	/**
+	 * The array of game object definitions.
+	 */
+	private static ObjectDefinition[] definitions;
+
+	/**
 	 * Gets the total number of objects.
 	 * 
 	 * @return The total number of objects.
@@ -58,39 +63,9 @@ public final class ObjectDefinition {
 	}
 
 	/**
-	 * The object's menu actions.
-	 */
-	private String[] menuActions;
-
-	/**
 	 * The object's description.
 	 */
 	private String description;
-
-	/**
-	 * Denotes whether this object has actions associated with it or not.
-	 */
-	private boolean interactive;
-
-	/**
-	 * The object's id.
-	 */
-	private final int id;
-
-	/**
-	 * The object's name.
-	 */
-	private String name;
-
-	/**
-	 * Denotes whether this object is impenetrable or not.
-	 */
-	private boolean impenetrable;
-
-	/**
-	 * Denotes whether the object can be walked over or not.
-	 */
-	private boolean solid;
 
 	/**
 	 * This object's height.
@@ -98,14 +73,39 @@ public final class ObjectDefinition {
 	private int height;
 
 	/**
+	 * The object's id.
+	 */
+	private final int id;
+
+	/**
+	 * Denotes whether this object is impenetrable or not.
+	 */
+	private boolean impenetrable;
+
+	/**
+	 * Denotes whether this object has actions associated with it or not.
+	 */
+	private boolean interactive;
+
+	/**
+	 * The object's menu actions.
+	 */
+	private String[] menuActions;
+
+	/**
+	 * The object's name.
+	 */
+	private String name;
+
+	/**
+	 * Denotes whether the object can be walked over or not.
+	 */
+	private boolean solid;
+
+	/**
 	 * This object's width.
 	 */
 	private int width;
-
-	/**
-	 * The array of game object definitions.
-	 */
-	private static ObjectDefinition[] definitions;
 
 	/**
 	 * Creates a new object definition.

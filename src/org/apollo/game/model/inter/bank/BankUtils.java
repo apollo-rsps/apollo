@@ -120,7 +120,7 @@ public final class BankUtils {
 
 		int newId = player.isWithdrawingNotes() ? ItemDefinition.itemToNote(item.getId()) : item.getId();
 
-		if (inventory.freeSlots() == 0 && !(inventory.contains(newId) && ItemDefinition.forId(newId).isStackable())) {
+		if (inventory.freeSlots() == 0 && !(inventory.contains(newId) && ItemDefinition.lookup(newId).isStackable())) {
 			inventory.forceCapacityExceeded();
 			return true;
 		}

@@ -13,6 +13,15 @@ public final class NpcDefinition {
 	private static NpcDefinition[] definitions;
 
 	/**
+	 * Gets the total number of NPCs.
+	 * 
+	 * @return The total number of NPCs.
+	 */
+	public static int count() {
+		return definitions.length;
+	}
+
+	/**
 	 * Initialises the class with the specified set of definitions.
 	 * 
 	 * @param definitions The definitions.
@@ -29,22 +38,13 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the total number of NPCs.
-	 * 
-	 * @return The total number of NPCs.
-	 */
-	public static int count() {
-		return definitions.length;
-	}
-
-	/**
 	 * Gets the NPC definition for the specified id.
 	 * 
 	 * @param The id.
 	 * @return The definition.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
-	public static NpcDefinition forId(int id) {
+	public static NpcDefinition lookup(int id) {
 		if (id < 0 || id >= definitions.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -52,19 +52,29 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * The NPC id.
+	 * The combat level of the NPC.
 	 */
-	private final int id;
-
-	/**
-	 * The name of the NPC.
-	 */
-	private String name;
+	private int combatLevel = -1;
 
 	/**
 	 * The description of the NPC.
 	 */
 	private String description;
+
+	/**
+	 * The NPC id.
+	 */
+	private final int id;
+
+	/**
+	 * An array of interaction options.
+	 */
+	private String[] interactions = new String[5];
+
+	/**
+	 * The name of the NPC.
+	 */
+	private String name;
 
 	/**
 	 * The NPC's size, in tiles.
@@ -77,22 +87,30 @@ public final class NpcDefinition {
 	private int standAnim = -1, walkAnim = -1, walkBackAnim = -1, walkLeftAnim = -1, walkRightAnim = -1;
 
 	/**
-	 * An array of interaction options.
-	 */
-	private String[] interactions = new String[5];
-
-	/**
-	 * The combat level of the NPC.
-	 */
-	private int combatLevel = -1;
-
-	/**
 	 * Creates a new NPC definition.
 	 * 
 	 * @param id The NPC id.
 	 */
 	public NpcDefinition(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * Gets the NPC's combat level.
+	 * 
+	 * @return The combat level, or -1 if it doesn't have one.
+	 */
+	public int getCombatLevel() {
+		return combatLevel;
+	}
+
+	/**
+	 * Gets the description of the NPC.
+	 * 
+	 * @return The description.
+	 */
+	public String getDescription() {
+		return description;
 	}
 
 	/**
@@ -105,21 +123,35 @@ public final class NpcDefinition {
 	}
 
 	/**
+	 * Gets an interaction option.
+	 * 
+	 * @param slot The slot of the option.
+	 * @return The option, or {@code null} if there isn't any at the specified slot.
+	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
+	 */
+	public String getInteraction(int slot) {
+		if (slot < 0 || slot >= interactions.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		return interactions[slot];
+	}
+
+	/**
+	 * Gets the array of interaction options.
+	 * 
+	 * @return The interaction options.
+	 */
+	public String[] getInteractions() {
+		return interactions;
+	}
+
+	/**
 	 * Gets the name of the NPC.
 	 * 
 	 * @return The name of the NPC.
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * Gets the description of the NPC.
-	 * 
-	 * @return The description.
-	 */
-	public String getDescription() {
-		return description;
 	}
 
 	/**
@@ -177,35 +209,26 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets an interaction option.
+	 * Checks if the NPC has a combat level.
 	 * 
-	 * @param slot The slot of the option.
-	 * @return The option, or {@code null} if there isn't any at the specified slot.
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean hasCombatLevel() {
+		return combatLevel != -1;
+	}
+
+	/**
+	 * Checks if there is an interaction option present.
+	 * 
+	 * @param slot The slot to check.
+	 * @return {@code true} if so, {@code false} if not.
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
-	public String getInteraction(int slot) {
+	public boolean hasInteraction(int slot) {
 		if (slot < 0 || slot >= interactions.length) {
 			throw new IndexOutOfBoundsException();
 		}
-		return interactions[slot];
-	}
-
-	/**
-	 * Gets the array of interaction options.
-	 * 
-	 * @return The interaction options.
-	 */
-	public String[] getInteractions() {
-		return interactions;
-	}
-
-	/**
-	 * Gets the NPC's combat level.
-	 * 
-	 * @return The combat level, or -1 if it doesn't have one.
-	 */
-	public int getCombatLevel() {
-		return combatLevel;
+		return interactions[slot] != null;
 	}
 
 	/**
@@ -254,35 +277,12 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Checks if there is an interaction option present.
+	 * Sets the NPC's combat level.
 	 * 
-	 * @param slot The slot to check.
-	 * @return {@code true} if so, {@code false} if not.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
+	 * @param combatLevel The combat level.
 	 */
-	public boolean hasInteraction(int slot) {
-		if (slot < 0 || slot >= interactions.length) {
-			throw new IndexOutOfBoundsException();
-		}
-		return interactions[slot] != null;
-	}
-
-	/**
-	 * Checks if the NPC has a combat level.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean hasCombatLevel() {
-		return combatLevel != -1;
-	}
-
-	/**
-	 * Sets the name of the NPC.
-	 * 
-	 * @param name The name.
-	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setCombatLevel(int combatLevel) {
+		this.combatLevel = combatLevel;
 	}
 
 	/**
@@ -292,6 +292,29 @@ public final class NpcDefinition {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * Sets an interaction option.
+	 * 
+	 * @param slot The slot of the option.
+	 * @param interaction The interaction options.
+	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
+	 */
+	public void setInteraction(int slot, String interaction) {
+		if (slot < 0 || slot >= interactions.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		interactions[slot] = interaction;
+	}
+
+	/**
+	 * Sets the name of the NPC.
+	 * 
+	 * @param name The name.
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -334,29 +357,6 @@ public final class NpcDefinition {
 		this.walkBackAnim = walkBackAnim;
 		this.walkLeftAnim = walkLeftAnim;
 		this.walkRightAnim = walkRightAnim;
-	}
-
-	/**
-	 * Sets an interaction option.
-	 * 
-	 * @param slot The slot of the option.
-	 * @param interaction The interaction options.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
-	 */
-	public void setInteraction(int slot, String interaction) {
-		if (slot < 0 || slot >= interactions.length) {
-			throw new IndexOutOfBoundsException();
-		}
-		interactions[slot] = interaction;
-	}
-
-	/**
-	 * Sets the NPC's combat level.
-	 * 
-	 * @param combatLevel The combat level.
-	 */
-	public void setCombatLevel(int combatLevel) {
-		this.combatLevel = combatLevel;
 	}
 
 }
