@@ -8,14 +8,14 @@ package org.apollo.game.event.impl;
 public final class ItemOnItemEvent extends InventoryItemEvent {
 
 	/**
-	 * The interface id of the target item.
-	 */
-	private final int targetInterface;
-
-	/**
 	 * The id of the target item.
 	 */
 	private final int targetId;
+
+	/**
+	 * The interface id of the target item.
+	 */
+	private final int targetInterface;
 
 	/**
 	 * The slot of the target item.
@@ -41,21 +41,21 @@ public final class ItemOnItemEvent extends InventoryItemEvent {
 	}
 
 	/**
-	 * Gets the interface id of the target item.
-	 * 
-	 * @return The target item's interface id.
-	 */
-	public int getTargetInterfaceId() {
-		return targetInterface;
-	}
-
-	/**
 	 * Gets the id of the target item.
 	 * 
 	 * @return The target item's interface id.
 	 */
 	public int getTargetId() {
 		return targetId;
+	}
+
+	/**
+	 * Gets the interface id of the target item.
+	 * 
+	 * @return The target item's interface id.
+	 */
+	public int getTargetInterfaceId() {
+		return targetInterface;
 	}
 
 	/**

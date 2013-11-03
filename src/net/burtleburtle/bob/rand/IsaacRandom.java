@@ -33,12 +33,12 @@ public final class IsaacRandom {
 	/**
 	 * The log of the size of the result and memory arrays.
 	 */
-	private static final int SIZEL = 8;
+	private static final int LOG_SIZE = 8;
 
 	/**
 	 * The size of the result and memory arrays.
 	 */
-	private static final int SIZE = 1 << SIZEL;
+	private static final int SIZE = 1 << LOG_SIZE;
 
 	/**
 	 * A mask for pseudorandom lookup.
@@ -241,25 +241,25 @@ public final class IsaacRandom {
 			a ^= a << 13;
 			a += mem[j++];
 			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
 
 			x = mem[i];
 			a ^= a >>> 6;
 			a += mem[j++];
 			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
 
 			x = mem[i];
 			a ^= a << 2;
 			a += mem[j++];
 			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
 
 			x = mem[i];
 			a ^= a >>> 16;
 			a += mem[j++];
 			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
 		}
 
 		for (j = 0; j < SIZE / 2;) {
@@ -267,25 +267,25 @@ public final class IsaacRandom {
 			a ^= a << 13;
 			a += mem[j++];
 			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
 
 			x = mem[i];
 			a ^= a >>> 6;
 			a += mem[j++];
 			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
 
 			x = mem[i];
 			a ^= a << 2;
 			a += mem[j++];
 			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
 
 			x = mem[i];
 			a ^= a >>> 16;
 			a += mem[j++];
 			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
 		}
 	}
 

@@ -1,11 +1,25 @@
-package org.apollo.game.model.inter.quest;
+package org.apollo.game.model;
 
 /**
- * Contains quest-related constants.
+ * Contains interface-related constants.
  * 
- * @author Graham
+ * @author Major
  */
-public final class QuestConstants {
+public class InterfaceConstants {
+
+	/**
+	 * The character design interface id.
+	 */
+	public static final int CHARACTER_DESIGN = 3559;
+
+	/**
+	 * The default inventory tab ids.
+	 */
+	public static final int[] DEFAULT_INVENTORY_TABS = { 2423, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449,
+			904, 147, 962, };
+	// 6299 = music tab, music disabled
+	// 4445 = settings tab, music disabled
+	// 12855 = ancients magic
 
 	/**
 	 * The quest interface id.
@@ -13,12 +27,17 @@ public final class QuestConstants {
 	public static final int QUEST_INTERFACE = 8134;
 
 	/**
-	 * The part of the quest interface that contains the scroll bar.
+	 * The scroll bar widget.
 	 */
-	public static final int QUEST_SCROLL_PANE = 8143; // 8144 = title
+	public static final int QUEST_SCROLL_PANE = 8143;
 
 	/**
-	 * The array of sub interfaces which display the text.
+	 * The quest title widget id.
+	 */
+	public static final int QUEST_TITLE = 8144;
+
+	/**
+	 * The array of widgets that display the text.
 	 */
 	public static final int[] QUEST_TEXT = { 8144, 8145, 8147, 8148, 8149, 8150, 8151, 8152, 8153, 8154, 8155, 8156,
 			8157, 8158, 8159, 8160, 8161, 8162, 8163, 8164, 8165, 8166, 8167, 8168, 8169, 8170, 8171, 8172, 8173, 8174,
@@ -27,12 +46,5 @@ public final class QuestConstants {
 			12186, 12187, 12188, 12189, 12190, 12191, 12192, 12193, 12194, 12195, 12196, 12197, 12198, 12199, 12200,
 			12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208, 12209, 12210, 12211, 12212, 12213, 12214, 12215,
 			12216, 12217, 12218, 12219, 12220, 12221, 12222, 12223 };
-
-	/**
-	 * Default private constructor to prevent instantiation.
-	 */
-	private QuestConstants() {
-
-	}
 
 }

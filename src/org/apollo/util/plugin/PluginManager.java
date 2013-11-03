@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -46,12 +45,12 @@ public final class PluginManager {
 	}
 
 	/**
-	 * Creates an iterator for the set of authors.
+	 * Creates an unmodifiable {@link Set} containing the authors.
 	 * 
-	 * @return The iterator.
+	 * @return The set.
 	 */
-	public Iterator<String> createAuthorsIterator() {
-		return authors.iterator();
+	public Set<String> getAuthors() {
+		return Collections.unmodifiableSortedSet(authors);
 	}
 
 	/**
