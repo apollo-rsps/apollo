@@ -4,8 +4,8 @@ import org.apollo.game.event.impl.ChatEvent;
 import org.apollo.game.model.Animation;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
-import org.apollo.game.model.Position;
 import org.apollo.game.model.Player;
+import org.apollo.game.model.Position;
 import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**

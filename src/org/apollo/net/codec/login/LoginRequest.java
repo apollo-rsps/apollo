@@ -61,6 +61,15 @@ public final class LoginRequest {
 	}
 
 	/**
+	 * Gets the archive CRCs.
+	 * 
+	 * @return The array of archive CRCs.
+	 */
+	public int[] getArchiveCrcs() {
+		return archiveCrcs;
+	}
+
+	/**
 	 * Gets the player's credentials.
 	 * 
 	 * @return The player's credentials.
@@ -79,6 +88,15 @@ public final class LoginRequest {
 	}
 
 	/**
+	 * Gets the release number.
+	 * 
+	 * @return The release number.
+	 */
+	public int getReleaseNumber() {
+		return releaseNumber;
+	}
+
+	/**
 	 * Checks if this client is in low memory mode.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
@@ -94,24 +112,6 @@ public final class LoginRequest {
 	 */
 	public boolean isReconnecting() {
 		return reconnecting;
-	}
-
-	/**
-	 * Gets the release number.
-	 * 
-	 * @return The release number.
-	 */
-	public int getReleaseNumber() {
-		return releaseNumber;
-	}
-
-	/**
-	 * Gets the archive CRCs.
-	 * 
-	 * @return The array of archive CRCs.
-	 */
-	public int[] getArchiveCrcs() {
-		return archiveCrcs;
 	}
 
 }

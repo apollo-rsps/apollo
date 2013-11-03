@@ -44,19 +44,10 @@ public final class PlayerCredentials {
 	 */
 	public PlayerCredentials(String username, String password, int usernameHash, int uid) {
 		this.username = username;
-		this.encodedUsername = NameUtil.encodeBase37(username);
+		encodedUsername = NameUtil.encodeBase37(username);
 		this.password = password;
 		this.usernameHash = usernameHash;
 		this.uid = uid;
-	}
-
-	/**
-	 * Gets the player's username.
-	 * 
-	 * @return The player's username.
-	 */
-	public String getUsername() {
-		return username;
 	}
 
 	/**
@@ -78,21 +69,30 @@ public final class PlayerCredentials {
 	}
 
 	/**
-	 * Gets the username hash.
-	 * 
-	 * @return The username hash.
-	 */
-	public int getUsernameHash() {
-		return usernameHash;
-	}
-
-	/**
 	 * Gets the computer's uid.
 	 * 
 	 * @return The computer's uid.
 	 */
 	public int getUid() {
 		return uid;
+	}
+
+	/**
+	 * Gets the player's username.
+	 * 
+	 * @return The player's username.
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * Gets the username hash.
+	 * 
+	 * @return The username hash.
+	 */
+	public int getUsernameHash() {
+		return usernameHash;
 	}
 
 }

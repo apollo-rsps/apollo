@@ -16,27 +16,6 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 public final class BankUtils {
 
 	/**
-	 * Opens a player's bank.
-	 * 
-	 * @param player The player.
-	 */
-	public static void openBank(Player player) {
-		InventoryListener invListener = new SynchronizationInventoryListener(player, BankConstants.SIDEBAR_INVENTORY_ID);
-		InventoryListener bankListener = new SynchronizationInventoryListener(player, BankConstants.BANK_INVENTORY_ID);
-
-		player.getInventory().addListener(invListener);
-		player.getBank().addListener(bankListener);
-
-		player.getInventory().forceRefresh();
-		player.getBank().forceRefresh();
-
-		InterfaceListener interListener = new BankInterfaceListener(player, invListener, bankListener);
-
-		player.getInterfaceSet().openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID,
-				BankConstants.SIDEBAR_ID);
-	}
-
-	/**
 	 * Deposits an item into the player's bank.
 	 * 
 	 * @param player The player.
@@ -86,6 +65,27 @@ public final class BankUtils {
 		bank.add(newId, removed);
 
 		return true;
+	}
+
+	/**
+	 * Opens a player's bank.
+	 * 
+	 * @param player The player.
+	 */
+	public static void openBank(Player player) {
+		InventoryListener invListener = new SynchronizationInventoryListener(player, BankConstants.SIDEBAR_INVENTORY_ID);
+		InventoryListener bankListener = new SynchronizationInventoryListener(player, BankConstants.BANK_INVENTORY_ID);
+
+		player.getInventory().addListener(invListener);
+		player.getBank().addListener(bankListener);
+
+		player.getInventory().forceRefresh();
+		player.getBank().forceRefresh();
+
+		InterfaceListener interListener = new BankInterfaceListener(player, invListener, bankListener);
+
+		player.getInterfaceSet().openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID,
+				BankConstants.SIDEBAR_ID);
 	}
 
 	/**

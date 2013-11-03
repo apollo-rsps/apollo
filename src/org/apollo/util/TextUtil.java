@@ -17,32 +17,33 @@ public final class TextUtil {
 			'=', '\243', '$', '%', '"', '[', ']' };
 
 	/**
-	 * Uncompresses the compressed data ({@code in}) with the length ({@code len}) and returns the uncompressed
-	 * {@link String}.
+	 * Capitalizes the string correctly.
 	 * 
-	 * @param in The compressed input data.
-	 * @param len The length.
-	 * @return The uncompressed {@link String}.
+	 * @param str The input string.
+	 * @return The string with correct capitalization.
 	 */
-	public static String uncompress(byte[] in, int len) {
-		byte[] out = new byte[4096];
-		int outPos = 0;
-		int carry = -1;
-
-		for (int i = 0; i < (len * 2); i++) {
-			int tblPos = in[i / 2] >> (4 - 4 * (i % 2)) & 0xF;
-			if (carry == -1) {
-				if (tblPos < 13) {
-					out[outPos++] = (byte) FREQUENCY_ORDERED_CHARS[tblPos];
-				} else {
-					carry = tblPos;
+	public static String capitalize(String str) {
+		char[] chars = str.toCharArray();
+		boolean sentenceStart = true;
+		for (int i = 0; i < chars.length; i++) {
+			char c = chars[i];
+			if (sentenceStart) {
+				if (c >= 'a' && c <= 'z') {
+					chars[i] -= 0x20;
+					sentenceStart = false;
+				} else if (c >= 'A' && c <= 'Z') {
+					sentenceStart = false;
 				}
 			} else {
-				out[outPos++] = (byte) FREQUENCY_ORDERED_CHARS[((carry << 4) + tblPos) - 195];
-				carry = -1;
+				if (c >= 'A' && c <= 'Z') {
+					chars[i] += 0x20;
+				}
+			}
+			if (c == '.' || c == '!' || c == '?') {
+				sentenceStart = true;
 			}
 		}
-		return new String(out, 0, outPos);
+		return new String(chars, 0, chars.length);
 	}
 
 	/**
@@ -112,33 +113,32 @@ public final class TextUtil {
 	}
 
 	/**
-	 * Capitalizes the string correctly.
+	 * Uncompresses the compressed data ({@code in}) with the length ({@code len}) and returns the uncompressed
+	 * {@link String}.
 	 * 
-	 * @param str The input string.
-	 * @return The string with correct capitalization.
+	 * @param in The compressed input data.
+	 * @param len The length.
+	 * @return The uncompressed {@link String}.
 	 */
-	public static String capitalize(String str) {
-		char[] chars = str.toCharArray();
-		boolean sentenceStart = true;
-		for (int i = 0; i < chars.length; i++) {
-			char c = chars[i];
-			if (sentenceStart) {
-				if (c >= 'a' && c <= 'z') {
-					chars[i] -= 0x20;
-					sentenceStart = false;
-				} else if (c >= 'A' && c <= 'Z') {
-					sentenceStart = false;
+	public static String uncompress(byte[] in, int len) {
+		byte[] out = new byte[4096];
+		int outPos = 0;
+		int carry = -1;
+
+		for (int i = 0; i < len * 2; i++) {
+			int tblPos = in[i / 2] >> 4 - 4 * (i % 2) & 0xF;
+			if (carry == -1) {
+				if (tblPos < 13) {
+					out[outPos++] = (byte) FREQUENCY_ORDERED_CHARS[tblPos];
+				} else {
+					carry = tblPos;
 				}
 			} else {
-				if (c >= 'A' && c <= 'Z') {
-					chars[i] += 0x20;
-				}
-			}
-			if (c == '.' || c == '!' || c == '?') {
-				sentenceStart = true;
+				out[outPos++] = (byte) FREQUENCY_ORDERED_CHARS[(carry << 4) + tblPos - 195];
+				carry = -1;
 			}
 		}
-		return new String(chars, 0, chars.length);
+		return new String(out, 0, outPos);
 	}
 
 	/**

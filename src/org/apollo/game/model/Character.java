@@ -318,8 +318,8 @@ public abstract class Character {
 	 * @param second The second direction.
 	 */
 	public void setDirections(Direction first, Direction second) {
-		this.firstDirection = first;
-		this.secondDirection = second;
+		firstDirection = first;
+		secondDirection = second;
 	}
 
 	/**
@@ -399,10 +399,10 @@ public abstract class Character {
 	 * @param position The position.
 	 */
 	public void teleport(Position position) {
-		this.teleporting = true;
+		teleporting = true;
 		this.position = position;
-		this.walkingQueue.clear();
-		this.stopAction(); // TODO do it on any movement is a must.. walking queue perhaps?
+		walkingQueue.clear();
+		stopAction(); // TODO do it on any movement is a must.. walking queue perhaps?
 	}
 
 	/**

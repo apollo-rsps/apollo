@@ -26,16 +26,6 @@ public final class CommandDispatcher {
 	}
 
 	/**
-	 * Registers a listener with the
-	 * 
-	 * @param command The command's name.
-	 * @param listener The listener.
-	 */
-	public void register(String command, CommandListener listener) {
-		listeners.put(command.toLowerCase(), listener);
-	}
-
-	/**
 	 * Dispatches a command to the appropriate listener.
 	 * 
 	 * @param player The player.
@@ -46,6 +36,16 @@ public final class CommandDispatcher {
 		if (listener != null) {
 			listener.execute(player, command);
 		}
+	}
+
+	/**
+	 * Registers a listener with the
+	 * 
+	 * @param command The command's name.
+	 * @param listener The listener.
+	 */
+	public void register(String command, CommandListener listener) {
+		listeners.put(command.toLowerCase(), listener);
 	}
 
 }

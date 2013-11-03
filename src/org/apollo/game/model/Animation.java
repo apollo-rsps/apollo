@@ -183,21 +183,21 @@ public final class Animation {
 	}
 
 	/**
-	 * Gets the animation's id.
-	 * 
-	 * @return The animation's id.
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
 	 * Gets the animation's delay.
 	 * 
 	 * @return The animation's delay.
 	 */
 	public int getDelay() {
 		return delay;
+	}
+
+	/**
+	 * Gets the animation's id.
+	 * 
+	 * @return The animation's id.
+	 */
+	public int getId() {
+		return id;
 	}
 
 }

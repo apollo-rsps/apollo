@@ -38,21 +38,21 @@ public final class EquipEvent extends Event {
 	}
 
 	/**
-	 * Gets the interface id.
-	 * 
-	 * @return The interface id.
-	 */
-	public int getInterfaceId() {
-		return interfaceId;
-	}
-
-	/**
 	 * Gets the item id.
 	 * 
 	 * @return The item id.
 	 */
 	public int getId() {
 		return id;
+	}
+
+	/**
+	 * Gets the interface id.
+	 * 
+	 * @return The interface id.
+	 */
+	public int getInterfaceId() {
+		return interfaceId;
 	}
 
 	/**

@@ -31,7 +31,7 @@ public final class PlayerLoaderResponse {
 			throw new IllegalArgumentException("player required for this status code");
 		}
 		this.status = status;
-		this.player = null;
+		player = null;
 	}
 
 	/**
@@ -50,21 +50,21 @@ public final class PlayerLoaderResponse {
 	}
 
 	/**
-	 * Gets the status code.
-	 * 
-	 * @return The status code.
-	 */
-	public int getStatus() {
-		return status;
-	}
-
-	/**
 	 * Gets the player.
 	 * 
 	 * @return The player, or {@code null} if there is no player in this response.
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+
+	/**
+	 * Gets the status code.
+	 * 
+	 * @return The status code.
+	 */
+	public int getStatus() {
+		return status;
 	}
 
 }

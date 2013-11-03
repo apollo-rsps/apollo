@@ -39,6 +39,25 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 		throw new IllegalArgumentException();
 	}
 
+	/**
+	 * Handles a deposit action.
+	 * 
+	 * @param ctx The event handler context.
+	 * @param player The player.
+	 * @param event The event.
+	 */
+	private void deposit(EventHandlerContext ctx, Player player, ItemActionEvent event) {
+		int amount = optionToAmount(event.getOption());
+		if (amount == -1) {
+			player.getInterfaceSet().openEnterAmountDialog(
+					new BankDepositEnterAmountListener(player, event.getSlot(), event.getId()));
+		} else {
+			if (!BankUtils.deposit(player, event.getSlot(), event.getId(), amount)) {
+				ctx.breakHandlerChain();
+			}
+		}
+	}
+
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, ItemActionEvent event) {
 		if (!player.getInterfaceSet().contains(BankConstants.BANK_WINDOW_ID)) {
@@ -66,25 +85,6 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 					new BankWithdrawEnterAmountListener(player, event.getSlot(), event.getId()));
 		} else {
 			if (!BankUtils.withdraw(player, event.getSlot(), event.getId(), amount)) {
-				ctx.breakHandlerChain();
-			}
-		}
-	}
-
-	/**
-	 * Handles a deposit action.
-	 * 
-	 * @param ctx The event handler context.
-	 * @param player The player.
-	 * @param event The event.
-	 */
-	private void deposit(EventHandlerContext ctx, Player player, ItemActionEvent event) {
-		int amount = optionToAmount(event.getOption());
-		if (amount == -1) {
-			player.getInterfaceSet().openEnterAmountDialog(
-					new BankDepositEnterAmountListener(player, event.getSlot(), event.getId()));
-		} else {
-			if (!BankUtils.deposit(player, event.getSlot(), event.getId(), amount)) {
 				ctx.breakHandlerChain();
 			}
 		}

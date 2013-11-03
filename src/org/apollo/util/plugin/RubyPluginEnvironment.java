@@ -28,6 +28,11 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 		parseBootstrapper();
 	}
 
+	@Override
+	public void parse(InputStream is, String name) {
+		container.runScriptlet(is, name);
+	}
+
 	/**
 	 * Parses the bootstrapper.
 	 * 
@@ -41,11 +46,6 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 		} finally {
 			is.close();
 		}
-	}
-
-	@Override
-	public void parse(InputStream is, String name) {
-		container.runScriptlet(is, name);
 	}
 
 	@Override

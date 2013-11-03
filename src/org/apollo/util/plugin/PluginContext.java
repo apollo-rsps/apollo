@@ -45,23 +45,6 @@ public final class PluginContext {
 	}
 
 	/**
-	 * Adds an event encoder.
-	 * 
-	 * @param <T> The type of encoder.
-	 * @param releaseNo The release number.
-	 * @param event The event.
-	 * @param encoder The event encoder.
-	 */
-	public <T extends Event> void addEventEncoder(int releaseNo, Class<T> event, EventEncoder<T> encoder) {
-		Release release = context.getRelease();
-		if (release.getReleaseNumber() != releaseNo) {
-			return;
-		}
-
-		release.register(event, encoder);
-	}
-
-	/**
 	 * Adds an event decoder.
 	 * 
 	 * @param <T> The type of decoder.
@@ -76,6 +59,23 @@ public final class PluginContext {
 		}
 
 		release.register(opcode, decoder);
+	}
+
+	/**
+	 * Adds an event encoder.
+	 * 
+	 * @param <T> The type of encoder.
+	 * @param releaseNo The release number.
+	 * @param event The event.
+	 * @param encoder The event encoder.
+	 */
+	public <T extends Event> void addEventEncoder(int releaseNo, Class<T> event, EventEncoder<T> encoder) {
+		Release release = context.getRelease();
+		if (release.getReleaseNumber() != releaseNo) {
+			return;
+		}
+
+		release.register(event, encoder);
 	}
 
 	/**

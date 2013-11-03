@@ -86,7 +86,7 @@ public final class Archive {
 		int hash = 0;
 		name = name.toUpperCase();
 		for (int i = 0; i < name.length(); i++) {
-			hash = (hash * 61 + name.charAt(i)) - 32;
+			hash = hash * 61 + name.charAt(i) - 32;
 		}
 		for (ArchiveEntry entry : entries) {
 			if (entry.getIdentifier() == hash) {

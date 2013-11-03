@@ -39,21 +39,21 @@ public abstract class ObjectActionEvent extends Event {
 	}
 
 	/**
-	 * Gets the option number.
-	 * 
-	 * @return The option number.
-	 */
-	public int getOption() {
-		return option;
-	}
-
-	/**
 	 * Gets the id of the object.
 	 * 
 	 * @return The id of the object.
 	 */
 	public int getId() {
 		return id;
+	}
+
+	/**
+	 * Gets the option number.
+	 * 
+	 * @return The option number.
+	 */
+	public int getOption() {
+		return option;
 	}
 
 	/**

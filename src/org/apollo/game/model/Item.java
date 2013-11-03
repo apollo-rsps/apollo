@@ -44,15 +44,6 @@ public final class Item {
 	}
 
 	/**
-	 * Gets the id.
-	 * 
-	 * @return The id.
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
 	 * Gets the amount.
 	 * 
 	 * @return The amount.
@@ -68,6 +59,15 @@ public final class Item {
 	 */
 	public ItemDefinition getDefinition() {
 		return ItemDefinition.lookup(id);
+	}
+
+	/**
+	 * Gets the id.
+	 * 
+	 * @return The id.
+	 */
+	public int getId() {
+		return id;
 	}
 
 	@Override

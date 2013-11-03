@@ -32,8 +32,13 @@ public abstract class ScheduledTask {
 	 */
 	public ScheduledTask(int delay, boolean immediate) {
 		setDelay(delay);
-		this.pulses = immediate ? 0 : delay;
+		pulses = immediate ? 0 : delay;
 	}
+
+	/**
+	 * Executes this task.
+	 */
+	public abstract void execute();
 
 	/**
 	 * Checks if this task is running.
@@ -42,6 +47,16 @@ public abstract class ScheduledTask {
 	 */
 	public final boolean isRunning() {
 		return running;
+	}
+
+	/**
+	 * Pulses this task: updates the delay and calls {@link #execute()} if necessary.
+	 */
+	final void pulse() {
+		if (running && pulses-- == 0) {
+			execute();
+			pulses = delay;
+		}
 	}
 
 	/**
@@ -63,20 +78,5 @@ public abstract class ScheduledTask {
 	public void stop() {
 		running = false;
 	}
-
-	/**
-	 * Pulses this task: updates the delay and calls {@link #execute()} if necessary.
-	 */
-	final void pulse() {
-		if (running && pulses-- == 0) {
-			execute();
-			pulses = delay;
-		}
-	}
-
-	/**
-	 * Executes this task.
-	 */
-	public abstract void execute();
 
 }

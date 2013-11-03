@@ -88,6 +88,14 @@ public final class LoginService extends Service {
 	}
 
 	/**
+	 * Starts the login service.
+	 */
+	@Override
+	public void start() {
+		/* empty - here for consistency with other services */
+	}
+
+	/**
 	 * Submits a login request.
 	 * 
 	 * @param session The session submitting this request.
@@ -111,14 +119,6 @@ public final class LoginService extends Service {
 	 */
 	public void submitSaveRequest(GameSession session, Player player) {
 		executor.submit(new PlayerSaverWorker(saver, session, player));
-	}
-
-	/**
-	 * Starts the login service.
-	 */
-	@Override
-	public void start() {
-		/* empty - here for consistency with other services */
 	}
 
 }

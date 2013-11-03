@@ -36,6 +36,15 @@ public final class LoginResponse {
 	}
 
 	/**
+	 * Gets the rights level.
+	 * 
+	 * @return The rights level.
+	 */
+	public int getRights() {
+		return rights;
+	}
+
+	/**
 	 * Gets the status.
 	 * 
 	 * @return The status.
@@ -51,15 +60,6 @@ public final class LoginResponse {
 	 */
 	public boolean isFlagged() {
 		return flagged;
-	}
-
-	/**
-	 * Gets the rights level.
-	 * 
-	 * @return The rights level.
-	 */
-	public int getRights() {
-		return rights;
 	}
 
 }

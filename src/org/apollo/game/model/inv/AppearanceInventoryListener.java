@@ -26,11 +26,9 @@ public final class AppearanceInventoryListener extends InventoryAdapter {
 		this.player = player;
 	}
 
-	/**
-	 * Updates the player's appearance.
-	 */
-	private void update() {
-		player.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(player));
+	@Override
+	public void itemsUpdated(Inventory inventory) {
+		update();
 	}
 
 	@Override
@@ -38,9 +36,11 @@ public final class AppearanceInventoryListener extends InventoryAdapter {
 		update();
 	}
 
-	@Override
-	public void itemsUpdated(Inventory inventory) {
-		update();
+	/**
+	 * Updates the player's appearance.
+	 */
+	private void update() {
+		player.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(player));
 	}
 
 }

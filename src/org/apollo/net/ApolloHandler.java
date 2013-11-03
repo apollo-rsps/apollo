@@ -43,12 +43,7 @@ public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
 	 * @param context The server context.
 	 */
 	public ApolloHandler(ServerContext context) {
-		this.serverContext = context;
-	}
-
-	@Override
-	public void channelIdle(ChannelHandlerContext ctx, IdleStateEvent e) throws Exception {
-		e.getChannel().close();
+		serverContext = context;
 	}
 
 	@Override
@@ -67,6 +62,17 @@ public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
 		if (attachment != null) {
 			((Session) attachment).destroy();
 		}
+	}
+
+	@Override
+	public void channelIdle(ChannelHandlerContext ctx, IdleStateEvent e) throws Exception {
+		e.getChannel().close();
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+		logger.log(Level.WARNING, "Exception occured for channel: " + e.getChannel() + ", closing...", e.getCause());
+		ctx.getChannel().close();
 	}
 
 	@Override
@@ -94,12 +100,6 @@ public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
 		} else {
 			((Session) ctx.getAttachment()).messageReceived(e.getMessage());
 		}
-	}
-
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-		logger.log(Level.WARNING, "Exception occured for channel: " + e.getChannel() + ", closing...", e.getCause());
-		ctx.getChannel().close();
 	}
 
 }

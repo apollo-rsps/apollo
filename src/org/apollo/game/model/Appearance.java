@@ -51,30 +51,21 @@ public final class Appearance {
 	}
 
 	/**
+	 * Gets the player's colors.
+	 * 
+	 * @return The player's colors.
+	 */
+	public int[] getColors() {
+		return colors;
+	}
+
+	/**
 	 * Gets the gender of the player.
 	 * 
 	 * @return The gender of the player.
 	 */
 	public Gender getGender() {
 		return gender;
-	}
-
-	/**
-	 * Checks if the player is male.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean isMale() {
-		return gender == Gender.MALE;
-	}
-
-	/**
-	 * Checks if the player is female.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean isFemale() {
-		return gender == Gender.FEMALE;
 	}
 
 	/**
@@ -92,12 +83,21 @@ public final class Appearance {
 	}
 
 	/**
-	 * Gets the player's colors.
+	 * Checks if the player is female.
 	 * 
-	 * @return The player's colors.
+	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public int[] getColors() {
-		return colors;
+	public boolean isFemale() {
+		return gender == Gender.FEMALE;
+	}
+
+	/**
+	 * Checks if the player is male.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isMale() {
+		return gender == Gender.MALE;
 	}
 
 }

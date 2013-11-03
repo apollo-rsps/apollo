@@ -40,13 +40,13 @@ public abstract class RequestWorker<T, P> implements Runnable {
 	}
 
 	/**
-	 * Stops this worker. The worker's thread may need to be interrupted.
+	 * Gets the next request.
+	 * 
+	 * @param dispatcher The dispatcher.
+	 * @return The next request.
+	 * @throws InterruptedException If the thread is interrupted.
 	 */
-	public final void stop() {
-		synchronized (this) {
-			running = false;
-		}
-	}
+	protected abstract ChannelRequest<T> nextRequest(UpdateDispatcher dispatcher) throws InterruptedException;
 
 	@Override
 	public final void run() {
@@ -76,15 +76,6 @@ public abstract class RequestWorker<T, P> implements Runnable {
 	}
 
 	/**
-	 * Gets the next request.
-	 * 
-	 * @param dispatcher The dispatcher.
-	 * @return The next request.
-	 * @throws InterruptedException If the thread is interrupted.
-	 */
-	protected abstract ChannelRequest<T> nextRequest(UpdateDispatcher dispatcher) throws InterruptedException;
-
-	/**
 	 * Services a request.
 	 * 
 	 * @param provider The resource provider.
@@ -93,5 +84,14 @@ public abstract class RequestWorker<T, P> implements Runnable {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	protected abstract void service(P provider, Channel channel, T request) throws IOException;
+
+	/**
+	 * Stops this worker. The worker's thread may need to be interrupted.
+	 */
+	public final void stop() {
+		synchronized (this) {
+			running = false;
+		}
+	}
 
 }

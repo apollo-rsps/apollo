@@ -200,7 +200,7 @@ public final class Player extends Character {
 	 * Sets the excessive npcs flag.
 	 */
 	public void flagExcessiveNpcs() {
-		this.excessiveNpcs = true;
+		excessiveNpcs = true;
 	}
 
 	/**
@@ -435,6 +435,15 @@ public final class Player extends Character {
 	}
 
 	/**
+	 * Gets whether the player is running or not.
+	 * 
+	 * @return {@code true} if the player is running, otherwise {@code false}.
+	 */
+	public boolean isRunning() {
+		return running;
+	}
+
+	/**
 	 * Gets the withdrawing notes flag.
 	 * 
 	 * @return The flag.
@@ -527,7 +536,7 @@ public final class Player extends Character {
 	 */
 	public void setAppearance(Appearance appearance) {
 		this.appearance = appearance;
-		this.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(this));
+		getBlockSet().add(SynchronizationBlock.createAppearanceBlock(this));
 	}
 
 	/**
@@ -594,6 +603,16 @@ public final class Player extends Character {
 	}
 
 	/**
+	 * Sets whether the running toggle is enabled.
+	 * 
+	 * @param running The toggle.
+	 */
+	public void setRunning(boolean running) {
+		this.running = running;
+		getWalkingQueue().setRunningQueue(running);
+	}
+
+	/**
 	 * Sets the player's {@link GameSession}.
 	 * 
 	 * @param session The player's {@link GameSession}.
@@ -626,25 +645,6 @@ public final class Player extends Character {
 	public String toString() {
 		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel="
 				+ privilegeLevel + "]";
-	}
-
-	/**
-	 * Gets whether the player is running or not.
-	 * 
-	 * @return {@code true} if the player is running, otherwise {@code false}.
-	 */
-	public boolean isRunning() {
-		return running;
-	}
-
-	/**
-	 * Sets whether the running toggle is enabled.
-	 * 
-	 * @param running The toggle.
-	 */
-	public void setRunning(boolean running) {
-		this.running = running;
-		getWalkingQueue().setRunningQueue(running);
 	}
 
 }

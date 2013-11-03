@@ -2,15 +2,15 @@ package org.apollo.net.release.r317;
 
 import org.apollo.game.event.impl.PlayerSynchronizationEvent;
 import org.apollo.game.model.Animation;
+import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Direction;
+import org.apollo.game.model.EquipmentConstants;
 import org.apollo.game.model.Gender;
 import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.def.EquipmentDefinition;
-import org.apollo.game.model.Appearance;
-import org.apollo.game.model.EquipmentConstants;
 import org.apollo.game.sync.block.AnimationBlock;
 import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.ChatBlock;
@@ -86,8 +86,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * @param event The event.
 	 * @param builder The builder.
 	 */
-	private void putAddCharacterUpdate(AddPlayerSegment seg, PlayerSynchronizationEvent event,
-			GamePacketBuilder builder) {
+	private void putAddCharacterUpdate(AddPlayerSegment seg, PlayerSynchronizationEvent event, GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		Position player = event.getPosition();
 		Position other = seg.getPosition();

@@ -25,6 +25,13 @@ public abstract class Session {
 	}
 
 	/**
+	 * Destroys this session.
+	 * 
+	 * @throws Exception If an error occurs.
+	 */
+	public abstract void destroy() throws Exception;
+
+	/**
 	 * Gets the channel.
 	 * 
 	 * @return The channel.
@@ -40,12 +47,5 @@ public abstract class Session {
 	 * @throws Exception If an error occurs.
 	 */
 	public abstract void messageReceived(Object message) throws Exception;
-
-	/**
-	 * Destroys this session.
-	 * 
-	 * @throws Exception If an error occurs.
-	 */
-	public abstract void destroy() throws Exception;
 
 }

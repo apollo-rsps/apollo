@@ -73,21 +73,21 @@ public final class PlayerSynchronizationEvent extends Event {
 	}
 
 	/**
+	 * Gets the number of local players.
+	 * 
+	 * @return The number of local players.
+	 */
+	public int getLocalPlayers() {
+		return localPlayers;
+	}
+
+	/**
 	 * Gets the player's position.
 	 * 
 	 * @return The player's position.
 	 */
 	public Position getPosition() {
 		return position;
-	}
-
-	/**
-	 * Checks if the region has changed.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean hasRegionChanged() {
-		return regionChanged;
 	}
 
 	/**
@@ -100,21 +100,21 @@ public final class PlayerSynchronizationEvent extends Event {
 	}
 
 	/**
-	 * Gets the number of local players.
-	 * 
-	 * @return The number of local players.
-	 */
-	public int getLocalPlayers() {
-		return localPlayers;
-	}
-
-	/**
 	 * Gets the synchronization segments.
 	 * 
 	 * @return The segments.
 	 */
 	public List<SynchronizationSegment> getSegments() {
 		return segments;
+	}
+
+	/**
+	 * Checks if the region has changed.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean hasRegionChanged() {
+		return regionChanged;
 	}
 
 }

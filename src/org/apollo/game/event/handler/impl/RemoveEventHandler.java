@@ -5,9 +5,9 @@ import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.ItemActionEvent;
 import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
+import org.apollo.game.model.Player;
 import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
-import org.apollo.game.model.Player;
 
 /**
  * An event handler which removes equipped items.

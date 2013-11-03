@@ -32,21 +32,21 @@ public final class IsaacRandomPair {
 	}
 
 	/**
-	 * Gets the random number generator used for encoding.
-	 * 
-	 * @return The random number generator used for encoding.
-	 */
-	public IsaacRandom getEncodingRandom() {
-		return encodingRandom;
-	}
-
-	/**
 	 * Gets the random number generator used for decoding.
 	 * 
 	 * @return The random number generator used for decoding.
 	 */
 	public IsaacRandom getDecodingRandom() {
 		return decodingRandom;
+	}
+
+	/**
+	 * Gets the random number generator used for encoding.
+	 * 
+	 * @return The random number generator used for encoding.
+	 */
+	public IsaacRandom getEncodingRandom() {
+		return encodingRandom;
 	}
 
 }

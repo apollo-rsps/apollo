@@ -98,6 +98,20 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		this.priority = priority;
 	}
 
+	@Override
+	public int compareTo(OnDemandRequest o) {
+		int thisPriority = priority.toInteger();
+		int otherPriority = o.priority.toInteger();
+
+		if (thisPriority < otherPriority) {
+			return 1;
+		} else if (thisPriority == otherPriority) {
+			return 0;
+		} else {
+			return -1;
+		}
+	}
+
 	/**
 	 * Gets the file descriptor.
 	 * 
@@ -114,20 +128,6 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 	 */
 	public Priority getPriority() {
 		return priority;
-	}
-
-	@Override
-	public int compareTo(OnDemandRequest o) {
-		int thisPriority = priority.toInteger();
-		int otherPriority = o.priority.toInteger();
-
-		if (thisPriority < otherPriority) {
-			return 1;
-		} else if (thisPriority == otherPriority) {
-			return 0;
-		} else {
-			return -1;
-		}
 	}
 
 }

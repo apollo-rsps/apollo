@@ -24,6 +24,13 @@ public abstract class PrivilegedCommandListener implements CommandListener {
 		this.level = level;
 	}
 
+	@Override
+	public final void execute(Player player, Command command) {
+		if (player.getPrivilegeLevel().toInteger() >= level.toInteger()) {
+			executePrivileged(player, command);
+		}
+	}
+
 	/**
 	 * Executes a privileged command.
 	 * 
@@ -31,12 +38,5 @@ public abstract class PrivilegedCommandListener implements CommandListener {
 	 * @param command The command.
 	 */
 	public abstract void executePrivileged(Player player, Command command);
-
-	@Override
-	public final void execute(Player player, Command command) {
-		if (player.getPrivilegeLevel().toInteger() >= level.toInteger()) {
-			executePrivileged(player, command);
-		}
-	}
 
 }

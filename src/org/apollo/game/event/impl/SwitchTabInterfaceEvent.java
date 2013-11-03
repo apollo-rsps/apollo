@@ -31,21 +31,21 @@ public final class SwitchTabInterfaceEvent extends Event {
 	}
 
 	/**
-	 * Gets the tab id.
-	 * 
-	 * @return The tab id.
-	 */
-	public int getTabId() {
-		return tab;
-	}
-
-	/**
 	 * Gets the interface id.
 	 * 
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
 		return interfaceId;
+	}
+
+	/**
+	 * Gets the tab id.
+	 * 
+	 * @return The tab id.
+	 */
+	public int getTabId() {
+		return tab;
 	}
 
 }

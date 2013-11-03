@@ -21,6 +21,71 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream
 public final class CompressionUtil {
 
 	/**
+	 * Bzip2s the specified array.
+	 * 
+	 * @param bytes The uncompressed array.
+	 * @return The compressed array.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public static byte[] bzip2(byte[] bytes) throws IOException {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(bout, 1);
+		try {
+			os.write(bytes);
+			os.finish();
+			byte[] compressed = bout.toByteArray();
+			byte[] newCompressed = new byte[compressed.length - 4];
+			System.arraycopy(compressed, 4, newCompressed, 0, newCompressed.length);
+			return newCompressed;
+		} finally {
+			os.close();
+		}
+	}
+
+	/**
+	 * Gzips the specified array.
+	 * 
+	 * @param bytes The uncompressed array.
+	 * @return The compressed array.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public static byte[] gzip(byte[] bytes) throws IOException {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		DeflaterOutputStream os = new GZIPOutputStream(bout);
+		try {
+			os.write(bytes);
+			os.finish();
+			return bout.toByteArray();
+		} finally {
+			os.close();
+		}
+	}
+
+	/**
+	 * Unbzip2s the compressed array and places the result into the uncompressed array.
+	 * 
+	 * @param compressed The compressed array.
+	 * @param uncompressed The uncompressed array.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public static void unbzip2(byte[] compressed, byte[] uncompressed) throws IOException {
+		byte[] newCompressed = new byte[compressed.length + 4];
+		newCompressed[0] = 'B';
+		newCompressed[1] = 'Z';
+		newCompressed[2] = 'h';
+		newCompressed[3] = '1';
+		System.arraycopy(compressed, 0, newCompressed, 4, compressed.length);
+
+		DataInputStream is = new DataInputStream(
+				new BZip2CompressorInputStream(new ByteArrayInputStream(newCompressed)));
+		try {
+			is.readFully(uncompressed);
+		} finally {
+			is.close();
+		}
+	}
+
+	/**
 	 * Ungzips the compressed array and places the results into the uncompressed array.
 	 * 
 	 * @param compressed The compressed array.
@@ -66,71 +131,6 @@ public final class CompressionUtil {
 			return os.toByteArray();
 		} finally {
 			is.close();
-		}
-	}
-
-	/**
-	 * Unbzip2s the compressed array and places the result into the uncompressed array.
-	 * 
-	 * @param compressed The compressed array.
-	 * @param uncompressed The uncompressed array.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	public static void unbzip2(byte[] compressed, byte[] uncompressed) throws IOException {
-		byte[] newCompressed = new byte[compressed.length + 4];
-		newCompressed[0] = 'B';
-		newCompressed[1] = 'Z';
-		newCompressed[2] = 'h';
-		newCompressed[3] = '1';
-		System.arraycopy(compressed, 0, newCompressed, 4, compressed.length);
-
-		DataInputStream is = new DataInputStream(
-				new BZip2CompressorInputStream(new ByteArrayInputStream(newCompressed)));
-		try {
-			is.readFully(uncompressed);
-		} finally {
-			is.close();
-		}
-	}
-
-	/**
-	 * Gzips the specified array.
-	 * 
-	 * @param bytes The uncompressed array.
-	 * @return The compressed array.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	public static byte[] gzip(byte[] bytes) throws IOException {
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		DeflaterOutputStream os = new GZIPOutputStream(bout);
-		try {
-			os.write(bytes);
-			os.finish();
-			return bout.toByteArray();
-		} finally {
-			os.close();
-		}
-	}
-
-	/**
-	 * Bzip2s the specified array.
-	 * 
-	 * @param bytes The uncompressed array.
-	 * @return The compressed array.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	public static byte[] bzip2(byte[] bytes) throws IOException {
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(bout, 1);
-		try {
-			os.write(bytes);
-			os.finish();
-			byte[] compressed = bout.toByteArray();
-			byte[] newCompressed = new byte[compressed.length - 4];
-			System.arraycopy(compressed, 4, newCompressed, 0, newCompressed.length);
-			return newCompressed;
-		} finally {
-			os.close();
 		}
 	}
 

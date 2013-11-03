@@ -46,13 +46,13 @@ public final class SynchronizationInventoryListener extends InventoryAdapter {
 	}
 
 	@Override
-	public void itemUpdated(Inventory inventory, int slot, Item item) {
-		player.send(new UpdateSlottedItemsEvent(interfaceId, new SlottedItem(slot, item)));
+	public void itemsUpdated(Inventory inventory) {
+		player.send(new UpdateItemsEvent(interfaceId, inventory.getItems()));
 	}
 
 	@Override
-	public void itemsUpdated(Inventory inventory) {
-		player.send(new UpdateItemsEvent(interfaceId, inventory.getItems()));
+	public void itemUpdated(Inventory inventory, int slot, Item item) {
+		player.send(new UpdateSlottedItemsEvent(interfaceId, new SlottedItem(slot, item)));
 	}
 
 }

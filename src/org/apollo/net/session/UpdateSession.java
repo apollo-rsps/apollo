@@ -32,6 +32,11 @@ public final class UpdateSession extends Session {
 	}
 
 	@Override
+	public void destroy() throws Exception {
+		// TODO implement
+	}
+
+	@Override
 	public void messageReceived(Object message) throws Exception {
 		UpdateDispatcher dispatcher = context.getService(UpdateService.class).getDispatcher();
 		if (message instanceof OnDemandRequest) {
@@ -43,11 +48,6 @@ public final class UpdateSession extends Session {
 		} else {
 			throw new Exception("unknown message type");
 		}
-	}
-
-	@Override
-	public void destroy() throws Exception {
-		// TODO implement
 	}
 
 }

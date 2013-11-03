@@ -29,21 +29,21 @@ public final class SlottedItem {
 	}
 
 	/**
-	 * Gets the slot.
-	 * 
-	 * @return The slot.
-	 */
-	public int getSlot() {
-		return slot;
-	}
-
-	/**
 	 * Gets the item.
 	 * 
 	 * @return The item.
 	 */
 	public Item getItem() {
 		return item;
+	}
+
+	/**
+	 * Gets the slot.
+	 * 
+	 * @return The slot.
+	 */
+	public int getSlot() {
+		return slot;
 	}
 
 }

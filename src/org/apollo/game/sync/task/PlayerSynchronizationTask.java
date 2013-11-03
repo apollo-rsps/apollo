@@ -13,8 +13,8 @@ import org.apollo.game.sync.block.ChatBlock;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.game.sync.seg.AddPlayerSegment;
-import org.apollo.game.sync.seg.RemoveCharacterSegment;
 import org.apollo.game.sync.seg.MovementSegment;
+import org.apollo.game.sync.seg.RemoveCharacterSegment;
 import org.apollo.game.sync.seg.SynchronizationSegment;
 import org.apollo.game.sync.seg.TeleportSegment;
 import org.apollo.util.CharacterRepository;
@@ -82,8 +82,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		int added = 0;
 
 		CharacterRepository<Player> repository = World.getWorld().getPlayerRepository();
-		for (Iterator<Player> it = repository.iterator(); it.hasNext();) {
-			Player p = it.next();
+		for (Player p : repository) {
 			if (localPlayers.size() >= 255) {
 				player.flagExcessivePlayers();
 				break;

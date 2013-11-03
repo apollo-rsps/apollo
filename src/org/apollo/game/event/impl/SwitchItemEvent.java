@@ -54,6 +54,24 @@ public final class SwitchItemEvent extends Event {
 	}
 
 	/**
+	 * Gets the new slot.
+	 * 
+	 * @return The new slot.
+	 */
+	public int getNewSlot() {
+		return newSlot;
+	}
+
+	/**
+	 * Gets the old slot.
+	 * 
+	 * @return The old slot.
+	 */
+	public int getOldSlot() {
+		return oldSlot;
+	}
+
+	/**
 	 * Checks if this event is in insertion mode.
 	 * 
 	 * @return The insertion flag.
@@ -69,24 +87,6 @@ public final class SwitchItemEvent extends Event {
 	 */
 	public boolean isSwapping() {
 		return !inserting;
-	}
-
-	/**
-	 * Gets the old slot.
-	 * 
-	 * @return The old slot.
-	 */
-	public int getOldSlot() {
-		return oldSlot;
-	}
-
-	/**
-	 * Gets the new slot.
-	 * 
-	 * @return The new slot.
-	 */
-	public int getNewSlot() {
-		return newSlot;
 	}
 
 }

@@ -16,33 +16,6 @@ public final class NameUtil {
 			'"', '[', ']', '|', '?', '/', '`' };
 
 	/**
-	 * Converts a player name to a long.
-	 * 
-	 * @param name The player name.
-	 * @return The long.
-	 */
-	public static long encodeBase37(String name) {
-		if (name.length() > 12) {
-			throw new IllegalArgumentException("name too long");
-		}
-		long l = 0L;
-		for (int i = 0; i < name.length(); i++) {
-			char c = name.charAt(i);
-			l *= 37L;
-			if (c >= 'A' && c <= 'Z') {
-				l += (1 + c) - 65;
-			} else if (c >= 'a' && c <= 'z') {
-				l += (1 + c) - 97;
-			} else if (c >= '0' && c <= '9') {
-				l += (27 + c) - 48;
-			}
-		}
-		for (; l % 37L == 0L && l != 0L; l /= 37L)
-			;
-		return l;
-	}
-
-	/**
 	 * Converts a long to a player name.
 	 * 
 	 * @param l The long.
@@ -57,6 +30,34 @@ public final class NameUtil {
 			chars[11 - i++] = NAME_CHARS[(int) (tmp - l * 37L)];
 		}
 		return new String(chars, 12 - i, i);
+	}
+
+	/**
+	 * Converts a player name to a long.
+	 * 
+	 * @param name The player name.
+	 * @return The long.
+	 */
+	public static long encodeBase37(String name) {
+		if (name.length() > 12) {
+			throw new IllegalArgumentException("name too long");
+		}
+		long l = 0L;
+		for (int i = 0; i < name.length(); i++) {
+			char c = name.charAt(i);
+			l *= 37L;
+			if (c >= 'A' && c <= 'Z') {
+				l += 1 + c - 65;
+			} else if (c >= 'a' && c <= 'z') {
+				l += 1 + c - 97;
+			} else if (c >= '0' && c <= '9') {
+				l += 27 + c - 48;
+			}
+		}
+		for (; l % 37L == 0L && l != 0L; l /= 37L) {
+			;
+		}
+		return l;
 	}
 
 	/**

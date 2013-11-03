@@ -61,15 +61,6 @@ public final class ServerContext {
 	}
 
 	/**
-	 * Gets the service manager.
-	 * 
-	 * @return The service manager.
-	 */
-	public ServiceManager getServiceManager() {
-		return serviceManager;
-	}
-
-	/**
 	 * Gets a service. This method is shorthand for {@code getServiceManager().getService(...)}.
 	 * 
 	 * @param <S> The type of service.
@@ -78,6 +69,15 @@ public final class ServerContext {
 	 */
 	public <S extends Service> S getService(Class<S> clazz) {
 		return serviceManager.getService(clazz);
+	}
+
+	/**
+	 * Gets the service manager.
+	 * 
+	 * @return The service manager.
+	 */
+	public ServiceManager getServiceManager() {
+		return serviceManager;
 	}
 
 }

@@ -36,6 +36,18 @@ public final class ServiceManager {
 	}
 
 	/**
+	 * Gets a service.
+	 * 
+	 * @param <S> The type of service.
+	 * @param clazz The service class.
+	 * @return The service.
+	 */
+	@SuppressWarnings("unchecked")
+	public <S extends Service> S getService(Class<S> clazz) {
+		return (S) services.get(clazz);
+	}
+
+	/**
 	 * Initializes this service manager.
 	 * 
 	 * @throws Exception If an error occurs.
@@ -85,15 +97,14 @@ public final class ServiceManager {
 	}
 
 	/**
-	 * Gets a service.
+	 * Sets the context of all services.
 	 * 
-	 * @param <S> The type of service.
-	 * @param clazz The service class.
-	 * @return The service.
+	 * @param ctx The server context.
 	 */
-	@SuppressWarnings("unchecked")
-	public <S extends Service> S getService(Class<S> clazz) {
-		return (S) services.get(clazz);
+	public void setContext(ServerContext ctx) {
+		for (Service s : services.values()) {
+			s.setContext(ctx);
+		}
 	}
 
 	/**
@@ -104,17 +115,6 @@ public final class ServiceManager {
 		for (Service service : services.values()) {
 			logger.fine("Starting service: " + service.getClass().getName() + "...");
 			service.start();
-		}
-	}
-
-	/**
-	 * Sets the context of all services.
-	 * 
-	 * @param ctx The server context.
-	 */
-	public void setContext(ServerContext ctx) {
-		for (Service s : services.values()) {
-			s.setContext(ctx);
 		}
 	}
 

@@ -56,7 +56,7 @@ public final class StaticObject {
 		this.position = position;
 		this.type = (byte) type;
 		this.rotation = (byte) rotation;
-		this.definition = ObjectDefinition.lookup(id);
+		definition = ObjectDefinition.lookup(id);
 	}
 
 	/**

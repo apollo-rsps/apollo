@@ -12,11 +12,6 @@ import java.util.Queue;
 public final class WalkingQueue {
 
 	/**
-	 * The maximum size of the queue. If any additional steps are added, they are discarded.
-	 */
-	private static final int MAXIMUM_SIZE = 128;
-
-	/**
 	 * Represents a single point in the queue.
 	 * 
 	 * @author Graham
@@ -52,6 +47,11 @@ public final class WalkingQueue {
 	}
 
 	/**
+	 * The maximum size of the queue. If any additional steps are added, they are discarded.
+	 */
+	private static final int MAXIMUM_SIZE = 128;
+
+	/**
 	 * The character whose walking queue this is.
 	 */
 	private Character character;
@@ -78,42 +78,6 @@ public final class WalkingQueue {
 	 */
 	public WalkingQueue(Character character) {
 		this.character = character;
-	}
-
-	/**
-	 * Called every pulse, updates the queue.
-	 */
-	public void pulse() {
-		Position position = character.getPosition();
-
-		Direction first = Direction.NONE;
-		Direction second = Direction.NONE;
-
-		Point next = points.poll();
-		if (next != null) {
-			first = next.direction;
-			position = next.position;
-
-			if (runningQueue /* or run toggled AND enough energy */) {
-				next = points.poll();
-				if (next != null) {
-					second = next.direction;
-					position = next.position;
-				}
-			}
-		}
-
-		character.setDirections(first, second);
-		character.setPosition(position);
-	}
-
-	/**
-	 * Sets the running queue flag.
-	 * 
-	 * @param running The running queue flag.
-	 */
-	public void setRunningQueue(boolean running) {
-		this.runningQueue = running;
 	}
 
 	/**
@@ -166,6 +130,31 @@ public final class WalkingQueue {
 	}
 
 	/**
+	 * Adds a step.
+	 * 
+	 * @param x The x coordinate of this step.
+	 * @param y The y coordinate of this step.
+	 */
+	private void addStep(int x, int y) {
+		if (points.size() >= MAXIMUM_SIZE) {
+			return;
+		}
+
+		Point last = getLast();
+
+		int deltaX = x - last.position.getX();
+		int deltaY = y - last.position.getY();
+
+		Direction direction = Direction.fromDeltas(deltaX, deltaY);
+
+		if (direction != Direction.NONE) {
+			Point p = new Point(new Position(x, y, character.getPosition().getHeight()), direction);
+			points.add(p);
+			oldPoints.add(p);
+		}
+	}
+
+	/**
 	 * Adds a step to the queue.
 	 * 
 	 * @param step The step to add.
@@ -199,28 +188,11 @@ public final class WalkingQueue {
 	}
 
 	/**
-	 * Adds a step.
-	 * 
-	 * @param x The x coordinate of this step.
-	 * @param y The y coordinate of this step.
+	 * Clears the walking queue.
 	 */
-	private void addStep(int x, int y) {
-		if (points.size() >= MAXIMUM_SIZE) {
-			return;
-		}
-
-		Point last = getLast();
-
-		int deltaX = x - last.position.getX();
-		int deltaY = y - last.position.getY();
-
-		Direction direction = Direction.fromDeltas(deltaX, deltaY);
-
-		if (direction != Direction.NONE) {
-			Point p = new Point(new Position(x, y, character.getPosition().getHeight()), direction);
-			points.add(p);
-			oldPoints.add(p);
-		}
+	public void clear() {
+		points.clear();
+		oldPoints.clear();
 	}
 
 	/**
@@ -237,11 +209,39 @@ public final class WalkingQueue {
 	}
 
 	/**
-	 * Clears the walking queue.
+	 * Called every pulse, updates the queue.
 	 */
-	public void clear() {
-		points.clear();
-		oldPoints.clear();
+	public void pulse() {
+		Position position = character.getPosition();
+
+		Direction first = Direction.NONE;
+		Direction second = Direction.NONE;
+
+		Point next = points.poll();
+		if (next != null) {
+			first = next.direction;
+			position = next.position;
+
+			if (runningQueue /* or run toggled AND enough energy */) {
+				next = points.poll();
+				if (next != null) {
+					second = next.direction;
+					position = next.position;
+				}
+			}
+		}
+
+		character.setDirections(first, second);
+		character.setPosition(position);
+	}
+
+	/**
+	 * Sets the running queue flag.
+	 * 
+	 * @param running The running queue flag.
+	 */
+	public void setRunningQueue(boolean running) {
+		runningQueue = running;
 	}
 
 	/**
