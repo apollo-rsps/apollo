@@ -15,7 +15,7 @@ public interface PlayerLoader {
 	 * 
 	 * @param credentials The player's credentials.
 	 * @return The {@link PlayerLoaderResponse}.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception;
 

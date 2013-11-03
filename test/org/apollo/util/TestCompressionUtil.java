@@ -15,7 +15,7 @@ public class TestCompressionUtil {
 	/**
 	 * Tests the {@link CompressionUtil#gzip(byte[])} and
 	 * {@link CompressionUtil#ungzip(byte[], byte[])} methods.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	@Test
 	public void testGzip() throws IOException {
@@ -29,7 +29,7 @@ public class TestCompressionUtil {
 	/**
 	 * Tests the {@link CompressionUtil#bzip2(byte[])} and
 	 * {@link CompressionUtil#unbzip2(byte[], byte[])} methods.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	@Test
 	public void testBzip2() throws IOException {

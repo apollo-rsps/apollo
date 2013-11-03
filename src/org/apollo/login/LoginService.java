@@ -44,7 +44,7 @@ public final class LoginService extends Service {
 	/**
 	 * Creates the login service.
 	 * 
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	public LoginService() throws Exception {
 		init();
@@ -53,7 +53,7 @@ public final class LoginService extends Service {
 	/**
 	 * Initialises the login service.
 	 * 
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private void init() throws Exception {
 		XmlParser parser = new XmlParser();

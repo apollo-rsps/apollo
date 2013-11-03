@@ -59,7 +59,7 @@ public final class ItemDefinition {
 	 * Initialises the class with the specified set of definitions.
 	 * 
 	 * @param definitions The definitions.
-	 * @throws RuntimeException if there is an id mismatch.
+	 * @throws RuntimeException If there is an id mismatch.
 	 */
 	public static void init(ItemDefinition[] definitions) {
 		ItemDefinition.definitions = definitions;
@@ -89,7 +89,7 @@ public final class ItemDefinition {
 	 * 
 	 * @param id The id.
 	 * @return The definition.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public static ItemDefinition forId(int id) {
 		if (id < 0 || id >= definitions.length) {
@@ -214,7 +214,7 @@ public final class ItemDefinition {
 	/**
 	 * Converts this item to a note, if possible.
 	 * 
-	 * @throws IllegalStateException if {@link ItemDefinition#isNote()} returns {@code false}.
+	 * @throws IllegalStateException If {@link ItemDefinition#isNote()} returns {@code false}.
 	 */
 	public void toNote() {
 		if (isNote()) {
@@ -336,7 +336,7 @@ public final class ItemDefinition {
 	 * 
 	 * @param id The id.
 	 * @param action The action.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public void setGroundAction(int id, String action) {
 		if (id < 0 || id >= groundActions.length) {
@@ -350,7 +350,7 @@ public final class ItemDefinition {
 	 * 
 	 * @param id The id.
 	 * @return The action.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public String getGroundAction(int id) {
 		if (id < 0 || id >= groundActions.length) {
@@ -364,7 +364,7 @@ public final class ItemDefinition {
 	 * 
 	 * @param id The id.
 	 * @param action The action.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public void setInventoryAction(int id, String action) {
 		if (id < 0 || id >= inventoryActions.length) {
@@ -378,7 +378,7 @@ public final class ItemDefinition {
 	 * 
 	 * @param id The id.
 	 * @return The action.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public String getInventoryAction(int id) {
 		if (id < 0 || id >= inventoryActions.length) {

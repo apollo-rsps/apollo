@@ -58,7 +58,7 @@ public final class GameService extends Service {
 	/**
 	 * Creates the game service.
 	 * 
-	 * @throws Exception if an error occurs during initialization.
+	 * @throws Exception If an error occurs during initialization.
 	 */
 	public GameService() throws Exception {
 		init();
@@ -76,7 +76,7 @@ public final class GameService extends Service {
 	/**
 	 * Initializes the game service.
 	 * 
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private void init() throws Exception {
 		InputStream is = new FileInputStream("data/events.xml");

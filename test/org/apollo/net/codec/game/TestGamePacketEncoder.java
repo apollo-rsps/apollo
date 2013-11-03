@@ -18,7 +18,7 @@ public class TestGamePacketEncoder {
 	/**
 	 * Tests the {@link GamePacketEncoder#encode(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.Channel, Object)}
 	 * method.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	@Test
 	public void testEncode() throws Exception {

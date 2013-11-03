@@ -20,8 +20,8 @@ public final class TestXmlParser {
 
 	/**
 	 * A test for the {@link XmlParser#parse(java.io.InputStream)} method.
-	 * @throws SAXException if a SAX error occurs.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	@Test
 	public void testParseInputStream() throws SAXException, IOException {
@@ -66,8 +66,8 @@ public final class TestXmlParser {
 
 	/**
 	 * A test for the {@link XmlParser#parse(java.io.Reader)} method.
-	 * @throws SAXException if a SAX error occurs.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	@Test
 	public void testParseReader() throws SAXException, IOException {

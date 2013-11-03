@@ -21,7 +21,7 @@ public final class EquipmentUpdater {
 	 * The entry point of the application.
 	 * 
 	 * @param args The command line arguments.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length != 1) {

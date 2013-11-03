@@ -108,7 +108,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 	 * 
 	 * @param in The input stream.
 	 * @param inventory The inventory.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	private void readInventory(DataInputStream in, Inventory inventory) throws IOException {
 		int capacity = in.readUnsignedShort();

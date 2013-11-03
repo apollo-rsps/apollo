@@ -33,7 +33,7 @@ public final class ItemDefinitionParser {
 	 * Parses the item definitions.
 	 * 
 	 * @return The item definitions.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public ItemDefinition[] parse() throws IOException {
 		Archive config = Archive.decode(fs.getFile(0, 2));

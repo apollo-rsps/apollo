@@ -16,7 +16,7 @@ public final class StreamUtil {
 	 * 
 	 * @param os The output stream.
 	 * @param str The string.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public static void writeString(OutputStream os, String str) throws IOException {
 		for (char c : str.toCharArray()) {
@@ -30,7 +30,7 @@ public final class StreamUtil {
 	 * 
 	 * @param is The input stream.
 	 * @return The string.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public static String readString(InputStream is) throws IOException {
 		StringBuilder builder = new StringBuilder();

@@ -12,7 +12,7 @@ public final class PacketMetaData {
 	 * 
 	 * @param length The length of the packet.
 	 * @return The {@link PacketMetaData} object.
-	 * @throws IllegalArgumentException if length is less than 0.
+	 * @throws IllegalArgumentException If length is less than 0.
 	 */
 	public static PacketMetaData createFixed(int length) {
 		if (length < 0) {
@@ -74,7 +74,7 @@ public final class PacketMetaData {
 	 * Gets the length of this packet.
 	 * 
 	 * @return The length of this packet.
-	 * @throws IllegalStateException if the packet is not a fixed-size packet.
+	 * @throws IllegalStateException If the packet is not a fixed-size packet.
 	 */
 	public int getLength() {
 		if (type != PacketType.FIXED) {

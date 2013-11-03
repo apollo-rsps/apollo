@@ -41,7 +41,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * 
 	 * @param base The base directory.
 	 * @param readOnly A flag indicating if the file system will be read only.
-	 * @throws Exception if the file system is invalid.
+	 * @throws Exception If the file system is invalid.
 	 */
 	public IndexedFileSystem(File base, boolean readOnly) throws Exception {
 		this.readOnly = readOnly;
@@ -61,7 +61,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * Automatically detect the layout of the specified directory.
 	 * 
 	 * @param base The base directory.
-	 * @throws Exception if the file system is invalid.
+	 * @throws Exception If the file system is invalid.
 	 */
 	private void detectLayout(File base) throws Exception {
 		int indexCount = 0;
@@ -92,7 +92,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * 
 	 * @param fd The {@link FileDescriptor} which points to the file.
 	 * @return The {@link Index}.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	private Index getIndex(FileDescriptor fd) throws IOException {
 		int index = fd.getType();
@@ -120,7 +120,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * 
 	 * @param type The type.
 	 * @return The number of files.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	private int getFileCount(int type) throws IOException {
 		if (type < 0 || type >= indices.length) {
@@ -137,7 +137,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * Gets the CRC table.
 	 * 
 	 * @return The CRC table.
-	 * @throws IOException if an I/O erorr occurs.
+	 * @throws IOException If an I/O erorr occurs.
 	 */
 	public ByteBuffer getCrcTable() throws IOException {
 		if (readOnly) {
@@ -195,7 +195,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * @param type The file type.
 	 * @param file The file id.
 	 * @return A {@link ByteBuffer} which contains the contents of the file.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public ByteBuffer getFile(int type, int file) throws IOException {
 		return getFile(new FileDescriptor(type, file));
@@ -206,7 +206,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * 
 	 * @param fd The {@link FileDescriptor} which points to the file.
 	 * @return A {@link ByteBuffer} which contains the contents of the file.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public ByteBuffer getFile(FileDescriptor fd) throws IOException {
 		Index index = getIndex(fd);

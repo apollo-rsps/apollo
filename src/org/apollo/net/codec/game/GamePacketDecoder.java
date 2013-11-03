@@ -77,7 +77,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private Object decodeOpcode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readable()) {
@@ -116,7 +116,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private Object decodeLength(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readable()) {
@@ -137,7 +137,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private Object decodePayload(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readableBytes() >= length) {
@@ -149,14 +149,14 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	/**
-	 * Decodes a zero length packet. This hackery is required as Netty will throw an exception if we return a frame but
+	 * Decodes a zero length packet. This hackery is required as Netty will throw an Exception If we return a frame but
 	 * have read nothing!
 	 * 
 	 * @param ctx The channel handler context.
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private Object decodeZeroLengthPacket(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer)
 			throws Exception {

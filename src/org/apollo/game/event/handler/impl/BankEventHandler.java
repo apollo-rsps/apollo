@@ -21,7 +21,7 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 	 * 
 	 * @param option The option.
 	 * @return The amount.
-	 * @throws IllegalArgumentException if the option is not legal.
+	 * @throws IllegalArgumentException If the option is not legal.
 	 */
 	private static final int optionToAmount(int option) {
 		switch (option) {

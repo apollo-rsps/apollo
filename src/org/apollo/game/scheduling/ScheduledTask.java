@@ -28,7 +28,7 @@ public abstract class ScheduledTask {
 	 * @param delay The delay between executions of the task, in pulses.
 	 * @param immediate A flag indicating if this task should (for the first execution) be ran immediately, or after the
 	 *            {@code delay}.
-	 * @throws IllegalArgumentException if the delay is less than or equal to zero.
+	 * @throws IllegalArgumentException If the delay is less than or equal to zero.
 	 */
 	public ScheduledTask(int delay, boolean immediate) {
 		setDelay(delay);
@@ -48,7 +48,7 @@ public abstract class ScheduledTask {
 	 * Sets the delay.
 	 * 
 	 * @param delay The delay.
-	 * @throws IllegalArgumentException if the delay is less than or equal to zero.
+	 * @throws IllegalArgumentException If the delay is less than or equal to zero.
 	 */
 	public void setDelay(int delay) {
 		if (delay < 0) {

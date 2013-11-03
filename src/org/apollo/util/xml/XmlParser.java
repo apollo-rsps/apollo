@@ -89,7 +89,7 @@ public final class XmlParser {
 	/**
 	 * Creates a new xml parser.
 	 * 
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws SAXException If a SAX error occurs.
 	 */
 	public XmlParser() throws SAXException {
 		xmlReader = XMLReaderFactory.createXMLReader();
@@ -112,8 +112,8 @@ public final class XmlParser {
 	 * 
 	 * @param is The {@link InputStream}.
 	 * @return The root {@link XmlNode}.
-	 * @throws IOException if an I/O error occurs.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
 	 */
 	public XmlNode parse(InputStream is) throws IOException, SAXException {
 		synchronized (this) {
@@ -126,8 +126,8 @@ public final class XmlParser {
 	 * 
 	 * @param reader The {@link Reader}.
 	 * @return The root {@link XmlNode}.
-	 * @throws IOException if an I/O error occurs.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
 	 */
 	public XmlNode parse(Reader reader) throws IOException, SAXException {
 		synchronized (this) {
@@ -140,8 +140,8 @@ public final class XmlParser {
 	 * 
 	 * @param source The {@link InputSource}.
 	 * @return The root {@link XmlNode}.
-	 * @throws IOException if an I/O error occurs.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
 	 */
 	private XmlNode parse(InputSource source) throws IOException, SAXException {
 		rootNode = null;

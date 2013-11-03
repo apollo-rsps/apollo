@@ -72,7 +72,7 @@ public final class SkillSet {
 	 * 
 	 * @param id The id.
 	 * @return The skill.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public Skill getSkill(int id) {
 		checkBounds(id);
@@ -219,7 +219,7 @@ public final class SkillSet {
 	 * 
 	 * @param id The id.
 	 * @param skill The skill.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public void setSkill(int id, Skill skill) {
 		checkBounds(id);
@@ -231,7 +231,7 @@ public final class SkillSet {
 	 * Checks the bounds of the id.
 	 * 
 	 * @param id The id.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	private void checkBounds(int id) {
 		if (id < 0 || id >= skills.length) {
@@ -243,7 +243,7 @@ public final class SkillSet {
 	 * Notifies listeners that a skill has been levelled up.
 	 * 
 	 * @param id The skill's id.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	private void notifyLevelledUp(int id) {
 		checkBounds(id);
@@ -258,7 +258,7 @@ public final class SkillSet {
 	 * Notifies listeners that a skill has been updated.
 	 * 
 	 * @param id The skill's id.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	private void notifySkillUpdated(int id) {
 		checkBounds(id);

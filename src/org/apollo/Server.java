@@ -99,7 +99,7 @@ public final class Server {
 	/**
 	 * Creates the Apollo server.
 	 * 
-	 * @throws Exception if an error occurs whilst creating services.
+	 * @throws Exception If an error occurs whilst creating services.
 	 */
 	public Server() throws Exception {
 		logger.info("Starting Apollo...");
@@ -110,9 +110,9 @@ public final class Server {
 	 * Initialises the server.
 	 * 
 	 * @param releaseClassName The class name of the current active {@link Release}.
-	 * @throws ClassNotFoundException if the release class could not be found.
-	 * @throws IllegalAccessException if the release class could not be accessed.
-	 * @throws InstantiationException if the release class could not be instantiated.
+	 * @throws ClassNotFoundException If the release class could not be found.
+	 * @throws IllegalAccessException If the release class could not be accessed.
+	 * @throws InstantiationException If the release class could not be instantiated.
 	 */
 	public void init(String releaseClassName) throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
@@ -155,7 +155,7 @@ public final class Server {
 			httpBootstrap.bind(httpAddress);
 		} catch (Throwable t) {
 			logger.log(Level.WARNING,
-					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not reccomended)!", t);
+					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
 		}
 
 		logger.info("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
@@ -167,7 +167,7 @@ public final class Server {
 	/**
 	 * Starts the server.
 	 * 
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	public void start() throws Exception {
 		PluginManager mgr = new PluginManager(new PluginContext(context));

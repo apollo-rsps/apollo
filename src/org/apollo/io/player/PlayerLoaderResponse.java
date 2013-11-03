@@ -24,7 +24,7 @@ public final class PlayerLoaderResponse {
 	 * Creates a {@link PlayerLoaderResponse} with only a status code.
 	 * 
 	 * @param status The status code.
-	 * @throws IllegalArgumentException if the status code needs a {@link Player}.
+	 * @throws IllegalArgumentException If the status code needs a {@link Player}.
 	 */
 	public PlayerLoaderResponse(int status) {
 		if (status == LoginConstants.STATUS_OK || status == LoginConstants.STATUS_RECONNECTION_OK) {
@@ -39,7 +39,7 @@ public final class PlayerLoaderResponse {
 	 * 
 	 * @param status The status code.
 	 * @param player The player.
-	 * @throws IllegalArgumentException if the status code does not need {@link Player}.
+	 * @throws IllegalArgumentException If the status code does not need {@link Player}.
 	 */
 	public PlayerLoaderResponse(int status, Player player) {
 		if (status != LoginConstants.STATUS_OK && status != LoginConstants.STATUS_RECONNECTION_OK) {

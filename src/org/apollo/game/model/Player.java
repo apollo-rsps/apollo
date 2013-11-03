@@ -53,7 +53,7 @@ public final class Player extends Character {
 		 * 
 		 * @param numericalLevel The numerical level.
 		 * @return The privilege level.
-		 * @throws IllegalArgumentException if the numerical level is invalid.
+		 * @throws IllegalArgumentException If the numerical level is invalid.
 		 */
 		public static PrivilegeLevel valueOf(int numericalLevel) {
 			for (PrivilegeLevel level : values()) {

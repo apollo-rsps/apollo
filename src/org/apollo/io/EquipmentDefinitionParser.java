@@ -32,7 +32,7 @@ public final class EquipmentDefinitionParser {
 	 * Parses the input stream.
 	 * 
 	 * @return The equipment definition array.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public EquipmentDefinition[] parse() throws IOException {
 		DataInputStream dis = new DataInputStream(is);

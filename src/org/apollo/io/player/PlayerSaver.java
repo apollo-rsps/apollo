@@ -14,7 +14,7 @@ public interface PlayerSaver {
 	 * Saves a player.
 	 * 
 	 * @param player The player to save.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	public void savePlayer(Player player) throws Exception;
 
