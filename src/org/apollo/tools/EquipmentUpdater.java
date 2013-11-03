@@ -42,7 +42,7 @@ public final class EquipmentUpdater {
 
 				os.writeShort(defs.length);
 				for (int id = 0; id < defs.length; id++) {
-					ItemDefinition def = ItemDefinition.forId(id);
+					ItemDefinition def = ItemDefinition.lookup(id);
 					int type = getWeaponType(def);
 					os.writeByte(type);
 					if (type != -1) {

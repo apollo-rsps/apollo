@@ -341,7 +341,7 @@ public final class Inventory implements Cloneable {
 	 * @return The amount that was removed.
 	 */
 	public int remove(int id, int amount) {
-		ItemDefinition def = ItemDefinition.forId(id);
+		ItemDefinition def = ItemDefinition.lookup(id);
 		boolean stackable = isStackable(def);
 		if (stackable) {
 			for (int slot = 0; slot < capacity; slot++) {

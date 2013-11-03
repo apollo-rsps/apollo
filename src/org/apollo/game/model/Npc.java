@@ -22,7 +22,7 @@ public class Npc extends Character {
 	 * @param position The position.
 	 */
 	public Npc(int id, Position position) {
-		this(NpcDefinition.forId(id), position);
+		this(NpcDefinition.lookup(id), position);
 	}
 
 	/**

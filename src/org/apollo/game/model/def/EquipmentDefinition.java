@@ -35,15 +35,6 @@ public final class EquipmentDefinition {
 		}
 	}
 
-	public int count() {
-		return definitions.size();
-	}
-
-	/**
-	 * The array of skill requirement levels.
-	 */
-	private int[] levels = { 1, 1, 1, 1, 1, 1, 1 };
-
 	/**
 	 * Gets an equipment definition by its id.
 	 * 
@@ -51,7 +42,7 @@ public final class EquipmentDefinition {
 	 * @return {@code null} if the item is not equipment, the definition otherwise.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
-	public static EquipmentDefinition forId(int id) {
+	public static EquipmentDefinition lookup(int id) {
 		if (id < 0 || id >= ItemDefinition.count()) {
 			throw new IndexOutOfBoundsException(EquipmentDefinition.class.getName() + " lookup index " + id
 					+ " out of bounds.");
@@ -63,6 +54,11 @@ public final class EquipmentDefinition {
 	 * The item id.
 	 */
 	private final int id;
+
+	/**
+	 * The array of skill requirement levels.
+	 */
+	private int[] levels = { 1, 1, 1, 1, 1, 1, 1 };
 
 	/**
 	 * The slot this equipment goes into.
@@ -83,22 +79,35 @@ public final class EquipmentDefinition {
 		this.id = id;
 	}
 
+	public int count() {
+		return definitions.size();
+	}
+
 	/**
-	 * Gets the minimum attack level.
+	 * Gets the minimum attack level required to equip this item.
 	 * 
-	 * @return The minimum attack level.
+	 * @return The level.
 	 */
 	public int getAttackLevel() {
 		return levels[Skill.ATTACK];
 	}
 
 	/**
-	 * Gets the minimum defence level.
+	 * Gets the minimum defence level required to equip this item.
 	 * 
-	 * @return The minimum defence level.
+	 * @return The level.
 	 */
 	public int getDefenceLevel() {
 		return levels[Skill.DEFENCE];
+	}
+
+	/**
+	 * Gets the minimum hitpoints level required to equip this item.
+	 * 
+	 * @return The level.
+	 */
+	public int getHitpointsLevel() {
+		return levels[Skill.HITPOINTS];
 	}
 
 	/**
@@ -111,30 +120,40 @@ public final class EquipmentDefinition {
 	}
 
 	/**
-	 * Gets the level for a specific skill by its id.
+	 * Gets the minimum level required to equip this item for a specific skill.
 	 * 
 	 * @param skill The skill id.
+	 * @return The level.
 	 */
 	public int getLevel(int skill) {
 		if (skill < Skill.ATTACK || skill > Skill.MAGIC) {
-			throw new IllegalArgumentException("Skill id out of bounds for an equipment definition.");
+			throw new IllegalArgumentException("Skill id out of bounds.");
 		}
 		return levels[skill];
 	}
 
 	/**
-	 * Gets the minimum magic level.
+	 * Gets the minimum magic level required to equip this item.
 	 * 
-	 * @return The minimum magic level.
+	 * @return The level.
 	 */
 	public int getMagicLevel() {
 		return levels[Skill.MAGIC];
 	}
 
 	/**
-	 * Gets the minimum ranged level.
+	 * Gets the minimum prayer level required to equip this item.
 	 * 
-	 * @return The minimum ranged level.
+	 * @return The level.
+	 */
+	public int getPrayerLevel() {
+		return levels[Skill.PRAYER];
+	}
+
+	/**
+	 * Gets the minimum ranged level required to equip this item.
+	 * 
+	 * @return The level.
 	 */
 	public int getRangedLevel() {
 		return levels[Skill.RANGED];
@@ -150,9 +169,9 @@ public final class EquipmentDefinition {
 	}
 
 	/**
-	 * Gets the minimum strength level.
+	 * Gets the minimum strength level required to equip this item.
 	 * 
-	 * @return The minimum strength level.
+	 * @return The level.
 	 */
 	public int getStrengthLevel() {
 		return levels[Skill.STRENGTH];
@@ -219,10 +238,27 @@ public final class EquipmentDefinition {
 	 * @param magic The required magic level.
 	 */
 	public void setLevels(int attack, int strength, int defence, int ranged, int magic) {
+		setLevels(attack, strength, defence, 1, ranged, 1, magic);
+	}
+
+	/**
+	 * Sets the required levels.
+	 * 
+	 * @param attack The required attack level.
+	 * @param strength The required strength level.
+	 * @param defence The required defence level.
+	 * @param hitpoints The required hitpoints level.
+	 * @param ranged The required ranged level.
+	 * @param prayer The required prayer level.
+	 * @param magic The required magic level.
+	 */
+	public void setLevels(int attack, int strength, int defence, int hitpoints, int ranged, int prayer, int magic) {
 		levels[Skill.ATTACK] = attack;
 		levels[Skill.STRENGTH] = strength;
 		levels[Skill.DEFENCE] = defence;
+		levels[Skill.HITPOINTS] = hitpoints;
 		levels[Skill.RANGED] = ranged;
+		levels[Skill.PRAYER] = prayer;
 		levels[Skill.MAGIC] = magic;
 	}
 

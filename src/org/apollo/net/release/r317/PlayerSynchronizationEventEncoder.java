@@ -153,7 +153,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			}
 
 			if (chest != null) {
-				EquipmentDefinition def = EquipmentDefinition.forId(chest.getId());
+				EquipmentDefinition def = EquipmentDefinition.lookup(chest.getId());
 				if (def != null && !def.isFullBody()) {
 					playerProperties.put(DataType.SHORT, 0x100 + style[3]);
 				} else {
@@ -170,7 +170,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			}
 
 			if ((helm = equipment.get(EquipmentConstants.HAT)) != null) {
-				EquipmentDefinition def = EquipmentDefinition.forId(helm.getId());
+				EquipmentDefinition def = EquipmentDefinition.lookup(helm.getId());
 				if (def != null && !def.isFullHat() && !def.isFullMask()) {
 					playerProperties.put(DataType.SHORT, 0x100 + style[0]);
 				} else {
@@ -194,7 +194,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 			EquipmentDefinition def = null;
 			if (helm != null) {
-				def = EquipmentDefinition.forId(helm.getId());
+				def = EquipmentDefinition.lookup(helm.getId());
 			}
 			if (def != null && (def.isFullHat() || def.isFullMask()) || appearance.getGender() == Gender.FEMALE) {
 				playerProperties.put(DataType.BYTE, 0);

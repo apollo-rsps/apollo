@@ -67,7 +67,7 @@ public final class Item {
 	 * @return The definition.
 	 */
 	public ItemDefinition getDefinition() {
-		return ItemDefinition.forId(id);
+		return ItemDefinition.lookup(id);
 	}
 
 	@Override

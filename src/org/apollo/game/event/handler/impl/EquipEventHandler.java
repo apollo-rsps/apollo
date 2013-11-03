@@ -25,7 +25,7 @@ public final class EquipEventHandler extends EventHandler<EquipEvent> {
 			int inventorySlot = event.getSlot();
 			Item equipping = player.getInventory().get(inventorySlot);
 			int equippingId = equipping.getId();
-			EquipmentDefinition equippingDef = EquipmentDefinition.forId(equippingId);
+			EquipmentDefinition equippingDef = EquipmentDefinition.lookup(equippingId);
 
 			if (equippingDef == null) {
 				ctx.breakHandlerChain();
@@ -84,7 +84,7 @@ public final class EquipEventHandler extends EventHandler<EquipEvent> {
 				}
 				return;
 			} else if (equippingDef.getSlot() == EquipmentConstants.SHIELD && weapon != null
-					&& EquipmentDefinition.forId(weapon.getId()).isTwoHanded()) {
+					&& EquipmentDefinition.lookup(weapon.getId()).isTwoHanded()) {
 				equipment.set(EquipmentConstants.SHIELD, inventory.reset(inventorySlot));
 				inventory.add(equipment.reset(EquipmentConstants.WEAPON));
 				return;
