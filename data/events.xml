@@ -72,4 +72,11 @@
       <handler>org.apollo.game.event.handler.impl.EnteredAmountEventHandler</handler>
     </chain>
   </event>
+  <event>
+    <type>org.apollo.game.event.impl.ItemOnItemEvent</type>
+    <chain>
+      <handler>org.apollo.game.event.handler.impl.ItemVerificationHandler</handler>
+      <handler>org.apollo.game.event.handler.impl.ItemOnItemVerificationHandler</handler>
+    </chain>
+  </event>
 </events>

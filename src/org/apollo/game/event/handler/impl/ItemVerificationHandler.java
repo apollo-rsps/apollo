@@ -19,12 +19,11 @@ public final class ItemVerificationHandler extends EventHandler<InventoryItemEve
 	/**
 	 * Gets the inventory based on the interface id.
 	 * 
-	 * @param player The player.
 	 * @param interfaceId The interface id.
 	 * @return The proper inventory.
-	 * @throws IllegalArgumentException If the interface id is illegal.
+	 * @throws IllegalArgumentException If the interface id is not legal.
 	 */
-	private static Inventory interfaceToInventory(Player player, int interfaceId) {
+	public static Inventory interfaceToInventory(Player player, int interfaceId) {
 		switch (interfaceId) {
 
 		case SynchronizationInventoryListener.INVENTORY_ID:
@@ -38,7 +37,7 @@ public final class ItemVerificationHandler extends EventHandler<InventoryItemEve
 			return player.getBank();
 
 		default:
-			throw new IllegalArgumentException("Unknown interface id: " + interfaceId);
+			throw new IllegalArgumentException("unknown interface id: " + interfaceId);
 		}
 	}
 
