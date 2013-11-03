@@ -150,7 +150,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			}
 
 			int securePayloadLength = payload.readUnsignedByte();
-			if (securePayloadLength != (loginLength - 41)) {
+			if (securePayloadLength != loginLength - 41) {
 				throw new Exception("Secure payload length mismatch");
 			}
 

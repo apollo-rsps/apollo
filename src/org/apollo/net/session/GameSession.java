@@ -9,8 +9,8 @@ import org.apollo.ServerContext;
 import org.apollo.game.GameConstants;
 import org.apollo.game.GameService;
 import org.apollo.game.event.Event;
-import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
 import org.apollo.game.event.handler.chain.EventHandlerChain;
+import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
 import org.apollo.game.event.impl.LogoutEvent;
 import org.apollo.game.model.Player;
 import org.jboss.netty.channel.Channel;
@@ -58,13 +58,8 @@ public final class GameSession extends Session {
 	}
 
 	@Override
-	public void messageReceived(Object message) throws Exception {
-		Event event = (Event) message;
-		if (eventQueue.size() >= GameConstants.EVENTS_PER_PULSE) {
-			logger.warning("Too many events in queue for game session, dropping...");
-		} else {
-			eventQueue.add(event);
-		}
+	public void destroy() throws Exception {
+		context.getService(GameService.class).unregisterPlayer(player);
 	}
 
 	/**
@@ -127,8 +122,13 @@ public final class GameSession extends Session {
 	}
 
 	@Override
-	public void destroy() throws Exception {
-		context.getService(GameService.class).unregisterPlayer(player);
+	public void messageReceived(Object message) throws Exception {
+		Event event = (Event) message;
+		if (eventQueue.size() >= GameConstants.EVENTS_PER_PULSE) {
+			logger.warning("Too many events in queue for game session, dropping...");
+		} else {
+			eventQueue.add(event);
+		}
 	}
 
 }

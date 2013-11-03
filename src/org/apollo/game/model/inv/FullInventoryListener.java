@@ -45,7 +45,7 @@ public final class FullInventoryListener extends InventoryAdapter {
 	 */
 	public FullInventoryListener(Player player, String message) {
 		this.player = player;
-		this.event = new ServerMessageEvent(message);
+		event = new ServerMessageEvent(message);
 	}
 
 	@Override

@@ -26,8 +26,7 @@ public final class UpdateItemsEventEncoder extends EventEncoder<UpdateItemsEvent
 		builder.put(DataType.SHORT, event.getInterfaceId());
 		builder.put(DataType.SHORT, items.length);
 
-		for (int i = 0; i < items.length; i++) {
-			Item item = items[i];
+		for (Item item : items) {
 			int id = item == null ? -1 : item.getId();
 			int amount = item == null ? 0 : item.getAmount();
 

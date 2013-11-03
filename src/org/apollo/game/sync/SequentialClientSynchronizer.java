@@ -2,8 +2,8 @@ package org.apollo.game.sync;
 
 import org.apollo.game.GameService;
 import org.apollo.game.model.Npc;
-import org.apollo.game.model.World;
 import org.apollo.game.model.Player;
+import org.apollo.game.model.World;
 import org.apollo.game.sync.task.NpcSynchronizationTask;
 import org.apollo.game.sync.task.PlayerSynchronizationTask;
 import org.apollo.game.sync.task.PostNpcSynchronizationTask;

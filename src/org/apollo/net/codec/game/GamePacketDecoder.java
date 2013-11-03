@@ -71,6 +71,27 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	/**
+	 * Decodes in the length state.
+	 * 
+	 * @param ctx The channel handler context.
+	 * @param channel The channel.
+	 * @param buffer The buffer.
+	 * @return The frame, or {@code null}.
+	 * @throws Exception If an error occurs.
+	 */
+	private Object decodeLength(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+		if (buffer.readable()) {
+			length = buffer.readUnsignedByte();
+			if (length == 0) {
+				return decodeZeroLengthPacket(ctx, channel, buffer);
+			} else {
+				setState(GameDecoderState.GAME_PAYLOAD);
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Decodes in the opcode state.
 	 * 
 	 * @param ctx The channel handler context.
@@ -82,7 +103,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	private Object decodeOpcode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readable()) {
 			int encryptedOpcode = buffer.readUnsignedByte();
-			opcode = (encryptedOpcode - random.nextInt()) & 0xFF;
+			opcode = encryptedOpcode - random.nextInt() & 0xFF;
 
 			PacketMetaData metaData = release.getIncomingPacketMetaData(opcode);
 			if (metaData == null) {
@@ -104,27 +125,6 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 				break;
 			default:
 				throw new Exception("Illegal packet type: " + type);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Decodes in the length state.
-	 * 
-	 * @param ctx The channel handler context.
-	 * @param channel The channel.
-	 * @param buffer The buffer.
-	 * @return The frame, or {@code null}.
-	 * @throws Exception If an error occurs.
-	 */
-	private Object decodeLength(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
-		if (buffer.readable()) {
-			length = buffer.readUnsignedByte();
-			if (length == 0) {
-				return decodeZeroLengthPacket(ctx, channel, buffer);
-			} else {
-				setState(GameDecoderState.GAME_PAYLOAD);
 			}
 		}
 		return null;

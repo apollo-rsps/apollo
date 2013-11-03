@@ -40,17 +40,8 @@ public final class GamePacket {
 	public GamePacket(int opcode, PacketType type, ChannelBuffer payload) {
 		this.opcode = opcode;
 		this.type = type;
-		this.length = payload.readableBytes();
+		length = payload.readableBytes();
 		this.payload = payload;
-	}
-
-	/**
-	 * Gets the opcode.
-	 * 
-	 * @return The opcode.
-	 */
-	public int getOpcode() {
-		return opcode;
 	}
 
 	/**
@@ -60,6 +51,15 @@ public final class GamePacket {
 	 */
 	public int getLength() {
 		return length;
+	}
+
+	/**
+	 * Gets the opcode.
+	 * 
+	 * @return The opcode.
+	 */
+	public int getOpcode() {
+		return opcode;
 	}
 
 	/**

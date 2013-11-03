@@ -37,46 +37,16 @@ public final class UpdateDispatcher {
 	private final BlockingQueue<ChannelRequest<HttpRequest>> httpQueue = new LinkedBlockingQueue<ChannelRequest<HttpRequest>>();
 
 	/**
-	 * Gets the next 'on-demand' request from the queue, blocking if none are available.
-	 * 
-	 * @return The 'on-demand' request.
-	 * @throws InterruptedException If the thread is interrupted.
-	 */
-	ChannelRequest<OnDemandRequest> nextOnDemandRequest() throws InterruptedException {
-		return onDemandQueue.take();
-	}
-
-	/**
-	 * Gets the next JAGGRAB request from the queue, blocking if none are available.
-	 * 
-	 * @return The JAGGRAB request.
-	 * @throws InterruptedException If the thread is interrupted.
-	 */
-	ChannelRequest<JagGrabRequest> nextJagGrabRequest() throws InterruptedException {
-		return jagGrabQueue.take();
-	}
-
-	/**
-	 * Gets the next HTTP request from the queue, blocking if none are available.
-	 * 
-	 * @return The HTTP request.
-	 * @throws InterruptedException If the thread is interrupted.
-	 */
-	ChannelRequest<HttpRequest> nextHttpRequest() throws InterruptedException {
-		return httpQueue.take();
-	}
-
-	/**
-	 * Dispatches an 'on-demand' request.
+	 * Dispatches a HTTP request.
 	 * 
 	 * @param channel The channel.
 	 * @param request The request.
 	 */
-	public void dispatch(Channel channel, OnDemandRequest request) {
-		if (onDemandQueue.size() >= MAXIMUM_QUEUE_SIZE) {
+	public void dispatch(Channel channel, HttpRequest request) {
+		if (httpQueue.size() >= MAXIMUM_QUEUE_SIZE) {
 			channel.close();
 		}
-		onDemandQueue.add(new ChannelRequest<OnDemandRequest>(channel, request));
+		httpQueue.add(new ChannelRequest<HttpRequest>(channel, request));
 	}
 
 	/**
@@ -93,16 +63,46 @@ public final class UpdateDispatcher {
 	}
 
 	/**
-	 * Dispatches a HTTP request.
+	 * Dispatches an 'on-demand' request.
 	 * 
 	 * @param channel The channel.
 	 * @param request The request.
 	 */
-	public void dispatch(Channel channel, HttpRequest request) {
-		if (httpQueue.size() >= MAXIMUM_QUEUE_SIZE) {
+	public void dispatch(Channel channel, OnDemandRequest request) {
+		if (onDemandQueue.size() >= MAXIMUM_QUEUE_SIZE) {
 			channel.close();
 		}
-		httpQueue.add(new ChannelRequest<HttpRequest>(channel, request));
+		onDemandQueue.add(new ChannelRequest<OnDemandRequest>(channel, request));
+	}
+
+	/**
+	 * Gets the next HTTP request from the queue, blocking if none are available.
+	 * 
+	 * @return The HTTP request.
+	 * @throws InterruptedException If the thread is interrupted.
+	 */
+	ChannelRequest<HttpRequest> nextHttpRequest() throws InterruptedException {
+		return httpQueue.take();
+	}
+
+	/**
+	 * Gets the next JAGGRAB request from the queue, blocking if none are available.
+	 * 
+	 * @return The JAGGRAB request.
+	 * @throws InterruptedException If the thread is interrupted.
+	 */
+	ChannelRequest<JagGrabRequest> nextJagGrabRequest() throws InterruptedException {
+		return jagGrabQueue.take();
+	}
+
+	/**
+	 * Gets the next 'on-demand' request from the queue, blocking if none are available.
+	 * 
+	 * @return The 'on-demand' request.
+	 * @throws InterruptedException If the thread is interrupted.
+	 */
+	ChannelRequest<OnDemandRequest> nextOnDemandRequest() throws InterruptedException {
+		return onDemandQueue.take();
 	}
 
 }

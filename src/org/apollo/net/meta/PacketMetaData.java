@@ -62,15 +62,6 @@ public final class PacketMetaData {
 	}
 
 	/**
-	 * Gets the type of packet.
-	 * 
-	 * @return The type of packet.
-	 */
-	public PacketType getType() {
-		return type;
-	}
-
-	/**
 	 * Gets the length of this packet.
 	 * 
 	 * @return The length of this packet.
@@ -81,6 +72,15 @@ public final class PacketMetaData {
 			throw new IllegalStateException();
 		}
 		return length;
+	}
+
+	/**
+	 * Gets the type of packet.
+	 * 
+	 * @return The type of packet.
+	 */
+	public PacketType getType() {
+		return type;
 	}
 
 }

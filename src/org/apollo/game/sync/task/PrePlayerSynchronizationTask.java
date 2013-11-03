@@ -25,6 +25,21 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		this.player = player;
 	}
 
+	/**
+	 * Checks if a region update is required.
+	 * 
+	 * @return {@code true} if so, {@code false} otherwise.
+	 */
+	private boolean isRegionUpdateRequired() {
+		Position current = player.getPosition();
+		Position last = player.getLastKnownRegion();
+
+		int deltaX = current.getLocalX(last);
+		int deltaY = current.getLocalY(last);
+
+		return deltaX < 16 || deltaX >= 88 || deltaY < 16 || deltaY >= 88;
+	}
+
 	@Override
 	public void run() {
 		player.getWalkingQueue().pulse();
@@ -45,21 +60,6 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 			player.send(new RegionChangeEvent(position));
 		}
-	}
-
-	/**
-	 * Checks if a region update is required.
-	 * 
-	 * @return {@code true} if so, {@code false} otherwise.
-	 */
-	private boolean isRegionUpdateRequired() {
-		Position current = player.getPosition();
-		Position last = player.getLastKnownRegion();
-
-		int deltaX = current.getLocalX(last);
-		int deltaY = current.getLocalY(last);
-
-		return deltaX < 16 || deltaX >= 88 || deltaY < 16 || deltaY >= 88;
 	}
 
 }

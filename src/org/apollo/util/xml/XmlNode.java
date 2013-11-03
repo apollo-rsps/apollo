@@ -47,84 +47,41 @@ public final class XmlNode implements Iterable<XmlNode> {
 	}
 
 	/**
-	 * Gets the name of this node.
+	 * Adds a child {@link XmlNode}.
 	 * 
-	 * @return The name of this node.
+	 * @param child The child to add.
 	 */
-	public String getName() {
-		return name;
+	public void addChild(XmlNode child) {
+		children.add(child);
 	}
 
 	/**
-	 * Sets the name of this node.
+	 * Checks if an attribute with the specified name exists.
 	 * 
-	 * @param name The name of this node.
+	 * @param name The attribute's name.
+	 * @return {@code true} if an attribute with that name exists, {@code false} otherwise.
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public boolean containsAttribute(String name) {
+		return attributes.containsKey(name);
 	}
 
 	/**
-	 * Gets the value of this node.
+	 * Gets an attribute by it's name.
 	 * 
-	 * @return The value of this node, or {@code null} if it has no value.
+	 * @param name The name of the attribute.
+	 * @return The attribute's value, or {@code null} if it doesn't exist.
 	 */
-	public String getValue() {
-		return value;
+	public String getAttribute(String name) {
+		return attributes.get(name);
 	}
 
 	/**
-	 * Sets the value of this node.
+	 * Gets the attribute count.
 	 * 
-	 * @param value The value of this node.
+	 * @return The number of attributes.
 	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	/**
-	 * Removes the value of this node.
-	 */
-	public void removeValue() {
-		this.value = null;
-	}
-
-	/**
-	 * Checks if this node has a value.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean hasValue() {
-		return value != null;
-	}
-
-	@Override
-	public Iterator<XmlNode> iterator() {
-		return children.iterator();
-	}
-
-	/**
-	 * Gets a {@link Collection} of child {@link XmlNode}s.
-	 * 
-	 * @return The collection.
-	 */
-	public Collection<XmlNode> getChildren() {
-		return Collections.unmodifiableCollection(children);
-	}
-
-	/**
-	 * Gets the first child with the specified name.
-	 * 
-	 * @param name The name of the child.
-	 * @return The {@link XmlNode} if a child was found with a matching name, {@code null} otherwise.
-	 */
-	public XmlNode getChild(String name) {
-		for (XmlNode child : children) {
-			if (child.getName().equals(name)) {
-				return child;
-			}
-		}
-		return null;
+	public int getAttributeCount() {
+		return attributes.size();
 	}
 
 	/**
@@ -146,23 +103,107 @@ public final class XmlNode implements Iterable<XmlNode> {
 	}
 
 	/**
-	 * Gets an attribute by it's name.
+	 * Gets the first child with the specified name.
 	 * 
-	 * @param name The name of the attribute.
-	 * @return The attribute's value, or {@code null} if it doesn't exist.
+	 * @param name The name of the child.
+	 * @return The {@link XmlNode} if a child was found with a matching name, {@code null} otherwise.
 	 */
-	public String getAttribute(String name) {
-		return attributes.get(name);
+	public XmlNode getChild(String name) {
+		for (XmlNode child : children) {
+			if (child.getName().equals(name)) {
+				return child;
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * Checks if an attribute with the specified name exists.
+	 * Gets the child count.
 	 * 
-	 * @param name The attribute's name.
-	 * @return {@code true} if an attribute with that name exists, {@code false} otherwise.
+	 * @return The number of child {@link XmlNode}s.
 	 */
-	public boolean containsAttribute(String name) {
-		return attributes.containsKey(name);
+	public int getChildCount() {
+		return children.size();
+	}
+
+	/**
+	 * Gets a {@link Collection} of child {@link XmlNode}s.
+	 * 
+	 * @return The collection.
+	 */
+	public Collection<XmlNode> getChildren() {
+		return Collections.unmodifiableCollection(children);
+	}
+
+	/**
+	 * Gets the name of this node.
+	 * 
+	 * @return The name of this node.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Gets the value of this node.
+	 * 
+	 * @return The value of this node, or {@code null} if it has no value.
+	 */
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * Checks if this node has a value.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean hasValue() {
+		return value != null;
+	}
+
+	@Override
+	public Iterator<XmlNode> iterator() {
+		return children.iterator();
+	}
+
+	/**
+	 * Removes all attributes.
+	 */
+	public void removeAllAttributes() {
+		attributes.clear();
+	}
+
+	/**
+	 * Removes all children.
+	 */
+	public void removeAllChildren() {
+		children.clear();
+	}
+
+	/**
+	 * Removes an attribute.
+	 * 
+	 * @param name The name of the attribute.
+	 */
+	public void removeAttribute(String name) {
+		attributes.remove(name);
+	}
+
+	/**
+	 * Removes a child {@link XmlNode}.
+	 * 
+	 * @param child The child to remove.
+	 */
+	public void removeChild(XmlNode child) {
+		children.remove(child);
+	}
+
+	/**
+	 * Removes the value of this node.
+	 */
+	public void removeValue() {
+		value = null;
 	}
 
 	/**
@@ -176,62 +217,21 @@ public final class XmlNode implements Iterable<XmlNode> {
 	}
 
 	/**
-	 * Removes an attribute.
+	 * Sets the name of this node.
 	 * 
-	 * @param name The name of the attribute.
+	 * @param name The name of this node.
 	 */
-	public void removeAttribute(String name) {
-		attributes.remove(name);
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
-	 * Removes all attributes.
-	 */
-	public void removeAllAttributes() {
-		attributes.clear();
-	}
-
-	/**
-	 * Adds a child {@link XmlNode}.
+	 * Sets the value of this node.
 	 * 
-	 * @param child The child to add.
+	 * @param value The value of this node.
 	 */
-	public void addChild(XmlNode child) {
-		children.add(child);
-	}
-
-	/**
-	 * Removes a child {@link XmlNode}.
-	 * 
-	 * @param child The child to remove.
-	 */
-	public void removeChild(XmlNode child) {
-		children.remove(child);
-	}
-
-	/**
-	 * Removes all children.
-	 */
-	public void removeAllChildren() {
-		children.clear();
-	}
-
-	/**
-	 * Gets the child count.
-	 * 
-	 * @return The number of child {@link XmlNode}s.
-	 */
-	public int getChildCount() {
-		return children.size();
-	}
-
-	/**
-	 * Gets the attribute count.
-	 * 
-	 * @return The number of attributes.
-	 */
-	public int getAttributeCount() {
-		return attributes.size();
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 }

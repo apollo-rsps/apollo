@@ -29,21 +29,21 @@ public final class FileDescriptor {
 	}
 
 	/**
-	 * Gets the file type.
-	 * 
-	 * @return The file type.
-	 */
-	public int getType() {
-		return type;
-	}
-
-	/**
 	 * Gets the file id.
 	 * 
 	 * @return The file id.
 	 */
 	public int getFile() {
 		return file;
+	}
+
+	/**
+	 * Gets the file type.
+	 * 
+	 * @return The file type.
+	 */
+	public int getType() {
+		return type;
 	}
 
 }

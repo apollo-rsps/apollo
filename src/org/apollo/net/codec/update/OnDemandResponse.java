@@ -46,6 +46,24 @@ public final class OnDemandResponse {
 	}
 
 	/**
+	 * Gets the chunk data.
+	 * 
+	 * @return The chunk data.
+	 */
+	public ChannelBuffer getChunkData() {
+		return chunkData;
+	}
+
+	/**
+	 * Gets the chunk id.
+	 * 
+	 * @return The chunk id.
+	 */
+	public int getChunkId() {
+		return chunkId;
+	}
+
+	/**
 	 * Gets the file descriptor.
 	 * 
 	 * @return The file descriptor.
@@ -61,24 +79,6 @@ public final class OnDemandResponse {
 	 */
 	public int getFileSize() {
 		return fileSize;
-	}
-
-	/**
-	 * Gets the chunk id.
-	 * 
-	 * @return The chunk id.
-	 */
-	public int getChunkId() {
-		return chunkId;
-	}
-
-	/**
-	 * Gets the chunk data.
-	 * 
-	 * @return The chunk data.
-	 */
-	public ChannelBuffer getChunkData() {
-		return chunkData;
 	}
 
 }

@@ -53,6 +53,59 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 				WWW_DIRECTORY)));
 	}
 
+	/**
+	 * Creates an error page.
+	 * 
+	 * @param status The HTTP status.
+	 * @param description The error description.
+	 * @return The error page as a buffer.
+	 */
+	private ChannelBuffer createErrorPage(HttpResponseStatus status, String description) {
+		String title = status.getCode() + " " + status.getReasonPhrase();
+
+		StringBuilder bldr = new StringBuilder();
+
+		bldr.append("<!DOCTYPE html><html><head><title>");
+		bldr.append(title);
+		bldr.append("</title></head><body><h1>");
+		bldr.append(title);
+		bldr.append("</h1><p>");
+		bldr.append(description);
+		bldr.append("</p><hr /><address>");
+		bldr.append(SERVER_IDENTIFIER);
+		bldr.append(" Server</address></body></html>");
+
+		return ChannelBuffers.copiedBuffer(bldr.toString(), Charset.defaultCharset());
+	}
+
+	/**
+	 * Gets the MIME type of a file by its name.
+	 * 
+	 * @param name The file name.
+	 * @return The MIME type.
+	 */
+	private String getMimeType(String name) {
+		if (name.endsWith("/")) {
+			name = name.concat("index.html");
+		}
+		if (name.endsWith(".htm") || name.endsWith(".html")) {
+			return "text/html";
+		} else if (name.endsWith(".css")) {
+			return "text/css";
+		} else if (name.endsWith(".js")) {
+			return "text/javascript";
+		} else if (name.endsWith(".jpg") || name.endsWith(".jpeg")) {
+			return "image/jpeg";
+		} else if (name.endsWith(".gif")) {
+			return "image/gif";
+		} else if (name.endsWith(".png")) {
+			return "image/png";
+		} else if (name.endsWith(".txt")) {
+			return "text/plain";
+		}
+		return "application/octect-stream";
+	}
+
 	@Override
 	protected ChannelRequest<HttpRequest> nextRequest(UpdateDispatcher dispatcher) throws InterruptedException {
 		return dispatcher.nextHttpRequest();
@@ -90,59 +143,6 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 		resp.setContent(wrappedBuf);
 
 		channel.write(resp).addListener(ChannelFutureListener.CLOSE);
-	}
-
-	/**
-	 * Gets the MIME type of a file by its name.
-	 * 
-	 * @param name The file name.
-	 * @return The MIME type.
-	 */
-	private String getMimeType(String name) {
-		if (name.endsWith("/")) {
-			name = name.concat("index.html");
-		}
-		if (name.endsWith(".htm") || name.endsWith(".html")) {
-			return "text/html";
-		} else if (name.endsWith(".css")) {
-			return "text/css";
-		} else if (name.endsWith(".js")) {
-			return "text/javascript";
-		} else if (name.endsWith(".jpg") || name.endsWith(".jpeg")) {
-			return "image/jpeg";
-		} else if (name.endsWith(".gif")) {
-			return "image/gif";
-		} else if (name.endsWith(".png")) {
-			return "image/png";
-		} else if (name.endsWith(".txt")) {
-			return "text/plain";
-		}
-		return "application/octect-stream";
-	}
-
-	/**
-	 * Creates an error page.
-	 * 
-	 * @param status The HTTP status.
-	 * @param description The error description.
-	 * @return The error page as a buffer.
-	 */
-	private ChannelBuffer createErrorPage(HttpResponseStatus status, String description) {
-		String title = status.getCode() + " " + status.getReasonPhrase();
-
-		StringBuilder bldr = new StringBuilder();
-
-		bldr.append("<!DOCTYPE html><html><head><title>");
-		bldr.append(title);
-		bldr.append("</title></head><body><h1>");
-		bldr.append(title);
-		bldr.append("</h1><p>");
-		bldr.append(description);
-		bldr.append("</p><hr /><address>");
-		bldr.append(SERVER_IDENTIFIER);
-		bldr.append(" Server</address></body></html>");
-
-		return ChannelBuffers.copiedBuffer(bldr.toString(), Charset.defaultCharset());
 	}
 
 }

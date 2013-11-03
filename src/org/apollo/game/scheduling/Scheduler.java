@@ -24,15 +24,6 @@ public final class Scheduler {
 	private List<ScheduledTask> tasks = new ArrayList<ScheduledTask>();
 
 	/**
-	 * Schedules a new task.
-	 * 
-	 * @param task The task to schedule.
-	 */
-	public void schedule(ScheduledTask task) {
-		newTasks.add(task);
-	}
-
-	/**
 	 * Called every pulse: executes tasks that are still pending, adds new tasks and stops old tasks.
 	 */
 	public void pulse() {
@@ -48,6 +39,15 @@ public final class Scheduler {
 				it.remove();
 			}
 		}
+	}
+
+	/**
+	 * Schedules a new task.
+	 * 
+	 * @param task The task to schedule.
+	 */
+	public void schedule(ScheduledTask task) {
+		newTasks.add(task);
 	}
 
 }

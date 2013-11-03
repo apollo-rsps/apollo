@@ -65,6 +65,33 @@ public final class PluginMetaData {
 	}
 
 	/**
+	 * Gets the plugin's authors.
+	 * 
+	 * @return The plugin's authors.
+	 */
+	public String[] getAuthors() {
+		return authors;
+	}
+
+	/**
+	 * Gets the plugin's dependencies.
+	 * 
+	 * @return The plugin's dependencies.
+	 */
+	public String[] getDependencies() {
+		return dependencies;
+	}
+
+	/**
+	 * Gets the plugin's description.
+	 * 
+	 * @return The plugin's description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
 	 * Gets the plugin's id.
 	 * 
 	 * @return The plugin's id.
@@ -83,39 +110,12 @@ public final class PluginMetaData {
 	}
 
 	/**
-	 * Gets the plugin's description.
-	 * 
-	 * @return The plugin's description.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Gets the plugin's authors.
-	 * 
-	 * @return The plugin's authors.
-	 */
-	public String[] getAuthors() {
-		return authors;
-	}
-
-	/**
 	 * Gets the plugin's scripts.
 	 * 
 	 * @return The plugin's scripts.
 	 */
 	public String[] getScripts() {
 		return scripts;
-	}
-
-	/**
-	 * Gets the plugin's dependencies.
-	 * 
-	 * @return The plugin's dependencies.
-	 */
-	public String[] getDependencies() {
-		return dependencies;
 	}
 
 	/**

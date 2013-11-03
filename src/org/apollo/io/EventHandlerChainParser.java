@@ -9,8 +9,8 @@ import java.util.Map;
 
 import org.apollo.game.event.Event;
 import org.apollo.game.event.handler.EventHandler;
-import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
 import org.apollo.game.event.handler.chain.EventHandlerChain;
+import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
@@ -39,7 +39,7 @@ public final class EventHandlerChainParser {
 	 * @throws SAXException If a SAX error occurs.
 	 */
 	public EventHandlerChainParser(InputStream is) throws SAXException {
-		this.parser = new XmlParser();
+		parser = new XmlParser();
 		this.is = is;
 	}
 

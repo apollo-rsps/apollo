@@ -46,24 +46,6 @@ public final class PluginManager {
 	}
 
 	/**
-	 * Populates the list with the authors of the Apollo core.
-	 */
-	private void initAuthors() {
-		// Please don't remove or add names here, unless that person worked on
-		// the Apollo core! See the notice in CreditsCommandListener for more
-		// information about why we think you shouldn't (tl;dr we put loads of
-		// effort into it for free, keeping the credits intact is the least you
-		// can do in return).
-		//
-		// If you want to add your own name, make a plugin and add your name
-		// to the plugin.xml file.
-		//
-		// Thank you!
-		authors.add("Graham");
-		authors.add("Blake");
-	}
-
-	/**
 	 * Creates an iterator for the set of authors.
 	 * 
 	 * @return The iterator.
@@ -73,22 +55,17 @@ public final class PluginManager {
 	}
 
 	/**
-	 * Starts the plugin system by finding and loading all the plugins.
+	 * Creates a plugin map from a collection.
 	 * 
-	 * @throws SAXException If a SAX error occurs.
-	 * @throws IOException If an I/O error occurs.
-	 * @throws DependencyException If a dependency could not be resolved.
+	 * @param plugins The plugin collection.
+	 * @return The plugin map.
 	 */
-	public void start() throws IOException, SAXException, DependencyException {
-		Map<String, PluginMetaData> plugins = createMap(findPlugins());
-		Set<PluginMetaData> started = new HashSet<PluginMetaData>();
-
-		PluginEnvironment env = new RubyPluginEnvironment(); // TODO isolate plugins if possible in the future!
-		env.setContext(context);
-
-		for (PluginMetaData plugin : plugins.values()) {
-			start(env, plugin, plugins, started);
+	private Map<String, PluginMetaData> createMap(Collection<PluginMetaData> plugins) {
+		Map<String, PluginMetaData> map = new HashMap<String, PluginMetaData>();
+		for (PluginMetaData plugin : plugins) {
+			map.put(plugin.getId(), plugin);
 		}
+		return Collections.unmodifiableMap(map);
 	}
 
 	/**
@@ -120,6 +97,43 @@ public final class PluginManager {
 			}
 		}
 		return Collections.unmodifiableCollection(plugins);
+	}
+
+	/**
+	 * Populates the list with the authors of the Apollo core.
+	 */
+	private void initAuthors() {
+		// Please don't remove or add names here, unless that person worked on
+		// the Apollo core! See the notice in CreditsCommandListener for more
+		// information about why we think you shouldn't (tl;dr we put loads of
+		// effort into it for free, keeping the credits intact is the least you
+		// can do in return).
+		//
+		// If you want to add your own name, make a plugin and add your name
+		// to the plugin.xml file.
+		//
+		// Thank you!
+		authors.add("Graham");
+		authors.add("Blake");
+	}
+
+	/**
+	 * Starts the plugin system by finding and loading all the plugins.
+	 * 
+	 * @throws SAXException If a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws DependencyException If a dependency could not be resolved.
+	 */
+	public void start() throws IOException, SAXException, DependencyException {
+		Map<String, PluginMetaData> plugins = createMap(findPlugins());
+		Set<PluginMetaData> started = new HashSet<PluginMetaData>();
+
+		PluginEnvironment env = new RubyPluginEnvironment(); // TODO isolate plugins if possible in the future!
+		env.setContext(context);
+
+		for (PluginMetaData plugin : plugins.values()) {
+			start(env, plugin, plugins, started);
+		}
 	}
 
 	/**
@@ -156,20 +170,6 @@ public final class PluginManager {
 			InputStream is = new FileInputStream(f);
 			env.parse(is, f.getAbsolutePath());
 		}
-	}
-
-	/**
-	 * Creates a plugin map from a collection.
-	 * 
-	 * @param plugins The plugin collection.
-	 * @return The plugin map.
-	 */
-	private Map<String, PluginMetaData> createMap(Collection<PluginMetaData> plugins) {
-		Map<String, PluginMetaData> map = new HashMap<String, PluginMetaData>();
-		for (PluginMetaData plugin : plugins) {
-			map.put(plugin.getId(), plugin);
-		}
-		return Collections.unmodifiableMap(map);
 	}
 
 }

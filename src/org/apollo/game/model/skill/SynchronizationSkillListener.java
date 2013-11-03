@@ -33,15 +33,15 @@ public final class SynchronizationSkillListener extends SkillAdapter {
 	}
 
 	@Override
-	public void skillUpdated(SkillSet set, int id, Skill skill) {
-		player.send(new UpdateSkillEvent(id, skill));
-	}
-
-	@Override
 	public void skillsUpdated(SkillSet set) {
 		for (int id = 0; id < set.size(); id++) {
 			player.send(new UpdateSkillEvent(id, set.getSkill(id)));
 		}
+	}
+
+	@Override
+	public void skillUpdated(SkillSet set, int id, Skill skill) {
+		player.send(new UpdateSkillEvent(id, skill));
 	}
 
 }

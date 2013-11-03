@@ -35,195 +35,25 @@ public final class GamePacketReader {
 	}
 
 	/**
-	 * Gets the length of this reader.
+	 * Checks that this reader is in the bit access mode.
 	 * 
-	 * @return The length of this reader.
+	 * @throws IllegalStateException If the reader is not in bit access mode.
 	 */
-	public int getLength() {
-		checkByteAccess();
-		return buffer.writableBytes();
-	}
-
-	/**
-	 * Switches this builder's mode to the byte access mode.
-	 * 
-	 * @throws IllegalStateException If the builder is already in byte access mode.
-	 */
-	public void switchToByteAccess() {
-		if (mode == AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("Already in byte access mode");
-		}
-		mode = AccessMode.BYTE_ACCESS;
-		buffer.readerIndex((bitIndex + 7) / 8);
-	}
-
-	/**
-	 * Switches this builder's mode to the bit access mode.
-	 * 
-	 * @throws IllegalStateException If the builder is already in bit access mode.
-	 */
-	public void switchToBitAccess() {
-		if (mode == AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("Already in bit access mode");
-		}
-		mode = AccessMode.BIT_ACCESS;
-		bitIndex = buffer.readerIndex() * 8;
-	}
-
-	/**
-	 * Gets a string from the buffer.
-	 * 
-	 * @return The string.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 */
-	public String getString() {
-		checkByteAccess();
-		return ChannelBufferUtil.readString(buffer);
-	}
-
-	/**
-	 * Gets a signed smart from the buffer.
-	 * 
-	 * @return The smart.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 */
-	public int getSignedSmart() {
-		checkByteAccess();
-		int peek = buffer.getByte(buffer.readerIndex());
-		if (peek < 128) {
-			return buffer.readByte() - 64;
-		} else {
-			return buffer.readShort() - 49152;
+	private void checkBitAccess() {
+		if (mode != AccessMode.BIT_ACCESS) {
+			throw new IllegalStateException("For bit-based calls to work, the mode must be bit access");
 		}
 	}
 
 	/**
-	 * Gets an unsigned smart from the buffer.
+	 * Checks that this reader is in the byte access mode.
 	 * 
-	 * @return The smart.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalStateException If the reader is not in byte access mode.
 	 */
-	public int getUnsignedSmart() {
-		checkByteAccess();
-		int peek = buffer.getByte(buffer.readerIndex());
-		if (peek < 128) {
-			return buffer.readByte();
-		} else {
-			return buffer.readShort() - 32768;
+	private void checkByteAccess() {
+		if (mode != AccessMode.BYTE_ACCESS) {
+			throw new IllegalStateException("For byte-based calls to work, the mode must be byte access");
 		}
-	}
-
-	/**
-	 * Gets a signed data type from the buffer.
-	 * 
-	 * @param type The data type.
-	 * @return The value.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 */
-	public long getSigned(DataType type) {
-		return getSigned(type, DataOrder.BIG, DataTransformation.NONE);
-	}
-
-	/**
-	 * Gets a signed data type from the buffer with the specified order.
-	 * 
-	 * @param type The data type.
-	 * @param order The byte order.
-	 * @return The value.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 * @throws IllegalArgumentException If the combination is invalid.
-	 */
-	public long getSigned(DataType type, DataOrder order) {
-		return getSigned(type, order, DataTransformation.NONE);
-	}
-
-	/**
-	 * Gets a signed data type from the buffer with the specified transformation.
-	 * 
-	 * @param type The data type.
-	 * @param transformation The data transformation.
-	 * @return The value.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 * @throws IllegalArgumentException If the combination is invalid.
-	 */
-	public long getSigned(DataType type, DataTransformation transformation) {
-		return getSigned(type, DataOrder.BIG, transformation);
-	}
-
-	/**
-	 * Gets a signed data type from the buffer with the specified order and transformation.
-	 * 
-	 * @param type The data type.
-	 * @param order The byte order.
-	 * @param transformation The data transformation.
-	 * @return The value.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 * @throws IllegalArgumentException If the combination is invalid.
-	 */
-	public long getSigned(DataType type, DataOrder order, DataTransformation transformation) {
-		long longValue = get(type, order, transformation);
-		if (type != DataType.LONG) {
-			int max = (int) (Math.pow(2, type.getBytes() * 8 - 1) - 1);
-			if (longValue > max) {
-				longValue -= (max + 1) * 2;
-			}
-		}
-		return longValue;
-	}
-
-	/**
-	 * Gets an unsigned data type from the buffer.
-	 * 
-	 * @param type The data type.
-	 * @return The value.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 */
-	public long getUnsigned(DataType type) {
-		return getUnsigned(type, DataOrder.BIG, DataTransformation.NONE);
-	}
-
-	/**
-	 * Gets an unsigned data type from the buffer with the specified order.
-	 * 
-	 * @param type The data type.
-	 * @param order The byte order.
-	 * @return The value.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 * @throws IllegalArgumentException If the combination is invalid.
-	 */
-	public long getUnsigned(DataType type, DataOrder order) {
-		return getUnsigned(type, order, DataTransformation.NONE);
-	}
-
-	/**
-	 * Gets an unsigned data type from the buffer with the specified transformation.
-	 * 
-	 * @param type The data type.
-	 * @param transformation The data transformation.
-	 * @return The value.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 * @throws IllegalArgumentException If the combination is invalid.
-	 */
-	public long getUnsigned(DataType type, DataTransformation transformation) {
-		return getUnsigned(type, DataOrder.BIG, transformation);
-	}
-
-	/**
-	 * Gets an unsigned data type from the buffer with the specified order and transformation.
-	 * 
-	 * @param type The data type.
-	 * @param order The byte order.
-	 * @param transformation The data transformation.
-	 * @return The value.
-	 * @throws IllegalStateException If this reader is not in byte access mode.
-	 * @throws IllegalArgumentException If the combination is invalid.
-	 */
-	public long getUnsigned(DataType type, DataOrder order, DataTransformation transformation) {
-		long longValue = get(type, order, transformation);
-		if (type == DataType.LONG) {
-			throw new IllegalArgumentException("due to java restrictions, longs must be read as signed types");
-		}
-		return longValue & 0xFFFFFFFFFFFFFFFFL;
 	}
 
 	/**
@@ -244,32 +74,32 @@ public final class GamePacketReader {
 			for (int i = length - 1; i >= 0; i--) {
 				if (i == 0 && transformation != DataTransformation.NONE) {
 					if (transformation == DataTransformation.ADD) {
-						longValue |= (buffer.readByte() - 128) & 0xFF;
+						longValue |= buffer.readByte() - 128 & 0xFF;
 					} else if (transformation == DataTransformation.NEGATE) {
-						longValue |= (-buffer.readByte()) & 0xFF;
+						longValue |= -buffer.readByte() & 0xFF;
 					} else if (transformation == DataTransformation.SUBTRACT) {
-						longValue |= (128 - buffer.readByte()) & 0xFF;
+						longValue |= 128 - buffer.readByte() & 0xFF;
 					} else {
 						throw new IllegalArgumentException("unknown transformation");
 					}
 				} else {
-					longValue |= ((buffer.readByte() & 0xFF) << (i * 8));
+					longValue |= (buffer.readByte() & 0xFF) << i * 8;
 				}
 			}
 		} else if (order == DataOrder.LITTLE) {
 			for (int i = 0; i < length; i++) {
 				if (i == 0 && transformation != DataTransformation.NONE) {
 					if (transformation == DataTransformation.ADD) {
-						longValue |= (buffer.readByte() - 128) & 0xFF;
+						longValue |= buffer.readByte() - 128 & 0xFF;
 					} else if (transformation == DataTransformation.NEGATE) {
-						longValue |= (-buffer.readByte()) & 0xFF;
+						longValue |= -buffer.readByte() & 0xFF;
 					} else if (transformation == DataTransformation.SUBTRACT) {
-						longValue |= (128 - buffer.readByte()) & 0xFF;
+						longValue |= 128 - buffer.readByte() & 0xFF;
 					} else {
 						throw new IllegalArgumentException("unknown transformation");
 					}
 				} else {
-					longValue |= ((buffer.readByte() & 0xFF) << (i * 8));
+					longValue |= (buffer.readByte() & 0xFF) << i * 8;
 				}
 			}
 		} else if (order == DataOrder.MIDDLE) {
@@ -298,6 +128,48 @@ public final class GamePacketReader {
 			throw new IllegalArgumentException("unknown order");
 		}
 		return longValue;
+	}
+
+	/**
+	 * Gets a bit from the buffer.
+	 * 
+	 * @return The value.
+	 * @throws IllegalStateException If the reader is not in bit access mode.
+	 */
+	public int getBit() {
+		return getBits(1);
+	}
+
+	/**
+	 * Gets {@code numBits} from the buffer.
+	 * 
+	 * @param numBits The number of bits.
+	 * @return The value.
+	 * @throws IllegalStateException If the reader is not in bit access mode.
+	 * @throws IllegalArgumentException If the number of bits is not between 1 and 31 inclusive.
+	 */
+	public int getBits(int numBits) {
+		if (numBits < 0 || numBits > 32) {
+			throw new IllegalArgumentException("Number of bits must be between 1 and 32 inclusive");
+		}
+
+		checkBitAccess();
+
+		int bytePos = bitIndex >> 3;
+		int bitOffset = 8 - (bitIndex & 7);
+		int value = 0;
+		bitIndex += numBits;
+
+		for (; numBits > bitOffset; bitOffset = 8) {
+			value += (buffer.getByte(bytePos++) & DataConstants.BIT_MASK[bitOffset]) << numBits - bitOffset;
+			numBits -= bitOffset;
+		}
+		if (numBits == bitOffset) {
+			value += buffer.getByte(bytePos) & DataConstants.BIT_MASK[bitOffset];
+		} else {
+			value += buffer.getByte(bytePos) >> bitOffset - numBits & DataConstants.BIT_MASK[numBits];
+		}
+		return value;
 	}
 
 	/**
@@ -361,67 +233,195 @@ public final class GamePacketReader {
 	}
 
 	/**
-	 * Checks that this reader is in the byte access mode.
+	 * Gets the length of this reader.
 	 * 
-	 * @throws IllegalStateException If the reader is not in byte access mode.
+	 * @return The length of this reader.
 	 */
-	private void checkByteAccess() {
-		if (mode != AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("For byte-based calls to work, the mode must be byte access");
-		}
+	public int getLength() {
+		checkByteAccess();
+		return buffer.writableBytes();
 	}
 
 	/**
-	 * Checks that this reader is in the bit access mode.
+	 * Gets a signed data type from the buffer.
 	 * 
-	 * @throws IllegalStateException If the reader is not in bit access mode.
-	 */
-	private void checkBitAccess() {
-		if (mode != AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("For bit-based calls to work, the mode must be bit access");
-		}
-	}
-
-	/**
-	 * Gets a bit from the buffer.
-	 * 
+	 * @param type The data type.
 	 * @return The value.
-	 * @throws IllegalStateException If the reader is not in bit access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
-	public int getBit() {
-		return getBits(1);
+	public long getSigned(DataType type) {
+		return getSigned(type, DataOrder.BIG, DataTransformation.NONE);
 	}
 
 	/**
-	 * Gets {@code numBits} from the buffer.
+	 * Gets a signed data type from the buffer with the specified order.
 	 * 
-	 * @param numBits The number of bits.
+	 * @param type The data type.
+	 * @param order The byte order.
 	 * @return The value.
-	 * @throws IllegalStateException If the reader is not in bit access mode.
-	 * @throws IllegalArgumentException If the number of bits is not between 1 and 31 inclusive.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
-	public int getBits(int numBits) {
-		if (numBits < 0 || numBits > 32) {
-			throw new IllegalArgumentException("Number of bits must be between 1 and 32 inclusive");
+	public long getSigned(DataType type, DataOrder order) {
+		return getSigned(type, order, DataTransformation.NONE);
+	}
+
+	/**
+	 * Gets a signed data type from the buffer with the specified order and transformation.
+	 * 
+	 * @param type The data type.
+	 * @param order The byte order.
+	 * @param transformation The data transformation.
+	 * @return The value.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
+	 */
+	public long getSigned(DataType type, DataOrder order, DataTransformation transformation) {
+		long longValue = get(type, order, transformation);
+		if (type != DataType.LONG) {
+			int max = (int) (Math.pow(2, type.getBytes() * 8 - 1) - 1);
+			if (longValue > max) {
+				longValue -= (max + 1) * 2;
+			}
 		}
+		return longValue;
+	}
 
-		checkBitAccess();
+	/**
+	 * Gets a signed data type from the buffer with the specified transformation.
+	 * 
+	 * @param type The data type.
+	 * @param transformation The data transformation.
+	 * @return The value.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
+	 */
+	public long getSigned(DataType type, DataTransformation transformation) {
+		return getSigned(type, DataOrder.BIG, transformation);
+	}
 
-		int bytePos = bitIndex >> 3;
-		int bitOffset = 8 - (bitIndex & 7);
-		int value = 0;
-		bitIndex += numBits;
-
-		for (; numBits > bitOffset; bitOffset = 8) {
-			value += (buffer.getByte(bytePos++) & DataConstants.BIT_MASK[bitOffset]) << numBits - bitOffset;
-			numBits -= bitOffset;
-		}
-		if (numBits == bitOffset) {
-			value += buffer.getByte(bytePos) & DataConstants.BIT_MASK[bitOffset];
+	/**
+	 * Gets a signed smart from the buffer.
+	 * 
+	 * @return The smart.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 */
+	public int getSignedSmart() {
+		checkByteAccess();
+		int peek = buffer.getByte(buffer.readerIndex());
+		if (peek < 128) {
+			return buffer.readByte() - 64;
 		} else {
-			value += buffer.getByte(bytePos) >> bitOffset - numBits & DataConstants.BIT_MASK[numBits];
+			return buffer.readShort() - 49152;
 		}
-		return value;
+	}
+
+	/**
+	 * Gets a string from the buffer.
+	 * 
+	 * @return The string.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 */
+	public String getString() {
+		checkByteAccess();
+		return ChannelBufferUtil.readString(buffer);
+	}
+
+	/**
+	 * Gets an unsigned data type from the buffer.
+	 * 
+	 * @param type The data type.
+	 * @return The value.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 */
+	public long getUnsigned(DataType type) {
+		return getUnsigned(type, DataOrder.BIG, DataTransformation.NONE);
+	}
+
+	/**
+	 * Gets an unsigned data type from the buffer with the specified order.
+	 * 
+	 * @param type The data type.
+	 * @param order The byte order.
+	 * @return The value.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
+	 */
+	public long getUnsigned(DataType type, DataOrder order) {
+		return getUnsigned(type, order, DataTransformation.NONE);
+	}
+
+	/**
+	 * Gets an unsigned data type from the buffer with the specified order and transformation.
+	 * 
+	 * @param type The data type.
+	 * @param order The byte order.
+	 * @param transformation The data transformation.
+	 * @return The value.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
+	 */
+	public long getUnsigned(DataType type, DataOrder order, DataTransformation transformation) {
+		long longValue = get(type, order, transformation);
+		if (type == DataType.LONG) {
+			throw new IllegalArgumentException("due to java restrictions, longs must be read as signed types");
+		}
+		return longValue & 0xFFFFFFFFFFFFFFFFL;
+	}
+
+	/**
+	 * Gets an unsigned data type from the buffer with the specified transformation.
+	 * 
+	 * @param type The data type.
+	 * @param transformation The data transformation.
+	 * @return The value.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
+	 */
+	public long getUnsigned(DataType type, DataTransformation transformation) {
+		return getUnsigned(type, DataOrder.BIG, transformation);
+	}
+
+	/**
+	 * Gets an unsigned smart from the buffer.
+	 * 
+	 * @return The smart.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 */
+	public int getUnsignedSmart() {
+		checkByteAccess();
+		int peek = buffer.getByte(buffer.readerIndex());
+		if (peek < 128) {
+			return buffer.readByte();
+		} else {
+			return buffer.readShort() - 32768;
+		}
+	}
+
+	/**
+	 * Switches this builder's mode to the bit access mode.
+	 * 
+	 * @throws IllegalStateException If the builder is already in bit access mode.
+	 */
+	public void switchToBitAccess() {
+		if (mode == AccessMode.BIT_ACCESS) {
+			throw new IllegalStateException("Already in bit access mode");
+		}
+		mode = AccessMode.BIT_ACCESS;
+		bitIndex = buffer.readerIndex() * 8;
+	}
+
+	/**
+	 * Switches this builder's mode to the byte access mode.
+	 * 
+	 * @throws IllegalStateException If the builder is already in byte access mode.
+	 */
+	public void switchToByteAccess() {
+		if (mode == AccessMode.BYTE_ACCESS) {
+			throw new IllegalStateException("Already in byte access mode");
+		}
+		mode = AccessMode.BYTE_ACCESS;
+		buffer.readerIndex((bitIndex + 7) / 8);
 	}
 
 }

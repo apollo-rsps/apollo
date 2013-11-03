@@ -27,6 +27,18 @@ public final class XmlParser {
 	private final class XmlHandler extends DefaultHandler {
 
 		@Override
+		public void characters(char[] ch, int start, int length) throws SAXException {
+			currentNode.setValue(new String(ch, start, length));
+		}
+
+		@Override
+		public void endElement(String uri, String localName, String qName) throws SAXException {
+			if (!nodeStack.isEmpty()) {
+				currentNode = nodeStack.pop();
+			}
+		}
+
+		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			XmlNode next = new XmlNode(localName);
 
@@ -45,18 +57,6 @@ public final class XmlParser {
 					currentNode.setAttribute(attribLocalName, attributes.getValue(i));
 				}
 			}
-		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName) throws SAXException {
-			if (!nodeStack.isEmpty()) {
-				currentNode = nodeStack.pop();
-			}
-		}
-
-		@Override
-		public void characters(char[] ch, int start, int length) throws SAXException {
-			currentNode.setValue(new String(ch, start, length));
 		}
 
 	}
@@ -108,6 +108,23 @@ public final class XmlParser {
 	}
 
 	/**
+	 * Parses XML data from the {@link InputSource}.
+	 * 
+	 * @param source The {@link InputSource}.
+	 * @return The root {@link XmlNode}.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
+	 */
+	private XmlNode parse(InputSource source) throws IOException, SAXException {
+		rootNode = null;
+		xmlReader.parse(source);
+		if (rootNode == null) {
+			throw new SAXException("no root element!");
+		}
+		return rootNode;
+	}
+
+	/**
 	 * Parses XML data from the given {@link InputStream}.
 	 * 
 	 * @param is The {@link InputStream}.
@@ -133,23 +150,6 @@ public final class XmlParser {
 		synchronized (this) {
 			return parse(new InputSource(reader));
 		}
-	}
-
-	/**
-	 * Parses XML data from the {@link InputSource}.
-	 * 
-	 * @param source The {@link InputSource}.
-	 * @return The root {@link XmlNode}.
-	 * @throws IOException If an I/O error occurs.
-	 * @throws SAXException If a SAX error occurs.
-	 */
-	private XmlNode parse(InputSource source) throws IOException, SAXException {
-		rootNode = null;
-		xmlReader.parse(source);
-		if (rootNode == null) {
-			throw new SAXException("no root element!");
-		}
-		return rootNode;
 	}
 
 }

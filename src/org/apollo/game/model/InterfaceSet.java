@@ -71,6 +71,41 @@ public final class InterfaceSet {
 	}
 
 	/**
+	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any events.
+	 */
+	private void closeAndNotify() {
+		amountListener = null; // TODO should we notify??
+
+		interfaces.clear();
+		if (listener != null) {
+			listener.interfaceClosed();
+			listener = null;
+		}
+	}
+
+	/**
+	 * Checks if this interface sets contains the specified interface.
+	 * 
+	 * @param id The interface's id.
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean contains(int id) {
+		return interfaces.containsValue(id);
+	}
+
+	/**
+	 * Called when the client has entered the specified amount. Notifies the current listener.
+	 * 
+	 * @param amount The amount.
+	 */
+	public void enteredAmount(int amount) {
+		if (amountListener != null) {
+			amountListener.amountEntered(amount);
+			amountListener = null;
+		}
+	}
+
+	/**
 	 * Sent by the client when it has closed an interface.
 	 */
 	public void interfaceClosed() {
@@ -83,36 +118,9 @@ public final class InterfaceSet {
 	 * @param listener The enter amount listener.
 	 */
 	public void openEnterAmountDialog(EnterAmountListener listener) {
-		this.amountListener = listener;
+		amountListener = listener;
 
 		player.send(new EnterAmountEvent());
-	}
-
-	/**
-	 * Opens a window and inventory sidebar.
-	 * 
-	 * @param windowId The window's id.
-	 * @param sidebarId The sidebar's id.
-	 */
-	public void openWindowWithSidebar(int windowId, int sidebarId) {
-		openWindowWithSidebar(null, windowId, sidebarId);
-	}
-
-	/**
-	 * Opens a window and inventory sidebar with the specified listener.
-	 * 
-	 * @param listener The listener for this interface.
-	 * @param windowId The window's id.
-	 * @param sidebarId The sidebar's id.
-	 */
-	public void openWindowWithSidebar(InterfaceListener listener, int windowId, int sidebarId) {
-		closeAndNotify();
-		this.listener = listener;
-
-		interfaces.put(InterfaceType.WINDOW, windowId);
-		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
-
-		player.send(new OpenInterfaceSidebarEvent(windowId, sidebarId));
 	}
 
 	/**
@@ -140,38 +148,30 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * Checks if this interface sets contains the specified interface.
+	 * Opens a window and inventory sidebar.
 	 * 
-	 * @param id The interface's id.
-	 * @return {@code true} if so, {@code false} if not.
+	 * @param windowId The window's id.
+	 * @param sidebarId The sidebar's id.
 	 */
-	public boolean contains(int id) {
-		return interfaces.containsValue(id);
+	public void openWindowWithSidebar(int windowId, int sidebarId) {
+		openWindowWithSidebar(null, windowId, sidebarId);
 	}
 
 	/**
-	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any events.
-	 */
-	private void closeAndNotify() {
-		amountListener = null; // TODO should we notify??
-
-		interfaces.clear();
-		if (listener != null) {
-			listener.interfaceClosed();
-			listener = null;
-		}
-	}
-
-	/**
-	 * Called when the client has entered the specified amount. Notifies the current listener.
+	 * Opens a window and inventory sidebar with the specified listener.
 	 * 
-	 * @param amount The amount.
+	 * @param listener The listener for this interface.
+	 * @param windowId The window's id.
+	 * @param sidebarId The sidebar's id.
 	 */
-	public void enteredAmount(int amount) {
-		if (amountListener != null) {
-			amountListener.amountEntered(amount);
-			amountListener = null;
-		}
+	public void openWindowWithSidebar(InterfaceListener listener, int windowId, int sidebarId) {
+		closeAndNotify();
+		this.listener = listener;
+
+		interfaces.put(InterfaceType.WINDOW, windowId);
+		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
+
+		player.send(new OpenInterfaceSidebarEvent(windowId, sidebarId));
 	}
 
 }

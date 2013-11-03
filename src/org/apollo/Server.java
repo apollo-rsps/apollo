@@ -13,8 +13,8 @@ import org.apollo.game.model.World;
 import org.apollo.net.ApolloHandler;
 import org.apollo.net.HttpPipelineFactory;
 import org.apollo.net.JagGrabPipelineFactory;
-import org.apollo.net.ServicePipelineFactory;
 import org.apollo.net.NetworkConstants;
+import org.apollo.net.ServicePipelineFactory;
 import org.apollo.net.release.Release;
 import org.apollo.net.release.r317.Release317;
 import org.apollo.util.plugin.PluginContext;
@@ -107,6 +107,31 @@ public final class Server {
 	}
 
 	/**
+	 * Binds the server to the specified address.
+	 * 
+	 * @param serviceAddress The service address to bind to.
+	 * @param httpAddress The HTTP address to bind to.
+	 * @param jagGrabAddress The JAGGRAB address to bind to.
+	 */
+	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
+		logger.info("Binding service listener to address: " + serviceAddress + "...");
+		serviceBootstrap.bind(serviceAddress);
+
+		logger.info("Binding HTTP listener to address: " + httpAddress + "...");
+		try {
+			httpBootstrap.bind(httpAddress);
+		} catch (Throwable t) {
+			logger.log(Level.WARNING,
+					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
+		}
+
+		logger.info("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
+		jagGrabBootstrap.bind(jagGrabAddress);
+
+		logger.info("Ready for connections.");
+	}
+
+	/**
 	 * Initialises the server.
 	 * 
 	 * @param releaseClassName The class name of the current active {@link Release}.
@@ -137,31 +162,6 @@ public final class Server {
 
 		ChannelPipelineFactory jagGrabPipelineFactory = new JagGrabPipelineFactory(handler, timer);
 		jagGrabBootstrap.setPipelineFactory(jagGrabPipelineFactory);
-	}
-
-	/**
-	 * Binds the server to the specified address.
-	 * 
-	 * @param serviceAddress The service address to bind to.
-	 * @param httpAddress The HTTP address to bind to.
-	 * @param jagGrabAddress The JAGGRAB address to bind to.
-	 */
-	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
-		logger.info("Binding service listener to address: " + serviceAddress + "...");
-		serviceBootstrap.bind(serviceAddress);
-
-		logger.info("Binding HTTP listener to address: " + httpAddress + "...");
-		try {
-			httpBootstrap.bind(httpAddress);
-		} catch (Throwable t) {
-			logger.log(Level.WARNING,
-					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
-		}
-
-		logger.info("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
-		jagGrabBootstrap.bind(jagGrabAddress);
-
-		logger.info("Ready for connections.");
 	}
 
 	/**

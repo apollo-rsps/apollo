@@ -47,24 +47,6 @@ public final class CharacterDesignVerificationHandler extends EventHandler<Chara
 	}
 
 	/**
-	 * Checks if a {@link Gender#MALE} style combination is valid.
-	 * 
-	 * @param appearance The appearance combination.
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	private boolean validMaleStyle(Appearance appearance) {
-		int[] styles = appearance.getStyle();
-		int[] minStyles = new int[] { 0, 10, 18, 26, 33, 36, 42 };
-		int[] maxStyles = new int[] { 8, 17, 25, 31, 34, 40, 43 };
-		for (int i = 0; i < styles.length; i++) {
-			if (styles[i] < minStyles[i] || styles[i] > maxStyles[i]) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
 	 * Checks if a {@link Gender#FEMALE} style combination is valid.
 	 * 
 	 * @param appearance The appearance combination.
@@ -74,6 +56,24 @@ public final class CharacterDesignVerificationHandler extends EventHandler<Chara
 		int[] styles = appearance.getStyle();
 		int[] minStyles = new int[] { 45, 255, 56, 61, 67, 70, 79 };
 		int[] maxStyles = new int[] { 54, 255, 60, 65, 68, 77, 80 };
+		for (int i = 0; i < styles.length; i++) {
+			if (styles[i] < minStyles[i] || styles[i] > maxStyles[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if a {@link Gender#MALE} style combination is valid.
+	 * 
+	 * @param appearance The appearance combination.
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	private boolean validMaleStyle(Appearance appearance) {
+		int[] styles = appearance.getStyle();
+		int[] minStyles = new int[] { 0, 10, 18, 26, 33, 36, 42 };
+		int[] maxStyles = new int[] { 8, 17, 25, 31, 34, 40, 43 };
 		for (int i = 0; i < styles.length; i++) {
 			if (styles[i] < minStyles[i] || styles[i] > maxStyles[i]) {
 				return false;

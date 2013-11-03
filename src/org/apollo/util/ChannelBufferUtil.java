@@ -20,7 +20,7 @@ public final class ChannelBufferUtil {
 	public static String readString(ChannelBuffer buffer) {
 		StringBuilder builder = new StringBuilder();
 		int character;
-		while (buffer.readable() && ((character = buffer.readUnsignedByte()) != NetworkConstants.STRING_TERMINATOR)) {
+		while (buffer.readable() && (character = buffer.readUnsignedByte()) != NetworkConstants.STRING_TERMINATOR) {
 			builder.append((char) character);
 		}
 		return builder.toString();

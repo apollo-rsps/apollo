@@ -158,21 +158,21 @@ public final class Skill {
 	}
 
 	/**
-	 * Gets the experience.
-	 * 
-	 * @return The experience.
-	 */
-	public double getExperience() {
-		return experience;
-	}
-
-	/**
 	 * Gets the current level.
 	 * 
 	 * @return The current level.
 	 */
 	public int getCurrentLevel() {
 		return currentLevel;
+	}
+
+	/**
+	 * Gets the experience.
+	 * 
+	 * @return The experience.
+	 */
+	public double getExperience() {
+		return experience;
 	}
 
 	/**

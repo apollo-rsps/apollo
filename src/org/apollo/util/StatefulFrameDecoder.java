@@ -59,25 +59,6 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 		return decode(ctx, channel, buffer, state);
 	}
 
-	@Override
-	protected final Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer)
-			throws Exception {
-		return decodeLast(ctx, channel, buffer, state);
-	}
-
-	/**
-	 * Sets a new state.
-	 * 
-	 * @param state The new state.
-	 * @throws NullPointerException If the state is {@code null}.
-	 */
-	public final void setState(T state) {
-		if (state == null) {
-			throw new NullPointerException("state");
-		}
-		this.state = state;
-	}
-
 	/**
 	 * Decodes the received packets into a frame.
 	 * 
@@ -90,6 +71,12 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 */
 	protected abstract Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state)
 			throws Exception;
+
+	@Override
+	protected final Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer)
+			throws Exception {
+		return decodeLast(ctx, channel, buffer, state);
+	}
 
 	/**
 	 * Decodes remaining data before the channel is closed into a frame. You may override this method, but it is not
@@ -105,6 +92,19 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	protected Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state)
 			throws Exception {
 		return null;
+	}
+
+	/**
+	 * Sets a new state.
+	 * 
+	 * @param state The new state.
+	 * @throws NullPointerException If the state is {@code null}.
+	 */
+	public final void setState(T state) {
+		if (state == null) {
+			throw new NullPointerException("state");
+		}
+		this.state = state;
 	}
 
 }

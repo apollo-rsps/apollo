@@ -48,13 +48,21 @@ public final class IndexedFileSystem implements Closeable {
 		detectLayout(base);
 	}
 
-	/**
-	 * Checks if this {@link IndexedFileSystem} is read only.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean isReadOnly() {
-		return readOnly;
+	@Override
+	public void close() throws IOException {
+		if (data != null) {
+			synchronized (data) {
+				data.close();
+			}
+		}
+
+		for (RandomAccessFile index : indices) {
+			if (index != null) {
+				synchronized (index) {
+					index.close();
+				}
+			}
+		}
 	}
 
 	/**
@@ -84,52 +92,6 @@ public final class IndexedFileSystem implements Closeable {
 			data = new RandomAccessFile(newEngineData, readOnly ? "r" : "rw");
 		} else {
 			throw new Exception("No data file present");
-		}
-	}
-
-	/**
-	 * Gets the index of a file.
-	 * 
-	 * @param fd The {@link FileDescriptor} which points to the file.
-	 * @return The {@link Index}.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	private Index getIndex(FileDescriptor fd) throws IOException {
-		int index = fd.getType();
-		if (index < 0 || index >= indices.length) {
-			throw new IndexOutOfBoundsException();
-		}
-
-		byte[] buffer = new byte[FileSystemConstants.INDEX_SIZE];
-		RandomAccessFile indexFile = indices[index];
-		synchronized (indexFile) {
-			long ptr = (long) fd.getFile() * (long) FileSystemConstants.INDEX_SIZE;
-			if (ptr >= 0 && indexFile.length() >= (ptr + FileSystemConstants.INDEX_SIZE)) {
-				indexFile.seek(ptr);
-				indexFile.readFully(buffer);
-			} else {
-				throw new FileNotFoundException();
-			}
-		}
-
-		return Index.decode(buffer);
-	}
-
-	/**
-	 * Gets the number of files with the specified type.
-	 * 
-	 * @param type The type.
-	 * @return The number of files.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	private int getFileCount(int type) throws IOException {
-		if (type < 0 || type >= indices.length) {
-			throw new IndexOutOfBoundsException();
-		}
-
-		RandomAccessFile indexFile = indices[type];
-		synchronized (indexFile) {
-			return (int) (indexFile.length() / FileSystemConstants.INDEX_SIZE);
 		}
 	}
 
@@ -171,9 +133,9 @@ public final class IndexedFileSystem implements Closeable {
 
 			// hash the CRCs and place them in the buffer
 			ByteBuffer buf = ByteBuffer.allocate(crcs.length * 4 + 4);
-			for (int i = 0; i < crcs.length; i++) {
-				hash = (hash << 1) + crcs[i];
-				buf.putInt(crcs[i]);
+			for (int crc : crcs) {
+				hash = (hash << 1) + crc;
+				buf.putInt(crc);
 			}
 
 			// place the hash into the buffer
@@ -187,18 +149,6 @@ public final class IndexedFileSystem implements Closeable {
 		} else {
 			throw new IOException("cannot get CRC table from a writable file system");
 		}
-	}
-
-	/**
-	 * Gets a file.
-	 * 
-	 * @param type The file type.
-	 * @param file The file id.
-	 * @return A {@link ByteBuffer} which contains the contents of the file.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	public ByteBuffer getFile(int type, int file) throws IOException {
-		return getFile(new FileDescriptor(type, file));
 	}
 
 	/**
@@ -234,9 +184,9 @@ public final class IndexedFileSystem implements Closeable {
 			ptr += FileSystemConstants.HEADER_SIZE;
 
 			// parse header
-			int nextFile = ((header[0] & 0xFF) << 8) | (header[1] & 0xFF);
-			int curChunk = ((header[2] & 0xFF) << 8) | (header[3] & 0xFF);
-			int nextBlock = ((header[4] & 0xFF) << 16) | ((header[5] & 0xFF) << 8) | (header[6] & 0xFF);
+			int nextFile = (header[0] & 0xFF) << 8 | header[1] & 0xFF;
+			int curChunk = (header[2] & 0xFF) << 8 | header[3] & 0xFF;
+			int nextBlock = (header[4] & 0xFF) << 16 | (header[5] & 0xFF) << 8 | header[6] & 0xFF;
 			int nextType = header[7] & 0xFF;
 
 			// check expected chunk id is correct
@@ -265,7 +215,7 @@ public final class IndexedFileSystem implements Closeable {
 			// if we still have more data to read, check the validity of the
 			// header
 			if (size > read) {
-				if (nextType != (fd.getType() + 1)) {
+				if (nextType != fd.getType() + 1) {
 					throw new IOException("File type mismatch.");
 				}
 
@@ -279,21 +229,71 @@ public final class IndexedFileSystem implements Closeable {
 		return buffer;
 	}
 
-	@Override
-	public void close() throws IOException {
-		if (data != null) {
-			synchronized (data) {
-				data.close();
+	/**
+	 * Gets a file.
+	 * 
+	 * @param type The file type.
+	 * @param file The file id.
+	 * @return A {@link ByteBuffer} which contains the contents of the file.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public ByteBuffer getFile(int type, int file) throws IOException {
+		return getFile(new FileDescriptor(type, file));
+	}
+
+	/**
+	 * Gets the number of files with the specified type.
+	 * 
+	 * @param type The type.
+	 * @return The number of files.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	private int getFileCount(int type) throws IOException {
+		if (type < 0 || type >= indices.length) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		RandomAccessFile indexFile = indices[type];
+		synchronized (indexFile) {
+			return (int) (indexFile.length() / FileSystemConstants.INDEX_SIZE);
+		}
+	}
+
+	/**
+	 * Gets the index of a file.
+	 * 
+	 * @param fd The {@link FileDescriptor} which points to the file.
+	 * @return The {@link Index}.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	private Index getIndex(FileDescriptor fd) throws IOException {
+		int index = fd.getType();
+		if (index < 0 || index >= indices.length) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		byte[] buffer = new byte[FileSystemConstants.INDEX_SIZE];
+		RandomAccessFile indexFile = indices[index];
+		synchronized (indexFile) {
+			long ptr = (long) fd.getFile() * (long) FileSystemConstants.INDEX_SIZE;
+			if (ptr >= 0 && indexFile.length() >= ptr + FileSystemConstants.INDEX_SIZE) {
+				indexFile.seek(ptr);
+				indexFile.readFully(buffer);
+			} else {
+				throw new FileNotFoundException();
 			}
 		}
 
-		for (RandomAccessFile index : indices) {
-			if (index != null) {
-				synchronized (index) {
-					index.close();
-				}
-			}
-		}
+		return Index.decode(buffer);
+	}
+
+	/**
+	 * Checks if this {@link IndexedFileSystem} is read only.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isReadOnly() {
+		return readOnly;
 	}
 
 }

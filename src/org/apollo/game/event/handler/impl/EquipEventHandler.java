@@ -66,7 +66,7 @@ public final class EquipEventHandler extends EventHandler<EquipEvent> {
 			Item shield = equipment.get(EquipmentConstants.SHIELD);
 
 			if (equippingDef.isTwoHanded()) {
-				int slotsRequired = weapon != null ? (shield != null ? 1 : 0) : 0;
+				int slotsRequired = weapon != null ? shield != null ? 1 : 0 : 0;
 				if (inventory.freeSlots() < slotsRequired) {
 					ctx.breakHandlerChain();
 					return;

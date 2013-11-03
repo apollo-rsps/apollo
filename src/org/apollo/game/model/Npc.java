@@ -41,6 +41,7 @@ public class Npc extends Character {
 	 * 
 	 * @return The definition.
 	 */
+	@Override
 	public NpcDefinition getNpcDefinition() {
 		return definition;
 	}

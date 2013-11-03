@@ -16,6 +16,7 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class FirstObjectActionEventDecoder extends EventDecoder<FirstObjectActionEvent> {
 
+	@Override
 	public FirstObjectActionEvent decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 		int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);

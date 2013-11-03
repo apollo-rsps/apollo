@@ -58,18 +58,6 @@ public enum Direction {
 	public static final Direction[] EMPTY_DIRECTION_ARRAY = new Direction[0];
 
 	/**
-	 * Checks if the direction represented by the two delta values can connect two points together in a single
-	 * direction.
-	 * 
-	 * @param deltaX The difference in X coordinates.
-	 * @param deltaY The difference in X coordinates.
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public static boolean isConnectable(int deltaX, int deltaY) {
-		return Math.abs(deltaX) == Math.abs(deltaY) || deltaX == 0 || deltaY == 0;
-	}
-
-	/**
 	 * Creates a direction from the differences between X and Y.
 	 * 
 	 * @param deltaX The difference between two X coordinates.
@@ -101,6 +89,18 @@ public enum Direction {
 			}
 		}
 		return Direction.NONE;
+	}
+
+	/**
+	 * Checks if the direction represented by the two delta values can connect two points together in a single
+	 * direction.
+	 * 
+	 * @param deltaX The difference in X coordinates.
+	 * @param deltaY The difference in X coordinates.
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public static boolean isConnectable(int deltaX, int deltaY) {
+		return Math.abs(deltaX) == Math.abs(deltaY) || deltaX == 0 || deltaY == 0;
 	}
 
 	/**

@@ -43,7 +43,7 @@ public final class IsaacRandom {
 	/**
 	 * A mask for pseudorandom lookup.
 	 */
-	private static int MASK = (SIZE - 1) << 2;
+	private static int MASK = SIZE - 1 << 2;
 
 	/**
 	 * The count through the results in the results array.
@@ -96,66 +96,6 @@ public final class IsaacRandom {
 			rsl[i] = seed[i];
 		}
 		init(true);
-	}
-
-	/**
-	 * Generates 256 results.
-	 */
-	private void isaac() {
-		int i, j, x, y;
-
-		b += ++c;
-		for (i = 0, j = SIZE / 2; i < SIZE / 2;) {
-			x = mem[i];
-			a ^= a << 13;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a >>> 6;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a << 2;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a >>> 16;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
-		}
-
-		for (j = 0; j < SIZE / 2;) {
-			x = mem[i];
-			a ^= a << 13;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a >>> 6;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a << 2;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a >>> 16;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
-		}
 	}
 
 	/**
@@ -287,6 +227,66 @@ public final class IsaacRandom {
 
 		isaac();
 		count = SIZE;
+	}
+
+	/**
+	 * Generates 256 results.
+	 */
+	private void isaac() {
+		int i, j, x, y;
+
+		b += ++c;
+		for (i = 0, j = SIZE / 2; i < SIZE / 2;) {
+			x = mem[i];
+			a ^= a << 13;
+			a += mem[j++];
+			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
+			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+
+			x = mem[i];
+			a ^= a >>> 6;
+			a += mem[j++];
+			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
+			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+
+			x = mem[i];
+			a ^= a << 2;
+			a += mem[j++];
+			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
+			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+
+			x = mem[i];
+			a ^= a >>> 16;
+			a += mem[j++];
+			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
+			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+		}
+
+		for (j = 0; j < SIZE / 2;) {
+			x = mem[i];
+			a ^= a << 13;
+			a += mem[j++];
+			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
+			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+
+			x = mem[i];
+			a ^= a >>> 6;
+			a += mem[j++];
+			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
+			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+
+			x = mem[i];
+			a ^= a << 2;
+			a += mem[j++];
+			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
+			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+
+			x = mem[i];
+			a ^= a >>> 16;
+			a += mem[j++];
+			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
+			rsl[i++] = b = mem[(y >> SIZEL & MASK) >> 2] + x;
+		}
 	}
 
 	/**

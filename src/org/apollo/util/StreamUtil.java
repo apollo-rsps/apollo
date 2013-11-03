@@ -12,20 +12,6 @@ import java.io.OutputStream;
 public final class StreamUtil {
 
 	/**
-	 * Writes a string to the specified output stream.
-	 * 
-	 * @param os The output stream.
-	 * @param str The string.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	public static void writeString(OutputStream os, String str) throws IOException {
-		for (char c : str.toCharArray()) {
-			os.write(c);
-		}
-		os.write('\0');
-	}
-
-	/**
 	 * Reads a string from the specified input stream.
 	 * 
 	 * @param is The input stream.
@@ -39,6 +25,20 @@ public final class StreamUtil {
 			builder.append((char) character);
 		}
 		return builder.toString();
+	}
+
+	/**
+	 * Writes a string to the specified output stream.
+	 * 
+	 * @param os The output stream.
+	 * @param str The string.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public static void writeString(OutputStream os, String str) throws IOException {
+		for (char c : str.toCharArray()) {
+			os.write(c);
+		}
+		os.write('\0');
 	}
 
 	/**

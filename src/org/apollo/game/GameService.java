@@ -65,6 +65,17 @@ public final class GameService extends Service {
 	}
 
 	/**
+	 * Finalizes the unregistration of a player.
+	 * 
+	 * @param player The player.
+	 */
+	public void finalizePlayerUnregistration(Player player) {
+		synchronized (this) {
+			World.getWorld().unregister(player);
+		}
+	}
+
+	/**
 	 * Gets the event handler chains.
 	 * 
 	 * @return The event handler chains.
@@ -109,15 +120,6 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Starts the game service.
-	 */
-	@Override
-	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY,
-				GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
-	}
-
-	/**
 	 * Called every pulse.
 	 */
 	public void pulse() {
@@ -158,23 +160,21 @@ public final class GameService extends Service {
 	}
 
 	/**
+	 * Starts the game service.
+	 */
+	@Override
+	public void start() {
+		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY,
+				GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
+	}
+
+	/**
 	 * Unregisters a player. Returns immediately. The player is unregistered at the start of the next cycle.
 	 * 
 	 * @param player The player.
 	 */
 	public void unregisterPlayer(Player player) {
 		oldPlayers.add(player);
-	}
-
-	/**
-	 * Finalizes the unregistration of a player.
-	 * 
-	 * @param player The player.
-	 */
-	public void finalizePlayerUnregistration(Player player) {
-		synchronized (this) {
-			World.getWorld().unregister(player);
-		}
 	}
 
 }

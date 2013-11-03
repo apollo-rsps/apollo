@@ -37,8 +37,24 @@ public final class PluginMetaDataParser {
 	 * @throws SAXException If a SAX error occurs.
 	 */
 	public PluginMetaDataParser(InputStream is) throws SAXException {
-		this.parser = new XmlParser();
+		parser = new XmlParser();
 		this.is = is;
+	}
+
+	/**
+	 * Gets the specified child element, if it exists.
+	 * 
+	 * @param node The root node.
+	 * @param name The element name.
+	 * @return The node object.
+	 * @throws IOException If the element does not exist.
+	 */
+	private XmlNode getElement(XmlNode node, String name) throws IOException {
+		XmlNode child = node.getChild(name);
+		if (child == null) {
+			throw new IOException("no " + name + " element found");
+		}
+		return child;
 	}
 
 	/**
@@ -101,22 +117,6 @@ public final class PluginMetaDataParser {
 		}
 
 		return new PluginMetaData(id, name, description, authors, scripts, dependencies, version);
-	}
-
-	/**
-	 * Gets the specified child element, if it exists.
-	 * 
-	 * @param node The root node.
-	 * @param name The element name.
-	 * @return The node object.
-	 * @throws IOException If the element does not exist.
-	 */
-	private XmlNode getElement(XmlNode node, String name) throws IOException {
-		XmlNode child = node.getChild(name);
-		if (child == null) {
-			throw new IOException("no " + name + " element found");
-		}
-		return child;
 	}
 
 }

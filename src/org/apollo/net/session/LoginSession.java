@@ -52,10 +52,8 @@ public final class LoginSession extends Session {
 	}
 
 	@Override
-	public void messageReceived(Object message) throws Exception {
-		if (message.getClass() == LoginRequest.class) {
-			handleLoginRequest((LoginRequest) message);
-		}
+	public void destroy() {
+
 	}
 
 	/**
@@ -135,8 +133,10 @@ public final class LoginSession extends Session {
 	}
 
 	@Override
-	public void destroy() {
-
+	public void messageReceived(Object message) throws Exception {
+		if (message.getClass() == LoginRequest.class) {
+			handleLoginRequest((LoginRequest) message);
+		}
 	}
 
 }

@@ -29,21 +29,21 @@ public final class Command {
 	}
 
 	/**
-	 * Gets the name of the command.
-	 * 
-	 * @return The name of the command.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
 	 * Gets the command's arguments.
 	 * 
 	 * @return The command's arguments.
 	 */
 	public String[] getArguments() {
 		return arguments;
+	}
+
+	/**
+	 * Gets the name of the command.
+	 * 
+	 * @return The name of the command.
+	 */
+	public String getName() {
+		return name;
 	}
 
 }

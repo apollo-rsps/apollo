@@ -45,12 +45,12 @@ public abstract class ItemActionEvent extends Event {
 	}
 
 	/**
-	 * Gets the option number.
+	 * Gets the item id.
 	 * 
-	 * @return The option number.
+	 * @return The item id.
 	 */
-	public int getOption() {
-		return option;
+	public int getId() {
+		return id;
 	}
 
 	/**
@@ -63,12 +63,12 @@ public abstract class ItemActionEvent extends Event {
 	}
 
 	/**
-	 * Gets the item id.
+	 * Gets the option number.
 	 * 
-	 * @return The item id.
+	 * @return The option number.
 	 */
-	public int getId() {
-		return id;
+	public int getOption() {
+		return option;
 	}
 
 	/**

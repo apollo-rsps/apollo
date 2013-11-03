@@ -28,6 +28,24 @@ public final class RegionCoordinates {
 		this.y = y;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final RegionCoordinates other = (RegionCoordinates) obj;
+		if (x != other.x) {
+			return false;
+		}
+		if (y != other.y) {
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Gets the X coordinate.
 	 * 
@@ -47,28 +65,10 @@ public final class RegionCoordinates {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final RegionCoordinates other = (RegionCoordinates) obj;
-		if (this.x != other.x) {
-			return false;
-		}
-		if (this.y != other.y) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 61 * hash + this.x;
-		hash = 61 * hash + this.y;
+		hash = 61 * hash + x;
+		hash = 61 * hash + y;
 		return hash;
 	}
 

@@ -53,7 +53,7 @@ public final class GamePacketEncoder extends OneToOneEncoder {
 		}
 
 		ChannelBuffer buffer = ChannelBuffers.buffer(headerLength + payloadLength);
-		buffer.writeByte((packet.getOpcode() + random.nextInt()) & 0xFF);
+		buffer.writeByte(packet.getOpcode() + random.nextInt() & 0xFF);
 		if (type == PacketType.VARIABLE_BYTE) {
 			buffer.writeByte(payloadLength);
 		} else if (type == PacketType.VARIABLE_SHORT) {

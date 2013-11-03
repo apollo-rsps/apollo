@@ -16,12 +16,12 @@ public abstract class SkillAdapter implements SkillListener {
 	}
 
 	@Override
-	public void skillUpdated(SkillSet set, int id, Skill skill) {
+	public void skillsUpdated(SkillSet set) {
 		/* empty */
 	}
 
 	@Override
-	public void skillsUpdated(SkillSet set) {
+	public void skillUpdated(SkillSet set, int id, Skill skill) {
 		/* empty */
 	}
 

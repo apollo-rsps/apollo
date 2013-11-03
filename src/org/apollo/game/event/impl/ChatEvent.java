@@ -45,6 +45,15 @@ public final class ChatEvent extends Event {
 	}
 
 	/**
+	 * Gets the compressed message.
+	 * 
+	 * @return The compressed message.
+	 */
+	public byte[] getCompressedMessage() {
+		return compressedMessage;
+	}
+
+	/**
 	 * Gets the message.
 	 * 
 	 * @return The message.
@@ -69,15 +78,6 @@ public final class ChatEvent extends Event {
 	 */
 	public int getTextEffects() {
 		return effects;
-	}
-
-	/**
-	 * Gets the compressed message.
-	 * 
-	 * @return The compressed message.
-	 */
-	public byte[] getCompressedMessage() {
-		return compressedMessage;
 	}
 
 }

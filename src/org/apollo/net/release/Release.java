@@ -46,48 +46,6 @@ public abstract class Release {
 	}
 
 	/**
-	 * Gets the release number.
-	 * 
-	 * @return The release number.
-	 */
-	public final int getReleaseNumber() {
-		return releaseNumber;
-	}
-
-	/**
-	 * Registers a {@link EventDecoder} for the specified opcode.
-	 * 
-	 * @param opcode The opcode, between 0 and 255 inclusive.
-	 * @param decoder The {@link EventDecoder}.
-	 */
-	public final <E extends Event> void register(int opcode, EventDecoder<E> decoder) {
-		if (opcode < 0 || opcode >= decoders.length) {
-			throw new IndexOutOfBoundsException();
-		}
-		decoders[opcode] = decoder;
-	}
-
-	/**
-	 * Registers a {@link EventEncoder} for the specified event type.
-	 * 
-	 * @param type The event type.
-	 * @param encoder The {@link EventEncoder}.
-	 */
-	public final <E extends Event> void register(Class<E> type, EventEncoder<E> encoder) {
-		encoders.put(type, encoder);
-	}
-
-	/**
-	 * Gets meta data for the specified incoming packet.
-	 * 
-	 * @param opcode The opcode of the incoming packet.
-	 * @return The {@link PacketMetaData} object.
-	 */
-	public final PacketMetaData getIncomingPacketMetaData(int opcode) {
-		return incomingPacketMetaData.getMetaData(opcode);
-	}
-
-	/**
 	 * Gets the {@link EventDecoder} for the specified opcode.
 	 * 
 	 * @param opcode The opcode.
@@ -109,6 +67,48 @@ public abstract class Release {
 	@SuppressWarnings("unchecked")
 	public <E extends Event> EventEncoder<E> getEventEncoder(Class<E> type) {
 		return (EventEncoder<E>) encoders.get(type);
+	}
+
+	/**
+	 * Gets meta data for the specified incoming packet.
+	 * 
+	 * @param opcode The opcode of the incoming packet.
+	 * @return The {@link PacketMetaData} object.
+	 */
+	public final PacketMetaData getIncomingPacketMetaData(int opcode) {
+		return incomingPacketMetaData.getMetaData(opcode);
+	}
+
+	/**
+	 * Gets the release number.
+	 * 
+	 * @return The release number.
+	 */
+	public final int getReleaseNumber() {
+		return releaseNumber;
+	}
+
+	/**
+	 * Registers a {@link EventEncoder} for the specified event type.
+	 * 
+	 * @param type The event type.
+	 * @param encoder The {@link EventEncoder}.
+	 */
+	public final <E extends Event> void register(Class<E> type, EventEncoder<E> encoder) {
+		encoders.put(type, encoder);
+	}
+
+	/**
+	 * Registers a {@link EventDecoder} for the specified opcode.
+	 * 
+	 * @param opcode The opcode, between 0 and 255 inclusive.
+	 * @param decoder The {@link EventDecoder}.
+	 */
+	public final <E extends Event> void register(int opcode, EventDecoder<E> decoder) {
+		if (opcode < 0 || opcode >= decoders.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		decoders[opcode] = decoder;
 	}
 
 }

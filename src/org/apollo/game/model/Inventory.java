@@ -95,126 +95,8 @@ public final class Inventory implements Cloneable {
 			throw new NullPointerException("mode");
 		}
 		this.capacity = capacity;
-		this.items = new Item[capacity];
-		this.mode = mode;
-	}
-
-	/**
-	 * Creates a copy of this inventory. Listeners are not copied, they must be added again yourself! This is so cloned
-	 * copies don't send updates to their counterparts.
-	 */
-	@Override
-	public Inventory clone() {
-		Inventory copy = new Inventory(capacity, mode);
-		System.arraycopy(items, 0, copy.items, 0, capacity);
-		copy.size = size;
-		return copy;
-	}
-
-	/**
-	 * Checks if this inventory contains an item with the specified id.
-	 * 
-	 * @param id The item's id.
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean contains(int id) {
-		for (int i = 0; i < capacity; i++) {
-			Item item = items[i];
-			if (item != null && item.getId() == id) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Gets the number of free slots.
-	 * 
-	 * @return The number of free slots.
-	 */
-	public int freeSlots() {
-		return capacity - size;
-	}
-
-	/**
-	 * Clears the inventory.
-	 */
-	public void clear() {
 		items = new Item[capacity];
-		size = 0;
-		notifyItemsUpdated();
-	}
-
-	/**
-	 * Gets the capacity of this inventory.
-	 * 
-	 * @return The capacity.
-	 */
-	public int capacity() {
-		return capacity;
-	}
-
-	/**
-	 * Gets the size of this inventory - the number of used slots.
-	 * 
-	 * @return The size.
-	 */
-	public int size() {
-		return size;
-	}
-
-	/**
-	 * Gets the item in the specified slot.
-	 * 
-	 * @param slot The slot.
-	 * @return The item, or {@code null} if the slot is empty.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
-	 */
-	public Item get(int slot) {
-		checkBounds(slot);
-		return items[slot];
-	}
-
-	/**
-	 * Sets the item that is in the specified slot.
-	 * 
-	 * @param slot The slot.
-	 * @param item The item, or {@code null} to remove the item that is in the slot.
-	 * @return The item that was in the slot.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
-	 */
-	public Item set(int slot, Item item) {
-		if (item == null) {
-			return reset(slot);
-		}
-		checkBounds(slot);
-
-		Item old = items[slot];
-		if (old == null) {
-			size++;
-		}
-		items[slot] = item;
-		notifyItemUpdated(slot);
-		return old;
-	}
-
-	/**
-	 * Removes the item (if any) that is in the specified slot.
-	 * 
-	 * @param slot
-	 * @return The item that was in the slot.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
-	 */
-	public Item reset(int slot) {
-		checkBounds(slot);
-
-		Item old = items[slot];
-		if (old != null) {
-			size--;
-		}
-		items[slot] = null;
-		notifyItemUpdated(slot);
-		return old;
+		this.mode = mode;
 	}
 
 	/**
@@ -313,6 +195,178 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
+	 * Adds a listener.
+	 * 
+	 * @param listener The listener to add.
+	 */
+	public void addListener(InventoryListener listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * Gets the capacity of this inventory.
+	 * 
+	 * @return The capacity.
+	 */
+	public int capacity() {
+		return capacity;
+	}
+
+	/**
+	 * Checks the bounds of the specified slot.
+	 * 
+	 * @param slot The slot.
+	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
+	 */
+	private void checkBounds(int slot) {
+		if (slot < 0 || slot >= capacity) {
+			throw new IndexOutOfBoundsException("slot out of bounds");
+		}
+	}
+
+	/**
+	 * Clears the inventory.
+	 */
+	public void clear() {
+		items = new Item[capacity];
+		size = 0;
+		notifyItemsUpdated();
+	}
+
+	/**
+	 * Creates a copy of this inventory. Listeners are not copied, they must be added again yourself! This is so cloned
+	 * copies don't send updates to their counterparts.
+	 */
+	@Override
+	public Inventory clone() {
+		Inventory copy = new Inventory(capacity, mode);
+		System.arraycopy(items, 0, copy.items, 0, capacity);
+		copy.size = size;
+		return copy;
+	}
+
+	/**
+	 * Checks if this inventory contains an item with the specified id.
+	 * 
+	 * @param id The item's id.
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean contains(int id) {
+		for (int i = 0; i < capacity; i++) {
+			Item item = items[i];
+			if (item != null && item.getId() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Forces the capacity to exceeded event to be fired.
+	 */
+	public void forceCapacityExceeded() {
+		notifyCapacityExceeded();
+	}
+
+	/**
+	 * Forces the refresh of this inventory.
+	 */
+	public void forceRefresh() {
+		notifyItemsUpdated();
+	}
+
+	/**
+	 * Forces a refresh of a specific slot.
+	 * 
+	 * @param slot The slot.
+	 */
+	public void forceRefresh(int slot) {
+		notifyItemUpdated(slot);
+	}
+
+	/**
+	 * Gets the number of free slots.
+	 * 
+	 * @return The number of free slots.
+	 */
+	public int freeSlots() {
+		return capacity - size;
+	}
+
+	/**
+	 * Gets the item in the specified slot.
+	 * 
+	 * @param slot The slot.
+	 * @return The item, or {@code null} if the slot is empty.
+	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
+	 */
+	public Item get(int slot) {
+		checkBounds(slot);
+		return items[slot];
+	}
+
+	/**
+	 * Gets a clone of the items array.
+	 * 
+	 * @return A clone of the items array.
+	 */
+	public Item[] getItems() {
+		return items.clone();
+	}
+
+	/**
+	 * Checks if the item specified by the definition should be stacked.
+	 * 
+	 * @param def The definition.
+	 * @return {@code true} if the item should be stacked, {@code false} otherwise.
+	 */
+	private boolean isStackable(ItemDefinition def) {
+		if (mode == StackMode.STACK_ALWAYS) {
+			return true;
+		} else if (mode == StackMode.STACK_STACKABLE_ITEMS) {
+			return def.isStackable();
+		} else { // will be STACK_NEVER
+			return false;
+		}
+	}
+
+	/**
+	 * Notifies listeners that the capacity of this inventory has been exceeded.
+	 */
+	private void notifyCapacityExceeded() {
+		if (firingEvents) {
+			for (InventoryListener listener : listeners) {
+				listener.capacityExceeded(this);
+			}
+		}
+	}
+
+	/**
+	 * Notifies listeners that all the items have been updated.
+	 */
+	private void notifyItemsUpdated() {
+		if (firingEvents) {
+			for (InventoryListener listener : listeners) {
+				listener.itemsUpdated(this);
+			}
+		}
+	}
+
+	/**
+	 * Notifies listeners that the specified slot has been updated.
+	 * 
+	 * @param slot The slot.
+	 */
+	private void notifyItemUpdated(int slot) {
+		if (firingEvents) {
+			Item item = items[slot];
+			for (InventoryListener listener : listeners) {
+				listener.itemUpdated(this, slot, item);
+			}
+		}
+	}
+
+	/**
 	 * Removes one item with the specified id.
 	 * 
 	 * @param id The id.
@@ -320,16 +374,6 @@ public final class Inventory implements Cloneable {
 	 */
 	public boolean remove(int id) {
 		return remove(id, 1) == 1;
-	}
-
-	/**
-	 * An alias for {@code remove(item.getId(), item.getAmount())}.
-	 * 
-	 * @param item The item to remove.
-	 * @return The amount that was removed.
-	 */
-	public int remove(Item item) {
-		return remove(item.getId(), item.getAmount());
 	}
 
 	/**
@@ -374,6 +418,74 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
+	 * An alias for {@code remove(item.getId(), item.getAmount())}.
+	 * 
+	 * @param item The item to remove.
+	 * @return The amount that was removed.
+	 */
+	public int remove(Item item) {
+		return remove(item.getId(), item.getAmount());
+	}
+
+	/**
+	 * Removes all the listeners.
+	 */
+	public void removeAllListeners() {
+		listeners.clear();
+	}
+
+	/**
+	 * Removes a listener.
+	 * 
+	 * @param listener The listener to remove.
+	 */
+	public void removeListener(InventoryListener listener) {
+		listeners.remove(listener);
+	}
+
+	/**
+	 * Removes the item (if any) that is in the specified slot.
+	 * 
+	 * @param slot
+	 * @return The item that was in the slot.
+	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
+	 */
+	public Item reset(int slot) {
+		checkBounds(slot);
+
+		Item old = items[slot];
+		if (old != null) {
+			size--;
+		}
+		items[slot] = null;
+		notifyItemUpdated(slot);
+		return old;
+	}
+
+	/**
+	 * Sets the item that is in the specified slot.
+	 * 
+	 * @param slot The slot.
+	 * @param item The item, or {@code null} to remove the item that is in the slot.
+	 * @return The item that was in the slot.
+	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
+	 */
+	public Item set(int slot, Item item) {
+		if (item == null) {
+			return reset(slot);
+		}
+		checkBounds(slot);
+
+		Item old = items[slot];
+		if (old == null) {
+			size++;
+		}
+		items[slot] = item;
+		notifyItemUpdated(slot);
+		return old;
+	}
+
+	/**
 	 * Shifts all items to the top left of the container, leaving no gaps.
 	 */
 	public void shift() {
@@ -390,14 +502,26 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Swaps the two items at the specified slots.
+	 * Gets the size of this inventory - the number of used slots.
 	 * 
-	 * @param oldSlot The old slot.
-	 * @param newSlot The new slot.
-	 * @throws IndexOutOufBoundsException If the slot is out of bounds.
+	 * @return The size.
 	 */
-	public void swap(int oldSlot, int newSlot) {
-		swap(false, oldSlot, newSlot);
+	public int size() {
+		return size;
+	}
+
+	/**
+	 * Starts the firing of events.
+	 */
+	public void startFiringEvents() {
+		firingEvents = true;
+	}
+
+	/**
+	 * Stops the firing of events.
+	 */
+	public void stopFiringEvents() {
+		firingEvents = false;
 	}
 
 	/**
@@ -431,138 +555,14 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Adds a listener.
+	 * Swaps the two items at the specified slots.
 	 * 
-	 * @param listener The listener to add.
+	 * @param oldSlot The old slot.
+	 * @param newSlot The new slot.
+	 * @throws IndexOutOufBoundsException If the slot is out of bounds.
 	 */
-	public void addListener(InventoryListener listener) {
-		listeners.add(listener);
-	}
-
-	/**
-	 * Removes a listener.
-	 * 
-	 * @param listener The listener to remove.
-	 */
-	public void removeListener(InventoryListener listener) {
-		listeners.remove(listener);
-	}
-
-	/**
-	 * Removes all the listeners.
-	 */
-	public void removeAllListeners() {
-		listeners.clear();
-	}
-
-	/**
-	 * Notifies listeners that the capacity of this inventory has been exceeded.
-	 */
-	private void notifyCapacityExceeded() {
-		if (firingEvents) {
-			for (InventoryListener listener : listeners) {
-				listener.capacityExceeded(this);
-			}
-		}
-	}
-
-	/**
-	 * Notifies listeners that all the items have been updated.
-	 */
-	private void notifyItemsUpdated() {
-		if (firingEvents) {
-			for (InventoryListener listener : listeners) {
-				listener.itemsUpdated(this);
-			}
-		}
-	}
-
-	/**
-	 * Notifies listeners that the specified slot has been updated.
-	 * 
-	 * @param slot The slot.
-	 */
-	private void notifyItemUpdated(int slot) {
-		if (firingEvents) {
-			Item item = items[slot];
-			for (InventoryListener listener : listeners) {
-				listener.itemUpdated(this, slot, item);
-			}
-		}
-	}
-
-	/**
-	 * Checks the bounds of the specified slot.
-	 * 
-	 * @param slot The slot.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
-	 */
-	private void checkBounds(int slot) {
-		if (slot < 0 || slot >= capacity) {
-			throw new IndexOutOfBoundsException("slot out of bounds");
-		}
-	}
-
-	/**
-	 * Checks if the item specified by the definition should be stacked.
-	 * 
-	 * @param def The definition.
-	 * @return {@code true} if the item should be stacked, {@code false} otherwise.
-	 */
-	private boolean isStackable(ItemDefinition def) {
-		if (mode == StackMode.STACK_ALWAYS) {
-			return true;
-		} else if (mode == StackMode.STACK_STACKABLE_ITEMS) {
-			return def.isStackable();
-		} else { // will be STACK_NEVER
-			return false;
-		}
-	}
-
-	/**
-	 * Gets a clone of the items array.
-	 * 
-	 * @return A clone of the items array.
-	 */
-	public Item[] getItems() {
-		return items.clone();
-	}
-
-	/**
-	 * Stops the firing of events.
-	 */
-	public void stopFiringEvents() {
-		firingEvents = false;
-	}
-
-	/**
-	 * Starts the firing of events.
-	 */
-	public void startFiringEvents() {
-		firingEvents = true;
-	}
-
-	/**
-	 * Forces the refresh of this inventory.
-	 */
-	public void forceRefresh() {
-		notifyItemsUpdated();
-	}
-
-	/**
-	 * Forces a refresh of a specific slot.
-	 * 
-	 * @param slot The slot.
-	 */
-	public void forceRefresh(int slot) {
-		notifyItemUpdated(slot);
-	}
-
-	/**
-	 * Forces the capacity to exceeded event to be fired.
-	 */
-	public void forceCapacityExceeded() {
-		notifyCapacityExceeded();
+	public void swap(int oldSlot, int newSlot) {
+		swap(false, oldSlot, newSlot);
 	}
 
 }

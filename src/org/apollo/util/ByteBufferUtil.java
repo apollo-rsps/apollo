@@ -47,7 +47,7 @@ public final class ByteBufferUtil {
 	 * @return The tri byte.
 	 */
 	public static int readUnsignedTriByte(ByteBuffer buffer) {
-		return ((buffer.get() & 0xFF) << 16) | ((buffer.get() & 0xFF) << 8) | (buffer.get() & 0xFF);
+		return (buffer.get() & 0xFF) << 16 | (buffer.get() & 0xFF) << 8 | buffer.get() & 0xFF;
 	}
 
 	/**

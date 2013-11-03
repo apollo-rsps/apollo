@@ -31,6 +31,15 @@ public final class ChannelRequest<T> implements Comparable<ChannelRequest<T>> {
 		this.request = request;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public int compareTo(ChannelRequest<T> o) {
+		if (request instanceof Comparable<?> && o.request instanceof Comparable<?>) {
+			return ((Comparable<T>) request).compareTo(o.request);
+		}
+		return 0;
+	}
+
 	/**
 	 * Gets the channel.
 	 * 
@@ -47,15 +56,6 @@ public final class ChannelRequest<T> implements Comparable<ChannelRequest<T>> {
 	 */
 	public T getRequest() {
 		return request;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public int compareTo(ChannelRequest<T> o) {
-		if (request instanceof Comparable<?> && o.request instanceof Comparable<?>) {
-			return ((Comparable<T>) request).compareTo(o.request);
-		}
-		return 0;
 	}
 
 }

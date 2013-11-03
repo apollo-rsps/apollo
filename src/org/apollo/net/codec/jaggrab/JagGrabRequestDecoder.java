@@ -14,7 +14,7 @@ public final class JagGrabRequestDecoder extends OneToOneDecoder {
 	@Override
 	protected Object decode(ChannelHandlerContext ctx, Channel c, Object msg) throws Exception {
 		if (msg instanceof String) {
-			String str = ((String) msg);
+			String str = (String) msg;
 			if (str.startsWith("JAGGRAB /")) {
 				String filePath = str.substring(8).trim();
 				return new JagGrabRequest(filePath);
