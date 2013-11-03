@@ -2,6 +2,7 @@ package org.apollo.net.release.r377;
 
 import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.ConfigEvent;
+import org.apollo.game.event.impl.DisplayTabInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
 import org.apollo.game.event.impl.LogoutEvent;
@@ -106,6 +107,19 @@ public final class Release377 extends Release {
 		register(110, new ClosedInterfaceEventDecoder());
 		register(75, new EnteredAmountEventDecoder());
 		register(1, new ItemOnItemEventDecoder());
+		register(36, new MagicOnItemEventDecoder());
+
+		register(187, new FocusUpdateEventDecoder());
+		register(19, new MouseClickEventDecoder());
+		register(140, new ArrowKeyEventDecoder());
+
+		SpamPacketEventDecoder spamEventDecoder = new SpamPacketEventDecoder();
+		register(40, spamEventDecoder);
+		register(244, spamEventDecoder);
+
+		register(67, new FirstNpcActionEventDecoder());
+		register(112, new SecondNpcActionEventDecoder());
+		register(13, new ThirdNpcActionEventDecoder());
 
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
@@ -129,6 +143,7 @@ public final class Release377 extends Release {
 		register(SetWidgetPlayerModelEvent.class, new SetWidgetPlayerModelEventEncoder());
 		register(SetWidgetModelAnimationEvent.class, new SetWidgetModelAnimationEventEncoder());
 		register(ConfigEvent.class, new ConfigEventEncoder());
+		register(DisplayTabInterfaceEvent.class, new DisplayTabInterfaceEventEncoder());
 	}
 
 }

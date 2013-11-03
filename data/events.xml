@@ -79,4 +79,26 @@
       <handler>org.apollo.game.event.handler.impl.ItemOnItemVerificationHandler</handler>
     </chain>
   </event>
+  <event>
+    <type>org.apollo.game.event.impl.MagicOnItemEvent</type>
+    <chain>
+      <handler>org.apollo.game.event.handler.impl.ItemVerificationHandler</handler>
+    </chain>
+  </event>
+  <event>
+    <type>org.apollo.game.event.impl.SpamPacketEvent</type>
+    <chain />
+  </event>
+  <event>
+    <type>org.apollo.game.event.impl.MouseClickEvent</type>
+    <chain />
+  </event>
+  <event>
+    <type>org.apollo.game.event.impl.ArrowKeyEvent</type>
+    <chain />
+  </event>
+  <event>
+    <type>org.apollo.game.event.impl.FocusUpdateEvent</type>
+    <chain />
+  </event>
 </events>

@@ -36,6 +36,7 @@ public final class GameEventDecoder extends OneToOneDecoder {
 			if (decoder != null) {
 				return decoder.decode(packet);
 			}
+			System.out.println("Unidentified packet received - opcode: " + packet.getOpcode() + ".");
 			return null;
 		}
 		return msg;

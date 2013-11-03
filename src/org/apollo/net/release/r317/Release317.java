@@ -2,6 +2,7 @@ package org.apollo.net.release.r317;
 
 import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.ConfigEvent;
+import org.apollo.game.event.impl.DisplayTabInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
 import org.apollo.game.event.impl.LogoutEvent;
@@ -23,6 +24,9 @@ import org.apollo.game.event.impl.UpdateSkillEvent;
 import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
+import org.apollo.net.release.r377.FirstNpcActionEventDecoder;
+import org.apollo.net.release.r377.SecondNpcActionEventDecoder;
+import org.apollo.net.release.r377.ThirdNpcActionEventDecoder;
 
 /**
  * An implementation of {@link Release} for the 317 protocol.
@@ -106,6 +110,17 @@ public final class Release317 extends Release {
 		register(130, new ClosedInterfaceEventDecoder());
 		register(208, new EnteredAmountEventDecoder());
 		register(53, new ItemOnItemEventDecoder());
+		register(237, new MagicOnItemEventDecoder());
+
+		register(3, new FocusUpdateEventDecoder());
+		register(241, new MouseClickEventDecoder());
+		register(86, new ArrowKeyEventDecoder());
+		SpamPacketEventDecoder spamEventDecoder = new SpamPacketEventDecoder();
+		register(77, spamEventDecoder);
+
+		register(72, new FirstNpcActionEventDecoder());
+		register(155, new SecondNpcActionEventDecoder());
+		register(17, new ThirdNpcActionEventDecoder());
 
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
@@ -129,6 +144,7 @@ public final class Release317 extends Release {
 		register(SetWidgetPlayerModelEvent.class, new SetWidgetPlayerModelEventEncoder());
 		register(SetWidgetModelAnimationEvent.class, new SetWidgetModelAnimationEventEncoder());
 		register(ConfigEvent.class, new ConfigEventEncoder());
+		register(DisplayTabInterfaceEvent.class, new DisplayTabInterfaceEventEncoder());
 	}
 
 }

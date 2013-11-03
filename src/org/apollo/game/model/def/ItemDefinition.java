@@ -37,6 +37,15 @@ public final class ItemDefinition {
 	}
 
 	/**
+	 * Gets the array of item definitions.
+	 * 
+	 * @return The definitions.
+	 */
+	public static ItemDefinition[] getDefinitions() {
+		return definitions;
+	}
+
+	/**
 	 * Initialises the class with the specified set of definitions.
 	 * 
 	 * @param definitions The definitions.
@@ -121,7 +130,7 @@ public final class ItemDefinition {
 	/**
 	 * A flag indicating if this item is members only.
 	 */
-	private boolean members;
+	private boolean members = false;
 
 	/**
 	 * The name of the item.
@@ -149,9 +158,9 @@ public final class ItemDefinition {
 	private int team;
 
 	/**
-	 * The value of the item.
+	 * The item's floor value.
 	 */
-	private int value;
+	private int value = 1;
 
 	/**
 	 * Creates an item definition with the default values.
@@ -186,9 +195,9 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Gets the item's id.
+	 * Gets this item's id.
 	 * 
-	 * @return The item's id.
+	 * @return The id.
 	 */
 	public int getId() {
 		return id;
@@ -209,16 +218,16 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Gets the name of this item.
+	 * Gets this item's name.
 	 * 
-	 * @return The name of this item, or {@code null} if it has no name.
+	 * @return The name.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Gets the note graphic id.
+	 * Gets this item's note graphic id.
 	 * 
 	 * @return The note graphic id.
 	 */
@@ -227,7 +236,7 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Gets the note info id.
+	 * Gets this item's note info id.
 	 * 
 	 * @return The note info id.
 	 */
@@ -245,9 +254,9 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Gets the value of this item.
+	 * Gets this item's value.
 	 * 
-	 * @return The value of this item.
+	 * @return The value.
 	 */
 	public int getValue() {
 		return value;
@@ -281,9 +290,9 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Sets the description of this item.
+	 * Sets this item's description.
 	 * 
-	 * @param description The item's description.
+	 * @param description The description.
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -318,25 +327,25 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Sets the members only flag.
+	 * Sets this item's members only flag.
 	 * 
-	 * @param members The members only flag.
+	 * @param members The flag.
 	 */
 	public void setMembersOnly(boolean members) {
 		this.members = members;
 	}
 
 	/**
-	 * Sets the name of this item.
+	 * Sets this item's name.
 	 * 
-	 * @param name The item's name.
+	 * @param name The name.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * Sets the note graphic id.
+	 * Sets this item's note graphic id.
 	 * 
 	 * @param noteGraphicId The note graphic id.
 	 */
@@ -345,7 +354,7 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Sets the note info id.
+	 * Sets this item's note info id.
 	 * 
 	 * @param noteInfoId The note info id.
 	 */
@@ -354,7 +363,7 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Sets the stackable flag.
+	 * Sets this item's stackable flag.
 	 * 
 	 * @param stackable The stackable flag.
 	 */
@@ -363,7 +372,7 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Sets this items team.
+	 * Sets this item's team.
 	 * 
 	 * @param team The team.
 	 */
@@ -372,9 +381,9 @@ public final class ItemDefinition {
 	}
 
 	/**
-	 * Sets the value of this item.
+	 * sets this item's value.
 	 * 
-	 * @param value The value of this item.
+	 * @param value The value.
 	 */
 	public void setValue(int value) {
 		this.value = value;
@@ -394,7 +403,6 @@ public final class ItemDefinition {
 			ItemDefinition infoDef = lookup(noteInfoId);
 			name = infoDef.name;
 			members = infoDef.members;
-			value = infoDef.value;
 
 			String prefix = "a";
 			char firstChar = name == null ? 'n' : name.charAt(0);

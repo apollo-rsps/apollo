@@ -325,9 +325,8 @@ public final class Inventory implements Cloneable {
 			return true;
 		} else if (mode == StackMode.STACK_STACKABLE_ITEMS) {
 			return def.isStackable();
-		} else { // will be STACK_NEVER
-			return false;
 		}
+		return false; // will be STACK_NEVER
 	}
 
 	/**
