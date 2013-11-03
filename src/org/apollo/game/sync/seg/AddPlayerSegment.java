@@ -8,7 +8,7 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
  * 
  * @author Graham
  */
-public final class AddCharacterSegment extends SynchronizationSegment {
+public final class AddPlayerSegment extends SynchronizationSegment {
 
 	/**
 	 * The index.
@@ -27,7 +27,7 @@ public final class AddCharacterSegment extends SynchronizationSegment {
 	 * @param index The characters's index.
 	 * @param position The position.
 	 */
-	public AddCharacterSegment(SynchronizationBlockSet blockSet, int index, Position position) {
+	public AddPlayerSegment(SynchronizationBlockSet blockSet, int index, Position position) {
 		super(blockSet);
 		this.index = index;
 		this.position = position;

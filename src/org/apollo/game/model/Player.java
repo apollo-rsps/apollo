@@ -35,9 +35,9 @@ public final class Player extends Character {
 	public enum PrivilegeLevel {
 
 		/**
-		 * A standard (rights 0) account.
+		 * An administrator (rights 2) account.
 		 */
-		STANDARD(0),
+		ADMINISTRATOR(2),
 
 		/**
 		 * A player moderator (rights 1) account.
@@ -45,9 +45,9 @@ public final class Player extends Character {
 		MODERATOR(1),
 
 		/**
-		 * An administrator (rights 2) account.
+		 * A standard (rights 0) account.
 		 */
-		ADMINISTRATOR(2);
+		STANDARD(0);
 
 		/**
 		 * Gets the privilege level for the specified numerical level.
@@ -89,46 +89,8 @@ public final class Player extends Character {
 		}
 
 	}
+	
 
-	/**
-	 * A temporary queue of events sent during the login process.
-	 */
-	private final Queue<Event> queuedEvents = new ArrayDeque<Event>();
-
-	/**
-	 * The player's credentials.
-	 */
-	private PlayerCredentials credentials;
-
-	/**
-	 * The privilege level.
-	 */
-	private PrivilegeLevel privilegeLevel = PrivilegeLevel.STANDARD;
-
-	/**
-	 * The membership flag.
-	 */
-	private boolean members = false;
-
-	/**
-	 * A flag indicating if the player has designed their character.
-	 */
-	private boolean designedCharacter = false;
-
-	/**
-	 * The {@link GameSession} currently attached to this {@link Player}.
-	 */
-	private GameSession session;
-
-	/**
-	 * The centre of the last region the client has loaded.
-	 */
-	private Position lastKnownRegion;
-
-	/**
-	 * A flag indicating if the region changed in the last cycle.
-	 */
-	private boolean regionChanged = false;
 
 	/**
 	 * The player's appearance.
@@ -136,9 +98,19 @@ public final class Player extends Character {
 	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
 
 	/**
-	 * The current maximum viewing distance of this player.
+	 * The player's credentials.
 	 */
-	private int viewingDistance = 1;
+	private PlayerCredentials credentials;
+
+	/**
+	 * A flag indicating if the player has designed their character.
+	 */
+	private boolean designedCharacter = false;
+
+	/**
+	 * A flag which indicates there are npcs that couldn't be added.
+	 */
+	private boolean excessiveNpcs = false;
 
 	/**
 	 * A flag which indicates there are players that couldn't be added.
@@ -151,14 +123,49 @@ public final class Player extends Character {
 	private int headIcon = -1;
 
 	/**
+	 * This player's interface set.
+	 */
+	private final InterfaceSet interfaceSet = new InterfaceSet(this);
+
+	/**
+	 * The centre of the last region the client has loaded.
+	 */
+	private Position lastKnownRegion;
+
+	/**
+	 * The membership flag.
+	 */
+	private boolean members = false;
+
+	/**
 	 * This player's prayer icon.
 	 */
 	private int prayerIcon = -1;
 
 	/**
-	 * This player's interface set.
+	 * The privilege level.
 	 */
-	private final InterfaceSet interfaceSet = new InterfaceSet(this);
+	private PrivilegeLevel privilegeLevel = PrivilegeLevel.STANDARD;
+
+	/**
+	 * A temporary queue of events sent during the login process.
+	 */
+	private final Queue<Event> queuedEvents = new ArrayDeque<Event>();
+
+	/**
+	 * A flag indicating if the region changed in the last cycle.
+	 */
+	private boolean regionChanged = false;
+
+	/**
+	 * The {@link GameSession} currently attached to this {@link Player}.
+	 */
+	private GameSession session;
+
+	/**
+	 * The current maximum viewing distance of this player.
+	 */
+	private int viewingDistance = 1;
 
 	/**
 	 * A flag indicating if the player is withdrawing items as notes.
@@ -178,21 +185,19 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Gets this player's interface set.
-	 * 
-	 * @return The interface set for this player.
+	 * Decrements this player's viewing distance if it is greater than 1.
 	 */
-	public InterfaceSet getInterfaceSet() {
-		return interfaceSet;
+	public void decrementViewingDistance() {
+		if (viewingDistance > 1) { // TODO should it be 0?
+			viewingDistance--;
+		}
 	}
 
 	/**
-	 * Checks if there are excessive players.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
+	 * Sets the excessive npcs flag.
 	 */
-	public boolean isExcessivePlayersSet() {
-		return excessivePlayers;
+	public void flagExcessiveNpcs() {
+		this.excessiveNpcs = true;
 	}
 
 	/**
@@ -203,53 +208,48 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Resets the excessive players flag.
-	 */
-	public void resetExcessivePlayers() {
-		excessivePlayers = false;
-	}
-
-	/**
-	 * Resets this player's viewing distance.
-	 */
-	public void resetViewingDistance() {
-		viewingDistance = 1;
-	}
-
-	/**
-	 * Gets this player's viewing distance.
+	 * Gets the player's appearance.
 	 * 
-	 * @return The viewing distance.
+	 * @return The appearance.
 	 */
-	public int getViewingDistance() {
-		return viewingDistance;
+	public Appearance getAppearance() {
+		return appearance;
 	}
 
 	/**
-	 * Increments this player's viewing distance if it is less than the maximum viewing distance.
-	 */
-	public void incrementViewingDistance() {
-		if (viewingDistance < Position.MAX_DISTANCE) {
-			viewingDistance++;
-		}
-	}
-
-	/**
-	 * Decrements this player's viewing distance if it is greater than 1.
-	 */
-	public void decrementViewingDistance() {
-		if (viewingDistance > 1) { // TODO should it be 0?
-			viewingDistance--;
-		}
-	}
-
-	/**
-	 * Checks if this player has ever known a region.
+	 * Gets the player's credentials.
 	 * 
-	 * @return {@code true} if so, {@code false} if not.
+	 * @return The player's credentials.
 	 */
-	public boolean hasLastKnownRegion() {
-		return lastKnownRegion != null;
+	public PlayerCredentials getCredentials() {
+		return credentials;
+	}
+
+	/**
+	 * Gets the player's name, encoded as a long.
+	 * 
+	 * @return The encoded player name.
+	 */
+	public long getEncodedName() {
+		return credentials.getEncodedUsername();
+	}
+
+	/**
+	 * Gets the player's head icon.
+	 * 
+	 * @return The head icon.
+	 */
+	public int getHeadIcon() {
+		return headIcon;
+	}
+
+	/**
+	 * Gets this player's interface set.
+	 * 
+	 * @return The interface set for this player.
+	 */
+	public InterfaceSet getInterfaceSet() {
+		return interfaceSet;
 	}
 
 	/**
@@ -262,12 +262,21 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Sets the last known region.
+	 * Gets the player's name.
 	 * 
-	 * @param lastKnownRegion The last known region.
+	 * @return The player's name.
 	 */
-	public void setLastKnownRegion(Position lastKnownRegion) {
-		this.lastKnownRegion = lastKnownRegion;
+	public String getName() {
+		return credentials.getUsername();
+	}
+
+	/**
+	 * Gets the player's prayer icon.
+	 * 
+	 * @return The prayer icon.
+	 */
+	public int getPrayerIcon() {
+		return prayerIcon;
 	}
 
 	/**
@@ -280,67 +289,56 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Sets the privilege level.
+	 * Gets the game session.
 	 * 
-	 * @param privilegeLevel The privilege level.
+	 * @return The game session.
 	 */
-	public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
-		this.privilegeLevel = privilegeLevel;
+	public GameSession getSession() {
+		return session;
 	}
 
 	/**
-	 * Checks if this player account has membership.
+	 * Gets this player's viewing distance.
+	 * 
+	 * @return The viewing distance.
+	 */
+	public int getViewingDistance() {
+		return viewingDistance;
+	}
+
+	/**
+	 * Checks if the player has designed their character.
+	 * 
+	 * @return A flag indicating if the player has designed their character.
+	 */
+	public boolean hasDesignedCharacter() {
+		return designedCharacter;
+	}
+
+	/**
+	 * Checks if this player has ever known a region.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public boolean isMembers() {
-		return members;
+	public boolean hasLastKnownRegion() {
+		return lastKnownRegion != null;
 	}
 
 	/**
-	 * Changes the membership status of this player.
+	 * Checks if the region has changed.
 	 * 
-	 * @param members The new membership flag.
+	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public void setMembers(boolean members) {
-		this.members = members;
+	public boolean hasRegionChanged() {
+		return regionChanged;
 	}
 
 	/**
-	 * Sets the player's {@link GameSession}.
-	 * 
-	 * @param session The player's {@link GameSession}.
-	 * @param reconnecting The reconnecting flag.
+	 * Increments this player's viewing distance if it is less than the maximum viewing distance.
 	 */
-	public void setSession(GameSession session, boolean reconnecting) {
-		this.session = session;
-		if (!reconnecting) {
-			sendInitialEvents();
-		}
-		getBlockSet().add(SynchronizationBlock.createAppearanceBlock(this));
-	}
-
-	/**
-	 * Gets the player's credentials.
-	 * 
-	 * @return The player's credentials.
-	 */
-	public PlayerCredentials getCredentials() {
-		return credentials;
-	}
-
-	@Override
-	public void send(Event event) {
-		if (isActive()) {
-			if (!queuedEvents.isEmpty()) {
-				for (Event queuedEvent : queuedEvents) {
-					session.dispatchEvent(queuedEvent);
-				}
-				queuedEvents.clear();
-			}
-			session.dispatchEvent(event);
-		} else {
-			queuedEvents.add(event);
+	public void incrementViewingDistance() {
+		if (viewingDistance < Position.MAX_DISTANCE) {
+			viewingDistance++;
 		}
 	}
 
@@ -350,23 +348,6 @@ public final class Player extends Character {
 	private void init() {
 		initInventories();
 		initSkills();
-	}
-
-	/**
-	 * Initialises the player's skills.
-	 */
-	private void initSkills() {
-		SkillSet skills = getSkillSet();
-
-		// synchronization listener
-		SkillListener syncListener = new SynchronizationSkillListener(this);
-
-		// level up listener
-		SkillListener levelUpListener = new LevelUpSkillListener(this);
-
-		// add the listeners
-		skills.addListener(syncListener);
-		skills.addListener(levelUpListener);
 	}
 
 	/**
@@ -407,6 +388,95 @@ public final class Player extends Character {
 	}
 
 	/**
+	 * Initialises the player's skills.
+	 */
+	private void initSkills() {
+		SkillSet skills = getSkillSet();
+
+		// synchronization listener
+		SkillListener syncListener = new SynchronizationSkillListener(this);
+
+		// level up listener
+		SkillListener levelUpListener = new LevelUpSkillListener(this);
+
+		// add the listeners
+		skills.addListener(syncListener);
+		skills.addListener(levelUpListener);
+	}
+
+	/**
+	 * Checks if there are excessive npcs.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isExcessiveNpcsSet() {
+		return excessiveNpcs;
+	}
+
+	/**
+	 * Checks if there are excessive players.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isExcessivePlayersSet() {
+		return excessivePlayers;
+	}
+
+	/**
+	 * Checks if this player account has membership.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isMembers() {
+		return members;
+	}
+
+	/**
+	 * Gets the withdrawing notes flag.
+	 * 
+	 * @return The flag.
+	 */
+	public boolean isWithdrawingNotes() {
+		return withdrawingNotes;
+	}
+
+	/**
+	 * Logs the player out, if possible.
+	 */
+	public void logout() {
+		send(new LogoutEvent());
+	}
+
+	/**
+	 * Resets the excessive players flag.
+	 */
+	public void resetExcessivePlayers() {
+		excessivePlayers = false;
+	}
+
+	/**
+	 * Resets this player's viewing distance.
+	 */
+	public void resetViewingDistance() {
+		viewingDistance = 1;
+	}
+
+	@Override
+	public void send(Event event) {
+		if (isActive()) {
+			if (!queuedEvents.isEmpty()) {
+				for (Event queuedEvent : queuedEvents) {
+					session.dispatchEvent(queuedEvent);
+				}
+				queuedEvents.clear();
+			}
+			session.dispatchEvent(event);
+		} else {
+			queuedEvents.add(event);
+		}
+	}
+
+	/**
 	 * Sends the initial events.
 	 */
 	private void sendInitialEvents() {
@@ -438,37 +508,13 @@ public final class Player extends Character {
 		getSkillSet().forceRefresh();
 	}
 
-	@Override
-	public String toString() {
-		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel="
-				+ privilegeLevel + "]";
-	}
-
 	/**
-	 * Sets the region changed flag.
+	 * Sends a message to the character.
 	 * 
-	 * @param regionChanged A flag indicating if the region has changed.
+	 * @param message The message.
 	 */
-	public void setRegionChanged(boolean regionChanged) {
-		this.regionChanged = regionChanged;
-	}
-
-	/**
-	 * Checks if the region has changed.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean hasRegionChanged() {
-		return regionChanged;
-	}
-
-	/**
-	 * Gets the player's appearance.
-	 * 
-	 * @return The appearance.
-	 */
-	public Appearance getAppearance() {
-		return appearance;
+	public void sendMessage(String message) {
+		send(new ServerMessageEvent(message));
 	}
 
 	/**
@@ -482,40 +528,6 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Gets the player's name.
-	 * 
-	 * @return The player's name.
-	 */
-	public String getName() {
-		return credentials.getUsername();
-	}
-
-	/**
-	 * Gets the player's name, encoded as a long.
-	 * 
-	 * @return The encoded player name.
-	 */
-	public long getEncodedName() {
-		return credentials.getEncodedUsername();
-	}
-
-	/**
-	 * Logs the player out, if possible.
-	 */
-	public void logout() {
-		send(new LogoutEvent());
-	}
-
-	/**
-	 * Gets the game session.
-	 * 
-	 * @return The game session.
-	 */
-	public GameSession getSession() {
-		return session;
-	}
-
-	/**
 	 * Sets the character design flag.
 	 * 
 	 * @param designedCharacter A flag indicating if the character has been designed.
@@ -525,21 +537,71 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Checks if the player has designed their character.
+	 * Sets the player's head icon.
 	 * 
-	 * @return A flag indicating if the player has designed their character.
+	 * @param headIcon The head icon.
 	 */
-	public boolean hasDesignedCharacter() {
-		return designedCharacter;
+	public void setHeadIcon(int headIcon) {
+		this.headIcon = headIcon;
 	}
 
 	/**
-	 * Gets the withdrawing notes flag.
+	 * Sets the last known region.
 	 * 
-	 * @return The flag.
+	 * @param lastKnownRegion The last known region.
 	 */
-	public boolean isWithdrawingNotes() {
-		return withdrawingNotes;
+	public void setLastKnownRegion(Position lastKnownRegion) {
+		this.lastKnownRegion = lastKnownRegion;
+	}
+
+	/**
+	 * Changes the membership status of this player.
+	 * 
+	 * @param members The new membership flag.
+	 */
+	public void setMembers(boolean members) {
+		this.members = members;
+	}
+
+	/**
+	 * Sets the player's prayer icon.
+	 * 
+	 * @param prayerIcon The prayer icon.
+	 */
+	public void setPrayerIcon(int prayerIcon) {
+		this.prayerIcon = prayerIcon;
+	}
+
+	/**
+	 * Sets the privilege level.
+	 * 
+	 * @param privilegeLevel The privilege level.
+	 */
+	public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
+		this.privilegeLevel = privilegeLevel;
+	}
+
+	/**
+	 * Sets the region changed flag.
+	 * 
+	 * @param regionChanged A flag indicating if the region has changed.
+	 */
+	public void setRegionChanged(boolean regionChanged) {
+		this.regionChanged = regionChanged;
+	}
+
+	/**
+	 * Sets the player's {@link GameSession}.
+	 * 
+	 * @param session The player's {@link GameSession}.
+	 * @param reconnecting The reconnecting flag.
+	 */
+	public void setSession(GameSession session, boolean reconnecting) {
+		this.session = session;
+		if (!reconnecting) {
+			sendInitialEvents();
+		}
+		getBlockSet().add(SynchronizationBlock.createAppearanceBlock(this));
 	}
 
 	/**
@@ -557,49 +619,10 @@ public final class Player extends Character {
 		interfaceSet.close(); // TODO: should this be done if size == 0?
 	}
 
-	/**
-	 * Gets the player's prayer icon.
-	 * 
-	 * @return The prayer icon.
-	 */
-	public int getPrayerIcon() {
-		return prayerIcon;
-	}
-
-	/**
-	 * Gets the player's head icon.
-	 * 
-	 * @return The head icon.
-	 */
-	public int getHeadIcon() {
-		return headIcon;
-	}
-
-	/**
-	 * Sends a message to the character.
-	 * 
-	 * @param message The message.
-	 */
-	public void sendMessage(String message) {
-		send(new ServerMessageEvent(message));
-	}
-
-	/**
-	 * Sets the player's head icon.
-	 * 
-	 * @param headIcon The head icon.
-	 */
-	public void setHeadIcon(int headIcon) {
-		this.headIcon = headIcon;
-	}
-
-	/**
-	 * Sets the player's prayer icon.
-	 * 
-	 * @param prayerIcon The prayer icon.
-	 */
-	public void setPrayerIcon(int prayerIcon) {
-		this.prayerIcon = prayerIcon;
+	@Override
+	public String toString() {
+		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel="
+				+ privilegeLevel + "]";
 	}
 
 }

@@ -22,7 +22,7 @@ import org.apollo.game.sync.block.InteractingCharacterBlock;
 import org.apollo.game.sync.block.SecondHitUpdateBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.game.sync.block.TurnToPositionBlock;
-import org.apollo.game.sync.seg.AddCharacterSegment;
+import org.apollo.game.sync.seg.AddPlayerSegment;
 import org.apollo.game.sync.seg.MovementSegment;
 import org.apollo.game.sync.seg.SegmentType;
 import org.apollo.game.sync.seg.SynchronizationSegment;
@@ -60,7 +60,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			if (type == SegmentType.REMOVE_CHARACTER) {
 				putRemoveCharacterUpdate(builder);
 			} else if (type == SegmentType.ADD_CHARACTER) {
-				putAddCharacterUpdate((AddCharacterSegment) segment, event, builder);
+				putAddCharacterUpdate((AddPlayerSegment) segment, event, builder);
 				putBlocks(segment, blockBuilder);
 			} else {
 				putMovementUpdate(segment, event, builder);
@@ -86,7 +86,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * @param event The event.
 	 * @param builder The builder.
 	 */
-	private void putAddCharacterUpdate(AddCharacterSegment seg, PlayerSynchronizationEvent event,
+	private void putAddCharacterUpdate(AddPlayerSegment seg, PlayerSynchronizationEvent event,
 			GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		Position player = event.getPosition();

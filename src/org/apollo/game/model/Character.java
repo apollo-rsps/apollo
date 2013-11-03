@@ -20,9 +20,70 @@ import org.apollo.util.CharacterRepository;
 public abstract class Character {
 
 	/**
+	 * The character's current action.
+	 */
+	private Action<?> action; // TODO
+
+	/**
+	 * The character's bank.
+	 */
+	private final Inventory bank = new Inventory(InventoryConstants.BANK_CAPACITY, StackMode.STACK_ALWAYS);
+
+	/**
+	 * A set of {@link SynchronizationBlock}s.
+	 */
+	private SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
+
+	/**
+	 * The character's {@link NpcDefinition). This is only used by an instance of the {@link Player} class if they are
+	 * appearing as an npc in-game.
+	 */
+	private NpcDefinition definition;
+
+	/**
+	 * The character's equipment.
+	 */
+	private final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
+
+	/**
+	 * The first direction.
+	 */
+	private Direction firstDirection = Direction.NONE;
+
+	/**
 	 * The index of this character in the {@link CharacterRepository} it belongs to.
 	 */
 	private int index = -1;
+
+	/**
+	 * The character's inventory.
+	 */
+	private final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
+
+	/**
+	 * The list of local npcs.
+	 */
+	private final List<Npc> localNpcs = new ArrayList<Npc>();
+
+	/**
+	 * A list of local players.
+	 */
+	private final List<Player> localPlayers = new ArrayList<Player>();
+
+	/**
+	 * The current position of this character.
+	 */
+	private Position position;
+
+	/**
+	 * The second direction.
+	 */
+	private Direction secondDirection = Direction.NONE;
+
+	/**
+	 * The character's skill set.
+	 */
+	private final SkillSet skillSet = new SkillSet();
 
 	/**
 	 * Teleportation flag.
@@ -35,62 +96,6 @@ public abstract class Character {
 	private final WalkingQueue walkingQueue = new WalkingQueue(this);
 
 	/**
-	 * The first direction.
-	 */
-	private Direction firstDirection = Direction.NONE;
-
-	/**
-	 * The second direction.
-	 */
-	private Direction secondDirection = Direction.NONE;
-
-	/**
-	 * The current position of this character.
-	 */
-	private Position position;
-
-	/**
-	 * A list of local players.
-	 */
-	private final List<Player> localPlayers = new ArrayList<Player>(); // TODO make a specialized collection?
-
-	/**
-	 * A set of {@link SynchronizationBlock}s.
-	 */
-	private SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
-
-	/**
-	 * The character's current action.
-	 */
-	private Action<?> action; // TODO
-
-	/**
-	 * The character's inventory.
-	 */
-	private final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
-
-	/**
-	 * The character's equipment.
-	 */
-	private final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
-
-	/**
-	 * The character's bank.
-	 */
-	private final Inventory bank = new Inventory(InventoryConstants.BANK_CAPACITY, StackMode.STACK_ALWAYS);
-
-	/**
-	 * The character's skill set.
-	 */
-	private final SkillSet skillSet = new SkillSet();
-
-	/**
-	 * The character's {@link NpcDefinition). This is only used by an instance of the {@link Player} class if they are
-	 * appearing as an npc in-game.
-	 */
-	private NpcDefinition definition;
-
-	/**
 	 * Creates a new character with the specified initial position.
 	 * 
 	 * @param position The initial position of this character.
@@ -98,31 +103,6 @@ public abstract class Character {
 	public Character(Position position) {
 		this.position = position;
 		init();
-	}
-
-	/**
-	 * Initialises this character.
-	 */
-	private void init() {
-		World.getWorld().schedule(new SkillNormalizationTask(this));
-	}
-
-	/**
-	 * Gets the character's inventory.
-	 * 
-	 * @return The character's inventory.
-	 */
-	public Inventory getInventory() {
-		return inventory;
-	}
-
-	/**
-	 * Gets the character's equipment.
-	 * 
-	 * @return The character's equipment.
-	 */
-	public Inventory getEquipment() {
-		return equipment;
 	}
 
 	/**
@@ -135,68 +115,12 @@ public abstract class Character {
 	}
 
 	/**
-	 * Gets the local player list.
+	 * Gets the {@link SynchronizationBlockSet}.
 	 * 
-	 * @return The local player list.
+	 * @return The block set.
 	 */
-	public List<Player> getLocalPlayerList() {
-		return localPlayers;
-	}
-
-	/**
-	 * Checks if this player is currently teleporting.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean isTeleporting() {
-		return teleporting;
-	}
-
-	/**
-	 * Sets the teleporting flag.
-	 * 
-	 * @param teleporting {@code true} if the player is teleporting, {@code false} if not.
-	 */
-	public void setTeleporting(boolean teleporting) {
-		this.teleporting = teleporting;
-	}
-
-	/**
-	 * Gets the walking queue.
-	 * 
-	 * @return The walking queue.
-	 */
-	public WalkingQueue getWalkingQueue() {
-		return walkingQueue;
-	}
-
-	/**
-	 * Sets the next directions for this character.
-	 * 
-	 * @param first The first direction.
-	 * @param second The second direction.
-	 */
-	public void setDirections(Direction first, Direction second) {
-		this.firstDirection = first;
-		this.secondDirection = second;
-	}
-
-	/**
-	 * Gets the first direction.
-	 * 
-	 * @return The first direction.
-	 */
-	public Direction getFirstDirection() {
-		return firstDirection;
-	}
-
-	/**
-	 * Gets the second direction.
-	 * 
-	 * @return The second direction.
-	 */
-	public Direction getSecondDirection() {
-		return secondDirection;
+	public SynchronizationBlockSet getBlockSet() {
+		return blockSet;
 	}
 
 	/**
@@ -217,30 +141,21 @@ public abstract class Character {
 	}
 
 	/**
-	 * Gets the position of this character.
+	 * Gets the character's equipment.
 	 * 
-	 * @return The position of this character.
+	 * @return The character's equipment.
 	 */
-	public Position getPosition() {
-		return position;
+	public Inventory getEquipment() {
+		return equipment;
 	}
 
 	/**
-	 * Sets the position of this character.
+	 * Gets the first direction.
 	 * 
-	 * @param position The position of this character.
+	 * @return The first direction.
 	 */
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-
-	/**
-	 * Checks if this character is active.
-	 * 
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean isActive() {
-		return index != -1;
+	public Direction getFirstDirection() {
+		return firstDirection;
 	}
 
 	/**
@@ -255,23 +170,118 @@ public abstract class Character {
 	}
 
 	/**
-	 * Sets the index of this character.
+	 * Gets the character's inventory.
 	 * 
-	 * @param index The index of this character.
+	 * @return The character's inventory.
 	 */
-	public void setIndex(int index) {
-		synchronized (this) {
-			this.index = index;
-		}
+	public Inventory getInventory() {
+		return inventory;
 	}
 
 	/**
-	 * Gets the {@link SynchronizationBlockSet}.
+	 * Gets the local npc list.
 	 * 
-	 * @return The block set.
+	 * @return The local npc list.
 	 */
-	public SynchronizationBlockSet getBlockSet() {
-		return blockSet;
+	public List<Npc> getLocalNpcList() {
+		return localNpcs;
+	}
+
+	/**
+	 * Gets the local player list.
+	 * 
+	 * @return The local player list.
+	 */
+	public List<Player> getLocalPlayerList() {
+		return localPlayers;
+	}
+
+	/**
+	 * Gets this character's {@link NpcDefinition}.
+	 * 
+	 * @param definition The definition.
+	 */
+	public NpcDefinition getNpcDefinition() {
+		return definition;
+	}
+
+	/**
+	 * Gets the position of this character.
+	 * 
+	 * @return The position of this character.
+	 */
+	public Position getPosition() {
+		return position;
+	}
+
+	/**
+	 * Gets the second direction.
+	 * 
+	 * @return The second direction.
+	 */
+	public Direction getSecondDirection() {
+		return secondDirection;
+	}
+
+	/**
+	 * Gets the character's skill set.
+	 * 
+	 * @return The character's skill set.
+	 */
+	public SkillSet getSkillSet() {
+		return skillSet;
+	}
+
+	/**
+	 * Gets the walking queue.
+	 * 
+	 * @return The walking queue.
+	 */
+	public WalkingQueue getWalkingQueue() {
+		return walkingQueue;
+	}
+
+	/**
+	 * Initialises this character.
+	 */
+	private void init() {
+		World.getWorld().schedule(new SkillNormalizationTask(this));
+	}
+
+	/**
+	 * Checks if this character is active.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isActive() {
+		return index != -1;
+	}
+
+	/**
+	 * Checks if this player is currently teleporting.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isTeleporting() {
+		return teleporting;
+	}
+
+	/**
+	 * Plays the specified animation.
+	 * 
+	 * @param animation The animation.
+	 */
+	public void playAnimation(Animation animation) {
+		blockSet.add(SynchronizationBlock.createAnimationBlock(animation));
+	}
+
+	/**
+	 * Plays the specified graphic.
+	 * 
+	 * @param graphic The graphic.
+	 */
+	public void playGraphic(Graphic graphic) {
+		blockSet.add(SynchronizationBlock.createGraphicBlock(graphic));
 	}
 
 	/**
@@ -293,56 +303,52 @@ public abstract class Character {
 	public abstract void send(Event event);
 
 	/**
-	 * Teleports this character to the specified position, setting the appropriate flags and clearing the walking queue.
+	 * Sets this character's {@link NpcDefinition}.
 	 * 
-	 * @param position The position.
+	 * @param definition The definition.
 	 */
-	public void teleport(Position position) {
-		this.teleporting = true;
+	public void setDefinition(NpcDefinition definition) {
+		this.definition = definition;
+	}
+
+	/**
+	 * Sets the next directions for this character.
+	 * 
+	 * @param first The first direction.
+	 * @param second The second direction.
+	 */
+	public void setDirections(Direction first, Direction second) {
+		this.firstDirection = first;
+		this.secondDirection = second;
+	}
+
+	/**
+	 * Sets the index of this character.
+	 * 
+	 * @param index The index of this character.
+	 */
+	public void setIndex(int index) {
+		synchronized (this) {
+			this.index = index;
+		}
+	}
+
+	/**
+	 * Sets the position of this character.
+	 * 
+	 * @param position The position of this character.
+	 */
+	public void setPosition(Position position) {
 		this.position = position;
-		this.walkingQueue.clear();
-		this.stopAction(); // TODO do it on any movement is a must.. walking queue perhaps?
 	}
 
 	/**
-	 * Plays the specified animation.
+	 * Sets the teleporting flag.
 	 * 
-	 * @param animation The animation.
+	 * @param teleporting {@code true} if the player is teleporting, {@code false} if not.
 	 */
-	public void playAnimation(Animation animation) {
-		blockSet.add(SynchronizationBlock.createAnimationBlock(animation));
-	}
-
-	/**
-	 * Stops the current animation.
-	 */
-	public void stopAnimation() {
-		playAnimation(Animation.STOP_ANIMATION);
-	}
-
-	/**
-	 * Plays the specified graphic.
-	 * 
-	 * @param graphic The graphic.
-	 */
-	public void playGraphic(Graphic graphic) {
-		blockSet.add(SynchronizationBlock.createGraphicBlock(graphic));
-	}
-
-	/**
-	 * Stops the current graphic.
-	 */
-	public void stopGraphic() {
-		playGraphic(Graphic.STOP_GRAPHIC);
-	}
-
-	/**
-	 * Gets the character's skill set.
-	 * 
-	 * @return The character's skill set.
-	 */
-	public SkillSet getSkillSet() {
-		return skillSet;
+	public void setTeleporting(boolean teleporting) {
+		this.teleporting = teleporting;
 	}
 
 	/**
@@ -374,6 +380,32 @@ public abstract class Character {
 	}
 
 	/**
+	 * Stops the current animation.
+	 */
+	public void stopAnimation() {
+		playAnimation(Animation.STOP_ANIMATION);
+	}
+
+	/**
+	 * Stops the current graphic.
+	 */
+	public void stopGraphic() {
+		playGraphic(Graphic.STOP_GRAPHIC);
+	}
+
+	/**
+	 * Teleports this character to the specified position, setting the appropriate flags and clearing the walking queue.
+	 * 
+	 * @param position The position.
+	 */
+	public void teleport(Position position) {
+		this.teleporting = true;
+		this.position = position;
+		this.walkingQueue.clear();
+		this.stopAction(); // TODO do it on any movement is a must.. walking queue perhaps?
+	}
+
+	/**
 	 * Turns the character to face the specified position.
 	 * 
 	 * @param position The position to face.
@@ -389,24 +421,6 @@ public abstract class Character {
 	 */
 	public void updateInteractingCharacter(int index) {
 		blockSet.add(SynchronizationBlock.createInteractingCharacterBlock(index));
-	}
-
-	/**
-	 * Gets this character's {@link NpcDefinition}.
-	 * 
-	 * @param definition The definition.
-	 */
-	public NpcDefinition getNpcDefinition() {
-		return definition;
-	}
-
-	/**
-	 * Sets this character's {@link NpcDefinition}.
-	 * 
-	 * @param definition The definition.
-	 */
-	public void setDefinition(NpcDefinition definition) {
-		this.definition = definition;
 	}
 
 }
