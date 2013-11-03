@@ -6,11 +6,15 @@ import java.util.concurrent.Phaser;
 import java.util.concurrent.ThreadFactory;
 
 import org.apollo.game.GameService;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.Npc;
 import org.apollo.game.model.World;
+import org.apollo.game.model.Player;
+import org.apollo.game.sync.task.NpcSynchronizationTask;
 import org.apollo.game.sync.task.PhasedSynchronizationTask;
 import org.apollo.game.sync.task.PlayerSynchronizationTask;
+import org.apollo.game.sync.task.PostNpcSynchronizationTask;
 import org.apollo.game.sync.task.PostPlayerSynchronizationTask;
+import org.apollo.game.sync.task.PreNpcSynchronizationTask;
 import org.apollo.game.sync.task.PrePlayerSynchronizationTask;
 import org.apollo.game.sync.task.SynchronizationTask;
 import org.apollo.util.CharacterRepository;
@@ -24,6 +28,7 @@ import org.apollo.util.NamedThreadFactory;
  * will work.
  * 
  * @author Graham
+ * @author Major
  */
 public final class ParallelClientSynchronizer extends ClientSynchronizer {
 
@@ -50,11 +55,20 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 	@Override
 	public void synchronize() {
 		CharacterRepository<Player> players = World.getWorld().getPlayerRepository();
+		CharacterRepository<Npc> npcs = World.getWorld().getNpcRepository();
 		int playerCount = players.size();
+		int npcCount = npcs.size();
 
 		phaser.bulkRegister(playerCount);
 		for (Player player : players) {
 			SynchronizationTask task = new PrePlayerSynchronizationTask(player);
+			executor.submit(new PhasedSynchronizationTask(phaser, task));
+		}
+		phaser.arriveAndAwaitAdvance();
+
+		phaser.bulkRegister(npcCount);
+		for (Npc npc : npcs) {
+			SynchronizationTask task = new PreNpcSynchronizationTask(npc);
 			executor.submit(new PhasedSynchronizationTask(phaser, task));
 		}
 		phaser.arriveAndAwaitAdvance();
@@ -68,7 +82,21 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 
 		phaser.bulkRegister(playerCount);
 		for (Player player : players) {
+			SynchronizationTask task = new NpcSynchronizationTask(player);
+			executor.submit(new PhasedSynchronizationTask(phaser, task));
+		}
+		phaser.arriveAndAwaitAdvance();
+
+		phaser.bulkRegister(playerCount);
+		for (Player player : players) {
 			SynchronizationTask task = new PostPlayerSynchronizationTask(player);
+			executor.submit(new PhasedSynchronizationTask(phaser, task));
+		}
+		phaser.arriveAndAwaitAdvance();
+
+		phaser.bulkRegister(npcCount);
+		for (Npc npc : npcs) {
+			SynchronizationTask task = new PostNpcSynchronizationTask(npc);
 			executor.submit(new PhasedSynchronizationTask(phaser, task));
 		}
 		phaser.arriveAndAwaitAdvance();

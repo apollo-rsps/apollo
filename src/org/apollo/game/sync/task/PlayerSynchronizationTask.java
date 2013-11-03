@@ -12,7 +12,7 @@ import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.ChatBlock;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
-import org.apollo.game.sync.seg.AddCharacterSegment;
+import org.apollo.game.sync.seg.AddPlayerSegment;
 import org.apollo.game.sync.seg.RemoveCharacterSegment;
 import org.apollo.game.sync.seg.MovementSegment;
 import org.apollo.game.sync.seg.SynchronizationSegment;
@@ -104,7 +104,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 					blockSet.add(SynchronizationBlock.createAppearanceBlock(p));
 				}
 
-				segments.add(new AddCharacterSegment(blockSet, p.getIndex(), p.getPosition()));
+				segments.add(new AddPlayerSegment(blockSet, p.getIndex(), p.getPosition()));
 			}
 		}
 

@@ -34,26 +34,11 @@ import org.apollo.util.plugin.PluginManager;
 public final class World {
 
 	/**
-	 * The logger for this class.
-	 */
-	private static final Logger logger = Logger.getLogger(World.class.getName());
-
-	/**
-	 * The world.
-	 */
-	private static final World world = new World();
-
-	/**
 	 * Represents the different status codes for registering a player.
 	 * 
 	 * @author Graham
 	 */
 	public enum RegistrationStatus {
-
-		/**
-		 * Indicates the world is full.
-		 */
-		WORLD_FULL,
 
 		/**
 		 * Indicates that the player is already online.
@@ -63,8 +48,23 @@ public final class World {
 		/**
 		 * Indicates that the player was registered successfully.
 		 */
-		OK;
+		OK,
+
+		/**
+		 * Indicates the world is full.
+		 */
+		WORLD_FULL;
 	}
+
+	/**
+	 * The logger for this class.
+	 */
+	private static final Logger logger = Logger.getLogger(World.class.getName());
+
+	/**
+	 * The world.
+	 */
+	private static final World world = new World();
 
 	/**
 	 * Gets the world.
@@ -76,19 +76,15 @@ public final class World {
 	}
 
 	/**
-	 * The scheduler.
-	 */
-	// TODO: better place than here?
-	private final Scheduler scheduler = new Scheduler();
-
-	/**
 	 * The command dispatcher.
 	 */
 	// TODO: better place than here?
 	private final CommandDispatcher dispatcher = new CommandDispatcher();
 
-	// TODO: better place than here!!
-	private PluginManager pluginManager;
+	/**
+	 * The {@link CharacterRepository} of {@link Npc}s.
+	 */
+	private final CharacterRepository<Npc> npcRepository = new CharacterRepository<Npc>(WorldConstants.MAXIMUM_NPCS);
 
 	/**
 	 * The {@link CharacterRepository} of {@link Player}s.
@@ -96,11 +92,61 @@ public final class World {
 	private final CharacterRepository<Player> playerRepository = new CharacterRepository<Player>(
 			WorldConstants.MAXIMUM_PLAYERS);
 
+	// TODO: better place than here!!
+	private PluginManager pluginManager;
+
+	/**
+	 * The scheduler.
+	 */
+	// TODO: better place than here?
+	private final Scheduler scheduler = new Scheduler();
+
 	/**
 	 * Creates the world.
 	 */
 	private World() {
 
+	}
+
+	/**
+	 * Gets the command dispatcher. TODO should this be here?
+	 * 
+	 * @return The command dispatcher.
+	 */
+	public CommandDispatcher getCommandDispatcher() {
+		return dispatcher;
+	}
+
+	/**
+	 * Gets the npc repository.
+	 * 
+	 * @return The npc repository.
+	 */
+	public CharacterRepository<Npc> getNpcRepository() {
+		return npcRepository;
+	}
+
+	/**
+	 * Gets the character repository. NOTE: {@link CharacterRepository#add(Character)} and
+	 * {@link CharacterRepository#remove(Character)} should not be called directly! These mutation methods are not
+	 * guaranteed to work in future releases!
+	 * <p>
+	 * Instead, use the {@link World#register(Player)} and {@link World#unregister(Player)} methods which do the same
+	 * thing and will continue to work as normal in future releases.
+	 * 
+	 * @return The character repository.
+	 */
+	public CharacterRepository<Player> getPlayerRepository() {
+		return playerRepository;
+	}
+
+	/**
+	 * Gets the plugin manager. TODO should this be here?
+	 * 
+	 * @return The plugin manager.
+	 */
+	public PluginManager getPluginManager() {
+		return pluginManager;
 	}
 
 	/**
@@ -147,17 +193,42 @@ public final class World {
 	}
 
 	/**
-	 * Gets the character repository. NOTE: {@link CharacterRepository#add(Character)} and
-	 * {@link CharacterRepository#remove(Character)} should not be called directly! These mutation methods are not
-	 * guaranteed to work in future releases!
-	 * <p>
-	 * Instead, use the {@link World#register(Player)} and {@link World#unregister(Player)} methods which do the same
-	 * thing and will continue to work as normal in future releases.
+	 * Checks if the specified player is online.
 	 * 
-	 * @return The character repository.
+	 * @param name The player's name.
+	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public CharacterRepository<Player> getPlayerRepository() {
-		return playerRepository;
+	public boolean isPlayerOnline(String name) {
+		// TODO: use a hash set or map in the future?
+		for (Player player : playerRepository) {
+			if (player.getName().equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Calls the {@link Scheduler#pulse()} method.
+	 */
+	public void pulse() {
+		scheduler.pulse();
+	}
+
+	/**
+	 * Registers the specified npc.
+	 * 
+	 * @param npc The npc.
+	 * @return {@code true} if the npc registered successfully, otherwise {@code false}.
+	 */
+	public boolean register(final Npc npc) {
+		boolean success = npcRepository.add(npc);
+		if (success) {
+			logger.info("Registered npc: " + npc + " [online=" + npcRepository.size() + "]");
+		} else {
+			logger.warning("Failed to register npc, repository capacity reached: [online=" + npcRepository.size() + "]");
+		}
+		return success;
 	}
 
 	/**
@@ -183,19 +254,25 @@ public final class World {
 	}
 
 	/**
-	 * Checks if the specified player is online.
+	 * Schedules a new task.
 	 * 
-	 * @param name The player's name.
-	 * @return {@code true} if so, {@code false} if not.
+	 * @param task The {@link ScheduledTask}.
 	 */
-	public boolean isPlayerOnline(String name) {
-		// TODO: use a hash set or map in the future?
-		for (Player player : playerRepository) {
-			if (player.getName().equalsIgnoreCase(name)) {
-				return true;
-			}
+	public void schedule(ScheduledTask task) {
+		scheduler.schedule(task);
+	}
+
+	/**
+	 * Unregisters the specified {@link Npc}.
+	 * 
+	 * @param npc The npc.
+	 */
+	public void unregister(Npc npc) {
+		if (npcRepository.remove(npc)) {
+			logger.info("Unregistered npc: " + npc + " [online=" + npcRepository.size() + "]");
+		} else {
+			logger.warning("Could not find npc " + npc + " to unregister!");
 		}
-		return false;
 	}
 
 	/**
@@ -209,40 +286,6 @@ public final class World {
 		} else {
 			logger.warning("Could not find player to unregister: " + player + "!");
 		}
-	}
-
-	/**
-	 * Schedules a new task.
-	 * 
-	 * @param task The {@link ScheduledTask}.
-	 */
-	public void schedule(ScheduledTask task) {
-		scheduler.schedule(task);
-	}
-
-	/**
-	 * Calls the {@link Scheduler#pulse()} method.
-	 */
-	public void pulse() {
-		scheduler.pulse();
-	}
-
-	/**
-	 * Gets the command dispatcher. TODO should this be here?
-	 * 
-	 * @return The command dispatcher.
-	 */
-	public CommandDispatcher getCommandDispatcher() {
-		return dispatcher;
-	}
-
-	/**
-	 * Gets the plugin manager. TODO should this be here?
-	 * 
-	 * @return The plugin manager.
-	 */
-	public PluginManager getPluginManager() {
-		return pluginManager;
 	}
 
 }

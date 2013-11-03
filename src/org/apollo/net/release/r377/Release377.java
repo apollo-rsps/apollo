@@ -4,6 +4,7 @@ import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
 import org.apollo.game.event.impl.LogoutEvent;
+import org.apollo.game.event.impl.NpcSynchronizationEvent;
 import org.apollo.game.event.impl.OpenInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
 import org.apollo.game.event.impl.PlayerSynchronizationEvent;
@@ -105,6 +106,7 @@ public final class Release377 extends Release {
 		register(OpenInterfaceSidebarEvent.class, new OpenInterfaceSidebarEventEncoder());
 		register(EnterAmountEvent.class, new EnterAmountEventEncoder());
 		register(SetInterfaceTextEvent.class, new SetInterfaceTextEventEncoder());
+		register(NpcSynchronizationEvent.class, new NpcSynchronizationEventEncoder());
 	}
 
 }
