@@ -129,7 +129,7 @@ def on_button(args, proc)
   id = args[0].to_i
 
   on :event, :button do |ctx, player, event|
-    if event.interface_id == id
+    if event.widget_id == id
       proc.call player
     end
   end

@@ -10,7 +10,12 @@ import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
 import org.apollo.game.event.impl.PlayerSynchronizationEvent;
 import org.apollo.game.event.impl.RegionChangeEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
-import org.apollo.game.event.impl.SetInterfaceTextEvent;
+import org.apollo.game.event.impl.SetWidgetItemModelEvent;
+import org.apollo.game.event.impl.SetWidgetModelAnimationEvent;
+import org.apollo.game.event.impl.SetWidgetNpcModelEvent;
+import org.apollo.game.event.impl.SetWidgetPlayerModelEvent;
+import org.apollo.game.event.impl.SetWidgetTextEvent;
+import org.apollo.game.event.impl.SetWidgetVisibilityEvent;
 import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
 import org.apollo.game.event.impl.UpdateItemsEvent;
 import org.apollo.game.event.impl.UpdateSkillEvent;
@@ -110,8 +115,13 @@ public final class Release317 extends Release {
 		register(UpdateSkillEvent.class, new UpdateSkillEventEncoder());
 		register(OpenInterfaceSidebarEvent.class, new OpenInterfaceSidebarEventEncoder());
 		register(EnterAmountEvent.class, new EnterAmountEventEncoder());
-		register(SetInterfaceTextEvent.class, new SetInterfaceTextEventEncoder());
+		register(SetWidgetTextEvent.class, new SetWidgetTextEventEncoder());
 		register(NpcSynchronizationEvent.class, new NpcSynchronizationEventEncoder());
+		register(SetWidgetVisibilityEvent.class, new SetWidgetVisibilityEventEncoder());
+		register(SetWidgetItemModelEvent.class, new SetWidgetItemModelEventEncoder());
+		register(SetWidgetNpcModelEvent.class, new SetWidgetNpcModelEventEncoder());
+		register(SetWidgetPlayerModelEvent.class, new SetWidgetPlayerModelEventEncoder());
+		register(SetWidgetModelAnimationEvent.class, new SetWidgetModelAnimationEventEncoder());
 	}
 
 }

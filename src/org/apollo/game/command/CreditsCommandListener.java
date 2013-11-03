@@ -2,7 +2,7 @@ package org.apollo.game.command;
 
 import java.util.Iterator;
 
-import org.apollo.game.event.impl.SetInterfaceTextEvent;
+import org.apollo.game.event.impl.SetWidgetTextEvent;
 import org.apollo.game.model.Player;
 import org.apollo.game.model.World;
 import org.apollo.game.model.inter.quest.QuestConstants;
@@ -30,30 +30,30 @@ public final class CreditsCommandListener implements CommandListener {
 		Iterator<String> it = mgr.createAuthorsIterator();
 
 		int pos = 0;
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++], "@dre@Apollo"));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++], "@dre@Introduction"));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++], ""));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++],
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++], "@dre@Apollo"));
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++], "@dre@Introduction"));
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++], ""));
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++],
 				"This server is based on Apollo, a lightweight, fast, secure"));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++],
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++],
 				"and open-source RuneScape emulator. For more"));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++],
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++],
 				"information about Apollo, visit the website at:"));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++],
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++],
 				"@dbl@https://github.com/apollo-rsps/apollo"));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++], ""));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++],
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++], ""));
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++],
 				"Apollo is released under the terms of the ISC"));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++],
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++],
 				"license, details can be found in the root folder of the "));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++], "Apollo distribution."));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++], ""));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++], "@dre@Credits"));
-		player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos++], ""));
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++], "Apollo distribution."));
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++], ""));
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++], "@dre@Credits"));
+		player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos++], ""));
 
 		for (; pos < QuestConstants.QUEST_TEXT.length; pos++) {
 			String text = it.hasNext() ? it.next() : "";
-			player.send(new SetInterfaceTextEvent(QuestConstants.QUEST_TEXT[pos], text));
+			player.send(new SetWidgetTextEvent(QuestConstants.QUEST_TEXT[pos], text));
 		}
 
 		player.getInterfaceSet().openWindow(QuestConstants.QUEST_INTERFACE);
