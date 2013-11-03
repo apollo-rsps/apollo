@@ -89,8 +89,6 @@ public final class Player extends Character {
 		}
 
 	}
-	
-
 
 	/**
 	 * The player's appearance.
@@ -156,6 +154,11 @@ public final class Player extends Character {
 	 * A flag indicating if the region changed in the last cycle.
 	 */
 	private boolean regionChanged = false;
+
+	/**
+	 * A flag indicating if this player is running.
+	 */
+	private boolean running = false;
 
 	/**
 	 * The {@link GameSession} currently attached to this {@link Player}.
@@ -623,6 +626,25 @@ public final class Player extends Character {
 	public String toString() {
 		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel="
 				+ privilegeLevel + "]";
+	}
+
+	/**
+	 * Gets whether the player is running or not.
+	 * 
+	 * @return {@code true} if the player is running, otherwise {@code false}.
+	 */
+	public boolean isRunning() {
+		return running;
+	}
+
+	/**
+	 * Sets whether the running toggle is enabled.
+	 * 
+	 * @param running The toggle.
+	 */
+	public void setRunning(boolean running) {
+		this.running = running;
+		getWalkingQueue().setRunningQueue(running);
 	}
 
 }
