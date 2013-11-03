@@ -71,7 +71,7 @@ class MiningAction < DistancedAction
         # TODO: calculate the chance that the player can actually get the rock
 
         if character.inventory.add ore.id
-          ore_def = ItemDefinition.for_id @ore.id # TODO: split off into some method
+          ore_def = ItemDefinition.lookup @ore.id # TODO: split off into some method
           name = ore_def.name.sub(/ ore$/, "").downcase
 
           character.send_message "You manage to mine some #{name}."
@@ -126,7 +126,7 @@ class ProspectingAction < DistancedAction
       character.send_message "You examine the rock for ores..."
       character.turn_to @position
     else
-      ore_def = ItemDefinition.for_id @ore.id
+      ore_def = ItemDefinition.lookup @ore.id
       name = ore_def.name.sub(/ ore$/, "").downcase
 
       character.send_message "This rock contains #{name}."
