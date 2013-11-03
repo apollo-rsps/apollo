@@ -48,12 +48,14 @@
   <event>
     <type>org.apollo.game.event.impl.ItemOptionEvent</type>
     <chain>
+      <handler>org.apollo.game.event.handler.impl.ItemVerificationHandler</handler>
       <handler>org.apollo.game.event.handler.impl.EquipEventHandler</handler>
     </chain>
   </event>
   <event>
     <type>org.apollo.game.event.impl.ItemActionEvent</type>
     <chain>
+      <handler>org.apollo.game.event.handler.impl.ItemVerificationHandler</handler>
       <handler>org.apollo.game.event.handler.impl.RemoveEventHandler</handler>
       <handler>org.apollo.game.event.handler.impl.BankEventHandler</handler>
     </chain>

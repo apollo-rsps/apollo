@@ -26,15 +26,15 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 			int inventorySlot = event.getSlot();
 			Item equipping = player.getInventory().get(inventorySlot);
 			int equippingId = equipping.getId();
-			EquipmentDefinition equippingDef = EquipmentDefinition.lookup(equippingId);
+			EquipmentDefinition equippingDefinition = EquipmentDefinition.lookup(equippingId);
 
-			if (equippingDef == null) {
+			if (equippingDefinition == null) {
 				ctx.breakHandlerChain();
 				return;
 			}
 
 			for (int id = 0; id < 5; id++) {
-				int requirement = equippingDef.getLevel(id);
+				int requirement = equippingDefinition.getLevel(id);
 
 				if (player.getSkillSet().getSkill(id).getMaximumLevel() < requirement) {
 					String skillName = Skill.getName(id);
@@ -50,14 +50,12 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 			Inventory inventory = player.getInventory();
 			Inventory equipment = player.getEquipment();
 
-			// start
-
-			int equipmentSlot = equippingDef.getSlot();
+			int equipmentSlot = equippingDefinition.getSlot();
 			Item currentlyEquipped = equipment.get(equipmentSlot);
 
 			if (equipping.getDefinition().isStackable()
 					&& (currentlyEquipped == null || currentlyEquipped.getId() == equippingId)) {
-				equipment.set(equippingDef.getSlot(), equipping);
+				equipment.set(equippingDefinition.getSlot(), equipping);
 				inventory.reset(inventorySlot);
 				ctx.breakHandlerChain();
 				return;
@@ -66,7 +64,7 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 			Item weapon = equipment.get(EquipmentConstants.WEAPON);
 			Item shield = equipment.get(EquipmentConstants.SHIELD);
 
-			if (equippingDef.isTwoHanded()) {
+			if (equippingDefinition.isTwoHanded()) {
 				int slotsRequired = weapon != null ? shield != null ? 1 : 0 : 0;
 				if (inventory.freeSlots() < slotsRequired) {
 					ctx.breakHandlerChain();
@@ -84,7 +82,7 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 					inventory.add(weapon);
 				}
 				return;
-			} else if (equippingDef.getSlot() == EquipmentConstants.SHIELD && weapon != null
+			} else if (equippingDefinition.getSlot() == EquipmentConstants.SHIELD && weapon != null
 					&& EquipmentDefinition.lookup(weapon.getId()).isTwoHanded()) {
 				equipment.set(EquipmentConstants.SHIELD, inventory.reset(inventorySlot));
 				inventory.add(equipment.reset(EquipmentConstants.WEAPON));

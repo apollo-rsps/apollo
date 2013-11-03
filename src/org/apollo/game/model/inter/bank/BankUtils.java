@@ -32,14 +32,7 @@ public final class BankUtils {
 		Inventory inventory = player.getInventory();
 		Inventory bank = player.getBank();
 
-		if (slot < 0 || slot >= inventory.capacity()) {
-			return false;
-		}
-
 		Item item = inventory.get(slot);
-		if (item.getId() != id) {
-			return false;
-		}
 
 		int newId = ItemDefinition.noteToItem(item.getId());
 
@@ -105,14 +98,7 @@ public final class BankUtils {
 		Inventory inventory = player.getInventory();
 		Inventory bank = player.getBank();
 
-		if (slot < 0 || slot >= bank.capacity()) {
-			return false;
-		}
-
 		Item item = bank.get(slot);
-		if (item == null || item.getId() != id) {
-			return false;
-		}
 
 		if (amount >= item.getAmount()) {
 			amount = item.getAmount();
