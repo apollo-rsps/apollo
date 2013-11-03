@@ -75,7 +75,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private Object decodeHandshake(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readable()) {
@@ -100,7 +100,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private Object decodeHeader(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readableBytes() >= 2) {
@@ -126,7 +126,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	private Object decodePayload(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
 		if (buffer.readableBytes() >= loginLength) {

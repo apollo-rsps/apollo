@@ -76,7 +76,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 	 * 
 	 * @param out The output stream.
 	 * @param inventory The inventory.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	private void writeInventory(DataOutputStream out, Inventory inventory) throws IOException {
 		int capacity = inventory.capacity();

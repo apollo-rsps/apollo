@@ -15,7 +15,7 @@ public abstract class ResourceProvider {
 	 * 
 	 * @param path The path to the resource, e.g. {@code /crc}.
 	 * @return {@code true} if the provider can fulfil a request to the resource, {@code false} otherwise.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public abstract boolean accept(String path) throws IOException;
 
@@ -24,7 +24,7 @@ public abstract class ResourceProvider {
 	 * 
 	 * @param path The path.
 	 * @return The resource, or {@code null} if it doesn't exist.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public abstract ByteBuffer get(String path) throws IOException;
 

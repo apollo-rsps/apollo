@@ -69,7 +69,7 @@ public final class GamePacketBuilder {
 	 * Creates a {@link GamePacket} based on the current contents of this builder.
 	 * 
 	 * @return The {@link GamePacket}.
-	 * @throws IllegalStateException if the builder is not in byte access mode, or if the packet is raw.
+	 * @throws IllegalStateException If the builder is not in byte access mode, or if the packet is raw.
 	 */
 	public GamePacket toGamePacket() {
 		if (type == PacketType.RAW) {
@@ -85,7 +85,7 @@ public final class GamePacketBuilder {
 	 * Gets the current length of the builder's buffer.
 	 * 
 	 * @return The length of the buffer.
-	 * @throws IllegalStateException if the builder is not in byte access mode.
+	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	public int getLength() {
 		checkByteAccess();
@@ -95,7 +95,7 @@ public final class GamePacketBuilder {
 	/**
 	 * Switches this builder's mode to the byte access mode.
 	 * 
-	 * @throws IllegalStateException if the builder is already in byte access mode.
+	 * @throws IllegalStateException If the builder is already in byte access mode.
 	 */
 	public void switchToByteAccess() {
 		if (mode == AccessMode.BYTE_ACCESS) {
@@ -108,7 +108,7 @@ public final class GamePacketBuilder {
 	/**
 	 * Switches this builder's mode to the bit access mode.
 	 * 
-	 * @throws IllegalStateException if the builder is already in bit access mode.
+	 * @throws IllegalStateException If the builder is already in bit access mode.
 	 */
 	public void switchToBitAccess() {
 		if (mode == AccessMode.BIT_ACCESS) {
@@ -151,7 +151,7 @@ public final class GamePacketBuilder {
 	 * 
 	 * @param type The data type.
 	 * @param value The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public void put(DataType type, Number value) {
 		put(type, DataOrder.BIG, DataTransformation.NONE, value);
@@ -163,8 +163,8 @@ public final class GamePacketBuilder {
 	 * @param type The data type.
 	 * @param order The byte order.
 	 * @param value The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public void put(DataType type, DataOrder order, Number value) {
 		put(type, order, DataTransformation.NONE, value);
@@ -176,8 +176,8 @@ public final class GamePacketBuilder {
 	 * @param type The type.
 	 * @param transformation The transformation.
 	 * @param value The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public void put(DataType type, DataTransformation transformation, Number value) {
 		put(type, DataOrder.BIG, transformation, value);
@@ -190,8 +190,8 @@ public final class GamePacketBuilder {
 	 * @param order The byte order.
 	 * @param transformation The transformation.
 	 * @param value The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public void put(DataType type, DataOrder order, DataTransformation transformation, Number value) {
 		checkByteAccess();
@@ -288,7 +288,7 @@ public final class GamePacketBuilder {
 	 * Puts the bytes from the specified buffer into this packet's buffer.
 	 * 
 	 * @param buffer The source {@link ChannelBuffer}.
-	 * @throws IllegalStateException if the builder is not in byte access mode.
+	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	public void putBytes(ChannelBuffer buffer) {
 		byte[] bytes = new byte[buffer.readableBytes()];
@@ -305,7 +305,7 @@ public final class GamePacketBuilder {
 	 * Puts the bytes from the specified buffer into this packet's buffer, in reverse.
 	 * 
 	 * @param buffer The source {@link ChannelBuffer}.
-	 * @throws IllegalStateException if the builder is not in byte access mode.
+	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	public void putBytesReverse(ChannelBuffer buffer) {
 		byte[] bytes = new byte[buffer.readableBytes()];
@@ -322,7 +322,7 @@ public final class GamePacketBuilder {
 	 * Puts the specified byte array into the buffer.
 	 * 
 	 * @param bytes The byte array.
-	 * @throws IllegalStateException if the builder is not in bit access mode.
+	 * @throws IllegalStateException If the builder is not in bit access mode.
 	 */
 	public void putBytes(byte[] bytes) {
 		buffer.writeBytes(bytes);
@@ -333,7 +333,7 @@ public final class GamePacketBuilder {
 	 * 
 	 * @param transformation The transformation.
 	 * @param bytes The byte array.
-	 * @throws IllegalStateException if the builder is not in byte access mode.
+	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	public void putBytes(DataTransformation transformation, byte[] bytes) {
 		if (transformation == DataTransformation.NONE) {
@@ -349,7 +349,7 @@ public final class GamePacketBuilder {
 	 * Puts the specified byte array into the buffer in reverse.
 	 * 
 	 * @param bytes The byte array.
-	 * @throws IllegalStateException if the builder is not in byte access mode.
+	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	public void putBytesReverse(byte[] bytes) {
 		checkByteAccess();
@@ -363,7 +363,7 @@ public final class GamePacketBuilder {
 	 * 
 	 * @param transformation The transformation.
 	 * @param bytes The byte array.
-	 * @throws IllegalStateException if the builder is not in byte access mode.
+	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	public void putBytesReverse(DataTransformation transformation, byte[] bytes) {
 		if (transformation == DataTransformation.NONE) {
@@ -380,7 +380,7 @@ public final class GamePacketBuilder {
 	 * {@code flag} is {@code false}, the value of the bit is {@code 0}.
 	 * 
 	 * @param flag The flag.
-	 * @throws IllegalStateException if the builder is not in bit access mode.
+	 * @throws IllegalStateException If the builder is not in bit access mode.
 	 */
 	public void putBit(boolean flag) {
 		putBit(flag ? 1 : 0);
@@ -390,7 +390,7 @@ public final class GamePacketBuilder {
 	 * Puts a single bit into the buffer with the value {@code value}.
 	 * 
 	 * @param value The value.
-	 * @throws IllegalStateException if the builder is not in bit access mode.
+	 * @throws IllegalStateException If the builder is not in bit access mode.
 	 */
 	public void putBit(int value) {
 		putBits(1, value);
@@ -401,8 +401,8 @@ public final class GamePacketBuilder {
 	 * 
 	 * @param numBits The number of bits to put into the buffer.
 	 * @param value The value.
-	 * @throws IllegalStateException if the builder is not in bit access mode.
-	 * @throws IllegalArgumentException if the number of bits is not between 1 and 31 inclusive.
+	 * @throws IllegalStateException If the builder is not in bit access mode.
+	 * @throws IllegalArgumentException If the number of bits is not between 1 and 31 inclusive.
 	 */
 	public void putBits(int numBits, int value) {
 		if (numBits < 0 || numBits > 32) {
@@ -442,7 +442,7 @@ public final class GamePacketBuilder {
 	/**
 	 * Checks that this builder is in the byte access mode.
 	 * 
-	 * @throws IllegalStateException if the builder is not in byte access mode.
+	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	private void checkByteAccess() {
 		if (mode != AccessMode.BYTE_ACCESS) {
@@ -453,7 +453,7 @@ public final class GamePacketBuilder {
 	/**
 	 * Checks that this builder is in the bit access mode.
 	 * 
-	 * @throws IllegalStateException if the builder is not in bit access mode.
+	 * @throws IllegalStateException If the builder is not in bit access mode.
 	 */
 	private void checkBitAccess() {
 		if (mode != AccessMode.BIT_ACCESS) {

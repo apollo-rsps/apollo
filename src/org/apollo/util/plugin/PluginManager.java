@@ -75,9 +75,9 @@ public final class PluginManager {
 	/**
 	 * Starts the plugin system by finding and loading all the plugins.
 	 * 
-	 * @throws SAXException if a SAX error occurs.
-	 * @throws IOException if an I/O error occurs.
-	 * @throws DependencyException if a dependency could not be resolved.
+	 * @throws SAXException If a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws DependencyException If a dependency could not be resolved.
 	 */
 	public void start() throws IOException, SAXException, DependencyException {
 		Map<String, PluginMetaData> plugins = createMap(findPlugins());
@@ -95,8 +95,8 @@ public final class PluginManager {
 	 * Finds plugins and loads their meta data.
 	 * 
 	 * @return A collection of plugin meta data objects.
-	 * @throws IOException if an I/O error occurs.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
 	 */
 	private Collection<PluginMetaData> findPlugins() throws IOException, SAXException {
 		Collection<PluginMetaData> plugins = new ArrayList<PluginMetaData>();
@@ -129,8 +129,8 @@ public final class PluginManager {
 	 * @param plugin The plugin.
 	 * @param plugins The plugin map.
 	 * @param started A set of started plugins.
-	 * @throws DependencyException if a dependency error occurs.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws DependencyException If a dependency error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	private void start(PluginEnvironment env, PluginMetaData plugin, Map<String, PluginMetaData> plugins,
 			Set<PluginMetaData> started) throws DependencyException, IOException {

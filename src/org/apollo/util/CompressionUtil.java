@@ -23,7 +23,7 @@ public final class CompressionUtil {
 	 * 
 	 * @param compressed The compressed array.
 	 * @param uncompressed The uncompressed array.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public static void ungzip(byte[] compressed, byte[] uncompressed) throws IOException {
 		DataInputStream is = new DataInputStream(new GZIPInputStream(new ByteArrayInputStream(compressed)));
@@ -39,7 +39,7 @@ public final class CompressionUtil {
 	 * 
 	 * @param compressed The compressed array.
 	 * @param uncompressed The uncompressed array.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public static void unbzip2(byte[] compressed, byte[] uncompressed) throws IOException {
 		byte[] newCompressed = new byte[compressed.length + 4];
@@ -63,7 +63,7 @@ public final class CompressionUtil {
 	 * 
 	 * @param bytes The uncompressed array.
 	 * @return The compressed array.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public static byte[] gzip(byte[] bytes) throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -82,7 +82,7 @@ public final class CompressionUtil {
 	 * 
 	 * @param bytes The uncompressed array.
 	 * @return The compressed array.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public static byte[] bzip2(byte[] bytes) throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();

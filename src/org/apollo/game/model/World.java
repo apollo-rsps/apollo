@@ -103,7 +103,7 @@ public final class World {
 	 * @param release The release number.
 	 * @param fs The file system.
 	 * @param mgr The plugin manager. TODO move this.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public void init(int release, IndexedFileSystem fs, PluginManager mgr) throws IOException {
 		logger.info("Loading item definitions...");

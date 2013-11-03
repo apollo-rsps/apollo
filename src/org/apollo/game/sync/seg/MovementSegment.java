@@ -20,7 +20,7 @@ public final class MovementSegment extends SynchronizationSegment {
 	 * 
 	 * @param blockSet The block set.
 	 * @param directions The directions array.
-	 * @throws IllegalArgumentException if there are not 0, 1 or 2 directions.
+	 * @throws IllegalArgumentException If there are not 0, 1 or 2 directions.
 	 */
 	public MovementSegment(SynchronizationBlockSet blockSet, Direction[] directions) {
 		super(blockSet);

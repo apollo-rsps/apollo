@@ -12,7 +12,7 @@ public final class Index {
 	 * 
 	 * @param buffer The buffer.
 	 * @return The decoded {@link Index}.
-	 * @throws IllegalArgumentException if the buffer length is invalid.
+	 * @throws IllegalArgumentException If the buffer length is invalid.
 	 */
 	public static Index decode(byte[] buffer) {
 		if (buffer.length != FileSystemConstants.INDEX_SIZE) {

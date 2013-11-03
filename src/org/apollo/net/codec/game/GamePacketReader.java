@@ -47,7 +47,7 @@ public final class GamePacketReader {
 	/**
 	 * Switches this builder's mode to the byte access mode.
 	 * 
-	 * @throws IllegalStateException if the builder is already in byte access mode.
+	 * @throws IllegalStateException If the builder is already in byte access mode.
 	 */
 	public void switchToByteAccess() {
 		if (mode == AccessMode.BYTE_ACCESS) {
@@ -60,7 +60,7 @@ public final class GamePacketReader {
 	/**
 	 * Switches this builder's mode to the bit access mode.
 	 * 
-	 * @throws IllegalStateException if the builder is already in bit access mode.
+	 * @throws IllegalStateException If the builder is already in bit access mode.
 	 */
 	public void switchToBitAccess() {
 		if (mode == AccessMode.BIT_ACCESS) {
@@ -74,7 +74,7 @@ public final class GamePacketReader {
 	 * Gets a string from the buffer.
 	 * 
 	 * @return The string.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public String getString() {
 		checkByteAccess();
@@ -85,7 +85,7 @@ public final class GamePacketReader {
 	 * Gets a signed smart from the buffer.
 	 * 
 	 * @return The smart.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public int getSignedSmart() {
 		checkByteAccess();
@@ -101,7 +101,7 @@ public final class GamePacketReader {
 	 * Gets an unsigned smart from the buffer.
 	 * 
 	 * @return The smart.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public int getUnsignedSmart() {
 		checkByteAccess();
@@ -118,7 +118,7 @@ public final class GamePacketReader {
 	 * 
 	 * @param type The data type.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public long getSigned(DataType type) {
 		return getSigned(type, DataOrder.BIG, DataTransformation.NONE);
@@ -130,8 +130,8 @@ public final class GamePacketReader {
 	 * @param type The data type.
 	 * @param order The byte order.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public long getSigned(DataType type, DataOrder order) {
 		return getSigned(type, order, DataTransformation.NONE);
@@ -143,8 +143,8 @@ public final class GamePacketReader {
 	 * @param type The data type.
 	 * @param transformation The data transformation.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public long getSigned(DataType type, DataTransformation transformation) {
 		return getSigned(type, DataOrder.BIG, transformation);
@@ -157,8 +157,8 @@ public final class GamePacketReader {
 	 * @param order The byte order.
 	 * @param transformation The data transformation.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public long getSigned(DataType type, DataOrder order, DataTransformation transformation) {
 		long longValue = get(type, order, transformation);
@@ -176,7 +176,7 @@ public final class GamePacketReader {
 	 * 
 	 * @param type The data type.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public long getUnsigned(DataType type) {
 		return getUnsigned(type, DataOrder.BIG, DataTransformation.NONE);
@@ -188,8 +188,8 @@ public final class GamePacketReader {
 	 * @param type The data type.
 	 * @param order The byte order.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public long getUnsigned(DataType type, DataOrder order) {
 		return getUnsigned(type, order, DataTransformation.NONE);
@@ -201,8 +201,8 @@ public final class GamePacketReader {
 	 * @param type The data type.
 	 * @param transformation The data transformation.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public long getUnsigned(DataType type, DataTransformation transformation) {
 		return getUnsigned(type, DataOrder.BIG, transformation);
@@ -215,8 +215,8 @@ public final class GamePacketReader {
 	 * @param order The byte order.
 	 * @param transformation The data transformation.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	public long getUnsigned(DataType type, DataOrder order, DataTransformation transformation) {
 		long longValue = get(type, order, transformation);
@@ -233,8 +233,8 @@ public final class GamePacketReader {
 	 * @param order The data order.
 	 * @param transformation The data transformation.
 	 * @return The value.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
-	 * @throws IllegalArgumentException if the combination is invalid.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
+	 * @throws IllegalArgumentException If the combination is invalid.
 	 */
 	private long get(DataType type, DataOrder order, DataTransformation transformation) {
 		checkByteAccess();
@@ -304,7 +304,7 @@ public final class GamePacketReader {
 	 * Gets bytes.
 	 * 
 	 * @param bytes The target byte array.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public void getBytes(byte[] bytes) {
 		checkByteAccess();
@@ -318,7 +318,7 @@ public final class GamePacketReader {
 	 * 
 	 * @param transformation The transformation.
 	 * @param bytes The target byte array.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public void getBytes(DataTransformation transformation, byte[] bytes) {
 		if (transformation == DataTransformation.NONE) {
@@ -334,7 +334,7 @@ public final class GamePacketReader {
 	 * Gets bytes in reverse.
 	 * 
 	 * @param bytes The target byte array.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public void getBytesReverse(byte[] bytes) {
 		checkByteAccess();
@@ -348,7 +348,7 @@ public final class GamePacketReader {
 	 * 
 	 * @param transformation The transformation.
 	 * @param bytes The target byte array.
-	 * @throws IllegalStateException if this reader is not in byte access mode.
+	 * @throws IllegalStateException If this reader is not in byte access mode.
 	 */
 	public void getBytesReverse(DataTransformation transformation, byte[] bytes) {
 		if (transformation == DataTransformation.NONE) {
@@ -363,7 +363,7 @@ public final class GamePacketReader {
 	/**
 	 * Checks that this reader is in the byte access mode.
 	 * 
-	 * @throws IllegalStateException if the reader is not in byte access mode.
+	 * @throws IllegalStateException If the reader is not in byte access mode.
 	 */
 	private void checkByteAccess() {
 		if (mode != AccessMode.BYTE_ACCESS) {
@@ -374,7 +374,7 @@ public final class GamePacketReader {
 	/**
 	 * Checks that this reader is in the bit access mode.
 	 * 
-	 * @throws IllegalStateException if the reader is not in bit access mode.
+	 * @throws IllegalStateException If the reader is not in bit access mode.
 	 */
 	private void checkBitAccess() {
 		if (mode != AccessMode.BIT_ACCESS) {
@@ -386,7 +386,7 @@ public final class GamePacketReader {
 	 * Gets a bit from the buffer.
 	 * 
 	 * @return The value.
-	 * @throws IllegalStateException if the reader is not in bit access mode.
+	 * @throws IllegalStateException If the reader is not in bit access mode.
 	 */
 	public int getBit() {
 		return getBits(1);
@@ -397,8 +397,8 @@ public final class GamePacketReader {
 	 * 
 	 * @param numBits The number of bits.
 	 * @return The value.
-	 * @throws IllegalStateException if the reader is not in bit access mode.
-	 * @throws IllegalArgumentException if the number of bits is not between 1 and 31 inclusive.
+	 * @throws IllegalStateException If the reader is not in bit access mode.
+	 * @throws IllegalArgumentException If the number of bits is not between 1 and 31 inclusive.
 	 */
 	public int getBits(int numBits) {
 		if (numBits < 0 || numBits > 32) {

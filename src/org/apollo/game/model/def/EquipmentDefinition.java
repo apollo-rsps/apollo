@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apollo.game.model.Item;
+import org.apollo.game.model.Skill;
 
 /**
  * Represents a type of {@link Item} which may be equipped.
@@ -27,23 +28,33 @@ public final class EquipmentDefinition {
 			EquipmentDefinition def = definitions[id];
 			if (def != null) {
 				if (def.getId() != id) {
-					throw new RuntimeException("Item definition id mismatch!");
+					throw new RuntimeException("Equipment definition id mismatch!");
 				}
 				EquipmentDefinition.definitions.put(def.getId(), def);
 			}
 		}
 	}
 
+	public int count() {
+		return definitions.size();
+	}
+
+	/**
+	 * The array of skill requirement levels.
+	 */
+	private int[] levels = { 1, 1, 1, 1, 1, 1, 1 };
+
 	/**
 	 * Gets an equipment definition by its id.
 	 * 
 	 * @param id The id.
 	 * @return {@code null} if the item is not equipment, the definition otherwise.
-	 * @throws IndexOutOfBoundsException if the id is out of bounds.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public static EquipmentDefinition forId(int id) {
 		if (id < 0 || id >= ItemDefinition.count()) {
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException(EquipmentDefinition.class.getName() + " lookup index " + id
+					+ " out of bounds.");
 		}
 		return definitions.get(id);
 	}
@@ -57,11 +68,6 @@ public final class EquipmentDefinition {
 	 * The slot this equipment goes into.
 	 */
 	private int slot;
-
-	/**
-	 * The required levels.
-	 */
-	private int attack = 1, strength = 1, defence = 1, ranged = 1, magic = 1;
 
 	/**
 	 * Various flags.
@@ -78,6 +84,24 @@ public final class EquipmentDefinition {
 	}
 
 	/**
+	 * Gets the minimum attack level.
+	 * 
+	 * @return The minimum attack level.
+	 */
+	public int getAttackLevel() {
+		return levels[Skill.ATTACK];
+	}
+
+	/**
+	 * Gets the minimum defence level.
+	 * 
+	 * @return The minimum defence level.
+	 */
+	public int getDefenceLevel() {
+		return levels[Skill.DEFENCE];
+	}
+
+	/**
 	 * Gets the id.
 	 * 
 	 * @return The id.
@@ -87,56 +111,15 @@ public final class EquipmentDefinition {
 	}
 
 	/**
-	 * Sets the required levels.
+	 * Gets the level for a specific skill by its id.
 	 * 
-	 * @param attack The required attack level.
-	 * @param strength The required strength level.
-	 * @param defence The required defence level.
-	 * @param ranged The required ranged level.
-	 * @param magic The required magic level.
+	 * @param skill The skill id.
 	 */
-	public void setLevels(int attack, int strength, int defence, int ranged, int magic) {
-		this.attack = attack;
-		this.strength = strength;
-		this.defence = defence;
-		this.ranged = ranged;
-		this.magic = magic;
-	}
-
-	/**
-	 * Gets the minimum attack level.
-	 * 
-	 * @return The minimum attack level.
-	 */
-	public int getAttackLevel() {
-		return attack;
-	}
-
-	/**
-	 * Gets the minimum strength level.
-	 * 
-	 * @return The minimum strength level.
-	 */
-	public int getStrengthLevel() {
-		return strength;
-	}
-
-	/**
-	 * Gets the minimum defence level.
-	 * 
-	 * @return The minimum defence level.
-	 */
-	public int getDefenceLevel() {
-		return defence;
-	}
-
-	/**
-	 * Gets the minimum ranged level.
-	 * 
-	 * @return The minimum ranged level.
-	 */
-	public int getRangedLevel() {
-		return ranged;
+	public int getLevel(int skill) {
+		if (skill < Skill.ATTACK || skill > Skill.MAGIC) {
+			throw new IllegalArgumentException("Skill id out of bounds for an equipment definition.");
+		}
+		return levels[skill];
 	}
 
 	/**
@@ -145,16 +128,16 @@ public final class EquipmentDefinition {
 	 * @return The minimum magic level.
 	 */
 	public int getMagicLevel() {
-		return magic;
+		return levels[Skill.MAGIC];
 	}
 
 	/**
-	 * Sets the target slot.
+	 * Gets the minimum ranged level.
 	 * 
-	 * @param slot The target slot.
+	 * @return The minimum ranged level.
 	 */
-	public void setSlot(int slot) {
-		this.slot = slot;
+	public int getRangedLevel() {
+		return levels[Skill.RANGED];
 	}
 
 	/**
@@ -167,12 +150,12 @@ public final class EquipmentDefinition {
 	}
 
 	/**
-	 * Checks if this equipment is two-handed.
+	 * Gets the minimum strength level.
 	 * 
-	 * @return {@code true} if so, {@code false} if not.
+	 * @return The minimum strength level.
 	 */
-	public boolean isTwoHanded() {
-		return twoHanded;
+	public int getStrengthLevel() {
+		return levels[Skill.STRENGTH];
 	}
 
 	/**
@@ -203,6 +186,15 @@ public final class EquipmentDefinition {
 	}
 
 	/**
+	 * Checks if this equipment is two-handed.
+	 * 
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isTwoHanded() {
+		return twoHanded;
+	}
+
+	/**
 	 * Sets the flags.
 	 * 
 	 * @param twoHanded The two handed flag.
@@ -215,6 +207,32 @@ public final class EquipmentDefinition {
 		this.fullBody = fullBody;
 		this.fullHat = fullHat;
 		this.fullMask = fullMask;
+	}
+
+	/**
+	 * Sets the required levels.
+	 * 
+	 * @param attack The required attack level.
+	 * @param strength The required strength level.
+	 * @param defence The required defence level.
+	 * @param ranged The required ranged level.
+	 * @param magic The required magic level.
+	 */
+	public void setLevels(int attack, int strength, int defence, int ranged, int magic) {
+		levels[Skill.ATTACK] = attack;
+		levels[Skill.STRENGTH] = strength;
+		levels[Skill.DEFENCE] = defence;
+		levels[Skill.RANGED] = ranged;
+		levels[Skill.MAGIC] = magic;
+	}
+
+	/**
+	 * Sets the target slot.
+	 * 
+	 * @param slot The target slot.
+	 */
+	public void setSlot(int slot) {
+		this.slot = slot;
 	}
 
 }

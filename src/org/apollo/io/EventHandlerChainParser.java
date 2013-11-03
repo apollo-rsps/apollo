@@ -36,7 +36,7 @@ public final class EventHandlerChainParser {
 	 * Creates the event chain parser.
 	 * 
 	 * @param is The source {@link InputStream}.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws SAXException If a SAX error occurs.
 	 */
 	public EventHandlerChainParser(InputStream is) throws SAXException {
 		this.parser = new XmlParser();
@@ -46,11 +46,11 @@ public final class EventHandlerChainParser {
 	/**
 	 * Parses the XML and produces a group of {@link EventHandlerChain}s.
 	 * 
-	 * @throws IOException if an I/O error occurs.
-	 * @throws SAXException if a SAX error occurs.
-	 * @throws ClassNotFoundException if a class was not found.
-	 * @throws IllegalAccessException if a class was accessed illegally.
-	 * @throws InstantiationException if a class could not be instantiated.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
+	 * @throws ClassNotFoundException If a class was not found.
+	 * @throws IllegalAccessException If a class was accessed illegally.
+	 * @throws InstantiationException If a class could not be instantiated.
 	 * @return An {@link EventHandlerChainGroup}.
 	 */
 	@SuppressWarnings("unchecked")

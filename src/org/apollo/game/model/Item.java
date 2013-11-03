@@ -33,7 +33,7 @@ public final class Item {
 	 * 
 	 * @param id The item's id.
 	 * @param amount The amount.
-	 * @throws IllegalArgumentException if the amount is negative.
+	 * @throws IllegalArgumentException If the amount is negative.
 	 */
 	public Item(int id, int amount) {
 		if (amount < 0) {

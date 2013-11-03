@@ -29,7 +29,7 @@ public final class ServiceManager {
 	/**
 	 * Creates and initializes the {@link ServiceManager}.
 	 * 
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	public ServiceManager() throws Exception {
 		init();
@@ -38,7 +38,7 @@ public final class ServiceManager {
 	/**
 	 * Initializes this service manager.
 	 * 
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	@SuppressWarnings("unchecked")
 	private void init() throws Exception {

@@ -37,7 +37,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		 * 
 		 * @param v The integer value.
 		 * @return The priority.
-		 * @throws IllegalArgumentException if the value is outside of the range 1-3 inclusive.
+		 * @throws IllegalArgumentException If the value is outside of the range 1-3 inclusive.
 		 */
 		public static Priority valueOf(int v) {
 			switch (v) {

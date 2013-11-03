@@ -19,7 +19,7 @@ public final class Archive {
 	 * 
 	 * @param buffer The buffer.
 	 * @return The archive.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public static Archive decode(ByteBuffer buffer) throws IOException {
 		int extractedSize = ByteBufferUtil.readUnsignedTriByte(buffer);
@@ -80,7 +80,7 @@ public final class Archive {
 	 * 
 	 * @param name The name.
 	 * @return The entry.
-	 * @throws FileNotFoundException if the file could not be found.
+	 * @throws FileNotFoundException If the file could not be found.
 	 */
 	public ArchiveEntry getEntry(String name) throws FileNotFoundException {
 		int hash = 0;

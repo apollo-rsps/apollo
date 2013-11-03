@@ -37,14 +37,14 @@ public abstract class Session {
 	 * Processes a message received from the channel.
 	 * 
 	 * @param message The message.
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	public abstract void messageReceived(Object message) throws Exception;
 
 	/**
 	 * Destroys this session.
 	 * 
-	 * @throws Exception if an error occurs.
+	 * @throws Exception If an error occurs.
 	 */
 	public abstract void destroy() throws Exception;
 

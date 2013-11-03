@@ -22,7 +22,7 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 	/**
 	 * Creates and bootstraps the Ruby plugin environment.
 	 * 
-	 * @throws IOException if an I/O error occurs during bootstrapping.
+	 * @throws IOException If an I/O error occurs during bootstrapping.
 	 */
 	public RubyPluginEnvironment() throws IOException {
 		parseBootstrapper();
@@ -31,7 +31,7 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 	/**
 	 * Parses the bootstrapper.
 	 * 
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	private void parseBootstrapper() throws IOException {
 		File f = new File("./data/plugins/bootstrap.rb");

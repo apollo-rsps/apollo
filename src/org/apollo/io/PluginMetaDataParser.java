@@ -34,7 +34,7 @@ public final class PluginMetaDataParser {
 	 * Creates the plugin meta data parser.
 	 * 
 	 * @param is The input stream.
-	 * @throws SAXException if a SAX error occurs.
+	 * @throws SAXException If a SAX error occurs.
 	 */
 	public PluginMetaDataParser(InputStream is) throws SAXException {
 		this.parser = new XmlParser();
@@ -45,8 +45,8 @@ public final class PluginMetaDataParser {
 	 * Parses the XML and creates a meta data object.
 	 * 
 	 * @return The meta data object.
-	 * @throws SAXException if a SAX error occurs.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public PluginMetaData parse() throws IOException, SAXException {
 		XmlNode rootNode = parser.parse(is);
@@ -109,7 +109,7 @@ public final class PluginMetaDataParser {
 	 * @param node The root node.
 	 * @param name The element name.
 	 * @return The node object.
-	 * @throws IOException if the element does not exist.
+	 * @throws IOException If the element does not exist.
 	 */
 	private XmlNode getElement(XmlNode node, String name) throws IOException {
 		XmlNode child = node.getChild(name);

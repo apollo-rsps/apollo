@@ -36,7 +36,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * Creates the stateful frame decoder with the specified initial state.
 	 * 
 	 * @param state The initial state.
-	 * @throws NullPointerException if the state is {@code null}.
+	 * @throws NullPointerException If the state is {@code null}.
 	 */
 	public StatefulFrameDecoder(T state) {
 		this(state, false);
@@ -47,7 +47,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * 
 	 * @param state The initial state.
 	 * @param unwrap The unwrap flag.
-	 * @throws NullPointerException if the state is {@code null}.
+	 * @throws NullPointerException If the state is {@code null}.
 	 */
 	public StatefulFrameDecoder(T state, boolean unwrap) {
 		super(unwrap);
@@ -69,7 +69,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * Sets a new state.
 	 * 
 	 * @param state The new state.
-	 * @throws NullPointerException if the state is {@code null}.
+	 * @throws NullPointerException If the state is {@code null}.
 	 */
 	public final void setState(T state) {
 		if (state == null) {
@@ -86,7 +86,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
 	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
 	 * @return The decoded frame, or {@code null} if not enough data was received.
-	 * @throws Exception if an error occurs during decoding.
+	 * @throws Exception If an error occurs during decoding.
 	 */
 	protected abstract Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state)
 			throws Exception;
@@ -100,7 +100,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
 	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
 	 * @return The decoded frame, or {@code null} if not enough data was received.
-	 * @throws Exception if an error occurs during decoding.
+	 * @throws Exception If an error occurs during decoding.
 	 */
 	protected Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state)
 			throws Exception {

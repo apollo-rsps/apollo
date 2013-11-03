@@ -80,7 +80,7 @@ public abstract class RequestWorker<T, P> implements Runnable {
 	 * 
 	 * @param dispatcher The dispatcher.
 	 * @return The next request.
-	 * @throws InterruptedException if the thread is interrupted.
+	 * @throws InterruptedException If the thread is interrupted.
 	 */
 	protected abstract ChannelRequest<T> nextRequest(UpdateDispatcher dispatcher) throws InterruptedException;
 
@@ -90,7 +90,7 @@ public abstract class RequestWorker<T, P> implements Runnable {
 	 * @param provider The resource provider.
 	 * @param channel The channel.
 	 * @param request The request to service.
-	 * @throws IOException if an I/O error occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	protected abstract void service(P provider, Channel channel, T request) throws IOException;
 

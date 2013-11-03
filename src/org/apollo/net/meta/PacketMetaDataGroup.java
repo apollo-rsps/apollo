@@ -12,7 +12,7 @@ public final class PacketMetaDataGroup {
 	 * 
 	 * @param lengthArray The packet length array.
 	 * @return The {@link PacketMetaDataGroup} object.
-	 * @throws IllegalArgumentException if the array length is not 256 or if there is an element in the array with a
+	 * @throws IllegalArgumentException If the array length is not 256 or if there is an element in the array with a
 	 *             value below -3.
 	 */
 	public static PacketMetaDataGroup createFromArray(int[] lengthArray) {
@@ -54,7 +54,7 @@ public final class PacketMetaDataGroup {
 	 * 
 	 * @param opcode The opcode of the packet.
 	 * @return The {@link PacketMetaData}, or {@code null} if the packet does not exist.
-	 * @throws IllegalArgumentException if the opcoe is not in the range 0 to 255.
+	 * @throws IllegalArgumentException If the opcoe is not in the range 0 to 255.
 	 */
 	public PacketMetaData getMetaData(int opcode) {
 		if (opcode < 0 || opcode >= packets.length) {

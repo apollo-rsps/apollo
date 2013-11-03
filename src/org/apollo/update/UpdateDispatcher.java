@@ -40,7 +40,7 @@ public final class UpdateDispatcher {
 	 * Gets the next 'on-demand' request from the queue, blocking if none are available.
 	 * 
 	 * @return The 'on-demand' request.
-	 * @throws InterruptedException if the thread is interrupted.
+	 * @throws InterruptedException If the thread is interrupted.
 	 */
 	ChannelRequest<OnDemandRequest> nextOnDemandRequest() throws InterruptedException {
 		return onDemandQueue.take();
@@ -50,7 +50,7 @@ public final class UpdateDispatcher {
 	 * Gets the next JAGGRAB request from the queue, blocking if none are available.
 	 * 
 	 * @return The JAGGRAB request.
-	 * @throws InterruptedException if the thread is interrupted.
+	 * @throws InterruptedException If the thread is interrupted.
 	 */
 	ChannelRequest<JagGrabRequest> nextJagGrabRequest() throws InterruptedException {
 		return jagGrabQueue.take();
@@ -60,7 +60,7 @@ public final class UpdateDispatcher {
 	 * Gets the next HTTP request from the queue, blocking if none are available.
 	 * 
 	 * @return The HTTP request.
-	 * @throws InterruptedException if the thread is interrupted.
+	 * @throws InterruptedException If the thread is interrupted.
 	 */
 	ChannelRequest<HttpRequest> nextHttpRequest() throws InterruptedException {
 		return httpQueue.take();
