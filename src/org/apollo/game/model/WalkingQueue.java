@@ -43,7 +43,6 @@ public final class WalkingQueue {
 		public String toString() {
 			return Point.class.getName() + " [direction=" + direction + ", position=" + position + "]";
 		}
-
 	}
 
 	/**
@@ -54,17 +53,17 @@ public final class WalkingQueue {
 	/**
 	 * The character whose walking queue this is.
 	 */
-	private Character character;
+	private final Character character;
 
 	/**
 	 * The old queue of directions.
 	 */
-	private Deque<Point> oldPoints = new ArrayDeque<Point>();
+	private final Deque<Point> oldPoints = new ArrayDeque<Point>();
 
 	/**
 	 * The queue of directions.
 	 */
-	private Deque<Point> points = new ArrayDeque<Point>();
+	private final Deque<Point> points = new ArrayDeque<Point>();
 
 	/**
 	 * Flag indicating if this queue (only) should be ran.

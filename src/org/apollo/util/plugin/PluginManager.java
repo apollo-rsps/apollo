@@ -114,6 +114,8 @@ public final class PluginManager {
 		//
 		// Thank you!
 		authors.add("Graham");
+		authors.add("Major");
+		authors.add("Chris Fletcher");
 		authors.add("Blake");
 	}
 

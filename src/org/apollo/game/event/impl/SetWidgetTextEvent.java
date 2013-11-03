@@ -7,7 +7,7 @@ import org.apollo.game.event.Event;
  * 
  * @author Graham
  */
-public final class SetInterfaceTextEvent extends Event {
+public final class SetWidgetTextEvent extends Event {
 
 	/**
 	 * The interface's id.
@@ -25,7 +25,7 @@ public final class SetInterfaceTextEvent extends Event {
 	 * @param interfaceId The interface's id.
 	 * @param text The interface's text.
 	 */
-	public SetInterfaceTextEvent(int interfaceId, String text) {
+	public SetWidgetTextEvent(int interfaceId, String text) {
 		this.interfaceId = interfaceId;
 		this.text = text;
 	}

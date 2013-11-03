@@ -1,26 +1,24 @@
 package org.apollo.net.release.r377;
 
-import org.apollo.game.event.impl.SetInterfaceTextEvent;
+import org.apollo.game.event.impl.SetWidgetPlayerModelEvent;
 import org.apollo.net.codec.game.DataOrder;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;
-import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.EventEncoder;
 
 /**
- * An {@link EventEncoder} for the {@link SetInterfaceTextEvent}.
+ * An {@link EventEncoder} for the {@link SetWidgetPlayerModelEvent}.
  * 
- * @author Graham
+ * @author Chris Fletcher
  */
-public final class SetInterfaceTextEventEncoder extends EventEncoder<SetInterfaceTextEvent> {
+final class SetWidgetPlayerModelEventEncoder extends EventEncoder<SetWidgetPlayerModelEvent> {
 
 	@Override
-	public GamePacket encode(SetInterfaceTextEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(232, PacketType.VARIABLE_SHORT);
+	public GamePacket encode(SetWidgetPlayerModelEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(255);
 		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getInterfaceId());
-		builder.putString(event.getText());
 		return builder.toGamePacket();
 	}
 
