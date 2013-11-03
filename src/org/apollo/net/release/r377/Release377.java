@@ -1,6 +1,7 @@
 package org.apollo.net.release.r377;
 
 import org.apollo.game.event.impl.CloseInterfaceEvent;
+import org.apollo.game.event.impl.ConfigEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
 import org.apollo.game.event.impl.LogoutEvent;
@@ -122,6 +123,7 @@ public final class Release377 extends Release {
 		register(SetWidgetNpcModelEvent.class, new SetWidgetNpcModelEventEncoder());
 		register(SetWidgetPlayerModelEvent.class, new SetWidgetPlayerModelEventEncoder());
 		register(SetWidgetModelAnimationEvent.class, new SetWidgetModelAnimationEventEncoder());
+		register(ConfigEvent.class, new ConfigEventEncoder());
 	}
 
 }
