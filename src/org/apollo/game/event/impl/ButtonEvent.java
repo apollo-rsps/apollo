@@ -3,33 +3,33 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event sent when the client clicks a button.
+ * An event sent when a player clicks a button.
  * 
  * @author Graham
  */
 public final class ButtonEvent extends Event {
 
 	/**
-	 * The interface id.
+	 * The widget id.
 	 */
-	private final int interfaceId;
+	private final int widgetId;
 
 	/**
 	 * Creates the button event.
 	 * 
-	 * @param interfaceId The interface id.
+	 * @param widgetId The widget id.
 	 */
-	public ButtonEvent(int interfaceId) {
-		this.interfaceId = interfaceId;
+	public ButtonEvent(int widgetId) {
+		this.widgetId = widgetId;
 	}
 
 	/**
-	 * Gets the interface id.
+	 * Gets the widget id.
 	 * 
-	 * @return The interface id.
+	 * @return The widget id.
 	 */
-	public int getInterfaceId() {
-		return interfaceId;
+	public int getWidgetId() {
+		return widgetId;
 	}
 
 }

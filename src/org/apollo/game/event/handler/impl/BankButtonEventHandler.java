@@ -24,9 +24,9 @@ public final class BankButtonEventHandler extends EventHandler<ButtonEvent> {
 
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, ButtonEvent event) {
-		if (event.getInterfaceId() == WITHDRAW_AS_ITEM) {
+		if (event.getWidgetId() == WITHDRAW_AS_ITEM) {
 			player.setWithdrawingNotes(false);
-		} else if (event.getInterfaceId() == WITHDRAW_AS_NOTE) {
+		} else if (event.getWidgetId() == WITHDRAW_AS_NOTE) {
 			player.setWithdrawingNotes(true);
 		}
 	}

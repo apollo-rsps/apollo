@@ -1,5 +1,3 @@
-MAX_PLAYERS = 2000 # TODO: obtain from a Java class
-
 # Calculates the number of pulses it takes for an ore to respawn based on the
 # number of players currently online.
 #
@@ -14,5 +12,5 @@ MAX_PLAYERS = 2000 # TODO: obtain from a Java class
 # function. The rest of the mining plugin rounds the base respawn times in
 # pulses down where appropriate.
 def respawn_pulses(base, players)
-  base - players * base / (MAX_PLAYERS * 2)
+  base - players * base / (World.world.player_repository.size * 2)
 end

@@ -94,7 +94,8 @@ public final class Release377 extends Release {
 		register(158, new FifthItemActionEventDecoder());
 		register(110, new ClosedInterfaceEventDecoder());
 		register(75, new EnteredAmountEventDecoder());
-
+		register(1, new ItemOnItemEventDecoder());
+		
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
 		register(RegionChangeEvent.class, new RegionChangeEventEncoder());

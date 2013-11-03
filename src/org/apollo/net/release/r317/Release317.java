@@ -94,6 +94,7 @@ public final class Release317 extends Release {
 		register(135, new FifthItemActionEventDecoder());
 		register(130, new ClosedInterfaceEventDecoder());
 		register(208, new EnteredAmountEventDecoder());
+		register(53, new ItemOnItemEventDecoder());
 
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
