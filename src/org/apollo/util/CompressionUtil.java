@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -29,6 +31,39 @@ public final class CompressionUtil {
 		DataInputStream is = new DataInputStream(new GZIPInputStream(new ByteArrayInputStream(compressed)));
 		try {
 			is.readFully(uncompressed);
+		} finally {
+			is.close();
+		}
+	}
+
+	/**
+	 * Ungzips the compressed buffer and places the results into the returning array.
+	 * 
+	 * @param compressed The compressed buffer.
+	 * @return The uncompressed array.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public static byte[] ungzip(ByteBuffer compressed) throws IOException {
+		byte[] data = new byte[compressed.remaining()];
+		compressed.get(data);
+		InputStream is = new GZIPInputStream(new ByteArrayInputStream(data));
+
+		try {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			try {
+				while (true) {
+					byte[] buf = new byte[1024];
+					int read = is.read(buf, 0, buf.length);
+					if (read == -1) {
+						break;
+					}
+					os.write(buf, 0, read);
+				}
+			} finally {
+				os.close();
+			}
+
+			return os.toByteArray();
 		} finally {
 			is.close();
 		}

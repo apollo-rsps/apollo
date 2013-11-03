@@ -1,35 +1,112 @@
 package org.apollo.game.model.obj;
 
-import org.apollo.game.model.def.StaticObjectDefinition;
+import org.apollo.game.model.Position;
+import org.apollo.game.model.def.ObjectDefinition;
 
 /**
  * Represents a static object in the game world.
  * 
  * @author Graham
+ * @author Chris Fletcher
+ * @author Major
  */
 public final class StaticObject {
 
 	/**
-	 * The object definition.
+	 * Initialises the static objects.
 	 */
-	private final StaticObjectDefinition definition;
-
-	/**
-	 * Creates the game object.
-	 * 
-	 * @param definition The object's definition.
-	 */
-	public StaticObject(StaticObjectDefinition definition) {
-		this.definition = definition;
+	public static void init(StaticObject[] objects) {
 	}
 
 	/**
-	 * Gets the object's definition.
-	 * 
-	 * @return The definition.
+	 * The object's id.
 	 */
-	public StaticObjectDefinition getDefinition() {
+	private final short id;
+
+	/**
+	 * The object's definition.
+	 */
+	private final ObjectDefinition definition;
+
+	/**
+	 * The object's position.
+	 */
+	private final Position position;
+
+	/**
+	 * The object type.
+	 */
+	private final byte type;
+
+	/**
+	 * The object's rotation.
+	 */
+	private final byte rotation;
+
+	/**
+	 * Creates a new static object.
+	 * 
+	 * @param def The object's id.
+	 * @param position The position.
+	 * @param type The type code of the object.
+	 * @param rotation The rotation of the object.
+	 */
+	public StaticObject(int id, Position position, int type, int rotation) {
+		this.id = (short) id;
+		this.position = position;
+		this.type = (byte) type;
+		this.rotation = (byte) rotation;
+		this.definition = ObjectDefinition.lookup(id);
+	}
+
+	/**
+	 * Gets the definition of this object.
+	 * 
+	 * @return The object's definition.
+	 */
+	public ObjectDefinition getDefinition() {
 		return definition;
+	}
+
+	/**
+	 * Gets the id of the object.
+	 * 
+	 * @return The object id.
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * Gets the position of this object.
+	 * 
+	 * @return The object's position.
+	 */
+	public Position getPosition() {
+		return position;
+	}
+
+	/**
+	 * Gets the object's rotation.
+	 * 
+	 * @return The rotation.
+	 */
+	public int getRotation() {
+		return rotation;
+	}
+
+	/**
+	 * Gets the type code of the object.
+	 * 
+	 * @return The type.
+	 */
+	public int getType() {
+		return type;
+	}
+
+	@Override
+	public String toString() {
+		return StaticObject.class.getName() + " [id= " + id + ", type= " + type + ", rotation= " + rotation + "]";
 	}
 
 }

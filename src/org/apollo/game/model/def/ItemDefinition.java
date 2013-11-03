@@ -129,6 +129,11 @@ public final class ItemDefinition {
 	private boolean members;
 
 	/**
+	 * This item's team.
+	 */
+	private int team;
+
+	/**
 	 * The ground actions array.
 	 */
 	private String[] groundActions = new String[5];
@@ -385,6 +390,24 @@ public final class ItemDefinition {
 			throw new IndexOutOfBoundsException();
 		}
 		return inventoryActions[id];
+	}
+
+	/**
+	 * Sets this items team.
+	 * 
+	 * @param team The team.
+	 */
+	public void setTeam(int team) {
+		this.team = team;
+	}
+
+	/**
+	 * Gets this item's team.
+	 * 
+	 * @return The team.
+	 */
+	public int getTeam() {
+		return team;
 	}
 
 }
