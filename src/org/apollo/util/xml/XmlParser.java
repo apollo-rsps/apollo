@@ -62,9 +62,9 @@ public final class XmlParser {
 	}
 
 	/**
-	 * The {@link XMLReader} backing this {@link XmlParser}.
+	 * The current node.
 	 */
-	private final XMLReader xmlReader;
+	private XmlNode currentNode;
 
 	/**
 	 * The SAX event handler.
@@ -72,19 +72,19 @@ public final class XmlParser {
 	private final XmlHandler eventHandler;
 
 	/**
+	 * The stack of nodes, which is used when traversing the document and going through child nodes.
+	 */
+	private Stack<XmlNode> nodeStack = new Stack<XmlNode>();
+
+	/**
 	 * The current root node.
 	 */
 	private XmlNode rootNode;
 
 	/**
-	 * The current node.
+	 * The {@link XMLReader} backing this {@link XmlParser}.
 	 */
-	private XmlNode currentNode;
-
-	/**
-	 * The stack of nodes, which is used when traversing the document and going through child nodes.
-	 */
-	private Stack<XmlNode> nodeStack = new Stack<XmlNode>();
+	private final XMLReader xmlReader;
 
 	/**
 	 * Creates a new xml parser.

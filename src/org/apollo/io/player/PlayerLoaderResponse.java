@@ -11,14 +11,14 @@ import org.apollo.net.codec.login.LoginConstants;
 public final class PlayerLoaderResponse {
 
 	/**
-	 * The status code.
-	 */
-	private final int status;
-
-	/**
 	 * The player.
 	 */
 	private final Player player;
+
+	/**
+	 * The status code.
+	 */
+	private final int status;
 
 	/**
 	 * Creates a {@link PlayerLoaderResponse} with only a status code.

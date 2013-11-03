@@ -19,14 +19,14 @@ public final class WalkingQueue {
 	private static final class Point {
 
 		/**
-		 * The point's position.
-		 */
-		private final Position position;
-
-		/**
 		 * The direction to walk to this point.
 		 */
 		private final Direction direction;
+
+		/**
+		 * The point's position.
+		 */
+		private final Position position;
 
 		/**
 		 * Creates a point.
@@ -57,14 +57,14 @@ public final class WalkingQueue {
 	private Character character;
 
 	/**
-	 * The queue of directions.
-	 */
-	private Deque<Point> points = new ArrayDeque<Point>();
-
-	/**
 	 * The old queue of directions.
 	 */
 	private Deque<Point> oldPoints = new ArrayDeque<Point>();
+
+	/**
+	 * The queue of directions.
+	 */
+	private Deque<Point> points = new ArrayDeque<Point>();
 
 	/**
 	 * Flag indicating if this queue (only) should be ran.

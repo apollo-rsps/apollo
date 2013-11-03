@@ -15,11 +15,6 @@ import org.apollo.net.meta.PacketMetaDataGroup;
 public abstract class Release {
 
 	/**
-	 * The release number, e.g. {@code 317}.
-	 */
-	private final int releaseNumber;
-
-	/**
 	 * The decoders.
 	 */
 	private final EventDecoder<?>[] decoders = new EventDecoder<?>[256];
@@ -33,6 +28,11 @@ public abstract class Release {
 	 * The incoming packet meta data.
 	 */
 	private final PacketMetaDataGroup incomingPacketMetaData;
+
+	/**
+	 * The release number, e.g. {@code 317}.
+	 */
+	private final int releaseNumber;
 
 	/**
 	 * Creates the release.

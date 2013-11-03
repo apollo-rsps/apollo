@@ -10,11 +10,6 @@ import org.apollo.util.NameUtil;
 public final class PlayerCredentials {
 
 	/**
-	 * The player's username.
-	 */
-	private final String username;
-
-	/**
 	 * The player's username encoded as a long.
 	 */
 	private final long encodedUsername;
@@ -25,14 +20,19 @@ public final class PlayerCredentials {
 	private final String password;
 
 	/**
-	 * The hash of the player's username.
-	 */
-	private final int usernameHash;
-
-	/**
 	 * The computer's unique identifier.
 	 */
 	private final int uid;
+
+	/**
+	 * The player's username.
+	 */
+	private final String username;
+
+	/**
+	 * The hash of the player's username.
+	 */
+	private final int usernameHash;
 
 	/**
 	 * Creates a new {@link PlayerCredentials} object with the specified name, password and uid.

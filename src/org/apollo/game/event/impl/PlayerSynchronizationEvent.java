@@ -19,6 +19,11 @@ public final class PlayerSynchronizationEvent extends Event {
 	private final Position lastKnownRegion;
 
 	/**
+	 * The number of local players.
+	 */
+	private final int localPlayers;
+
+	/**
 	 * The player's position.
 	 */
 	private final Position position;
@@ -32,11 +37,6 @@ public final class PlayerSynchronizationEvent extends Event {
 	 * The current player's synchronization segment.
 	 */
 	private final SynchronizationSegment segment;
-
-	/**
-	 * The number of local players.
-	 */
-	private final int localPlayers;
 
 	/**
 	 * A list of segments.

@@ -19,14 +19,14 @@ public final class StaticObject {
 	}
 
 	/**
-	 * The object's id.
-	 */
-	private final short id;
-
-	/**
 	 * The object's definition.
 	 */
 	private final ObjectDefinition definition;
+
+	/**
+	 * The object's id.
+	 */
+	private final short id;
 
 	/**
 	 * The object's position.
@@ -34,14 +34,14 @@ public final class StaticObject {
 	private final Position position;
 
 	/**
-	 * The object type.
-	 */
-	private final byte type;
-
-	/**
 	 * The object's rotation.
 	 */
 	private final byte rotation;
+
+	/**
+	 * The object type.
+	 */
+	private final byte type;
 
 	/**
 	 * Creates a new static object.

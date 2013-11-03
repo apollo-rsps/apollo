@@ -17,14 +17,9 @@ import java.util.zip.CRC32;
 public final class IndexedFileSystem implements Closeable {
 
 	/**
-	 * Read only flag.
+	 * The cached CRC table.
 	 */
-	private final boolean readOnly;
-
-	/**
-	 * The index files.
-	 */
-	private RandomAccessFile[] indices = new RandomAccessFile[256];
+	private ByteBuffer crcTable;
 
 	/**
 	 * The data file.
@@ -32,9 +27,14 @@ public final class IndexedFileSystem implements Closeable {
 	private RandomAccessFile data;
 
 	/**
-	 * The cached CRC table.
+	 * The index files.
 	 */
-	private ByteBuffer crcTable;
+	private RandomAccessFile[] indices = new RandomAccessFile[256];
+
+	/**
+	 * Read only flag.
+	 */
+	private final boolean readOnly;
 
 	/**
 	 * Creates the file system with the specified base directory.

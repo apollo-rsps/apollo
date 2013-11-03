@@ -16,6 +16,11 @@ import org.jboss.netty.channel.group.DefaultChannelGroup;
 public final class ServerContext {
 
 	/**
+	 * The channel group.
+	 */
+	private final ChannelGroup group = new DefaultChannelGroup();
+
+	/**
 	 * The current release.
 	 */
 	private final Release release;
@@ -24,11 +29,6 @@ public final class ServerContext {
 	 * The service manager.
 	 */
 	private final ServiceManager serviceManager;
-
-	/**
-	 * The channel group.
-	 */
-	private final ChannelGroup group = new DefaultChannelGroup();
 
 	/**
 	 * Creates a new server context.

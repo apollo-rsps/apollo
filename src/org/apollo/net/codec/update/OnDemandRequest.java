@@ -22,15 +22,15 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		HIGH(0),
 
 		/**
-		 * Medium priority - used while loading the 'bare minimum' required to run the game.
-		 */
-		MEDIUM(1),
-
-		/**
 		 * Low priority - used when a file is not required urgently. The client login screen says
 		 * "loading extra files.." when low priority loading is being performed.
 		 */
-		LOW(2);
+		LOW(2),
+
+		/**
+		 * Medium priority - used while loading the 'bare minimum' required to run the game.
+		 */
+		MEDIUM(1);
 
 		/**
 		 * Converts the integer value to a priority.

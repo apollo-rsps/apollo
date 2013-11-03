@@ -16,14 +16,14 @@ public final class AddNpcSegment extends SynchronizationSegment {
 	private final int index;
 
 	/**
-	 * The position.
-	 */
-	private final Position position;
-
-	/**
 	 * The id of the npc.
 	 */
 	private final int npcId;
+
+	/**
+	 * The position.
+	 */
+	private final Position position;
 
 	/**
 	 * Creates the add npc segment.

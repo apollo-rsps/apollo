@@ -22,9 +22,9 @@ import org.jboss.netty.util.Timer;
 public final class JagGrabPipelineFactory implements ChannelPipelineFactory {
 
 	/**
-	 * The maximum length of a request, in bytes.
+	 * A buffer with two line feed (LF) characters in it.
 	 */
-	private static final int MAX_REQUEST_LENGTH = 8192;
+	private static final ChannelBuffer DOUBLE_LINE_FEED_DELIMITER = ChannelBuffers.buffer(2);
 
 	/**
 	 * The character set used in the request.
@@ -32,9 +32,9 @@ public final class JagGrabPipelineFactory implements ChannelPipelineFactory {
 	private static final Charset JAGGRAB_CHARSET = Charset.forName("US-ASCII");
 
 	/**
-	 * A buffer with two line feed (LF) characters in it.
+	 * The maximum length of a request, in bytes.
 	 */
-	private static final ChannelBuffer DOUBLE_LINE_FEED_DELIMITER = ChannelBuffers.buffer(2);
+	private static final int MAX_REQUEST_LENGTH = 8192;
 
 	/**
 	 * Populates the double line feed buffer.

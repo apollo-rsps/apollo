@@ -21,14 +21,14 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 	private final class CharacterRepositoryIterator implements Iterator<T> {
 
 		/**
-		 * The previous index of this iterator.
-		 */
-		private int previousIndex = -1;
-
-		/**
 		 * The current index of this iterator.
 		 */
 		private int index = 0;
+
+		/**
+		 * The previous index of this iterator.
+		 */
+		private int previousIndex = -1;
 
 		@Override
 		public boolean hasNext() {
@@ -78,14 +78,14 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 	private final Character[] characters;
 
 	/**
-	 * The current size of this repository.
-	 */
-	private int size = 0;
-
-	/**
 	 * The position of the next free index.
 	 */
 	private int pointer = 0;
+
+	/**
+	 * The current size of this repository.
+	 */
+	private int size = 0;
 
 	/**
 	 * Creates a new character repository with the specified capacity.

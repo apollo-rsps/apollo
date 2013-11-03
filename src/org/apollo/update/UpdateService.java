@@ -17,14 +17,19 @@ import org.apollo.fs.IndexedFileSystem;
 public final class UpdateService extends Service {
 
 	/**
+	 * The number of request types.
+	 */
+	private static final int REQUEST_TYPES = 3;
+
+	/**
 	 * The number of threads per request type.
 	 */
 	private static final int THREADS_PER_REQUEST_TYPE = Runtime.getRuntime().availableProcessors();
 
 	/**
-	 * The number of request types.
+	 * The update dispatcher.
 	 */
-	private static final int REQUEST_TYPES = 3;
+	private final UpdateDispatcher dispatcher = new UpdateDispatcher();
 
 	/**
 	 * The executor service.
@@ -35,11 +40,6 @@ public final class UpdateService extends Service {
 	 * A list of request workers.
 	 */
 	private final List<RequestWorker<?, ?>> workers = new ArrayList<RequestWorker<?, ?>>();
-
-	/**
-	 * The update dispatcher.
-	 */
-	private final UpdateDispatcher dispatcher = new UpdateDispatcher();
 
 	/**
 	 * Creates the update service.

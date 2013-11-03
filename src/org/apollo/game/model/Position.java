@@ -18,6 +18,11 @@ public final class Position {
 	public static final int MAX_DISTANCE = 15;
 
 	/**
+	 * The height level.
+	 */
+	private final int height;
+
+	/**
 	 * The x coordinate.
 	 */
 	private final int x;
@@ -26,11 +31,6 @@ public final class Position {
 	 * The y coordinate.
 	 */
 	private final int y;
-
-	/**
-	 * The height level.
-	 */
-	private final int height;
 
 	/**
 	 * Creates a position at the default height.

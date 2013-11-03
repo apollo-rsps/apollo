@@ -8,14 +8,14 @@ package org.apollo.fs;
 public final class FileDescriptor {
 
 	/**
-	 * The file type.
-	 */
-	private final int type;
-
-	/**
 	 * The file id.
 	 */
 	private final int file;
+
+	/**
+	 * The file type.
+	 */
+	private final int type;
 
 	/**
 	 * Creates the file descriptor.

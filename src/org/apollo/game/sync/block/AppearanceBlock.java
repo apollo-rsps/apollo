@@ -11,11 +11,6 @@ import org.apollo.game.model.Inventory;
 public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
-	 * The player's name.
-	 */
-	private final long name;
-
-	/**
 	 * The player's appearance.
 	 */
 	private final Appearance appearance;
@@ -26,19 +21,9 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	private final int combat;
 
 	/**
-	 * The player's total skill level (or 0).
-	 */
-	private final int skill;
-
-	/**
 	 * The player's equipment.
 	 */
 	private final Inventory equipment;
-
-	/**
-	 * The player's prayer icon.
-	 */
-	private final int prayerIcon;
 
 	/**
 	 * The player's head icon.
@@ -46,9 +31,24 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	private final int headIcon;
 
 	/**
+	 * The player's name.
+	 */
+	private final long name;
+
+	/**
 	 * The npc id this player is appearing as, if any.
 	 */
 	private final int npcId;
+
+	/**
+	 * The player's prayer icon.
+	 */
+	private final int prayerIcon;
+
+	/**
+	 * The player's total skill level (or 0).
+	 */
+	private final int skill;
 
 	/**
 	 * Creates the appearance block.

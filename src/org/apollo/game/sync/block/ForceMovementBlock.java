@@ -15,14 +15,19 @@ import org.apollo.game.model.Position;
 public class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
-	 * The initial {@link Position} of the player.
+	 * The direction the player is moving.
 	 */
-	private final Position initialPosition;
+	private final Direction direction;
 
 	/**
 	 * The {@link Position} the player is being moved to.
 	 */
 	private final Position finalPosition;
+
+	/**
+	 * The initial {@link Position} of the player.
+	 */
+	private final Position initialPosition;
 
 	/**
 	 * The length of time (in game ticks) the player's movement along the X axis will last.
@@ -33,11 +38,6 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	 * The length of time (in game ticks) the player's movement along the Y axis will last.
 	 */
 	private final int travelDurationY;
-
-	/**
-	 * The direction the player is moving.
-	 */
-	private final Direction direction;
 
 	/**
 	 * Creates a new Force Movement block.

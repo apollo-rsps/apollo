@@ -9,6 +9,7 @@ import org.apollo.net.release.EventDecoder;
 
 /**
  * An {@link EventDecoder} for the {@link SecondItemOptionEvent}.
+ * 
  * @author Graham
  */
 final class SecondItemOptionEventDecoder extends EventDecoder<SecondItemOptionEvent> {

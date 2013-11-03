@@ -11,24 +11,24 @@ import org.jboss.netty.buffer.ChannelBuffer;
 public final class GamePacket {
 
 	/**
-	 * The opcode.
-	 */
-	private final int opcode;
-
-	/**
-	 * The packet type.
-	 */
-	private final PacketType type;
-
-	/**
 	 * The length.
 	 */
 	private final int length;
 
 	/**
+	 * The opcode.
+	 */
+	private final int opcode;
+
+	/**
 	 * The payload.
 	 */
 	private final ChannelBuffer payload;
+
+	/**
+	 * The packet type.
+	 */
+	private final PacketType type;
 
 	/**
 	 * Creates the game packet.

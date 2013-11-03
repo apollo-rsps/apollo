@@ -8,14 +8,9 @@ package org.apollo.net.codec.game;
 public enum DataOrder {
 
 	/**
-	 * Least significant byte to most significant byte.
+	 * Most significant byte to least significant byte.
 	 */
-	LITTLE,
-
-	/**
-	 * Also known as the V1 order.
-	 */
-	MIDDLE,
+	BIG,
 
 	/**
 	 * Also known as the V2 order.
@@ -23,8 +18,13 @@ public enum DataOrder {
 	INVERSED_MIDDLE,
 
 	/**
-	 * Most significant byte to least significant byte.
+	 * Least significant byte to most significant byte.
 	 */
-	BIG;
+	LITTLE,
+
+	/**
+	 * Also known as the V1 order.
+	 */
+	MIDDLE;
 
 }

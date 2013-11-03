@@ -14,6 +14,11 @@ public final class Appearance {
 			42 }, new int[5]);
 
 	/**
+	 * The array of clothing/skin colours.
+	 */
+	private final int[] colors;
+
+	/**
 	 * The player's gender.
 	 */
 	private final Gender gender;
@@ -22,11 +27,6 @@ public final class Appearance {
 	 * The array of clothing/characteristic styles.
 	 */
 	private final int[] style;
-
-	/**
-	 * The array of clothing/skin colours.
-	 */
-	private final int[] colors;
 
 	/**
 	 * Creates the appearance with the specified gender, style and colors.

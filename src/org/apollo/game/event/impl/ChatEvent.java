@@ -10,9 +10,9 @@ import org.apollo.game.event.Event;
 public final class ChatEvent extends Event {
 
 	/**
-	 * The message.
+	 * The text color.
 	 */
-	private final String message;
+	private final int color;
 
 	/**
 	 * The compressed message.
@@ -20,14 +20,14 @@ public final class ChatEvent extends Event {
 	private final byte[] compressedMessage;
 
 	/**
-	 * The text color.
-	 */
-	private final int color;
-
-	/**
 	 * The text effects.
 	 */
 	private final int effects;
+
+	/**
+	 * The message.
+	 */
+	private final String message;
 
 	/**
 	 * Creates a new chat event.

@@ -20,6 +20,11 @@ public final class PlayerSaverWorker implements Runnable {
 	private static final Logger logger = Logger.getLogger(PlayerSaverWorker.class.getName());
 
 	/**
+	 * The player to save.
+	 */
+	private final Player player;
+
+	/**
 	 * The player saver.
 	 */
 	private final PlayerSaver saver;
@@ -28,11 +33,6 @@ public final class PlayerSaverWorker implements Runnable {
 	 * The game session.
 	 */
 	private final GameSession session;
-
-	/**
-	 * The player to save.
-	 */
-	private final Player player;
 
 	/**
 	 * Creates the player saver worker.

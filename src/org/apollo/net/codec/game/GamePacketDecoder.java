@@ -19,14 +19,9 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderState> {
 
 	/**
-	 * The current release.
+	 * The current length.
 	 */
-	private final Release release;
-
-	/**
-	 * The random number generator.
-	 */
-	private final IsaacRandom random;
+	private int length;
 
 	/**
 	 * The current opcode.
@@ -34,14 +29,19 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	private int opcode;
 
 	/**
+	 * The random number generator.
+	 */
+	private final IsaacRandom random;
+
+	/**
+	 * The current release.
+	 */
+	private final Release release;
+
+	/**
 	 * The packet type.
 	 */
 	private PacketType type;
-
-	/**
-	 * The current length.
-	 */
-	private int length;
 
 	/**
 	 * Creates the {@link GamePacketDecoder}.

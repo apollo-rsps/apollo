@@ -8,11 +8,6 @@ package org.apollo.game.scheduling;
 public abstract class ScheduledTask {
 
 	/**
-	 * A flag indicating if the task is running.
-	 */
-	private boolean running = true;
-
-	/**
 	 * The delay between executions of the task, in pulses.
 	 */
 	private int delay;
@@ -21,6 +16,11 @@ public abstract class ScheduledTask {
 	 * The number of pulses remaining until the task is next executed.
 	 */
 	private int pulses;
+
+	/**
+	 * A flag indicating if the task is running.
+	 */
+	private boolean running = true;
 
 	/**
 	 * Creates a new scheduled task.

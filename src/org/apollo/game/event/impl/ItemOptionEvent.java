@@ -1,8 +1,9 @@
 package org.apollo.game.event.impl;
 
 /**
- * An {@link InventoryItemEvent} which is sent by the client when an item's option is clicked (e.g. equip,
- * eat, drink, etc).
+ * An {@link InventoryItemEvent} which is sent by the client when an item's option is clicked (e.g. equip, eat, drink,
+ * etc).
+ * 
  * @author Chris Fletcher
  */
 public abstract class ItemOptionEvent extends InventoryItemEvent {

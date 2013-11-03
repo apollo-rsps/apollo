@@ -15,24 +15,24 @@ import org.apollo.game.model.SlottedItem;
 public final class SynchronizationInventoryListener extends InventoryAdapter {
 
 	/**
-	 * The inventory interface id.
-	 */
-	public static final int INVENTORY_ID = 3214;
-
-	/**
 	 * The equipment interface id.
 	 */
 	public static final int EQUIPMENT_ID = 1688;
 
 	/**
-	 * The player.
+	 * The inventory interface id.
 	 */
-	private final Player player;
+	public static final int INVENTORY_ID = 3214;
 
 	/**
 	 * The interface id.
 	 */
 	private final int interfaceId;
+
+	/**
+	 * The player.
+	 */
+	private final Player player;
 
 	/**
 	 * Creates the syncrhonization inventory listener.

@@ -11,14 +11,14 @@ import org.apollo.game.model.Position;
 public final class WalkEvent extends Event {
 
 	/**
-	 * The steps.
-	 */
-	private final Position[] steps;
-
-	/**
 	 * The running flag.
 	 */
 	private boolean run;
+
+	/**
+	 * The steps.
+	 */
+	private final Position[] steps;
 
 	/**
 	 * Creates the event.

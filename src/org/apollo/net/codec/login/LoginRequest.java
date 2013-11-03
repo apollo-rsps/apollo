@@ -11,19 +11,24 @@ import org.apollo.security.PlayerCredentials;
 public final class LoginRequest {
 
 	/**
+	 * The archive CRCs.
+	 */
+	private final int[] archiveCrcs;
+
+	/**
 	 * The player's credentials.
 	 */
 	private final PlayerCredentials credentials;
 
 	/**
-	 * The pair of random number generators.
-	 */
-	private final IsaacRandomPair randomPair;
-
-	/**
 	 * The low memory flag.
 	 */
 	private final boolean lowMemory;
+
+	/**
+	 * The pair of random number generators.
+	 */
+	private final IsaacRandomPair randomPair;
 
 	/**
 	 * The reconnecting flag.
@@ -34,11 +39,6 @@ public final class LoginRequest {
 	 * The release number.
 	 */
 	private final int releaseNumber;
-
-	/**
-	 * The archive CRCs.
-	 */
-	private final int[] archiveCrcs;
 
 	/**
 	 * Creates a login request.

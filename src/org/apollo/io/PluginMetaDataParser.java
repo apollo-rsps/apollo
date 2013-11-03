@@ -21,14 +21,14 @@ public final class PluginMetaDataParser {
 	private static final XmlNode[] EMPTY_NODE_ARRAY = new XmlNode[0];
 
 	/**
-	 * The XML parser.
-	 */
-	private final XmlParser parser;
-
-	/**
 	 * The input stream.
 	 */
 	private final InputStream is;
+
+	/**
+	 * The XML parser.
+	 */
+	private final XmlParser parser;
 
 	/**
 	 * Creates the plugin meta data parser.

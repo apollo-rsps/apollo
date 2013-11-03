@@ -13,14 +13,9 @@ import org.jboss.netty.buffer.ChannelBuffers;
 public final class GamePacketBuilder {
 
 	/**
-	 * The opcode.
+	 * The current bit index.
 	 */
-	private final int opcode;
-
-	/**
-	 * The {@link PacketType}.
-	 */
-	private final PacketType type;
+	private int bitIndex;
 
 	/**
 	 * The buffer.
@@ -33,9 +28,14 @@ public final class GamePacketBuilder {
 	private AccessMode mode = AccessMode.BYTE_ACCESS;
 
 	/**
-	 * The current bit index.
+	 * The opcode.
 	 */
-	private int bitIndex;
+	private final int opcode;
+
+	/**
+	 * The {@link PacketType}.
+	 */
+	private final PacketType type;
 
 	/**
 	 * Creates a raw {@link GamePacketBuilder}.

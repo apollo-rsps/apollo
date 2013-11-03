@@ -15,14 +15,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class NamedThreadFactory implements ThreadFactory {
 
 	/**
-	 * The unique name.
-	 */
-	private final String name;
-
-	/**
 	 * The next id.
 	 */
 	private AtomicInteger id = new AtomicInteger(0);
+
+	/**
+	 * The unique name.
+	 */
+	private final String name;
 
 	/**
 	 * Creates the named thread factory.

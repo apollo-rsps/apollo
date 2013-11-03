@@ -28,6 +28,11 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 public final class HttpRequestWorker extends RequestWorker<HttpRequest, ResourceProvider> {
 
 	/**
+	 * The default character set.
+	 */
+	private static final Charset CHARACTER_SET = Charset.forName("ISO-8859-1");
+
+	/**
 	 * The value of the server header.
 	 */
 	private static final String SERVER_IDENTIFIER = "JAGeX/3.1";
@@ -36,11 +41,6 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	 * The directory with web files.
 	 */
 	private static final File WWW_DIRECTORY = new File("./data/www/");
-
-	/**
-	 * The default character set.
-	 */
-	private static final Charset CHARACTER_SET = Charset.forName("ISO-8859-1");
 
 	/**
 	 * Creates the HTTP request worker.
