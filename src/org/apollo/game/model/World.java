@@ -8,10 +8,16 @@ import java.util.logging.Logger;
 
 import org.apollo.Service;
 import org.apollo.fs.IndexedFileSystem;
-import org.apollo.fs.parser.ItemDefinitionParser;
+import org.apollo.fs.decoder.ItemDefinitionDecoder;
+import org.apollo.fs.decoder.NpcDefinitionDecoder;
+import org.apollo.fs.decoder.ObjectDefinitionDecoder;
+import org.apollo.fs.decoder.StaticObjectDecoder;
 import org.apollo.game.command.CommandDispatcher;
 import org.apollo.game.model.def.EquipmentDefinition;
 import org.apollo.game.model.def.ItemDefinition;
+import org.apollo.game.model.def.NpcDefinition;
+import org.apollo.game.model.def.ObjectDefinition;
+import org.apollo.game.model.obj.StaticObject;
 import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
 import org.apollo.io.EquipmentDefinitionParser;
@@ -102,34 +108,42 @@ public final class World {
 	 * 
 	 * @param release The release number.
 	 * @param fs The file system.
-	 * @param mgr The plugin manager. TODO move this.
+	 * @param manager The plugin manager. TODO move this.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void init(int release, IndexedFileSystem fs, PluginManager mgr) throws IOException {
-		logger.info("Loading item definitions...");
-		ItemDefinitionParser itemParser = new ItemDefinitionParser(fs);
-		ItemDefinition[] itemDefs = itemParser.parse();
-		ItemDefinition.init(itemDefs);
-		logger.info("Done (loaded " + itemDefs.length + " item definitions).");
+	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws IOException {
 
-		logger.info("Loading equipment definitions...");
-		int nonNull = 0;
+		ItemDefinitionDecoder itemParser = new ItemDefinitionDecoder(fs);
+		ItemDefinition[] itemDefs = itemParser.decode();
+		ItemDefinition.init(itemDefs);
+		logger.info("Loaded " + itemDefs.length + " item definitions.");
+
 		InputStream is = new BufferedInputStream(new FileInputStream("data/equipment-" + release + ".dat"));
 		try {
-			EquipmentDefinitionParser equipParser = new EquipmentDefinitionParser(is);
-			EquipmentDefinition[] equipDefs = equipParser.parse();
-			for (EquipmentDefinition def : equipDefs) {
-				if (def != null) {
-					nonNull++;
-				}
-			}
-			EquipmentDefinition.init(equipDefs);
+			EquipmentDefinitionParser parser = new EquipmentDefinitionParser(is);
+			EquipmentDefinition[] defs = parser.parse();
+			EquipmentDefinition.init(defs);
+			logger.info("Loaded " + defs.length + " equipment definitions.");
 		} finally {
 			is.close();
 		}
-		logger.info("Done (loaded " + nonNull + " equipment definitions).");
 
-		this.pluginManager = mgr; // TODO move!!
+		NpcDefinitionDecoder parser = new NpcDefinitionDecoder(fs);
+		NpcDefinition[] npcDefs = parser.decode();
+		NpcDefinition.init(npcDefs);
+		logger.info("Loaded " + npcDefs.length + " npc definitions.");
+
+		ObjectDefinitionDecoder objParser = new ObjectDefinitionDecoder(fs);
+		ObjectDefinition[] objDefs = objParser.decode();
+		ObjectDefinition.init(objDefs);
+		logger.info("Loaded " + objDefs.length + " object definitions.");
+
+		StaticObjectDecoder objectParser = new StaticObjectDecoder(fs);
+		StaticObject[] objects = objectParser.decode();
+		StaticObject.init(objects);
+		logger.info("Loaded " + objects.length + " static objects.");
+
+		pluginManager = manager; // TODO move!!
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package org.apollo.fs.parser;
+package org.apollo.fs.decoder;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -9,35 +9,35 @@ import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.util.ByteBufferUtil;
 
 /**
- * A class which parses item definitions.
+ * Decodes item data from the {@code obj.dat} file into {@link ItemDefinition}s.
  * 
  * @author Graham
  */
-public final class ItemDefinitionParser {
+public final class ItemDefinitionDecoder {
 
 	/**
-	 * The indexed file system.
+	 * The {@link IndexedFileSystem}.
 	 */
 	private final IndexedFileSystem fs;
 
 	/**
-	 * Creates the item definition parser.
+	 * Creates the item definition decoder.
 	 * 
 	 * @param fs The indexed file system.
 	 */
-	public ItemDefinitionParser(IndexedFileSystem fs) {
+	public ItemDefinitionDecoder(IndexedFileSystem fs) {
 		this.fs = fs;
 	}
 
 	/**
-	 * Parses the item definitions.
+	 * Decodes the item definitions.
 	 * 
 	 * @return The item definitions.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public ItemDefinition[] parse() throws IOException {
+	public ItemDefinition[] decode() throws IOException {
 		Archive config = Archive.decode(fs.getFile(0, 2));
-		ByteBuffer dat = config.getEntry("obj.dat").getBuffer();
+		ByteBuffer data = config.getEntry("obj.dat").getBuffer();
 		ByteBuffer idx = config.getEntry("obj.idx").getBuffer();
 
 		int count = idx.getShort();
@@ -50,33 +50,33 @@ public final class ItemDefinitionParser {
 
 		ItemDefinition[] defs = new ItemDefinition[count];
 		for (int i = 0; i < count; i++) {
-			dat.position(indices[i]);
-			defs[i] = parseDefinition(i, dat);
+			data.position(indices[i]);
+			defs[i] = decode(i, data);
 		}
 
 		return defs;
 	}
 
 	/**
-	 * Parses a single definition.
+	 * Decodes a single definition.
 	 * 
 	 * @param id The item's id.
 	 * @param buffer The buffer.
-	 * @return The definition.
+	 * @return The {@link ItemDefinition}.
 	 */
-	private ItemDefinition parseDefinition(int id, ByteBuffer buffer) {
-		ItemDefinition def = new ItemDefinition(id);
+	private ItemDefinition decode(int id, ByteBuffer buffer) {
+		ItemDefinition definition = new ItemDefinition(id);
 		while (true) {
 			int code = buffer.get() & 0xFF;
 
 			if (code == 0) {
-				return def;
+				return definition;
 			} else if (code == 1) {
 				buffer.getShort();// & 0xFFFF; // model Id
 			} else if (code == 2) {
-				def.setName(ByteBufferUtil.readString(buffer));
+				definition.setName(ByteBufferUtil.readString(buffer));
 			} else if (code == 3) {
-				def.setDescription(ByteBufferUtil.readString(buffer));
+				definition.setDescription(ByteBufferUtil.readString(buffer));
 			} else if (code == 4) {
 				buffer.getShort();// & 0xFFFF; // sprite scale
 			} else if (code == 5) {
@@ -88,13 +88,13 @@ public final class ItemDefinitionParser {
 			} else if (code == 8) {
 				buffer.getShort(); // sprite dY
 			} else if (code == 10) {
-				buffer.getShort();// & 0xFFFF;
+				buffer.getShort();
 			} else if (code == 11) {
-				def.setStackable(true);
+				definition.setStackable(true);
 			} else if (code == 12) {
 				buffer.getInt(); // model height
 			} else if (code == 16) {
-				def.setMembersOnly(true);
+				definition.setMembersOnly(true);
 			} else if (code == 23) {
 				buffer.getShort(); // & 0xFFFF; //primaryMaleEquipModelId
 				buffer.get(); // maleEquipYTranslation
@@ -110,10 +110,10 @@ public final class ItemDefinitionParser {
 				if (str.equalsIgnoreCase("hidden")) {
 					str = null;
 				}
-				def.setGroundAction(code - 30, str);
+				definition.setGroundAction(code - 30, str);
 			} else if (code >= 35 && code < 40) {
 				String str = ByteBufferUtil.readString(buffer);
-				def.setInventoryAction(code - 35, str);
+				definition.setInventoryAction(code - 35, str);
 			} else if (code == 40) {
 				int colourCount = buffer.get() & 0xFF;
 				for (int i = 0; i < colourCount; i++) {
@@ -136,10 +136,10 @@ public final class ItemDefinitionParser {
 				buffer.getShort(); // & 0xFFFF; // spriteCameraYaw
 			} else if (code == 97) {
 				int noteInfoId = buffer.getShort() & 0xFFFF;
-				def.setNoteInfoId(noteInfoId);
+				definition.setNoteInfoId(noteInfoId);
 			} else if (code == 98) {
 				int noteGraphicId = buffer.getShort() & 0xFFFF;
-				def.setNoteGraphicId(noteGraphicId);
+				definition.setNoteGraphicId(noteGraphicId);
 			} else if (code >= 100 && code < 110) {
 				buffer.getShort(); // & 0xFFFF; // stack id
 				buffer.getShort(); // & 0xFFFF; // stack size
@@ -154,7 +154,7 @@ public final class ItemDefinitionParser {
 			} else if (code == 114) {
 				buffer.getShort(); // * 5; // light diffusion
 			} else if (code == 115) {
-				buffer.get(); // & 0xFF; // team
+				definition.setTeam(buffer.get() & 0xFF);
 			}
 		}
 	}

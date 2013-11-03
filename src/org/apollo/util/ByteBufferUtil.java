@@ -12,13 +12,17 @@ import org.apollo.net.NetworkConstants;
 public final class ByteBufferUtil {
 
 	/**
-	 * Reads an unsigned tri byte from the specified buffer.
+	 * Reads a 'smart' (either a {@code byte} or {@code short} depending on the value) from the specified buffer.
 	 * 
 	 * @param buffer The buffer.
-	 * @return The tri byte.
+	 * @return The 'smart'.
 	 */
-	public static int readUnsignedTriByte(ByteBuffer buffer) {
-		return ((buffer.get() & 0xFF) << 16) | ((buffer.get() & 0xFF) << 8) | (buffer.get() & 0xFF);
+	public static int readSmart(ByteBuffer buffer) {
+		int peek = buffer.get(buffer.position()) & 0xFF;
+		if (peek < 128) {
+			return buffer.get() & 0xFF;
+		}
+		return (buffer.getShort() & 0xFFFF) - 32768;
 	}
 
 	/**
@@ -34,6 +38,16 @@ public final class ByteBufferUtil {
 			bldr.append(c);
 		}
 		return bldr.toString();
+	}
+
+	/**
+	 * Reads an unsigned tri byte from the specified buffer.
+	 * 
+	 * @param buffer The buffer.
+	 * @return The tri byte.
+	 */
+	public static int readUnsignedTriByte(ByteBuffer buffer) {
+		return ((buffer.get() & 0xFF) << 16) | ((buffer.get() & 0xFF) << 8) | (buffer.get() & 0xFF);
 	}
 
 	/**

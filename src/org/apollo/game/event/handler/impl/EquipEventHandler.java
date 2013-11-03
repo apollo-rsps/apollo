@@ -8,9 +8,7 @@ import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Player;
 import org.apollo.game.model.Skill;
-import org.apollo.game.model.SkillSet;
 import org.apollo.game.model.def.EquipmentDefinition;
-import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 import org.apollo.util.LanguageUtil;
 

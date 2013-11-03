@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apollo.fs.IndexedFileSystem;
-import org.apollo.fs.parser.ItemDefinitionParser;
+import org.apollo.fs.decoder.ItemDefinitionDecoder;
 import org.apollo.game.model.def.ItemDefinition;
 
 /**
@@ -37,8 +37,8 @@ public final class NoteUpdater {
 		try {
 			IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true);
 			try {
-				ItemDefinitionParser parser = new ItemDefinitionParser(fs);
-				ItemDefinition[] defs = parser.parse();
+				ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
+				ItemDefinition[] defs = decoder.decode();
 				ItemDefinition.init(defs);
 
 				os.writeShort(defs.length);
