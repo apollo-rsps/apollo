@@ -13,7 +13,7 @@ import org.apollo.util.plugin.PluginManager;
  * 
  * @author Graham
  */
-public final class CreditsCommandListener implements CommandListener {
+public final class CreditsCommandListener extends CommandListener {
 
 	/*
 	 * If you are considering removing this command, please bear in mind that Apollo took several people thousands of
