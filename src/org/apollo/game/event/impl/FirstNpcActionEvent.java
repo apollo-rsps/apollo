@@ -10,10 +10,10 @@ public class FirstNpcActionEvent extends NpcActionEvent {
 	/**
 	 * Creates a new first npc action event.
 	 * 
-	 * @param npcIndex The index of the npc.
+	 * @param index The index of the npc.
 	 */
-	public FirstNpcActionEvent(int npcIndex) {
-		super(1, npcIndex);
+	public FirstNpcActionEvent(int index) {
+		super(1, index);
 	}
 
 }

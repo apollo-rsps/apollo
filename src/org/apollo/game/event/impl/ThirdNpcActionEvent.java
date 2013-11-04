@@ -10,10 +10,10 @@ public class ThirdNpcActionEvent extends NpcActionEvent {
 	/**
 	 * Creates a new third npc action event.
 	 * 
-	 * @param npcIndex The index of the npc.
+	 * @param index The index of the npc.
 	 */
-	public ThirdNpcActionEvent(int npcIndex) {
-		super(3, npcIndex);
+	public ThirdNpcActionEvent(int index) {
+		super(3, index);
 	}
 
 }

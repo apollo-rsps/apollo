@@ -45,15 +45,6 @@ public final class PluginManager {
 	}
 
 	/**
-	 * Creates an unmodifiable {@link Set} containing the authors.
-	 * 
-	 * @return The set.
-	 */
-	public Set<String> getAuthors() {
-		return Collections.unmodifiableSortedSet(authors);
-	}
-
-	/**
 	 * Creates a plugin map from a collection.
 	 * 
 	 * @param plugins The plugin collection.
@@ -96,6 +87,15 @@ public final class PluginManager {
 			}
 		}
 		return Collections.unmodifiableCollection(plugins);
+	}
+
+	/**
+	 * Creates an unmodifiable {@link Set} containing the authors.
+	 * 
+	 * @return The set.
+	 */
+	public Set<String> getAuthors() {
+		return Collections.unmodifiableSortedSet(authors);
 	}
 
 	/**
