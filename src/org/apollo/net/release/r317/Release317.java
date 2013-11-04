@@ -24,9 +24,6 @@ import org.apollo.game.event.impl.UpdateSkillEvent;
 import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
-import org.apollo.net.release.r377.FirstNpcActionEventDecoder;
-import org.apollo.net.release.r377.SecondNpcActionEventDecoder;
-import org.apollo.net.release.r377.ThirdNpcActionEventDecoder;
 
 /**
  * An implementation of {@link Release} for the 317 protocol.
