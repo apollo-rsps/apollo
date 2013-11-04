@@ -57,7 +57,6 @@ public final class EventHandlerChain<E extends Event> {
 			public void breakHandlerChain() {
 				running[0] = false;
 			}
-
 		};
 
 		for (EventHandler<E> handler : handlers) {

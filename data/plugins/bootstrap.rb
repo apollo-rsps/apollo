@@ -14,7 +14,7 @@
 
 require 'java'
 java_import 'org.apollo.game.event.handler.EventHandler'
-java_import 'org.apollo.game.command.PrivilegedCommandListener'
+java_import 'org.apollo.game.command.CommandListener'
 java_import 'org.apollo.game.model.Player'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
@@ -34,14 +34,14 @@ end
 
 # A CommandListener which executes a Proc object with two arguments: the player
 # and the command.
-class ProcCommandListener < PrivilegedCommandListener
+class ProcCommandListener < CommandListener
   def initialize(rights, block)
     super rights
     @block = block
   end
 
-  def executePrivileged(player, command)
-    @block.call player, command
+  def execute(player, command)
+    @block.call( player, command)
   end
 end
 
@@ -54,7 +54,7 @@ class ProcEventHandler < EventHandler
   end
 
   def handle(ctx, player, event)
-    @block.call ctx, player, event
+    @block.call(ctx, player, event)
   end
 end
 
@@ -66,7 +66,7 @@ class ProcScheduledTask < ScheduledTask
   end
 
   def execute
-    @block.call self
+    @block.call(self)
   end
 end
 
@@ -84,12 +84,12 @@ def schedule(*args, &block)
     if args.length == 1 or args.length == 2
       delay = args[0]
       immediate = args.length == 2 ? args[1] : false
-      World.world.schedule ProcScheduledTask.new(delay, immediate, block)
+      World.world.schedule(ProcScheduledTask.new(delay, immediate, block))
     else
       raise "invalid combination of arguments"
     end
   elsif args.length == 1
-    World.world.schedule args[0]
+    World.world.schedule(args[0])
   else
     raise "invalid combination of arguments"
   end
@@ -122,16 +122,12 @@ end
 
 # Defines an action to be taken upon a button press.
 def on_button(args, proc)
-  if args.length != 1
-    raise "button must have one argument"
-  end
+  raise "button must have one argument" unless args.length == 1
 
   id = args[0].to_i
 
   on :event, :button do |ctx, player, event|
-    if event.widget_id == id
-      proc.call player
-    end
+    proc.call player if event.widget_id == id
   end
 end
 
@@ -139,29 +135,22 @@ end
 # The event can either be a symbol with the lower case, underscored class name
 # or the class itself.
 def on_event(args, proc)
-  if args.length != 1
-    raise "event must have one argument"
-  end
+  raise "event must have one argument" unless args.length == 1
 
   evt = args[0]
   if evt.is_a? Symbol
-    class_name = evt.to_s.camelize.concat "Event"
-    evt = Java::JavaClass.for_name("org.apollo.game.event.impl.".concat class_name)
+    class_name = evt.to_s.camelize.concat("Event")
+    evt = Java::JavaClass.for_name("org.apollo.game.event.impl.".concat(class_name))
   end
 
-  $ctx.add_last_event_handler evt, ProcEventHandler.new(proc)
+  $ctx.add_last_event_handler(evt, ProcEventHandler.new(proc))
 end
 
 # Defines an action to be taken upon a command.
 def on_command(args, proc)
-  if args.length != 1 and args.length != 2
-    raise "command event must have one or two arguments"
-  end
+  raise "command event must have one or two arguments" unless (1..2).include? args.length
 
-  rights = RIGHTS_STANDARD
-  if args.length == 2
-    rights = args[1]
-  end
+  rights = args.length == 2 ? args[1] : RIGHTS_STANDARD
 
-  $ctx.add_command_listener args[0].to_s, ProcCommandListener.new(rights, proc)
+  $ctx.add_command_listener(args[0].to_s, ProcCommandListener.new(rights, proc))
 end

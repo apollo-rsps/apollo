@@ -21,7 +21,6 @@ public final class CommandDispatcher {
 	 * Creates the command dispatcher and registers a listener for the credits command.
 	 */
 	public CommandDispatcher() {
-		// not in a plugin so it is harder for people to remove!
 		listeners.put("credits", new CreditsCommandListener());
 	}
 
@@ -34,7 +33,7 @@ public final class CommandDispatcher {
 	public void dispatch(Player player, Command command) {
 		CommandListener listener = listeners.get(command.getName().toLowerCase());
 		if (listener != null) {
-			listener.execute(player, command);
+			listener.executePrivileged(player, command);
 		}
 	}
 
