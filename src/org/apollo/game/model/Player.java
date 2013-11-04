@@ -109,11 +109,6 @@ public final class Player extends Character {
 	private boolean designedCharacter = false;
 
 	/**
-	 * The player's run energy.
-	 */
-	private int runEnergy = 100;
-
-	/**
 	 * A flag which indicates there are npcs that couldn't be added.
 	 */
 	private boolean excessiveNpcs = false;
@@ -162,6 +157,11 @@ public final class Player extends Character {
 	 * A flag indicating if the region changed in the last cycle.
 	 */
 	private boolean regionChanged = false;
+
+	/**
+	 * The player's run energy.
+	 */
+	private int runEnergy = 100;
 
 	/**
 	 * A flag indicating if this player is running.
@@ -297,6 +297,15 @@ public final class Player extends Character {
 	 */
 	public PrivilegeLevel getPrivilegeLevel() {
 		return privilegeLevel;
+	}
+
+	/**
+	 * Gets the player's run energy.
+	 * 
+	 * @return The run energy.
+	 */
+	public int getRunEnergy() {
+		return runEnergy;
 	}
 
 	/**
@@ -620,6 +629,15 @@ public final class Player extends Character {
 	}
 
 	/**
+	 * Sets the player's run energy.
+	 * 
+	 * @param runEnergy The energy.
+	 */
+	public void setRunEnergy(int runEnergy) {
+		this.runEnergy = runEnergy;
+	}
+
+	/**
 	 * Sets the player's {@link GameSession}.
 	 * 
 	 * @param session The player's {@link GameSession}.
@@ -663,24 +681,6 @@ public final class Player extends Character {
 	public String toString() {
 		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel="
 				+ privilegeLevel + "]";
-	}
-
-	/**
-	 * Gets the player's run energy.
-	 * 
-	 * @return The run energy.
-	 */
-	public int getRunEnergy() {
-		return runEnergy;
-	}
-
-	/**
-	 * Sets the player's run energy.
-	 * 
-	 * @param runEnergy The energy.
-	 */
-	public void setRunEnergy(int runEnergy) {
-		this.runEnergy = runEnergy;
 	}
 
 }

@@ -17,17 +17,17 @@ public class NpcActionEvent extends Event {
 	/**
 	 * The npc index.
 	 */
-	private final int npcIndex;
+	private final int index;
 
 	/**
 	 * Creates a new npc action event.
 	 * 
 	 * @param action The action number.
-	 * @param npcIndex The index of the npc.
+	 * @param index The index of the npc.
 	 */
-	public NpcActionEvent(int action, int npcIndex) {
+	public NpcActionEvent(int action, int index) {
 		this.action = action;
-		this.npcIndex = npcIndex;
+		this.index = index;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class NpcActionEvent extends Event {
 	 * @return The npc index.
 	 */
 	public int getNpcIndex() {
-		return npcIndex;
+		return index;
 	}
 
 }

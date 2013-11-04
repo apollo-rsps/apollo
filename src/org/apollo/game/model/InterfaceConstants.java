@@ -32,11 +32,6 @@ public class InterfaceConstants {
 	public static final int QUEST_SCROLL_PANE = 8143;
 
 	/**
-	 * The quest title widget id.
-	 */
-	public static final int QUEST_TITLE = 8144;
-
-	/**
 	 * The array of widgets that display the text.
 	 */
 	public static final int[] QUEST_TEXT = { 8144, 8145, 8147, 8148, 8149, 8150, 8151, 8152, 8153, 8154, 8155, 8156,
@@ -46,6 +41,11 @@ public class InterfaceConstants {
 			12186, 12187, 12188, 12189, 12190, 12191, 12192, 12193, 12194, 12195, 12196, 12197, 12198, 12199, 12200,
 			12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208, 12209, 12210, 12211, 12212, 12213, 12214, 12215,
 			12216, 12217, 12218, 12219, 12220, 12221, 12222, 12223 };
+
+	/**
+	 * The quest title widget id.
+	 */
+	public static final int QUEST_TITLE = 8144;
 
 	/**
 	 * Prevent instantiation.
