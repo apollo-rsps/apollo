@@ -26,9 +26,7 @@ public final class NoteUpdater {
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length != 1) {
-			System.err.println("Usage:");
-			System.err.println("  java -cp ... org.apollo.tools.NoteUpdater [release]");
-			return;
+			throw new IllegalArgumentException("Usage:\njava -cp ... org.apollo.tools.NoteUpdater [release]");
 		}
 		String release = args[0];
 
@@ -42,7 +40,6 @@ public final class NoteUpdater {
 				ItemDefinition.init(defs);
 
 				os.writeShort(defs.length);
-
 				Map<Integer, Integer> itemToNote = new HashMap<Integer, Integer>();
 
 				for (int id = 0; id < defs.length; id++) {

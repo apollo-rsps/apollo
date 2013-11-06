@@ -20,11 +20,11 @@ public final class EquipmentUpdater {
 	/**
 	 * Gets the attack requirement.
 	 * 
-	 * @param def The item.
+	 * @param definition The item definition.
 	 * @return The required level.
 	 */
-	private static int getAttackRequirement(ItemDefinition def) {
-		String name = def.getName();
+	private static int getAttackRequirement(ItemDefinition definition) {
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -229,12 +229,12 @@ public final class EquipmentUpdater {
 	/**
 	 * Gets the defence requirement.
 	 * 
-	 * @param def The item.
+	 * @param definition The item definition.
 	 * @return The required level.
 	 */
-	private static int getDefenceRequirement(ItemDefinition def) {
-		int id = def.getId();
-		String name = def.getName();
+	private static int getDefenceRequirement(ItemDefinition definition) {
+		int id = definition.getId();
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -679,11 +679,11 @@ public final class EquipmentUpdater {
 	/**
 	 * Gets the magic requirement.
 	 * 
-	 * @param def The item.
+	 * @param definition The item definition.
 	 * @return The required level.
 	 */
-	private static int getMagicRequirement(ItemDefinition def) {
-		String name = def.getName();
+	private static int getMagicRequirement(ItemDefinition definition) {
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -786,12 +786,12 @@ public final class EquipmentUpdater {
 	/**
 	 * Gets the ranged requirement.
 	 * 
-	 * @param def The item.
+	 * @param definition The item.
 	 * @return The required level.
 	 */
-	private static int getRangedRequirement(ItemDefinition def) {
-		int id = def.getId();
-		String name = def.getName();
+	private static int getRangedRequirement(ItemDefinition definition) {
+		int id = definition.getId();
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -981,11 +981,11 @@ public final class EquipmentUpdater {
 	/**
 	 * Gets the weapon type.
 	 * 
-	 * @param def The item.
+	 * @param definition The item.
 	 * @return The weapon type, or {@code -1} if it is not a weapon.
 	 */
-	private static int getWeaponType(ItemDefinition def) {
-		String name = def.getName();
+	private static int getWeaponType(ItemDefinition definition) {
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -1050,11 +1050,11 @@ public final class EquipmentUpdater {
 	/**
 	 * Checks if the item is a full body item.
 	 * 
-	 * @param def The item.
+	 * @param definition The item.
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
-	private static boolean isFullBody(ItemDefinition def) {
-		String name = def.getName();
+	private static boolean isFullBody(ItemDefinition definition) {
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -1069,11 +1069,11 @@ public final class EquipmentUpdater {
 	/**
 	 * Checks if the item is a full hat item.
 	 * 
-	 * @param def The item.
+	 * @param definition The item.
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
-	private static boolean isFullHat(ItemDefinition def) {
-		String name = def.getName();
+	private static boolean isFullHat(ItemDefinition definition) {
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -1088,11 +1088,11 @@ public final class EquipmentUpdater {
 	/**
 	 * Checks if the item is a full mask item.
 	 * 
-	 * @param def The item.
+	 * @param definition The item.
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
-	private static boolean isFullMask(ItemDefinition def) {
-		String name = def.getName();
+	private static boolean isFullMask(ItemDefinition definition) {
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -1107,12 +1107,12 @@ public final class EquipmentUpdater {
 	/**
 	 * Checks if the item is two handed.
 	 * 
-	 * @param def The item.
+	 * @param definition The item.
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
-	private static boolean isTwoHanded(ItemDefinition def) {
-		int id = def.getId();
-		String name = def.getName();
+	private static boolean isTwoHanded(ItemDefinition definition) {
+		int id = definition.getId();
+		String name = definition.getName();
 		if (name == null) {
 			name = "null";
 		}
@@ -1154,9 +1154,8 @@ public final class EquipmentUpdater {
 			return true;
 		} else if (name.equals("Saradomin sword")) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -1167,9 +1166,7 @@ public final class EquipmentUpdater {
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length != 1) {
-			System.err.println("Usage:");
-			System.err.println("  java -cp ... org.apollo.tools.EquipmentUpdater [release]");
-			return;
+			throw new IllegalArgumentException("Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release]");
 		}
 		String release = args[0];
 
@@ -1179,11 +1176,11 @@ public final class EquipmentUpdater {
 			IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true);
 			try {
 				ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
-				ItemDefinition[] defs = decoder.decode();
-				ItemDefinition.init(defs);
+				ItemDefinition[] definitions = decoder.decode();
+				ItemDefinition.init(definitions);
 
-				os.writeShort(defs.length);
-				for (int id = 0; id < defs.length; id++) {
+				os.writeShort(definitions.length);
+				for (int id = 0; id < definitions.length; id++) {
 					ItemDefinition def = ItemDefinition.lookup(id);
 					int type = getWeaponType(def);
 					os.writeByte(type);
@@ -1211,7 +1208,6 @@ public final class EquipmentUpdater {
 	 * Default private constructor to prevent instantiation.
 	 */
 	private EquipmentUpdater() {
-
 	}
 
 }

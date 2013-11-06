@@ -93,10 +93,9 @@ public final class EquipmentConstants {
 			"Tzhaar-ket", "staff", "Staff", "godsword", "c'bow", "Crystal bow", "Dark bow", "Magic butterfly net" };
 
 	/**
-	 * Default private construcotr to prevent instantiation.
+	 * Default private constructor to prevent instantiation.
 	 */
 	private EquipmentConstants() {
-
 	}
 
 }

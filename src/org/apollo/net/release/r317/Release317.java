@@ -26,7 +26,7 @@ import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
 
 /**
- * An implementation of {@link Release} for the 317 protocol.
+ * A {@link Release} implementation for the 317 protocol.
  * 
  * @author Graham
  */
@@ -112,8 +112,12 @@ public final class Release317 extends Release {
 		register(3, new FocusUpdateEventDecoder());
 		register(241, new MouseClickEventDecoder());
 		register(86, new ArrowKeyEventDecoder());
+
 		SpamPacketEventDecoder spamEventDecoder = new SpamPacketEventDecoder();
 		register(77, spamEventDecoder);
+		register(165, spamEventDecoder);
+		register(189, spamEventDecoder);
+		register(226, spamEventDecoder);
 
 		register(72, new FirstNpcActionEventDecoder());
 		register(155, new SecondNpcActionEventDecoder());

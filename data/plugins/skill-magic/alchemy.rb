@@ -35,7 +35,7 @@ class AlchemyAction < ItemSpellAction
   end
   
   def illegal_item?
-  	return ILLEGAL_ALC_ITEMS.include? @item.id
+    return ILLEGAL_ALC_ITEMS.include? @item.id
   end
   
   def execute_action
