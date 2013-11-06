@@ -26,7 +26,7 @@ import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
 
 /**
- * An implementation of {@link Release} for the 377 protocol.
+ * A {@link Release} implementation for the 377 protocol.
  * 
  * @author Graham
  */

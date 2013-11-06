@@ -14,7 +14,7 @@ import org.apollo.util.plugin.PluginManager;
  * @author Graham
  */
 public final class CreditsCommandListener extends CommandListener {
-
+	
 	/*
 	 * If you are considering removing this command, please bear in mind that Apollo took several people thousands of
 	 * hours to create. We released it to the world for free and it isn't much to ask to leave this command in. It isn't
@@ -29,7 +29,7 @@ public final class CreditsCommandListener extends CommandListener {
 		PluginManager mgr = World.getWorld().getPluginManager();
 		final Set<String> authors = mgr.getAuthors();
 
-		List<String> text = new ArrayList<String>(14 + authors.size());
+		List<String> text = new ArrayList<String>(12 + authors.size());
 		text.add("@dre@Apollo");
 		text.add("@dre@Introduction");
 		text.add("");
@@ -38,9 +38,7 @@ public final class CreditsCommandListener extends CommandListener {
 		text.add("information about Apollo, visit the website at:");
 		text.add("@dbl@https://github.com/apollo-rsps/apollo");
 		text.add("");
-		text.add("Apollo is released under the terms of the ISC");
-		text.add("license, details can be found in the root folder of the");
-		text.add("Apollo distribution.");
+		text.add("Apollo is released under the terms of the ISC license.");
 		text.add("");
 		text.add("@dre@Credits");
 		text.add("");
