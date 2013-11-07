@@ -41,7 +41,7 @@ class ProcCommandListener < CommandListener
   end
 
   def execute(player, command)
-    @block.call( player, command)
+    @block.call(player, command)
   end
 end
 
@@ -61,7 +61,7 @@ end
 # A ScheduledTask which executes a Proc object with one argument (itself).
 class ProcScheduledTask < ScheduledTask
   def initialize(delay, immediate, block)
-    super delay, immediate
+    super(delay, immediate)
     @block = block
   end
 
@@ -127,7 +127,7 @@ def on_button(args, proc)
   id = args[0].to_i
 
   on :event, :button do |ctx, player, event|
-    proc.call player if event.widget_id == id
+    proc.call(player) if event.widget_id == id
   end
 end
 
@@ -137,13 +137,13 @@ end
 def on_event(args, proc)
   raise "event must have one argument" unless args.length == 1
 
-  evt = args[0]
-  if evt.is_a? Symbol
-    class_name = evt.to_s.camelize.concat("Event")
-    evt = Java::JavaClass.for_name("org.apollo.game.event.impl.".concat(class_name))
+  event = args[0]
+  if event.is_a? Symbol
+    class_name = event.to_s.camelize.concat("Event")
+    event = Java::JavaClass.for_name("org.apollo.game.event.impl.".concat(class_name))
   end
 
-  $ctx.add_last_event_handler(evt, ProcEventHandler.new(proc))
+  $ctx.add_last_event_handler(event, ProcEventHandler.new(proc))
 end
 
 # Defines an action to be taken upon a command.
