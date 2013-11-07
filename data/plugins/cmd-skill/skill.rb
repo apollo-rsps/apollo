@@ -11,16 +11,8 @@ end
 
 on :command, :level, RIGHTS_ADMIN do |player, command|
   args = command.arguments
-  unless args.length == 2
+  unless args.length == 2 and (0..20).include? (skill = args[0].to_i) and (1..99).include? (level = args[1].to_i)
     player.send_message("Invalid syntax - ::level [skill id] [level]")
-    return
-  end
-
-  skill = args[0].to_i
-  level = args[1].to_i
-
-  unless (0..20).include? skill and (1..99).include? level
-    player.send_message("Invalid syntax - ::level [skill id] [level]") 
     return
   end
 
@@ -30,18 +22,12 @@ end
 
 on :command, :xp, RIGHTS_ADMIN do |player, command|
   args = command.arguments
-  unless args.length == 2
+  unless args.length == 2 and (0..20).include? (skill = args[0].to_i)
     player.send_message("Invalid syntax - ::xp [skill id] [experience]")
     return
   end
 
-  skill = args[0].to_i
   experience = args[1].to_i
-
-  unless (0..20).include? skill
-    player.send_message("Invalid syntax - ::xp [skill id] [experience]") 
-    return
-  end
   
   player.skill_set.add_experience(skill, experience)
 end

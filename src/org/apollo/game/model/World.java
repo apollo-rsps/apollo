@@ -78,7 +78,6 @@ public final class World {
 	/**
 	 * The command dispatcher.
 	 */
-	// TODO: better place than here?
 	private final CommandDispatcher dispatcher = new CommandDispatcher();
 
 	/**
@@ -92,20 +91,21 @@ public final class World {
 	private final CharacterRepository<Player> playerRepository = new CharacterRepository<Player>(
 			WorldConstants.MAXIMUM_PLAYERS);
 
+	/**
+	 * The {@link PluginManager}.
+	 */
 	// TODO: better place than here!!
 	private PluginManager pluginManager;
 
 	/**
 	 * The scheduler.
 	 */
-	// TODO: better place than here?
 	private final Scheduler scheduler = new Scheduler();
 
 	/**
 	 * Creates the world.
 	 */
 	private World() {
-
 	}
 
 	/**
@@ -246,11 +246,10 @@ public final class World {
 		if (success) {
 			logger.info("Registered player: " + player + " [online=" + playerRepository.size() + "]");
 			return RegistrationStatus.OK;
-		} else {
-			logger.warning("Failed to register player (server full): " + player + " [online=" + playerRepository.size()
-					+ "]");
-			return RegistrationStatus.WORLD_FULL;
 		}
+		logger.warning("Failed to register player (server full): " + player + " [online=" + playerRepository.size()
+				+ "]");
+		return RegistrationStatus.WORLD_FULL;
 	}
 
 	/**
