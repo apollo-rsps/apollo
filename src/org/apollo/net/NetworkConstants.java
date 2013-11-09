@@ -1,5 +1,7 @@
 package org.apollo.net;
 
+import java.math.BigInteger;
+
 /**
  * Holds various network-related constants such as port numbers.
  * 
@@ -21,6 +23,16 @@ public final class NetworkConstants {
 	 * The JAGGRAB port.
 	 */
 	public static final int JAGGRAB_PORT = 43595;
+
+	/**
+	 * The exponent used when decrypting the RSA block.
+	 */
+	public static BigInteger RSA_EXPONENT;
+
+	/**
+	 * The modulus used when decrypting the RSA block.
+	 */
+	public static BigInteger RSA_MODULUS;
 
 	/**
 	 * The service port.
