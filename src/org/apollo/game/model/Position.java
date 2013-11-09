@@ -60,48 +60,42 @@ public final class Position {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
 		if (obj == null) {
 			return false;
+		}
+		if (this == obj) {
+			return true;
 		}
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		Position other = (Position) obj;
-		if (height != other.height) {
-			return false;
-		}
-		if (x != other.x) {
-			return false;
-		}
-		if (y != other.y) {
+		if (height != other.height || x != other.x || y != other.y) {
 			return false;
 		}
 		return true;
 	}
 
 	/**
-	 * Gets the x coordinate of the central region.
+	 * Gets the x coordinate of the central sector.
 	 * 
-	 * @return The x coordinate of the central region.
+	 * @return The x coordinate of the central sector.
 	 */
-	public int getCentralRegionX() {
+	public int getCentralSectorX() {
 		return x / 8;
 	}
 
 	/**
-	 * Gets the y coordinate of the central region.
+	 * Gets the y coordinate of the central sector.
 	 * 
-	 * @return The y coordinate of the central region.
+	 * @return The y coordinate of the central sector.
 	 */
-	public int getCentralRegionY() {
+	public int getCentralSectorY() {
 		return y / 8;
 	}
 
 	/**
-	 * Gets the distance between this position and another position. Only X and Y are considered (i.e. 2 dimensions).
+	 * Gets the distance between this position and another position. Only x and y are considered (i.e. 2 dimensions).
 	 * 
 	 * @param other The other position.
 	 * @return The distance.
@@ -109,7 +103,6 @@ public final class Position {
 	public int getDistance(Position other) {
 		int deltaX = x - other.x;
 		int deltaY = y - other.y;
-		// TODO will rounding up interfere with other stuff?
 		return (int) Math.ceil(Math.sqrt(deltaX * deltaX + deltaY * deltaY));
 	}
 
@@ -123,7 +116,7 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the x coordinate inside the region of this position.
+	 * Gets the x coordinate inside the sector of this position.
 	 * 
 	 * @return The local x coordinate.
 	 */
@@ -132,17 +125,17 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the local x coordinate inside the region of the {@code base} position.
+	 * Gets the local x coordinate inside the sector of the {@code base} position.
 	 * 
 	 * @param base The base position.
 	 * @return The local x coordinate.
 	 */
 	public int getLocalX(Position base) {
-		return x - base.getTopLeftRegionX() * 8;
+		return x - base.getTopLeftSectorX() * 8;
 	}
 
 	/**
-	 * Gets the y coordinate inside the region of this position.
+	 * Gets the y coordinate inside the sector of this position.
 	 * 
 	 * @return The local y coordinate.
 	 */
@@ -151,13 +144,13 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the local y coordinate inside the region of the {@code base} position.
+	 * Gets the local y coordinate inside the sector of the {@code base} position.
 	 * 
 	 * @param base The base position.
 	 * @return The local y coordinate.
 	 */
 	public int getLocalY(Position base) {
-		return y - base.getTopLeftRegionY() * 8;
+		return y - base.getTopLeftSectorY() * 8;
 	}
 
 	/**
@@ -173,20 +166,20 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the x coordinate of the region.
+	 * Gets the x coordinate of the sector.
 	 * 
-	 * @return The region x coordinate.
+	 * @return The sector x coordinate.
 	 */
-	public int getTopLeftRegionX() {
+	public int getTopLeftSectorX() {
 		return x / 8 - 6;
 	}
 
 	/**
-	 * Gets the y coordinate of the region.
+	 * Gets the y coordinate of the sector.
 	 * 
-	 * @return The region y coordinate.
+	 * @return The sector y coordinate.
 	 */
-	public int getTopLeftRegionY() {
+	public int getTopLeftSectorY() {
 		return y / 8 - 6;
 	}
 
@@ -228,7 +221,7 @@ public final class Position {
 
 	@Override
 	public String toString() {
-		return Position.class.getName() + " [x=" + x + ", y=" + y + ", height=" + height + "]";
+		return Position.class.getName() + " [x= " + x + ", y= " + y + ", height= " + height + "]";
 	}
 
 }

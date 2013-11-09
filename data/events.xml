@@ -101,4 +101,8 @@
     <type>org.apollo.game.event.impl.FocusUpdateEvent</type>
     <chain />
   </event>
+  <event>
+    <type>org.apollo.game.event.impl.TakeTileItemEvent</type>
+    <chain />
+  </event>
 </events>
