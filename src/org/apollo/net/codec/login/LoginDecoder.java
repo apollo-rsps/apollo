@@ -1,10 +1,12 @@
 package org.apollo.net.codec.login;
 
+import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import net.burtleburtle.bob.rand.IsaacRandom;
 
 import org.apollo.fs.FileSystemConstants;
+import org.apollo.net.NetworkConstants;
 import org.apollo.security.IsaacRandomPair;
 import org.apollo.security.PlayerCredentials;
 import org.apollo.util.ChannelBufferUtil;
@@ -64,7 +66,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		case LOGIN_PAYLOAD:
 			return decodePayload(ctx, channel, buffer);
 		default:
-			throw new Exception("Invalid login decoder state");
+			throw new IllegalArgumentException("Invalid login decoder state");
 		}
 	}
 
@@ -156,6 +158,11 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			ChannelBuffer securePayload = payload.readBytes(securePayloadLength);
 
+			BigInteger bigInteger = new BigInteger(securePayload.array());
+			bigInteger = bigInteger.modPow(NetworkConstants.RSA_EXPONENT, NetworkConstants.RSA_MODULUS);
+
+			securePayload = ChannelBuffers.wrappedBuffer(bigInteger.toByteArray());
+
 			int secureId = securePayload.readUnsignedByte();
 			if (secureId != 10) {
 				throw new Exception("Invalid secure payload id");
@@ -173,7 +180,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			String password = ChannelBufferUtil.readString(securePayload);
 
 			if (username.length() > 12 || password.length() > 20) {
-				throw new Exception("Username or password too long");
+				throw new Exception("Username or password too long.");
 			}
 
 			int[] seed = new int[4];
@@ -196,9 +203,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			if (buffer.readable()) {
 				return new Object[] { req, buffer.readBytes(buffer.readableBytes()) };
-			} else {
-				return req;
 			}
+			return req;
 		}
 		return null;
 	}
