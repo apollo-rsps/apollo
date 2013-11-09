@@ -10,8 +10,10 @@ import org.apollo.game.event.impl.NpcSynchronizationEvent;
 import org.apollo.game.event.impl.OpenInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
 import org.apollo.game.event.impl.PlayerSynchronizationEvent;
+import org.apollo.game.event.impl.PositionEvent;
 import org.apollo.game.event.impl.RegionChangeEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
+import org.apollo.game.event.impl.SetTileItemEvent;
 import org.apollo.game.event.impl.SetWidgetItemModelEvent;
 import org.apollo.game.event.impl.SetWidgetModelAnimationEvent;
 import org.apollo.game.event.impl.SetWidgetNpcModelEvent;
@@ -120,6 +122,7 @@ public final class Release377 extends Release {
 		register(67, new FirstNpcActionEventDecoder());
 		register(112, new SecondNpcActionEventDecoder());
 		register(13, new ThirdNpcActionEventDecoder());
+		register(71, new TakeTileItemEventDecoder());
 
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
@@ -144,6 +147,8 @@ public final class Release377 extends Release {
 		register(SetWidgetModelAnimationEvent.class, new SetWidgetModelAnimationEventEncoder());
 		register(ConfigEvent.class, new ConfigEventEncoder());
 		register(DisplayTabInterfaceEvent.class, new DisplayTabInterfaceEventEncoder());
+		register(SetTileItemEvent.class, new SetTileItemEventEncoder());
+		register(PositionEvent.class, new PositionEventEncoder());
 	}
 
 }
