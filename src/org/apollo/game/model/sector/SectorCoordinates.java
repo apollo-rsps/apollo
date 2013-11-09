@@ -1,29 +1,29 @@
-package org.apollo.game.model.region;
+package org.apollo.game.model.sector;
 
 /**
- * An immutable class which contains the coordinates of a region.
+ * An immutable class representing the coordinates of a sector.
  * 
  * @author Graham
  */
-public final class RegionCoordinates {
+public final class SectorCoordinates {
 
 	/**
-	 * The X coordinate.
+	 * The x coordinate.
 	 */
 	private final int x;
 
 	/**
-	 * The Y coordinate.
+	 * The y coordinate.
 	 */
 	private final int y;
 
 	/**
-	 * Creates the region coordinates.
+	 * Creates the sector coordinates.
 	 * 
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
-	public RegionCoordinates(int x, int y) {
+	public SectorCoordinates(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -36,29 +36,26 @@ public final class RegionCoordinates {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final RegionCoordinates other = (RegionCoordinates) obj;
-		if (x != other.x) {
-			return false;
-		}
-		if (y != other.y) {
+		final SectorCoordinates other = (SectorCoordinates) obj;
+		if (x != other.x || y != other.y) {
 			return false;
 		}
 		return true;
 	}
 
 	/**
-	 * Gets the X coordinate.
+	 * Gets the x coordinate.
 	 * 
-	 * @return The X coordinate.
+	 * @return The x coordinate.
 	 */
 	public int getX() {
 		return x;
 	}
 
 	/**
-	 * Gets the Y coordinate.
+	 * Gets the y coordinate.
 	 * 
-	 * @return The Y coordinate.
+	 * @return The y coordinate.
 	 */
 	public int getY() {
 		return y;

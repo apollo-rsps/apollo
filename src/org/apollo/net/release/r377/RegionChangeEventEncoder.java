@@ -18,8 +18,8 @@ public final class RegionChangeEventEncoder extends EventEncoder<RegionChangeEve
 	@Override
 	public GamePacket encode(RegionChangeEvent event) {
 		GamePacketBuilder builder = new GamePacketBuilder(222);
-		builder.put(DataType.SHORT, event.getPosition().getCentralRegionY());
-		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getPosition().getCentralRegionX());
+		builder.put(DataType.SHORT, event.getPosition().getCentralSectorY());
+		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getPosition().getCentralSectorX());
 		return builder.toGamePacket();
 	}
 
