@@ -166,7 +166,7 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the x coordinate of the sector.
+	 * Gets the x coordinate of the sector this position is in.
 	 * 
 	 * @return The sector x coordinate.
 	 */
@@ -175,7 +175,7 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the y coordinate of the sector.
+	 * Gets the y coordinate of the sector this position is in.
 	 * 
 	 * @return The sector y coordinate.
 	 */
@@ -221,7 +221,7 @@ public final class Position {
 
 	@Override
 	public String toString() {
-		return Position.class.getName() + " [x= " + x + ", y= " + y + ", height= " + height + "]";
+		return Position.class.getName() + " [x=" + x + ", y=" + y + ", height=" + height + "]";
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.apollo.game.model;
+package org.apollo.game.model.inter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +7,7 @@ import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
 import org.apollo.game.event.impl.OpenInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
-import org.apollo.game.model.inter.EnterAmountListener;
-import org.apollo.game.model.inter.InterfaceListener;
+import org.apollo.game.model.Player;
 
 /**
  * Represents the set of interfaces the player has open.
@@ -16,14 +15,13 @@ import org.apollo.game.model.inter.InterfaceListener;
  * This class manages all six distinct types of interface (the last two are not present on 317 servers).
  * <p>
  * <ul>
- * <li><strong>Windows:</strong> the ones people mostly associate with the word interfaces. Things like your bank, the
- * wildy warning screen, the trade screen, etc.</li>
- * <li><strong>Overlays:</strong> display in the same place as windows, but don't prevent you from moving. For example,
+ * <li><strong>Windows:</strong> Interfaces such as the bank, the wilderness warning screen, the trade screen, etc.</li>
+ * <li><strong>Overlays:</strong> Displayed in the same place as windows, but don't prevent a player from moving e.g.
  * the wilderness level indicator.</li>
- * <li><strong>Dialogues:</strong> interfaces which are displayed over the chat box.</li>
- * <li><strong>Sidebars:</strong> an interface which displays over the inventory area.</li>
- * <li><strong>Fullscreen windows:</strong> a window which displays over the whole screen e.g. the 377 welcome screen.</li>
- * <li><strong>Fullscreen background:</strong> an interface displayed behind the fullscreen window, typically a blank,
+ * <li><strong>Dialogues:</strong> Interfaces displayed over the chat box.</li>
+ * <li><strong>Sidebars:</strong> Interfaces displayed over the inventory area.</li>
+ * <li><strong>Fullscreen windows:</strong> A window displayed over the whole screen e.g. the 377 welcome screen.</li>
+ * <li><strong>Fullscreen background:</strong> Interfaces displayed behind the fullscreen window, typically a blank,
  * black screen.</li>
  * </ul>
  * 

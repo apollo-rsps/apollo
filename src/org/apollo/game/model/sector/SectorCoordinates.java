@@ -1,19 +1,32 @@
 package org.apollo.game.model.sector;
 
+import org.apollo.game.model.Position;
+
 /**
- * An immutable class representing the coordinates of a sector.
+ * An immutable class representing the coordinates of a sector, where the coordinates ({@code x, y}) are the top-left of
+ * the sector.
  * 
  * @author Graham
  */
 public final class SectorCoordinates {
 
 	/**
-	 * The x coordinate.
+	 * Gets a pair of sector coordinates from a {@link Position}.
+	 * 
+	 * @param position The position.
+	 * @return The sector coordinates.
+	 */
+	public static SectorCoordinates fromPosition(Position position) {
+		return new SectorCoordinates(position.getTopLeftSectorX(), position.getTopLeftSectorY());
+	}
+
+	/**
+	 * The x coordinate of this sector.
 	 */
 	private final int x;
 
 	/**
-	 * The y coordinate.
+	 * The y coordinate of this sector.
 	 */
 	private final int y;
 
@@ -44,7 +57,7 @@ public final class SectorCoordinates {
 	}
 
 	/**
-	 * Gets the x coordinate.
+	 * Gets the x coordinate (equivalent to the {@link Position#getTopLeftSectorX()} of a position within this sector).
 	 * 
 	 * @return The x coordinate.
 	 */
@@ -53,7 +66,7 @@ public final class SectorCoordinates {
 	}
 
 	/**
-	 * Gets the y coordinate.
+	 * Gets the y coordinate (equivalent to the {@link Position#getTopLeftSectorY()} of a position within this sector).
 	 * 
 	 * @return The y coordinate.
 	 */
@@ -63,10 +76,7 @@ public final class SectorCoordinates {
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 61 * hash + x;
-		hash = 61 * hash + y;
-		return hash;
+		return 61 * (427 + x) + y;
 	}
 
 }

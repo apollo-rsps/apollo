@@ -1,5 +1,8 @@
 package org.apollo.game.model.obj;
 
+import org.apollo.game.model.Entity;
+import org.apollo.game.model.EntityType;
+import org.apollo.game.model.Position;
 import org.apollo.game.model.def.ObjectDefinition;
 
 /**
@@ -7,7 +10,7 @@ import org.apollo.game.model.def.ObjectDefinition;
  * 
  * @author Major
  */
-public final class GameObject {
+public final class GameObject implements Entity {
 
 	/**
 	 * The object definition.
@@ -15,12 +18,18 @@ public final class GameObject {
 	private final ObjectDefinition definition;
 
 	/**
+	 * The position of the game object.
+	 */
+	private final Position position;
+
+	/**
 	 * Creates the game object.
 	 * 
 	 * @param definition The object's definition.
 	 */
-	public GameObject(ObjectDefinition definition) {
+	public GameObject(ObjectDefinition definition, Position position) {
 		this.definition = definition;
+		this.position = position;
 	}
 
 	/**
@@ -30,6 +39,16 @@ public final class GameObject {
 	 */
 	public ObjectDefinition getDefinition() {
 		return definition;
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.GAME_OBJECT;
+	}
+
+	@Override
+	public Position getPosition() {
+		return position;
 	}
 
 }

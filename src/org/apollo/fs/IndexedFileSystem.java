@@ -40,10 +40,10 @@ public final class IndexedFileSystem implements Closeable {
 	 * Creates the file system with the specified base directory.
 	 * 
 	 * @param base The base directory.
-	 * @param readOnly A flag indicating if the file system will be read only.
-	 * @throws Exception If the file system is invalid.
+	 * @param readOnly Indicates whether the file system will be read only or not.
+	 * @throws FileNotFoundException If the data files could not be found.
 	 */
-	public IndexedFileSystem(File base, boolean readOnly) throws Exception {
+	public IndexedFileSystem(File base, boolean readOnly) throws FileNotFoundException {
 		this.readOnly = readOnly;
 		detectLayout(base);
 	}
@@ -69,9 +69,9 @@ public final class IndexedFileSystem implements Closeable {
 	 * Automatically detect the layout of the specified directory.
 	 * 
 	 * @param base The base directory.
-	 * @throws Exception If the file system is invalid.
+	 * @throws FileNotFoundException If the data files could not be found.
 	 */
-	private void detectLayout(File base) throws Exception {
+	private void detectLayout(File base) throws FileNotFoundException {
 		int indexCount = 0;
 		for (int index = 0; index < indices.length; index++) {
 			File f = new File(base.getAbsolutePath() + "/main_file_cache.idx" + index);
@@ -81,7 +81,7 @@ public final class IndexedFileSystem implements Closeable {
 			}
 		}
 		if (indexCount <= 0) {
-			throw new Exception("No index file(s) present");
+			throw new FileNotFoundException("No index file(s) present");
 		}
 
 		File oldEngineData = new File(base.getAbsolutePath() + "/main_file_cache.dat");
@@ -91,7 +91,7 @@ public final class IndexedFileSystem implements Closeable {
 		} else if (newEngineData.exists() && !oldEngineData.isDirectory()) {
 			data = new RandomAccessFile(newEngineData, readOnly ? "r" : "rw");
 		} else {
-			throw new Exception("No data file present");
+			throw new FileNotFoundException("No data file present");
 		}
 	}
 
@@ -99,7 +99,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * Gets the CRC table.
 	 * 
 	 * @return The CRC table.
-	 * @throws IOException If an I/O erorr occurs.
+	 * @throws IOException If an I/O error occurs.
 	 */
 	public ByteBuffer getCrcTable() throws IOException {
 		if (readOnly) {
@@ -146,9 +146,8 @@ public final class IndexedFileSystem implements Closeable {
 				crcTable = buf.asReadOnlyBuffer();
 				return crcTable.duplicate();
 			}
-		} else {
-			throw new IOException("cannot get CRC table from a writable file system");
 		}
+		throw new IOException("cannot get CRC table from a writable file system");
 	}
 
 	/**
@@ -250,7 +249,7 @@ public final class IndexedFileSystem implements Closeable {
 	 */
 	private int getFileCount(int type) throws IOException {
 		if (type < 0 || type >= indices.length) {
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException("file type out of bounds");
 		}
 
 		RandomAccessFile indexFile = indices[type];
@@ -269,7 +268,7 @@ public final class IndexedFileSystem implements Closeable {
 	private Index getIndex(FileDescriptor fd) throws IOException {
 		int index = fd.getType();
 		if (index < 0 || index >= indices.length) {
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException("file descriptor type out of bounds");
 		}
 
 		byte[] buffer = new byte[FileSystemConstants.INDEX_SIZE];
@@ -280,7 +279,7 @@ public final class IndexedFileSystem implements Closeable {
 				indexFile.seek(ptr);
 				indexFile.readFully(buffer);
 			} else {
-				throw new FileNotFoundException();
+				throw new FileNotFoundException("could not find find index");
 			}
 		}
 

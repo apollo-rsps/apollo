@@ -130,6 +130,16 @@ public final class Skill {
 	}
 
 	/**
+	 * Whether the skill affects the combat level or not.
+	 * 
+	 * @param skill The id of the skill.
+	 * @return {@code true} if the skill is a combat skill, otherwise {@code false}.
+	 */
+	public static boolean isCombatSkill(int skill) {
+		return skill >= ATTACK && skill <= MAGIC;
+	}
+
+	/**
 	 * The current level.
 	 */
 	private final int currentLevel;

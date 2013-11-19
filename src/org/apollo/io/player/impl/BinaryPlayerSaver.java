@@ -23,7 +23,7 @@ import org.apollo.util.StreamUtil;
 public final class BinaryPlayerSaver implements PlayerSaver {
 
 	@Override
-	public void savePlayer(Player player) throws Exception {
+	public void savePlayer(Player player) throws IOException {
 		File f = BinaryPlayerUtil.getFile(player.getName());
 		DataOutputStream out = new DataOutputStream(new FileOutputStream(f));
 		try {

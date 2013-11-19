@@ -36,6 +36,11 @@ public class Npc extends Character {
 		this.definition = definition;
 	}
 
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.NPC;
+	}
+
 	/**
 	 * Gets this npc's {@link NpcDefinition}
 	 * 

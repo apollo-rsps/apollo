@@ -46,8 +46,8 @@ public final class Scheduler {
 	 * 
 	 * @param task The task to schedule.
 	 */
-	public void schedule(ScheduledTask task) {
-		newTasks.add(task);
+	public boolean schedule(ScheduledTask task) {
+		return newTasks.add(task);
 	}
 
 }

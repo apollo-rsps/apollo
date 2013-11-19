@@ -29,7 +29,7 @@ public final class GameEventDecoder extends OneToOneDecoder {
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel c, Object msg) throws Exception {
+	protected Object decode(ChannelHandlerContext ctx, Channel c, Object msg) {
 		if (msg instanceof GamePacket) {
 			GamePacket packet = (GamePacket) msg;
 			EventDecoder<?> decoder = release.getEventDecoder(packet.getOpcode());

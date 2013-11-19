@@ -26,7 +26,7 @@ public final class HandshakeDecoder extends FrameDecoder {
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
 		if (buffer.readable()) {
 			int id = buffer.readUnsignedByte();
 
@@ -43,7 +43,7 @@ public final class HandshakeDecoder extends FrameDecoder {
 				channel.write(buf); // TODO should it be here?
 				break;
 			default:
-				throw new Exception("Invalid service id");
+				throw new IllegalArgumentException("Invalid service id");
 			}
 
 			ctx.getPipeline().remove(this);
@@ -52,10 +52,8 @@ public final class HandshakeDecoder extends FrameDecoder {
 
 			if (buffer.readable()) {
 				return new Object[] { message, buffer.readBytes(buffer.readableBytes()) };
-			} else {
-				return message;
 			}
-
+			return message;
 		}
 		return null;
 	}

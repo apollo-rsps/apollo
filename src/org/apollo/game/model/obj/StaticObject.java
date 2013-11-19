@@ -1,22 +1,17 @@
 package org.apollo.game.model.obj;
 
+import org.apollo.game.model.Entity;
+import org.apollo.game.model.EntityType;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.def.ObjectDefinition;
 
 /**
  * Represents a static object in the game world.
  * 
- * @author Graham
  * @author Chris Fletcher
  * @author Major
  */
-public final class StaticObject {
-
-	/**
-	 * Initialises the static objects.
-	 */
-	public static void init(StaticObject[] objects) {
-	}
+public final class StaticObject implements Entity {
 
 	/**
 	 * The object's definition.
@@ -26,7 +21,7 @@ public final class StaticObject {
 	/**
 	 * The object's id.
 	 */
-	private final short id;
+	private final int id;
 
 	/**
 	 * The object's position.
@@ -36,12 +31,12 @@ public final class StaticObject {
 	/**
 	 * The object's rotation.
 	 */
-	private final byte rotation;
+	private final int rotation;
 
 	/**
 	 * The object type.
 	 */
-	private final byte type;
+	private final int type;
 
 	/**
 	 * Creates a new static object.
@@ -52,10 +47,10 @@ public final class StaticObject {
 	 * @param rotation The rotation of the object.
 	 */
 	public StaticObject(int id, Position position, int type, int rotation) {
-		this.id = (short) id;
+		this.id = id;
 		this.position = position;
-		this.type = (byte) type;
-		this.rotation = (byte) rotation;
+		this.type = type;
+		this.rotation = rotation;
 		definition = ObjectDefinition.lookup(id);
 	}
 
@@ -66,6 +61,11 @@ public final class StaticObject {
 	 */
 	public ObjectDefinition getDefinition() {
 		return definition;
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.STATIC_OBJECT;
 	}
 
 	/**
@@ -106,7 +106,7 @@ public final class StaticObject {
 
 	@Override
 	public String toString() {
-		return StaticObject.class.getName() + " [id= " + id + ", type= " + type + ", rotation= " + rotation + "]";
+		return StaticObject.class.getName() + " [id=" + id + ", type=" + type + ", rotation=" + rotation + "]";
 	}
 
 }

@@ -16,7 +16,6 @@ public final class RegionChangeEventEncoder extends EventEncoder<RegionChangeEve
 
 	@Override
 	public GamePacket encode(RegionChangeEvent event) {
-		System.out.println("Sending region change event.");
 		GamePacketBuilder builder = new GamePacketBuilder(73);
 		builder.put(DataType.SHORT, DataTransformation.ADD, event.getPosition().getCentralSectorX());
 		builder.put(DataType.SHORT, event.getPosition().getCentralSectorY());

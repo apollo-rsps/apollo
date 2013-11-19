@@ -43,7 +43,7 @@ public final class HttpPipelineFactory implements ChannelPipelineFactory {
 	}
 
 	@Override
-	public ChannelPipeline getPipeline() throws Exception {
+	public ChannelPipeline getPipeline() {
 		ChannelPipeline pipeline = Channels.pipeline();
 
 		// decoders

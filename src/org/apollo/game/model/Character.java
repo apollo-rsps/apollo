@@ -17,12 +17,12 @@ import org.apollo.util.CharacterRepository;
  * 
  * @author Graham
  */
-public abstract class Character {
+public abstract class Character implements Entity {
 
 	/**
 	 * The character's current action.
 	 */
-	private Action<?> action; // TODO
+	private Action<?> action;
 
 	/**
 	 * The character's bank.
@@ -130,14 +130,10 @@ public abstract class Character {
 	 */
 	public Direction[] getDirections() {
 		if (firstDirection != Direction.NONE) {
-			if (secondDirection != Direction.NONE) {
-				return new Direction[] { firstDirection, secondDirection };
-			} else {
-				return new Direction[] { firstDirection };
-			}
-		} else {
-			return Direction.EMPTY_DIRECTION_ARRAY;
+			return secondDirection == Direction.NONE ? new Direction[] { firstDirection } : new Direction[] {
+					firstDirection, secondDirection };
 		}
+		return Direction.EMPTY_DIRECTION_ARRAY;
 	}
 
 	/**
@@ -205,11 +201,7 @@ public abstract class Character {
 		return definition;
 	}
 
-	/**
-	 * Gets the position of this character.
-	 * 
-	 * @return The position of this character.
-	 */
+	@Override
 	public Position getPosition() {
 		return position;
 	}
@@ -365,8 +357,7 @@ public abstract class Character {
 			stopAction();
 		}
 		this.action = action;
-		World.getWorld().schedule(action);
-		return true; // TODO maybe this should be incorporated into the action class itself?
+		return World.getWorld().schedule(action);
 	}
 
 	/**

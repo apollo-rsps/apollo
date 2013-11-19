@@ -1,5 +1,6 @@
 package org.apollo.net.codec.login;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -66,7 +67,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		case LOGIN_PAYLOAD:
 			return decodePayload(ctx, channel, buffer);
 		default:
-			throw new IllegalArgumentException("Invalid login decoder state");
+			throw new IllegalStateException("Invalid login decoder state");
 		}
 	}
 
@@ -79,7 +80,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodeHandshake(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	private Object decodeHandshake(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
 		if (buffer.readable()) {
 			usernameHash = buffer.readUnsignedByte();
 			serverSeed = random.nextLong();
@@ -102,14 +103,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception If an error occurs.
+	 * @throws IOException If the login type sent by the client is invalid.
 	 */
-	private Object decodeHeader(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	private Object decodeHeader(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws IOException {
 		if (buffer.readableBytes() >= 2) {
 			int loginType = buffer.readUnsignedByte();
 
 			if (loginType != LoginConstants.TYPE_STANDARD && loginType != LoginConstants.TYPE_RECONNECTION) {
-				throw new Exception("Invalid login type");
+				throw new IOException("Invalid login type");
 			}
 
 			reconnecting = loginType == LoginConstants.TYPE_RECONNECTION;

@@ -12,7 +12,7 @@ import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 public final class JagGrabResponseEncoder extends OneToOneEncoder {
 
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel c, Object msg) throws Exception {
+	protected Object encode(ChannelHandlerContext ctx, Channel c, Object msg) {
 		if (msg instanceof JagGrabResponse) {
 			JagGrabResponse resp = (JagGrabResponse) msg;
 			return resp.getFileData();

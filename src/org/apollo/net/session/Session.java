@@ -26,10 +26,8 @@ public abstract class Session {
 
 	/**
 	 * Destroys this session.
-	 * 
-	 * @throws Exception If an error occurs.
 	 */
-	public abstract void destroy() throws Exception;
+	public abstract void destroy();
 
 	/**
 	 * Gets the channel.
@@ -46,6 +44,6 @@ public abstract class Session {
 	 * @param message The message.
 	 * @throws Exception If an error occurs.
 	 */
-	public abstract void messageReceived(Object message) throws Exception;
+	public abstract void messageReceived(Object message);
 
 }

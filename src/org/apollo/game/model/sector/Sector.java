@@ -1,9 +1,14 @@
 package org.apollo.game.model.sector;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apollo.game.model.Entity;
+
 /**
  * Represents an 8x8 area of the map.
  * 
- * @author Graham
+ * @author Major
  */
 public final class Sector {
 
@@ -16,6 +21,11 @@ public final class Sector {
 	 * The {@link SectorCoordinates} of this sector.
 	 */
 	private final SectorCoordinates coordinates;
+
+	/**
+	 * A {@link List} of every {@link Entity} in this sector.
+	 */
+	private final List<Entity> entities = new ArrayList<Entity>();
 
 	/**
 	 * Creates a new sector.
@@ -37,21 +47,33 @@ public final class Sector {
 	}
 
 	/**
-	 * Gets the x coordinate of this sector.
+	 * Adds a {@link Entity} from to sector. Note that this does not spawn the entity, or do any other action
+	 * other than register it to this sector.
 	 * 
-	 * @return The x coordinate.
+	 * @param entity The entity.
+	 * @return {@code true} if the entity was added, otherwise {@code false}.
 	 */
-	public int getX() {
-		return coordinates.getX();
+	public boolean addEntity(Entity entity) {
+		return entities.add(entity);
 	}
 
 	/**
-	 * Gets the y coordinate of this sector.
+	 * Gets this sector's {@link SectorCoordinates}.
 	 * 
-	 * @return The y coordinate.
+	 * @return The sector coordinates.
 	 */
-	public int getY() {
-		return coordinates.getY();
+	public SectorCoordinates getCoordinates() {
+		return coordinates;
+	}
+
+	/**
+	 * Removes a {@link Entity} from this sector.
+	 * 
+	 * @param entity The entity.
+	 * @return {@code true} if the entity was removed, otherwise {@code false}.
+	 */
+	public boolean removeEntity(Entity entity) {
+		return entities.remove(entity);
 	}
 
 }

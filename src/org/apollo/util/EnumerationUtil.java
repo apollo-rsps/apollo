@@ -33,7 +33,7 @@ public final class EnumerationUtil {
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException();
+				throw new UnsupportedOperationException("cannot remove an element using this wrapper");
 			}
 
 		};

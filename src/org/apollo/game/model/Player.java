@@ -1,8 +1,8 @@
 package org.apollo.game.model;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
-import java.util.Queue;
 
 import org.apollo.game.event.Event;
 import org.apollo.game.event.impl.ConfigEvent;
@@ -11,6 +11,9 @@ import org.apollo.game.event.impl.LogoutEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SetWidgetTextEvent;
 import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
+import org.apollo.game.event.impl.UpdateRunEnergyEvent;
+import org.apollo.game.model.inter.InterfaceConstants;
+import org.apollo.game.model.inter.InterfaceSet;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.AppearanceInventoryListener;
 import org.apollo.game.model.inv.FullInventoryListener;
@@ -22,6 +25,7 @@ import org.apollo.game.model.skill.SynchronizationSkillListener;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.net.session.GameSession;
 import org.apollo.security.PlayerCredentials;
+import org.apollo.util.Point;
 
 /**
  * A {@link Player} is a {@link Character} that a user is controlling.
@@ -99,6 +103,11 @@ public final class Player extends Character {
 	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
 
 	/**
+	 * A {@link List} of this player's mouse clicks.
+	 */
+	private Deque<Point> clicks = new ArrayDeque<Point>();
+
+	/**
 	 * The player's credentials.
 	 */
 	private PlayerCredentials credentials;
@@ -151,7 +160,7 @@ public final class Player extends Character {
 	/**
 	 * A temporary queue of events sent during the login process.
 	 */
-	private final Queue<Event> queuedEvents = new ArrayDeque<Event>();
+	private final Deque<Event> queuedEvents = new ArrayDeque<Event>();
 
 	/**
 	 * A flag indicating if the region changed in the last cycle.
@@ -196,6 +205,16 @@ public final class Player extends Character {
 	}
 
 	/**
+	 * Adds a click, represented by a {@link Point}, to the {@link List} of clicks.
+	 * 
+	 * @param point The point.
+	 * @return {@code true} if the point was added successfully.
+	 */
+	public boolean addClick(Point point) {
+		return clicks.add(point);
+	}
+
+	/**
 	 * Decrements this player's viewing distance if it is greater than 1.
 	 */
 	public void decrementViewingDistance() {
@@ -228,6 +247,15 @@ public final class Player extends Character {
 	}
 
 	/**
+	 * Gets the {@link Deque} of clicks.
+	 * 
+	 * @return The deque.
+	 */
+	public Deque<Point> getClicks() {
+		return clicks;
+	}
+
+	/**
 	 * Gets the player's credentials.
 	 * 
 	 * @return The player's credentials.
@@ -243,6 +271,11 @@ public final class Player extends Character {
 	 */
 	public long getEncodedName() {
 		return credentials.getEncodedUsername();
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.PLAYER;
 	}
 
 	/**
@@ -261,6 +294,15 @@ public final class Player extends Character {
 	 */
 	public InterfaceSet getInterfaceSet() {
 		return interfaceSet;
+	}
+
+	/**
+	 * Gets this player's last click, represented by a {@link Point}.
+	 * 
+	 * @return The click.
+	 */
+	public Point getLastClick() {
+		return clicks.pollLast();
 	}
 
 	/**
@@ -377,8 +419,6 @@ public final class Player extends Character {
 		Inventory inventory = getInventory();
 		Inventory bank = getBank();
 		Inventory equipment = getEquipment();
-
-		// TODO only add bank listener when it is open? (like Hyperion)
 
 		// inventory full listeners
 		InventoryListener fullInventoryListener = new FullInventoryListener(this,
@@ -509,7 +549,6 @@ public final class Player extends Character {
 	 * Sends the initial events.
 	 */
 	private void sendInitialEvents() {
-		// vital initial stuff
 		send(new IdAssignmentEvent(getIndex(), members)); // TODO should this be sent when we reconnect?
 		sendMessage("Welcome to RuneScape.");
 
@@ -546,7 +585,7 @@ public final class Player extends Character {
 	public void sendQuestInterface(List<String> text) {
 		int size = text.size(), lines = InterfaceConstants.QUEST_TEXT.length;
 		if (size > lines) {
-			throw new IllegalArgumentException("List contains too much text for the interface.");
+			throw new IllegalArgumentException("list contains too much text for this interface.");
 		}
 
 		for (int pos = 0; pos < lines; pos++) {
@@ -635,6 +674,7 @@ public final class Player extends Character {
 	 */
 	public void setRunEnergy(int runEnergy) {
 		this.runEnergy = runEnergy;
+		send(new UpdateRunEnergyEvent(runEnergy));
 	}
 
 	/**
@@ -652,9 +692,9 @@ public final class Player extends Character {
 	}
 
 	/**
-	 * Sets the withdrawing notes flag.
+	 * Sets whether the player is withdrawing notes from the bank.
 	 * 
-	 * @param withdrawingNotes The flag.
+	 * @param withdrawingNotes Whether the player is withdrawing noted items or not.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
 		this.withdrawingNotes = withdrawingNotes;

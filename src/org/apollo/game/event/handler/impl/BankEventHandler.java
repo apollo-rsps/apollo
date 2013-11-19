@@ -36,7 +36,7 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 		case 5:
 			return -1;
 		}
-		throw new IllegalArgumentException();
+		throw new IllegalArgumentException("option out of bounds");
 	}
 
 	/**

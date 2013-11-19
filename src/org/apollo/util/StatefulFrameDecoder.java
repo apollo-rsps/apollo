@@ -67,14 +67,12 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
 	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
 	 * @return The decoded frame, or {@code null} if not enough data was received.
-	 * @throws Exception If an error occurs during decoding.
 	 */
 	protected abstract Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state)
 			throws Exception;
 
 	@Override
-	protected final Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer)
-			throws Exception {
+	protected final Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
 		return decodeLast(ctx, channel, buffer, state);
 	}
 
@@ -87,10 +85,8 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
 	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
 	 * @return The decoded frame, or {@code null} if not enough data was received.
-	 * @throws Exception If an error occurs during decoding.
 	 */
-	protected Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state)
-			throws Exception {
+	protected Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state) {
 		return null;
 	}
 

@@ -44,9 +44,8 @@ public final class Server {
 	 * @param args The command-line arguments passed to the application.
 	 */
 	public static void main(String[] args) {
-		Server server = null;
 		try {
-			server = new Server();
+			Server server = new Server();
 			server.init(args.length == 1 ? args[0] : Release317.class.getName());
 
 			SocketAddress service = new InetSocketAddress(NetworkConstants.SERVICE_PORT);

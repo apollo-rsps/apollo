@@ -1,4 +1,4 @@
-package org.apollo.game.model;
+package org.apollo.game.model.inter;
 
 /**
  * Contains interface-related constants.
@@ -20,6 +20,12 @@ public class InterfaceConstants {
 	// 6299 = music tab, music disabled
 	// 4445 = settings tab, music disabled
 	// 12855 = ancients magic
+
+	/**
+	 * The level-up dialogue interface ids.
+	 */
+	public static final int[] LEVEL_UP_INTERFACES = { 6247, 6253, 6206, 6216, 4443, 6242, 6211, 6226, 4272, 6231, 6258,
+			4282, 6263, 6221, 4416, 6237, 4277, 4261, 12122, 4887, 4267 };
 
 	/**
 	 * The quest interface id.

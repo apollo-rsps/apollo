@@ -1,6 +1,7 @@
 package org.apollo;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.logging.Logger;
 
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
+import org.xml.sax.SAXException;
 
 /**
  * A class which manages {@link Service}s.
@@ -50,10 +52,15 @@ public final class ServiceManager {
 	/**
 	 * Initializes this service manager.
 	 * 
-	 * @throws Exception If an error occurs.
+	 * @throws SAXException If the service XML file could not be parsed.
+	 * @throws IOException If the file could not be accessed.
+	 * @throws IllegalAccessException If the service could not be accessed.
+	 * @throws InstantiationException If the service could not be instantiated.
+	 * @throws ClassNotFoundException If the service could not be found.
 	 */
 	@SuppressWarnings("unchecked")
-	private void init() throws Exception {
+	private void init() throws SAXException, IOException, InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
 		logger.info("Registering services...");
 
 		XmlParser parser = new XmlParser();
@@ -67,16 +74,16 @@ public final class ServiceManager {
 		}
 
 		if (!rootNode.getName().equals("services")) {
-			throw new Exception("unexpected name of root node");
+			throw new IOException("unexpected name of root node");
 		}
 
 		for (XmlNode childNode : rootNode) {
 			if (!childNode.getName().equals("service")) {
-				throw new Exception("unexpected name of child node");
+				throw new IOException("unexpected name of child node");
 			}
 
 			if (!childNode.hasValue()) {
-				throw new Exception("child node must have a value!");
+				throw new IOException("child node must have a value!");
 			}
 
 			Class<? extends Service> clazz = (Class<? extends Service>) Class.forName(childNode.getValue());
