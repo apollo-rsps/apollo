@@ -30,12 +30,12 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	private final Position initialPosition;
 
 	/**
-	 * The length of time (in game ticks) the player's movement along the X axis will last.
+	 * The length of time (in game pulses) the player's movement along the X axis will last.
 	 */
 	private final int travelDurationX;
 
 	/**
-	 * The length of time (in game ticks) the player's movement along the Y axis will last.
+	 * The length of time (in game pulses) the player's movement along the Y axis will last.
 	 */
 	private final int travelDurationY;
 
@@ -44,8 +44,8 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	 * 
 	 * @param initialPosition The initial {@link Position} of the player.
 	 * @param finalPosition The final {@link Position} of the player
-	 * @param travelDurationX The length of time (in game ticks) the player's movement along the X axis will last.
-	 * @param travelDurationY The length of time (in game ticks) the player's movement along the Y axis will last.
+	 * @param travelDurationX The length of time (in game pulses) the player's movement along the X axis will last.
+	 * @param travelDurationY The length of time (in game pulses) the player's movement along the Y axis will last.
 	 * @param direction The direction the player should move.
 	 */
 	public ForceMovementBlock(Position initialPosition, Position finalPosition, int travelDurationX,
@@ -123,7 +123,7 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the length of time (in game ticks) the player's movement along the Y axis will last.
+	 * Gets the length of time (in game pulses) the player's movement along the Y axis will last.
 	 * 
 	 * @return The time period.
 	 */
@@ -132,7 +132,7 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the length of time (in game ticks) the player's movement along the Y axis will last.
+	 * Gets the length of time (in game pulses) the player's movement along the Y axis will last.
 	 * 
 	 * @return The time period.
 	 */

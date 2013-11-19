@@ -30,7 +30,7 @@ public final class GameEventEncoder extends OneToOneEncoder {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel c, Object msg) throws Exception {
+	protected Object encode(ChannelHandlerContext ctx, Channel c, Object msg) {
 		if (msg instanceof Event) {
 			Event event = (Event) msg;
 			EventEncoder<Event> encoder = (EventEncoder<Event>) release.getEventEncoder(event.getClass());

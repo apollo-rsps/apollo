@@ -15,7 +15,7 @@ public final class SkillSet {
 	/**
 	 * The maximum allowed experience.
 	 */
-	public static final double MAXIMUM_EXP = 200000000;
+	public static final double MAXIMUM_EXP = 200_000_000;
 
 	/**
 	 * The number of skills.
@@ -61,6 +61,11 @@ public final class SkillSet {
 	}
 
 	/**
+	 * The combat level for this skill set.
+	 */
+	private int combatLevel = 3;
+
+	/**
 	 * A flag indicating if events are being fired.
 	 */
 	private boolean firingEvents = true;
@@ -94,23 +99,18 @@ public final class SkillSet {
 		Skill old = skills[id];
 
 		double newExperience = old.getExperience() + experience;
-
-		if (newExperience > MAXIMUM_EXP) {
-			newExperience = MAXIMUM_EXP;
-		}
+		newExperience = newExperience > MAXIMUM_EXP ? MAXIMUM_EXP : newExperience;
 
 		int newCurrentLevel = old.getCurrentLevel();
 		int newMaximumLevel = getLevelForExperience(newExperience);
 
 		int delta = newMaximumLevel - old.getMaximumLevel();
-		if (delta > 0) {
-			newCurrentLevel += delta;
-		}
+		newCurrentLevel += delta > 0 ? delta : 0;
 
 		setSkill(id, new Skill(newExperience, newCurrentLevel, newMaximumLevel));
 
 		if (delta > 0) {
-			// here so it gets updated skill
+			// here so it notifies using the updated skill
 			notifyLevelledUp(id);
 		}
 	}
@@ -120,27 +120,8 @@ public final class SkillSet {
 	 * 
 	 * @param listener The listener to add.
 	 */
-	public void addListener(SkillListener listener) {
-		listeners.add(listener);
-	}
-
-	/**
-	 * Checks the bounds of the id.
-	 * 
-	 * @param id The id.
-	 * @throws IndexOutOfBoundsException If the id is out of bounds.
-	 */
-	private void checkBounds(int id) {
-		if (id < 0 || id >= skills.length) {
-			throw new IndexOutOfBoundsException();
-		}
-	}
-
-	/**
-	 * Forces this skill set to refresh.
-	 */
-	public void forceRefresh() {
-		notifySkillsUpdated();
+	public boolean addListener(SkillListener listener) {
+		return listeners.add(listener);
 	}
 
 	/**
@@ -148,12 +129,7 @@ public final class SkillSet {
 	 * 
 	 * @return The combat level.
 	 */
-	/**
-	 * Gets the combat level for this skill set.
-	 * 
-	 * @return The combat level.
-	 */
-	public int getCombatLevel() {
+	public void calculateCombatLevel() {
 		int attack = skills[Skill.ATTACK].getMaximumLevel();
 		int defence = skills[Skill.DEFENCE].getMaximumLevel();
 		int strength = skills[Skill.STRENGTH].getMaximumLevel();
@@ -170,7 +146,35 @@ public final class SkillSet {
 
 		double mage = magic * 0.4875;
 
-		return (int) (combatLevel + Math.max(melee, Math.max(range, mage)));
+		this.combatLevel = (int) (combatLevel + Math.max(melee, Math.max(range, mage)));
+	}
+
+	/**
+	 * Checks the bounds of the id.
+	 * 
+	 * @param id The id.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
+	 */
+	private void checkBounds(int id) {
+		if (id < 0 || id >= skills.length) {
+			throw new IndexOutOfBoundsException("skill id is out of bounds");
+		}
+	}
+
+	/**
+	 * Forces this skill set to refresh.
+	 */
+	public void forceRefresh() {
+		notifySkillsUpdated();
+	}
+
+	/**
+	 * Gets the combat level for this skill set.
+	 * 
+	 * @return The combat level.
+	 */
+	public int getCombatLevel() {
+		return combatLevel;
 	}
 
 	/**
@@ -178,7 +182,6 @@ public final class SkillSet {
 	 * 
 	 * @param id The id.
 	 * @return The skill.
-	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public Skill getSkill(int id) {
 		checkBounds(id);
@@ -202,13 +205,8 @@ public final class SkillSet {
 	 * Initialises the skill set.
 	 */
 	private void init() {
-		for (int i = 0; i < skills.length; i++) {
-			if (i == Skill.HITPOINTS) {
-				skills[i] = new Skill(1154, 10, 10);
-			} else {
-				skills[i] = new Skill(0, 1, 1);
-			}
-			// DO NOT CALL notifyXXX here!!
+		for (int id = 0; id < skills.length; id++) {
+			skills[id] = id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1);
 		}
 	}
 
@@ -216,10 +214,9 @@ public final class SkillSet {
 	 * Normalizes the skills in this set.
 	 */
 	public void normalize() {
-		for (int i = 0; i < skills.length; i++) {
-			// TODO I think prayer works differently(?)
-			int cur = skills[i].getCurrentLevel();
-			int max = skills[i].getMaximumLevel();
+		for (int id = 0; id < skills.length; id++) {
+			int cur = skills[id].getCurrentLevel();
+			int max = skills[id].getMaximumLevel();
 
 			if (cur > max) {
 				cur--;
@@ -229,7 +226,7 @@ public final class SkillSet {
 				continue;
 			}
 
-			setSkill(i, new Skill(skills[i].getExperience(), cur, max));
+			setSkill(id, new Skill(skills[id].getExperience(), cur, max));
 		}
 	}
 
@@ -237,7 +234,6 @@ public final class SkillSet {
 	 * Notifies listeners that a skill has been levelled up.
 	 * 
 	 * @param id The skill's id.
-	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	private void notifyLevelledUp(int id) {
 		checkBounds(id);
@@ -263,7 +259,6 @@ public final class SkillSet {
 	 * Notifies listeners that a skill has been updated.
 	 * 
 	 * @param id The skill's id.
-	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	private void notifySkillUpdated(int id) {
 		checkBounds(id);
@@ -286,8 +281,8 @@ public final class SkillSet {
 	 * 
 	 * @param listener The listener to remove.
 	 */
-	public void removeListener(SkillListener listener) {
-		listeners.remove(listener);
+	public boolean removeListener(SkillListener listener) {
+		return listeners.remove(listener);
 	}
 
 	/**
@@ -295,7 +290,6 @@ public final class SkillSet {
 	 * 
 	 * @param id The id.
 	 * @param skill The skill.
-	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public void setSkill(int id, Skill skill) {
 		checkBounds(id);

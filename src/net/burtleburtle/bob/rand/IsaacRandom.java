@@ -101,9 +101,9 @@ public final class IsaacRandom {
 	/**
 	 * Initialises this random number generator.
 	 * 
-	 * @param flag Set to {@code true} if a seed was passed to the constructor.
+	 * @param hasSeed Set to {@code true} if a seed was passed to the constructor.
 	 */
-	private void init(boolean flag) {
+	private void init(boolean hasSeed) {
 		int i;
 		int a, b, c, d, e, f, g, h;
 		a = b = c = d = e = f = g = h = GOLDEN_RATIO;
@@ -136,7 +136,7 @@ public final class IsaacRandom {
 		}
 
 		for (i = 0; i < SIZE; i += 8) { /* fill in mem[] with messy stuff */
-			if (flag) {
+			if (hasSeed) {
 				a += rsl[i];
 				b += rsl[i + 1];
 				c += rsl[i + 2];
@@ -180,7 +180,7 @@ public final class IsaacRandom {
 			mem[i + 7] = h;
 		}
 
-		if (flag) { /* second pass makes all of seed affect all of mem */
+		if (hasSeed) { /* second pass makes all of seed affect all of mem */
 			for (i = 0; i < SIZE; i += 8) {
 				a += mem[i];
 				b += mem[i + 1];

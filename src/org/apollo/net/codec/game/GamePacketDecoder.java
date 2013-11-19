@@ -1,5 +1,7 @@
 package org.apollo.net.codec.game;
 
+import java.io.IOException;
+
 import net.burtleburtle.bob.rand.IsaacRandom;
 
 import org.apollo.net.meta.PacketMetaData;
@@ -57,7 +59,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	@Override
 	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, GameDecoderState state)
-			throws Exception {
+			throws IOException {
 		switch (state) {
 		case GAME_OPCODE:
 			return decodeOpcode(ctx, channel, buffer);
@@ -66,7 +68,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 		case GAME_PAYLOAD:
 			return decodePayload(ctx, channel, buffer);
 		default:
-			throw new Exception("Invalid game decoder state");
+			throw new IllegalStateException("Invalid game decoder state");
 		}
 	}
 
@@ -79,7 +81,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodeLength(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	private Object decodeLength(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
 		if (buffer.readable()) {
 			length = buffer.readUnsignedByte();
 			if (length == 0) {
@@ -98,16 +100,16 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @param channel The channel.
 	 * @param buffer The buffer.
 	 * @return The frame, or {@code null}.
-	 * @throws Exception If an error occurs.
+	 * @throws IOException If a received opcode or packet type is illegal.
 	 */
-	private Object decodeOpcode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	private Object decodeOpcode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws IOException {
 		if (buffer.readable()) {
 			int encryptedOpcode = buffer.readUnsignedByte();
 			opcode = encryptedOpcode - random.nextInt() & 0xFF;
 
 			PacketMetaData metaData = release.getIncomingPacketMetaData(opcode);
 			if (metaData == null) {
-				throw new Exception("Illegal opcode: " + opcode);
+				throw new IOException("Illegal opcode: " + opcode);
 			}
 
 			type = metaData.getType();
@@ -124,7 +126,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 				setState(GameDecoderState.GAME_LENGTH);
 				break;
 			default:
-				throw new Exception("Illegal packet type: " + type);
+				throw new IOException("Illegal packet type: " + type);
 			}
 		}
 		return null;
@@ -139,7 +141,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodePayload(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	private Object decodePayload(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
 		if (buffer.readableBytes() >= length) {
 			ChannelBuffer payload = buffer.readBytes(length);
 			setState(GameDecoderState.GAME_OPCODE);
@@ -158,8 +160,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodeZeroLengthPacket(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer)
-			throws Exception {
+	private Object decodeZeroLengthPacket(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
 		ChannelBuffer payload = ChannelBuffers.buffer(0);
 		setState(GameDecoderState.GAME_OPCODE);
 		return new GamePacket(opcode, type, payload);

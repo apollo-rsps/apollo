@@ -12,15 +12,14 @@ import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 public final class JagGrabRequestDecoder extends OneToOneDecoder {
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel c, Object msg) throws Exception {
+	protected Object decode(ChannelHandlerContext ctx, Channel c, Object msg) {
 		if (msg instanceof String) {
 			String str = (String) msg;
 			if (str.startsWith("JAGGRAB /")) {
 				String filePath = str.substring(8).trim();
 				return new JagGrabRequest(filePath);
-			} else {
-				throw new Exception("corrupted request line");
 			}
+			throw new IllegalArgumentException("corrupted request line");
 		}
 		return msg;
 	}

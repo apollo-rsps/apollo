@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apollo.Service;
@@ -18,6 +20,9 @@ import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.obj.StaticObject;
+import org.apollo.game.model.sector.Sector;
+import org.apollo.game.model.sector.SectorCoordinates;
+import org.apollo.game.model.sector.SectorRepository;
 import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
 import org.apollo.io.EquipmentDefinitionParser;
@@ -92,10 +97,24 @@ public final class World {
 			WorldConstants.MAXIMUM_PLAYERS);
 
 	/**
-	 * The {@link PluginManager}.
+	 * The release number (i.e. version) of this world.
 	 */
-	// TODO: better place than here!!
+	private int releaseNumber;
+
+	/**
+	 * A {@link Map} of player usernames and the player objects.
+	 */
+	private final Map<String, Player> players = new HashMap<String, Player>();
+
+	/**
+	 * The {@link PluginManager}. TODO: better place than here!!
+	 */
 	private PluginManager pluginManager;
+
+	/**
+	 * This world's {@link SectorRepository}.
+	 */
+	private final SectorRepository repository = new SectorRepository(false);
 
 	/**
 	 * The scheduler.
@@ -127,12 +146,20 @@ public final class World {
 	}
 
 	/**
-	 * Gets the character repository. NOTE: {@link CharacterRepository#add(Character)} and
-	 * {@link CharacterRepository#remove(Character)} should not be called directly! These mutation methods are not
-	 * guaranteed to work in future releases!
+	 * Gets the {@link Player} with the specified username.
+	 * 
+	 * @param username The username.
+	 * @return The player.
+	 */
+	public Player getPlayer(String username) {
+		return players.get(username);
+	}
+
+	/**
+	 * Gets the character repository.
 	 * <p>
-	 * Instead, use the {@link World#register(Player)} and {@link World#unregister(Player)} methods which do the same
-	 * thing and will continue to work as normal in future releases.
+	 * Note: players should be registered and unregistered using {@link World#register(Player)} and
+	 * {@link World#unregister(Player)} respectively, not by adding to or removing from this repository directly.
 	 * 
 	 * @return The character repository.
 	 */
@@ -158,9 +185,9 @@ public final class World {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws IOException {
-
-		ItemDefinitionDecoder itemParser = new ItemDefinitionDecoder(fs);
-		ItemDefinition[] itemDefs = itemParser.decode();
+		this.releaseNumber = release;
+		ItemDefinitionDecoder itemDefParser = new ItemDefinitionDecoder(fs);
+		ItemDefinition[] itemDefs = itemDefParser.decode();
 		ItemDefinition.init(itemDefs);
 		logger.info("Loaded " + itemDefs.length + " item definitions.");
 
@@ -174,42 +201,51 @@ public final class World {
 			is.close();
 		}
 
-		NpcDefinitionDecoder parser = new NpcDefinitionDecoder(fs);
-		NpcDefinition[] npcDefs = parser.decode();
+		NpcDefinitionDecoder npcDefParser = new NpcDefinitionDecoder(fs);
+		NpcDefinition[] npcDefs = npcDefParser.decode();
 		NpcDefinition.init(npcDefs);
 		logger.info("Loaded " + npcDefs.length + " npc definitions.");
 
-		ObjectDefinitionDecoder objParser = new ObjectDefinitionDecoder(fs);
-		ObjectDefinition[] objDefs = objParser.decode();
+		ObjectDefinitionDecoder objDefParser = new ObjectDefinitionDecoder(fs);
+		ObjectDefinition[] objDefs = objDefParser.decode();
 		ObjectDefinition.init(objDefs);
 		logger.info("Loaded " + objDefs.length + " object definitions.");
 
 		StaticObjectDecoder objectParser = new StaticObjectDecoder(fs);
 		StaticObject[] objects = objectParser.decode();
-		StaticObject.init(objects);
+		placeEntities(objects);
 		logger.info("Loaded " + objects.length + " static objects.");
 
 		pluginManager = manager; // TODO move!!
 	}
 
 	/**
-	 * Checks if the specified player is online.
+	 * Checks if the {@link Player} with the specified name is online.
 	 * 
-	 * @param name The player's name.
-	 * @return {@code true} if so, {@code false} if not.
+	 * @param name The name.
+	 * @return {@code true} if the player is online, otherwise {@code false}.
 	 */
 	public boolean isPlayerOnline(String name) {
-		// TODO: use a hash set or map in the future?
-		for (Player player : playerRepository) {
-			if (player.getName().equalsIgnoreCase(name)) {
-				return true;
-			}
-		}
-		return false;
+		return getPlayer(name) != null;
 	}
 
 	/**
-	 * Calls the {@link Scheduler#pulse()} method.
+	 * Adds entities to sectors in the {@link SectorRepository}.
+	 * 
+	 * @param entities The entities.
+	 * @return {@code true} if all entities were added successfully, otherwise {@code false}.
+	 */
+	private boolean placeEntities(Entity[] entities) {
+		boolean success = true;
+		for (Entity entity : entities) {
+			Sector sector = repository.get(SectorCoordinates.fromPosition(entity.getPosition()));
+			success &= sector.addEntity(entity);
+		}
+		return success;
+	}
+
+	/**
+	 * Pulses the world.
 	 */
 	public void pulse() {
 		scheduler.pulse();
@@ -242,7 +278,7 @@ public final class World {
 			return RegistrationStatus.ALREADY_ONLINE;
 		}
 
-		boolean success = playerRepository.add(player);
+		boolean success = playerRepository.add(player) & players.put(player.getName(), player) == null;
 		if (success) {
 			logger.info("Registered player: " + player + " [online=" + playerRepository.size() + "]");
 			return RegistrationStatus.OK;
@@ -253,12 +289,21 @@ public final class World {
 	}
 
 	/**
+	 * Gets the release number of this world.
+	 * 
+	 * @return The release number.
+	 */
+	public int getReleaseNumber() {
+		return releaseNumber;
+	}
+
+	/**
 	 * Schedules a new task.
 	 * 
 	 * @param task The {@link ScheduledTask}.
 	 */
-	public void schedule(ScheduledTask task) {
-		scheduler.schedule(task);
+	public boolean schedule(ScheduledTask task) {
+		return scheduler.schedule(task);
 	}
 
 	/**
@@ -268,7 +313,7 @@ public final class World {
 	 */
 	public void unregister(Npc npc) {
 		if (npcRepository.remove(npc)) {
-			logger.info("Unregistered npc: " + npc + " [online=" + npcRepository.size() + "]");
+			logger.info("Unregistered npc: " + npc + " [count=" + npcRepository.size() + "]");
 		} else {
 			logger.warning("Could not find npc " + npc + " to unregister!");
 		}
@@ -280,10 +325,10 @@ public final class World {
 	 * @param player The player.
 	 */
 	public void unregister(Player player) {
-		if (playerRepository.remove(player)) {
+		if (playerRepository.remove(player) & players.remove(player.getName()) == player) {
 			logger.info("Unregistered player: " + player + " [online=" + playerRepository.size() + "]");
 		} else {
-			logger.warning("Could not find player to unregister: " + player + "!");
+			logger.warning("Could not find player " + player + " to unregister!");
 		}
 	}
 

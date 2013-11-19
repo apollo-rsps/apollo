@@ -21,7 +21,7 @@ public final class DummyPlayerLoader implements PlayerLoader {
 	private static final Position DEFAULT_POSITION = new Position(3222, 3222);
 
 	@Override
-	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception {
+	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) {
 		int status = LoginConstants.STATUS_OK;
 
 		Player player = new Player(credentials, DEFAULT_POSITION);

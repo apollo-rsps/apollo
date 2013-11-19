@@ -15,7 +15,7 @@ import org.jboss.netty.handler.codec.frame.FrameDecoder;
 public final class UpdateDecoder extends FrameDecoder {
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel c, ChannelBuffer buf) throws Exception {
+	protected Object decode(ChannelHandlerContext ctx, Channel c, ChannelBuffer buf) {
 		if (buf.readableBytes() >= 4) {
 			int type = buf.readUnsignedByte() + 1;
 			int file = buf.readUnsignedShort();

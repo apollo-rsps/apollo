@@ -33,7 +33,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 	private static final Position SPAWN_POSITION = new Position(3222, 3222);
 
 	@Override
-	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception {
+	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws IOException {
 		File f = BinaryPlayerUtil.getFile(credentials.getUsername());
 		if (!f.exists()) {
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, new Player(credentials, SPAWN_POSITION));
@@ -42,7 +42,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 		DataInputStream in = new DataInputStream(new FileInputStream(f));
 
 		try {
-			// read credentials nad privileges
+			// read credentials and privileges
 			String name = StreamUtil.readString(in);
 			String pass = StreamUtil.readString(in);
 

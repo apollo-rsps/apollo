@@ -58,7 +58,7 @@ public final class GameSession extends Session {
 	}
 
 	@Override
-	public void destroy() throws Exception {
+	public void destroy() {
 		context.getService(GameService.class).unregisterPlayer(player);
 	}
 
@@ -122,7 +122,7 @@ public final class GameSession extends Session {
 	}
 
 	@Override
-	public void messageReceived(Object message) throws Exception {
+	public void messageReceived(Object message) {
 		Event event = (Event) message;
 		if (eventQueue.size() >= GameConstants.EVENTS_PER_PULSE) {
 			logger.warning("Too many events in queue for game session, dropping...");

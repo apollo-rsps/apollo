@@ -1,6 +1,7 @@
 package org.apollo.login;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,6 +19,7 @@ import org.apollo.net.session.LoginSession;
 import org.apollo.util.NamedThreadFactory;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
+import org.xml.sax.SAXException;
 
 /**
  * The {@link LoginService} manages {@link LoginRequest}s.
@@ -53,9 +55,14 @@ public final class LoginService extends Service {
 	/**
 	 * Initialises the login service.
 	 * 
-	 * @throws Exception If an error occurs.
+	 * @throws SAXException If there is an error parsing the XML file.
+	 * @throws IOException If there is an error accessing the file.
+	 * @throws ClassNotFoundException If the player loader/saver implementation could not be found.
+	 * @throws IllegalAccessException If the player loader/saver implementation could not be accessed.
+	 * @throws InstantiationException If the player loader/saver implementation could not be instantiated.
 	 */
-	private void init() throws Exception {
+	private void init() throws SAXException, IOException, ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
 		XmlParser parser = new XmlParser();
 		XmlNode rootNode;
 
@@ -67,17 +74,17 @@ public final class LoginService extends Service {
 		}
 
 		if (!rootNode.getName().equals("login")) {
-			throw new Exception("unexpected root node name");
+			throw new IOException("unexpected root node name");
 		}
 
 		XmlNode loaderNode = rootNode.getChild("loader");
 		if (loaderNode == null || !loaderNode.hasValue()) {
-			throw new Exception("no loader child node or value");
+			throw new IOException("no loader child node or value");
 		}
 
 		XmlNode saverNode = rootNode.getChild("saver");
 		if (saverNode == null || !saverNode.hasValue()) {
-			throw new Exception("no saver child node or value");
+			throw new IOException("no saver child node or value");
 		}
 
 		Class<?> loaderClazz = Class.forName(loaderNode.getValue());

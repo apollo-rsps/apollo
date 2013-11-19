@@ -47,14 +47,14 @@ public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
 	}
 
 	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
 		Channel channel = ctx.getChannel();
 		logger.info("Channel connected: " + channel);
 		serverContext.getChannelGroup().add(channel);
 	}
 
 	@Override
-	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
 		Channel channel = ctx.getChannel();
 		logger.info("Channel disconnected: " + channel);
 		serverContext.getChannelGroup().remove(channel);
@@ -65,18 +65,18 @@ public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
 	}
 
 	@Override
-	public void channelIdle(ChannelHandlerContext ctx, IdleStateEvent e) throws Exception {
+	public void channelIdle(ChannelHandlerContext ctx, IdleStateEvent e) {
 		e.getChannel().close();
 	}
 
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		logger.log(Level.WARNING, "Exception occured for channel: " + e.getChannel() + ", closing...", e.getCause());
 		ctx.getChannel().close();
 	}
 
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
 		if (ctx.getAttachment() == null) {
 			Object msg = e.getMessage();
 			if (msg instanceof HttpRequest || msg instanceof JagGrabRequest) {
@@ -94,7 +94,7 @@ public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
 					ctx.setAttachment(new UpdateSession(ctx.getChannel(), serverContext));
 					break;
 				default:
-					throw new Exception("Invalid service id");
+					throw new IllegalStateException("Invalid service id");
 				}
 			}
 		} else {

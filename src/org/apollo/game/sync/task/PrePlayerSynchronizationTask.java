@@ -45,10 +45,6 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		player.getWalkingQueue().pulse();
 
 		if (player.isTeleporting()) {
-			// TODO check if this should be done anywhere else if the conditions should be different
-			// e.g. if the player teleports one tile away should the viewing distance be reset?
-			// if this isn't the case, what should the max teleport distance be before it is reset?
-			// or is this correct anyway?!
 			player.resetViewingDistance();
 		}
 

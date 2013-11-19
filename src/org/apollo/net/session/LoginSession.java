@@ -133,7 +133,7 @@ public final class LoginSession extends Session {
 	}
 
 	@Override
-	public void messageReceived(Object message) throws Exception {
+	public void messageReceived(Object message) {
 		if (message.getClass() == LoginRequest.class) {
 			handleLoginRequest((LoginRequest) message);
 		}

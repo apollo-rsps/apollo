@@ -16,7 +16,7 @@ public final class PacketMetaData {
 	 */
 	public static PacketMetaData createFixed(int length) {
 		if (length < 0) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("packet length cannot be less than 0");
 		}
 		return new PacketMetaData(PacketType.FIXED, length);
 	}
@@ -69,7 +69,7 @@ public final class PacketMetaData {
 	 */
 	public int getLength() {
 		if (type != PacketType.FIXED) {
-			throw new IllegalStateException();
+			throw new IllegalStateException("can only get the length of a fixed length packet");
 		}
 		return length;
 	}

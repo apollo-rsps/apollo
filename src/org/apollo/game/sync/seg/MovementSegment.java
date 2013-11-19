@@ -49,7 +49,7 @@ public final class MovementSegment extends SynchronizationSegment {
 		case 2:
 			return SegmentType.RUN;
 		default:
-			throw new IllegalStateException();
+			throw new IllegalStateException("direction type unsupported");
 		}
 	}
 

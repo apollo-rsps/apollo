@@ -53,7 +53,7 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 				}
 			}
 			if (character == null) {
-				throw new NoSuchElementException();
+				throw new NoSuchElementException("character does not exist");
 			}
 			previousIndex = index;
 			index++;
@@ -64,7 +64,7 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 		@Override
 		public void remove() {
 			if (previousIndex == -1) {
-				throw new IllegalStateException();
+				throw new IllegalStateException("cannot remove as the repository is empty");
 			}
 			CharacterRepository.this.remove((T) characters[previousIndex]);
 			previousIndex = -1;
@@ -167,9 +167,8 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 			character.setIndex(-1);
 			size--;
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	/**

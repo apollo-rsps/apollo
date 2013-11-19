@@ -22,6 +22,7 @@ import org.apollo.game.event.impl.SetWidgetTextEvent;
 import org.apollo.game.event.impl.SetWidgetVisibilityEvent;
 import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
 import org.apollo.game.event.impl.UpdateItemsEvent;
+import org.apollo.game.event.impl.UpdateRunEnergyEvent;
 import org.apollo.game.event.impl.UpdateSkillEvent;
 import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
 import org.apollo.net.meta.PacketMetaDataGroup;
@@ -117,6 +118,7 @@ public final class Release317 extends Release {
 
 		SpamPacketEventDecoder spamEventDecoder = new SpamPacketEventDecoder();
 		register(77, spamEventDecoder);
+		register(78, spamEventDecoder);
 		register(165, spamEventDecoder);
 		register(189, spamEventDecoder);
 		register(226, spamEventDecoder);
@@ -151,6 +153,7 @@ public final class Release317 extends Release {
 		register(DisplayTabInterfaceEvent.class, new DisplayTabInterfaceEventEncoder());
 		register(SetTileItemEvent.class, new SetTileItemEventEncoder());
 		register(PositionEvent.class, new PositionEventEncoder());
+		register(UpdateRunEnergyEvent.class, new UpdateRunEnergyEventEncoder());
 	}
 
 }

@@ -22,7 +22,7 @@ public final class PositionEvent extends Event {
 	private final Position position;
 
 	/**
-	 * Creates a new focus position event.
+	 * Creates a new position event.
 	 * 
 	 * @param base The base from which the position is being focused on.
 	 * @param position The position to focus on.

@@ -14,7 +14,7 @@ public final class Appearance {
 			42 }, new int[5]);
 
 	/**
-	 * The array of clothing/skin colours.
+	 * The array of clothing/skin colors.
 	 */
 	private final int[] colors;
 
@@ -37,7 +37,7 @@ public final class Appearance {
 	 */
 	public Appearance(Gender gender, int[] style, int[] colors) {
 		if (gender == null || style == null || colors == null) {
-			throw new NullPointerException();
+			throw new NullPointerException("no arguments can be null");
 		}
 		if (style.length != 7) {
 			throw new IllegalArgumentException("the style array must have 7 elements");
@@ -74,11 +74,7 @@ public final class Appearance {
 	 * @return The player's styles.
 	 */
 	public int[] getStyle() {
-		/*
-		 * Info on the elements of the array itself:
-		 * 
-		 * 0 = head 1 = chin/beard 2 = chest 3 = arms 4 = hands 5 = legs 6 = feet
-		 */
+		// 0 = head 1 = chin/beard 2 = chest 3 = arms 4 = hands 5 = legs 6 = feet
 		return style;
 	}
 

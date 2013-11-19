@@ -32,12 +32,12 @@ public final class UpdateSession extends Session {
 	}
 
 	@Override
-	public void destroy() throws Exception {
+	public void destroy() {
 		// TODO implement
 	}
 
 	@Override
-	public void messageReceived(Object message) throws Exception {
+	public void messageReceived(Object message) {
 		UpdateDispatcher dispatcher = context.getService(UpdateService.class).getDispatcher();
 		if (message instanceof OnDemandRequest) {
 			dispatcher.dispatch(getChannel(), (OnDemandRequest) message);
@@ -46,7 +46,7 @@ public final class UpdateSession extends Session {
 		} else if (message instanceof HttpRequest) {
 			dispatcher.dispatch(getChannel(), (HttpRequest) message);
 		} else {
-			throw new Exception("unknown message type");
+			throw new IllegalArgumentException("unknown message type");
 		}
 	}
 

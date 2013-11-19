@@ -1,6 +1,7 @@
 package org.apollo.game;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -21,6 +22,7 @@ import org.apollo.net.session.GameSession;
 import org.apollo.util.NamedThreadFactory;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
+import org.xml.sax.SAXException;
 
 /**
  * The {@link GameService} class schedules and manages the execution of the {@link GamePulseHandler} class.
@@ -88,9 +90,15 @@ public final class GameService extends Service {
 	/**
 	 * Initializes the game service.
 	 * 
-	 * @throws Exception If an error occurs.
+	 * @throws IOException If there is an error with the file (e.g. does not exist, cannot be read, does not contain
+	 *             valid nodes).
+	 * @throws SAXException If there is an error parsing the file.
+	 * @throws ClassNotFoundException If an event handler could not be found.
+	 * @throws InstantiationException If an event handler could not be instantiated.
+	 * @throws IllegalAccessException If an event handler could not be accessed.
 	 */
-	private void init() throws Exception {
+	private void init() throws IOException, SAXException, ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
 		InputStream is = new FileInputStream("data/events.xml");
 		try {
 			EventHandlerChainParser chainGroupParser = new EventHandlerChainParser(is);
@@ -105,12 +113,12 @@ public final class GameService extends Service {
 			XmlNode rootNode = parser.parse(is);
 
 			if (!rootNode.getName().equals("synchronizer")) {
-				throw new Exception("Invalid root node name.");
+				throw new IOException("Invalid root node name.");
 			}
 
 			XmlNode activeNode = rootNode.getChild("active");
 			if (activeNode == null || !activeNode.hasValue()) {
-				throw new Exception("No active node/value.");
+				throw new IOException("No active node/value.");
 			}
 
 			Class<?> clazz = Class.forName(activeNode.getValue());
