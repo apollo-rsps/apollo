@@ -1,6 +1,6 @@
 package org.apollo.game.action;
 
-import org.apollo.game.model.Character;
+import org.apollo.game.model.Mob;
 import org.apollo.game.model.Position;
 
 /**
@@ -9,7 +9,7 @@ import org.apollo.game.model.Position;
  * @author Blake
  * @author Graham
  */
-public abstract class DistancedAction<T extends Character> extends Action<T> {
+public abstract class DistancedAction<T extends Mob> extends Action<T> {
 
 	/**
 	 * The delay once the threshold is reached.

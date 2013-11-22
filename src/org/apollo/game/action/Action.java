@@ -1,6 +1,6 @@
 package org.apollo.game.action;
 
-import org.apollo.game.model.Character;
+import org.apollo.game.model.Mob;
 import org.apollo.game.scheduling.ScheduledTask;
 
 /**
@@ -12,7 +12,7 @@ import org.apollo.game.scheduling.ScheduledTask;
  * 
  * @author Graham
  */
-public abstract class Action<T extends Character> extends ScheduledTask {
+public abstract class Action<T extends Mob> extends ScheduledTask {
 
 	/**
 	 * The character performing the action.

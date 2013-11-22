@@ -4,11 +4,11 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.def.NpcDefinition;
 
 /**
- * An {@link Npc} is a {@link Character} that is not being controlled by a player.
+ * An {@link Npc} is a {@link Mob} that is not being controlled by a player.
  * 
  * @author Major
  */
-public class Npc extends Character {
+public class Npc extends Mob {
 
 	/**
 	 * This npc's definition.

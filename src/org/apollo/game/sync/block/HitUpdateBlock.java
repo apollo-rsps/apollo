@@ -9,7 +9,7 @@ package org.apollo.game.sync.block;
 public class HitUpdateBlock extends SynchronizationBlock {
 
 	/**
-	 * The {@link org.apollo.game.model.Character}'s current health.
+	 * The {@link org.apollo.game.model.Mob}'s current health.
 	 */
 	private final int currentHealth;
 
@@ -19,7 +19,7 @@ public class HitUpdateBlock extends SynchronizationBlock {
 	private final int damage;
 
 	/**
-	 * The {@link org.apollo.game.model.Character}'s maximum health.
+	 * The {@link org.apollo.game.model.Mob}'s maximum health.
 	 */
 	private final int maximumHealth;
 
@@ -33,8 +33,8 @@ public class HitUpdateBlock extends SynchronizationBlock {
 	 * 
 	 * @param hitDamage The damage dealt by the hit.
 	 * @param hitType The type of hit.
-	 * @param currentHealth The current health of the {@link org.apollo.game.model.Character}.
-	 * @param maximumHealth The maximum health of the {@link org.apollo.game.model.Character}.
+	 * @param currentHealth The current health of the {@link org.apollo.game.model.Mob}.
+	 * @param maximumHealth The maximum health of the {@link org.apollo.game.model.Mob}.
 	 */
 	public HitUpdateBlock(int hitDamage, int hitType, int currentHealth, int maximumHealth) {
 		damage = hitDamage;
@@ -44,7 +44,7 @@ public class HitUpdateBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the current health of the {@link org.apollo.game.model.Character}.
+	 * Gets the current health of the {@link org.apollo.game.model.Mob}.
 	 * 
 	 * @return The current health;
 	 */
@@ -62,7 +62,7 @@ public class HitUpdateBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the maximum health of the {@link org.apollo.game.model.Character}.
+	 * Gets the maximum health of the {@link org.apollo.game.model.Mob}.
 	 * 
 	 * @return The maximum health.
 	 */

@@ -1,6 +1,6 @@
 package org.apollo.game.scheduling.impl;
 
-import org.apollo.game.model.Character;
+import org.apollo.game.model.Mob;
 import org.apollo.game.scheduling.ScheduledTask;
 
 /**
@@ -14,14 +14,14 @@ public final class SkillNormalizationTask extends ScheduledTask {
 	/**
 	 * The character.
 	 */
-	private final Character character;
+	private final Mob character;
 
 	/**
 	 * Creates the skill normalization task.
 	 * 
 	 * @param character The character.
 	 */
-	public SkillNormalizationTask(Character character) {
+	public SkillNormalizationTask(Mob character) {
 		super(100, false);
 		this.character = character;
 	}

@@ -10,17 +10,12 @@ import org.apollo.game.model.def.ObjectDefinition;
  * 
  * @author Major
  */
-public final class GameObject implements Entity {
+public final class GameObject extends Entity {
 
 	/**
 	 * The object definition.
 	 */
 	private final ObjectDefinition definition;
-
-	/**
-	 * The position of the game object.
-	 */
-	private final Position position;
 
 	/**
 	 * Creates the game object.
@@ -44,11 +39,6 @@ public final class GameObject implements Entity {
 	@Override
 	public EntityType getEntityType() {
 		return EntityType.GAME_OBJECT;
-	}
-
-	@Override
-	public Position getPosition() {
-		return position;
 	}
 
 }

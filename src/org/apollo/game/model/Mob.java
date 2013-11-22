@@ -13,11 +13,11 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.util.CharacterRepository;
 
 /**
- * A {@link Character} is a living creature in the world, such as a player or NPC.
+ * A {@link Mob} is a living entity in the world, such as a player or NPC.
  * 
  * @author Graham
  */
-public abstract class Character implements Entity {
+public abstract class Mob extends Entity {
 
 	/**
 	 * The character's current action.
@@ -71,11 +71,6 @@ public abstract class Character implements Entity {
 	private final List<Player> localPlayers = new ArrayList<Player>();
 
 	/**
-	 * The current position of this character.
-	 */
-	private Position position;
-
-	/**
 	 * The second direction.
 	 */
 	private Direction secondDirection = Direction.NONE;
@@ -100,7 +95,7 @@ public abstract class Character implements Entity {
 	 * 
 	 * @param position The initial position of this character.
 	 */
-	public Character(Position position) {
+	public Mob(Position position) {
 		this.position = position;
 		init();
 	}
@@ -286,8 +281,8 @@ public abstract class Character implements Entity {
 	/**
 	 * Sends an {@link Event} to either:
 	 * <ul>
-	 * <li>The client if this {@link Character} is a {@link Player}.</li>
-	 * <li>The AI routines if this {@link Character} is an NPC</li>
+	 * <li>The client if this {@link Mob} is a {@link Player}.</li>
+	 * <li>The AI routines if this {@link Mob} is an NPC</li>
 	 * </ul>
 	 * 
 	 * @param event The event.

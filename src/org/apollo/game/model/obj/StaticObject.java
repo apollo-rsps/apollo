@@ -11,7 +11,7 @@ import org.apollo.game.model.def.ObjectDefinition;
  * @author Chris Fletcher
  * @author Major
  */
-public final class StaticObject implements Entity {
+public final class StaticObject extends Entity {
 
 	/**
 	 * The object's definition.
@@ -22,11 +22,6 @@ public final class StaticObject implements Entity {
 	 * The object's id.
 	 */
 	private final int id;
-
-	/**
-	 * The object's position.
-	 */
-	private final Position position;
 
 	/**
 	 * The object's rotation.
@@ -75,15 +70,6 @@ public final class StaticObject implements Entity {
 	 */
 	public int getId() {
 		return id;
-	}
-
-	/**
-	 * Gets the position of this object.
-	 * 
-	 * @return The object's position.
-	 */
-	public Position getPosition() {
-		return position;
 	}
 
 	/**
