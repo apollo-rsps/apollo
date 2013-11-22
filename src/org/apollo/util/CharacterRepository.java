@@ -3,15 +3,15 @@ package org.apollo.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.apollo.game.model.Character;
+import org.apollo.game.model.Mob;
 
 /**
- * A {@link CharacterRepository} is a repository of {@link Character}s that are currently active in the game world.
+ * A {@link CharacterRepository} is a repository of {@link Mob}s that are currently active in the game world.
  * 
  * @author Graham
  * @param <T> The type of character.
  */
-public final class CharacterRepository<T extends Character> implements Iterable<T> {
+public final class CharacterRepository<T extends Mob> implements Iterable<T> {
 
 	/**
 	 * The {@link Iterator} implementation for the {@link CharacterRepository} class.
@@ -75,7 +75,7 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 	/**
 	 * The array of characters in this repository.
 	 */
-	private final Character[] characters;
+	private final Mob[] characters;
 
 	/**
 	 * The position of the next free index.
@@ -93,7 +93,7 @@ public final class CharacterRepository<T extends Character> implements Iterable<
 	 * @param capacity The maximum number of characters that can be present in the repository.
 	 */
 	public CharacterRepository(int capacity) {
-		this.characters = new Character[capacity];
+		this.characters = new Mob[capacity];
 	}
 
 	/**

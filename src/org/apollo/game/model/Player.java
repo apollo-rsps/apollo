@@ -28,11 +28,11 @@ import org.apollo.security.PlayerCredentials;
 import org.apollo.util.Point;
 
 /**
- * A {@link Player} is a {@link Character} that a user is controlling.
+ * A {@link Player} is a {@link Mob} that a user is controlling.
  * 
  * @author Graham
  */
-public final class Player extends Character {
+public final class Player extends Mob {
 
 	/**
 	 * An enumeration with the different privilege levels a player can have.

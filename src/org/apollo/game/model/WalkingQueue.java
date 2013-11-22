@@ -5,7 +5,7 @@ import java.util.Deque;
 import java.util.Queue;
 
 /**
- * A queue of {@link Direction}s which a {@link Character} will follow.
+ * A queue of {@link Direction}s which a {@link Mob} will follow.
  * 
  * @author Graham
  */
@@ -53,7 +53,7 @@ public final class WalkingQueue {
 	/**
 	 * The character whose walking queue this is.
 	 */
-	private final Character character;
+	private final Mob character;
 
 	/**
 	 * The old queue of directions.
@@ -75,7 +75,7 @@ public final class WalkingQueue {
 	 * 
 	 * @param character The character.
 	 */
-	public WalkingQueue(Character character) {
+	public WalkingQueue(Mob character) {
 		this.character = character;
 	}
 
