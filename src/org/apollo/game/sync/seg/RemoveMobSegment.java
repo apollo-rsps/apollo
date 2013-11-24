@@ -3,11 +3,11 @@ package org.apollo.game.sync.seg;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
- * A {@link SynchronizationSegment} which removes a character.
+ * A {@link SynchronizationSegment} which removes a mob.
  * 
  * @author Graham
  */
-public final class RemoveCharacterSegment extends SynchronizationSegment {
+public final class RemoveMobSegment extends SynchronizationSegment {
 
 	/**
 	 * An empty {@link SynchronizationBlockSet}.
@@ -15,15 +15,15 @@ public final class RemoveCharacterSegment extends SynchronizationSegment {
 	private static final SynchronizationBlockSet EMPTY_BLOCK_SET = new SynchronizationBlockSet();
 
 	/**
-	 * Creates the remove character segment.
+	 * Creates the remove mob segment.
 	 */
-	public RemoveCharacterSegment() {
+	public RemoveMobSegment() {
 		super(EMPTY_BLOCK_SET);
 	}
 
 	@Override
 	public SegmentType getType() {
-		return SegmentType.REMOVE_CHARACTER;
+		return SegmentType.REMOVE_MOB;
 	}
 
 }

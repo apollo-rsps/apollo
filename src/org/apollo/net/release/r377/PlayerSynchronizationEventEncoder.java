@@ -18,8 +18,8 @@ import org.apollo.game.sync.block.ForceChatBlock;
 import org.apollo.game.sync.block.ForceMovementBlock;
 import org.apollo.game.sync.block.GraphicBlock;
 import org.apollo.game.sync.block.HitUpdateBlock;
-import org.apollo.game.sync.block.InteractingCharacterBlock;
-import org.apollo.game.sync.block.SecondHitUpdateBlock;
+import org.apollo.game.sync.block.InteractingMobBlock;
+import org.apollo.game.sync.block.SecondaryHitUpdateBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.game.sync.block.TurnToPositionBlock;
 import org.apollo.game.sync.seg.AddPlayerSegment;
@@ -57,10 +57,10 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 		for (SynchronizationSegment segment : event.getSegments()) {
 			SegmentType type = segment.getType();
-			if (type == SegmentType.REMOVE_CHARACTER) {
-				putRemoveCharacterUpdate(builder);
-			} else if (type == SegmentType.ADD_CHARACTER) {
-				putAddCharacterUpdate((AddPlayerSegment) segment, event, builder);
+			if (type == SegmentType.REMOVE_MOB) {
+				putRemovePlayerUpdate(builder);
+			} else if (type == SegmentType.ADD_MOB) {
+				putAddPlayerUpdate((AddPlayerSegment) segment, event, builder);
 				putBlocks(segment, blockBuilder);
 			} else {
 				putMovementUpdate(segment, event, builder);
@@ -80,13 +80,13 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	}
 
 	/**
-	 * Puts an add character update.
+	 * Puts an add player update.
 	 * 
 	 * @param seg The segment.
 	 * @param event The event.
 	 * @param builder The builder.
 	 */
-	private void putAddCharacterUpdate(AddPlayerSegment seg, PlayerSynchronizationEvent event, GamePacketBuilder builder) {
+	private void putAddPlayerUpdate(AddPlayerSegment seg, PlayerSynchronizationEvent event, GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		Position player = event.getPosition();
 		Position other = seg.getPosition();
@@ -120,8 +120,8 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 		GamePacketBuilder playerProperties = new GamePacketBuilder();
 
 		playerProperties.put(DataType.BYTE, appearance.getGender().toInteger());
-		playerProperties.put(DataType.BYTE, -1); // skull icon
-		playerProperties.put(DataType.BYTE, -1); // prayer icon
+		playerProperties.put(DataType.BYTE, block.getHeadIcon()); // skull icon
+		playerProperties.put(DataType.BYTE, block.getPrayerIcon()); // prayer icon
 
 		if (block.appearingAsNpc()) {
 			playerProperties.put(DataType.BYTE, 255);
@@ -244,7 +244,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			if (blockSet.contains(ForceMovementBlock.class)) {
 				mask |= 0x100;
 			}
-			if (blockSet.contains(InteractingCharacterBlock.class)) {
+			if (blockSet.contains(InteractingMobBlock.class)) {
 				mask |= 0x1;
 			}
 			if (blockSet.contains(TurnToPositionBlock.class)) {
@@ -256,7 +256,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			if (blockSet.contains(AppearanceBlock.class)) {
 				mask |= 0x4;
 			}
-			if (blockSet.contains(SecondHitUpdateBlock.class)) {
+			if (blockSet.contains(SecondaryHitUpdateBlock.class)) {
 				mask |= 0x400;
 			}
 			if (blockSet.contains(ChatBlock.class)) {
@@ -282,8 +282,8 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			if (blockSet.contains(ForceMovementBlock.class)) {
 				putForceMovementBlock(blockSet.get(ForceMovementBlock.class), blockBuilder);
 			}
-			if (blockSet.contains(InteractingCharacterBlock.class)) {
-				putInteractingCharacterBlock(blockSet.get(InteractingCharacterBlock.class), blockBuilder);
+			if (blockSet.contains(InteractingMobBlock.class)) {
+				putInteractingMobBlock(blockSet.get(InteractingMobBlock.class), blockBuilder);
 			}
 			if (blockSet.contains(TurnToPositionBlock.class)) {
 				putTurnToPositionBlock(blockSet.get(TurnToPositionBlock.class), blockBuilder);
@@ -294,8 +294,8 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 			if (blockSet.contains(AppearanceBlock.class)) {
 				putAppearanceBlock(blockSet.get(AppearanceBlock.class), blockBuilder);
 			}
-			if (blockSet.contains(SecondHitUpdateBlock.class)) {
-				putSecondHitUpdateBlock(blockSet.get(SecondHitUpdateBlock.class), blockBuilder);
+			if (blockSet.contains(SecondaryHitUpdateBlock.class)) {
+				putSecondHitUpdateBlock(blockSet.get(SecondaryHitUpdateBlock.class), blockBuilder);
 			}
 			if (blockSet.contains(ChatBlock.class)) {
 				putChatBlock(blockSet.get(ChatBlock.class), blockBuilder);
@@ -374,13 +374,13 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	}
 
 	/**
-	 * Puts an interacting character block into the specified builder.
+	 * Puts an interacting mob block into the specified builder.
 	 * 
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putInteractingCharacterBlock(InteractingCharacterBlock block, GamePacketBuilder builder) {
-		builder.put(DataType.SHORT, DataTransformation.ADD, block.getInteractingCharacterIndex());
+	private void putInteractingMobBlock(InteractingMobBlock block, GamePacketBuilder builder) {
+		builder.put(DataType.SHORT, DataTransformation.ADD, block.getInteractingMobIndex());
 	}
 
 	/**
@@ -426,11 +426,11 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	}
 
 	/**
-	 * Puts a remove character update.
+	 * Puts a remove player update.
 	 * 
 	 * @param builder The builder.
 	 */
-	private void putRemoveCharacterUpdate(GamePacketBuilder builder) {
+	private void putRemovePlayerUpdate(GamePacketBuilder builder) {
 		builder.putBits(1, 1);
 		builder.putBits(2, 3);
 	}
@@ -441,7 +441,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putSecondHitUpdateBlock(SecondHitUpdateBlock block, GamePacketBuilder builder) {
+	private void putSecondHitUpdateBlock(SecondaryHitUpdateBlock block, GamePacketBuilder builder) {
 		builder.put(DataType.BYTE, DataTransformation.ADD, block.getDamage());
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, block.getType());
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getCurrentHealth());

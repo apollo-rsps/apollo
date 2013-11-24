@@ -3,4 +3,3 @@
  * NPCs, etc.
  */
 package org.apollo.game.model.def;
-

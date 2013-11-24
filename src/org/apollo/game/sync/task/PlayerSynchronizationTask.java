@@ -14,10 +14,10 @@ import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.game.sync.seg.AddPlayerSegment;
 import org.apollo.game.sync.seg.MovementSegment;
-import org.apollo.game.sync.seg.RemoveCharacterSegment;
+import org.apollo.game.sync.seg.RemoveMobSegment;
 import org.apollo.game.sync.seg.SynchronizationSegment;
 import org.apollo.game.sync.seg.TeleportSegment;
-import org.apollo.util.CharacterRepository;
+import org.apollo.util.MobRepository;
 
 /**
  * A {@link SynchronizationTask} which synchronizes the specified {@link Player} .
@@ -67,44 +67,45 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		List<Player> localPlayers = player.getLocalPlayerList();
 		int oldLocalPlayers = localPlayers.size();
 		List<SynchronizationSegment> segments = new ArrayList<SynchronizationSegment>();
+		Iterator<Player> it = localPlayers.iterator();
 
-		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext();) {
-			Player p = it.next();
-			if (!p.isActive() || p.isTeleporting()
-					|| p.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
+		for (Player local = null; it.hasNext(); local = it.next()) {
+			if (!local.isActive() || local.isTeleporting()
+					|| local.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
 				it.remove();
-				segments.add(new RemoveCharacterSegment());
+				segments.add(new RemoveMobSegment());
 			} else {
-				segments.add(new MovementSegment(p.getBlockSet(), p.getDirections()));
+				segments.add(new MovementSegment(local.getBlockSet(), local.getDirections()));
 			}
 		}
 
 		int added = 0;
 
-		CharacterRepository<Player> repository = World.getWorld().getPlayerRepository();
-		for (Player p : repository) {
+		MobRepository<Player> repository = World.getWorld().getPlayerRepository();
+		for (Player global : repository) {
 			if (localPlayers.size() >= 255) {
 				player.flagExcessivePlayers();
-				break;
-			} else if (added >= NEW_PLAYERS_PER_CYCLE) {
-				break;
-			}
-			// we do not check p.isActive() here, since if they are active they
-			// must be in the repository
-			if (p != player && p.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
-					&& !localPlayers.contains(p)) {
-				localPlayers.add(p);
-				added++;
+			} else if (added < NEW_PLAYERS_PER_CYCLE) {
+				// we do not check p.isActive() here, since if they are active they
+				// must be in the repository
+				if (global != player
+						&& global.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
+						&& !localPlayers.contains(global)) {
+					localPlayers.add(global);
+					added++;
 
-				blockSet = p.getBlockSet();
-				if (!blockSet.contains(AppearanceBlock.class)) {
-					// TODO check if client has cached appearance
-					blockSet = blockSet.clone();
-					blockSet.add(SynchronizationBlock.createAppearanceBlock(p));
+					blockSet = global.getBlockSet();
+					if (!blockSet.contains(AppearanceBlock.class)) {
+						// TODO check if client has cached appearance
+						blockSet = blockSet.clone();
+						blockSet.add(SynchronizationBlock.createAppearanceBlock(global));
+					}
+
+					segments.add(new AddPlayerSegment(blockSet, global.getIndex(), global.getPosition()));
 				}
-
-				segments.add(new AddPlayerSegment(blockSet, p.getIndex(), p.getPosition()));
+				continue;
 			}
+			break;
 		}
 
 		PlayerSynchronizationEvent event = new PlayerSynchronizationEvent(lastKnownRegion, player.getPosition(),

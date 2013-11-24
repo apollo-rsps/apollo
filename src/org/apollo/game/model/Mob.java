@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apollo.game.action.Action;
-import org.apollo.game.event.Event;
 import org.apollo.game.model.Inventory.StackMode;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.scheduling.impl.SkillNormalizationTask;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
-import org.apollo.util.CharacterRepository;
+import org.apollo.util.MobRepository;
 
 /**
  * A {@link Mob} is a living entity in the world, such as a player or NPC.
@@ -20,93 +19,78 @@ import org.apollo.util.CharacterRepository;
 public abstract class Mob extends Entity {
 
 	/**
-	 * The character's current action.
+	 * This mob's current action.
 	 */
 	private Action<?> action;
 
 	/**
-	 * The character's bank.
+	 * This mob's set of {@link SynchronizationBlock}s.
 	 */
-	private final Inventory bank = new Inventory(InventoryConstants.BANK_CAPACITY, StackMode.STACK_ALWAYS);
+	protected SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
 
 	/**
-	 * A set of {@link SynchronizationBlock}s.
+	 * This mob's {@link NpcDefinition). A {@link Player} only uses this if they are appearing as an npc in-game.
 	 */
-	private SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
+	protected NpcDefinition definition;
 
 	/**
-	 * The character's {@link NpcDefinition). This is only used by an instance of the {@link Player} class if they are
-	 * appearing as an npc in-game.
-	 */
-	private NpcDefinition definition;
-
-	/**
-	 * The character's equipment.
+	 * This mob's equipment.
 	 */
 	private final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
 
 	/**
-	 * The first direction.
+	 * This mob's first movement {@link Direction}.
 	 */
 	private Direction firstDirection = Direction.NONE;
 
 	/**
-	 * The index of this character in the {@link CharacterRepository} it belongs to.
+	 * The index of this mob in the {@link MobRepository} it belongs to.
 	 */
 	private int index = -1;
 
 	/**
-	 * The character's inventory.
+	 * This mob's inventory.
 	 */
 	private final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
 
 	/**
-	 * The list of local npcs.
+	 * This mob's {@link List} of local npcs.
 	 */
 	private final List<Npc> localNpcs = new ArrayList<Npc>();
 
 	/**
-	 * A list of local players.
+	 * This mob's {@link List} of local players.
 	 */
 	private final List<Player> localPlayers = new ArrayList<Player>();
 
 	/**
-	 * The second direction.
+	 * This mob's second movement direction.
 	 */
 	private Direction secondDirection = Direction.NONE;
 
 	/**
-	 * The character's skill set.
+	 * This mob's skill set.
 	 */
 	private final SkillSet skillSet = new SkillSet();
 
 	/**
-	 * Teleportation flag.
+	 * Indicates whether this mob is currently teleporting or not.
 	 */
 	private boolean teleporting = false;
 
 	/**
-	 * The walking queue.
+	 * This mob's walking queue.
 	 */
 	private final WalkingQueue walkingQueue = new WalkingQueue(this);
 
 	/**
-	 * Creates a new character with the specified initial position.
+	 * Creates a new mob with the specified initial {@link Position}.
 	 * 
-	 * @param position The initial position of this character.
+	 * @param position The initial position.
 	 */
 	public Mob(Position position) {
 		this.position = position;
 		init();
-	}
-
-	/**
-	 * Gets the character's bank.
-	 * 
-	 * @return The character's bank.
-	 */
-	public Inventory getBank() {
-		return bank;
 	}
 
 	/**
@@ -116,6 +100,19 @@ public abstract class Mob extends Entity {
 	 */
 	public SynchronizationBlockSet getBlockSet() {
 		return blockSet;
+	}
+
+	/**
+	 * Deals damage to this mob.
+	 * 
+	 * @param damage The damage dealt.
+	 * @param type The type of damage.
+	 * @param secondary Whether this should be dealt as a secondary hit or not.
+	 */
+	public void damage(int damage, int type, boolean secondary) {
+		Skill hitpoints = skillSet.getSkill(Skill.HITPOINTS);
+		blockSet.add(SynchronizationBlock.createHitUpdateBlock(damage, type, hitpoints.getCurrentLevel(),
+				hitpoints.getMaximumLevel(), secondary));
 	}
 
 	/**
@@ -132,27 +129,27 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the character's equipment.
+	 * Gets the mob's equipment.
 	 * 
-	 * @return The character's equipment.
+	 * @return The mob's equipment.
 	 */
 	public Inventory getEquipment() {
 		return equipment;
 	}
 
 	/**
-	 * Gets the first direction.
+	 * Gets the first {@link Direction}.
 	 * 
-	 * @return The first direction.
+	 * @return The direction.
 	 */
 	public Direction getFirstDirection() {
 		return firstDirection;
 	}
 
 	/**
-	 * Gets the index of this character.
+	 * Gets the index of this mob.
 	 * 
-	 * @return The index of this character.
+	 * @return The index.
 	 */
 	public int getIndex() {
 		synchronized (this) {
@@ -161,34 +158,34 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the character's inventory.
+	 * Gets the mob's inventory.
 	 * 
-	 * @return The character's inventory.
+	 * @return The inventory.
 	 */
 	public Inventory getInventory() {
 		return inventory;
 	}
 
 	/**
-	 * Gets the local npc list.
+	 * Gets the local npc {@link List}.
 	 * 
-	 * @return The local npc list.
+	 * @return The list.
 	 */
 	public List<Npc> getLocalNpcList() {
 		return localNpcs;
 	}
 
 	/**
-	 * Gets the local player list.
+	 * Gets the local player {@link List}.
 	 * 
-	 * @return The local player list.
+	 * @return The list.
 	 */
 	public List<Player> getLocalPlayerList() {
 		return localPlayers;
 	}
 
 	/**
-	 * Gets this character's {@link NpcDefinition}.
+	 * Gets this mob's {@link NpcDefinition}.
 	 * 
 	 * @param definition The definition.
 	 */
@@ -196,31 +193,26 @@ public abstract class Mob extends Entity {
 		return definition;
 	}
 
-	@Override
-	public Position getPosition() {
-		return position;
-	}
-
 	/**
-	 * Gets the second direction.
+	 * Gets the second {@link Direction}.
 	 * 
-	 * @return The second direction.
+	 * @return The direction.
 	 */
 	public Direction getSecondDirection() {
 		return secondDirection;
 	}
 
 	/**
-	 * Gets the character's skill set.
+	 * Gets this mob's {@link SkillSet}.
 	 * 
-	 * @return The character's skill set.
+	 * @return The skill set.
 	 */
 	public SkillSet getSkillSet() {
 		return skillSet;
 	}
 
 	/**
-	 * Gets the walking queue.
+	 * Gets the {@link WalkingQueue}.
 	 * 
 	 * @return The walking queue.
 	 */
@@ -229,14 +221,14 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Initialises this character.
+	 * Initialises this mob.
 	 */
 	private void init() {
 		World.getWorld().schedule(new SkillNormalizationTask(this));
 	}
 
 	/**
-	 * Checks if this character is active.
+	 * Checks if this mob is active.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -245,7 +237,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Checks if this player is currently teleporting.
+	 * Checks if this mob is currently teleporting.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -254,7 +246,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Plays the specified animation.
+	 * Plays the specified {@link Animation}.
 	 * 
 	 * @param animation The animation.
 	 */
@@ -263,7 +255,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Plays the specified graphic.
+	 * Plays the specified {@link Graphic}.
 	 * 
 	 * @param graphic The graphic.
 	 */
@@ -279,18 +271,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Sends an {@link Event} to either:
-	 * <ul>
-	 * <li>The client if this {@link Mob} is a {@link Player}.</li>
-	 * <li>The AI routines if this {@link Mob} is an NPC</li>
-	 * </ul>
-	 * 
-	 * @param event The event.
-	 */
-	public abstract void send(Event event);
-
-	/**
-	 * Sets this character's {@link NpcDefinition}.
+	 * Sets this mob's {@link NpcDefinition}.
 	 * 
 	 * @param definition The definition.
 	 */
@@ -299,7 +280,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Sets the next directions for this character.
+	 * Sets the next directions for this mob.
 	 * 
 	 * @param first The first direction.
 	 * @param second The second direction.
@@ -310,9 +291,9 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Sets the index of this character.
+	 * Sets the index of this mob.
 	 * 
-	 * @param index The index of this character.
+	 * @param index The index.
 	 */
 	public void setIndex(int index) {
 		synchronized (this) {
@@ -321,18 +302,29 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Sets the position of this character.
+	 * Sets the position of this mob.
 	 * 
-	 * @param position The position of this character.
+	 * @param position The position.
 	 */
 	public void setPosition(Position position) {
 		this.position = position;
 	}
 
 	/**
-	 * Sets the teleporting flag.
+	 * Forces this mob to shout a message. Note that messages can only be shown in the chat box if they are said by a
+	 * player.
 	 * 
-	 * @param teleporting {@code true} if the player is teleporting, {@code false} if not.
+	 * @param message The message.
+	 * @param chatBox If the message should be shown in the player's chat box.
+	 */
+	public void shout(String message, boolean chatBox) {
+		blockSet.add(SynchronizationBlock.createForceChatBlock(message));
+	}
+
+	/**
+	 * Sets whether this mob is teleporting or not.
+	 * 
+	 * @param teleporting {@code true} if the mob is teleporting, {@code false} if not.
 	 */
 	public void setTeleporting(boolean teleporting) {
 		this.teleporting = teleporting;
@@ -366,21 +358,22 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Stops the current animation.
+	 * Stops the current {@link Animation}.
 	 */
 	public void stopAnimation() {
 		playAnimation(Animation.STOP_ANIMATION);
 	}
 
 	/**
-	 * Stops the current graphic.
+	 * Stops the current {@link Graphic}.
 	 */
 	public void stopGraphic() {
 		playGraphic(Graphic.STOP_GRAPHIC);
 	}
 
 	/**
-	 * Teleports this character to the specified position, setting the appropriate flags and clearing the walking queue.
+	 * Teleports this mob to the specified {@link Position}, setting the appropriate flags and clearing the walking
+	 * queue.
 	 * 
 	 * @param position The position.
 	 */
@@ -388,11 +381,11 @@ public abstract class Mob extends Entity {
 		teleporting = true;
 		this.position = position;
 		walkingQueue.clear();
-		stopAction(); // TODO do it on any movement is a must.. walking queue perhaps?
+		stopAction(); // TODO do it on any movement is a must... walking queue perhaps?
 	}
 
 	/**
-	 * Turns the character to face the specified position.
+	 * Turns the mob to face the specified {@link Position}.
 	 * 
 	 * @param position The position to face.
 	 */
@@ -401,12 +394,12 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Updates the character's interacting character.
+	 * Updates this mob's interacting mob.
 	 * 
-	 * @param index The index of the interacting character.
+	 * @param index The index of the interacting mob.
 	 */
-	public void updateInteractingCharacter(int index) {
-		blockSet.add(SynchronizationBlock.createInteractingCharacterBlock(index));
+	public void updateInteractingMob(int index) {
+		blockSet.add(SynchronizationBlock.createInteractingMobBlock(index));
 	}
 
 }

@@ -2,21 +2,21 @@ package org.apollo.game.event.handler.impl;
 
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
-import org.apollo.game.event.impl.CharacterDesignEvent;
+import org.apollo.game.event.impl.PlayerDesignEvent;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Gender;
 import org.apollo.game.model.Player;
 
 /**
- * A handler which verifies {@link CharacterDesignEvent}s.
+ * A handler which verifies {@link PlayerDesignEvent}s.
  * 
  * @author Graham
  */
-public final class CharacterDesignVerificationHandler extends EventHandler<CharacterDesignEvent> {
+public final class PlayerDesignVerificationHandler extends EventHandler<PlayerDesignEvent> {
 
 	@Override
-	public void handle(EventHandlerContext ctx, Player player, CharacterDesignEvent event) {
-		if (!valid(event.getAppearance()) || player.hasDesignedCharacter()) {
+	public void handle(EventHandlerContext ctx, Player player, PlayerDesignEvent event) {
+		if (!valid(event.getAppearance()) || player.hasDesignedAvatar()) {
 			ctx.breakHandlerChain();
 		}
 	}
@@ -42,7 +42,7 @@ public final class CharacterDesignVerificationHandler extends EventHandler<Chara
 		} else if (gender == Gender.FEMALE) {
 			return validFemaleStyle(appearance);
 		} else {
-			return false; // maybe null?
+			throw new IllegalArgumentException("player can only be either male or female");
 		}
 	}
 

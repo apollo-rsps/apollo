@@ -4,10 +4,10 @@
     <chain />
   </event>
   <event>
-    <type>org.apollo.game.event.impl.CharacterDesignEvent</type>
+    <type>org.apollo.game.event.impl.PlayerDesignEvent</type>
     <chain>
-      <handler>org.apollo.game.event.handler.impl.CharacterDesignVerificationHandler</handler>
-      <handler>org.apollo.game.event.handler.impl.CharacterDesignEventHandler</handler>
+      <handler>org.apollo.game.event.handler.impl.PlayerDesignVerificationHandler</handler>
+      <handler>org.apollo.game.event.handler.impl.PlayerDesignEventHandler</handler>
     </chain>
   </event>
   <event>

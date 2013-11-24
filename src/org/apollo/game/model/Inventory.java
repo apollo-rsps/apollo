@@ -73,7 +73,6 @@ public final class Inventory implements Cloneable {
 	 * Creates an inventory.
 	 * 
 	 * @param capacity The capacity.
-	 * @throws IllegalArgumentException If the capacity is negative.
 	 */
 	public Inventory(int capacity) {
 		this(capacity, StackMode.STACK_STACKABLE_ITEMS);
@@ -83,7 +82,7 @@ public final class Inventory implements Cloneable {
 	 * Creates an inventory.
 	 * 
 	 * @param capacity The capacity.
-	 * @param mode The stacking mode.
+	 * @param mode The {@link StackMode}.
 	 * @throws IllegalArgumentException If the capacity is negative.
 	 * @throws NullPointerException If the mode is {@code null}.
 	 */
@@ -92,7 +91,7 @@ public final class Inventory implements Cloneable {
 			throw new IllegalArgumentException("capacity cannot be negative");
 		}
 		if (mode == null) {
-			throw new NullPointerException("mode");
+			throw new NullPointerException("stacking mode cannot be null");
 		}
 		this.capacity = capacity;
 		items = new Item[capacity];
@@ -195,9 +194,9 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Adds a listener.
+	 * Adds an {@link InventoryListener}.
 	 * 
-	 * @param listener The listener to add.
+	 * @param listener The listener.
 	 */
 	public void addListener(InventoryListener listener) {
 		listeners.add(listener);
@@ -298,7 +297,6 @@ public final class Inventory implements Cloneable {
 	 * 
 	 * @param slot The slot.
 	 * @return The item, or {@code null} if the slot is empty.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
 	public Item get(int slot) {
 		checkBounds(slot);
@@ -447,7 +445,6 @@ public final class Inventory implements Cloneable {
 	 * 
 	 * @param slot
 	 * @return The item that was in the slot.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
 	public Item reset(int slot) {
 		checkBounds(slot);
@@ -467,7 +464,6 @@ public final class Inventory implements Cloneable {
 	 * @param slot The slot.
 	 * @param item The item, or {@code null} to remove the item that is in the slot.
 	 * @return The item that was in the slot.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
 	public Item set(int slot, Item item) {
 		if (item == null) {
@@ -529,7 +525,6 @@ public final class Inventory implements Cloneable {
 	 * @param insert If the swap should be done in insertion mode.
 	 * @param oldSlot The old slot.
 	 * @param newSlot The new slot.
-	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
 	public void swap(boolean insert, int oldSlot, int newSlot) {
 		checkBounds(oldSlot);
@@ -543,13 +538,14 @@ public final class Inventory implements Cloneable {
 				for (int slot = oldSlot; slot > newSlot; slot--) {
 					swap(slot, slot - 1);
 				}
-			} // else no change is required - aren't we lucky?
+			}
 			forceRefresh();
 		} else {
-			Item temp = items[oldSlot];
+			Item tmp = items[oldSlot];
 			items[oldSlot] = items[newSlot];
-			items[newSlot] = temp;
-			notifyItemsUpdated(); // TODO can we just fire for the two slots?
+			items[newSlot] = tmp;
+			notifyItemUpdated(oldSlot);
+			notifyItemUpdated(newSlot);
 		}
 	}
 
@@ -558,7 +554,6 @@ public final class Inventory implements Cloneable {
 	 * 
 	 * @param oldSlot The old slot.
 	 * @param newSlot The new slot.
-	 * @throws IndexOutOufBoundsException If the slot is out of bounds.
 	 */
 	public void swap(int oldSlot, int newSlot) {
 		swap(false, oldSlot, newSlot);

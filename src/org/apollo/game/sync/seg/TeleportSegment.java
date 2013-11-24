@@ -4,7 +4,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
- * A {@link SynchronizationSegment} where the character is teleported to a new location.
+ * A {@link SynchronizationSegment} where the mob is teleported to a new location.
  * 
  * @author Graham
  */

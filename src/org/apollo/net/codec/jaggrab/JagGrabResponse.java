@@ -3,7 +3,7 @@ package org.apollo.net.codec.jaggrab;
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
- * Represents a single JAGGRAB reponse.
+ * Represents a single JAGGRAB response.
  * 
  * @author Graham
  */

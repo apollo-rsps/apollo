@@ -31,17 +31,5 @@ public class SpamPacketEvent extends Event {
 	public byte[] getData() {
 		return data;
 	}
-	// 0
-	// random * 256
-	// 101
-	// 233
-	// 45092 (short)
-	// 35784 if random * 2= 0
-	// random * 256
-	// 64
-	// 38
-	// Math.random() * 65536
-	// Math.random() * 65536
-	// offset - start offset (exc. the first 0 sent) - size byte.
 
 }

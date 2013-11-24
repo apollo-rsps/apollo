@@ -1,6 +1,5 @@
 /**
  * Contains classes related to actions, specialised scheduled tasks which
- * characters perform.
+ * mobs perform.
  */
 package org.apollo.game.action;
-

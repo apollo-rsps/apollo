@@ -59,7 +59,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			int height = in.readUnsignedByte();
 
 			// read appearance
-			boolean designedCharacter = in.readBoolean();
+			boolean designed = in.readBoolean();
 
 			int genderIntValue = in.readUnsignedByte();
 			Gender gender = genderIntValue == Gender.MALE.toInteger() ? Gender.MALE : Gender.FEMALE;
@@ -72,20 +72,20 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 				colors[i] = in.readUnsignedByte();
 			}
 
-			Player p = new Player(credentials, new Position(x, y, height));
-			p.setPrivilegeLevel(privilegeLevel);
-			p.setMembers(members);
-			p.setDesignedCharacter(designedCharacter);
-			p.setAppearance(new Appearance(gender, style, colors));
+			Player player = new Player(credentials, new Position(x, y, height));
+			player.setPrivilegeLevel(privilegeLevel);
+			player.setMembers(members);
+			player.setDesigned(designed);
+			player.setAppearance(new Appearance(gender, style, colors));
 
 			// read inventories
-			readInventory(in, p.getInventory());
-			readInventory(in, p.getEquipment());
-			readInventory(in, p.getBank());
+			readInventory(in, player.getInventory());
+			readInventory(in, player.getEquipment());
+			readInventory(in, player.getBank());
 
 			// read skills
 			int size = in.readUnsignedByte();
-			SkillSet skills = p.getSkillSet();
+			SkillSet skills = player.getSkillSet();
 			skills.stopFiringEvents();
 			try {
 				for (int i = 0; i < size; i++) {
@@ -94,10 +94,11 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 					skills.setSkill(i, new Skill(experience, level, SkillSet.getLevelForExperience(experience)));
 				}
 			} finally {
+				skills.calculateCombatLevel();
 				skills.startFiringEvents();
 			}
 
-			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, p);
+			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
 		} finally {
 			in.close();
 		}

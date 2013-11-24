@@ -12,26 +12,26 @@ import org.apollo.game.scheduling.ScheduledTask;
 public final class SkillNormalizationTask extends ScheduledTask {
 
 	/**
-	 * The character.
+	 * The mob.
 	 */
-	private final Mob character;
+	private final Mob mob;
 
 	/**
 	 * Creates the skill normalization task.
 	 * 
-	 * @param character The character.
+	 * @param mob The mob.
 	 */
-	public SkillNormalizationTask(Mob character) {
+	public SkillNormalizationTask(Mob mob) {
 		super(100, false);
-		this.character = character;
+		this.mob = mob;
 	}
 
 	@Override
 	public void execute() {
-		if (!character.isActive()) { // TODO is this check okay for this? an NPC could be temporarily removed from list
+		if (!mob.isActive()) {
 			stop();
 		} else {
-			character.getSkillSet().normalize();
+			mob.getSkillSet().normalize();
 		}
 	}
 

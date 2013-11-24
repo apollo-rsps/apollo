@@ -76,7 +76,7 @@ public final class UpdateService extends Service {
 				service.submit(worker);
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(ex); // TODO neater/more elegant way
+			System.err.println("Error adding request workers - " + ex.getMessage());
 		}
 	}
 

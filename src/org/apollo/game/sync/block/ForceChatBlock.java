@@ -2,8 +2,8 @@ package org.apollo.game.sync.block;
 
 /**
  * The Force Chat {@link SynchronizationBlock}. This is a block that can be implemented in both player and npc
- * synchronization tasks, and will cause the character to shout the specified text. It is not possible to add colour or
- * effect (e.g. wave or scroll) to this block.
+ * synchronization tasks, and will cause the mob to shout the specified text. It is not possible to add colour or effect
+ * (e.g. wave or scroll) to this block.
  * 
  * @author Major
  */
@@ -17,7 +17,7 @@ public class ForceChatBlock extends SynchronizationBlock {
 	/**
 	 * Creates a new force chat [@link SynchronizationBlock}.
 	 * 
-	 * @param message The message the character will say.
+	 * @param message The message the mob will say.
 	 */
 	public ForceChatBlock(String message) {
 		this.message = message;

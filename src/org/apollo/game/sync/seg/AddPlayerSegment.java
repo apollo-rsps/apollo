@@ -4,7 +4,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
- * A {@link SynchronizationSegment} which adds a character.
+ * A {@link SynchronizationSegment} which adds a player.
  * 
  * @author Graham
  */
@@ -21,10 +21,10 @@ public final class AddPlayerSegment extends SynchronizationSegment {
 	private final Position position;
 
 	/**
-	 * Creates the add character segment.
+	 * Creates the add player segment.
 	 * 
 	 * @param blockSet The block set.
-	 * @param index The characters's index.
+	 * @param index The player's index.
 	 * @param position The position.
 	 */
 	public AddPlayerSegment(SynchronizationBlockSet blockSet, int index, Position position) {
@@ -34,7 +34,7 @@ public final class AddPlayerSegment extends SynchronizationSegment {
 	}
 
 	/**
-	 * Gets the character's index.
+	 * Gets the player's index.
 	 * 
 	 * @return The index.
 	 */
@@ -53,7 +53,7 @@ public final class AddPlayerSegment extends SynchronizationSegment {
 
 	@Override
 	public SegmentType getType() {
-		return SegmentType.ADD_CHARACTER;
+		return SegmentType.ADD_MOB;
 	}
 
 }

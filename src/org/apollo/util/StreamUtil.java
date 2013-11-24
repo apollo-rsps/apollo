@@ -20,9 +20,9 @@ public final class StreamUtil {
 	 */
 	public static String readString(InputStream is) throws IOException {
 		StringBuilder builder = new StringBuilder();
-		int character;
-		while ((character = is.read()) != -1 && character != '\0') {
-			builder.append((char) character);
+		char character;
+		while ((character = (char) is.read()) != -1 && character != '\0') {
+			builder.append(character);
 		}
 		return builder.toString();
 	}

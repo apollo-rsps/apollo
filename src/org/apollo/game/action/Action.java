@@ -4,7 +4,7 @@ import org.apollo.game.model.Mob;
 import org.apollo.game.scheduling.ScheduledTask;
 
 /**
- * An action is a specialised {@link ScheduledTask} which is specific to a character.
+ * An action is a specialised {@link ScheduledTask} which is specific to a mob.
  * <p>
  * <strong>ALL</strong> actions <strong>MUST</strong> implement the {@link #equals(Object)} method. This is to check if
  * two actions are identical: if they are, then the new action does not replace the old one (so spam/accidental clicking
@@ -15,9 +15,9 @@ import org.apollo.game.scheduling.ScheduledTask;
 public abstract class Action<T extends Mob> extends ScheduledTask {
 
 	/**
-	 * The character performing the action.
+	 * The mob performing the action.
 	 */
-	private final T character;
+	protected final T mob;
 
 	/**
 	 * A flag indicating if this action is stopping.
@@ -29,20 +29,20 @@ public abstract class Action<T extends Mob> extends ScheduledTask {
 	 * 
 	 * @param delay The delay in pulses.
 	 * @param immediate A flag indicating if the action should happen immediately.
-	 * @param character The character performing the action.
+	 * @param mob The mob performing the action.
 	 */
-	public Action(int delay, boolean immediate, T character) {
+	public Action(int delay, boolean immediate, T mob) {
 		super(delay, immediate);
-		this.character = character;
+		this.mob = mob;
 	}
 
 	/**
-	 * Gets the character which performed the action.
+	 * Gets the mob which performed the action.
 	 * 
-	 * @return The character.
+	 * @return The mob.
 	 */
-	public T getCharacter() {
-		return character;
+	public T getMob() {
+		return mob;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public abstract class Action<T extends Mob> extends ScheduledTask {
 		super.stop();
 		if (!stopping) {
 			stopping = true;
-			character.stopAction();
+			mob.stopAction();
 		}
 	}
 

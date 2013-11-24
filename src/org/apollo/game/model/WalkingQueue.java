@@ -51,9 +51,9 @@ public final class WalkingQueue {
 	private static final int MAXIMUM_SIZE = 128;
 
 	/**
-	 * The character whose walking queue this is.
+	 * The mob whose walking queue this is.
 	 */
-	private final Mob character;
+	private final Mob mob;
 
 	/**
 	 * The old queue of directions.
@@ -71,32 +71,32 @@ public final class WalkingQueue {
 	private boolean runningQueue;
 
 	/**
-	 * Creates a walking queue for the specified character.
+	 * Creates a walking queue for the specified mob.
 	 * 
-	 * @param character The character.
+	 * @param mob The mob.
 	 */
-	public WalkingQueue(Mob character) {
-		this.character = character;
+	public WalkingQueue(Mob mob) {
+		this.mob = mob;
 	}
 
 	/**
 	 * Adds the first step to the queue, attempting to connect the server and client position by looking at the previous
 	 * queue.
 	 * 
-	 * @param clientConnectionPosition The first step.
+	 * @param clientPosition The first step.
 	 * @return {@code true} if the queues could be connected correctly, {@code false} if not.
 	 */
-	public boolean addFirstStep(Position clientConnectionPosition) {
-		Position serverPosition = character.getPosition();
+	public boolean addFirstStep(Position clientPosition) {
+		Position serverPosition = mob.getPosition();
 
-		int deltaX = clientConnectionPosition.getX() - serverPosition.getX();
-		int deltaY = clientConnectionPosition.getY() - serverPosition.getY();
+		int deltaX = clientPosition.getX() - serverPosition.getX();
+		int deltaY = clientPosition.getY() - serverPosition.getY();
 
 		if (Direction.isConnectable(deltaX, deltaY)) {
 			points.clear();
 			oldPoints.clear();
 
-			addStep(clientConnectionPosition);
+			addStep(clientPosition);
 			return true;
 		}
 
@@ -119,7 +119,7 @@ public final class WalkingQueue {
 					addStep(travelBackPosition);
 				}
 
-				addStep(clientConnectionPosition);
+				addStep(clientPosition);
 				return true;
 			}
 		}
@@ -147,7 +147,7 @@ public final class WalkingQueue {
 		Direction direction = Direction.fromDeltas(deltaX, deltaY);
 
 		if (direction != Direction.NONE) {
-			Point p = new Point(new Position(x, y, character.getPosition().getHeight()), direction);
+			Point p = new Point(new Position(x, y, mob.getPosition().getHeight()), direction);
 			points.add(p);
 			oldPoints.add(p);
 		}
@@ -202,7 +202,7 @@ public final class WalkingQueue {
 	private Point getLast() {
 		Point last = points.peekLast();
 		if (last == null) {
-			return new Point(character.getPosition(), Direction.NONE);
+			return new Point(mob.getPosition(), Direction.NONE);
 		}
 		return last;
 	}
@@ -211,17 +211,18 @@ public final class WalkingQueue {
 	 * Called every pulse, updates the queue.
 	 */
 	public void pulse() {
-		Position position = character.getPosition();
+		Position position = mob.getPosition();
 
 		Direction first = Direction.NONE;
 		Direction second = Direction.NONE;
 
 		Point next = points.poll();
 		if (next != null) {
+			mob.stopAction();
 			first = next.direction;
 			position = next.position;
 
-			if (runningQueue /* or run toggled AND enough energy */) {
+			if (runningQueue /* and enough energy */) {
 				next = points.poll();
 				if (next != null) {
 					second = next.direction;
@@ -230,8 +231,8 @@ public final class WalkingQueue {
 			}
 		}
 
-		character.setDirections(first, second);
-		character.setPosition(position);
+		mob.setDirections(first, second);
+		mob.setPosition(position);
 	}
 
 	/**

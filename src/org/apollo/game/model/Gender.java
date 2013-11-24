@@ -8,14 +8,14 @@ package org.apollo.game.model;
 public enum Gender {
 
 	/**
-	 * The female gender.
-	 */
-	FEMALE(1),
-
-	/**
 	 * The male gender.
 	 */
-	MALE(0);
+	MALE(0),
+
+	/**
+	 * The female gender.
+	 */
+	FEMALE(1);
 
 	/**
 	 * An integer representation used by the client.

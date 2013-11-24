@@ -38,7 +38,7 @@ public final class EquipmentDefinitionParser {
 		DataInputStream dis = new DataInputStream(is);
 
 		int count = dis.readShort() & 0xFFFF;
-		EquipmentDefinition[] defs = new EquipmentDefinition[count];
+		EquipmentDefinition[] definitions = new EquipmentDefinition[count];
 
 		for (int id = 0; id < count; id++) {
 			int slot = dis.readByte() & 0xFF;
@@ -53,16 +53,16 @@ public final class EquipmentDefinitionParser {
 				int ranged = dis.readByte() & 0xFF;
 				int magic = dis.readByte() & 0xFF;
 
-				EquipmentDefinition def = new EquipmentDefinition(id);
-				def.setLevels(attack, strength, defence, ranged, magic);
-				def.setSlot(slot);
-				def.setFlags(twoHanded, fullBody, fullHat, fullMask);
+				EquipmentDefinition definition = new EquipmentDefinition(id);
+				definition.setLevels(attack, strength, defence, ranged, magic);
+				definition.setSlot(slot);
+				definition.setFlags(twoHanded, fullBody, fullHat, fullMask);
 
-				defs[id] = def;
+				definitions[id] = definition;
 			}
 		}
 
-		return defs;
+		return definitions;
 	}
 
 }

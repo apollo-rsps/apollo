@@ -12,17 +12,17 @@ public abstract class InventoryAdapter implements InventoryListener {
 
 	@Override
 	public void capacityExceeded(Inventory inventory) {
-		/* empty */
+
 	}
 
 	@Override
 	public void itemsUpdated(Inventory inventory) {
-		/* empty */
+
 	}
 
 	@Override
 	public void itemUpdated(Inventory inventory, int slot, Item item) {
-		/* empty */
+
 	}
 
 }

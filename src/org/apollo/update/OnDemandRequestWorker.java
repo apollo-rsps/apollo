@@ -42,17 +42,17 @@ public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, 
 	protected void service(IndexedFileSystem fs, Channel channel, OnDemandRequest request) throws IOException {
 		FileDescriptor desc = request.getFileDescriptor();
 
-		ByteBuffer buf = fs.getFile(desc);
-		int length = buf.remaining();
+		ByteBuffer buffer = fs.getFile(desc);
+		int length = buffer.remaining();
 
-		for (int chunk = 0; buf.remaining() > 0; chunk++) {
-			int chunkSize = buf.remaining();
+		for (int chunk = 0; buffer.remaining() > 0; chunk++) {
+			int chunkSize = buffer.remaining();
 			if (chunkSize > CHUNK_LENGTH) {
 				chunkSize = CHUNK_LENGTH;
 			}
 
 			byte[] tmp = new byte[chunkSize];
-			buf.get(tmp, 0, tmp.length);
+			buffer.get(tmp, 0, tmp.length);
 			ChannelBuffer chunkData = ChannelBuffers.wrappedBuffer(tmp, 0, chunkSize);
 
 			OnDemandResponse response = new OnDemandResponse(desc, length, chunk, chunkData);

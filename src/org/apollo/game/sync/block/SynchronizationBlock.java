@@ -63,11 +63,11 @@ public abstract class SynchronizationBlock {
 	/**
 	 * Creates a new force movement block with the specified parameters.
 	 * 
-	 * @param initialPosition The initial position of the player.
-	 * @param finalPosition The final position of the player.
-	 * @param travelDurationX The duration motion along the X axis will occur.
-	 * @param travelDurationY The duration motion along the Y axis will occur.
-	 * @param direction The direction the player will face.
+	 * @param initialPosition The initial {@link Position} of the player.
+	 * @param finalPosition The final {@link Position} of the player
+	 * @param travelDurationX The length of time (in game pulses) the player's movement along the X axis will last.
+	 * @param travelDurationY The length of time (in game pulses) the player's movement along the Y axis will last.
+	 * @param direction The direction the player should move.
 	 * @return The force movement block.
 	 */
 	public static SynchronizationBlock createForceMovementBlock(Position initialPosition, Position finalPosition,
@@ -86,13 +86,39 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates an interacting character block with the specified character index.
+	 * Creates a new hit or secondary hit update block
 	 * 
-	 * @param index The index of the interacting character.
-	 * @return The interacting character block.
+	 * @param damage The damage dealt by the hit.
+	 * @param type The type of hit.
+	 * @param currentHealth The current health of the mob.
+	 * @param maximumHealth The maximum health of the mob.
+	 * @param secondary If the block is a secondary hit or not.
+	 * @return The hit update block.
 	 */
-	public static SynchronizationBlock createInteractingCharacterBlock(int index) {
-		return new InteractingCharacterBlock(index);
+	public static SynchronizationBlock createHitUpdateBlock(int damage, int type, int currentHealth, int maximumHealth,
+			boolean secondary) {
+		return secondary ? new SecondaryHitUpdateBlock(damage, type, currentHealth, maximumHealth)
+				: new HitUpdateBlock(damage, type, currentHealth, maximumHealth);
+	}
+
+	/**
+	 * Creates an interacting mob block with the specified index.
+	 * 
+	 * @param index The index of the mob being interacted with.
+	 * @return The interacting mob block.
+	 */
+	public static SynchronizationBlock createInteractingMobBlock(int index) {
+		return new InteractingMobBlock(index);
+	}
+
+	/**
+	 * Creates a transform block with the specified id.
+	 * 
+	 * @param id The id.
+	 * @return The transform block.
+	 */
+	public static SynchronizationBlock createTransformBlock(int id) {
+		return new TransformBlock(id);
 	}
 
 	/**

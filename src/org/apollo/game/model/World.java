@@ -26,13 +26,13 @@ import org.apollo.game.model.sector.SectorRepository;
 import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
 import org.apollo.io.EquipmentDefinitionParser;
-import org.apollo.util.CharacterRepository;
+import org.apollo.util.MobRepository;
 import org.apollo.util.plugin.PluginManager;
 
 /**
- * The world class is a singleton which contains objects like the {@link CharacterRepository} for players and NPCs. It
- * should only contain things relevant to the in-game world and not classes which deal with I/O and such (these may be
- * better off inside some custom {@link Service} or other code, however, the circumstances are rare).
+ * The world class is a singleton which contains objects like the {@link MobRepository} for players and NPCs. It should
+ * only contain things relevant to the in-game world and not classes which deal with I/O and such (these may be better
+ * off inside some custom {@link Service} or other code, however, the circumstances are rare).
  * 
  * @author Graham
  */
@@ -86,20 +86,14 @@ public final class World {
 	private final CommandDispatcher dispatcher = new CommandDispatcher();
 
 	/**
-	 * The {@link CharacterRepository} of {@link Npc}s.
+	 * The {@link MobRepository} of {@link Npc}s.
 	 */
-	private final CharacterRepository<Npc> npcRepository = new CharacterRepository<Npc>(WorldConstants.MAXIMUM_NPCS);
+	private final MobRepository<Npc> npcRepository = new MobRepository<Npc>(WorldConstants.MAXIMUM_NPCS);
 
 	/**
-	 * The {@link CharacterRepository} of {@link Player}s.
+	 * The {@link MobRepository} of {@link Player}s.
 	 */
-	private final CharacterRepository<Player> playerRepository = new CharacterRepository<Player>(
-			WorldConstants.MAXIMUM_PLAYERS);
-
-	/**
-	 * The release number (i.e. version) of this world.
-	 */
-	private int releaseNumber;
+	private final MobRepository<Player> playerRepository = new MobRepository<Player>(WorldConstants.MAXIMUM_PLAYERS);
 
 	/**
 	 * A {@link Map} of player usernames and the player objects.
@@ -110,6 +104,11 @@ public final class World {
 	 * The {@link PluginManager}. TODO: better place than here!!
 	 */
 	private PluginManager pluginManager;
+
+	/**
+	 * The release number (i.e. version) of this world.
+	 */
+	private int releaseNumber;
 
 	/**
 	 * This world's {@link SectorRepository}.
@@ -128,7 +127,7 @@ public final class World {
 	}
 
 	/**
-	 * Gets the command dispatcher. TODO should this be here?
+	 * Gets the command dispatcher.
 	 * 
 	 * @return The command dispatcher.
 	 */
@@ -141,7 +140,7 @@ public final class World {
 	 * 
 	 * @return The npc repository.
 	 */
-	public CharacterRepository<Npc> getNpcRepository() {
+	public MobRepository<Npc> getNpcRepository() {
 		return npcRepository;
 	}
 
@@ -156,14 +155,14 @@ public final class World {
 	}
 
 	/**
-	 * Gets the character repository.
+	 * Gets the player repository.
 	 * <p>
 	 * Note: players should be registered and unregistered using {@link World#register(Player)} and
 	 * {@link World#unregister(Player)} respectively, not by adding to or removing from this repository directly.
 	 * 
-	 * @return The character repository.
+	 * @return The player repository.
 	 */
-	public CharacterRepository<Player> getPlayerRepository() {
+	public MobRepository<Player> getPlayerRepository() {
 		return playerRepository;
 	}
 
@@ -174,6 +173,15 @@ public final class World {
 	 */
 	public PluginManager getPluginManager() {
 		return pluginManager;
+	}
+
+	/**
+	 * Gets the release number of this world.
+	 * 
+	 * @return The release number.
+	 */
+	public int getReleaseNumber() {
+		return releaseNumber;
 	}
 
 	/**
@@ -286,15 +294,6 @@ public final class World {
 		logger.warning("Failed to register player (server full): " + player + " [online=" + playerRepository.size()
 				+ "]");
 		return RegistrationStatus.WORLD_FULL;
-	}
-
-	/**
-	 * Gets the release number of this world.
-	 * 
-	 * @return The release number.
-	 */
-	public int getReleaseNumber() {
-		return releaseNumber;
 	}
 
 	/**

@@ -11,10 +11,10 @@ public final class DependencyException extends Exception {
 	/**
 	 * Creates the dependency exception.
 	 * 
-	 * @param s The message describing what happened.
+	 * @param message The message describing what happened.
 	 */
-	public DependencyException(String s) {
-		super(s);
+	public DependencyException(String message) {
+		super(message);
 	}
 
 }

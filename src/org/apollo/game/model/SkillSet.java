@@ -48,8 +48,8 @@ public final class SkillSet {
 	 * @return The minimum level.
 	 */
 	public static int getLevelForExperience(double experience) {
-		int points = 0;
-		int output = 0;
+		int points = 0, output = 0;
+
 		for (int lvl = 1; lvl <= 99; lvl++) {
 			points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0));
 			output = (int) Math.floor(points / 4);
@@ -110,22 +110,21 @@ public final class SkillSet {
 		setSkill(id, new Skill(newExperience, newCurrentLevel, newMaximumLevel));
 
 		if (delta > 0) {
-			// here so it notifies using the updated skill
-			notifyLevelledUp(id);
+			notifyLevelledUp(id); // here so it notifies using the updated skill
 		}
 	}
 
 	/**
-	 * Adds a listener.
+	 * Adds a {@link SkillListener} to this set.
 	 * 
-	 * @param listener The listener to add.
+	 * @param listener The listener.
 	 */
 	public boolean addListener(SkillListener listener) {
 		return listeners.add(listener);
 	}
 
 	/**
-	 * Gets the combat level for this skill set.
+	 * Calculates the combat level for this skill set.
 	 * 
 	 * @return The combat level.
 	 */
@@ -138,15 +137,12 @@ public final class SkillSet {
 		int ranged = skills[Skill.RANGED].getMaximumLevel();
 		int magic = skills[Skill.MAGIC].getMaximumLevel();
 
-		double combatLevel = (defence + hitpoints + Math.floor(prayer / 2)) * 0.25;
-
+		double base = (defence + hitpoints + Math.floor(prayer / 2)) * 0.25;
 		double melee = (attack + strength) * 0.325;
-
 		double range = ranged * 0.4875;
-
 		double mage = magic * 0.4875;
 
-		this.combatLevel = (int) (combatLevel + Math.max(melee, Math.max(range, mage)));
+		this.combatLevel = (int) (base + Math.max(melee, Math.max(range, mage)));
 	}
 
 	/**
@@ -169,7 +165,7 @@ public final class SkillSet {
 	}
 
 	/**
-	 * Gets the combat level for this skill set.
+	 * Gets the combat level of this skill set.
 	 * 
 	 * @return The combat level.
 	 */
@@ -218,13 +214,10 @@ public final class SkillSet {
 			int cur = skills[id].getCurrentLevel();
 			int max = skills[id].getMaximumLevel();
 
-			if (cur > max) {
-				cur--;
-			} else if (max > cur) {
-				cur++;
-			} else {
+			if (cur == max) {
 				continue;
 			}
+			cur += cur < max ? 1 : -1;
 
 			setSkill(id, new Skill(skills[id].getExperience(), cur, max));
 		}
@@ -270,14 +263,14 @@ public final class SkillSet {
 	}
 
 	/**
-	 * Removes all the listeners.
+	 * Removes all the {@link SkillListener}s.
 	 */
 	public void removeAllListeners() {
 		listeners.clear();
 	}
 
 	/**
-	 * Removes a listener.
+	 * Removes a {@link SkillListener}.
 	 * 
 	 * @param listener The listener to remove.
 	 */
@@ -286,7 +279,7 @@ public final class SkillSet {
 	}
 
 	/**
-	 * Sets a skill.
+	 * Sets a {@link Skill}.
 	 * 
 	 * @param id The id.
 	 * @param skill The skill.
@@ -298,7 +291,7 @@ public final class SkillSet {
 	}
 
 	/**
-	 * Gets the number of skills.
+	 * Gets the number of {@link Skill}s in this set.
 	 * 
 	 * @return The number of skills.
 	 */
@@ -307,7 +300,7 @@ public final class SkillSet {
 	}
 
 	/**
-	 * Re-enables the firing of events.
+	 * Starts the firing of events.
 	 */
 	public void startFiringEvents() {
 		firingEvents = true;

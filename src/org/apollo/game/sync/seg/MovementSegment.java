@@ -4,7 +4,7 @@ import org.apollo.game.model.Direction;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
- * A {@link SynchronizationSegment} where the character is moved (or doesn't move!).
+ * A {@link SynchronizationSegment} where the mob is moved (or doesn't move!).
  * 
  * @author Graham
  */

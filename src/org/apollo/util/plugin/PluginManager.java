@@ -167,9 +167,9 @@ public final class PluginManager {
 		String[] scripts = plugin.getScripts();
 
 		for (String script : scripts) {
-			File f = new File("./data/plugins/" + plugin.getId() + "/" + script);
-			InputStream is = new FileInputStream(f);
-			env.parse(is, f.getAbsolutePath());
+			File scriptFile = new File("./data/plugins/" + plugin.getId() + "/" + script);
+			InputStream is = new FileInputStream(scriptFile);
+			env.parse(is, scriptFile.getAbsolutePath());
 		}
 	}
 

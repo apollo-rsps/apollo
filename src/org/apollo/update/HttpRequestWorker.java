@@ -63,19 +63,19 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	private ChannelBuffer createErrorPage(HttpResponseStatus status, String description) {
 		String title = status.getCode() + " " + status.getReasonPhrase();
 
-		StringBuilder bldr = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
 
-		bldr.append("<!DOCTYPE html><html><head><title>");
-		bldr.append(title);
-		bldr.append("</title></head><body><h1>");
-		bldr.append(title);
-		bldr.append("</h1><p>");
-		bldr.append(description);
-		bldr.append("</p><hr /><address>");
-		bldr.append(SERVER_IDENTIFIER);
-		bldr.append(" Server</address></body></html>");
+		builder.append("<!DOCTYPE html><html><head><title>");
+		builder.append(title);
+		builder.append("</title></head><body><h1>");
+		builder.append(title);
+		builder.append("</h1><p>");
+		builder.append(description);
+		builder.append("</p><hr /><address>");
+		builder.append(SERVER_IDENTIFIER);
+		builder.append(" Server</address></body></html>");
 
-		return ChannelBuffers.copiedBuffer(bldr.toString(), Charset.defaultCharset());
+		return ChannelBuffers.copiedBuffer(builder.toString(), Charset.defaultCharset());
 	}
 
 	/**
@@ -116,33 +116,33 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 		String path = request.getUri();
 		ByteBuffer buf = provider.get(path);
 
-		ChannelBuffer wrappedBuf;
+		ChannelBuffer wrapped;
 		HttpResponseStatus status = HttpResponseStatus.OK;
 
-		String mimeType = getMimeType(request.getUri());
+		String mime = getMimeType(request.getUri());
 
 		if (buf == null) {
 			status = HttpResponseStatus.NOT_FOUND;
-			wrappedBuf = createErrorPage(status, "The page you requested could not be found.");
-			mimeType = "text/html";
+			wrapped = createErrorPage(status, "The page you requested could not be found.");
+			mime = "text/html";
 		} else {
-			wrappedBuf = ChannelBuffers.wrappedBuffer(buf);
+			wrapped = ChannelBuffers.wrappedBuffer(buf);
 		}
 
-		HttpResponse resp = new DefaultHttpResponse(request.getProtocolVersion(), status);
+		HttpResponse response = new DefaultHttpResponse(request.getProtocolVersion(), status);
 
-		resp.setHeader("Date", new Date());
-		resp.setHeader("Server", SERVER_IDENTIFIER);
-		resp.setHeader("Content-type", mimeType + ", charset=" + CHARACTER_SET.name());
-		resp.setHeader("Cache-control", "no-cache");
-		resp.setHeader("Pragma", "no-cache");
-		resp.setHeader("Expires", new Date(0));
-		resp.setHeader("Connection", "close");
-		resp.setHeader("Content-length", wrappedBuf.readableBytes());
-		resp.setChunked(false);
-		resp.setContent(wrappedBuf);
+		response.setHeader("Date", new Date());
+		response.setHeader("Server", SERVER_IDENTIFIER);
+		response.setHeader("Content-type", mime + ", charset=" + CHARACTER_SET.name());
+		response.setHeader("Cache-control", "no-cache");
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Expires", new Date(0));
+		response.setHeader("Connection", "close");
+		response.setHeader("Content-length", wrapped.readableBytes());
+		response.setChunked(false);
+		response.setContent(wrapped);
 
-		channel.write(resp).addListener(ChannelFutureListener.CLOSE);
+		channel.write(response).addListener(ChannelFutureListener.CLOSE);
 	}
 
 }

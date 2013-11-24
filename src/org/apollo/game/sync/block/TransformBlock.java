@@ -18,7 +18,7 @@ public final class TransformBlock extends SynchronizationBlock {
 	 * 
 	 * @param id The id.
 	 */
-	public TransformBlock(int id) {
+	TransformBlock(int id) {
 		this.id = id;
 	}
 

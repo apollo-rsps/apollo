@@ -85,7 +85,7 @@ public final class Release317 extends Release {
 		register(98, walkEventDecoder);
 
 		register(0, new KeepAliveEventDecoder());
-		register(101, new CharacterDesignEventDecoder());
+		register(101, new PlayerDesignEventDecoder());
 		register(4, new ChatEventDecoder());
 		register(103, new CommandEventDecoder());
 		register(214, new SwitchItemEventDecoder());

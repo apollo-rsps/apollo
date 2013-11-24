@@ -33,7 +33,6 @@ public final class BankUtils {
 		Inventory bank = player.getBank();
 
 		Item item = inventory.get(slot);
-
 		int newId = ItemDefinition.noteToItem(item.getId());
 
 		if (bank.freeSlots() == 0 && !bank.contains(item.getId())) {
@@ -126,7 +125,7 @@ public final class BankUtils {
 	}
 
 	/**
-	 * Default private constructor to prevent insantiation.
+	 * Default private constructor to prevent instantiation.
 	 */
 	private BankUtils() {
 
