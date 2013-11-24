@@ -1,15 +1,14 @@
 package org.apollo.game.sync.block;
 
 /**
- * The Hit Update {@link SynchronizationBlock}. This is a simple implementation designed so that you can integrate it
- * easily with your combat system. Both npcs and players can implement this block.
+ * The hit update {@link SynchronizationBlock}. Both npcs and players can implement this block.
  * 
  * @author Major
  */
 public class HitUpdateBlock extends SynchronizationBlock {
 
 	/**
-	 * The {@link org.apollo.game.model.Mob}'s current health.
+	 * The mob's current health.
 	 */
 	private final int currentHealth;
 
@@ -19,7 +18,7 @@ public class HitUpdateBlock extends SynchronizationBlock {
 	private final int damage;
 
 	/**
-	 * The {@link org.apollo.game.model.Mob}'s maximum health.
+	 * The mob's maximum health.
 	 */
 	private final int maximumHealth;
 
@@ -31,20 +30,20 @@ public class HitUpdateBlock extends SynchronizationBlock {
 	/**
 	 * Creates a new Hit Update block.
 	 * 
-	 * @param hitDamage The damage dealt by the hit.
-	 * @param hitType The type of hit.
-	 * @param currentHealth The current health of the {@link org.apollo.game.model.Mob}.
-	 * @param maximumHealth The maximum health of the {@link org.apollo.game.model.Mob}.
+	 * @param damage The damage dealt by the hit.
+	 * @param type The type of hit.
+	 * @param currentHealth The current health of the mob.
+	 * @param maximumHealth The maximum health of the mob.
 	 */
-	public HitUpdateBlock(int hitDamage, int hitType, int currentHealth, int maximumHealth) {
-		damage = hitDamage;
-		type = hitType;
+	HitUpdateBlock(int damage, int type, int currentHealth, int maximumHealth) {
+		this.damage = damage;
+		this.type = type;
 		this.currentHealth = currentHealth;
 		this.maximumHealth = maximumHealth;
 	}
 
 	/**
-	 * Gets the current health of the {@link org.apollo.game.model.Mob}.
+	 * Gets the current health of the mob.
 	 * 
 	 * @return The current health;
 	 */
@@ -62,7 +61,7 @@ public class HitUpdateBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the maximum health of the {@link org.apollo.game.model.Mob}.
+	 * Gets the maximum health of the mob.
 	 * 
 	 * @return The maximum health.
 	 */

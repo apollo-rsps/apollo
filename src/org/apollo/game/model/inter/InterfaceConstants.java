@@ -8,9 +8,9 @@ package org.apollo.game.model.inter;
 public class InterfaceConstants {
 
 	/**
-	 * The character design interface id.
+	 * The avatar design interface id.
 	 */
-	public static final int CHARACTER_DESIGN = 3559;
+	public static final int AVATAR_DESIGN = 3559;
 
 	/**
 	 * The default inventory tab ids.

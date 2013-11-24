@@ -21,7 +21,6 @@ public final class SwitchItemEventHandler extends EventHandler<SwitchItemEvent> 
 		Inventory inventory;
 		boolean insertPermitted = false;
 
-		// TODO is there a better way of doing this??
 		switch (event.getInterfaceId()) {
 		case SynchronizationInventoryListener.INVENTORY_ID:
 		case BankConstants.SIDEBAR_INVENTORY_ID:

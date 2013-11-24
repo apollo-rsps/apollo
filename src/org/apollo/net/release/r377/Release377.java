@@ -85,7 +85,7 @@ public final class Release377 extends Release {
 		register(247, walkEventDecoder);
 
 		register(248, new KeepAliveEventDecoder());
-		register(163, new CharacterDesignEventDecoder());
+		register(163, new PlayerDesignEventDecoder());
 		register(49, new ChatEventDecoder());
 		register(56, new CommandEventDecoder());
 		register(123, new SwitchItemEventDecoder());

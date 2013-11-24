@@ -1,16 +1,16 @@
 package org.apollo.game.sync.block;
 
 /**
- * The Second Hit Update {@link SynchronizationBlock}. This is believed to be used for when multiple attacks happen at
- * once (for example, the dragon-dagger special attack). This block can be implemented by both players and npcs.
+ * The secondary hit update {@link SynchronizationBlock}. This is used for when multiple attacks happen at once (for
+ * example, the dragon-dagger special attack). This block can be implemented by both players and npcs.
  * 
  * 
  * @author Major
  */
-public class SecondHitUpdateBlock extends SynchronizationBlock {
+public class SecondaryHitUpdateBlock extends SynchronizationBlock {
 
 	/**
-	 * The character's current health.
+	 * The mob's current health.
 	 */
 	private final int currentHealth;
 
@@ -20,7 +20,7 @@ public class SecondHitUpdateBlock extends SynchronizationBlock {
 	private final int damage;
 
 	/**
-	 * The character's maximum health.
+	 * The mob's maximum health.
 	 */
 	private final int maximumHealth;
 
@@ -30,22 +30,22 @@ public class SecondHitUpdateBlock extends SynchronizationBlock {
 	private final int type;
 
 	/**
-	 * Creates a new Second Hit Update block.
+	 * Creates a new secondary hit update block.
 	 * 
-	 * @param hitDamage The damage dealt by the hit.
-	 * @param hitType The type of hit.
-	 * @param currentHealth The current health of the character.
-	 * @param maximumHealth The maximum health of the character.
+	 * @param damage The damage dealt by the hit.
+	 * @param type The type of hit.
+	 * @param currentHealth The current health of the mob.
+	 * @param maximumHealth The maximum health of the mob.
 	 */
-	public SecondHitUpdateBlock(int hitDamage, int hitType, int currentHealth, int maximumHealth) {
-		damage = hitDamage;
-		type = hitType;
+	SecondaryHitUpdateBlock(int damage, int type, int currentHealth, int maximumHealth) {
+		this.damage = damage;
+		this.type = type;
 		this.currentHealth = currentHealth;
 		this.maximumHealth = maximumHealth;
 	}
 
 	/**
-	 * Gets the current health of the character.
+	 * Gets the current health of the mob.
 	 * 
 	 * @return The current health;
 	 */
@@ -63,7 +63,7 @@ public class SecondHitUpdateBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the maximum health of the character.
+	 * Gets the maximum health of the mob.
 	 * 
 	 * @return The maximum health.
 	 */

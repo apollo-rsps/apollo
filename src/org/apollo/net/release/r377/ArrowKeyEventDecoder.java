@@ -21,4 +21,5 @@ public class ArrowKeyEventDecoder extends EventDecoder<ArrowKeyEvent> {
 		int yaw = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
 		return new ArrowKeyEvent(roll, yaw);
 	}
+
 }

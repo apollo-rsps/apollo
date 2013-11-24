@@ -8,9 +8,9 @@ package org.apollo.game.sync.seg;
 public enum SegmentType {
 
 	/**
-	 * A segment where the character is added.
+	 * A segment where the mob is added.
 	 */
-	ADD_CHARACTER,
+	ADD_MOB,
 
 	/**
 	 * A segment without any movement.
@@ -18,9 +18,9 @@ public enum SegmentType {
 	NO_MOVEMENT,
 
 	/**
-	 * A segment where the character is removed.
+	 * A segment where the mob is removed.
 	 */
-	REMOVE_CHARACTER,
+	REMOVE_MOB,
 
 	/**
 	 * A segment with movement in two directions.
@@ -28,7 +28,7 @@ public enum SegmentType {
 	RUN,
 
 	/**
-	 * A segment where the character is teleported.
+	 * A segment where the mob is teleported.
 	 */
 	TELEPORT,
 

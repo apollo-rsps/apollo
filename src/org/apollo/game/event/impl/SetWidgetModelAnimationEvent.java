@@ -3,14 +3,14 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event which is sent to the client to make a character model on an interface play a certain animation.
+ * An event which is sent to the client to make a mob model on an interface play a certain animation.
  * 
  * @author Chris Fletcher
  */
 public final class SetWidgetModelAnimationEvent extends Event {
 
 	/**
-	 * The model's mood id.
+	 * The model's animation id.
 	 */
 	private final int animation;
 

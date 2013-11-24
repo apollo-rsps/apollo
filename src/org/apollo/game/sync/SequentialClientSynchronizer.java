@@ -11,7 +11,7 @@ import org.apollo.game.sync.task.PostPlayerSynchronizationTask;
 import org.apollo.game.sync.task.PreNpcSynchronizationTask;
 import org.apollo.game.sync.task.PrePlayerSynchronizationTask;
 import org.apollo.game.sync.task.SynchronizationTask;
-import org.apollo.util.CharacterRepository;
+import org.apollo.util.MobRepository;
 
 /**
  * An implementation of {@link ClientSynchronizer} which runs in a single thread (the {@link GameService} thread from
@@ -26,8 +26,8 @@ public final class SequentialClientSynchronizer extends ClientSynchronizer {
 
 	@Override
 	public void synchronize() {
-		CharacterRepository<Player> players = World.getWorld().getPlayerRepository();
-		CharacterRepository<Npc> npcs = World.getWorld().getNpcRepository();
+		MobRepository<Player> players = World.getWorld().getPlayerRepository();
+		MobRepository<Npc> npcs = World.getWorld().getNpcRepository();
 
 		for (Player player : players) {
 			SynchronizationTask task = new PrePlayerSynchronizationTask(player);

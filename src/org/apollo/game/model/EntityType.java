@@ -33,7 +33,7 @@ public enum EntityType {
 	PROJECTILE,
 
 	/**
-	 * A permanent object appearing on the map.
+	 * A permanent object appearing on the map, loaded from the cache.
 	 */
 	STATIC_OBJECT;
 

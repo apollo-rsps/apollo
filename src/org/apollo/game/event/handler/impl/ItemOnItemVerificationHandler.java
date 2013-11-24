@@ -27,7 +27,6 @@ public final class ItemOnItemVerificationHandler extends EventHandler<ItemOnItem
 		Item item = inventory.get(slot);
 		if (item == null || item.getId() != event.getTargetId()) {
 			ctx.breakHandlerChain();
-			return;
 		}
 	}
 

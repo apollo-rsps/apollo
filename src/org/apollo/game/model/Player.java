@@ -12,6 +12,7 @@ import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SetWidgetTextEvent;
 import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
 import org.apollo.game.event.impl.UpdateRunEnergyEvent;
+import org.apollo.game.model.Inventory.StackMode;
 import org.apollo.game.model.inter.InterfaceConstants;
 import org.apollo.game.model.inter.InterfaceSet;
 import org.apollo.game.model.inter.bank.BankConstants;
@@ -103,19 +104,24 @@ public final class Player extends Mob {
 	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
 
 	/**
+	 * This player's bank.
+	 */
+	private final Inventory bank = new Inventory(InventoryConstants.BANK_CAPACITY, StackMode.STACK_ALWAYS);
+
+	/**
 	 * A {@link List} of this player's mouse clicks.
 	 */
 	private Deque<Point> clicks = new ArrayDeque<Point>();
 
 	/**
-	 * The player's credentials.
+	 * This player's credentials.
 	 */
 	private PlayerCredentials credentials;
 
 	/**
-	 * A flag indicating if the player has designed their character.
+	 * A flag indicating if the player has designed their avatar.
 	 */
-	private boolean designedCharacter = false;
+	private boolean designedAvatar = false;
 
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
@@ -150,7 +156,7 @@ public final class Player extends Mob {
 	/**
 	 * This player's prayer icon.
 	 */
-	private int prayerIcon = -1;
+	private int prayerIcon = 0;
 
 	/**
 	 * The privilege level.
@@ -244,6 +250,15 @@ public final class Player extends Mob {
 	 */
 	public Appearance getAppearance() {
 		return appearance;
+	}
+
+	/**
+	 * Gets the mob's bank.
+	 * 
+	 * @return The bank.
+	 */
+	public Inventory getBank() {
+		return bank;
 	}
 
 	/**
@@ -369,12 +384,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Checks if the player has designed their character.
+	 * Checks if the player has designed their avatar.
 	 * 
-	 * @return A flag indicating if the player has designed their character.
+	 * @return A flag indicating if the player has designed their avatar.
 	 */
-	public boolean hasDesignedCharacter() {
-		return designedCharacter;
+	public boolean hasDesignedAvatar() {
+		return designedAvatar;
 	}
 
 	/**
@@ -424,8 +439,6 @@ public final class Player extends Mob {
 		InventoryListener fullInventoryListener = new FullInventoryListener(this,
 				FullInventoryListener.FULL_INVENTORY_MESSAGE);
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
-		InventoryListener fullEquipmentListener = new FullInventoryListener(this,
-				FullInventoryListener.FULL_EQUIPMENT_MESSAGE);
 
 		// equipment appearance listener
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
@@ -444,7 +457,6 @@ public final class Player extends Mob {
 		bank.addListener(fullBankListener);
 		equipment.addListener(syncEquipmentListener);
 		equipment.addListener(appearanceListener);
-		equipment.addListener(fullEquipmentListener);
 	}
 
 	/**
@@ -530,7 +542,11 @@ public final class Player extends Mob {
 		viewingDistance = 1;
 	}
 
-	@Override
+	/**
+	 * Sends an {@link Event} to this player.
+	 * 
+	 * @param event The event.
+	 */
 	public void send(Event event) {
 		if (isActive()) {
 			if (!queuedEvents.isEmpty()) {
@@ -552,8 +568,8 @@ public final class Player extends Mob {
 		send(new IdAssignmentEvent(getIndex(), members)); // TODO should this be sent when we reconnect?
 		sendMessage("Welcome to RuneScape.");
 
-		if (!designedCharacter) {
-			interfaceSet.openWindow(InterfaceConstants.CHARACTER_DESIGN);
+		if (!designedAvatar) {
+			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
 		}
 
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
@@ -569,7 +585,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sends a message to the character.
+	 * Sends a message to the player.
 	 * 
 	 * @param message The message.
 	 */
@@ -605,12 +621,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the character design flag.
+	 * Sets the design flag.
 	 * 
-	 * @param designedCharacter A flag indicating if the character has been designed.
+	 * @param designed A flag indicating if the player has been designed.
 	 */
-	public void setDesignedCharacter(boolean designedCharacter) {
-		this.designedCharacter = designedCharacter;
+	public void setDesigned(boolean designed) {
+		this.designedAvatar = designed;
 	}
 
 	/**
@@ -701,8 +717,13 @@ public final class Player extends Mob {
 	}
 
 	@Override
+	public void shout(String message, boolean chatBox) {
+		blockSet.add(SynchronizationBlock.createForceChatBlock(chatBox ? '~' + message : message));
+	}
+
+	@Override
 	public void teleport(Position position) {
-		super.teleport(position); // TODO put this in the same place as Character#teleport and WalkEventHandler!!
+		super.teleport(position);
 		if (interfaceSet.size() > 0) {
 			interfaceSet.close();
 		}

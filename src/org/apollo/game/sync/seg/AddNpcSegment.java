@@ -29,7 +29,7 @@ public final class AddNpcSegment extends SynchronizationSegment {
 	 * Creates the add npc segment.
 	 * 
 	 * @param blockSet The block set.
-	 * @param index The characters's index.
+	 * @param index The npcs's index.
 	 * @param position The position.
 	 * @param npcId The id of the npc.
 	 */
@@ -41,7 +41,7 @@ public final class AddNpcSegment extends SynchronizationSegment {
 	}
 
 	/**
-	 * Gets the character's index.
+	 * Gets the npc's index.
 	 * 
 	 * @return The index.
 	 */
@@ -69,7 +69,7 @@ public final class AddNpcSegment extends SynchronizationSegment {
 
 	@Override
 	public SegmentType getType() {
-		return SegmentType.ADD_CHARACTER;
+		return SegmentType.ADD_MOB;
 	}
 
 }

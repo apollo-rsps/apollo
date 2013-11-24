@@ -1,19 +1,14 @@
 package org.apollo.game.model;
 
-import org.apollo.game.event.Event;
 import org.apollo.game.model.def.NpcDefinition;
+import org.apollo.game.sync.block.SynchronizationBlock;
 
 /**
  * An {@link Npc} is a {@link Mob} that is not being controlled by a player.
  * 
  * @author Major
  */
-public class Npc extends Mob {
-
-	/**
-	 * This npc's definition.
-	 */
-	private final NpcDefinition definition;
+public final class Npc extends Mob {
 
 	/**
 	 * Creates a new npc with the specified id and {@link Position}.
@@ -36,23 +31,31 @@ public class Npc extends Mob {
 		this.definition = definition;
 	}
 
-	@Override
-	public EntityType getEntityType() {
-		return EntityType.NPC;
+	/**
+	 * Gets the id of this npc. Shorthand for {@link #getDefinition().getId()}.
+	 * 
+	 * @return The id.
+	 */
+	public int getId() {
+		return definition.getId();
 	}
 
 	/**
-	 * Gets this npc's {@link NpcDefinition}
+	 * Transforms this npc into the npc with the specified id.
 	 * 
-	 * @return The definition.
+	 * @param id The id.
 	 */
-	@Override
-	public NpcDefinition getNpcDefinition() {
-		return definition;
+	public void transform(int id) {
+		if (id < 0 || id > NpcDefinition.count()) {
+			throw new IllegalArgumentException("id to transform to is out of bounds");
+		}
+		definition = NpcDefinition.lookup(id);
+		blockSet.add(SynchronizationBlock.createTransformBlock(id));
 	}
 
 	@Override
-	public void send(Event event) {
+	public EntityType getEntityType() {
+		return EntityType.NPC;
 	}
 
 }

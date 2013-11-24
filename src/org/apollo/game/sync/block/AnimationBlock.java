@@ -10,7 +10,7 @@ import org.apollo.game.model.Animation;
 public final class AnimationBlock extends SynchronizationBlock {
 
 	/**
-	 * The animation.
+	 * The {@link Animation}.
 	 */
 	private final Animation animation;
 
@@ -24,7 +24,7 @@ public final class AnimationBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the animation.
+	 * Gets the {@link Animation}.
 	 * 
 	 * @return The animation.
 	 */

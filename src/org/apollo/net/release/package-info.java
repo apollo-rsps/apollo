@@ -3,4 +3,3 @@
  * allowing for portability between various protocol and client releases.
  */
 package org.apollo.net.release;
-

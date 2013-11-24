@@ -17,21 +17,21 @@ public final class UpdateEncoder extends OneToOneEncoder {
 	@Override
 	protected Object encode(ChannelHandlerContext ctx, Channel c, Object msg) {
 		if (msg instanceof OnDemandResponse) {
-			OnDemandResponse resp = (OnDemandResponse) msg;
+			OnDemandResponse response = (OnDemandResponse) msg;
 
-			FileDescriptor fileDescriptor = resp.getFileDescriptor();
-			int fileSize = resp.getFileSize();
-			int chunkId = resp.getChunkId();
-			ChannelBuffer chunkData = resp.getChunkData();
+			FileDescriptor descriptor = response.getFileDescriptor();
+			int fileSize = response.getFileSize();
+			int chunkId = response.getChunkId();
+			ChannelBuffer chunkData = response.getChunkData();
 
-			ChannelBuffer buf = ChannelBuffers.buffer(6 + chunkData.readableBytes());
-			buf.writeByte(fileDescriptor.getType() - 1);
-			buf.writeShort(fileDescriptor.getFile());
-			buf.writeShort(fileSize);
-			buf.writeByte(chunkId);
-			buf.writeBytes(chunkData);
+			ChannelBuffer buffer = ChannelBuffers.buffer(6 + chunkData.readableBytes());
+			buffer.writeByte(descriptor.getType() - 1);
+			buffer.writeShort(descriptor.getFile());
+			buffer.writeShort(fileSize);
+			buffer.writeByte(chunkId);
+			buffer.writeBytes(chunkData);
 
-			return buf;
+			return buffer;
 		}
 		return msg;
 	}

@@ -9,8 +9,8 @@ import org.apollo.game.sync.block.AnimationBlock;
 import org.apollo.game.sync.block.ForceChatBlock;
 import org.apollo.game.sync.block.GraphicBlock;
 import org.apollo.game.sync.block.HitUpdateBlock;
-import org.apollo.game.sync.block.InteractingCharacterBlock;
-import org.apollo.game.sync.block.SecondHitUpdateBlock;
+import org.apollo.game.sync.block.InteractingMobBlock;
+import org.apollo.game.sync.block.SecondaryHitUpdateBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.game.sync.block.TransformBlock;
 import org.apollo.game.sync.block.TurnToPositionBlock;
@@ -39,14 +39,13 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 		builder.switchToBitAccess();
 
 		GamePacketBuilder blockBuilder = new GamePacketBuilder();
-
 		builder.putBits(8, event.getLocalNpcCount());
 
 		for (SynchronizationSegment segment : event.getSegments()) {
 			SegmentType type = segment.getType();
-			if (type == SegmentType.REMOVE_CHARACTER) {
-				putRemoveCharacterUpdate(builder);
-			} else if (type == SegmentType.ADD_CHARACTER) {
+			if (type == SegmentType.REMOVE_MOB) {
+				putRemoveNpcUpdate(builder);
+			} else if (type == SegmentType.ADD_MOB) {
 				putAddNpcUpdate((AddNpcSegment) segment, event, builder);
 				putBlocks(segment, blockBuilder);
 			} else {
@@ -67,7 +66,7 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 	}
 
 	/**
-	 * Puts an add character update.
+	 * Puts an add npc update.
 	 * 
 	 * @param seg The segment.
 	 * @param event The event.
@@ -112,7 +111,7 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 				mask |= 0x1;
 			}
 
-			if (blockSet.contains(InteractingCharacterBlock.class)) {
+			if (blockSet.contains(InteractingMobBlock.class)) {
 				mask |= 0x40;
 			}
 
@@ -136,7 +135,7 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 				mask |= 0x2;
 			}
 
-			if (blockSet.contains(SecondHitUpdateBlock.class)) {
+			if (blockSet.contains(SecondaryHitUpdateBlock.class)) {
 				mask |= 0x10;
 			}
 
@@ -146,8 +145,8 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 				putTransformBlock(blockSet.get(TransformBlock.class), blockBuilder);
 			}
 
-			if (blockSet.contains(InteractingCharacterBlock.class)) {
-				putInteractingCharacterBlock(blockSet.get(InteractingCharacterBlock.class), blockBuilder);
+			if (blockSet.contains(InteractingMobBlock.class)) {
+				putInteractingMobBlock(blockSet.get(InteractingMobBlock.class), blockBuilder);
 			}
 
 			if (blockSet.contains(HitUpdateBlock.class)) {
@@ -170,8 +169,8 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 				putAnimationBlock(blockSet.get(AnimationBlock.class), blockBuilder);
 			}
 
-			if (blockSet.contains(SecondHitUpdateBlock.class)) {
-				putSecondHitUpdateBlock(blockSet.get(SecondHitUpdateBlock.class), blockBuilder);
+			if (blockSet.contains(SecondaryHitUpdateBlock.class)) {
+				putSecondHitUpdateBlock(blockSet.get(SecondaryHitUpdateBlock.class), blockBuilder);
 			}
 		}
 	}
@@ -212,13 +211,13 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 	}
 
 	/**
-	 * Puts an interacting character block into the specified builder.
+	 * Puts an interacting mob block into the specified builder.
 	 * 
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putInteractingCharacterBlock(InteractingCharacterBlock block, GamePacketBuilder builder) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, block.getInteractingCharacterIndex());
+	private void putInteractingMobBlock(InteractingMobBlock block, GamePacketBuilder builder) {
+		builder.put(DataType.SHORT, DataOrder.LITTLE, block.getInteractingMobIndex());
 	}
 
 	/**
@@ -254,11 +253,11 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 	}
 
 	/**
-	 * Puts a remove character update.
+	 * Puts a remove mob update.
 	 * 
 	 * @param builder The builder.
 	 */
-	private void putRemoveCharacterUpdate(GamePacketBuilder builder) {
+	private void putRemoveNpcUpdate(GamePacketBuilder builder) {
 		builder.putBits(1, 1);
 		builder.putBits(2, 3);
 	}
@@ -269,7 +268,7 @@ public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizat
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putSecondHitUpdateBlock(SecondHitUpdateBlock block, GamePacketBuilder builder) {
+	private void putSecondHitUpdateBlock(SecondaryHitUpdateBlock block, GamePacketBuilder builder) {
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, block.getDamage());
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, block.getType());
 		builder.put(DataType.BYTE, block.getCurrentHealth());

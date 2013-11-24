@@ -26,21 +26,20 @@ public final class BinaryPlayerUtil {
 	}
 
 	/**
-	 * Gets the file for the specified player.
+	 * Gets the save {@link File} for the specified player.
 	 * 
-	 * @param name The name of the player.
+	 * @param username The username of the player.
 	 * @return The file.
 	 */
-	public static File getFile(String name) {
-		name = NameUtil.decodeBase37(NameUtil.encodeBase37(name));
-		return new File(SAVED_GAMES_DIRECTORY, name + ".dat");
+	public static File getFile(String username) {
+		username = NameUtil.decodeBase37(NameUtil.encodeBase37(username));
+		return new File(SAVED_GAMES_DIRECTORY, username + ".dat");
 	}
 
 	/**
 	 * Default private constructor to prevent instantiation.
 	 */
 	private BinaryPlayerUtil() {
-
 	}
 
 }

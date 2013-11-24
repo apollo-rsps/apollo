@@ -11,12 +11,12 @@ import org.apollo.game.model.Player.PrivilegeLevel;
 public final class ChatBlock extends SynchronizationBlock {
 
 	/**
-	 * The chat event.
+	 * The {@link ChatEvent}.
 	 */
 	private final ChatEvent chatEvent;
 
 	/**
-	 * The privilege level.
+	 * The {@link PrivilegeLevel}.
 	 */
 	private final PrivilegeLevel privilegeLevel;
 

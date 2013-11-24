@@ -107,9 +107,8 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 			return 1;
 		} else if (thisPriority == otherPriority) {
 			return 0;
-		} else {
-			return -1;
 		}
+		return -1;
 	}
 
 	/**

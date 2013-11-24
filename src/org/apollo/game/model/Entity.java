@@ -1,14 +1,14 @@
 package org.apollo.game.model;
 
 /**
- * Represents an in-game entity, such as a character, object, projectile etc.
+ * Represents an in-game entity, such as a mob, object, projectile etc.
  * 
  * @author Major
  */
 public abstract class Entity {
 
 	/**
-	 * The position of the entity.
+	 * The position of this entity.
 	 */
 	protected Position position;
 
@@ -20,7 +20,7 @@ public abstract class Entity {
 	public abstract EntityType getEntityType();
 
 	/**
-	 * Gets the position of this entity.
+	 * Gets the {@link Position} of this entity.
 	 * 
 	 * @return The position.
 	 */

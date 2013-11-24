@@ -41,12 +41,12 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 	 * 
 	 * @param delay The delay between executions once the distance threshold is reached.
 	 * @param immediate Whether or not this action fires immediately after the distance threshold is reached.
-	 * @param character The character.
+	 * @param mob The mob.
 	 * @param position The position.
 	 * @param distance The distance.
 	 */
-	public DistancedAction(int delay, boolean immediate, T character, Position position, int distance) {
-		super(0, true, character);
+	public DistancedAction(int delay, boolean immediate, T mob, Position position, int distance) {
+		super(0, true, mob);
 		this.position = position;
 		this.distance = distance;
 		this.delay = delay;
@@ -59,7 +59,7 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 			// some actions (e.g. agility) will cause the player to move away again
 			// so we don't check once the player got close enough once
 			executeAction();
-		} else if (getCharacter().getPosition().getDistance(position) <= distance) {
+		} else if (mob.getPosition().getDistance(position) <= distance) {
 			reached = true;
 			setDelay(delay);
 			if (immediate) { // TODO: required?

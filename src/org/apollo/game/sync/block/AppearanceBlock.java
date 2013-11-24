@@ -53,11 +53,12 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	/**
 	 * Creates the appearance block.
 	 * 
-	 * @param name The player's name.
+	 * @param name The player's username.
 	 * @param appearance The appearance.
 	 * @param combat The player's combat.
 	 * @param skill The player's skill, or 0 if showing the combat level.
 	 * @param equipment The player's equipment.
+	 * @param npcId The npc id of the player, if they are appearing as an npc (otherwise {@code -1}).
 	 */
 	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int prayerIcon,
 			int headIcon, int npcId) {

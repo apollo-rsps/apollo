@@ -11,9 +11,9 @@ import java.util.Map;
 public final class SynchronizationBlockSet implements Cloneable {
 
 	/**
-	 * The blocks.
+	 * A {@link Map} of {@link SynchronizationBlock}s.
 	 */
-	private final Map<Class<? extends SynchronizationBlock>, SynchronizationBlock> blocks = new HashMap<Class<? extends SynchronizationBlock>, SynchronizationBlock>();
+	private final Map<Class<? extends SynchronizationBlock>, SynchronizationBlock> blocks = new HashMap<>();
 
 	/**
 	 * Adds a {@link SynchronizationBlock}.

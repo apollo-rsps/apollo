@@ -23,7 +23,6 @@ public final class CommandEventHandler extends EventHandler<CommandEvent> {
 		String[] arguments = new String[components.length - 1];
 
 		System.arraycopy(components, 1, arguments, 0, arguments.length);
-
 		Command command = new Command(name, arguments);
 
 		World.getWorld().getCommandDispatcher().dispatch(player, command);

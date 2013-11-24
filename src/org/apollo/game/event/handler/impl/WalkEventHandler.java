@@ -23,7 +23,7 @@ public final class WalkEventHandler extends EventHandler<WalkEvent> {
 			Position step = steps[i];
 			if (i == 0) {
 				if (!queue.addFirstStep(step)) {
-					return; /* ignore packet */
+					return; // ignore packet
 				}
 			} else {
 				queue.addStep(step);

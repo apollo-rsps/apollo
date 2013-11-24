@@ -91,7 +91,7 @@ public final class IndexedFileSystem implements Closeable {
 		} else if (newEngineData.exists() && !oldEngineData.isDirectory()) {
 			data = new RandomAccessFile(newEngineData, readOnly ? "r" : "rw");
 		} else {
-			throw new FileNotFoundException("No data file present");
+			throw new FileNotFoundException("no data file present");
 		}
 	}
 
@@ -123,27 +123,27 @@ public final class IndexedFileSystem implements Closeable {
 			for (int i = 1; i < crcs.length; i++) {
 				crc32.reset();
 
-				ByteBuffer bb = getFile(0, i);
-				byte[] bytes = new byte[bb.remaining()];
-				bb.get(bytes, 0, bytes.length);
+				ByteBuffer buffer = getFile(0, i);
+				byte[] bytes = new byte[buffer.remaining()];
+				buffer.get(bytes, 0, bytes.length);
 				crc32.update(bytes, 0, bytes.length);
 
 				crcs[i] = (int) crc32.getValue();
 			}
 
 			// hash the CRCs and place them in the buffer
-			ByteBuffer buf = ByteBuffer.allocate(crcs.length * 4 + 4);
+			ByteBuffer buffer = ByteBuffer.allocate(crcs.length * 4 + 4);
 			for (int crc : crcs) {
 				hash = (hash << 1) + crc;
-				buf.putInt(crc);
+				buffer.putInt(crc);
 			}
 
 			// place the hash into the buffer
-			buf.putInt(hash);
-			buf.flip();
+			buffer.putInt(hash);
+			buffer.flip();
 
 			synchronized (this) {
-				crcTable = buf.asReadOnlyBuffer();
+				crcTable = buffer.asReadOnlyBuffer();
 				return crcTable.duplicate();
 			}
 		}
@@ -153,16 +153,16 @@ public final class IndexedFileSystem implements Closeable {
 	/**
 	 * Gets a file.
 	 * 
-	 * @param fd The {@link FileDescriptor} which points to the file.
+	 * @param descriptor The {@link FileDescriptor} which points to the file.
 	 * @return A {@link ByteBuffer} which contains the contents of the file.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public ByteBuffer getFile(FileDescriptor fd) throws IOException {
-		Index index = getIndex(fd);
+	public ByteBuffer getFile(FileDescriptor descriptor) throws IOException {
+		Index index = getIndex(descriptor);
 		ByteBuffer buffer = ByteBuffer.allocate(index.getSize());
 
 		// calculate some initial values
-		long ptr = (long) index.getBlock() * (long) FileSystemConstants.BLOCK_SIZE;
+		long ptr = index.getBlock() * FileSystemConstants.BLOCK_SIZE;
 		int read = 0;
 		int size = index.getSize();
 		int blocks = size / FileSystemConstants.CHUNK_SIZE;
@@ -171,7 +171,6 @@ public final class IndexedFileSystem implements Closeable {
 		}
 
 		for (int i = 0; i < blocks; i++) {
-
 			// read header
 			byte[] header = new byte[FileSystemConstants.HEADER_SIZE];
 			synchronized (data) {
@@ -211,15 +210,14 @@ public final class IndexedFileSystem implements Closeable {
 			read += chunkSize;
 			ptr = (long) nextBlock * (long) FileSystemConstants.BLOCK_SIZE;
 
-			// if we still have more data to read, check the validity of the
-			// header
+			// if we still have more data to read, check the validity of the header
 			if (size > read) {
-				if (nextType != fd.getType() + 1) {
-					throw new IOException("File type mismatch.");
+				if (nextType != descriptor.getType() + 1) {
+					throw new IOException("file type mismatch.");
 				}
 
-				if (nextFile != fd.getFile()) {
-					throw new IOException("File id mismatch.");
+				if (nextFile != descriptor.getFile()) {
+					throw new IOException("file id mismatch.");
 				}
 			}
 		}
@@ -261,12 +259,12 @@ public final class IndexedFileSystem implements Closeable {
 	/**
 	 * Gets the index of a file.
 	 * 
-	 * @param fd The {@link FileDescriptor} which points to the file.
+	 * @param descriptor The {@link FileDescriptor} which points to the file.
 	 * @return The {@link Index}.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private Index getIndex(FileDescriptor fd) throws IOException {
-		int index = fd.getType();
+	private Index getIndex(FileDescriptor descriptor) throws IOException {
+		int index = descriptor.getType();
 		if (index < 0 || index >= indices.length) {
 			throw new IndexOutOfBoundsException("file descriptor type out of bounds");
 		}
@@ -274,7 +272,7 @@ public final class IndexedFileSystem implements Closeable {
 		byte[] buffer = new byte[FileSystemConstants.INDEX_SIZE];
 		RandomAccessFile indexFile = indices[index];
 		synchronized (indexFile) {
-			long ptr = (long) fd.getFile() * (long) FileSystemConstants.INDEX_SIZE;
+			long ptr = descriptor.getFile() * FileSystemConstants.INDEX_SIZE;
 			if (ptr >= 0 && indexFile.length() >= ptr + FileSystemConstants.INDEX_SIZE) {
 				indexFile.seek(ptr);
 				indexFile.readFully(buffer);

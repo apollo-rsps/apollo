@@ -4,11 +4,11 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Appearance;
 
 /**
- * An event sent by the client when the player modifies their character's design.
+ * An event sent by the client when the player modifies their design.
  * 
  * @author Graham
  */
-public final class CharacterDesignEvent extends Event {
+public final class PlayerDesignEvent extends Event {
 
 	/**
 	 * The appearance.
@@ -16,11 +16,11 @@ public final class CharacterDesignEvent extends Event {
 	private final Appearance appearance;
 
 	/**
-	 * Creates the character design event.
+	 * Creates the player design event.
 	 * 
 	 * @param appearance The appearance.
 	 */
-	public CharacterDesignEvent(Appearance appearance) {
+	public PlayerDesignEvent(Appearance appearance) {
 		this.appearance = appearance;
 	}
 

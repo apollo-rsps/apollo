@@ -1,6 +1,6 @@
 package org.apollo.net.release.r377;
 
-import org.apollo.game.event.impl.CharacterDesignEvent;
+import org.apollo.game.event.impl.PlayerDesignEvent;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Gender;
 import org.apollo.net.codec.game.DataType;
@@ -9,14 +9,14 @@ import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.EventDecoder;
 
 /**
- * An {@link EventDecoder} for the {@link CharacterDesignEvent}.
+ * An {@link EventDecoder} for the {@link PlayerDesignEvent}.
  * 
  * @author Graham
  */
-public final class CharacterDesignEventDecoder extends EventDecoder<CharacterDesignEvent> {
+public final class PlayerDesignEventDecoder extends EventDecoder<PlayerDesignEvent> {
 
 	@Override
-	public CharacterDesignEvent decode(GamePacket packet) {
+	public PlayerDesignEvent decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
 		int genderIntValue = (int) reader.getUnsigned(DataType.BYTE);
@@ -33,7 +33,7 @@ public final class CharacterDesignEventDecoder extends EventDecoder<CharacterDes
 
 		Gender gender = genderIntValue == Gender.MALE.toInteger() ? Gender.MALE : Gender.FEMALE;
 
-		return new CharacterDesignEvent(new Appearance(gender, style, color));
+		return new PlayerDesignEvent(new Appearance(gender, style, color));
 	}
 
 }

@@ -63,7 +63,6 @@ public final class InterfaceSet {
 	 */
 	public void close() {
 		closeAndNotify();
-
 		player.send(new CloseInterfaceEvent());
 	}
 
