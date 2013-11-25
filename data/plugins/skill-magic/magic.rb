@@ -20,8 +20,8 @@ end
 class SpellAction < Action
   attr_reader :spell, :pulses
   
-  def initialize(character, spell)
-    super(0, true, character)
+  def initialize(mob, spell)
+    super(0, true, mob)
     
     @spell = spell
     @pulses = 0
@@ -44,8 +44,8 @@ class SpellAction < Action
   
   def check_skill
     required = @spell.level
-    if required > character.skill_set.skill(MAGIC_ID).maximum_level
-      character.send_message "You need a Magic level of at least #{required} to cast this spell."
+    if required > mob.skill_set.skill(MAGIC_ID).maximum_level
+      mob.send_message "You need a Magic level of at least #{required} to cast this spell."
       return false
     end
     
@@ -56,14 +56,14 @@ class SpellAction < Action
     elements = @spell.elements
     
     elements.each do |element, amount|
-      unless element.check_remove(character, amount, false)
-        character.send_message "You do not have enough #{element.name}s to cast this spell."
+      unless element.check_remove(mob, amount, false)
+        mob.send_message "You do not have enough #{element.name}s to cast this spell."
         return false
       end
     end
     
     elements.each do |element, amount|
-      element.check_remove(character, amount, true)
+      element.check_remove(mob, amount, true)
     end
     
     return true
@@ -77,8 +77,8 @@ end
 class ItemSpellAction < SpellAction
   attr_reader :slot, :item
 
-  def initialize(character, spell, slot, item)
-    super(character, spell)
+  def initialize(mob, spell, slot, item)
+    super(mob, spell)
     
     @slot = slot
     @item = item
@@ -88,7 +88,7 @@ class ItemSpellAction < SpellAction
   def execute
     if @pulses == 0
       if illegal_item?
-        character.send_message "You cannot use that spell on this item!"
+        mob.send_message "You cannot use that spell on this item!"
         stop
         return
       end
@@ -98,8 +98,8 @@ class ItemSpellAction < SpellAction
       # TODO: There has to be a better way to do this.
       @spell.elements.each do |element, amount|
         element.runes.each do |rune|
-          if id == rune && !element.check_remove(character, amount + 1, false)
-            character.send_message("You do not have enough " + element.name + "s to cast this spell.")
+          if id == rune && !element.check_remove(mob, amount + 1, false)
+            mob.send_message("You do not have enough " + element.name + "s to cast this spell.")
             stop
             return
           end

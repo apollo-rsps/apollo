@@ -29,8 +29,8 @@ end
 
 class TeleportingAction < SpellAction
   
-  def initialize(character, spell)
-    super(character, spell)
+  def initialize(mob, spell)
+    super(mob, spell)
   end
   
   def execute_action
@@ -38,7 +38,7 @@ class TeleportingAction < SpellAction
   end
   
   def execute_modern
-    player = character
+    player = mob
     if @pulses == 0
       player.play_animation(MODERN_TELE_ANIM)
     elsif @pulses == 1
@@ -56,7 +56,7 @@ class TeleportingAction < SpellAction
   end
   
   def execute_ancient
-    player = character
+    player = mob
     if @pulses == 0
       player.play_graphic(ANCIENT_TELE_GFX)
       player.play_animation(ANCIENT_TELE_ANIM)

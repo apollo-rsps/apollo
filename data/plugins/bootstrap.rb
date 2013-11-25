@@ -81,13 +81,10 @@ end
 # behaviour is undefined (and most likely it'll be bad).
 def schedule(*args, &block)
   if block_given?
-    if args.length == 1 or args.length == 2
-      delay = args[0]
-      immediate = args.length == 2 ? args[1] : false
-      World.world.schedule(ProcScheduledTask.new(delay, immediate, block))
-    else
-      raise "invalid combination of arguments"
-    end
+    raise "invalid combination of arguments" unless args.length == 1 or args.length == 2
+    delay = args[0]
+    immediate = args.length == 2 ? args[1] : false
+    World.world.schedule(ProcScheduledTask.new(delay, immediate, block))
   elsif args.length == 1
     World.world.schedule(args[0])
   else
@@ -95,7 +92,7 @@ def schedule(*args, &block)
   end
 end
 
-# Defines some sort of action to take upon an event. The following 'kinds' of
+# Defines some sort of action to take upon an event. The following types of
 # event are currently valid:
 #
 #   * :command
@@ -111,8 +108,8 @@ end
 #
 # A button takes one argument (the id). The block should have one argument: the
 # player who clicked the button.
-def on(kind, *args, &block)
-  case kind
+def on(type, *args, &block)
+  case type
     when :command then on_command(args, block)
     when :event   then on_event(args, block)
     when :button  then on_button(args, block)
