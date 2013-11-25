@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <plugin>
-  <id>mining</id>
+  <id>skill-mining</id>
   <version>1</version>
   <name>Mining</name>
   <description>Adds the mining skill.</description>
