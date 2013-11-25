@@ -27,7 +27,6 @@ on :command, :xp, RIGHTS_ADMIN do |player, command|
     return
   end
 
-  experience = args[1].to_i
-  
+  experience = args[1].to_i  
   player.skill_set.add_experience(skill, experience)
 end
