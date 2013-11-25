@@ -10,8 +10,8 @@ ORE_SIZE = 1
 class MiningAction < DistancedAction
   attr_reader :position, :ore, :counter, :started
 
-  def initialize(character, position, ore)
-    super 0, true, character, position, ORE_SIZE
+  def initialize(player, position, ore)
+    super 0, true, player, position, ORE_SIZE
     @position = position
     @ore = ore
     @started = false
@@ -20,12 +20,12 @@ class MiningAction < DistancedAction
 
   def find_pickaxe
     PICKAXE_IDS.each do |id|
-      weapon = character.equipment.get EquipmentConstants::WEAPON
+      weapon = player.equipment.get EquipmentConstants::WEAPON
       if weapon.id == id
         return PICKAXES[id]
       end
 
-      if character.inventory.contains id
+      if player.inventory.contains id
         return PICKAXES[id]
       end
     end
@@ -33,31 +33,31 @@ class MiningAction < DistancedAction
     return nil
   end
 
-  # starts the mining animation, sets counters/flags and turns the character to
+  # starts the mining animation, sets counters/flags and turns the player to
   # the ore
   def start_mine(pickaxe)
     @started = true
-    character.send_message "You swing your pick at the rock."
-    character.turn_to @position
-    character.play_animation pickaxe.animation
+    player.send_message "You swing your pick at the rock."
+    player.turn_to @position
+    player.play_animation pickaxe.animation
     @counter = pickaxe.pulses
   end
 
   def executeAction
-    skills = character.skill_set
+    skills = player.skill_set
     level = skills.get_skill(Skill::MINING).current_level
     pickaxe = find_pickaxe
 
     # verify the player can mine with their pickaxe
     if not (pickaxe != nil and level >= pickaxe.level)
-      character.send_message "You do not have a pickaxe for which you have the level to use."
+      player.send_message "You do not have a pickaxe for which you have the level to use."
       stop
       return
     end
 
     # verify the player can mine the ore
     if ore.level > level
-      character.send_message "You do not have the required level to mine this rock."
+      player.send_message "You do not have the required level to mine this rock."
       stop
       return
     end
@@ -70,11 +70,11 @@ class MiningAction < DistancedAction
       if @counter == 0
         # TODO: calculate the chance that the player can actually get the rock
 
-        if character.inventory.add ore.id
+        if player.inventory.add ore.id
           ore_def = ItemDefinition.lookup @ore.id # TODO: split off into some method
           name = ore_def.name.sub(/ ore$/, "").downcase
 
-          character.send_message "You manage to mine some #{name}."
+          player.send_message "You manage to mine some #{name}."
           skills.add_experience Skill::MINING, ore.exp
           # TODO: expire the rock
         end
@@ -94,12 +94,12 @@ end
 class ExpiredProspectingAction < DistancedAction
   attr_reader :position
 
-  def initialize(character, position)
-    super 0, true, character, position, ORE_SIZE
+  def initialize(player, position)
+    super 0, true, player, position, ORE_SIZE
   end
 
   def executeAction
-    character.send_message "There is currently no ore available in this rock."
+    player.send_message "There is currently no ore available in this rock."
     stop
   end
 
@@ -112,8 +112,8 @@ end
 class ProspectingAction < DistancedAction
   attr_reader :position, :ore
 
-  def initialize(character, position, ore)
-    super PROSPECT_PULSES, true, character, position, ORE_SIZE
+  def initialize(player, position, ore)
+    super PROSPECT_PULSES, true, player, position, ORE_SIZE
     @position = position
     @ore = ore
     @started = false
@@ -123,13 +123,13 @@ class ProspectingAction < DistancedAction
     if not @started
       @started = true
 
-      character.send_message "You examine the rock for ores..."
-      character.turn_to @position
+      player.send_message "You examine the rock for ores..."
+      player.turn_to @position
     else
       ore_def = ItemDefinition.lookup @ore.id
       name = ore_def.name.sub(/ ore$/, "").downcase
 
-      character.send_message "This rock contains #{name}."
+      player.send_message "This rock contains #{name}."
 
       stop
     end
