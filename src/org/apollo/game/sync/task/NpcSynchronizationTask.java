@@ -46,6 +46,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 	public void run() {
 		SynchronizationBlockSet blockSet = player.getBlockSet();
 		List<Npc> localNpcs = player.getLocalNpcList();
+		int oldLocalNpcs = localNpcs.size();
 		List<SynchronizationSegment> segments = new ArrayList<SynchronizationSegment>();
 		Iterator<Npc> it = localNpcs.iterator();
 
@@ -78,7 +79,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 			break;
 
 		}
-		NpcSynchronizationEvent event = new NpcSynchronizationEvent(player.getPosition(), segments, localNpcs.size());
+		NpcSynchronizationEvent event = new NpcSynchronizationEvent(player.getPosition(), segments, oldLocalNpcs);
 		player.send(event);
 	}
 
