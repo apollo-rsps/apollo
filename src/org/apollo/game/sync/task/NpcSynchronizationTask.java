@@ -48,9 +48,9 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 		List<Npc> localNpcs = player.getLocalNpcList();
 		int oldLocalNpcs = localNpcs.size();
 		List<SynchronizationSegment> segments = new ArrayList<SynchronizationSegment>();
-		Iterator<Npc> it = localNpcs.iterator();
 
-		for (Npc npc = null; it.hasNext(); npc = it.next()) {
+		for (Iterator<Npc> it = localNpcs.iterator(); it.hasNext();) {
+			Npc npc = it.next();
 			if (!npc.isActive() || npc.isTeleporting()
 					|| npc.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
 				it.remove();
@@ -66,19 +66,21 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 		for (Npc npc : repository) {
 			if (localNpcs.size() >= 255) {
 				player.flagExcessiveNpcs();
-			} else if (added < NEW_NPCS_PER_CYCLE) {
-				if (!localNpcs.contains(npc)
-						&& npc.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())) {
-					localNpcs.add(npc);
-					added++;
-					blockSet = npc.getBlockSet();
-					segments.add(new AddNpcSegment(blockSet, npc.getIndex(), npc.getPosition(), npc.getId()));
-				}
-				continue;
+				break;
+			} else if (added >= NEW_NPCS_PER_CYCLE) {
+				break;
 			}
-			break;
 
+			if (npc.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
+					&& !localNpcs.contains(npc)) {
+				localNpcs.add(npc);
+				added++;
+				blockSet = npc.getBlockSet();
+				segments.add(new AddNpcSegment(blockSet, npc.getIndex(), npc.getPosition(), npc.getNpcDefinition()
+						.getId()));
+			}
 		}
+
 		NpcSynchronizationEvent event = new NpcSynchronizationEvent(player.getPosition(), segments, oldLocalNpcs);
 		player.send(event);
 	}
