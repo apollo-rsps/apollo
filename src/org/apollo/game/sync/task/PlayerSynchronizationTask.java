@@ -67,45 +67,44 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		List<Player> localPlayers = player.getLocalPlayerList();
 		int oldLocalPlayers = localPlayers.size();
 		List<SynchronizationSegment> segments = new ArrayList<SynchronizationSegment>();
-		Iterator<Player> it = localPlayers.iterator();
 
-		for (Player local = null; it.hasNext(); local = it.next()) {
-			if (!local.isActive() || local.isTeleporting()
-					|| local.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
+		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext();) {
+			Player p = it.next();
+			if (!p.isActive() || p.isTeleporting()
+					|| p.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
 				it.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
-				segments.add(new MovementSegment(local.getBlockSet(), local.getDirections()));
+				segments.add(new MovementSegment(p.getBlockSet(), p.getDirections()));
 			}
 		}
 
 		int added = 0;
 
 		MobRepository<Player> repository = World.getWorld().getPlayerRepository();
-		for (Player global : repository) {
+		for (Iterator<Player> it = repository.iterator(); it.hasNext();) {
+			Player p = it.next();
 			if (localPlayers.size() >= 255) {
 				player.flagExcessivePlayers();
-			} else if (added < NEW_PLAYERS_PER_CYCLE) {
-				// we do not check p.isActive() here, since if they are active they
-				// must be in the repository
-				if (global != player
-						&& global.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
-						&& !localPlayers.contains(global)) {
-					localPlayers.add(global);
-					added++;
-
-					blockSet = global.getBlockSet();
-					if (!blockSet.contains(AppearanceBlock.class)) {
-						// TODO check if client has cached appearance
-						blockSet = blockSet.clone();
-						blockSet.add(SynchronizationBlock.createAppearanceBlock(global));
-					}
-
-					segments.add(new AddPlayerSegment(blockSet, global.getIndex(), global.getPosition()));
-				}
-				continue;
+				break;
+			} else if (added >= NEW_PLAYERS_PER_CYCLE) {
+				break;
 			}
-			break;
+
+			if (p != player && p.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
+					&& !localPlayers.contains(p)) {
+				localPlayers.add(p);
+				added++;
+
+				blockSet = p.getBlockSet();
+				if (!blockSet.contains(AppearanceBlock.class)) {
+					// TODO check if client has cached appearance
+					blockSet = blockSet.clone();
+					blockSet.add(SynchronizationBlock.createAppearanceBlock(p));
+				}
+
+				segments.add(new AddPlayerSegment(blockSet, p.getIndex(), p.getPosition()));
+			}
 		}
 
 		PlayerSynchronizationEvent event = new PlayerSynchronizationEvent(lastKnownRegion, player.getPosition(),
