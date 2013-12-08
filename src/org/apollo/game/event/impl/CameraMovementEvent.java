@@ -5,7 +5,7 @@ import org.apollo.game.event.Event;
 /**
  * An event sent when the user moves the camera.
  * 
- * @author Toby
+ * @author Major
  */
 public class CameraMovementEvent extends Event {
 
