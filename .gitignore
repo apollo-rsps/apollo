@@ -1,0 +1,5 @@
+target/*
+.idea/*
+*.iml
+data/fs/*
+data/savedGames/*
