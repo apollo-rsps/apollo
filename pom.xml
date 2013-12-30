@@ -3,9 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>apollo</artifactId>
+    <artifactId>org.apollo</artifactId>
     <version>1.0</version>
-    <groupId>apollo-rsps</groupId>
+    <groupId>apollo</groupId>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceIdentity>test</testSourceDirectory>
+    </build>
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
