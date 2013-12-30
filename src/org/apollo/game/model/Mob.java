@@ -89,7 +89,7 @@ public abstract class Mob extends Entity {
 	 * @param position The initial position.
 	 */
 	public Mob(Position position) {
-		this.position = position;
+		super(position);
 		init();
 	}
 
@@ -315,9 +315,9 @@ public abstract class Mob extends Entity {
 	 * player.
 	 * 
 	 * @param message The message.
-	 * @param chatBox If the message should be shown in the player's chat box.
+	 * @param chatOnly If the message should only be shown in the player's chat box, or above their head too.
 	 */
-	public void shout(String message, boolean chatBox) {
+	public void shout(String message, boolean chatOnly) {
 		blockSet.add(SynchronizationBlock.createForceChatBlock(message));
 	}
 

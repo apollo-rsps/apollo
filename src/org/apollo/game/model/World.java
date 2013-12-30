@@ -192,7 +192,7 @@ public final class World {
 	 * @param manager The plugin manager. TODO move this.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws IOException {
+	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
 		this.releaseNumber = release;
 		ItemDefinitionDecoder itemDefParser = new ItemDefinitionDecoder(fs);
 		ItemDefinition[] itemDefs = itemDefParser.decode();
@@ -224,6 +224,7 @@ public final class World {
 		placeEntities(objects);
 		logger.info("Loaded " + objects.length + " static objects.");
 
+		manager.start();
 		pluginManager = manager; // TODO move!!
 	}
 
@@ -268,9 +269,9 @@ public final class World {
 	public boolean register(final Npc npc) {
 		boolean success = npcRepository.add(npc);
 		if (success) {
-			logger.info("Registered npc: " + npc + " [online=" + npcRepository.size() + "]");
+			logger.info("Registered npc: " + npc + " [count=" + npcRepository.size() + "]");
 		} else {
-			logger.warning("Failed to register npc, repository capacity reached: [online=" + npcRepository.size() + "]");
+			logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
 		}
 		return success;
 	}
@@ -288,10 +289,10 @@ public final class World {
 
 		boolean success = playerRepository.add(player) & players.put(player.getName(), player) == null;
 		if (success) {
-			logger.info("Registered player: " + player + " [online=" + playerRepository.size() + "]");
+			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 			return RegistrationStatus.OK;
 		}
-		logger.warning("Failed to register player (server full): " + player + " [online=" + playerRepository.size()
+		logger.warning("Failed to register player (server full): " + player + " [count=" + playerRepository.size()
 				+ "]");
 		return RegistrationStatus.WORLD_FULL;
 	}
@@ -325,7 +326,7 @@ public final class World {
 	 */
 	public void unregister(Player player) {
 		if (playerRepository.remove(player) & players.remove(player.getName()) == player) {
-			logger.info("Unregistered player: " + player + " [online=" + playerRepository.size() + "]");
+			logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
 		} else {
 			logger.warning("Could not find player " + player + " to unregister!");
 		}

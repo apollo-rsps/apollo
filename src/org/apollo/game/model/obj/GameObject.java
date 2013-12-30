@@ -23,8 +23,8 @@ public final class GameObject extends Entity {
 	 * @param definition The object's definition.
 	 */
 	public GameObject(ObjectDefinition definition, Position position) {
+		super(position);
 		this.definition = definition;
-		this.position = position;
 	}
 
 	/**

@@ -42,8 +42,8 @@ public final class StaticObject extends Entity {
 	 * @param rotation The rotation of the object.
 	 */
 	public StaticObject(int id, Position position, int type, int rotation) {
+		super(position);
 		this.id = id;
-		this.position = position;
 		this.type = type;
 		this.rotation = rotation;
 		definition = ObjectDefinition.lookup(id);
