@@ -72,21 +72,21 @@ public final class ItemDefinitionDecoder {
 			if (opcode == 0) {
 				return definition;
 			} else if (opcode == 1) {
-				buffer.getShort();// & 0xFFFF; // model Id
+				buffer.getShort();
 			} else if (opcode == 2) {
 				definition.setName(ByteBufferUtil.readString(buffer));
 			} else if (opcode == 3) {
 				definition.setDescription(ByteBufferUtil.readString(buffer));
 			} else if (opcode == 4) {
-				buffer.getShort();// & 0xFFFF; // sprite scale
+				buffer.getShort();
 			} else if (opcode == 5) {
-				buffer.getShort();// & 0xFFFF; // sprite pitch
+				buffer.getShort();
 			} else if (opcode == 6) {
-				buffer.getShort();// & 0xFFFF; //sprite camera roll
+				buffer.getShort();
 			} else if (opcode == 7) {
-				buffer.getShort(); // sprite dX
+				buffer.getShort();
 			} else if (opcode == 8) {
-				buffer.getShort(); // sprite dY
+				buffer.getShort();
 			} else if (opcode == 10) {
 				buffer.getShort();
 			} else if (opcode == 11) {
@@ -96,15 +96,15 @@ public final class ItemDefinitionDecoder {
 			} else if (opcode == 16) {
 				definition.setMembersOnly(true);
 			} else if (opcode == 23) {
-				buffer.getShort(); // & 0xFFFF; //primaryMaleEquipModelId
-				buffer.get(); // maleEquipYTranslation
+				buffer.getShort();
+				buffer.get();
 			} else if (opcode == 24) {
-				buffer.getShort(); // & 0xFFFF; // secondaryMaleEquipModelId
+				buffer.getShort();
 			} else if (opcode == 25) {
-				buffer.getShort(); // & 0xFFFF; // primaryFemaleEquipModelId
-				buffer.get(); // femaleEquipYTranslation
+				buffer.getShort();
+				buffer.get();
 			} else if (opcode == 26) {
-				buffer.getShort(); // & 0xFFFF; // secondaryFemaleEquipModelId
+				buffer.getShort();
 			} else if (opcode >= 30 && opcode < 35) {
 				String str = ByteBufferUtil.readString(buffer);
 				if (str.equalsIgnoreCase("hidden")) {
@@ -116,40 +116,40 @@ public final class ItemDefinitionDecoder {
 			} else if (opcode == 40) {
 				int colourCount = buffer.get() & 0xFF;
 				for (int i = 0; i < colourCount; i++) {
-					buffer.getShort(); // & 0xFFFF; // original colour
-					buffer.getShort(); // & 0xFFFF; // replacement colour
+					buffer.getShort();
+					buffer.getShort();
 				}
 			} else if (opcode == 78) {
-				buffer.getShort(); // & 0xFFFF; // tertiaryMaleEquipModelId
+				buffer.getShort();
 			} else if (opcode == 79) {
-				buffer.getShort(); // & 0xFFFF; // tertiaryFemaleEquipModelId
+				buffer.getShort();
 			} else if (opcode == 90) {
-				buffer.getShort(); // & 0xFFFF; // primaryMaleHeadPiece
+				buffer.getShort();
 			} else if (opcode == 91) {
-				buffer.getShort(); // & 0xFFFF; // primaryFemaleHeadPiece
+				buffer.getShort();
 			} else if (opcode == 92) {
-				buffer.getShort(); // & 0xFFFF; // secondaryMaleHeadPiece
+				buffer.getShort();
 			} else if (opcode == 93) {
-				buffer.getShort(); // & 0xFFFF; // secondaryFemaleHeadPiece
+				buffer.getShort();
 			} else if (opcode == 95) {
-				buffer.getShort(); // & 0xFFFF; // spriteCameraYaw
+				buffer.getShort();
 			} else if (opcode == 97) {
 				definition.setNoteInfoId(buffer.getShort() & 0xFFFF);
 			} else if (opcode == 98) {
 				definition.setNoteGraphicId(buffer.getShort() & 0xFFFF);
 			} else if (opcode >= 100 && opcode < 110) {
-				buffer.getShort(); // & 0xFFFF; // stack id
-				buffer.getShort(); // & 0xFFFF; // stack size
+				buffer.getShort();
+				buffer.getShort();
 			} else if (opcode == 110) {
-				buffer.getShort(); // & 0xFFFF; // groundScaleX
+				buffer.getShort();
 			} else if (opcode == 111) {
-				buffer.getShort(); // & 0xFFFF; // groundScaleY
+				buffer.getShort();
 			} else if (opcode == 112) {
-				buffer.getShort(); // & 0xFFFF; // groundScaleZ
+				buffer.getShort();
 			} else if (opcode == 113) {
-				buffer.get(); // light ambiance
+				buffer.get();
 			} else if (opcode == 114) {
-				buffer.getShort(); // * 5; // light diffusion
+				buffer.getShort();
 			} else if (opcode == 115) {
 				definition.setTeam(buffer.get() & 0xFF);
 			}
