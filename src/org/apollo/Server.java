@@ -170,7 +170,6 @@ public final class Server {
 	 */
 	public void start() throws Exception {
 		PluginManager mgr = new PluginManager(new PluginContext(context));
-		mgr.start(); // TODO move this?
 
 		serviceManager.startAll();
 

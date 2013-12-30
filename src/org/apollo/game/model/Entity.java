@@ -13,6 +13,15 @@ public abstract class Entity {
 	protected Position position;
 
 	/**
+	 * Creates a new entity with the specified position.
+	 * 
+	 * @param position The position.
+	 */
+	public Entity(Position position) {
+		this.position = position;
+	}
+
+	/**
 	 * Gets the {@link EntityType} of this entity.
 	 * 
 	 * @return The type.

@@ -623,10 +623,10 @@ public final class Player extends Mob {
 	/**
 	 * Sets the design flag.
 	 * 
-	 * @param designed A flag indicating if the player has been designed.
+	 * @param designedAvatar A flag indicating if the player has designed their avatar.
 	 */
-	public void setDesigned(boolean designed) {
-		this.designedAvatar = designed;
+	public void setDesigned(boolean designedAvatar) {
+		this.designedAvatar = designedAvatar;
 	}
 
 	/**
@@ -717,8 +717,8 @@ public final class Player extends Mob {
 	}
 
 	@Override
-	public void shout(String message, boolean chatBox) {
-		blockSet.add(SynchronizationBlock.createForceChatBlock(chatBox ? '~' + message : message));
+	public void shout(String message, boolean chatOnly) {
+		blockSet.add(SynchronizationBlock.createForceChatBlock(chatOnly ? message : '~' + message));
 	}
 
 	@Override
@@ -740,8 +740,8 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilegeLevel="
-				+ privilegeLevel + "]";
+		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilege=" + privilegeLevel
+				+ "]";
 	}
 
 }
