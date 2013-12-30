@@ -34,9 +34,9 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			out.writeBoolean(player.isMembers());
 
 			// write settings
-			out.writeByte(player.getPrivacyPublicChat().toInteger());
-			out.writeByte(player.getPrivacyPrivateChat().toInteger());
-			out.writeByte(player.getPrivacyTradeCompete().toInteger());
+			out.writeByte(player.getPublicChatPrivacy().toInteger());
+			out.writeByte(player.getPrivateChatPrivacy().toInteger());
+			out.writeByte(player.getTradeChatPrivacy().toInteger());
 
 			// write position
 			Position position = player.getPosition();

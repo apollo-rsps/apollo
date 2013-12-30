@@ -12,6 +12,7 @@ import org.apollo.game.model.Item;
 import org.apollo.game.model.Player;
 import org.apollo.game.model.Player.PrivilegeLevel;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.PrivacyState;
 import org.apollo.game.model.Skill;
 import org.apollo.game.model.SkillSet;
 import org.apollo.io.player.PlayerLoader;
@@ -54,9 +55,9 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			boolean members = in.readBoolean();
 
 			// read settings
-			Player.PrivacyOption privacyPublicChat = Player.PrivacyOption.valueOf(in.readByte());
-			Player.PrivacyOption privacyPrivateChat = Player.PrivacyOption.valueOf(in.readByte());
-			Player.PrivacyOption privacyTradeCompete = Player.PrivacyOption.valueOf(in.readByte());
+			PrivacyState privacyPublicChat = PrivacyState.valueOf(in.readByte());
+			PrivacyState privacyPrivateChat = PrivacyState.valueOf(in.readByte());
+			PrivacyState privacyTradeCompete = PrivacyState.valueOf(in.readByte());
 
 			// read position
 			int x = in.readUnsignedShort();
@@ -80,9 +81,9 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			Player player = new Player(credentials, new Position(x, y, height));
 			player.setPrivilegeLevel(privilegeLevel);
 			player.setMembers(members);
-			player.setPrivacyPublicChat(privacyPublicChat);
-			player.setPrivacyPrivateChat(privacyPrivateChat);
-			player.setPrivacyTradeCompete(privacyTradeCompete);
+			player.setPublicChatPrivacy(privacyPublicChat);
+			player.setPrivateChatPrivacy(privacyPrivateChat);
+			player.setTradeChatPrivacy(privacyTradeCompete);
 			player.setDesigned(designed);
 			player.setAppearance(new Appearance(gender, style, colors));
 

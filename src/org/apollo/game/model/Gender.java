@@ -18,26 +18,26 @@ public enum Gender {
 	FEMALE(1);
 
 	/**
-	 * An integer representation used by the client.
+	 * The numerical value used by the client.
 	 */
-	private final int intValue;
+	private final int value;
 
 	/**
 	 * Creates the gender.
 	 * 
-	 * @param intValue The integer representation.
+	 * @param value The numerical value.
 	 */
-	private Gender(int intValue) {
-		this.intValue = intValue;
+	private Gender(int value) {
+		this.value = value;
 	}
 
 	/**
 	 * Converts this gender to an integer.
 	 * 
-	 * @return The integer representation used by the client.
+	 * @return The numerical value used by the client.
 	 */
 	public int toInteger() {
-		return intValue;
+		return value;
 	}
 
 }

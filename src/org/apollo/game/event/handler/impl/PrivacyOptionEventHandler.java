@@ -6,17 +6,17 @@ import org.apollo.game.event.impl.PrivacyOptionEvent;
 import org.apollo.game.model.Player;
 
 /**
- * Handles {@link PrivacyOptionEvent} from the client to the server.
- *
+ * Handles {@link PrivacyOptionEvent}s from the client.
+ * 
  * @author Kyle Stevenson
- *         Date: 12/24/13
- *         Time: 2:03 AM
  */
 public class PrivacyOptionEventHandler extends EventHandler<PrivacyOptionEvent> {
-    @Override
-    public void handle(final EventHandlerContext ctx, final Player player, final PrivacyOptionEvent event) {
-        player.setPrivacyPublicChat(event.getPrivacyPublicChat());
-        player.setPrivacyPrivateChat(event.getPrivacyPrivateChat());
-        player.setPrivacyTradeCompete(event.getPrivacyTradeCompete());
-    }
+
+	@Override
+	public void handle(EventHandlerContext ctx, Player player, PrivacyOptionEvent event) {
+		player.setPublicChatPrivacy(event.getPublicChatPrivacy());
+		player.setPrivateChatPrivacy(event.getPrivateChatPrivacy());
+		player.setTradeChatPrivacy(event.getTradeChatPrivacy());
+	}
+
 }

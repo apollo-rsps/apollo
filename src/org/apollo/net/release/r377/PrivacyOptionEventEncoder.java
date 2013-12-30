@@ -1,4 +1,4 @@
-package org.apollo.net.release.r317;
+package org.apollo.net.release.r377;
 
 import org.apollo.game.event.impl.PrivacyOptionEvent;
 import org.apollo.net.codec.game.DataType;
@@ -9,13 +9,13 @@ import org.apollo.net.release.EventEncoder;
 /**
  * An {@link EventEncoder} for the {@link PrivacyOptionEvent}.
  * 
- * @author Kyle Stevenson
+ * @author Major
  */
 public final class PrivacyOptionEventEncoder extends EventEncoder<PrivacyOptionEvent> {
 
 	@Override
 	public GamePacket encode(final PrivacyOptionEvent event) {
-		final GamePacketBuilder builder = new GamePacketBuilder(206);
+		GamePacketBuilder builder = new GamePacketBuilder(201);
 
 		builder.put(DataType.BYTE, event.getPublicChatPrivacy().ordinal());
 		builder.put(DataType.BYTE, event.getPrivateChatPrivacy().ordinal());
