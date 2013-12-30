@@ -1,5 +1,7 @@
-target/*
-.idea/*
+!.gitignore
+.*
+*~
+/target
 *.iml
-data/fs/*
-data/savedGames/*
+/data/fs
+/data/savedGames
