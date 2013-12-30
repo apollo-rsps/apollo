@@ -98,6 +98,80 @@ public final class Player extends Mob {
 
 	}
 
+    /**
+     * An enumeration representing the different states for chat and trade options in the protocol.
+     *
+     * @author Kyle Stevenson
+     */
+    public enum PrivacyOption {
+
+        /**
+         * Represents the on-state which displays all messages.
+         */
+        ON(0),
+
+        /**
+         * Represents the friends-state which only displays messages from friends and staff members.
+         */
+        FRIENDS(1),
+
+        /**
+         * Represents the off-state which displays no messages except those of moderators and staff members.
+         */
+        OFF(2),
+
+        /**
+         * Represents the hidden-state which displays text over player's heads but not in the chat box.
+         * This only applies to the "public" option.
+         */
+        HIDE(3);
+
+        /**
+         * Gets the privacy option for the specified numerical value.
+         *
+         * @param numericalValue The numerical level.
+         * @return The privilege level.
+         * @throws IllegalArgumentException If the numerical level is invalid.
+         */
+        public static PrivacyOption valueOf(final int numericalValue) {
+            for (final PrivacyOption option : values()) {
+                if (option.numericalOption == numericalValue) {
+                    return option;
+                }
+            }
+            throw new IllegalArgumentException("invalid numerical level");
+        }
+
+        /**
+         * The numerical level used in the protocol.
+         */
+        private final int numericalOption;
+
+        /**
+         * Creates a privacy option.
+         *
+         * @param numericalValue The numerical value.
+         */
+        private PrivacyOption(final int numericalValue) {
+            this.numericalOption = numericalValue;
+        }
+
+        /**
+         * Gets the numerical option.
+         *
+         * @return The numerical option used in the protocol.
+         */
+        public int toInteger() {
+            return numericalOption;
+        }
+    }
+
+    private PrivacyOption privacyPublicChat = PrivacyOption.ON;
+
+    private PrivacyOption privacyPrivateChat = PrivacyOption.ON;
+
+    private PrivacyOption privacyTradeCompete = PrivacyOption.ON;
+
 	/**
 	 * The player's appearance.
 	 */
@@ -346,6 +420,33 @@ public final class Player extends Mob {
 	public int getPrayerIcon() {
 		return prayerIcon;
 	}
+
+    /**
+     * Gets the privacy option of private chat.
+     *
+     * @return The privacy option.
+     */
+    public PrivacyOption getPrivacyPrivateChat() {
+        return privacyPrivateChat;
+    }
+
+    /**
+     * Gets the privacy option of public chat.
+     *
+     * @return The privacy option.
+     */
+    public PrivacyOption getPrivacyPublicChat() {
+        return privacyPublicChat;
+    }
+
+    /**
+     * Gets the privacy option of trade/compete.
+     *
+     * @return The privacy option.
+     */
+    public PrivacyOption getPrivacyTradeCompete() {
+        return privacyTradeCompete;
+    }
 
 	/**
 	 * Gets the privilege level.
@@ -664,6 +765,33 @@ public final class Player extends Mob {
 	public void setPrayerIcon(int prayerIcon) {
 		this.prayerIcon = prayerIcon;
 	}
+
+    /**
+     * Sets the privacy option for private chat.
+     *
+     * @param privacyPrivateChat The privacy option.
+     */
+    public void setPrivacyPrivateChat(final PrivacyOption privacyPrivateChat) {
+        this.privacyPrivateChat = privacyPrivateChat;
+    }
+
+    /**
+     * Sets the privacy option for public chat.
+     *
+     * @param privacyPublicChat The privacy option.
+     */
+    public void setPrivacyPublicChat(final PrivacyOption privacyPublicChat) {
+        this.privacyPublicChat = privacyPublicChat;
+    }
+
+    /**
+     * Sets the privacy option for trade/compete.
+     *
+     * @param privacyTradeCompete The privacy option.
+     */
+    public void setPrivacyTradeCompete(final PrivacyOption privacyTradeCompete) {
+        this.privacyTradeCompete = privacyTradeCompete;
+    }
 
 	/**
 	 * Sets the privilege level.
