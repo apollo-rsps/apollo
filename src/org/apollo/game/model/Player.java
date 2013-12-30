@@ -60,31 +60,30 @@ public final class Player extends Mob {
 		/**
 		 * Gets the privilege level for the specified numerical level.
 		 * 
-		 * @param numericalLevel The numerical level.
+		 * @param value The numerical level.
 		 * @return The privilege level.
 		 * @throws IllegalArgumentException If the numerical level is invalid.
 		 */
-		public static PrivilegeLevel valueOf(int numericalLevel) {
-			for (PrivilegeLevel level : values()) {
-				if (level.numericalLevel == numericalLevel) {
-					return level;
-				}
+		public static PrivilegeLevel valueOf(int value) {
+			PrivilegeLevel[] values = values();
+			if (value < 0 || value > values.length) {
+				throw new IndexOutOfBoundsException("Invalid privilege level integer value supplied");
 			}
-			throw new IllegalArgumentException("invalid numerical level");
+			return values[value];
 		}
 
 		/**
 		 * The numerical level used in the protocol.
 		 */
-		private final int numericalLevel;
+		private final int value;
 
 		/**
-		 * Creates a privilege level.
+		 * Creates the privilege level.
 		 * 
-		 * @param numericalLevel The numerical level.
+		 * @param value The numerical level.
 		 */
-		private PrivilegeLevel(int numericalLevel) {
-			this.numericalLevel = numericalLevel;
+		private PrivilegeLevel(int value) {
+			this.value = value;
 		}
 
 		/**
@@ -93,84 +92,10 @@ public final class Player extends Mob {
 		 * @return The numerical level used in the protocol.
 		 */
 		public int toInteger() {
-			return numericalLevel;
+			return value;
 		}
 
 	}
-
-    /**
-     * An enumeration representing the different states for chat and trade options in the protocol.
-     *
-     * @author Kyle Stevenson
-     */
-    public enum PrivacyOption {
-
-        /**
-         * Represents the on-state which displays all messages.
-         */
-        ON(0),
-
-        /**
-         * Represents the friends-state which only displays messages from friends and staff members.
-         */
-        FRIENDS(1),
-
-        /**
-         * Represents the off-state which displays no messages except those of moderators and staff members.
-         */
-        OFF(2),
-
-        /**
-         * Represents the hidden-state which displays text over player's heads but not in the chat box.
-         * This only applies to the "public" option.
-         */
-        HIDE(3);
-
-        /**
-         * Gets the privacy option for the specified numerical value.
-         *
-         * @param numericalValue The numerical level.
-         * @return The privilege level.
-         * @throws IllegalArgumentException If the numerical level is invalid.
-         */
-        public static PrivacyOption valueOf(final int numericalValue) {
-            for (final PrivacyOption option : values()) {
-                if (option.numericalOption == numericalValue) {
-                    return option;
-                }
-            }
-            throw new IllegalArgumentException("invalid numerical level");
-        }
-
-        /**
-         * The numerical level used in the protocol.
-         */
-        private final int numericalOption;
-
-        /**
-         * Creates a privacy option.
-         *
-         * @param numericalValue The numerical value.
-         */
-        private PrivacyOption(final int numericalValue) {
-            this.numericalOption = numericalValue;
-        }
-
-        /**
-         * Gets the numerical option.
-         *
-         * @return The numerical option used in the protocol.
-         */
-        public int toInteger() {
-            return numericalOption;
-        }
-    }
-
-    private PrivacyOption privacyPublicChat = PrivacyOption.ON;
-
-    private PrivacyOption privacyPrivateChat = PrivacyOption.ON;
-
-    private PrivacyOption privacyTradeCompete = PrivacyOption.ON;
 
 	/**
 	 * The player's appearance.
@@ -233,9 +158,19 @@ public final class Player extends Mob {
 	private int prayerIcon = 0;
 
 	/**
+	 * The privacy state of this player's private chat.
+	 */
+	private PrivacyState privateChatPrivacy = PrivacyState.ON;
+
+	/**
 	 * The privilege level.
 	 */
 	private PrivilegeLevel privilegeLevel = PrivilegeLevel.STANDARD;
+
+	/**
+	 * The privacy state of this player's public chat.
+	 */
+	private PrivacyState publicChatPrivacy = PrivacyState.ON;
 
 	/**
 	 * A temporary queue of events sent during the login process.
@@ -261,6 +196,11 @@ public final class Player extends Mob {
 	 * The {@link GameSession} currently attached to this {@link Player}.
 	 */
 	private GameSession session;
+
+	/**
+	 * The privacy state of this player's trade chat.
+	 */
+	private PrivacyState tradeChatPrivacy = PrivacyState.ON;
 
 	/**
 	 * The current maximum viewing distance of this player.
@@ -421,32 +361,14 @@ public final class Player extends Mob {
 		return prayerIcon;
 	}
 
-    /**
-     * Gets the privacy option of private chat.
-     *
-     * @return The privacy option.
-     */
-    public PrivacyOption getPrivacyPrivateChat() {
-        return privacyPrivateChat;
-    }
-
-    /**
-     * Gets the privacy option of public chat.
-     *
-     * @return The privacy option.
-     */
-    public PrivacyOption getPrivacyPublicChat() {
-        return privacyPublicChat;
-    }
-
-    /**
-     * Gets the privacy option of trade/compete.
-     *
-     * @return The privacy option.
-     */
-    public PrivacyOption getPrivacyTradeCompete() {
-        return privacyTradeCompete;
-    }
+	/**
+	 * Gets this player's private chat privacy state.
+	 * 
+	 * @return The privacy state.
+	 */
+	public PrivacyState getPrivateChatPrivacy() {
+		return privateChatPrivacy;
+	}
 
 	/**
 	 * Gets the privilege level.
@@ -455,6 +377,15 @@ public final class Player extends Mob {
 	 */
 	public PrivilegeLevel getPrivilegeLevel() {
 		return privilegeLevel;
+	}
+
+	/**
+	 * Gets this player's public chat privacy state.
+	 * 
+	 * @return The privacy state.
+	 */
+	public PrivacyState getPublicChatPrivacy() {
+		return publicChatPrivacy;
 	}
 
 	/**
@@ -473,6 +404,15 @@ public final class Player extends Mob {
 	 */
 	public GameSession getSession() {
 		return session;
+	}
+
+	/**
+	 * Gets this player's trade chat privacy state.
+	 * 
+	 * @return The privacy state.
+	 */
+	public PrivacyState getTradeChatPrivacy() {
+		return tradeChatPrivacy;
 	}
 
 	/**
@@ -766,32 +706,32 @@ public final class Player extends Mob {
 		this.prayerIcon = prayerIcon;
 	}
 
-    /**
-     * Sets the privacy option for private chat.
-     *
-     * @param privacyPrivateChat The privacy option.
-     */
-    public void setPrivacyPrivateChat(final PrivacyOption privacyPrivateChat) {
-        this.privacyPrivateChat = privacyPrivateChat;
-    }
+	/**
+	 * Sets the private chat {@link PrivacyState}.
+	 * 
+	 * @param privateChatPrivacy The privacy state.
+	 */
+	public void setPrivateChatPrivacy(PrivacyState privateChatPrivacy) {
+		this.privateChatPrivacy = privateChatPrivacy;
+	}
 
-    /**
-     * Sets the privacy option for public chat.
-     *
-     * @param privacyPublicChat The privacy option.
-     */
-    public void setPrivacyPublicChat(final PrivacyOption privacyPublicChat) {
-        this.privacyPublicChat = privacyPublicChat;
-    }
+	/**
+	 * Sets the public chat {@link PrivacyState}.
+	 * 
+	 * @param publicChatPrivacy The privacy state.
+	 */
+	public void setPublicChatPrivacy(PrivacyState publicChatPrivacy) {
+		this.publicChatPrivacy = publicChatPrivacy;
+	}
 
-    /**
-     * Sets the privacy option for trade/compete.
-     *
-     * @param privacyTradeCompete The privacy option.
-     */
-    public void setPrivacyTradeCompete(final PrivacyOption privacyTradeCompete) {
-        this.privacyTradeCompete = privacyTradeCompete;
-    }
+	/**
+	 * Sets the trade chat {@link PrivacyState}.
+	 * 
+	 * @param tradeChatPrivacy The privacy state.
+	 */
+	public void setTradeChatPrivacy(PrivacyState tradeChatPrivacy) {
+		this.tradeChatPrivacy = tradeChatPrivacy;
+	}
 
 	/**
 	 * Sets the privilege level.

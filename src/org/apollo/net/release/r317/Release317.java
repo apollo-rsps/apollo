@@ -116,7 +116,6 @@ public final class Release317 extends Release {
 		register(3, new FocusUpdateEventDecoder());
 		register(241, new MouseClickEventDecoder());
 		register(86, new ArrowKeyEventDecoder());
-
 		register(95, new PrivacyOptionEventDecoder());
 
 		SpamPacketEventDecoder spamEventDecoder = new SpamPacketEventDecoder();

@@ -1,98 +1,68 @@
 package org.apollo.game.event.impl;
 
 import org.apollo.game.event.Event;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.PrivacyState;
 
 /**
- * An {@link Event} sent by the client or server to specify the options at the bottom of the game screen relating
- * to the chat and trade privacy options.
- * <br />
- * See http://rswiki.moparisthebest.com/index.php?title=317:Privacy_options
- *
+ * An {@link Event} sent by the client or server to update the chat and trade privacy state.
+ * 
  * @author Kyle Stevenson
- *         Date: 12/24/13
- *         Time: 1:38 AM
  */
 public class PrivacyOptionEvent extends Event {
-    /**
-     * Public chat setting
-     */
-    private final int publicChat;
 
-    /**
-     * Private chat setting
-     */
-    private final int privateChat;
+	/**
+	 * The privacy state of the player's public chat.
+	 */
+	private final PrivacyState publicChatState;
 
-    /**
-     * Trade/compete setting
-     */
-    private final int tradeCompete;
+	/**
+	 * The privacy state of the player's private chat.
+	 */
+	private final PrivacyState privateChatState;
 
-    /**
-     * Creates a privacy option event.
-     *
-     * @param publicChat The byte value of the public chat privacy option.
-     * @param privateChat The byte value of the private chat privacy option.
-     * @param tradeCompete The byte value of the trade/compete privacy option.
-     */
-    public PrivacyOptionEvent(final int publicChat, final int privateChat, final int tradeCompete) {
-        this.publicChat = publicChat & 0xFF;
-        this.privateChat = privateChat & 0xFF;
-        this.tradeCompete = tradeCompete & 0xFF;
-    }
+	/**
+	 * The privacy state of the player's trade chat.
+	 */
+	private final PrivacyState tradeChatState;
 
-    /**
-     * Public chat unsigned byte value.
-     *
-     * @return The public chat unsigned byte.
-     */
-    public int getPublicChat() {
-        return publicChat;
-    }
+	/**
+	 * Creates a privacy option event.
+	 * 
+	 * @param publicChatState The privacy state of the player's public chat.
+	 * @param privateChatState The privacy state of the player's private chat.
+	 * @param tradeChatState The privacy state of the player's trade chat.
+	 */
+	public PrivacyOptionEvent(int publicChatState, int privateChatState, int tradeChatState) {
+		this.publicChatState = PrivacyState.valueOf(publicChatState);
+		this.privateChatState = PrivacyState.valueOf(privateChatState);
+		this.tradeChatState = PrivacyState.valueOf(tradeChatState);
+	}
 
-    /**
-     * Public chat privacy option.
-     *
-     * @return The public chat privacy option.
-     */
-    public Player.PrivacyOption getPrivacyPublicChat() {
-        return Player.PrivacyOption.valueOf(publicChat);
-    }
+	/**
+	 * Gets the public chat {@link PrivacyState}.
+	 * 
+	 * @return The privacy option.
+	 */
+	public PrivacyState getPublicChatPrivacy() {
+		return publicChatState;
+	}
 
-    /**
-     * Private chat unsigned byte value.
-     *
-     * @return The private chat unsigned byte.
-     */
-    public int getPrivateChat() {
-        return privateChat;
-    }
+	/**
+	 * Gets the private chat {@link PrivacyState}.
+	 * 
+	 * @return The privacy option.
+	 */
+	public PrivacyState getPrivateChatPrivacy() {
+		return privateChatState;
+	}
 
-    /**
-     * Private chat privacy option.
-     *
-     * @return The private chat privacy option.
-     */
-    public Player.PrivacyOption getPrivacyPrivateChat() {
-        return Player.PrivacyOption.valueOf(privateChat);
-    }
+	/**
+	 * Gets the trade chat {@link PrivacyState}.
+	 * 
+	 * @return The privacy option.
+	 */
+	public PrivacyState getTradeChatPrivacy() {
+		return tradeChatState;
+	}
 
-    /**
-     * Trade/compete unsigned byte value.
-     *
-     * @return The trade/compete unsigned byte.
-     */
-    public int getTradeCompete() {
-        return tradeCompete;
-    }
-
-    /**
-     * Trade/compete privacy option.
-     *
-     * @return The trade/compete privacy option.
-     */
-    public Player.PrivacyOption getPrivacyTradeCompete() {
-        return Player.PrivacyOption.valueOf(tradeCompete);
-    }
 }
