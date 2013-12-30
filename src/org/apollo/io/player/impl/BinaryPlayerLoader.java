@@ -53,6 +53,11 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			PrivilegeLevel privilegeLevel = PrivilegeLevel.valueOf(in.readByte());
 			boolean members = in.readBoolean();
 
+			// read settings
+			Player.PrivacyOption privacyPublicChat = Player.PrivacyOption.valueOf(in.readByte());
+			Player.PrivacyOption privacyPrivateChat = Player.PrivacyOption.valueOf(in.readByte());
+			Player.PrivacyOption privacyTradeCompete = Player.PrivacyOption.valueOf(in.readByte());
+
 			// read position
 			int x = in.readUnsignedShort();
 			int y = in.readUnsignedShort();
@@ -75,6 +80,9 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			Player player = new Player(credentials, new Position(x, y, height));
 			player.setPrivilegeLevel(privilegeLevel);
 			player.setMembers(members);
+			player.setPrivacyPublicChat(privacyPublicChat);
+			player.setPrivacyPrivateChat(privacyPrivateChat);
+			player.setPrivacyTradeCompete(privacyTradeCompete);
 			player.setDesigned(designed);
 			player.setAppearance(new Appearance(gender, style, colors));
 

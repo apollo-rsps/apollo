@@ -11,6 +11,7 @@ import org.apollo.game.event.impl.OpenInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
 import org.apollo.game.event.impl.PlayerSynchronizationEvent;
 import org.apollo.game.event.impl.PositionEvent;
+import org.apollo.game.event.impl.PrivacyOptionEvent;
 import org.apollo.game.event.impl.RegionChangeEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SetTileItemEvent;
@@ -116,6 +117,8 @@ public final class Release317 extends Release {
 		register(241, new MouseClickEventDecoder());
 		register(86, new ArrowKeyEventDecoder());
 
+		register(95, new PrivacyOptionEventDecoder());
+
 		SpamPacketEventDecoder spamEventDecoder = new SpamPacketEventDecoder();
 		register(77, spamEventDecoder);
 		register(78, spamEventDecoder);
@@ -154,6 +157,7 @@ public final class Release317 extends Release {
 		register(SetTileItemEvent.class, new SetTileItemEventEncoder());
 		register(PositionEvent.class, new PositionEventEncoder());
 		register(UpdateRunEnergyEvent.class, new UpdateRunEnergyEventEncoder());
+		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
 	}
 
 }
