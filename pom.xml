@@ -8,7 +8,7 @@
     <groupId>apollo</groupId>
     <build>
         <sourceDirectory>src</sourceDirectory>
-        <testSourceIdentity>test</testSourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
     </build>
     <dependencies>
         <dependency>
