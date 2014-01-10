@@ -117,6 +117,7 @@ public final class Release377 extends Release {
 		register(19, new MouseClickEventDecoder());
 		register(140, new ArrowKeyEventDecoder());
 		register(176, new PrivacyOptionEventDecoder());
+		register(184, new ReportAbuseEventDecoder());
 
 		SpamPacketEventDecoder spamEventDecoder = new SpamPacketEventDecoder();
 		register(40, spamEventDecoder);

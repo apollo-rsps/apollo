@@ -6,6 +6,12 @@
     </chain>
   </event>
   <event>
+    <type>org.apollo.game.event.impl.ReportAbuseEvent</type>
+    <chain>
+      <handler>org.apollo.game.event.handler.impl.ReportAbuseEventHandler</handler>
+    </chain>
+  </event>
+  <event>
     <type>org.apollo.game.event.impl.KeepAliveEvent</type>
     <chain />
   </event>
