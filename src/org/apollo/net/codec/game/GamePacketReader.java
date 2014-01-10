@@ -74,32 +74,32 @@ public final class GamePacketReader {
 			for (int i = length - 1; i >= 0; i--) {
 				if (i == 0 && transformation != DataTransformation.NONE) {
 					if (transformation == DataTransformation.ADD) {
-						longValue |= buffer.readByte() - 128 & 0xFF;
+						longValue |= buffer.readByte() - 128 & 0xFFL;
 					} else if (transformation == DataTransformation.NEGATE) {
-						longValue |= -buffer.readByte() & 0xFF;
+						longValue |= -buffer.readByte() & 0xFFL;
 					} else if (transformation == DataTransformation.SUBTRACT) {
-						longValue |= 128 - buffer.readByte() & 0xFF;
+						longValue |= 128 - buffer.readByte() & 0xFFL;
 					} else {
 						throw new IllegalArgumentException("unknown transformation");
 					}
 				} else {
-					longValue |= (buffer.readByte() & 0xFF) << i * 8;
+					longValue |= (buffer.readByte() & 0xFFL) << i * 8;
 				}
 			}
 		} else if (order == DataOrder.LITTLE) {
 			for (int i = 0; i < length; i++) {
 				if (i == 0 && transformation != DataTransformation.NONE) {
 					if (transformation == DataTransformation.ADD) {
-						longValue |= buffer.readByte() - 128 & 0xFF;
+						longValue |= buffer.readByte() - 128 & 0xFFL;
 					} else if (transformation == DataTransformation.NEGATE) {
-						longValue |= -buffer.readByte() & 0xFF;
+						longValue |= -buffer.readByte() & 0xFFL;
 					} else if (transformation == DataTransformation.SUBTRACT) {
-						longValue |= 128 - buffer.readByte() & 0xFF;
+						longValue |= 128 - buffer.readByte() & 0xFFL;
 					} else {
 						throw new IllegalArgumentException("unknown transformation");
 					}
 				} else {
-					longValue |= (buffer.readByte() & 0xFF) << i * 8;
+					longValue |= (buffer.readByte() & 0xFFL) << i * 8;
 				}
 			}
 		} else if (order == DataOrder.MIDDLE) {
