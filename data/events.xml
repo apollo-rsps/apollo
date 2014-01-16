@@ -33,6 +33,7 @@
     <type>org.apollo.game.event.impl.ButtonEvent</type>
     <chain>
       <handler>org.apollo.game.event.handler.impl.BankButtonEventHandler</handler>
+      <handler>org.apollo.game.event.handler.impl.PlayerSettingChangedEvent</handler>
     </chain>
   </event>
   <event>

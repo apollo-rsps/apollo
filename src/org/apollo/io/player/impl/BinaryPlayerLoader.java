@@ -58,6 +58,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			PrivacyState privacyPublicChat = PrivacyState.valueOf(in.readByte());
 			PrivacyState privacyPrivateChat = PrivacyState.valueOf(in.readByte());
 			PrivacyState privacyTradeCompete = PrivacyState.valueOf(in.readByte());
+            byte screenBrightness = in.readByte();
 
 			// read position
 			int x = in.readUnsignedShort();
@@ -84,6 +85,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			player.setPublicChatPrivacy(privacyPublicChat);
 			player.setPrivateChatPrivacy(privacyPrivateChat);
 			player.setTradeChatPrivacy(privacyTradeCompete);
+            player.setScreenBrightness(screenBrightness);
 			player.setDesigned(designed);
 			player.setAppearance(new Appearance(gender, style, colors));
 
