@@ -33,6 +33,7 @@
     <type>org.apollo.game.event.impl.ButtonEvent</type>
     <chain>
       <handler>org.apollo.game.event.handler.impl.BankButtonEventHandler</handler>
+      <handler>org.apollo.game.event.handler.impl.PlayerSettingChangedEvent</handler>
     </chain>
   </event>
   <event>
@@ -111,4 +112,10 @@
     <type>org.apollo.game.event.impl.TakeTileItemEvent</type>
     <chain />
   </event>
+    <event>
+        <type>org.apollo.game.event.impl.IdleEvent</type>
+        <chain>
+            <handler>org.apollo.game.event.handler.impl.IdleEventHandler</handler>
+        </chain>
+    </event>
 </events>

@@ -212,6 +212,11 @@ public final class Player extends Mob {
 	 */
 	private boolean withdrawingNotes = false;
 
+    /**
+     *  The players screenBrightness level
+     */
+    public byte screenBrightness = 2;
+
 	/**
 	 * Creates the {@link Player}.
 	 * 
@@ -618,6 +623,9 @@ public final class Player extends Mob {
 			send(new SwitchTabInterfaceEvent(i, tabs[i]));
 		}
 
+        send(new UpdateRunEnergyEvent(runEnergy));
+        send(new ConfigEvent(166, screenBrightness));
+
 		getInventory().forceRefresh();
 		getEquipment().forceRefresh();
 		getBank().forceRefresh();
@@ -811,5 +819,24 @@ public final class Player extends Mob {
 		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilege=" + privilegeLevel
 				+ "]";
 	}
+
+    /**
+     * Gets the players screenBrightness level
+     * @return The screenBrightness level
+     */
+    public byte getScreenBrightness() {
+        return screenBrightness;
+    }
+
+    /**
+     * Sets the players screenBrightness level
+     * @param screenBrightness The screenBrightness level
+     */
+    public void setScreenBrightness(byte screenBrightness) {
+        if(screenBrightness < 1 || screenBrightness > 4) {
+            throw new IllegalArgumentException("invalid screenBrightness level, must be between 1-4. screenBrightness provided: " + screenBrightness);
+        }
+        this.screenBrightness = screenBrightness;
+    }
 
 }
