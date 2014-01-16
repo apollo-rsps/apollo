@@ -112,4 +112,10 @@
     <type>org.apollo.game.event.impl.TakeTileItemEvent</type>
     <chain />
   </event>
+    <event>
+        <type>org.apollo.game.event.impl.IdleEvent</type>
+        <chain>
+            <handler>org.apollo.game.event.handler.impl.IdleEventHandler</handler>
+        </chain>
+    </event>
 </events>
