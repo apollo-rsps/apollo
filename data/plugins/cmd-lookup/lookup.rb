@@ -1,11 +1,14 @@
 require 'java'
 java_import 'org.apollo.game.model.Player'
+java_import 'org.apollo.game.model.def.ItemDefinition'
+java_import 'org.apollo.game.model.def.NpcDefinition'
+java_import 'org.apollo.game.model.def.ObjectDefinition'
 
 on :command, :lookup, RIGHTS_ADMIN do |player, command|
   args = command.arguments.to_a
   unless args.length > 1
     player.send_message("Invalid syntax - ::lookup [npc/object/item] [name]")
-    return
+    next
   end
   
   type = args.shift.downcase
@@ -13,7 +16,7 @@ on :command, :lookup, RIGHTS_ADMIN do |player, command|
 
   if ["npc","object","item"].index(type) == nil
     player.send_message("Invalid syntax - ::lookup [npc/object/item] [name]") 
-    return
+    next
   end
 
   Kernel.const_get("#{type.capitalize}Definition").definitions.each do |definition|
@@ -30,7 +33,7 @@ on :command, :iteminfo, RIGHTS_ADMIN do |player, command|
   args = command.arguments
   unless args.length == 1
     player.send_message("Invalid syntax - ::iteminfo [item id]")
-    return
+    next
   end
 
   id = args[0].to_i
