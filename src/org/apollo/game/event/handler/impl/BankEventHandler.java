@@ -83,10 +83,8 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 		if (amount == -1) {
 			player.getInterfaceSet().openEnterAmountDialog(
 					new BankWithdrawEnterAmountListener(player, event.getSlot(), event.getId()));
-		} else {
-			if (!BankUtils.withdraw(player, event.getSlot(), event.getId(), amount)) {
-				ctx.breakHandlerChain();
-			}
+		} else if (!BankUtils.withdraw(player, event.getSlot(), event.getId(), amount)) {
+			ctx.breakHandlerChain();
 		}
 	}
 

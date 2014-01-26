@@ -19,7 +19,6 @@ public final class RemoveEventHandler extends EventHandler<ItemActionEvent> {
 
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, ItemActionEvent event) {
-
 		if (event.getOption() == 1 && event.getInterfaceId() == SynchronizationInventoryListener.EQUIPMENT_ID) {
 			Inventory inventory = player.getInventory();
 			Inventory equipment = player.getEquipment();
