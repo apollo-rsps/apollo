@@ -1,5 +1,9 @@
 package org.apollo.net.session;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -13,9 +17,6 @@ import org.apollo.game.event.handler.chain.EventHandlerChain;
 import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
 import org.apollo.game.event.impl.LogoutEvent;
 import org.apollo.game.model.Player;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelFutureListener;
 
 /**
  * A game session.
@@ -69,8 +70,8 @@ public final class GameSession extends Session {
 	 */
 	public void dispatchEvent(Event event) {
 		Channel channel = getChannel();
-		if (channel.isBound() && channel.isConnected() && channel.isOpen()) {
-			ChannelFuture future = channel.write(event);
+		if (channel.isActive() && channel.isOpen()) {
+			ChannelFuture future = channel.writeAndFlush(event);
 			if (event.getClass() == LogoutEvent.class) {
 				future.addListener(ChannelFutureListener.CLOSE);
 			}
@@ -106,7 +107,7 @@ public final class GameSession extends Session {
 				try {
 					chain.handle(player, event);
 				} catch (Exception ex) {
-					logger.log(Level.SEVERE, "Error handling event.", ex);
+					logger.log(Level.SEVERE, "Error handling event: ", ex);
 				}
 			}
 		}

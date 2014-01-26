@@ -1,34 +1,31 @@
 package org.apollo.net.codec.login;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageEncoder;
+
+import java.util.List;
 
 /**
  * A class which encodes login response messages.
  * 
  * @author Graham
  */
-public final class LoginEncoder extends OneToOneEncoder {
+public final class LoginEncoder extends MessageToMessageEncoder<LoginResponse> {
+
+	public LoginEncoder() {
+		super(LoginResponse.class);
+	}
 
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel channel, Object message) {
-		if (!(message instanceof LoginResponse)) {
-			return message;
-		}
-
-		LoginResponse response = (LoginResponse) message;
-
-		ChannelBuffer buffer = ChannelBuffers.buffer(3);
+	protected void encode(ChannelHandlerContext ctx, LoginResponse response, List<Object> out) {
+		ByteBuf buffer = ctx.alloc().buffer(3);
 		buffer.writeByte(response.getStatus());
 		if (response.getStatus() == LoginConstants.STATUS_OK) {
 			buffer.writeByte(response.getRights());
 			buffer.writeByte(response.isFlagged() ? 1 : 0);
 		}
-
-		return buffer;
+		out.add(buffer);
 	}
 
 }

@@ -47,8 +47,8 @@ public final class Sector {
 	}
 
 	/**
-	 * Adds a {@link Entity} from to sector. Note that this does not spawn the entity, or do any other action
-	 * other than register it to this sector.
+	 * Adds a {@link Entity} from to sector. Note that this does not spawn the entity, or do any other action other than
+	 * register it to this sector.
 	 * 
 	 * @param entity The entity.
 	 * @return {@code true} if the entity was added, otherwise {@code false}.

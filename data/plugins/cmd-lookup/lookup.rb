@@ -1,5 +1,8 @@
 require 'java'
 java_import 'org.apollo.game.model.Player'
+java_import 'org.apollo.game.model.def.ItemDefinition'
+java_import 'org.apollo.game.model.def.NpcDefinition'
+java_import 'org.apollo.game.model.def.ObjectDefinition'
 
 on :command, :lookup, RIGHTS_ADMIN do |player, command|
   args = command.arguments.to_a
@@ -11,7 +14,7 @@ on :command, :lookup, RIGHTS_ADMIN do |player, command|
   type = args.shift.downcase
   name = args.join(" ").downcase
 
-  if ["npc","object","item"].index(type) == nil
+  if ["npc", "object", "item"].index(type) == nil
     player.send_message("Invalid syntax - ::lookup [npc/object/item] [name]") 
     return
   end
@@ -37,6 +40,6 @@ on :command, :iteminfo, RIGHTS_ADMIN do |player, command|
   definition = ItemDefinition.lookup(id)
 
   members = definition.is_members_only ? "members" : "not members"
-  player.send_message("Item #{id} is called #{definition.name}, is #{members} only, and a has a team of #{definition.team}.")
+  player.send_message("Item #{id} is called #{definition.name}, is #{members} only, and has a team of #{definition.team}.")
   player.send_message("Its description is \"#{definition.description}\".")
 end

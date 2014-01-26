@@ -24,9 +24,9 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 
 	@Override
 	public void savePlayer(Player player) throws IOException {
-		File f = BinaryPlayerUtil.getFile(player.getName());
-		DataOutputStream out = new DataOutputStream(new FileOutputStream(f));
-		try {
+		File file = BinaryPlayerUtil.getFile(player.getName());
+
+		try (DataOutputStream out = new DataOutputStream(new FileOutputStream(file))) {
 			// write credentials and privileges
 			StreamUtil.writeString(out, player.getName());
 			StreamUtil.writeString(out, player.getCredentials().getPassword());
@@ -37,6 +37,8 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			out.writeByte(player.getPublicChatPrivacy().toInteger());
 			out.writeByte(player.getPrivateChatPrivacy().toInteger());
 			out.writeByte(player.getTradeChatPrivacy().toInteger());
+			out.writeByte(player.getRunEnergy());
+			out.writeByte(player.getScreenBrightness().toInteger());
 
 			// write position
 			Position position = player.getPosition();
@@ -66,13 +68,11 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			// write skills
 			SkillSet skills = player.getSkillSet();
 			out.writeByte(skills.size());
-			for (int i = 0; i < skills.size(); i++) {
-				Skill skill = skills.getSkill(i);
+			for (int id = 0; id < skills.size(); id++) {
+				Skill skill = skills.getSkill(id);
 				out.writeByte(skill.getCurrentLevel());
 				out.writeDouble(skill.getExperience());
 			}
-		} finally {
-			out.close();
 		}
 	}
 

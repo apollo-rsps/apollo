@@ -1,6 +1,10 @@
 package org.apollo.net;
 
+import io.netty.util.AttributeKey;
+
 import java.math.BigInteger;
+
+import org.apollo.net.session.Session;
 
 /**
  * Holds various network-related constants such as port numbers.
@@ -38,6 +42,11 @@ public final class NetworkConstants {
 	 * The service port.
 	 */
 	public static final int SERVICE_PORT = 43594;
+
+	/**
+	 * The {@link Session} {@link AttributeKey}.
+	 */
+	public static final AttributeKey<Session> SESSION_KEY = AttributeKey.valueOf("session");
 
 	/**
 	 * The terminator of a string.

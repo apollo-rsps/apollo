@@ -1,15 +1,15 @@
 package org.apollo.util;
 
+import io.netty.buffer.ByteBuf;
+
 import org.apollo.net.NetworkConstants;
-import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
- * A utility class which provides extra {@link ChannelBuffer}-related methods which deal with data types used in the
- * protocol.
+ * A utility class which provides extra {@link ByteBuf}-related methods which deal with data types used in the protocol.
  * 
  * @author Graham
  */
-public final class ChannelBufferUtil {
+public final class ByteBufUtil {
 
 	/**
 	 * Reads a string from the specified buffer.
@@ -17,10 +17,10 @@ public final class ChannelBufferUtil {
 	 * @param buffer The buffer.
 	 * @return The string.
 	 */
-	public static String readString(ChannelBuffer buffer) {
+	public static String readString(ByteBuf buffer) {
 		StringBuilder builder = new StringBuilder();
 		int character;
-		while (buffer.readable() && (character = buffer.readUnsignedByte()) != NetworkConstants.STRING_TERMINATOR) {
+		while (buffer.isReadable() && (character = buffer.readUnsignedByte()) != NetworkConstants.STRING_TERMINATOR) {
 			builder.append((char) character);
 		}
 		return builder.toString();
@@ -29,7 +29,7 @@ public final class ChannelBufferUtil {
 	/**
 	 * Default private constructor to prevent instantiation by other classes.
 	 */
-	private ChannelBufferUtil() {
+	private ByteBufUtil() {
 
 	}
 

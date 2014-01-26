@@ -1,5 +1,14 @@
 package org.apollo.update;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.handler.codec.http.DefaultHttpResponse;
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -11,14 +20,6 @@ import org.apollo.update.resource.CombinedResourceProvider;
 import org.apollo.update.resource.HypertextResourceProvider;
 import org.apollo.update.resource.ResourceProvider;
 import org.apollo.update.resource.VirtualResourceProvider;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFutureListener;
-import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
-import org.jboss.netty.handler.codec.http.HttpRequest;
-import org.jboss.netty.handler.codec.http.HttpResponse;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * A worker which services HTTP requests.
@@ -60,8 +61,8 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	 * @param description The error description.
 	 * @return The error page as a buffer.
 	 */
-	private ChannelBuffer createErrorPage(HttpResponseStatus status, String description) {
-		String title = status.getCode() + " " + status.getReasonPhrase();
+	private ByteBuf createErrorPage(HttpResponseStatus status, String description) {
+		String title = status.code() + " " + status.reasonPhrase();
 
 		StringBuilder builder = new StringBuilder();
 
@@ -75,7 +76,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 		builder.append(SERVER_IDENTIFIER);
 		builder.append(" Server</address></body></html>");
 
-		return ChannelBuffers.copiedBuffer(builder.toString(), Charset.defaultCharset());
+		return Unpooled.copiedBuffer(builder.toString(), Charset.defaultCharset());
 	}
 
 	/**
@@ -116,7 +117,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 		String path = request.getUri();
 		ByteBuffer buf = provider.get(path);
 
-		ChannelBuffer wrapped;
+		ByteBuf wrapped;
 		HttpResponseStatus status = HttpResponseStatus.OK;
 
 		String mime = getMimeType(request.getUri());
@@ -126,23 +127,22 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 			wrapped = createErrorPage(status, "The page you requested could not be found.");
 			mime = "text/html";
 		} else {
-			wrapped = ChannelBuffers.wrappedBuffer(buf);
+			wrapped = Unpooled.wrappedBuffer(buf);
 		}
 
 		HttpResponse response = new DefaultHttpResponse(request.getProtocolVersion(), status);
 
-		response.setHeader("Date", new Date());
-		response.setHeader("Server", SERVER_IDENTIFIER);
-		response.setHeader("Content-type", mime + ", charset=" + CHARACTER_SET.name());
-		response.setHeader("Cache-control", "no-cache");
-		response.setHeader("Pragma", "no-cache");
-		response.setHeader("Expires", new Date(0));
-		response.setHeader("Connection", "close");
-		response.setHeader("Content-length", wrapped.readableBytes());
-		response.setChunked(false);
-		response.setContent(wrapped);
+		response.headers().set("Date", new Date());
+		response.headers().set("Server", SERVER_IDENTIFIER);
+		response.headers().set("Content-type", mime + ", charset=" + CHARACTER_SET.name());
+		response.headers().set("Cache-control", "no-cache");
+		response.headers().set("Pragma", "no-cache");
+		response.headers().set("Expires", new Date(0));
+		response.headers().set("Connection", "close");
+		response.headers().set("Content-length", wrapped.readableBytes());
 
-		channel.write(response).addListener(ChannelFutureListener.CLOSE);
+		channel.write(response);
+		channel.writeAndFlush(wrapped).addListener(ChannelFutureListener.CLOSE);
 	}
 
 }

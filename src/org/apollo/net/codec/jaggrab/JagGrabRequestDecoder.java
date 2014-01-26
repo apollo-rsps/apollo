@@ -1,27 +1,26 @@
 package org.apollo.net.codec.jaggrab;
 
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageDecoder;
+
+import java.util.List;
 
 /**
  * A {@link OneToOneDecoder} for the JAGGRAB protocol.
  * 
  * @author Graham
  */
-public final class JagGrabRequestDecoder extends OneToOneDecoder {
+public final class JagGrabRequestDecoder extends MessageToMessageDecoder<String> {
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel c, Object msg) {
-		if (msg instanceof String) {
-			String str = (String) msg;
-			if (str.startsWith("JAGGRAB /")) {
-				String filePath = str.substring(8).trim();
-				return new JagGrabRequest(filePath);
-			}
+	protected void decode(ChannelHandlerContext ctx, String msg, List<Object> out) {
+		String request = (String) msg;
+		if (request.startsWith("JAGGRAB /")) {
+			String filePath = request.substring(8).trim();
+			out.add(new JagGrabRequest(filePath));
+		} else {
 			throw new IllegalArgumentException("corrupted request line");
 		}
-		return msg;
 	}
 
 }

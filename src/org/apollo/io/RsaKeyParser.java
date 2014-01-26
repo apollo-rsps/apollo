@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Major
  */
-public class RsaKeyParser {
+public final class RsaKeyParser {
 
 	/**
 	 * The source {@link InputStream}.

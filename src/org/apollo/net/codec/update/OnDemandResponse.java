@@ -1,7 +1,8 @@
 package org.apollo.net.codec.update;
 
+import io.netty.buffer.ByteBuf;
+
 import org.apollo.fs.FileDescriptor;
-import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
  * Represents a single 'on-demand' response.
@@ -13,7 +14,7 @@ public final class OnDemandResponse {
 	/**
 	 * The chunk data.
 	 */
-	private final ChannelBuffer chunkData;
+	private final ByteBuf chunkData;
 
 	/**
 	 * The chunk id.
@@ -38,7 +39,7 @@ public final class OnDemandResponse {
 	 * @param chunkId The chunk id.
 	 * @param chunkData The chunk data.
 	 */
-	public OnDemandResponse(FileDescriptor fileDescriptor, int fileSize, int chunkId, ChannelBuffer chunkData) {
+	public OnDemandResponse(FileDescriptor fileDescriptor, int fileSize, int chunkId, ByteBuf chunkData) {
 		this.fileDescriptor = fileDescriptor;
 		this.fileSize = fileSize;
 		this.chunkId = chunkId;
@@ -50,7 +51,7 @@ public final class OnDemandResponse {
 	 * 
 	 * @return The chunk data.
 	 */
-	public ChannelBuffer getChunkData() {
+	public ByteBuf getChunkData() {
 		return chunkData;
 	}
 

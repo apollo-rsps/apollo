@@ -1,8 +1,13 @@
 package org.apollo.net.codec.login;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.List;
 
 import net.burtleburtle.bob.rand.IsaacRandom;
 
@@ -10,12 +15,8 @@ import org.apollo.fs.FileSystemConstants;
 import org.apollo.net.NetworkConstants;
 import org.apollo.security.IsaacRandomPair;
 import org.apollo.security.PlayerCredentials;
-import org.apollo.util.ChannelBufferUtil;
+import org.apollo.util.ByteBufUtil;
 import org.apollo.util.StatefulFrameDecoder;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * A {@link StatefulFrameDecoder} which decodes the login request frames.
@@ -57,15 +58,18 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, LoginDecoderState state)
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, LoginDecoderState state)
 			throws Exception {
 		switch (state) {
 		case LOGIN_HANDSHAKE:
-			return decodeHandshake(ctx, channel, buffer);
+			decodeHandshake(ctx, in, out);
+			break;
 		case LOGIN_HEADER:
-			return decodeHeader(ctx, channel, buffer);
+			decodeHeader(ctx, in, out);
+			break;
 		case LOGIN_PAYLOAD:
-			return decodePayload(ctx, channel, buffer);
+			decodePayload(ctx, in, out);
+			break;
 		default:
 			throw new IllegalStateException("Invalid login decoder state");
 		}
@@ -80,20 +84,19 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodeHandshake(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
-		if (buffer.readable()) {
+	private void decodeHandshake(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+		if (buffer.isReadable()) {
 			usernameHash = buffer.readUnsignedByte();
 			serverSeed = random.nextLong();
 
-			ChannelBuffer resp = ChannelBuffers.buffer(17);
+			ByteBuf resp = ctx.alloc().buffer(17);
 			resp.writeByte(LoginConstants.STATUS_EXCHANGE_DATA);
 			resp.writeLong(0);
 			resp.writeLong(serverSeed);
-			channel.write(resp);
+			ctx.channel().writeAndFlush(resp);
 
 			setState(LoginDecoderState.LOGIN_HEADER);
 		}
-		return null;
 	}
 
 	/**
@@ -105,7 +108,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @return The frame, or {@code null}.
 	 * @throws IOException If the login type sent by the client is invalid.
 	 */
-	private Object decodeHeader(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws IOException {
+	private void decodeHeader(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws IOException {
 		if (buffer.readableBytes() >= 2) {
 			int loginType = buffer.readUnsignedByte();
 
@@ -114,12 +117,10 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			}
 
 			reconnecting = loginType == LoginConstants.TYPE_RECONNECTION;
-
 			loginLength = buffer.readUnsignedByte();
 
 			setState(LoginDecoderState.LOGIN_PAYLOAD);
 		}
-		return null;
 	}
 
 	/**
@@ -131,9 +132,9 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodePayload(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
 		if (buffer.readableBytes() >= loginLength) {
-			ChannelBuffer payload = buffer.readBytes(loginLength);
+			ByteBuf payload = buffer.readBytes(loginLength);
 			if (payload.readUnsignedByte() != 0xFF) {
 				throw new Exception("Invalid magic id");
 			}
@@ -157,12 +158,12 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 				throw new Exception("Secure payload length mismatch");
 			}
 
-			ChannelBuffer securePayload = payload.readBytes(securePayloadLength);
+			ByteBuf securePayload = payload.readBytes(securePayloadLength);
 
 			BigInteger bigInteger = new BigInteger(securePayload.array());
 			bigInteger = bigInteger.modPow(NetworkConstants.RSA_EXPONENT, NetworkConstants.RSA_MODULUS);
 
-			securePayload = ChannelBuffers.wrappedBuffer(bigInteger.toByteArray());
+			securePayload = Unpooled.wrappedBuffer(bigInteger.toByteArray());
 
 			int secureId = securePayload.readUnsignedByte();
 			if (secureId != 10) {
@@ -177,8 +178,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			int uid = securePayload.readInt();
 
-			String username = ChannelBufferUtil.readString(securePayload);
-			String password = ChannelBufferUtil.readString(securePayload);
+			String username = ByteBufUtil.readString(securePayload);
+			String password = ByteBufUtil.readString(securePayload);
 
 			if (username.length() > 12 || password.length() > 20) {
 				throw new Exception("Username or password too long.");
@@ -199,15 +200,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid);
 			IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
-			LoginRequest req = new LoginRequest(credentials, randomPair, reconnecting, lowMemory, releaseNumber,
+			LoginRequest request = new LoginRequest(credentials, randomPair, reconnecting, lowMemory, releaseNumber,
 					archiveCrcs);
 
-			if (buffer.readable()) {
-				return new Object[] { req, buffer.readBytes(buffer.readableBytes()) };
+			out.add(request);
+			if (buffer.isReadable()) {
+				out.add(buffer.readBytes(buffer.readableBytes()));
 			}
-			return req;
 		}
-		return null;
 	}
 
 }

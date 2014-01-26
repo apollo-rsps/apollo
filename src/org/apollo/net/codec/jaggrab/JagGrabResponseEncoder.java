@@ -1,23 +1,20 @@
 package org.apollo.net.codec.jaggrab;
 
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageEncoder;
+
+import java.util.List;
 
 /**
  * A {@link OneToOneEncoder} for the JAGGRAB protocol.
  * 
  * @author Graham
  */
-public final class JagGrabResponseEncoder extends OneToOneEncoder {
+public final class JagGrabResponseEncoder extends MessageToMessageEncoder<JagGrabResponse> {
 
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel c, Object msg) {
-		if (msg instanceof JagGrabResponse) {
-			JagGrabResponse resp = (JagGrabResponse) msg;
-			return resp.getFileData();
-		}
-		return msg;
+	protected void encode(ChannelHandlerContext ctx, JagGrabResponse response, List<Object> out) {
+		out.add(response.getFileData());
 	}
 
 }

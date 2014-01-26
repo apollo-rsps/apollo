@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 import org.apollo.game.event.Event;
-import org.apollo.game.model.PrivacyState;
+import org.apollo.game.model.settings.PrivacyState;
 
 /**
  * An {@link Event} sent by the client or server to update the chat and trade privacy state.

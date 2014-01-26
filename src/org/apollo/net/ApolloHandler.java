@@ -1,5 +1,11 @@
 package org.apollo.net;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.HttpRequest;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,22 +16,14 @@ import org.apollo.net.codec.jaggrab.JagGrabRequest;
 import org.apollo.net.session.LoginSession;
 import org.apollo.net.session.Session;
 import org.apollo.net.session.UpdateSession;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
-import org.jboss.netty.handler.codec.http.HttpRequest;
-import org.jboss.netty.handler.timeout.IdleStateAwareChannelUpstreamHandler;
-import org.jboss.netty.handler.timeout.IdleStateEvent;
 
 /**
  * An implementation of {@link SimpleChannelUpstreamHandler} which handles incoming upstream events from Netty.
  * 
  * @author Graham
  */
-public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
+@Sharable
+public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 
 	/**
 	 * The logger for this class.
@@ -47,58 +45,42 @@ public final class ApolloHandler extends IdleStateAwareChannelUpstreamHandler {
 	}
 
 	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
-		Channel channel = ctx.getChannel();
-		logger.info("Channel connected: " + channel);
-		serverContext.getChannelGroup().add(channel);
-	}
-
-	@Override
-	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
-		Channel channel = ctx.getChannel();
-		logger.info("Channel disconnected: " + channel);
-		serverContext.getChannelGroup().remove(channel);
-		Object attachment = ctx.getAttachment();
-		if (attachment != null) {
-			((Session) attachment).destroy();
+	public void channelInactive(ChannelHandlerContext ctx) {
+		Channel channel = ctx.channel();
+		Session session = ctx.attr(NetworkConstants.SESSION_KEY).getAndRemove();
+		if (session != null) {
+			session.destroy();
 		}
+		logger.info("Channel disconnected: " + channel);
+		channel.close();
 	}
 
 	@Override
-	public void channelIdle(ChannelHandlerContext ctx, IdleStateEvent e) {
-		e.getChannel().close();
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
+		logger.log(Level.WARNING, "Exception occured for channel: " + ctx.channel() + ", closing...", e);
+		ctx.channel().close();
 	}
 
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		logger.log(Level.WARNING, "Exception occured for channel: " + e.getChannel() + ", closing...", e.getCause());
-		ctx.getChannel().close();
-	}
-
-	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
-		if (ctx.getAttachment() == null) {
-			Object msg = e.getMessage();
+	public void channelRead(ChannelHandlerContext ctx, Object msg) {
+		if (ctx.attr(NetworkConstants.SESSION_KEY).get() == null) {
 			if (msg instanceof HttpRequest || msg instanceof JagGrabRequest) {
-				Session s = new UpdateSession(ctx.getChannel(), serverContext);
-				s.messageReceived(msg);
-				// we don't bother to set it as an attachment, as the connection
-				// will be closed once the request is completed anyway
+				new UpdateSession(ctx.channel(), serverContext).messageReceived(msg);
 			} else {
 				HandshakeMessage handshakeMessage = (HandshakeMessage) msg;
 				switch (handshakeMessage.getServiceId()) {
 				case HandshakeConstants.SERVICE_GAME:
-					ctx.setAttachment(new LoginSession(ctx.getChannel(), ctx, serverContext));
+					ctx.attr(NetworkConstants.SESSION_KEY).set(new LoginSession(ctx, serverContext));
 					break;
 				case HandshakeConstants.SERVICE_UPDATE:
-					ctx.setAttachment(new UpdateSession(ctx.getChannel(), serverContext));
+					ctx.attr(NetworkConstants.SESSION_KEY).set(new UpdateSession(ctx.channel(), serverContext));
 					break;
 				default:
 					throw new IllegalStateException("Invalid service id");
 				}
 			}
 		} else {
-			((Session) ctx.getAttachment()).messageReceived(e.getMessage());
+			ctx.attr(NetworkConstants.SESSION_KEY).get().messageReceived(msg);
 		}
 	}
 

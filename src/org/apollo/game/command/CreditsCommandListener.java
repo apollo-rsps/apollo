@@ -14,7 +14,7 @@ import org.apollo.util.plugin.PluginManager;
  * @author Graham
  */
 public final class CreditsCommandListener extends CommandListener {
-	
+
 	/*
 	 * If you are considering removing this command, please bear in mind that Apollo took several people thousands of
 	 * hours to create. We released it to the world for free and it isn't much to ask to leave this command in. It isn't

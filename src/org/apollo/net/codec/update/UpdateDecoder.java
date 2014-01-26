@@ -1,32 +1,31 @@
 package org.apollo.net.codec.update;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+
+import java.util.List;
+
 import org.apollo.fs.FileDescriptor;
 import org.apollo.net.codec.update.OnDemandRequest.Priority;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 /**
- * A {@link FrameDecoder} for the 'on-demand' protocol.
+ * A {@link ByteToMessageDecoder} for the 'on-demand' protocol.
  * 
  * @author Graham
  */
-public final class UpdateDecoder extends FrameDecoder {
+public final class UpdateDecoder extends ByteToMessageDecoder {
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel c, ChannelBuffer buf) {
-		if (buf.readableBytes() >= 4) {
-			int type = buf.readUnsignedByte() + 1;
-			int file = buf.readUnsignedShort();
-			int priority = buf.readUnsignedByte();
+	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+		if (buffer.readableBytes() >= 4) {
+			int type = buffer.readUnsignedByte() + 1;
+			int file = buffer.readUnsignedShort();
+			Priority priority = Priority.valueOf(buffer.readUnsignedByte());
 
 			FileDescriptor desc = new FileDescriptor(type, file);
-			Priority p = Priority.valueOf(priority);
-
-			return new OnDemandRequest(desc, p);
+			out.add(new OnDemandRequest(desc, priority));
 		}
-		return null;
 	}
 
 }

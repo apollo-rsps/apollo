@@ -1,13 +1,14 @@
 package org.apollo.update;
 
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.HttpRequest;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import org.apollo.net.codec.jaggrab.JagGrabRequest;
 import org.apollo.net.codec.update.OnDemandRequest;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.handler.codec.http.HttpRequest;
 
 /**
  * A class which dispatches requests to worker threads.

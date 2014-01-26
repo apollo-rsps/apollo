@@ -1,8 +1,8 @@
 package org.apollo.update;
 
-import java.io.IOException;
+import io.netty.channel.Channel;
 
-import org.jboss.netty.channel.Channel;
+import java.io.IOException;
 
 /**
  * The base class for request workers.

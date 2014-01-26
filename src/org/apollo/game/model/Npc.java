@@ -46,7 +46,7 @@ public final class Npc extends Mob {
 	 * @param id The id.
 	 */
 	public void transform(int id) {
-		if (id < 0 || id > NpcDefinition.count()) {
+		if (id < 0 || id >= NpcDefinition.count()) {
 			throw new IllegalArgumentException("Id to transform to is out of bounds");
 		}
 		definition = NpcDefinition.lookup(id);

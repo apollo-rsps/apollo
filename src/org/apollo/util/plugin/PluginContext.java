@@ -41,7 +41,7 @@ public final class PluginContext {
 	 * @param listener The listener.
 	 */
 	public void addCommandListener(String name, CommandListener listener) {
-		World.getWorld().getCommandDispatcher().register(name, listener); // TODO best way?
+		World.getWorld().getCommandDispatcher().register(name, listener);
 	}
 
 	/**

@@ -109,13 +109,8 @@ public final class IndexedFileSystem implements Closeable {
 				}
 			}
 
-			// the number of archives
 			int archives = getFileCount(0);
-
-			// the hash
 			int hash = 1234;
-
-			// the CRCs
 			int[] crcs = new int[archives];
 
 			// calculate the CRCs
@@ -138,7 +133,6 @@ public final class IndexedFileSystem implements Closeable {
 				buffer.putInt(crc);
 			}
 
-			// place the hash into the buffer
 			buffer.putInt(hash);
 			buffer.flip();
 

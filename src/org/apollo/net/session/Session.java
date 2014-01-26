@@ -1,10 +1,10 @@
 package org.apollo.net.session;
 
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
- * A session which is used as the attachment of a {@link ChannelHandlerContext} in Netty.
+ * A session which is used as an attribute of a {@link ChannelHandlerContext} in Netty.
  * 
  * @author Graham
  */

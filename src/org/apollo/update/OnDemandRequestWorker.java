@@ -1,5 +1,9 @@
 package org.apollo.update;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -7,9 +11,6 @@ import org.apollo.fs.FileDescriptor;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.net.codec.update.OnDemandRequest;
 import org.apollo.net.codec.update.OnDemandResponse;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
 
 /**
  * A worker which services 'on-demand' requests.
@@ -53,10 +54,10 @@ public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, 
 
 			byte[] tmp = new byte[chunkSize];
 			buffer.get(tmp, 0, tmp.length);
-			ChannelBuffer chunkData = ChannelBuffers.wrappedBuffer(tmp, 0, chunkSize);
+			ByteBuf chunkData = Unpooled.wrappedBuffer(tmp, 0, chunkSize);
 
 			OnDemandResponse response = new OnDemandResponse(desc, length, chunk, chunkData);
-			channel.write(response);
+			channel.writeAndFlush(response);
 		}
 	}
 

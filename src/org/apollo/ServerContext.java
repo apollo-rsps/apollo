@@ -1,8 +1,6 @@
 package org.apollo;
 
 import org.apollo.net.release.Release;
-import org.jboss.netty.channel.group.ChannelGroup;
-import org.jboss.netty.channel.group.DefaultChannelGroup;
 
 /**
  * A {@link ServerContext} is created along with the {@link Server} object. The primary difference is that a reference
@@ -14,11 +12,6 @@ import org.jboss.netty.channel.group.DefaultChannelGroup;
  * @author Graham
  */
 public final class ServerContext {
-
-	/**
-	 * The channel group.
-	 */
-	private final ChannelGroup group = new DefaultChannelGroup();
 
 	/**
 	 * The current release.
@@ -40,15 +33,6 @@ public final class ServerContext {
 		this.release = release;
 		this.serviceManager = serviceManager;
 		this.serviceManager.setContext(this);
-	}
-
-	/**
-	 * Gets the channel group.
-	 * 
-	 * @return The channel group.
-	 */
-	public ChannelGroup getChannelGroup() {
-		return group;
 	}
 
 	/**

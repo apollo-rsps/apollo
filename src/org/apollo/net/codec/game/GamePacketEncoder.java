@@ -1,20 +1,22 @@
 package org.apollo.net.codec.game;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageEncoder;
+
+import java.util.List;
+
 import net.burtleburtle.bob.rand.IsaacRandom;
 
 import org.apollo.net.meta.PacketType;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
 /**
  * A {@link OneToOneEncoder} which encodes in-game packets.
  * 
  * @author Graham
  */
-public final class GamePacketEncoder extends OneToOneEncoder {
+public final class GamePacketEncoder extends MessageToMessageEncoder<GamePacket> {
 
 	/**
 	 * The random number generator.
@@ -31,11 +33,7 @@ public final class GamePacketEncoder extends OneToOneEncoder {
 	}
 
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-		if (!(msg instanceof GamePacket)) {
-			return msg;
-		}
-
+	protected void encode(ChannelHandlerContext ctx, GamePacket msg, List<Object> out) throws Exception {
 		GamePacket packet = (GamePacket) msg;
 		PacketType type = packet.getType();
 		int headerLength = 1;
@@ -52,7 +50,7 @@ public final class GamePacketEncoder extends OneToOneEncoder {
 			}
 		}
 
-		ChannelBuffer buffer = ChannelBuffers.buffer(headerLength + payloadLength);
+		ByteBuf buffer = Unpooled.buffer(headerLength + payloadLength);
 		buffer.writeByte(packet.getOpcode() + random.nextInt() & 0xFF);
 		if (type == PacketType.VARIABLE_BYTE) {
 			buffer.writeByte(payloadLength);
@@ -61,7 +59,7 @@ public final class GamePacketEncoder extends OneToOneEncoder {
 		}
 		buffer.writeBytes(packet.getPayload());
 
-		return buffer;
+		out.add(buffer);
 	}
 
 }

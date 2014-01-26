@@ -1,4 +1,5 @@
 require 'java'
+
 java_import 'org.apollo.game.model.EquipmentConstants'
 
 AIR_ELEMENTS = {}
