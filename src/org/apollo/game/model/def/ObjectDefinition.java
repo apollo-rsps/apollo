@@ -15,9 +15,9 @@ public final class ObjectDefinition {
 	private static ObjectDefinition[] definitions;
 
 	/**
-	 * Gets the total number of objects.
+	 * Gets the total number of object definitions.
 	 * 
-	 * @return The total number of objects.
+	 * @return The count.
 	 */
 	public static int count() {
 		return definitions.length;
@@ -36,6 +36,7 @@ public final class ObjectDefinition {
 	 * Initialises the object definitions.
 	 * 
 	 * @param definitions The decoded definitions.
+	 * @throws RuntimeException If there is an id mismatch.
 	 */
 	public static void init(ObjectDefinition[] definitions) {
 		ObjectDefinition.definitions = definitions;
@@ -53,6 +54,7 @@ public final class ObjectDefinition {
 	 * 
 	 * @param id The id of the object.
 	 * @return The definition.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public static ObjectDefinition lookup(int id) {
 		if (id < 0 || id > definitions.length) {

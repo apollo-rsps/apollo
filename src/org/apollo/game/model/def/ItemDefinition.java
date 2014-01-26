@@ -28,9 +28,9 @@ public final class ItemDefinition {
 	private static final BiMap<Integer, Integer> notesInverse = notes.inverse();
 
 	/**
-	 * Gets the total number of items.
+	 * Gets the total number of item definitions.
 	 * 
-	 * @return The total number of items.
+	 * @return The count.
 	 */
 	public static int count() {
 		return definitions.length;
@@ -88,7 +88,8 @@ public final class ItemDefinition {
 	 */
 	public static ItemDefinition lookup(int id) {
 		if (id < 0 || id >= definitions.length) {
-			throw new IndexOutOfBoundsException("item id is out of bounds");
+			throw new IndexOutOfBoundsException(ItemDefinition.class.getName() + " lookup index " + id
+					+ " out of bounds.");
 		}
 		return definitions[id];
 	}

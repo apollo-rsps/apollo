@@ -22,6 +22,7 @@ public final class EquipmentDefinition {
 	 * Initialises the equipment definitions.
 	 * 
 	 * @param definitions The definitions.
+	 * @throws RuntimeException If there is an id mismatch.
 	 */
 	public static void init(EquipmentDefinition[] definitions) {
 		for (int id = 0; id < definitions.length; id++) {
@@ -79,6 +80,11 @@ public final class EquipmentDefinition {
 		this.id = id;
 	}
 
+	/**
+	 * Gets the total number of equipment definitions.
+	 * 
+	 * @return The count.
+	 */
 	public int count() {
 		return definitions.size();
 	}
