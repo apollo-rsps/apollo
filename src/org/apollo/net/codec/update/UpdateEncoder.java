@@ -16,24 +16,20 @@ import org.apollo.fs.FileDescriptor;
 public final class UpdateEncoder extends MessageToMessageEncoder<OnDemandResponse> {
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, OnDemandResponse msg, List<Object> out) {
-		if (msg instanceof OnDemandResponse) {
-			OnDemandResponse response = (OnDemandResponse) msg;
+	protected void encode(ChannelHandlerContext ctx, OnDemandResponse response, List<Object> out) {
+		FileDescriptor descriptor = response.getFileDescriptor();
+		int fileSize = response.getFileSize();
+		int chunkId = response.getChunkId();
+		ByteBuf chunkData = response.getChunkData();
 
-			FileDescriptor descriptor = response.getFileDescriptor();
-			int fileSize = response.getFileSize();
-			int chunkId = response.getChunkId();
-			ByteBuf chunkData = response.getChunkData();
+		ByteBuf buffer = ctx.alloc().buffer(6 + chunkData.readableBytes());
+		buffer.writeByte(descriptor.getType() - 1);
+		buffer.writeShort(descriptor.getFile());
+		buffer.writeShort(fileSize);
+		buffer.writeByte(chunkId);
+		buffer.writeBytes(chunkData);
 
-			ByteBuf buffer = ctx.alloc().buffer(6 + chunkData.readableBytes());
-			buffer.writeByte(descriptor.getType() - 1);
-			buffer.writeShort(descriptor.getFile());
-			buffer.writeShort(fileSize);
-			buffer.writeByte(chunkId);
-			buffer.writeBytes(chunkData);
-
-			out.add(buffer);
-		}
+		out.add(buffer);
 	}
 
 }

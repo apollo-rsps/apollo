@@ -89,11 +89,11 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			usernameHash = buffer.readUnsignedByte();
 			serverSeed = random.nextLong();
 
-			ByteBuf resp = ctx.alloc().buffer(17);
-			resp.writeByte(LoginConstants.STATUS_EXCHANGE_DATA);
-			resp.writeLong(0);
-			resp.writeLong(serverSeed);
-			ctx.channel().writeAndFlush(resp);
+			ByteBuf response = ctx.alloc().buffer(17);
+			response.writeByte(LoginConstants.STATUS_EXCHANGE_DATA);
+			response.writeLong(0);
+			response.writeLong(serverSeed);
+			ctx.channel().writeAndFlush(response);
 
 			setState(LoginDecoderState.LOGIN_HEADER);
 		}
