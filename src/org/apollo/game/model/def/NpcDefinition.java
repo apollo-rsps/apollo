@@ -43,7 +43,7 @@ public final class NpcDefinition {
 		for (int id = 0; id < definitions.length; id++) {
 			NpcDefinition def = definitions[id];
 			if (def.getId() != id) {
-				throw new RuntimeException("NPC definition id mismatch");
+				throw new RuntimeException("npc definition id mismatch");
 			}
 		}
 	}

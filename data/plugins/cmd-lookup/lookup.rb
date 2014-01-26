@@ -43,3 +43,18 @@ on :command, :iteminfo, RIGHTS_ADMIN do |player, command|
   player.send_message("Item #{id} is called #{definition.name}, is #{members} only, and has a team of #{definition.team}.")
   player.send_message("Its description is \"#{definition.description}\".")
 end
+
+on :command, :npcinfo, RIGHTS_ADMIN do |player, command|
+  args = command.arguments
+  unless args.length == 1
+    player.send_message("Invalid syntax - ::npcinfo [npc id]")
+    return
+  end
+
+  id = args[0].to_i
+  definition = NpcDefinition.lookup(id)
+
+  is_combative = definition.has_combat_level ? "has a combat level of #{definition.combat_level}" : "does not have a combat level"
+  player.send_message("Npc #{id} is called #{definition.name} and #{is_combative}.")
+  player.send_message("Its description is \"#{definition.description}\".")
+end
