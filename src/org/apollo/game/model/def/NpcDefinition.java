@@ -15,9 +15,9 @@ public final class NpcDefinition {
 	private static NpcDefinition[] definitions;
 
 	/**
-	 * Gets the total number of NPCs.
+	 * Gets the total number of npc definitions.
 	 * 
-	 * @return The total number of NPCs.
+	 * @return The count.
 	 */
 	public static int count() {
 		return definitions.length;
@@ -43,7 +43,7 @@ public final class NpcDefinition {
 		for (int id = 0; id < definitions.length; id++) {
 			NpcDefinition def = definitions[id];
 			if (def.getId() != id) {
-				throw new RuntimeException("npc definition id mismatch");
+				throw new RuntimeException("Npc definition id mismatch!");
 			}
 		}
 	}
@@ -57,7 +57,8 @@ public final class NpcDefinition {
 	 */
 	public static NpcDefinition lookup(int id) {
 		if (id < 0 || id >= definitions.length) {
-			throw new IndexOutOfBoundsException("npc id is out of bounds");
+			throw new IndexOutOfBoundsException(NpcDefinition.class.getName() + " lookup index " + id
+					+ " out of bounds.");
 		}
 		return definitions[id];
 	}
