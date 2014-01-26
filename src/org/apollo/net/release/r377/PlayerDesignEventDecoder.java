@@ -2,7 +2,7 @@ package org.apollo.net.release.r377;
 
 import org.apollo.game.event.impl.PlayerDesignEvent;
 import org.apollo.game.model.Appearance;
-import org.apollo.game.model.Gender;
+import org.apollo.game.model.settings.Gender;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;

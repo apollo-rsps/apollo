@@ -25,6 +25,7 @@ public final class Archive {
 		int extractedSize = ByteBufferUtil.readUnsignedTriByte(buffer);
 		int size = ByteBufferUtil.readUnsignedTriByte(buffer);
 		boolean extracted = false;
+
 		if (size != extractedSize) {
 			byte[] compressed = new byte[size];
 			byte[] uncompressed = new byte[extractedSize];
@@ -33,15 +34,18 @@ public final class Archive {
 			buffer = ByteBuffer.wrap(uncompressed);
 			extracted = true;
 		}
+
 		int entries = buffer.getShort() & 0xFFFF;
 		int[] identifiers = new int[entries];
 		int[] extractedSizes = new int[entries];
 		int[] sizes = new int[entries];
+
 		for (int i = 0; i < entries; i++) {
 			identifiers[i] = buffer.getInt();
 			extractedSizes[i] = ByteBufferUtil.readUnsignedTriByte(buffer);
 			sizes[i] = ByteBufferUtil.readUnsignedTriByte(buffer);
 		}
+
 		ArchiveEntry[] entry = new ArchiveEntry[entries];
 		for (int i = 0; i < entries; i++) {
 			ByteBuffer entryBuffer;
@@ -85,9 +89,11 @@ public final class Archive {
 	public ArchiveEntry getEntry(String name) throws FileNotFoundException {
 		int hash = 0;
 		name = name.toUpperCase();
+
 		for (int i = 0; i < name.length(); i++) {
 			hash = hash * 61 + name.charAt(i) - 32;
 		}
+
 		for (ArchiveEntry entry : entries) {
 			if (entry.getIdentifier() == hash) {
 				return entry;

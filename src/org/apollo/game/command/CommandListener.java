@@ -1,7 +1,7 @@
 package org.apollo.game.command;
 
 import org.apollo.game.model.Player;
-import org.apollo.game.model.Player.PrivilegeLevel;
+import org.apollo.game.model.settings.PrivilegeLevel;
 
 /**
  * An interface which should be implemented by classes to listen to {@link Command}s.

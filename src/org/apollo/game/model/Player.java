@@ -20,6 +20,9 @@ import org.apollo.game.model.inv.AppearanceInventoryListener;
 import org.apollo.game.model.inv.FullInventoryListener;
 import org.apollo.game.model.inv.InventoryListener;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
+import org.apollo.game.model.settings.PrivacyState;
+import org.apollo.game.model.settings.PrivilegeLevel;
+import org.apollo.game.model.settings.ScreenBrightness;
 import org.apollo.game.model.skill.LevelUpSkillListener;
 import org.apollo.game.model.skill.SkillListener;
 import org.apollo.game.model.skill.SynchronizationSkillListener;
@@ -34,68 +37,6 @@ import org.apollo.util.Point;
  * @author Graham
  */
 public final class Player extends Mob {
-
-	/**
-	 * An enumeration with the different privilege levels a player can have.
-	 * 
-	 * @author Graham
-	 */
-	public enum PrivilegeLevel {
-
-		/**
-		 * An administrator (rights 2) account.
-		 */
-		ADMINISTRATOR(2),
-
-		/**
-		 * A player moderator (rights 1) account.
-		 */
-		MODERATOR(1),
-
-		/**
-		 * A standard (rights 0) account.
-		 */
-		STANDARD(0);
-
-		/**
-		 * Gets the privilege level for the specified numerical level.
-		 * 
-		 * @param value The numerical level.
-		 * @return The privilege level.
-		 * @throws IllegalArgumentException If the numerical level is invalid.
-		 */
-		public static PrivilegeLevel valueOf(int value) {
-			PrivilegeLevel[] values = values();
-			if (value < 0 || value > values.length) {
-				throw new IndexOutOfBoundsException("Invalid privilege level integer value supplied");
-			}
-			return values[value];
-		}
-
-		/**
-		 * The numerical level used in the protocol.
-		 */
-		private final int value;
-
-		/**
-		 * Creates the privilege level.
-		 * 
-		 * @param value The numerical level.
-		 */
-		private PrivilegeLevel(int value) {
-			this.value = value;
-		}
-
-		/**
-		 * Gets the numerical level.
-		 * 
-		 * @return The numerical level used in the protocol.
-		 */
-		public int toInteger() {
-			return value;
-		}
-
-	}
 
 	/**
 	 * The player's appearance.
@@ -185,12 +126,17 @@ public final class Player extends Mob {
 	/**
 	 * The player's run energy.
 	 */
-	private int runEnergy = 100;
+	private int runEnergy = 0;
 
 	/**
 	 * A flag indicating if this player is running.
 	 */
 	private boolean running = false;
+
+	/**
+	 * The brightness of this player's screen.
+	 */
+	private ScreenBrightness screenBrightness;
 
 	/**
 	 * The {@link GameSession} currently attached to this {@link Player}.
@@ -395,6 +341,15 @@ public final class Player extends Mob {
 	 */
 	public int getRunEnergy() {
 		return runEnergy;
+	}
+
+	/**
+	 * Gets this player's {@link ScreenBrightness}.
+	 * 
+	 * @return The screen brightness.
+	 */
+	public ScreenBrightness getScreenBrightness() {
+		return screenBrightness;
 	}
 
 	/**
@@ -716,30 +671,21 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the public chat {@link PrivacyState}.
-	 * 
-	 * @param publicChatPrivacy The privacy state.
-	 */
-	public void setPublicChatPrivacy(PrivacyState publicChatPrivacy) {
-		this.publicChatPrivacy = publicChatPrivacy;
-	}
-
-	/**
-	 * Sets the trade chat {@link PrivacyState}.
-	 * 
-	 * @param tradeChatPrivacy The privacy state.
-	 */
-	public void setTradeChatPrivacy(PrivacyState tradeChatPrivacy) {
-		this.tradeChatPrivacy = tradeChatPrivacy;
-	}
-
-	/**
 	 * Sets the privilege level.
 	 * 
 	 * @param privilegeLevel The privilege level.
 	 */
 	public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
 		this.privilegeLevel = privilegeLevel;
+	}
+
+	/**
+	 * Sets the public chat {@link PrivacyState}.
+	 * 
+	 * @param publicChatPrivacy The privacy state.
+	 */
+	public void setPublicChatPrivacy(PrivacyState publicChatPrivacy) {
+		this.publicChatPrivacy = publicChatPrivacy;
 	}
 
 	/**
@@ -762,6 +708,15 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sets the {@link ScreenBrightness} of this player.
+	 * 
+	 * @param brightness The screen brightness.
+	 */
+	public void setScreenBrightness(ScreenBrightness brightness) {
+		this.screenBrightness = brightness;
+	}
+
+	/**
 	 * Sets the player's {@link GameSession}.
 	 * 
 	 * @param session The player's {@link GameSession}.
@@ -773,6 +728,15 @@ public final class Player extends Mob {
 			sendInitialEvents();
 		}
 		getBlockSet().add(SynchronizationBlock.createAppearanceBlock(this));
+	}
+
+	/**
+	 * Sets the trade chat {@link PrivacyState}.
+	 * 
+	 * @param tradeChatPrivacy The privacy state.
+	 */
+	public void setTradeChatPrivacy(PrivacyState tradeChatPrivacy) {
+		this.tradeChatPrivacy = tradeChatPrivacy;
 	}
 
 	/**

@@ -1,18 +1,20 @@
 package org.apollo.net.codec.game;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageDecoder;
+
+import java.util.List;
+
 import org.apollo.game.event.Event;
 import org.apollo.net.release.EventDecoder;
 import org.apollo.net.release.Release;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 
 /**
  * A {@link OneToOneDecoder} that decodes {@link GamePacket}s into {@link Event}s.
  * 
  * @author Graham
  */
-public final class GameEventDecoder extends OneToOneDecoder {
+public final class GameEventDecoder extends MessageToMessageDecoder<GamePacket> {
 
 	/**
 	 * The current release.
@@ -29,17 +31,14 @@ public final class GameEventDecoder extends OneToOneDecoder {
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel c, Object msg) {
-		if (msg instanceof GamePacket) {
-			GamePacket packet = (GamePacket) msg;
-			EventDecoder<?> decoder = release.getEventDecoder(packet.getOpcode());
-			if (decoder != null) {
-				return decoder.decode(packet);
-			}
+	protected void decode(ChannelHandlerContext ctx, GamePacket msg, List<Object> out) {
+		GamePacket packet = (GamePacket) msg;
+		EventDecoder<?> decoder = release.getEventDecoder(packet.getOpcode());
+		if (decoder != null) {
+			out.add(decoder.decode(packet));
+		} else {
 			System.out.println("Unidentified packet received - opcode: " + packet.getOpcode() + ".");
-			return null;
 		}
-		return msg;
 	}
 
 }

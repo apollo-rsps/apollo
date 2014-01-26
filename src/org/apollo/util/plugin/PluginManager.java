@@ -160,7 +160,6 @@ public final class PluginManager {
 			if (dependency == null) {
 				throw new DependencyException("Unresolved dependency: " + dependencyId + ".");
 			}
-
 			start(env, plugin, plugins, started);
 		}
 

@@ -1,18 +1,20 @@
 package org.apollo.net.codec.game;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageEncoder;
+
+import java.util.List;
+
 import org.apollo.game.event.Event;
 import org.apollo.net.release.EventEncoder;
 import org.apollo.net.release.Release;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
 /**
  * A {@link OneToOneEncoder} which encodes {@link Event}s into {@link GamePacket}s.
  * 
  * @author Graham
  */
-public final class GameEventEncoder extends OneToOneEncoder {
+public final class GameEventEncoder extends MessageToMessageEncoder<Event> {
 
 	/**
 	 * The current release.
@@ -30,16 +32,11 @@ public final class GameEventEncoder extends OneToOneEncoder {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel c, Object msg) {
-		if (msg instanceof Event) {
-			Event event = (Event) msg;
-			EventEncoder<Event> encoder = (EventEncoder<Event>) release.getEventEncoder(event.getClass());
-			if (encoder != null) {
-				return encoder.encode(event);
-			}
-			return null;
+	protected void encode(ChannelHandlerContext ctx, Event event, List<Object> out) {
+		EventEncoder<Event> encoder = (EventEncoder<Event>) release.getEventEncoder(event.getClass());
+		if (encoder != null) {
+			out.add(encoder.encode(event));
 		}
-		return msg;
 	}
 
 }

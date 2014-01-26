@@ -1,11 +1,12 @@
 package org.apollo.util;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
-import org.jboss.netty.handler.codec.replay.ReplayingDecoder;
-import org.jboss.netty.handler.codec.replay.VoidEnum;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.ReplayingDecoder;
+
+import java.util.List;
 
 /**
  * A stateful implementation of a {@link FrameDecoder} which may be extended and used by other classes. The current
@@ -14,8 +15,8 @@ import org.jboss.netty.handler.codec.replay.VoidEnum;
  * The state may be changed by calling the {@link StatefulFrameDecoder#setState(Enum)} method.
  * 
  * The current state is supplied as a parameter in the
- * {@link StatefulFrameDecoder#decode(ChannelHandlerContext, Channel, ChannelBuffer, Enum)} and
- * {@link StatefulFrameDecoder#decodeLast(ChannelHandlerContext, Channel, ChannelBuffer, Enum)} methods.
+ * {@link StatefulFrameDecoder#decode(ChannelHandlerContext, Channel, ByteBuf, Enum)} and
+ * {@link StatefulFrameDecoder#decodeLast(ChannelHandlerContext, Channel, ByteBuf, Enum)} methods.
  * 
  * This class is not thread safe: it is recommended that the state is only set in the decode methods overriden.
  * 
@@ -25,7 +26,7 @@ import org.jboss.netty.handler.codec.replay.VoidEnum;
  * @author Graham
  * @param <T> The state enumeration.
  */
-public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecoder {
+public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMessageDecoder {
 
 	/**
 	 * The current state.
@@ -50,13 +51,12 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * @throws NullPointerException If the state is {@code null}.
 	 */
 	public StatefulFrameDecoder(T state, boolean unwrap) {
-		super(unwrap);
 		setState(state);
 	}
 
 	@Override
-	protected final Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
-		return decode(ctx, channel, buffer, state);
+	protected final void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		decode(ctx, in, out, state);
 	}
 
 	/**
@@ -66,14 +66,12 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * @param channel The channel.
 	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
 	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
-	 * @return The decoded frame, or {@code null} if not enough data was received.
 	 */
-	protected abstract Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state)
-			throws Exception;
+	protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) throws Exception;
 
 	@Override
-	protected final Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
-		return decodeLast(ctx, channel, buffer, state);
+	protected final void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+		decodeLast(ctx, in, out, state);
 	}
 
 	/**
@@ -84,10 +82,9 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends FrameDecod
 	 * @param channel The channel.
 	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
 	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
-	 * @return The decoded frame, or {@code null} if not enough data was received.
 	 */
-	protected Object decodeLast(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, T state) {
-		return null;
+	protected void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) {
+
 	}
 
 	/**

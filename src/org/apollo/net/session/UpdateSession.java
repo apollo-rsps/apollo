@@ -1,12 +1,13 @@
 package org.apollo.net.session;
 
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.HttpRequest;
+
 import org.apollo.ServerContext;
 import org.apollo.net.codec.jaggrab.JagGrabRequest;
 import org.apollo.net.codec.update.OnDemandRequest;
 import org.apollo.update.UpdateDispatcher;
 import org.apollo.update.UpdateService;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.handler.codec.http.HttpRequest;
 
 /**
  * An update session.

@@ -1,7 +1,6 @@
 package org.apollo.game.model.obj;
 
 import org.apollo.game.model.Entity;
-import org.apollo.game.model.EntityType;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.def.ObjectDefinition;
 

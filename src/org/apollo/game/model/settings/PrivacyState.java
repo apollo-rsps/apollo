@@ -1,4 +1,4 @@
-package org.apollo.game.model;
+package org.apollo.game.model.settings;
 
 /**
  * An enumeration representing the different privacy states for public, private and trade chat.
@@ -8,9 +8,9 @@ package org.apollo.game.model;
 public enum PrivacyState {
 
 	/**
-	 * Represents the 'friends' state, when only messages from friends and moderators are displayed.
+	 * Represents the 'on' state, when all messages are displayed.
 	 */
-	FRIENDS(2),
+	ON(0),
 
 	/**
 	 * Represents the 'hidden' state, when all public chat text is displayed over the heads of players, but not in the
@@ -19,14 +19,14 @@ public enum PrivacyState {
 	HIDE(1),
 
 	/**
-	 * Represents the 'off' state, when only messages from moderators are displayed.
+	 * Represents the 'friends' state, when only messages from friends and moderators are displayed.
 	 */
-	OFF(3),
+	FRIENDS(2),
 
 	/**
-	 * Represents the 'on' state, when all messages are displayed.
+	 * Represents the 'off' state, when only messages from moderators are displayed.
 	 */
-	ON(0);
+	OFF(3);
 
 	/**
 	 * Gets the privacy state for the specified numerical value.

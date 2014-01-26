@@ -30,36 +30,36 @@ public final class HypertextResourceProvider extends ResourceProvider {
 
 	@Override
 	public boolean accept(String path) throws IOException {
-		File f = new File(base, path);
-		URI target = f.toURI().normalize();
+		File file = new File(base, path);
+		URI target = file.toURI().normalize();
 		if (target.toASCIIString().startsWith(base.toURI().normalize().toASCIIString())) {
-			if (f.isDirectory()) {
-				f = new File(f, "index.html");
+			if (file.isDirectory()) {
+				file = new File(file, "index.html");
 			}
-			return f.exists();
+			return file.exists();
 		}
 		return false;
 	}
 
 	@Override
 	public ByteBuffer get(String path) throws IOException {
-		File f = new File(base, path);
-		if (f.isDirectory()) {
-			f = new File(f, "index.html");
+		File file = new File(base, path);
+		if (file.isDirectory()) {
+			file = new File(file, "index.html");
 		}
-		if (!f.exists()) {
+		if (!file.exists()) {
 			return null;
 		}
 
-		RandomAccessFile raf = new RandomAccessFile(f, "r");
-		ByteBuffer buf;
+		RandomAccessFile raf = new RandomAccessFile(file, "r");
+		ByteBuffer buffer;
 		try {
-			buf = raf.getChannel().map(MapMode.READ_ONLY, 0, raf.length());
+			buffer = raf.getChannel().map(MapMode.READ_ONLY, 0, raf.length());
 		} finally {
 			raf.close();
 		}
 
-		return buf;
+		return buffer;
 	}
 
 }

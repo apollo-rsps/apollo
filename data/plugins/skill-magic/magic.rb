@@ -1,4 +1,5 @@
 require 'java'
+
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.event.impl.DisplayTabInterfaceEvent'
 java_import 'org.apollo.game.model.EquipmentConstants'

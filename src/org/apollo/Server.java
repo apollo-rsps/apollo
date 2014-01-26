@@ -1,30 +1,29 @@
 package org.apollo;
 
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.game.model.World;
 import org.apollo.net.ApolloHandler;
-import org.apollo.net.HttpPipelineFactory;
-import org.apollo.net.JagGrabPipelineFactory;
+import org.apollo.net.HttpChannelInitializer;
+import org.apollo.net.JagGrabChannelInitializer;
 import org.apollo.net.NetworkConstants;
-import org.apollo.net.ServicePipelineFactory;
+import org.apollo.net.ServiceChannelInitializer;
 import org.apollo.net.release.Release;
 import org.apollo.net.release.r317.Release317;
 import org.apollo.util.plugin.PluginContext;
 import org.apollo.util.plugin.PluginManager;
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.util.HashedWheelTimer;
-import org.jboss.netty.util.Timer;
 
 /**
  * The core class of the Apollo server.
@@ -75,25 +74,19 @@ public final class Server {
 	private final ServerBootstrap jagGrabBootstrap = new ServerBootstrap();
 
 	/**
-	 * The {@link ExecutorService} used for network events. The named thread factory is unused as Netty names threads
-	 * itself.
-	 */
-	private final ExecutorService networkExecutor = Executors.newCachedThreadPool();
-
-	/**
 	 * The {@link ServerBootstrap} for the service listener.
 	 */
 	private final ServerBootstrap serviceBootstrap = new ServerBootstrap();
 
 	/**
+	 * The event loop group.
+	 */
+	private final EventLoopGroup loopGroup = new NioEventLoopGroup();
+
+	/**
 	 * The service manager.
 	 */
 	private final ServiceManager serviceManager;
-
-	/**
-	 * The timer used for idle checking.
-	 */
-	private final Timer timer = new HashedWheelTimer();
 
 	/**
 	 * Creates the Apollo server.
@@ -145,22 +138,24 @@ public final class Server {
 
 		logger.info("Initialized release #" + release.getReleaseNumber() + ".");
 
-		ChannelFactory factory = new NioServerSocketChannelFactory(networkExecutor, networkExecutor);
-		serviceBootstrap.setFactory(factory);
-		httpBootstrap.setFactory(factory);
-		jagGrabBootstrap.setFactory(factory);
+		serviceBootstrap.group(loopGroup);
+		httpBootstrap.group(loopGroup);
+		jagGrabBootstrap.group(loopGroup);
 
 		context = new ServerContext(release, serviceManager);
 		ApolloHandler handler = new ApolloHandler(context);
 
-		ChannelPipelineFactory servicePipelineFactory = new ServicePipelineFactory(handler, timer);
-		serviceBootstrap.setPipelineFactory(servicePipelineFactory);
+		ChannelInitializer<SocketChannel> serviceInitializer = new ServiceChannelInitializer(handler);
+		serviceBootstrap.channel(NioServerSocketChannel.class);
+		serviceBootstrap.childHandler(serviceInitializer);
 
-		ChannelPipelineFactory httpPipelineFactory = new HttpPipelineFactory(handler, timer);
-		httpBootstrap.setPipelineFactory(httpPipelineFactory);
+		ChannelInitializer<SocketChannel> httpInitializer = new HttpChannelInitializer(handler);
+		httpBootstrap.channel(NioServerSocketChannel.class);
+		httpBootstrap.childHandler(httpInitializer);
 
-		ChannelPipelineFactory jagGrabPipelineFactory = new JagGrabPipelineFactory(handler, timer);
-		jagGrabBootstrap.setPipelineFactory(jagGrabPipelineFactory);
+		ChannelInitializer<SocketChannel> jagGrabInitializer = new JagGrabChannelInitializer(handler);
+		jagGrabBootstrap.channel(NioServerSocketChannel.class);
+		jagGrabBootstrap.childHandler(jagGrabInitializer);
 	}
 
 	/**
@@ -169,14 +164,12 @@ public final class Server {
 	 * @throws Exception If an error occurs.
 	 */
 	public void start() throws Exception {
-		PluginManager mgr = new PluginManager(new PluginContext(context));
-
+		PluginManager manager = new PluginManager(new PluginContext(context));
 		serviceManager.startAll();
 
-		// TODO move this?
 		int releaseNo = context.getRelease().getReleaseNumber();
 		IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + releaseNo), true);
-		World.getWorld().init(releaseNo, fs, mgr);
+		World.getWorld().init(releaseNo, fs, manager);
 	}
 
 }

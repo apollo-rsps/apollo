@@ -1,6 +1,6 @@
 package org.apollo.net.codec.jaggrab;
 
-import org.jboss.netty.buffer.ChannelBuffer;
+import io.netty.buffer.ByteBuf;
 
 /**
  * Represents a single JAGGRAB response.
@@ -12,14 +12,14 @@ public final class JagGrabResponse {
 	/**
 	 * The file data.
 	 */
-	private final ChannelBuffer fileData;
+	private final ByteBuf fileData;
 
 	/**
 	 * Creates the response.
 	 * 
 	 * @param fileData The file data.
 	 */
-	public JagGrabResponse(ChannelBuffer fileData) {
+	public JagGrabResponse(ByteBuf fileData) {
 		this.fileData = fileData;
 	}
 
@@ -28,7 +28,7 @@ public final class JagGrabResponse {
 	 * 
 	 * @return The file data.
 	 */
-	public ChannelBuffer getFileData() {
+	public ByteBuf getFileData() {
 		return fileData;
 	}
 

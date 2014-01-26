@@ -1,7 +1,7 @@
 package org.apollo.game.sync.block;
 
 import org.apollo.game.event.impl.ChatEvent;
-import org.apollo.game.model.Player.PrivilegeLevel;
+import org.apollo.game.model.settings.PrivilegeLevel;
 
 /**
  * The chat {@link SynchronizationBlock}.

@@ -1,4 +1,5 @@
 require 'java'
+
 java_import 'org.apollo.game.action.DistancedAction'
 java_import 'org.apollo.game.model.EquipmentConstants'
 java_import 'org.apollo.game.model.def.ItemDefinition'

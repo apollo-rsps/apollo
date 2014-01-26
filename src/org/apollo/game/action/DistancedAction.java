@@ -62,7 +62,7 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 		} else if (mob.getPosition().getDistance(position) <= distance) {
 			reached = true;
 			setDelay(delay);
-			if (immediate) { // TODO: required?
+			if (immediate) {
 				executeAction();
 			}
 		}

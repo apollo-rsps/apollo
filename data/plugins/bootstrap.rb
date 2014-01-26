@@ -16,13 +16,14 @@ require 'java'
 java_import 'org.apollo.game.event.handler.EventHandler'
 java_import 'org.apollo.game.command.CommandListener'
 java_import 'org.apollo.game.model.Player'
+java_import 'org.apollo.game.model.settings.PrivilegeLevel'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
 
 # Alias the privilege levels.
-RIGHTS_ADMIN    = Player::PrivilegeLevel::ADMINISTRATOR
-RIGHTS_MOD      = Player::PrivilegeLevel::MODERATOR
-RIGHTS_STANDARD = Player::PrivilegeLevel::STANDARD
+RIGHTS_ADMIN    = PrivilegeLevel::ADMINISTRATOR
+RIGHTS_MOD      = PrivilegeLevel::MODERATOR
+RIGHTS_STANDARD = PrivilegeLevel::STANDARD
 
 # Extends the (Ruby) String class with a method to convert a lower case,
 # underscore delimited string to camel-case.

@@ -109,8 +109,8 @@ public final class ServiceManager {
 	 * @param ctx The server context.
 	 */
 	public void setContext(ServerContext ctx) {
-		for (Service s : services.values()) {
-			s.setContext(ctx);
+		for (Service service : services.values()) {
+			service.setContext(ctx);
 		}
 	}
 

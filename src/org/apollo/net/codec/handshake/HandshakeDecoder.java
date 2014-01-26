@@ -1,14 +1,15 @@
 package org.apollo.net.codec.handshake;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+
+import java.util.List;
+
 import org.apollo.net.codec.login.LoginDecoder;
 import org.apollo.net.codec.login.LoginEncoder;
 import org.apollo.net.codec.update.UpdateDecoder;
 import org.apollo.net.codec.update.UpdateEncoder;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 /**
  * A {@link FrameDecoder} which decodes the handshake and makes changes to the pipeline as appropriate for the selected
@@ -16,46 +17,37 @@ import org.jboss.netty.handler.codec.frame.FrameDecoder;
  * 
  * @author Graham
  */
-public final class HandshakeDecoder extends FrameDecoder {
-
-	/**
-	 * Creates the handshake frame decoder.
-	 */
-	public HandshakeDecoder() {
-		super(true);
-	}
+public final class HandshakeDecoder extends ByteToMessageDecoder {
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
-		if (buffer.readable()) {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+		if (buffer.isReadable()) {
 			int id = buffer.readUnsignedByte();
 
 			switch (id) {
 			case HandshakeConstants.SERVICE_GAME:
-				ctx.getPipeline().addFirst("loginEncoder", new LoginEncoder());
-				ctx.getPipeline().addBefore("handler", "loginDecoder", new LoginDecoder());
+				ctx.pipeline().addFirst("loginEncoder", new LoginEncoder());
+				ctx.pipeline().addAfter("handshakeDecoder", "loginDecoder", new LoginDecoder());
 				break;
 			case HandshakeConstants.SERVICE_UPDATE:
-				ctx.getPipeline().addFirst("updateEncoder", new UpdateEncoder());
-				ctx.getPipeline().addBefore("handler", "updateDecoder", new UpdateDecoder());
-				ChannelBuffer buf = ChannelBuffers.buffer(8);
+				ctx.pipeline().addFirst("updateEncoder", new UpdateEncoder());
+				ctx.pipeline().addBefore("handler", "updateDecoder", new UpdateDecoder());
+				ByteBuf buf = ctx.alloc().buffer(8);
 				buf.writeLong(0);
-				channel.write(buf); // TODO should it be here?
+				ctx.channel().writeAndFlush(buf);
 				break;
 			default:
 				throw new IllegalArgumentException("Invalid service id");
 			}
 
-			ctx.getPipeline().remove(this);
-
+			ctx.pipeline().remove(this);
 			HandshakeMessage message = new HandshakeMessage(id);
 
-			if (buffer.readable()) {
-				return new Object[] { message, buffer.readBytes(buffer.readableBytes()) };
+			out.add(message);
+			if (buffer.isReadable()) {
+				out.add(buffer.readBytes(buffer.readableBytes()));
 			}
-			return message;
 		}
-		return null;
 	}
 
 }

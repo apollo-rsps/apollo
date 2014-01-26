@@ -1,5 +1,10 @@
 package org.apollo.net.session;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandlerContext;
+
 import org.apollo.ServerContext;
 import org.apollo.game.GameService;
 import org.apollo.game.model.Player;
@@ -7,6 +12,7 @@ import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.login.LoginService;
 import org.apollo.net.ApolloHandler;
+import org.apollo.net.NetworkConstants;
 import org.apollo.net.codec.game.GameEventDecoder;
 import org.apollo.net.codec.game.GameEventEncoder;
 import org.apollo.net.codec.game.GamePacketDecoder;
@@ -16,10 +22,6 @@ import org.apollo.net.codec.login.LoginRequest;
 import org.apollo.net.codec.login.LoginResponse;
 import org.apollo.net.release.Release;
 import org.apollo.security.IsaacRandomPair;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelFutureListener;
-import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * A login session.
@@ -41,13 +43,12 @@ public final class LoginSession extends Session {
 	/**
 	 * Creates a login session for the specified channel.
 	 * 
-	 * @param channel The channel.
-	 * @param channelContext The context of the {@link ApolloHandler}.
+	 * @param ctx The context of the {@link ApolloHandler}.
 	 * @param serverContext The server context.
 	 */
-	public LoginSession(Channel channel, ChannelHandlerContext channelContext, ServerContext serverContext) {
-		super(channel);
-		this.channelContext = channelContext;
+	public LoginSession(ChannelHandlerContext ctx, ServerContext serverContext) {
+		super(ctx.channel());
+		this.channelContext = ctx;
 		this.serverContext = serverContext;
 	}
 
@@ -107,7 +108,7 @@ public final class LoginSession extends Session {
 			}
 		}
 
-		ChannelFuture future = channel.write(new LoginResponse(status, rights, log));
+		ChannelFuture future = channel.writeAndFlush(new LoginResponse(status, rights, log));
 
 		destroy();
 
@@ -115,18 +116,18 @@ public final class LoginSession extends Session {
 			IsaacRandomPair randomPair = request.getRandomPair();
 			Release release = serverContext.getRelease();
 
-			channel.getPipeline().addFirst("eventEncoder", new GameEventEncoder(release));
-			channel.getPipeline().addBefore("eventEncoder", "gameEncoder",
+			channel.pipeline().addFirst("eventEncoder", new GameEventEncoder(release));
+			channel.pipeline().addBefore("eventEncoder", "gameEncoder",
 					new GamePacketEncoder(randomPair.getEncodingRandom()));
 
-			channel.getPipeline().addBefore("handler", "gameDecoder",
+			channel.pipeline().addBefore("handler", "gameDecoder",
 					new GamePacketDecoder(randomPair.getDecodingRandom(), serverContext.getRelease()));
-			channel.getPipeline().addAfter("gameDecoder", "eventDecoder", new GameEventDecoder(release));
+			channel.pipeline().addAfter("gameDecoder", "eventDecoder", new GameEventDecoder(release));
 
-			channel.getPipeline().remove("loginDecoder");
-			channel.getPipeline().remove("loginEncoder");
+			channel.pipeline().remove("loginDecoder");
+			channel.pipeline().remove("loginEncoder");
 
-			channelContext.setAttachment(player.getSession());
+			channelContext.attr(NetworkConstants.SESSION_KEY).set(player.getSession());
 		} else {
 			future.addListener(ChannelFutureListener.CLOSE);
 		}

@@ -1,6 +1,11 @@
 package org.apollo.net.codec.game;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.IOException;
+import java.util.List;
 
 import net.burtleburtle.bob.rand.IsaacRandom;
 
@@ -8,10 +13,6 @@ import org.apollo.net.meta.PacketMetaData;
 import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.Release;
 import org.apollo.util.StatefulFrameDecoder;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * A {@link StatefulFrameDecoder} which decodes game packets.
@@ -58,15 +59,18 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer, GameDecoderState state)
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, GameDecoderState state)
 			throws IOException {
 		switch (state) {
 		case GAME_OPCODE:
-			return decodeOpcode(ctx, channel, buffer);
+			decodeOpcode(ctx, in, out);
+			break;
 		case GAME_LENGTH:
-			return decodeLength(ctx, channel, buffer);
+			decodeLength(ctx, in, out);
+			break;
 		case GAME_PAYLOAD:
-			return decodePayload(ctx, channel, buffer);
+			decodePayload(ctx, in, out);
+			break;
 		default:
 			throw new IllegalStateException("Invalid game decoder state");
 		}
@@ -81,11 +85,11 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodeLength(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
-		if (buffer.readable()) {
+	private Object decodeLength(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+		if (buffer.isReadable()) {
 			length = buffer.readUnsignedByte();
 			if (length == 0) {
-				return decodeZeroLengthPacket(ctx, channel, buffer);
+				decodeZeroLengthPacket(ctx, buffer, out);
 			} else {
 				setState(GameDecoderState.GAME_PAYLOAD);
 			}
@@ -102,8 +106,8 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @return The frame, or {@code null}.
 	 * @throws IOException If a received opcode or packet type is illegal.
 	 */
-	private Object decodeOpcode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws IOException {
-		if (buffer.readable()) {
+	private void decodeOpcode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws IOException {
+		if (buffer.isReadable()) {
 			int encryptedOpcode = buffer.readUnsignedByte();
 			opcode = encryptedOpcode - random.nextInt() & 0xFF;
 
@@ -117,7 +121,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 			case FIXED:
 				length = metaData.getLength();
 				if (length == 0) {
-					return decodeZeroLengthPacket(ctx, channel, buffer);
+					decodeZeroLengthPacket(ctx, buffer, out);
 				} else {
 					setState(GameDecoderState.GAME_PAYLOAD);
 				}
@@ -129,7 +133,6 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 				throw new IOException("Illegal packet type: " + type);
 			}
 		}
-		return null;
 	}
 
 	/**
@@ -141,17 +144,16 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodePayload(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
+	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
 		if (buffer.readableBytes() >= length) {
-			ChannelBuffer payload = buffer.readBytes(length);
+			ByteBuf payload = buffer.readBytes(length);
 			setState(GameDecoderState.GAME_OPCODE);
-			return new GamePacket(opcode, type, payload);
+			out.add(new GamePacket(opcode, type, payload));
 		}
-		return null;
 	}
 
 	/**
-	 * Decodes a zero length packet. This hackery is required as Netty will throw an Exception If we return a frame but
+	 * Decodes a zero length packet. This hackery is required as Netty will throw an exception if we return a frame but
 	 * have read nothing!
 	 * 
 	 * @param ctx The channel handler context.
@@ -160,10 +162,10 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * @return The frame, or {@code null}.
 	 * @throws Exception If an error occurs.
 	 */
-	private Object decodeZeroLengthPacket(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) {
-		ChannelBuffer payload = ChannelBuffers.buffer(0);
+	private void decodeZeroLengthPacket(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+		ByteBuf payload = Unpooled.EMPTY_BUFFER;
 		setState(GameDecoderState.GAME_OPCODE);
-		return new GamePacket(opcode, type, payload);
+		out.add(new GamePacket(opcode, type, payload));
 	}
 
 }

@@ -6,15 +6,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.apollo.game.model.Appearance;
-import org.apollo.game.model.Gender;
 import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Player;
-import org.apollo.game.model.Player.PrivilegeLevel;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.PrivacyState;
 import org.apollo.game.model.Skill;
 import org.apollo.game.model.SkillSet;
+import org.apollo.game.model.settings.Gender;
+import org.apollo.game.model.settings.PrivacyState;
+import org.apollo.game.model.settings.PrivilegeLevel;
+import org.apollo.game.model.settings.ScreenBrightness;
 import org.apollo.io.player.PlayerLoader;
 import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.net.codec.login.LoginConstants;
@@ -35,14 +36,12 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 
 	@Override
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws IOException {
-		File f = BinaryPlayerUtil.getFile(credentials.getUsername());
-		if (!f.exists()) {
+		File file = BinaryPlayerUtil.getFile(credentials.getUsername());
+		if (!file.exists()) {
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, new Player(credentials, SPAWN_POSITION));
 		}
 
-		DataInputStream in = new DataInputStream(new FileInputStream(f));
-
-		try {
+		try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
 			// read credentials and privileges
 			String name = StreamUtil.readString(in);
 			String pass = StreamUtil.readString(in);
@@ -58,6 +57,8 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			PrivacyState privacyPublicChat = PrivacyState.valueOf(in.readByte());
 			PrivacyState privacyPrivateChat = PrivacyState.valueOf(in.readByte());
 			PrivacyState privacyTradeCompete = PrivacyState.valueOf(in.readByte());
+			int runEnergy = in.readByte();
+			ScreenBrightness brightness = ScreenBrightness.valueOf(in.readByte());
 
 			// read position
 			int x = in.readUnsignedShort();
@@ -84,6 +85,9 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			player.setPublicChatPrivacy(privacyPublicChat);
 			player.setPrivateChatPrivacy(privacyPrivateChat);
 			player.setTradeChatPrivacy(privacyTradeCompete);
+			player.setRunEnergy(runEnergy);
+			player.setScreenBrightness(brightness);
+
 			player.setDesigned(designed);
 			player.setAppearance(new Appearance(gender, style, colors));
 
@@ -108,8 +112,6 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			}
 
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
-		} finally {
-			in.close();
 		}
 	}
 
