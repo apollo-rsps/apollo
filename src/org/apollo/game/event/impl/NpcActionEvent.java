@@ -7,7 +7,7 @@ import org.apollo.game.event.Event;
  * 
  * @author Major
  */
-public class NpcActionEvent extends Event {
+public abstract class NpcActionEvent extends Event {
 
 	/**
 	 * The action number .

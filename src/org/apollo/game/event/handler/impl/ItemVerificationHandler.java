@@ -29,13 +29,10 @@ public final class ItemVerificationHandler extends EventHandler<InventoryItemEve
 		case SynchronizationInventoryListener.INVENTORY_ID:
 		case BankConstants.SIDEBAR_INVENTORY_ID:
 			return player.getInventory();
-
 		case SynchronizationInventoryListener.EQUIPMENT_ID:
 			return player.getEquipment();
-
 		case BankConstants.BANK_INVENTORY_ID:
 			return player.getBank();
-
 		default:
 			throw new IllegalArgumentException("unknown interface id: " + interfaceId);
 		}

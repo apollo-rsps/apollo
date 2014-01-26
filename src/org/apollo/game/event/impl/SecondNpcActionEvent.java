@@ -5,7 +5,7 @@ package org.apollo.game.event.impl;
  * 
  * @author Major
  */
-public class SecondNpcActionEvent extends NpcActionEvent {
+public final class SecondNpcActionEvent extends NpcActionEvent {
 
 	/**
 	 * Creates a new second npc action event.

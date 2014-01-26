@@ -5,7 +5,7 @@ package org.apollo.game.event.impl;
  * 
  * @author Major
  */
-public class ThirdNpcActionEvent extends NpcActionEvent {
+public final class ThirdNpcActionEvent extends NpcActionEvent {
 
 	/**
 	 * Creates a new third npc action event.
