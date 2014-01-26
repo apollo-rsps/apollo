@@ -14,7 +14,7 @@ on :command, :lookup, RIGHTS_ADMIN do |player, command|
   type = args.shift.downcase
   name = args.join(" ").downcase
 
-  if ["npc", "object", "item"].index(type) == nil
+  if ['npc', 'object', 'item'].index(type) == nil
     player.send_message("Invalid syntax - ::lookup [npc/object/item] [name]") 
     return
   end
