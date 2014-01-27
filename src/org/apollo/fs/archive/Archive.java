@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import org.apollo.util.ByteBufferUtil;
+import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
 
 /**
@@ -22,8 +22,8 @@ public final class Archive {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public static Archive decode(ByteBuffer buffer) throws IOException {
-		int extractedSize = ByteBufferUtil.readUnsignedTriByte(buffer);
-		int size = ByteBufferUtil.readUnsignedTriByte(buffer);
+		int extractedSize = BufferUtil.readUnsignedTriByte(buffer);
+		int size = BufferUtil.readUnsignedTriByte(buffer);
 		boolean extracted = false;
 
 		if (size != extractedSize) {
@@ -42,8 +42,8 @@ public final class Archive {
 
 		for (int i = 0; i < entries; i++) {
 			identifiers[i] = buffer.getInt();
-			extractedSizes[i] = ByteBufferUtil.readUnsignedTriByte(buffer);
-			sizes[i] = ByteBufferUtil.readUnsignedTriByte(buffer);
+			extractedSizes[i] = BufferUtil.readUnsignedTriByte(buffer);
+			sizes[i] = BufferUtil.readUnsignedTriByte(buffer);
 		}
 
 		ArchiveEntry[] entry = new ArchiveEntry[entries];

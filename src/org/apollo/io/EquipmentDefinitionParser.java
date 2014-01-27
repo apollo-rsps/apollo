@@ -7,8 +7,7 @@ import java.io.InputStream;
 import org.apollo.game.model.def.EquipmentDefinition;
 
 /**
- * A class which parses the {@code data/equipment-[release].dat} file to create an array of {@link EquipmentDefinition}
- * s.
+ * A class that parses the {@code data/equipment-[release].dat} file to create an array of {@link EquipmentDefinition}s.
  * 
  * @author Graham
  */

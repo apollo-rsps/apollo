@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
 import org.apollo.game.model.def.ObjectDefinition;
-import org.apollo.util.ByteBufferUtil;
+import org.apollo.util.BufferUtil;
 
 /**
  * Decodes object data from the {@code loc.dat} file into {@link ObjectDefinition}s.
@@ -78,9 +78,9 @@ public final class ObjectDefinitionDecoder {
 					data.get(); // model position
 				}
 			} else if (opcode == 2) {
-				definition.setName(ByteBufferUtil.readString(data));
+				definition.setName(BufferUtil.readString(data));
 			} else if (opcode == 3) {
-				definition.setDescription(ByteBufferUtil.readString(data));
+				definition.setDescription(BufferUtil.readString(data));
 			} else if (opcode == 5) {
 				int amount = data.get() & 0xFF;
 				for (int i = 0; i < amount; i++) {
@@ -113,7 +113,7 @@ public final class ObjectDefinitionDecoder {
 				if (actions == null) {
 					actions = new String[10];
 				}
-				String action = ByteBufferUtil.readString(data);
+				String action = BufferUtil.readString(data);
 				actions[opcode - 30] = action;
 				definition.setMenuActions(actions);
 			} else if (opcode == 39) {

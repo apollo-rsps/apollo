@@ -14,6 +14,16 @@ import org.apollo.net.session.Session;
 public final class NetworkConstants {
 
 	/**
+	 * The service port.
+	 */
+	public static final int SERVICE_PORT = 43594;
+
+	/**
+	 * The JAGGRAB port.
+	 */
+	public static final int JAGGRAB_PORT = 43595;
+
+	/**
 	 * The HTTP port.
 	 */
 	public static final int HTTP_PORT = 80;
@@ -24,9 +34,9 @@ public final class NetworkConstants {
 	public static final int IDLE_TIME = 15;
 
 	/**
-	 * The JAGGRAB port.
+	 * The terminator of a string.
 	 */
-	public static final int JAGGRAB_PORT = 43595;
+	public static final int STRING_TERMINATOR = 10;
 
 	/**
 	 * The exponent used when decrypting the RSA block.
@@ -39,19 +49,9 @@ public final class NetworkConstants {
 	public static BigInteger RSA_MODULUS;
 
 	/**
-	 * The service port.
-	 */
-	public static final int SERVICE_PORT = 43594;
-
-	/**
 	 * The {@link Session} {@link AttributeKey}.
 	 */
 	public static final AttributeKey<Session> SESSION_KEY = AttributeKey.valueOf("session");
-
-	/**
-	 * The terminator of a string.
-	 */
-	public static final int STRING_TERMINATOR = 10;
 
 	/**
 	 * Default private constructor to prevent instantiation by other classes.

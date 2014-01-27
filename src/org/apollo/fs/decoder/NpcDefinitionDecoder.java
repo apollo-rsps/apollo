@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
 import org.apollo.game.model.def.NpcDefinition;
-import org.apollo.util.ByteBufferUtil;
+import org.apollo.util.BufferUtil;
 
 /**
  * Decodes npc data from the {@code npc.dat} file into {@link NpcDefinition}s.
@@ -78,9 +78,9 @@ public final class NpcDefinitionDecoder {
 					npcModels[i] = buffer.getShort();
 				}
 			} else if (code == 2) {
-				definition.setName(ByteBufferUtil.readString(buffer));
+				definition.setName(BufferUtil.readString(buffer));
 			} else if (code == 3) {
-				definition.setDescription(ByteBufferUtil.readString(buffer));
+				definition.setDescription(BufferUtil.readString(buffer));
 			} else if (code == 12) {
 				definition.setSize(buffer.get());
 			} else if (code == 13) {
@@ -91,7 +91,7 @@ public final class NpcDefinitionDecoder {
 				definition
 						.setWalkAnimations(buffer.getShort(), buffer.getShort(), buffer.getShort(), buffer.getShort());
 			} else if (code >= 30 && code < 40) {
-				String str = ByteBufferUtil.readString(buffer);
+				String str = BufferUtil.readString(buffer);
 				if (str.equals("hidden")) {
 					str = null;
 				}
