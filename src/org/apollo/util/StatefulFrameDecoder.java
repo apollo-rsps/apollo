@@ -4,13 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.ReplayingDecoder;
 
 import java.util.List;
 
 /**
- * A stateful implementation of a {@link FrameDecoder} which may be extended and used by other classes. The current
- * state is tracked by this class and is a user-specified enumeration.
+ * A stateful implementation of a {@link ByteToMessageDecoder} which may be extended and used by other classes. The
+ * current state is tracked by this class and is a user-specified enumeration.
  * 
  * The state may be changed by calling the {@link StatefulFrameDecoder#setState(Enum)} method.
  * 
@@ -20,8 +19,7 @@ import java.util.List;
  * 
  * This class is not thread safe: it is recommended that the state is only set in the decode methods overriden.
  * 
- * {@code null} states are not permitted. This means you cannot use {@link VoidEnum} like used in a
- * {@link ReplayingDecoder}. If you do not need state management, the {@link FrameDecoder} class should be used instead.
+ * {@code null} states are not permitted.
  * 
  * @author Graham
  * @param <T> The state enumeration.

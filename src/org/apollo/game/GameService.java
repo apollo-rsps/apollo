@@ -159,7 +159,6 @@ public final class GameService extends Service {
 			}
 
 			world.pulse();
-
 			synchronizer.synchronize();
 		}
 	}

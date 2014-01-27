@@ -57,6 +57,7 @@ public class InterfaceConstants {
 	 * Prevent instantiation.
 	 */
 	private InterfaceConstants() {
+
 	}
 
 }

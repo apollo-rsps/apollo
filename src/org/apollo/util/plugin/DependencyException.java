@@ -5,8 +5,12 @@ package org.apollo.util.plugin;
  * 
  * @author Graham
  */
-@SuppressWarnings("serial")
 public final class DependencyException extends Exception {
+
+	/**
+	 * A generated serial version id.
+	 */
+	private static final long serialVersionUID = -3335727281501054641L;
 
 	/**
 	 * Creates the dependency exception.

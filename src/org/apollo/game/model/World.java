@@ -124,6 +124,7 @@ public final class World {
 	 * Creates the world.
 	 */
 	private World() {
+
 	}
 
 	/**
@@ -156,9 +157,6 @@ public final class World {
 
 	/**
 	 * Gets the player repository.
-	 * <p>
-	 * Note: players should be registered and unregistered using {@link World#register(Player)} and
-	 * {@link World#unregister(Player)} respectively, not by adding to or removing from this repository directly.
 	 * 
 	 * @return The player repository.
 	 */
@@ -209,18 +207,18 @@ public final class World {
 			is.close();
 		}
 
-		NpcDefinitionDecoder npcDefParser = new NpcDefinitionDecoder(fs);
-		NpcDefinition[] npcDefs = npcDefParser.decode();
+		NpcDefinitionDecoder npcDecoder = new NpcDefinitionDecoder(fs);
+		NpcDefinition[] npcDefs = npcDecoder.decode();
 		NpcDefinition.init(npcDefs);
 		logger.info("Loaded " + npcDefs.length + " npc definitions.");
 
-		ObjectDefinitionDecoder objDefParser = new ObjectDefinitionDecoder(fs);
-		ObjectDefinition[] objDefs = objDefParser.decode();
+		ObjectDefinitionDecoder objectDecoder = new ObjectDefinitionDecoder(fs);
+		ObjectDefinition[] objDefs = objectDecoder.decode();
 		ObjectDefinition.init(objDefs);
 		logger.info("Loaded " + objDefs.length + " object definitions.");
 
-		StaticObjectDecoder objectParser = new StaticObjectDecoder(fs);
-		StaticObject[] objects = objectParser.decode();
+		StaticObjectDecoder staticDecoder = new StaticObjectDecoder(fs);
+		StaticObject[] objects = staticDecoder.decode();
 		placeEntities(objects);
 		logger.info("Loaded " + objects.length + " static objects.");
 

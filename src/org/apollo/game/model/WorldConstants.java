@@ -21,6 +21,7 @@ public final class WorldConstants {
 	 * Default private constructor to prevent instantiation by other classes.
 	 */
 	private WorldConstants() {
+
 	}
 
 }

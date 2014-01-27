@@ -39,10 +39,10 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	private void parseBootstrapper() throws IOException {
-		File f = new File("./data/plugins/bootstrap.rb");
-		InputStream is = new FileInputStream(f);
+		File bootstrap = new File("./data/plugins/bootstrap.rb");
+		InputStream is = new FileInputStream(bootstrap);
 		try {
-			parse(is, f.getAbsolutePath());
+			parse(is, bootstrap.getAbsolutePath());
 		} finally {
 			is.close();
 		}
