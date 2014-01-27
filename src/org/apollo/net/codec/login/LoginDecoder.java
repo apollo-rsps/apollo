@@ -15,7 +15,7 @@ import org.apollo.fs.FileSystemConstants;
 import org.apollo.net.NetworkConstants;
 import org.apollo.security.IsaacRandomPair;
 import org.apollo.security.PlayerCredentials;
-import org.apollo.util.ByteBufUtil;
+import org.apollo.util.BufferUtil;
 import org.apollo.util.StatefulFrameDecoder;
 
 /**
@@ -178,8 +178,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			int uid = securePayload.readInt();
 
-			String username = ByteBufUtil.readString(securePayload);
-			String password = ByteBufUtil.readString(securePayload);
+			String username = BufferUtil.readString(securePayload);
+			String password = BufferUtil.readString(securePayload);
 
 			if (username.length() > 12 || password.length() > 20) {
 				throw new Exception("Username or password too long.");

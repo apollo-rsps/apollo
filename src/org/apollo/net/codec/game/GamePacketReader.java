@@ -2,7 +2,7 @@ package org.apollo.net.codec.game;
 
 import io.netty.buffer.ByteBuf;
 
-import org.apollo.util.ByteBufUtil;
+import org.apollo.util.BufferUtil;
 
 /**
  * A utility class for reading {@link GamePacket}s.
@@ -325,7 +325,7 @@ public final class GamePacketReader {
 	 */
 	public String getString() {
 		checkByteAccess();
-		return ByteBufUtil.readString(buffer);
+		return BufferUtil.readString(buffer);
 	}
 
 	/**

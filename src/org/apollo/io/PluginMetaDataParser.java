@@ -9,7 +9,7 @@ import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
 
 /**
- * A class which parses {@code plugin.xml} files into {@link PluginMetaData} objects.
+ * A class that parses {@code plugin.xml} files into {@link PluginMetaData} objects.
  * 
  * @author Graham
  */
@@ -37,8 +37,8 @@ public final class PluginMetaDataParser {
 	 * @throws SAXException If a SAX error occurs.
 	 */
 	public PluginMetaDataParser(InputStream is) throws SAXException {
-		parser = new XmlParser();
 		this.is = is;
+		parser = new XmlParser();
 	}
 
 	/**

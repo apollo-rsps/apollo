@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
 import org.apollo.game.model.def.ItemDefinition;
-import org.apollo.util.ByteBufferUtil;
+import org.apollo.util.BufferUtil;
 
 /**
  * Decodes item data from the {@code obj.dat} file into {@link ItemDefinition}s.
@@ -74,9 +74,9 @@ public final class ItemDefinitionDecoder {
 			} else if (opcode == 1) {
 				buffer.getShort();
 			} else if (opcode == 2) {
-				definition.setName(ByteBufferUtil.readString(buffer));
+				definition.setName(BufferUtil.readString(buffer));
 			} else if (opcode == 3) {
-				definition.setDescription(ByteBufferUtil.readString(buffer));
+				definition.setDescription(BufferUtil.readString(buffer));
 			} else if (opcode == 4) {
 				buffer.getShort();
 			} else if (opcode == 5) {
@@ -106,13 +106,13 @@ public final class ItemDefinitionDecoder {
 			} else if (opcode == 26) {
 				buffer.getShort();
 			} else if (opcode >= 30 && opcode < 35) {
-				String str = ByteBufferUtil.readString(buffer);
+				String str = BufferUtil.readString(buffer);
 				if (str.equalsIgnoreCase("hidden")) {
 					str = null;
 				}
 				definition.setGroundAction(opcode - 30, str);
 			} else if (opcode >= 35 && opcode < 40) {
-				definition.setInventoryAction(opcode - 35, ByteBufferUtil.readString(buffer));
+				definition.setInventoryAction(opcode - 35, BufferUtil.readString(buffer));
 			} else if (opcode == 40) {
 				int colourCount = buffer.get() & 0xFF;
 				for (int i = 0; i < colourCount; i++) {

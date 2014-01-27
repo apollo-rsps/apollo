@@ -33,8 +33,8 @@ public final class RsaKeyParser {
 	 * @throws SAXException If a SAX error occurs.
 	 */
 	public RsaKeyParser(InputStream is) throws SAXException {
-		parser = new XmlParser();
 		this.is = is;
+		parser = new XmlParser();
 	}
 
 	/**

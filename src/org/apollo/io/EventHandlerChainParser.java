@@ -16,7 +16,7 @@ import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
 
 /**
- * A class which parses the {@code events.xml} file to produce {@link EventHandlerChainGroup}s.
+ * A class that parses the {@code events.xml} file to produce {@link EventHandlerChainGroup}s.
  * 
  * @author Graham
  */
@@ -39,8 +39,8 @@ public final class EventHandlerChainParser {
 	 * @throws SAXException If a SAX error occurs.
 	 */
 	public EventHandlerChainParser(InputStream is) throws SAXException {
-		parser = new XmlParser();
 		this.is = is;
+		parser = new XmlParser();
 	}
 
 	/**

@@ -10,7 +10,7 @@ import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.obj.StaticObject;
-import org.apollo.util.ByteBufferUtil;
+import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
 
 /**
@@ -89,13 +89,13 @@ public final class StaticObjectDecoder {
 		int id = -1;
 		int idOffset;
 
-		while ((idOffset = ByteBufferUtil.readSmart(buffer)) != 0) {
+		while ((idOffset = BufferUtil.readSmart(buffer)) != 0) {
 			id += idOffset;
 
 			int position = 0;
 			int positionOffset;
 
-			while ((positionOffset = ByteBufferUtil.readSmart(buffer)) != 0) {
+			while ((positionOffset = BufferUtil.readSmart(buffer)) != 0) {
 				position += positionOffset - 1;
 
 				int localX = position >> 6 & 0x3F;
