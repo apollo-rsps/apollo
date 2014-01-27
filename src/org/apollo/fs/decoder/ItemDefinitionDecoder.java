@@ -40,9 +40,8 @@ public final class ItemDefinitionDecoder {
 		ByteBuffer data = config.getEntry("obj.dat").getBuffer();
 		ByteBuffer idx = config.getEntry("obj.idx").getBuffer();
 
-		int count = idx.getShort();
+		int count = idx.getShort(), index = 2;
 		int[] indices = new int[count];
-		int index = 2;
 		for (int i = 0; i < count; i++) {
 			indices[i] = index;
 			index += idx.getShort();

@@ -147,9 +147,9 @@ public final class WalkingQueue {
 		Direction direction = Direction.fromDeltas(deltaX, deltaY);
 
 		if (direction != Direction.NONE) {
-			Point p = new Point(new Position(x, y, mob.getPosition().getHeight()), direction);
-			points.add(p);
-			oldPoints.add(p);
+			Point point = new Point(new Position(x, y, mob.getPosition().getHeight()), direction);
+			points.add(point);
+			oldPoints.add(point);
 		}
 	}
 

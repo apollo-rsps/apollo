@@ -4,4 +4,3 @@
  * executed during the client synchronization process.
  */
 package org.apollo.game.sync.task;
-

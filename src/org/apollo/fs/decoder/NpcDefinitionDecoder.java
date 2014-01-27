@@ -40,9 +40,8 @@ public final class NpcDefinitionDecoder {
 		ByteBuffer data = config.getEntry("npc.dat").getBuffer();
 		ByteBuffer idx = config.getEntry("npc.idx").getBuffer();
 
-		int count = idx.getShort();
+		int count = idx.getShort(), index = 2;
 		int[] indices = new int[count];
-		int index = 2;
 		for (int i = 0; i < count; i++) {
 			indices[i] = index;
 			index += idx.getShort();
@@ -66,37 +65,37 @@ public final class NpcDefinitionDecoder {
 	 */
 	private NpcDefinition decode(int id, ByteBuffer buffer) {
 		NpcDefinition definition = new NpcDefinition(id);
-
 		while (true) {
-			int code = buffer.get() & 0xFF;
-			if (code == 0) {
+			int opcode = buffer.get() & 0xFF;
+
+			if (opcode == 0) {
 				return definition;
-			} else if (code == 1) {
+			} else if (opcode == 1) {
 				int length = buffer.get() & 0xFF;
-				int[] npcModels = new int[length];
+				int[] models = new int[length];
 				for (int i = 0; i < length; i++) {
-					npcModels[i] = buffer.getShort();
+					models[i] = buffer.getShort();
 				}
-			} else if (code == 2) {
+			} else if (opcode == 2) {
 				definition.setName(BufferUtil.readString(buffer));
-			} else if (code == 3) {
+			} else if (opcode == 3) {
 				definition.setDescription(BufferUtil.readString(buffer));
-			} else if (code == 12) {
+			} else if (opcode == 12) {
 				definition.setSize(buffer.get());
-			} else if (code == 13) {
+			} else if (opcode == 13) {
 				definition.setStandAnimation(buffer.getShort());
-			} else if (code == 14) {
+			} else if (opcode == 14) {
 				definition.setWalkAnimation(buffer.getShort());
-			} else if (code == 17) {
+			} else if (opcode == 17) {
 				definition
 						.setWalkAnimations(buffer.getShort(), buffer.getShort(), buffer.getShort(), buffer.getShort());
-			} else if (code >= 30 && code < 40) {
+			} else if (opcode >= 30 && opcode < 40) {
 				String str = BufferUtil.readString(buffer);
 				if (str.equals("hidden")) {
 					str = null;
 				}
-				definition.setInteraction(code - 30, str);
-			} else if (code == 40) {
+				definition.setInteraction(opcode - 30, str);
+			} else if (opcode == 40) {
 				int length = buffer.get() & 0xFF;
 				int[] originalColours = new int[length];
 				int[] replacementColours = new int[length];
@@ -104,45 +103,33 @@ public final class NpcDefinitionDecoder {
 					originalColours[i] = buffer.getShort();
 					replacementColours[i] = buffer.getShort();
 				}
-			} else if (code == 60) {
+			} else if (opcode == 60) {
 				int length = buffer.get() & 0xFF;
 				int[] additionalModels = new int[length];
 				for (int i = 0; i < length; i++) {
 					additionalModels[i] = buffer.getShort();
 				}
-			} else if (code == 90) {
+			} else if (opcode == 90) {
 				buffer.getShort(); // Dummy
-			} else if (code == 91) {
+			} else if (opcode == 91) {
 				buffer.getShort(); // Dummy
-			} else if (code == 92) {
+			} else if (opcode == 92) {
 				buffer.getShort(); // Dummy
-			} else if (code == 93) {
-				@SuppressWarnings("unused")
-				boolean drawMinimapDot = false;
-			} else if (code == 95) {
+			} else if (opcode == 95) {
 				definition.setCombatLevel(buffer.getShort());
-			} else if (code == 97) {
-				@SuppressWarnings("unused")
-				int scaleXZ = buffer.getShort();
-			} else if (code == 98) {
-				@SuppressWarnings("unused")
-				int scaleY = buffer.getShort();
-			} else if (code == 99) {
-				@SuppressWarnings("unused")
-				boolean unknown = true;
-			} else if (code == 100) {
-				@SuppressWarnings("unused")
-				int lightModifier = buffer.get();
-			} else if (code == 101) {
-				@SuppressWarnings("unused")
-				int shadowModifier = buffer.get() * 5;
-			} else if (code == 102) {
-				@SuppressWarnings("unused")
-				int headIcon = buffer.getShort();
-			} else if (code == 103) {
-				@SuppressWarnings("unused")
-				int degreesToRotate = buffer.getShort();
-			} else if (code == 106) {
+			} else if (opcode == 97) {
+				buffer.getShort();
+			} else if (opcode == 98) {
+				buffer.getShort();
+			} else if (opcode == 100) {
+				buffer.get();
+			} else if (opcode == 101) {
+				buffer.get();
+			} else if (opcode == 102) {
+				buffer.getShort();
+			} else if (opcode == 103) {
+				buffer.getShort();
+			} else if (opcode == 106) {
 				int morphVariableBitsIndex = buffer.getShort();
 				if (morphVariableBitsIndex == 65535) {
 					morphVariableBitsIndex = -1;
@@ -161,7 +148,7 @@ public final class NpcDefinitionDecoder {
 					}
 					morphisms[i] = morphism;
 				}
-			} else if (code == 107) {
+			} else if (opcode == 107) {
 				@SuppressWarnings("unused")
 				boolean clickable = false;
 			}

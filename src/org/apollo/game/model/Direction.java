@@ -70,17 +70,15 @@ public enum Direction {
 				return Direction.NORTH_EAST;
 			} else if (deltaX == 0) {
 				return Direction.NORTH;
-			} else {
-				return Direction.NORTH_WEST;
 			}
+			return Direction.NORTH_WEST;
 		} else if (deltaY == -1) {
 			if (deltaX == 1) {
 				return Direction.SOUTH_EAST;
 			} else if (deltaX == 0) {
 				return Direction.SOUTH;
-			} else {
-				return Direction.SOUTH_WEST;
 			}
+			return Direction.SOUTH_WEST;
 		} else {
 			if (deltaX == 1) {
 				return Direction.EAST;

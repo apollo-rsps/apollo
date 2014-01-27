@@ -202,7 +202,7 @@ public final class SkillSet {
 	 */
 	private void init() {
 		for (int id = 0; id < skills.length; id++) {
-			skills[id] = id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1);
+			skills[id] = (id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1));
 		}
 	}
 
@@ -211,15 +211,15 @@ public final class SkillSet {
 	 */
 	public void normalize() {
 		for (int id = 0; id < skills.length; id++) {
-			int cur = skills[id].getCurrentLevel();
+			int current = skills[id].getCurrentLevel();
 			int max = skills[id].getMaximumLevel();
 
-			if (cur == max) {
+			if (current == max) {
 				continue;
 			}
-			cur += cur < max ? 1 : -1;
+			current += current < max ? 1 : -1;
 
-			setSkill(id, new Skill(skills[id].getExperience(), cur, max));
+			setSkill(id, new Skill(skills[id].getExperience(), current, max));
 		}
 	}
 
