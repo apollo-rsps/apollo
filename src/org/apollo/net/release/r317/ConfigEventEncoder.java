@@ -13,7 +13,7 @@ import org.apollo.net.release.EventEncoder;
  * @author Chris Fletcher
  * @author Major
  */
-final class ConfigEventEncoder extends EventEncoder<ConfigEvent> {
+public final class ConfigEventEncoder extends EventEncoder<ConfigEvent> {
 
 	@Override
 	public GamePacket encode(ConfigEvent event) {

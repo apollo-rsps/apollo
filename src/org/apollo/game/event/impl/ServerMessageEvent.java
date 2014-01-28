@@ -15,7 +15,7 @@ public final class ServerMessageEvent extends Event {
 	private final String message;
 
 	/**
-	 * Creates the {@link ServerMessageEvent}.
+	 * Creates a server message event.
 	 * 
 	 * @param message The message.
 	 */
