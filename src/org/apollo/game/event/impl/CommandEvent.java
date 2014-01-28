@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event issued by the client to send a {@code ::} command/
+ * An event issued by the client to send a {@code ::} command.
  * 
  * @author Graham
  */
