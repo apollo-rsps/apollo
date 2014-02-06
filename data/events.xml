@@ -44,10 +44,6 @@
     </chain>
   </event>
   <event>
-    <type>org.apollo.game.event.impl.ObjectActionEvent</type>
-    <chain />
-  </event>
-  <event>
     <type>org.apollo.game.event.impl.ItemOptionEvent</type>
     <chain>
       <handler>org.apollo.game.event.handler.impl.ItemVerificationHandler</handler>
