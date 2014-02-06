@@ -54,11 +54,9 @@ public final class PluginContext {
 	 */
 	public <T extends Event> void addEventDecoder(int releaseNo, int opcode, EventDecoder<T> decoder) {
 		Release release = context.getRelease();
-		if (release.getReleaseNumber() != releaseNo) {
-			return;
+		if (release.getReleaseNumber() == releaseNo) {
+			release.register(opcode, decoder);
 		}
-
-		release.register(opcode, decoder);
 	}
 
 	/**
@@ -71,11 +69,9 @@ public final class PluginContext {
 	 */
 	public <T extends Event> void addEventEncoder(int releaseNo, Class<T> event, EventEncoder<T> encoder) {
 		Release release = context.getRelease();
-		if (release.getReleaseNumber() != releaseNo) {
-			return;
+		if (release.getReleaseNumber() == releaseNo) {
+			release.register(event, encoder);
 		}
-
-		release.register(event, encoder);
 	}
 
 	/**

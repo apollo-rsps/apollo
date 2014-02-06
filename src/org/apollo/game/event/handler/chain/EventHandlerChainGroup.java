@@ -3,6 +3,7 @@ package org.apollo.game.event.handler.chain;
 import java.util.Map;
 
 import org.apollo.game.event.Event;
+import org.apollo.game.event.handler.EventHandler;
 
 /**
  * A group of {@link EventHandlerChain}s classified by the {@link Event} type.
@@ -34,7 +35,11 @@ public final class EventHandlerChainGroup {
 	 */
 	@SuppressWarnings("unchecked")
 	public <E extends Event> EventHandlerChain<E> getChain(Class<E> clazz) {
-		return (EventHandlerChain<E>) chains.get(clazz);
+		EventHandlerChain<E> chain = (EventHandlerChain<E>) chains.get(clazz);
+		if (chain == null) {
+			chains.put(clazz, chain = new EventHandlerChain<E>(new EventHandler[0]));
+		}
+		return chain;
 	}
 
 }
