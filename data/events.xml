@@ -6,10 +6,6 @@
     </chain>
   </event>
   <event>
-    <type>org.apollo.game.event.impl.KeepAliveEvent</type>
-    <chain />
-  </event>
-  <event>
     <type>org.apollo.game.event.impl.PlayerDesignEvent</type>
     <chain>
       <handler>org.apollo.game.event.handler.impl.PlayerDesignVerificationHandler</handler>
@@ -90,25 +86,5 @@
     <chain>
       <handler>org.apollo.game.event.handler.impl.ItemVerificationHandler</handler>
     </chain>
-  </event>
-  <event>
-    <type>org.apollo.game.event.impl.SpamPacketEvent</type>
-    <chain />
-  </event>
-  <event>
-    <type>org.apollo.game.event.impl.MouseClickEvent</type>
-    <chain />
-  </event>
-  <event>
-    <type>org.apollo.game.event.impl.ArrowKeyEvent</type>
-    <chain />
-  </event>
-  <event>
-    <type>org.apollo.game.event.impl.FocusUpdateEvent</type>
-    <chain />
-  </event>
-  <event>
-    <type>org.apollo.game.event.impl.TakeTileItemEvent</type>
-    <chain />
   </event>
 </events>
