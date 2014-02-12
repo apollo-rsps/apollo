@@ -7,7 +7,7 @@ import org.apollo.game.event.Event;
  * 
  * @author Major
  */
-public final class SendPrivateMessageEvent extends Event {
+public final class PrivateMessageEvent extends Event {
 
 	/**
 	 * The username this message is being sent to.
@@ -31,7 +31,7 @@ public final class SendPrivateMessageEvent extends Event {
 	 * @param message The message.
 	 * @param compressedMessage The message, in a compressed form.
 	 */
-	public SendPrivateMessageEvent(String username, String message, byte[] compressedMessage) {
+	public PrivateMessageEvent(String username, String message, byte[] compressedMessage) {
 		this.username = username;
 		this.message = message;
 		this.compressedMessage = compressedMessage;

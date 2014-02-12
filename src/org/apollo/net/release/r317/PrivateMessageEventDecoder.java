@@ -1,6 +1,6 @@
 package org.apollo.net.release.r317;
 
-import org.apollo.game.event.impl.SendPrivateMessageEvent;
+import org.apollo.game.event.impl.PrivateMessageEvent;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;
@@ -9,18 +9,17 @@ import org.apollo.util.NameUtil;
 import org.apollo.util.TextUtil;
 
 /**
- * An {@link EventDecoder} for the {@link SendPrivateMessageEvent}.
+ * An {@link EventDecoder} for the {@link PrivateMessageEvent}.
  * 
  * @author Major
  */
-public final class SendPrivateMessageEventDecoder extends EventDecoder<SendPrivateMessageEvent> {
+public final class PrivateMessageEventDecoder extends EventDecoder<PrivateMessageEvent> {
 
 	@Override
-	public SendPrivateMessageEvent decode(GamePacket packet) {
+	public PrivateMessageEvent decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
 		String username = NameUtil.decodeBase37(reader.getSigned(DataType.LONG));
-
 		int length = packet.getLength() - 8;
 
 		byte[] originalCompressed = new byte[length];
@@ -33,7 +32,7 @@ public final class SendPrivateMessageEventDecoder extends EventDecoder<SendPriva
 		byte[] recompressed = new byte[length];
 		TextUtil.compress(uncompressed, recompressed);
 		
-		return new SendPrivateMessageEvent(username, new String(uncompressed), recompressed);
+		return new PrivateMessageEvent(username, new String(uncompressed), recompressed);
 	}
 
 }

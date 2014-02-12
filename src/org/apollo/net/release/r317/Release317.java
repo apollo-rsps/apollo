@@ -138,7 +138,7 @@ public final class Release317 extends Release {
 		register(133, new AddIgnoreEventDecoder());
 		register(215, new RemoveFriendEventDecoder());
 		register(74, new RemoveIgnoreEventDecoder());
-		register(126, new SendPrivateMessageEventDecoder());
+		register(126, new PrivateMessageEventDecoder());
 
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
