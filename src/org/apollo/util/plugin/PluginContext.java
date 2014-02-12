@@ -7,6 +7,8 @@ import org.apollo.game.event.Event;
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.chain.EventHandlerChain;
 import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
+import org.apollo.game.login.LoginListener;
+import org.apollo.game.login.LogoutListener;
 import org.apollo.game.model.World;
 import org.apollo.net.release.EventDecoder;
 import org.apollo.net.release.EventEncoder;
@@ -35,7 +37,7 @@ public final class PluginContext {
 	}
 
 	/**
-	 * Adds a command listener.
+	 * Adds a {@link CommandListener}.
 	 * 
 	 * @param name The name of the listener.
 	 * @param listener The listener.
@@ -45,7 +47,7 @@ public final class PluginContext {
 	}
 
 	/**
-	 * Adds an event decoder.
+	 * Adds an {@link EventDecoder}.
 	 * 
 	 * @param <T> The type of decoder.
 	 * @param releaseNo The release number.
@@ -60,14 +62,14 @@ public final class PluginContext {
 	}
 
 	/**
-	 * Adds an event encoder.
+	 * Adds an {@link EventEncoder}.
 	 * 
-	 * @param <T> The type of encoder.
+	 * @param <E> The type of encoder.
 	 * @param releaseNo The release number.
 	 * @param event The event.
 	 * @param encoder The event encoder.
 	 */
-	public <T extends Event> void addEventEncoder(int releaseNo, Class<T> event, EventEncoder<T> encoder) {
+	public <E extends Event> void addEventEncoder(int releaseNo, Class<E> event, EventEncoder<E> encoder) {
 		Release release = context.getRelease();
 		if (release.getReleaseNumber() == releaseNo) {
 			release.register(event, encoder);
@@ -75,16 +77,39 @@ public final class PluginContext {
 	}
 
 	/**
-	 * Adds an event handler to the end of the chain.
+	 * Adds an {@link EventHandler} to the end of the chain.
 	 * 
-	 * @param <T> The type of event.
+	 * @param <E> The type of event.
 	 * @param event The event.
 	 * @param handler The handler.
 	 */
-	public <T extends Event> void addLastEventHandler(Class<T> event, EventHandler<T> handler) {
+	public <E extends Event> void addLastEventHandler(Class<E> event, EventHandler<E> handler) {
 		EventHandlerChainGroup chains = context.getService(GameService.class).getEventHandlerChains();
-		EventHandlerChain<T> chain = chains.getChain(event);
-		chain.addLast(handler);
+		EventHandlerChain<E> chain = chains.getChain(event);
+		if (chain == null) {
+			chain = new EventHandlerChain<E>(handler);
+			chains.register(event, chain);
+		} else {
+			chain.addLast(handler);
+		}
+	}
+
+	/**
+	 * Adds a {@link LoginListener}.
+	 * 
+	 * @param listener The listener.
+	 */
+	public void addLoginListener(LoginListener listener) {
+		World.getWorld().getLoginDispatcher().register(listener);
+	}
+
+	/**
+	 * Adds a {@link LogoutListener}.
+	 * 
+	 * @param listener The listener.
+	 */
+	public void addLogoutListener(LogoutListener listener) {
+		World.getWorld().getLogoutDispatcher().register(listener);
 	}
 
 }

@@ -10,6 +10,7 @@ import org.apollo.game.model.def.ObjectDefinition;
  * @author Chris Fletcher
  * @author Major
  */
+@SuppressWarnings("serial")
 public final class StaticObject extends Entity {
 
 	/**

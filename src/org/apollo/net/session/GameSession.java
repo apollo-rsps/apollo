@@ -101,9 +101,7 @@ public final class GameSession extends Session {
 				}
 			}
 
-			if (chain == null) {
-				logger.warning("No chain for event: " + event.getClass().getName() + ".");
-			} else {
+			if (chain != null) {
 				try {
 					chain.handle(player, event);
 				} catch (Exception ex) {

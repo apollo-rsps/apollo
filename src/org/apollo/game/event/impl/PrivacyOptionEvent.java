@@ -7,62 +7,63 @@ import org.apollo.game.model.settings.PrivacyState;
  * An {@link Event} sent by the client or server to update the chat and trade privacy state.
  * 
  * @author Kyle Stevenson
+ * @author Major
  */
-public class PrivacyOptionEvent extends Event {
+public final class PrivacyOptionEvent extends Event {
 
 	/**
-	 * The privacy state of the player's public chat.
+	 * The privacy state of the player's chat.
 	 */
-	private final PrivacyState publicChatState;
+	private final PrivacyState chatPrivacy;
 
 	/**
-	 * The privacy state of the player's private chat.
+	 * The privacy state of the player's friend chat.
 	 */
-	private final PrivacyState privateChatState;
+	private final PrivacyState friendPrivacy;
 
 	/**
 	 * The privacy state of the player's trade chat.
 	 */
-	private final PrivacyState tradeChatState;
+	private final PrivacyState tradePrivacy;
 
 	/**
 	 * Creates a privacy option event.
 	 * 
-	 * @param publicChatState The privacy state of the player's public chat.
-	 * @param privateChatState The privacy state of the player's private chat.
-	 * @param tradeChatState The privacy state of the player's trade chat.
+	 * @param chatPrivacy The privacy state of the player's chat.
+	 * @param friendPrivacy The privacy state of the player's friend chat.
+	 * @param tradePrivacy The privacy state of the player's trade chat.
 	 */
-	public PrivacyOptionEvent(int publicChatState, int privateChatState, int tradeChatState) {
-		this.publicChatState = PrivacyState.valueOf(publicChatState);
-		this.privateChatState = PrivacyState.valueOf(privateChatState);
-		this.tradeChatState = PrivacyState.valueOf(tradeChatState);
+	public PrivacyOptionEvent(int chatPrivacy, int friendPrivacy, int tradePrivacy) {
+		this.chatPrivacy = PrivacyState.valueOf(chatPrivacy);
+		this.friendPrivacy = PrivacyState.valueOf(friendPrivacy);
+		this.tradePrivacy = PrivacyState.valueOf(tradePrivacy);
 	}
 
 	/**
-	 * Gets the public chat {@link PrivacyState}.
+	 * Gets the chat {@link PrivacyState}.
 	 * 
-	 * @return The privacy option.
+	 * @return The privacy state.
 	 */
-	public PrivacyState getPublicChatPrivacy() {
-		return publicChatState;
+	public PrivacyState getChatPrivacy() {
+		return chatPrivacy;
 	}
 
 	/**
-	 * Gets the private chat {@link PrivacyState}.
+	 * Gets the friend {@link PrivacyState}.
 	 * 
-	 * @return The privacy option.
+	 * @return The privacy state.
 	 */
-	public PrivacyState getPrivateChatPrivacy() {
-		return privateChatState;
+	public PrivacyState getFriendPrivacy() {
+		return friendPrivacy;
 	}
 
 	/**
-	 * Gets the trade chat {@link PrivacyState}.
+	 * Gets the trade {@link PrivacyState}.
 	 * 
-	 * @return The privacy option.
+	 * @return The privacy state.
 	 */
-	public PrivacyState getTradeChatPrivacy() {
-		return tradeChatState;
+	public PrivacyState getTradePrivacy() {
+		return tradePrivacy;
 	}
 
 }

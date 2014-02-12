@@ -9,6 +9,7 @@ import org.apollo.game.model.def.ObjectDefinition;
  * 
  * @author Major
  */
+@SuppressWarnings("serial")
 public final class GameObject extends Entity {
 
 	/**

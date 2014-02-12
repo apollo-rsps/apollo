@@ -310,14 +310,14 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * Puts a chat block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putChatBlock(ChatBlock block, GamePacketBuilder blockBuilder) {
+	private void putChatBlock(ChatBlock block, GamePacketBuilder builder) {
 		byte[] bytes = block.getCompressedMessage();
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, block.getTextColor() << 8 | block.getTextEffects());
-		blockBuilder.put(DataType.BYTE, block.getPrivilegeLevel().toInteger());
-		blockBuilder.put(DataType.BYTE, DataTransformation.NEGATE, bytes.length);
-		blockBuilder.putBytesReverse(bytes);
+		builder.put(DataType.SHORT, DataOrder.LITTLE, block.getTextColor() << 8 | block.getTextEffects());
+		builder.put(DataType.BYTE, block.getPrivilegeLevel().toInteger());
+		builder.put(DataType.BYTE, DataTransformation.NEGATE, bytes.length);
+		builder.putBytesReverse(bytes);
 	}
 
 	/**
@@ -350,12 +350,12 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * Puts a graphic block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder blockBuilder) {
+	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder builder) {
 		Graphic graphic = block.getGraphic();
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, graphic.getId());
-		blockBuilder.put(DataType.INT, graphic.getHeight() << 16 | graphic.getDelay() & 0xFFFF);
+		builder.put(DataType.SHORT, DataOrder.LITTLE, graphic.getId());
+		builder.put(DataType.INT, graphic.getHeight() << 16 | graphic.getDelay() & 0xFFFF);
 	}
 
 	/**
@@ -450,12 +450,12 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * Puts a Turn To Position block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder blockBuilder) {
+	private void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
 		Position pos = block.getPosition();
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, pos.getX() * 2 + 1);
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, pos.getY() * 2 + 1);
+		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, pos.getX() * 2 + 1);
+		builder.put(DataType.SHORT, DataOrder.LITTLE, pos.getY() * 2 + 1);
 	}
 
 }

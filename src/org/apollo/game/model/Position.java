@@ -51,7 +51,7 @@ public final class Position {
 	 */
 	public Position(int x, int y, int height) {
 		if (height < 0 || height >= HEIGHT_LEVELS) {
-			throw new IllegalArgumentException("Height out of bounds");
+			throw new IllegalArgumentException("Height level out of bounds.");
 		}
 		this.x = x;
 		this.y = y;

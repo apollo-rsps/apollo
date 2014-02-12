@@ -15,6 +15,8 @@ import org.apollo.fs.decoder.NpcDefinitionDecoder;
 import org.apollo.fs.decoder.ObjectDefinitionDecoder;
 import org.apollo.fs.decoder.StaticObjectDecoder;
 import org.apollo.game.command.CommandDispatcher;
+import org.apollo.game.login.LoginDispatcher;
+import org.apollo.game.login.LogoutDispatcher;
 import org.apollo.game.model.def.EquipmentDefinition;
 import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.def.NpcDefinition;
@@ -27,6 +29,7 @@ import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
 import org.apollo.io.EquipmentDefinitionParser;
 import org.apollo.util.MobRepository;
+import org.apollo.util.NameUtil;
 import org.apollo.util.plugin.PluginManager;
 
 /**
@@ -83,22 +86,32 @@ public final class World {
 	/**
 	 * The command dispatcher.
 	 */
-	private final CommandDispatcher dispatcher = new CommandDispatcher();
+	private final CommandDispatcher commandDispatcher = new CommandDispatcher();
+
+	/**
+	 * The login dispatcher.
+	 */
+	private final LoginDispatcher loginDispatcher = new LoginDispatcher();
+
+	/**
+	 * The logout dispatcher.
+	 */
+	private final LogoutDispatcher logoutDispatcher = new LogoutDispatcher();
 
 	/**
 	 * The {@link MobRepository} of {@link Npc}s.
 	 */
-	private final MobRepository<Npc> npcRepository = new MobRepository<Npc>(WorldConstants.MAXIMUM_NPCS);
+	private final MobRepository<Npc> npcRepository = new MobRepository<>(WorldConstants.MAXIMUM_NPCS);
 
 	/**
 	 * The {@link MobRepository} of {@link Player}s.
 	 */
-	private final MobRepository<Player> playerRepository = new MobRepository<Player>(WorldConstants.MAXIMUM_PLAYERS);
+	private final MobRepository<Player> playerRepository = new MobRepository<>(WorldConstants.MAXIMUM_PLAYERS);
 
 	/**
 	 * A {@link Map} of player usernames and the player objects.
 	 */
-	private final Map<String, Player> players = new HashMap<String, Player>();
+	private final Map<Long, Player> players = new HashMap<>();
 
 	/**
 	 * The {@link PluginManager}. TODO: better place than here!!
@@ -133,7 +146,25 @@ public final class World {
 	 * @return The command dispatcher.
 	 */
 	public CommandDispatcher getCommandDispatcher() {
-		return dispatcher;
+		return commandDispatcher;
+	}
+
+	/**
+	 * Gets the {@link LoginDispatcher}.
+	 * 
+	 * @return The dispatcher.
+	 */
+	public LoginDispatcher getLoginDispatcher() {
+		return loginDispatcher;
+	}
+
+	/**
+	 * Gets the {@link LogoutDispatcher}.
+	 * 
+	 * @return The dispatcher.
+	 */
+	public LogoutDispatcher getLogoutDispatcher() {
+		return logoutDispatcher;
 	}
 
 	/**
@@ -146,13 +177,14 @@ public final class World {
 	}
 
 	/**
-	 * Gets the {@link Player} with the specified username.
+	 * Gets the {@link Player} with the specified username. Note that this will return {@code null} if the player is
+	 * offline.
 	 * 
 	 * @param username The username.
 	 * @return The player.
 	 */
 	public Player getPlayer(String username) {
-		return players.get(username);
+		return players.get(NameUtil.encodeBase37(username.toLowerCase()));
 	}
 
 	/**
@@ -229,11 +261,11 @@ public final class World {
 	/**
 	 * Checks if the {@link Player} with the specified name is online.
 	 * 
-	 * @param name The name.
+	 * @param username The name.
 	 * @return {@code true} if the player is online, otherwise {@code false}.
 	 */
-	public boolean isPlayerOnline(String name) {
-		return getPlayer(name) != null;
+	public boolean isPlayerOnline(String username) {
+		return players.get(NameUtil.encodeBase37(username.toLowerCase())) != null;
 	}
 
 	/**
@@ -242,8 +274,9 @@ public final class World {
 	 * @param entities The entities.
 	 * @return {@code true} if all entities were added successfully, otherwise {@code false}.
 	 */
-	private boolean placeEntities(Entity[] entities) {
+	private boolean placeEntities(Entity... entities) {
 		boolean success = true;
+
 		for (Entity entity : entities) {
 			Sector sector = repository.get(SectorCoordinates.fromPosition(entity.getPosition()));
 			success &= sector.addEntity(entity);
@@ -266,6 +299,7 @@ public final class World {
 	 */
 	public boolean register(final Npc npc) {
 		boolean success = npcRepository.add(npc);
+
 		if (success) {
 			logger.info("Registered npc: " + npc + " [count=" + npcRepository.size() + "]");
 		} else {
@@ -281,15 +315,17 @@ public final class World {
 	 * @return A {@link RegistrationStatus}.
 	 */
 	public RegistrationStatus register(final Player player) {
-		if (isPlayerOnline(player.getName())) {
+		if (isPlayerOnline(player.getUsername())) {
 			return RegistrationStatus.ALREADY_ONLINE;
 		}
 
-		boolean success = playerRepository.add(player) & players.put(player.getName(), player) == null;
+		boolean success = playerRepository.add(player);
 		if (success) {
+			players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player);
 			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 			return RegistrationStatus.OK;
 		}
+
 		logger.warning("Failed to register player (server full): " + player + " [count=" + playerRepository.size()
 				+ "]");
 		return RegistrationStatus.WORLD_FULL;
@@ -309,7 +345,7 @@ public final class World {
 	 * 
 	 * @param npc The npc.
 	 */
-	public void unregister(Npc npc) {
+	public void unregister(final Npc npc) {
 		if (npcRepository.remove(npc)) {
 			logger.info("Unregistered npc: " + npc + " [count=" + npcRepository.size() + "]");
 		} else {
@@ -322,9 +358,10 @@ public final class World {
 	 * 
 	 * @param player The player.
 	 */
-	public void unregister(Player player) {
-		if (playerRepository.remove(player) & players.remove(player.getName()) == player) {
+	public void unregister(final Player player) {
+		if (playerRepository.remove(player) & players.remove(NameUtil.encodeBase37(player.getUsername().toLowerCase())) == player) {
 			logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
+			logoutDispatcher.dispatch(player);
 		} else {
 			logger.warning("Could not find player " + player + " to unregister!");
 		}

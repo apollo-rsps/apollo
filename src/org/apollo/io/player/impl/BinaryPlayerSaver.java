@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Inventory;
@@ -13,6 +14,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.Skill;
 import org.apollo.game.model.SkillSet;
 import org.apollo.io.player.PlayerSaver;
+import org.apollo.util.NameUtil;
 import org.apollo.util.StreamUtil;
 
 /**
@@ -24,19 +26,19 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 
 	@Override
 	public void savePlayer(Player player) throws IOException {
-		File file = BinaryPlayerUtil.getFile(player.getName());
+		File file = BinaryPlayerUtil.getFile(player.getUsername());
 
 		try (DataOutputStream out = new DataOutputStream(new FileOutputStream(file))) {
 			// write credentials and privileges
-			StreamUtil.writeString(out, player.getName());
+			StreamUtil.writeString(out, player.getUsername());
 			StreamUtil.writeString(out, player.getCredentials().getPassword());
 			out.writeByte(player.getPrivilegeLevel().toInteger());
 			out.writeBoolean(player.isMembers());
 
 			// write settings
-			out.writeByte(player.getPublicChatPrivacy().toInteger());
-			out.writeByte(player.getPrivateChatPrivacy().toInteger());
-			out.writeByte(player.getTradeChatPrivacy().toInteger());
+			out.writeByte(player.getChatPrivacy().toInteger());
+			out.writeByte(player.getFriendPrivacy().toInteger());
+			out.writeByte(player.getTradePrivacy().toInteger());
 			out.writeByte(player.getRunEnergy());
 			out.writeByte(player.getScreenBrightness().toInteger());
 
@@ -72,6 +74,18 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 				Skill skill = skills.getSkill(id);
 				out.writeByte(skill.getCurrentLevel());
 				out.writeDouble(skill.getExperience());
+			}
+
+			List<String> usernames = player.getFriendUsernames();
+			out.writeByte(usernames.size());
+			for (String username : usernames) {
+				out.writeLong(NameUtil.encodeBase37(username));
+			}
+
+			usernames = player.getIgnoredUsernames();
+			out.writeByte(usernames.size());
+			for (String username : usernames) {
+				out.writeLong(NameUtil.encodeBase37(username));
 			}
 		}
 	}

@@ -5,9 +5,7 @@ import org.apollo.net.release.Release;
 /**
  * A {@link ServerContext} is created along with the {@link Server} object. The primary difference is that a reference
  * to the current context should be passed around within the server. The {@link Server} should not be as it allows
- * access to some methods such as
- * {@link Server#bind(java.net.SocketAddress, java.net.SocketAddress, java.net.SocketAddress)} which user scripts/code
- * should not be able to access.
+ * access to some methods such as {@link Server#bind} which user scripts/code should not be able to access.
  * 
  * @author Graham
  */

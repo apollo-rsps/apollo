@@ -4,7 +4,10 @@ import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.ConfigEvent;
 import org.apollo.game.event.impl.DisplayTabInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
+import org.apollo.game.event.impl.ForwardPrivateMessageEvent;
+import org.apollo.game.event.impl.FriendServerStatusEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
+import org.apollo.game.event.impl.IgnoreListEvent;
 import org.apollo.game.event.impl.LogoutEvent;
 import org.apollo.game.event.impl.NpcSynchronizationEvent;
 import org.apollo.game.event.impl.OpenInterfaceEvent;
@@ -13,6 +16,7 @@ import org.apollo.game.event.impl.PlayerSynchronizationEvent;
 import org.apollo.game.event.impl.PositionEvent;
 import org.apollo.game.event.impl.PrivacyOptionEvent;
 import org.apollo.game.event.impl.RegionChangeEvent;
+import org.apollo.game.event.impl.SendFriendEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SetTileItemEvent;
 import org.apollo.game.event.impl.SetWidgetItemModelEvent;
@@ -130,6 +134,12 @@ public final class Release317 extends Release {
 		register(17, new ThirdNpcActionEventDecoder());
 		register(236, new TakeTileItemEventDecoder());
 
+		register(188, new AddFriendEventDecoder());
+		register(133, new AddIgnoreEventDecoder());
+		register(215, new RemoveFriendEventDecoder());
+		register(74, new RemoveIgnoreEventDecoder());
+		register(126, new SendPrivateMessageEventDecoder());
+
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
 		register(RegionChangeEvent.class, new RegionChangeEventEncoder());
@@ -157,6 +167,11 @@ public final class Release317 extends Release {
 		register(PositionEvent.class, new PositionEventEncoder());
 		register(UpdateRunEnergyEvent.class, new UpdateRunEnergyEventEncoder());
 		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
+
+		register(ForwardPrivateMessageEvent.class, new ForwardPrivateMessageEventEncoder());
+		register(FriendServerStatusEvent.class, new FriendServerStatusEventEncoder());
+		register(IgnoreListEvent.class, new IgnoreListEventEncoder());
+		register(SendFriendEvent.class, new SendFriendEventEncoder());
 	}
 
 }

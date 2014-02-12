@@ -1,11 +1,5 @@
 <events>
   <event>
-    <type>org.apollo.game.event.impl.PrivacyOptionEvent</type>
-    <chain>
-      <handler>org.apollo.game.event.handler.impl.PrivacyOptionEventHandler</handler>
-    </chain>
-  </event>
-  <event>
     <type>org.apollo.game.event.impl.PlayerDesignEvent</type>
     <chain>
       <handler>org.apollo.game.event.handler.impl.PlayerDesignVerificationHandler</handler>
