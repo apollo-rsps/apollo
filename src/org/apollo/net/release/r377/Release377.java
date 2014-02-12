@@ -4,6 +4,7 @@ import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.ConfigEvent;
 import org.apollo.game.event.impl.DisplayTabInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
+import org.apollo.game.event.impl.ForwardPrivateMessageEvent;
 import org.apollo.game.event.impl.FriendServerStatusEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
 import org.apollo.game.event.impl.IgnoreListEvent;
@@ -134,6 +135,7 @@ public final class Release377 extends Release {
 		register(217, new AddIgnoreEventDecoder());
 		register(141, new RemoveFriendEventDecoder());
 		register(160, new RemoveIgnoreEventDecoder());
+		register(227, new SendPrivateMessageEventDecoder());
 
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
@@ -163,6 +165,7 @@ public final class Release377 extends Release {
 		register(UpdateRunEnergyEvent.class, new UpdateRunEnergyEventEncoder());
 		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
 
+		register(ForwardPrivateMessageEvent.class, new ForwardPrivateMessageEventEncoder());
 		register(FriendServerStatusEvent.class, new FriendServerStatusEventEncoder());
 		register(IgnoreListEvent.class, new IgnoreListEventEncoder());
 		register(SendFriendEvent.class, new SendFriendEventEncoder());
