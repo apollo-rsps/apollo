@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apollo.game.model.Player;
 
 /**
- * A class which dispatches {@link Command}s to {@link CommandListener}s.
+ * A class that dispatches {@link Command}s to {@link CommandListener}s.
  * 
  * @author Graham
  */

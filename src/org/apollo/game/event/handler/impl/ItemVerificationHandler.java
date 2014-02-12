@@ -17,33 +17,26 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 public final class ItemVerificationHandler extends EventHandler<InventoryItemEvent> {
 
 	/**
-	 * Gets the inventory based on the interface id.
-	 * 
-	 * @param interfaceId The interface id.
-	 * @return The proper inventory.
-	 * @throws IllegalArgumentException If the interface id is not legal.
-	 */
-	public static Inventory interfaceToInventory(Player player, int interfaceId) {
-		switch (interfaceId) {
-
-		case SynchronizationInventoryListener.INVENTORY_ID:
-		case BankConstants.SIDEBAR_INVENTORY_ID:
-			return player.getInventory();
-		case SynchronizationInventoryListener.EQUIPMENT_ID:
-			return player.getEquipment();
-		case BankConstants.BANK_INVENTORY_ID:
-			return player.getBank();
-		default:
-			throw new IllegalArgumentException("unknown interface id: " + interfaceId);
-		}
-	}
-
-	/**
 	 * Checks if the information provided by the event is valid, breaking the handler chain if it isn't.
 	 */
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, InventoryItemEvent event) {
-		Inventory inventory = interfaceToInventory(player, event.getInterfaceId());
+		Inventory inventory;
+
+		switch (event.getInterfaceId()) {
+		case SynchronizationInventoryListener.INVENTORY_ID:
+		case BankConstants.SIDEBAR_INVENTORY_ID:
+			inventory = player.getInventory();
+			break;
+		case SynchronizationInventoryListener.EQUIPMENT_ID:
+			inventory = player.getEquipment();
+			break;
+		case BankConstants.BANK_INVENTORY_ID:
+			inventory = player.getBank();
+			break;
+		default:
+			return;
+		}
 
 		int slot = event.getSlot();
 		if (slot < 0 || slot >= inventory.capacity()) {

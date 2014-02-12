@@ -8,9 +8,9 @@ package org.apollo.game.model.settings;
 public enum PrivilegeLevel {
 
 	/**
-	 * An administrator (rights 2) account.
+	 * A standard (rights 0) account.
 	 */
-	ADMINISTRATOR(2),
+	STANDARD(0),
 
 	/**
 	 * A player moderator (rights 1) account.
@@ -18,9 +18,9 @@ public enum PrivilegeLevel {
 	MODERATOR(1),
 
 	/**
-	 * A standard (rights 0) account.
+	 * An administrator (rights 2) account.
 	 */
-	STANDARD(0);
+	ADMINISTRATOR(2);
 
 	/**
 	 * Gets the privilege level for the specified numerical level.

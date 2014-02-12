@@ -38,7 +38,7 @@ public enum PrivacyState {
 	public static PrivacyState valueOf(int value) {
 		PrivacyState[] values = values();
 		if (value < 0 || value >= values.length) {
-			throw new IllegalArgumentException("Invalid privacy option integer value specified");
+			throw new IllegalArgumentException("Invalid privacy option integer value specified: " + value);
 		}
 		return values[value];
 	}

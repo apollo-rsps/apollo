@@ -40,6 +40,7 @@ public final class BinaryPlayerUtil {
 	 * Default private constructor to prevent instantiation.
 	 */
 	private BinaryPlayerUtil() {
+
 	}
 
 }

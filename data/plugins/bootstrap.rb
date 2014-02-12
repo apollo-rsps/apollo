@@ -13,11 +13,14 @@
 # *****************************************************************************
 
 require 'java'
-java_import 'org.apollo.game.event.handler.EventHandler'
+
 java_import 'org.apollo.game.command.CommandListener'
+java_import 'org.apollo.game.event.handler.EventHandler'
+java_import 'org.apollo.game.login.LoginListener'
+java_import 'org.apollo.game.login.LogoutListener'
 java_import 'org.apollo.game.model.Player'
-java_import 'org.apollo.game.model.settings.PrivilegeLevel'
 java_import 'org.apollo.game.model.World'
+java_import 'org.apollo.game.model.settings.PrivilegeLevel'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
 
 # Alias the privilege levels.
@@ -33,7 +36,7 @@ class String
   end
 end
 
-# A CommandListener which executes a Proc object with two arguments: the player
+# A CommandListener that executes a Proc object with two arguments: the player
 # and the command.
 class ProcCommandListener < CommandListener
   def initialize(rights, block)
@@ -43,6 +46,30 @@ class ProcCommandListener < CommandListener
 
   def execute(player, command)
     @block.call(player, command)
+  end
+end
+
+# A LoginListener that executes a Proc object with the player argument.
+class ProcLoginListener < LoginListener
+  def initialize(block)
+    super()
+    @block = block
+  end
+
+  def execute(player)
+    @block.call player
+  end
+end
+
+# A LogoutListener that executes a Proc object with the player argument.
+class ProcLogoutListener < LogoutListener
+  def initialize(block)
+    super()
+    @block = block
+  end
+
+  def execute(player)
+    @block.call player
   end
 end
 
@@ -114,6 +141,8 @@ def on(type, *args, &block)
     when :command then on_command(args, block)
     when :event   then on_event(args, block)
     when :button  then on_button(args, block)
+    when :login   then on_login(args, block)
+    when :logout  then on_logout(args, block)
     else raise "unknown event type"
   end
 end
@@ -125,7 +154,7 @@ def on_button(args, proc)
   id = args[0].to_i
 
   on :event, :button do |ctx, player, event|
-    proc.call(player) if event.widget_id == id
+    proc.call player if event.widget_id == id
   end
 end
 
@@ -151,4 +180,14 @@ def on_command(args, proc)
   rights = args.length == 2 ? args[1] : RIGHTS_STANDARD
 
   $ctx.add_command_listener(args[0].to_s, ProcCommandListener.new(rights, proc))
+end
+
+# Defines an action to be taken upon login.
+def on_login(args, proc)
+  $ctx.add_login_listener ProcLoginListener.new(proc)
+end
+
+# Defines an action to be taken upon logout.
+def on_logout(args, proc)
+  $ctx.add_logout_listener ProcLogoutListener.new(proc)
 end

@@ -8,24 +8,9 @@ package org.apollo.game.model;
 public final class Skill {
 
 	/**
-	 * The agility id.
-	 */
-	public static final int AGILITY = 16;
-
-	/**
 	 * The attack id.
 	 */
 	public static final int ATTACK = 0;
-
-	/**
-	 * The cooking id.
-	 */
-	public static final int COOKING = 7;
-
-	/**
-	 * The crafting id.
-	 */
-	public static final int CRAFTING = 12;
 
 	/**
 	 * The defence id.
@@ -33,29 +18,9 @@ public final class Skill {
 	public static final int DEFENCE = 1;
 
 	/**
-	 * The farming id.
+	 * The strength id.
 	 */
-	public static final int FARMING = 19;
-
-	/**
-	 * The firemaking id.
-	 */
-	public static final int FIREMAKING = 11;
-
-	/**
-	 * The fishing id.
-	 */
-	public static final int FISHING = 10;
-
-	/**
-	 * The fletching id.
-	 */
-	public static final int FLETCHING = 9;
-
-	/**
-	 * The herblore id.
-	 */
-	public static final int HERBLORE = 15;
+	public static final int STRENGTH = 2;
 
 	/**
 	 * The hitpoints id.
@@ -63,14 +28,9 @@ public final class Skill {
 	public static final int HITPOINTS = 3;
 
 	/**
-	 * The magic id.
+	 * The ranged id.
 	 */
-	public static final int MAGIC = 6;
-
-	/**
-	 * The mining id.rivate
-	 */
-	public static final int MINING = 14;
+	public static final int RANGED = 4;
 
 	/**
 	 * The prayer id.
@@ -78,9 +38,74 @@ public final class Skill {
 	public static final int PRAYER = 5;
 
 	/**
-	 * The ranged id.
+	 * The magic id.
 	 */
-	public static final int RANGED = 4;
+	public static final int MAGIC = 6;
+
+	/**
+	 * The cooking id.
+	 */
+	public static final int COOKING = 7;
+
+	/**
+	 * The woodcutting id.
+	 */
+	public static final int WOODCUTTING = 8;
+
+	/**
+	 * The fletching id.
+	 */
+	public static final int FLETCHING = 9;
+
+	/**
+	 * The fishing id.
+	 */
+	public static final int FISHING = 10;
+
+	/**
+	 * The firemaking id.
+	 */
+	public static final int FIREMAKING = 11;
+
+	/**
+	 * The crafting id.
+	 */
+	public static final int CRAFTING = 12;
+
+	/**
+	 * The smithing id.
+	 */
+	public static final int SMITHING = 13;
+
+	/**
+	 * The mining id.rivate
+	 */
+	public static final int MINING = 14;
+
+	/**
+	 * The herblore id.
+	 */
+	public static final int HERBLORE = 15;
+
+	/**
+	 * The agility id.
+	 */
+	public static final int AGILITY = 16;
+
+	/**
+	 * The thieving id.
+	 */
+	public static final int THIEVING = 17;
+
+	/**
+	 * The slayer id.
+	 */
+	public static final int SLAYER = 18;
+
+	/**
+	 * The farming id.
+	 */
+	public static final int FARMING = 19;
 
 	/**
 	 * The runecrafting id.
@@ -93,31 +118,6 @@ public final class Skill {
 	private static final String SKILL_NAMES[] = { "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer",
 			"Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining",
 			"Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecraft" };
-
-	/**
-	 * The slayer id.
-	 */
-	public static final int SLAYER = 18;
-
-	/**
-	 * The smithing id.
-	 */
-	public static final int SMITHING = 13;
-
-	/**
-	 * The strength id.
-	 */
-	public static final int STRENGTH = 2;
-
-	/**
-	 * The thieving id.
-	 */
-	public static final int THIEVING = 17;
-
-	/**
-	 * The woodcutting id.
-	 */
-	public static final int WOODCUTTING = 8;
 
 	/**
 	 * Gets the name of a skill.

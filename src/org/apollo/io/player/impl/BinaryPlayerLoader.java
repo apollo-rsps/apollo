@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Inventory;
@@ -20,6 +22,7 @@ import org.apollo.io.player.PlayerLoader;
 import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.security.PlayerCredentials;
+import org.apollo.util.NameUtil;
 import org.apollo.util.StreamUtil;
 
 /**
@@ -82,9 +85,9 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			Player player = new Player(credentials, new Position(x, y, height));
 			player.setPrivilegeLevel(privilegeLevel);
 			player.setMembers(members);
-			player.setPublicChatPrivacy(privacyPublicChat);
-			player.setPrivateChatPrivacy(privacyPrivateChat);
-			player.setTradeChatPrivacy(privacyTradeCompete);
+			player.setChatPrivacy(privacyPublicChat);
+			player.setFriendPrivacy(privacyPrivateChat);
+			player.setTradePrivacy(privacyTradeCompete);
 			player.setRunEnergy(runEnergy);
 			player.setScreenBrightness(brightness);
 
@@ -110,6 +113,20 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 				skills.calculateCombatLevel();
 				skills.startFiringEvents();
 			}
+
+			int friendCount = in.readByte();
+			List<String> friends = new ArrayList<String>(friendCount);
+			for (int i = 0; i < friendCount; i++) {
+				friends.add(NameUtil.decodeBase37(in.readLong()));
+			}
+			player.setFriendUsernames(friends);
+
+			int ignoreCount = in.readByte();
+			List<String> ignores = new ArrayList<String>(ignoreCount);
+			for (int i = 0; i < ignoreCount; i++) {
+				ignores.add(NameUtil.decodeBase37(in.readLong()));
+			}
+			player.setIgnoredUsernames(ignores);
 
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
 		}

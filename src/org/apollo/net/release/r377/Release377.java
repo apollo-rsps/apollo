@@ -4,7 +4,9 @@ import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.ConfigEvent;
 import org.apollo.game.event.impl.DisplayTabInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
+import org.apollo.game.event.impl.FriendServerStatusEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
+import org.apollo.game.event.impl.IgnoreListEvent;
 import org.apollo.game.event.impl.LogoutEvent;
 import org.apollo.game.event.impl.NpcSynchronizationEvent;
 import org.apollo.game.event.impl.OpenInterfaceEvent;
@@ -13,6 +15,7 @@ import org.apollo.game.event.impl.PlayerSynchronizationEvent;
 import org.apollo.game.event.impl.PositionEvent;
 import org.apollo.game.event.impl.PrivacyOptionEvent;
 import org.apollo.game.event.impl.RegionChangeEvent;
+import org.apollo.game.event.impl.SendFriendEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SetTileItemEvent;
 import org.apollo.game.event.impl.SetWidgetItemModelEvent;
@@ -127,6 +130,11 @@ public final class Release377 extends Release {
 		register(13, new ThirdNpcActionEventDecoder());
 		register(71, new TakeTileItemEventDecoder());
 
+		register(120, new AddFriendEventDecoder());
+		register(217, new AddIgnoreEventDecoder());
+		register(141, new RemoveFriendEventDecoder());
+		register(160, new RemoveIgnoreEventDecoder());
+
 		// register encoders
 		register(IdAssignmentEvent.class, new IdAssignmentEventEncoder());
 		register(RegionChangeEvent.class, new RegionChangeEventEncoder());
@@ -154,6 +162,10 @@ public final class Release377 extends Release {
 		register(PositionEvent.class, new PositionEventEncoder());
 		register(UpdateRunEnergyEvent.class, new UpdateRunEnergyEventEncoder());
 		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
+
+		register(FriendServerStatusEvent.class, new FriendServerStatusEventEncoder());
+		register(IgnoreListEvent.class, new IgnoreListEventEncoder());
+		register(SendFriendEvent.class, new SendFriendEventEncoder());
 	}
 
 }

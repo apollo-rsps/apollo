@@ -19,14 +19,19 @@ import org.apollo.util.MobRepository;
 public abstract class Mob extends Entity {
 
 	/**
+	 * The generated serial uid.
+	 */
+	private static final long serialVersionUID = 8342608309450355638L;
+
+	/**
 	 * This mob's current action.
 	 */
-	private Action<?> action;
+	private transient Action<?> action;
 
 	/**
 	 * This mob's set of {@link SynchronizationBlock}s.
 	 */
-	protected SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
+	protected transient SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
 
 	/**
 	 * This mob's {@link NpcDefinition). A {@link Player} only uses this if they are appearing as an npc in-game.
@@ -36,52 +41,52 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's equipment.
 	 */
-	private final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
+	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
 
 	/**
 	 * This mob's first movement {@link Direction}.
 	 */
-	private Direction firstDirection = Direction.NONE;
+	private transient Direction firstDirection = Direction.NONE;
 
 	/**
 	 * The index of this mob in the {@link MobRepository} it belongs to.
 	 */
-	private int index = -1;
+	protected int index = -1;
 
 	/**
 	 * This mob's inventory.
 	 */
-	private final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
+	protected final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
 
 	/**
 	 * This mob's {@link List} of local npcs.
 	 */
-	private final List<Npc> localNpcs = new ArrayList<Npc>();
+	private final transient List<Npc> localNpcs = new ArrayList<Npc>();
 
 	/**
 	 * This mob's {@link List} of local players.
 	 */
-	private final List<Player> localPlayers = new ArrayList<Player>();
+	private final transient List<Player> localPlayers = new ArrayList<Player>();
 
 	/**
 	 * This mob's second movement direction.
 	 */
-	private Direction secondDirection = Direction.NONE;
+	private transient Direction secondDirection = Direction.NONE;
 
 	/**
 	 * This mob's skill set.
 	 */
-	private final SkillSet skillSet = new SkillSet();
+	protected final SkillSet skillSet = new SkillSet();
 
 	/**
 	 * Indicates whether this mob is currently teleporting or not.
 	 */
-	private boolean teleporting = false;
+	private transient boolean teleporting = false;
 
 	/**
 	 * This mob's walking queue.
 	 */
-	private final WalkingQueue walkingQueue = new WalkingQueue(this);
+	protected final transient WalkingQueue walkingQueue = new WalkingQueue(this);
 
 	/**
 	 * Creates a new mob with the specified initial {@link Position}.

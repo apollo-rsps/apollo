@@ -1,13 +1,16 @@
 package org.apollo.game.model;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
 import org.apollo.game.event.Event;
 import org.apollo.game.event.impl.ConfigEvent;
 import org.apollo.game.event.impl.IdAssignmentEvent;
+import org.apollo.game.event.impl.IgnoreListEvent;
 import org.apollo.game.event.impl.LogoutEvent;
+import org.apollo.game.event.impl.SendFriendEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SetWidgetTextEvent;
 import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
@@ -39,6 +42,11 @@ import org.apollo.util.Point;
 public final class Player extends Mob {
 
 	/**
+	 * The generated serial uid.
+	 */
+	private static final long serialVersionUID = -5865532568677077237L;
+
+	/**
 	 * The player's appearance.
 	 */
 	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
@@ -49,9 +57,14 @@ public final class Player extends Mob {
 	private final Inventory bank = new Inventory(InventoryConstants.BANK_CAPACITY, StackMode.STACK_ALWAYS);
 
 	/**
-	 * A {@link List} of this player's mouse clicks.
+	 * The privacy state of this player's public chat.
 	 */
-	private Deque<Point> clicks = new ArrayDeque<Point>();
+	private PrivacyState chatPrivacy = PrivacyState.ON;
+
+	/**
+	 * A deque of this player's mouse clicks.
+	 */
+	private transient Deque<Point> clicks = new ArrayDeque<Point>();
 
 	/**
 	 * This player's credentials.
@@ -66,12 +79,22 @@ public final class Player extends Mob {
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
 	 */
-	private boolean excessiveNpcs = false;
+	private transient boolean excessiveNpcs = false;
 
 	/**
 	 * A flag which indicates there are players that couldn't be added.
 	 */
-	private boolean excessivePlayers = false;
+	private transient boolean excessivePlayers = false;
+
+	/**
+	 * The privacy state of this player's private chat.
+	 */
+	private PrivacyState friendPrivacy = PrivacyState.ON;
+
+	/**
+	 * The list of usernames of players this player has befriended.
+	 */
+	private List<String> friends = new ArrayList<>();
 
 	/**
 	 * This player's head icon.
@@ -79,19 +102,24 @@ public final class Player extends Mob {
 	private int headIcon = -1;
 
 	/**
+	 * The list of usernames of players this player has ignored.
+	 */
+	private List<String> ignores = new ArrayList<>();
+
+	/**
 	 * This player's interface set.
 	 */
-	private final InterfaceSet interfaceSet = new InterfaceSet(this);
+	private final transient InterfaceSet interfaceSet = new InterfaceSet(this);
 
 	/**
 	 * The centre of the last region the client has loaded.
 	 */
-	private Position lastKnownRegion;
+	private transient Position lastKnownRegion;
 
 	/**
 	 * The membership flag.
 	 */
-	private boolean members = false;
+	private transient boolean members = false;
 
 	/**
 	 * This player's prayer icon.
@@ -99,34 +127,24 @@ public final class Player extends Mob {
 	private int prayerIcon = 0;
 
 	/**
-	 * The privacy state of this player's private chat.
-	 */
-	private PrivacyState privateChatPrivacy = PrivacyState.ON;
-
-	/**
 	 * The privilege level.
 	 */
 	private PrivilegeLevel privilegeLevel = PrivilegeLevel.STANDARD;
 
 	/**
-	 * The privacy state of this player's public chat.
-	 */
-	private PrivacyState publicChatPrivacy = PrivacyState.ON;
-
-	/**
 	 * A temporary queue of events sent during the login process.
 	 */
-	private final Deque<Event> queuedEvents = new ArrayDeque<Event>();
+	private final transient Deque<Event> queuedEvents = new ArrayDeque<Event>();
 
 	/**
 	 * A flag indicating if the region changed in the last cycle.
 	 */
-	private boolean regionChanged = false;
+	private transient boolean regionChanged = false;
 
 	/**
 	 * The player's run energy.
 	 */
-	private int runEnergy = 0;
+	private int runEnergy = 100;
 
 	/**
 	 * A flag indicating if this player is running.
@@ -136,17 +154,17 @@ public final class Player extends Mob {
 	/**
 	 * The brightness of this player's screen.
 	 */
-	private ScreenBrightness screenBrightness;
+	private ScreenBrightness screenBrightness = ScreenBrightness.NORMAL;
 
 	/**
 	 * The {@link GameSession} currently attached to this {@link Player}.
 	 */
-	private GameSession session;
+	private transient GameSession session;
 
 	/**
 	 * The privacy state of this player's trade chat.
 	 */
-	private PrivacyState tradeChatPrivacy = PrivacyState.ON;
+	private PrivacyState tradePrivacy = PrivacyState.ON;
 
 	/**
 	 * The current maximum viewing distance of this player.
@@ -157,6 +175,11 @@ public final class Player extends Mob {
 	 * A flag indicating if the player is withdrawing items as notes.
 	 */
 	private boolean withdrawingNotes = false;
+
+	/**
+	 * The id of the world this player is in.
+	 */
+	private transient int worldId = 1;
 
 	/**
 	 * Creates the {@link Player}.
@@ -178,6 +201,24 @@ public final class Player extends Mob {
 	 */
 	public boolean addClick(Point point) {
 		return clicks.add(point);
+	}
+
+	/**
+	 * Adds the specified username to this player's friend list.
+	 * 
+	 * @param username The username.
+	 */
+	public boolean addFriend(String username) {
+		return friends.add(username.toLowerCase());
+	}
+
+	/**
+	 * Adds the specified username to this player's ignore list.
+	 * 
+	 * @param username The username.
+	 */
+	public boolean addIgnore(String username) {
+		return ignores.add(username.toLowerCase());
 	}
 
 	/**
@@ -204,6 +245,16 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Indicates whether this player is friends with the player with the specified username or not.
+	 * 
+	 * @param username The username of the other player.
+	 * @return {@code true} if the specified username is on this player's friend list, otherwise {@code false}.
+	 */
+	public boolean friendsWith(String username) {
+		return friends.contains(username.toLowerCase());
+	}
+
+	/**
 	 * Gets the player's appearance.
 	 * 
 	 * @return The appearance.
@@ -219,6 +270,15 @@ public final class Player extends Mob {
 	 */
 	public Inventory getBank() {
 		return bank;
+	}
+
+	/**
+	 * Gets this player's public chat privacy state.
+	 * 
+	 * @return The privacy state.
+	 */
+	public PrivacyState getChatPrivacy() {
+		return chatPrivacy;
 	}
 
 	/**
@@ -254,12 +314,39 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Gets this player's friend chat {@link PrivacyState}.
+	 * 
+	 * @return The privacy state.
+	 */
+	public PrivacyState getFriendPrivacy() {
+		return friendPrivacy;
+	}
+
+	/**
+	 * Gets the {@link List} of this player's friends.
+	 * 
+	 * @return The list.
+	 */
+	public List<String> getFriendUsernames() {
+		return friends;
+	}
+
+	/**
 	 * Gets the player's head icon.
 	 * 
 	 * @return The head icon.
 	 */
 	public int getHeadIcon() {
 		return headIcon;
+	}
+
+	/**
+	 * Gets the {@link List} of usernames of ignored players.
+	 * 
+	 * @return The list.
+	 */
+	public List<String> getIgnoredUsernames() {
+		return ignores;
 	}
 
 	/**
@@ -290,15 +377,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets the player's name.
-	 * 
-	 * @return The player's name.
-	 */
-	public String getName() {
-		return credentials.getUsername();
-	}
-
-	/**
 	 * Gets the player's prayer icon.
 	 * 
 	 * @return The prayer icon.
@@ -308,30 +386,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets this player's private chat privacy state.
-	 * 
-	 * @return The privacy state.
-	 */
-	public PrivacyState getPrivateChatPrivacy() {
-		return privateChatPrivacy;
-	}
-
-	/**
 	 * Gets the privilege level.
 	 * 
 	 * @return The privilege level.
 	 */
 	public PrivilegeLevel getPrivilegeLevel() {
 		return privilegeLevel;
-	}
-
-	/**
-	 * Gets this player's public chat privacy state.
-	 * 
-	 * @return The privacy state.
-	 */
-	public PrivacyState getPublicChatPrivacy() {
-		return publicChatPrivacy;
 	}
 
 	/**
@@ -362,12 +422,21 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets this player's trade chat privacy state.
+	 * Gets this player's trade {@link PrivacyState}.
 	 * 
 	 * @return The privacy state.
 	 */
-	public PrivacyState getTradeChatPrivacy() {
-		return tradeChatPrivacy;
+	public PrivacyState getTradePrivacy() {
+		return tradePrivacy;
+	}
+
+	/**
+	 * Gets the player's name.
+	 * 
+	 * @return The player's name.
+	 */
+	public String getUsername() {
+		return credentials.getUsername();
 	}
 
 	/**
@@ -380,12 +449,31 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Gets the id of the world this player is in.
+	 * 
+	 * @return The id.
+	 */
+	public int getWorldId() {
+		return worldId;
+	}
+
+	/**
 	 * Checks if the player has designed their avatar.
 	 * 
 	 * @return A flag indicating if the player has designed their avatar.
 	 */
 	public boolean hasDesignedAvatar() {
 		return designedAvatar;
+	}
+
+	/**
+	 * Indicates whether or not the player with the specified username is on this player's ignore list.
+	 * 
+	 * @param username The username of the player.
+	 * @return {@code true} if the player is ignored, {@code false} if not.
+	 */
+	public boolean hasIgnored(String username) {
+		return ignores.contains(username.toLowerCase());
 	}
 
 	/**
@@ -427,10 +515,6 @@ public final class Player extends Mob {
 	 * Initialises the player's inventories.
 	 */
 	private void initInventories() {
-		Inventory inventory = getInventory();
-		Inventory bank = getBank();
-		Inventory equipment = getEquipment();
-
 		// inventory full listeners
 		InventoryListener fullInventoryListener = new FullInventoryListener(this,
 				FullInventoryListener.FULL_INVENTORY_MESSAGE);
@@ -525,6 +609,24 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Removes the specified username from this player's friend list.
+	 * 
+	 * @param username The username.
+	 */
+	public boolean removeFriend(String username) {
+		return friends.remove(username.toLowerCase());
+	}
+
+	/**
+	 * Removes the specified username from this player's ignore list.
+	 * 
+	 * @param username The username.
+	 */
+	public boolean removeIgnore(String username) {
+		return ignores.remove(username.toLowerCase());
+	}
+
+	/**
 	 * Resets the excessive players flag.
 	 */
 	public void resetExcessivePlayers() {
@@ -561,7 +663,7 @@ public final class Player extends Mob {
 	 * Sends the initial events.
 	 */
 	private void sendInitialEvents() {
-		send(new IdAssignmentEvent(getIndex(), members)); // TODO should this be sent when we reconnect?
+		send(new IdAssignmentEvent(index, members)); // TODO should this be sent when we reconnect?
 		sendMessage("Welcome to RuneScape.");
 
 		if (!designedAvatar) {
@@ -569,15 +671,16 @@ public final class Player extends Mob {
 		}
 
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
-		for (int i = 0; i < tabs.length; i++) {
-			send(new SwitchTabInterfaceEvent(i, tabs[i]));
+		for (int tab = 0; tab < tabs.length; tab++) {
+			send(new SwitchTabInterfaceEvent(tab, tabs[tab]));
 		}
 
-		getInventory().forceRefresh();
-		getEquipment().forceRefresh();
-		getBank().forceRefresh();
+		inventory.forceRefresh();
+		equipment.forceRefresh();
+		bank.forceRefresh();
+		skillSet.forceRefresh();
 
-		getSkillSet().forceRefresh();
+		World.getWorld().getLoginDispatcher().dispatch(this);
 	}
 
 	/**
@@ -597,7 +700,7 @@ public final class Player extends Mob {
 	public void sendQuestInterface(List<String> text) {
 		int size = text.size(), lines = InterfaceConstants.QUEST_TEXT.length;
 		if (size > lines) {
-			throw new IllegalArgumentException("list contains too much text for this interface.");
+			throw new IllegalArgumentException("List contains too much text for this interface.");
 		}
 
 		for (int pos = 0; pos < lines; pos++) {
@@ -607,13 +710,37 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sends the friend and ignore user lists.
+	 */
+	public void sendUserLists() {
+		if (ignores.size() > 0) {
+			send(new IgnoreListEvent(ignores));
+		}
+
+		World world = World.getWorld();
+		for (String username : friends) {
+			int worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
+			send(new SendFriendEvent(username, worldId));
+		}
+	}
+
+	/**
 	 * Sets the player's appearance.
 	 * 
 	 * @param appearance The new appearance.
 	 */
 	public void setAppearance(Appearance appearance) {
 		this.appearance = appearance;
-		getBlockSet().add(SynchronizationBlock.createAppearanceBlock(this));
+		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
+	}
+
+	/**
+	 * Sets the chat {@link PrivacyState}.
+	 * 
+	 * @param chatPrivacy The privacy state.
+	 */
+	public void setChatPrivacy(PrivacyState chatPrivacy) {
+		this.chatPrivacy = chatPrivacy;
 	}
 
 	/**
@@ -626,12 +753,39 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sets the friend {@link PrivacyState}.
+	 * 
+	 * @param friendPrivacy The privacy state.
+	 */
+	public void setFriendPrivacy(PrivacyState friendPrivacy) {
+		this.friendPrivacy = friendPrivacy;
+	}
+
+	/**
+	 * Sets the {@link List} of this player's friends.
+	 * 
+	 * @param friends The friends.
+	 */
+	public void setFriendUsernames(List<String> friends) {
+		this.friends = friends;
+	}
+
+	/**
 	 * Sets the player's head icon.
 	 * 
 	 * @param headIcon The head icon.
 	 */
 	public void setHeadIcon(int headIcon) {
 		this.headIcon = headIcon;
+	}
+
+	/**
+	 * Sets the {@link List} of this player's ignored players.
+	 * 
+	 * @param ignores The ignored player list.
+	 */
+	public void setIgnoredUsernames(List<String> ignores) {
+		this.ignores = ignores;
 	}
 
 	/**
@@ -662,30 +816,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the private chat {@link PrivacyState}.
-	 * 
-	 * @param privateChatPrivacy The privacy state.
-	 */
-	public void setPrivateChatPrivacy(PrivacyState privateChatPrivacy) {
-		this.privateChatPrivacy = privateChatPrivacy;
-	}
-
-	/**
 	 * Sets the privilege level.
 	 * 
 	 * @param privilegeLevel The privilege level.
 	 */
 	public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
 		this.privilegeLevel = privilegeLevel;
-	}
-
-	/**
-	 * Sets the public chat {@link PrivacyState}.
-	 * 
-	 * @param publicChatPrivacy The privacy state.
-	 */
-	public void setPublicChatPrivacy(PrivacyState publicChatPrivacy) {
-		this.publicChatPrivacy = publicChatPrivacy;
 	}
 
 	/**
@@ -727,16 +863,16 @@ public final class Player extends Mob {
 		if (!reconnecting) {
 			sendInitialEvents();
 		}
-		getBlockSet().add(SynchronizationBlock.createAppearanceBlock(this));
+		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 	}
 
 	/**
-	 * Sets the trade chat {@link PrivacyState}.
+	 * Sets the trade {@link PrivacyState}.
 	 * 
-	 * @param tradeChatPrivacy The privacy state.
+	 * @param tradePrivacy The privacy state.
 	 */
-	public void setTradeChatPrivacy(PrivacyState tradeChatPrivacy) {
-		this.tradeChatPrivacy = tradeChatPrivacy;
+	public void setTradePrivacy(PrivacyState tradePrivacy) {
+		this.tradePrivacy = tradePrivacy;
 	}
 
 	/**
@@ -766,7 +902,7 @@ public final class Player extends Mob {
 	 */
 	public void toggleRunning() {
 		running = !running;
-		getWalkingQueue().setRunningQueue(running);
+		walkingQueue.setRunningQueue(running);
 		send(new ConfigEvent(173, running ? 1 : 0));
 	}
 
