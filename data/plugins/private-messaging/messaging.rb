@@ -4,7 +4,7 @@ java_import 'org.apollo.game.event.impl.ForwardPrivateMessageEvent'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.settings.PrivacyState'
 
-on :event, :send_private_message do |ctx, player, event|
+on :event, :private_message do |ctx, player, event|
   friend = World.world.get_player(event.username)
   return unless interaction_permitted(player, friend)
 
