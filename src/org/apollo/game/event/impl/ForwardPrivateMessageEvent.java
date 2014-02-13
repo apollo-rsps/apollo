@@ -60,7 +60,7 @@ public final class ForwardPrivateMessageEvent extends Event {
 	 * 
 	 * @return The message.
 	 */
-	public byte[] getMessage() {
+	public byte[] getCompressedMessage() {
 		return message;
 	}
 
