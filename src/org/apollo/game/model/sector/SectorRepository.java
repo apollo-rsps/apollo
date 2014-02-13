@@ -41,10 +41,10 @@ public final class SectorRepository {
 	 */
 	public void add(Sector sector) {
 		if (sector == null) {
-			throw new IllegalArgumentException("sector cannot be null");
+			throw new IllegalArgumentException("Sector cannot be null.");
 		} else if (sectors.containsKey(sector.getCoordinates()) && !permitRemoval) {
 			throw new UnsupportedOperationException(
-					"cannot add a sector with the same coordinates as an existing sector");
+					"Cannot add a sector with the same coordinates as an existing sector.");
 		}
 		sectors.put(sector.getCoordinates(), sector);
 	}
@@ -95,7 +95,7 @@ public final class SectorRepository {
 	 */
 	public void remove(Sector sector) {
 		if (!permitRemoval) {
-			throw new UnsupportedOperationException("cannot remove sectors from this repository");
+			throw new UnsupportedOperationException("Cannot remove sectors from this repository.");
 		}
 		sectors.remove(sector.getCoordinates());
 	}

@@ -56,6 +56,17 @@ public final class SetTileItemEvent extends Event {
 	}
 
 	/**
+	 * Creates a new event that updates the previous amount of the item.
+	 * 
+	 * @param id The id of the item.
+	 * @param amount The amount of the item.
+	 * @param previousAmount The previous amount of the item.
+	 */
+	public SetTileItemEvent(int id, int amount, int previousAmount) {
+		this(id, amount, true, true, previousAmount, 0);
+	}
+
+	/**
 	 * Creates a new set tile item event.
 	 * 
 	 * @param id The id of the item.
@@ -75,17 +86,6 @@ public final class SetTileItemEvent extends Event {
 		this.updating = updating;
 		this.previousAmount = previousAmount;
 		this.positionOffset = positionOffset;
-	}
-
-	/**
-	 * Creates a new event that updates the previous amount of the item.
-	 * 
-	 * @param id The id of the item.
-	 * @param amount The amount of the item.
-	 * @param previousAmount The previous amount of the item.
-	 */
-	public SetTileItemEvent(int id, int amount, int previousAmount) {
-		this(id, amount, true, true, previousAmount, 0);
 	}
 
 	/**

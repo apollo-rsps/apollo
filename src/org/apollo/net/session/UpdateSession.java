@@ -47,7 +47,7 @@ public final class UpdateSession extends Session {
 		} else if (message instanceof HttpRequest) {
 			dispatcher.dispatch(getChannel(), (HttpRequest) message);
 		} else {
-			throw new IllegalArgumentException("unknown message type");
+			throw new IllegalArgumentException("Unknown message type.");
 		}
 	}
 

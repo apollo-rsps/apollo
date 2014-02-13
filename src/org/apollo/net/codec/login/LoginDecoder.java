@@ -71,7 +71,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			decodePayload(ctx, in, out);
 			break;
 		default:
-			throw new IllegalStateException("Invalid login decoder state");
+			throw new IllegalStateException("Invalid login decoder state.");
 		}
 	}
 
@@ -113,7 +113,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			int loginType = buffer.readUnsignedByte();
 
 			if (loginType != LoginConstants.TYPE_STANDARD && loginType != LoginConstants.TYPE_RECONNECTION) {
-				throw new IOException("Invalid login type");
+				throw new IOException("Invalid login type.");
 			}
 
 			reconnecting = loginType == LoginConstants.TYPE_RECONNECTION;
@@ -136,14 +136,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		if (buffer.readableBytes() >= loginLength) {
 			ByteBuf payload = buffer.readBytes(loginLength);
 			if (payload.readUnsignedByte() != 0xFF) {
-				throw new Exception("Invalid magic id");
+				throw new Exception("Invalid magic id.");
 			}
 
 			int releaseNumber = payload.readUnsignedShort();
 
 			int lowMemoryFlag = payload.readUnsignedByte();
 			if (lowMemoryFlag != 0 && lowMemoryFlag != 1) {
-				throw new Exception("Invalid value for low memory flag");
+				throw new Exception("Invalid value for low memory flag.");
 			}
 
 			boolean lowMemory = lowMemoryFlag == 1;
@@ -155,7 +155,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			int securePayloadLength = payload.readUnsignedByte();
 			if (securePayloadLength != loginLength - 41) {
-				throw new Exception("Secure payload length mismatch");
+				throw new Exception("Secure payload length mismatch.");
 			}
 
 			ByteBuf securePayload = payload.readBytes(securePayloadLength);
@@ -167,13 +167,13 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			int secureId = securePayload.readUnsignedByte();
 			if (secureId != 10) {
-				throw new Exception("Invalid secure payload id");
+				throw new Exception("Invalid secure payload id.");
 			}
 
 			long clientSeed = securePayload.readLong();
 			long reportedServerSeed = securePayload.readLong();
 			if (reportedServerSeed != serverSeed) {
-				throw new Exception("Server seed mismatch");
+				throw new Exception("Server seed mismatch.");
 			}
 
 			int uid = securePayload.readInt();

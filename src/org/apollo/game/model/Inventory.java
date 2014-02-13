@@ -88,10 +88,10 @@ public final class Inventory implements Cloneable {
 	 */
 	public Inventory(int capacity, StackMode mode) {
 		if (capacity < 0) {
-			throw new IllegalArgumentException("capacity cannot be negative");
+			throw new IllegalArgumentException("Capacity cannot be negative.");
 		}
 		if (mode == null) {
-			throw new NullPointerException("stacking mode cannot be null");
+			throw new NullPointerException("Stacking mode cannot be null.");
 		}
 		this.capacity = capacity;
 		items = new Item[capacity];
@@ -219,7 +219,7 @@ public final class Inventory implements Cloneable {
 	 */
 	private void checkBounds(int slot) {
 		if (slot < 0 || slot >= capacity) {
-			throw new IndexOutOfBoundsException("slot out of bounds");
+			throw new IndexOutOfBoundsException("Slot out of bounds.");
 		}
 	}
 

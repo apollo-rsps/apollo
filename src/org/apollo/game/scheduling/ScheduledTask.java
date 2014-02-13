@@ -67,7 +67,7 @@ public abstract class ScheduledTask {
 	 */
 	public void setDelay(int delay) {
 		if (delay < 0) {
-			throw new IllegalArgumentException("delay cannot be less than 0");
+			throw new IllegalArgumentException("Delay cannot be less than 0.");
 		}
 		this.delay = delay;
 	}

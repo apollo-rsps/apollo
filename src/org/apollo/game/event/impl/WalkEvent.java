@@ -28,7 +28,7 @@ public final class WalkEvent extends Event {
 	 */
 	public WalkEvent(Position[] steps, boolean run) {
 		if (steps.length < 0) {
-			throw new IllegalArgumentException("number of steps must not be negative");
+			throw new IllegalArgumentException("Number of steps must not be negative.");
 		}
 		this.steps = steps;
 		this.run = run;

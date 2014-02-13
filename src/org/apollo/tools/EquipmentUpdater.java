@@ -1166,7 +1166,7 @@ public final class EquipmentUpdater {
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length != 1) {
-			throw new IllegalArgumentException("Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release]");
+			throw new IllegalArgumentException("Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release].");
 		}
 		String release = args[0];
 

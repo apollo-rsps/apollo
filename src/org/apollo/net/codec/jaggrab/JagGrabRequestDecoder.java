@@ -18,7 +18,7 @@ public final class JagGrabRequestDecoder extends MessageToMessageDecoder<String>
 			String filePath = request.substring(8).trim();
 			out.add(new JagGrabRequest(filePath));
 		} else {
-			throw new IllegalArgumentException("corrupted request line");
+			throw new IllegalArgumentException("Corrupted request line.");
 		}
 	}
 

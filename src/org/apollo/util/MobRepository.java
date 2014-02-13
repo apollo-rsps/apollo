@@ -53,7 +53,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 				}
 			}
 			if (mob == null) {
-				throw new NoSuchElementException("mob does not exist");
+				throw new NoSuchElementException("Mob does not exist.");
 			}
 			previousIndex = index;
 			index++;
@@ -64,7 +64,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		@Override
 		public void remove() {
 			if (previousIndex == -1) {
-				throw new IllegalStateException("cannot remove as the repository is empty");
+				throw new IllegalStateException("Cannot remove as the repository is empty.");
 			}
 			MobRepository.this.remove((T) mobs[previousIndex]);
 			previousIndex = -1;

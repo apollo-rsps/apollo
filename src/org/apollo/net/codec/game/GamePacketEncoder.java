@@ -41,12 +41,12 @@ public final class GamePacketEncoder extends MessageToMessageEncoder<GamePacket>
 		if (type == PacketType.VARIABLE_BYTE) {
 			headerLength++;
 			if (payloadLength >= 256) {
-				throw new Exception("Payload too long for variable byte packet");
+				throw new Exception("Payload too long for variable byte packet.");
 			}
 		} else if (type == PacketType.VARIABLE_SHORT) {
 			headerLength += 2;
 			if (payloadLength >= 65536) {
-				throw new Exception("Payload too long for variable short packet");
+				throw new Exception("Payload too long for variable short packet.");
 			}
 		}
 

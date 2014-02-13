@@ -53,7 +53,7 @@ public abstract class Release {
 	 */
 	public final EventDecoder<?> getEventDecoder(int opcode) {
 		if (opcode < 0 || opcode >= decoders.length) {
-			throw new IndexOutOfBoundsException("opcode is out of bounds");
+			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
 		}
 		return decoders[opcode];
 	}
@@ -106,7 +106,7 @@ public abstract class Release {
 	 */
 	public final <E extends Event> void register(int opcode, EventDecoder<E> decoder) {
 		if (opcode < 0 || opcode >= decoders.length) {
-			throw new IndexOutOfBoundsException("opcode is out of bounds");
+			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
 		}
 		decoders[opcode] = decoder;
 	}

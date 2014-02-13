@@ -41,10 +41,9 @@ public final class ObjectDefinition {
 	public static void init(ObjectDefinition[] definitions) {
 		ObjectDefinition.definitions = definitions;
 		for (int id = 0; id < definitions.length; id++) {
-			// This also verifies that none of the definitions are null.
 			ObjectDefinition def = definitions[id];
 			if (def.getId() != id) {
-				throw new RuntimeException("Item definition id mismatch!");
+				throw new RuntimeException("Item definition id mismatch.");
 			}
 		}
 	}

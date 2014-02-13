@@ -52,7 +52,7 @@ public final class PluginMetaDataParser {
 	private XmlNode getElement(XmlNode node, String name) throws IOException {
 		XmlNode child = node.getChild(name);
 		if (child == null) {
-			throw new IOException("no " + name + " element found");
+			throw new IOException("No " + name + " element found.");
 		}
 		return child;
 	}
@@ -67,7 +67,7 @@ public final class PluginMetaDataParser {
 	public PluginMetaData parse() throws IOException, SAXException {
 		XmlNode rootNode = parser.parse(is);
 		if (!rootNode.getName().equals("plugin")) {
-			throw new IOException("root node must be named plugin");
+			throw new IOException("Root node must be named plugin.");
 		}
 
 		XmlNode idNode = getElement(rootNode, "id");
@@ -84,7 +84,7 @@ public final class PluginMetaDataParser {
 		int version = Integer.parseInt(versionNode.getValue());
 
 		if (id == null || name == null || description == null) {
-			throw new IOException("id, name and description must have values");
+			throw new IOException("Id, name and description must have values.");
 		}
 
 		XmlNode[] authorNodes = authorsNode.getChildren().toArray(EMPTY_NODE_ARRAY);
@@ -98,21 +98,21 @@ public final class PluginMetaDataParser {
 		for (int i = 0; i < authorNodes.length; i++) {
 			authors[i] = authorNodes[i].getValue();
 			if (authors[i] == null) {
-				throw new IOException("author elements must have values");
+				throw new IOException("Author elements must have values.");
 			}
 		}
 
 		for (int i = 0; i < scriptNodes.length; i++) {
 			scripts[i] = scriptNodes[i].getValue();
 			if (scripts[i] == null) {
-				throw new IOException("script elements must have values");
+				throw new IOException("Script elements must have values.");
 			}
 		}
 
 		for (int i = 0; i < dependencyNodes.length; i++) {
 			dependencies[i] = dependencyNodes[i].getValue();
 			if (dependencies[i] == null) {
-				throw new IOException("dependency elements must have values");
+				throw new IOException("Dependency elements must have values.");
 			}
 		}
 

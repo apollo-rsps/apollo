@@ -46,17 +46,17 @@ public final class RsaKeyParser {
 	public void parse() throws SAXException, IOException {
 		XmlNode rootNode = parser.parse(is);
 		if (!rootNode.getName().equals("rsa")) {
-			throw new IOException("root node name is not 'rsa'");
+			throw new IOException("Root node name is not 'rsa'.");
 		}
 
 		XmlNode modulusNode = rootNode.getChild("modulus");
 		if (modulusNode == null) {
-			throw new IOException("no node named 'modulus' beneath root node");
+			throw new IOException("No node named 'modulus' beneath root node.");
 		}
 
 		XmlNode exponentNode = rootNode.getChild("private-exponent");
 		if (exponentNode == null) {
-			throw new IOException("no node named 'private-exponent' beneath root node");
+			throw new IOException("No node named 'private-exponent' beneath root node.");
 		}
 
 		NetworkConstants.RSA_MODULUS = new BigInteger(modulusNode.getValue());

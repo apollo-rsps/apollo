@@ -29,7 +29,7 @@ public final class EquipmentDefinition {
 			EquipmentDefinition def = definitions[id];
 			if (def != null) {
 				if (def.getId() != id) {
-					throw new RuntimeException("Equipment definition id mismatch!");
+					throw new RuntimeException("Equipment definition id mismatch.");
 				}
 				EquipmentDefinition.definitions.put(def.getId(), def);
 			}

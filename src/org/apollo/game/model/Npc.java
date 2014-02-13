@@ -48,7 +48,7 @@ public final class Npc extends Mob {
 	 */
 	public void transform(int id) {
 		if (id < 0 || id >= NpcDefinition.count()) {
-			throw new IllegalArgumentException("id to transform to is out of bounds");
+			throw new IllegalArgumentException("Id to transform to is out of bounds.");
 		}
 		definition = NpcDefinition.lookup(id);
 		blockSet.add(SynchronizationBlock.createTransformBlock(id));

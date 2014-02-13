@@ -37,7 +37,7 @@ public final class Item {
 	 */
 	public Item(int id, int amount) {
 		if (amount < 0) {
-			throw new IllegalArgumentException("negative amount");
+			throw new IllegalArgumentException("Negative amount.");
 		}
 		this.id = id;
 		this.amount = amount;

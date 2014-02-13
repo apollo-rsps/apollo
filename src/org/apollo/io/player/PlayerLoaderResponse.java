@@ -28,7 +28,7 @@ public final class PlayerLoaderResponse {
 	 */
 	public PlayerLoaderResponse(int status) {
 		if (status == LoginConstants.STATUS_OK || status == LoginConstants.STATUS_RECONNECTION_OK) {
-			throw new IllegalArgumentException("player required for this status code");
+			throw new IllegalArgumentException("Player required for this status code.");
 		}
 		this.status = status;
 		player = null;
@@ -43,7 +43,7 @@ public final class PlayerLoaderResponse {
 	 */
 	public PlayerLoaderResponse(int status, Player player) {
 		if (status != LoginConstants.STATUS_OK && status != LoginConstants.STATUS_RECONNECTION_OK) {
-			throw new IllegalArgumentException("player required for this status code");
+			throw new IllegalArgumentException("Player not required for this status code.");
 		}
 		this.status = status;
 		this.player = player;

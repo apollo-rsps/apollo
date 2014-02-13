@@ -23,16 +23,16 @@ public enum PrivilegeLevel {
 	ADMINISTRATOR(2);
 
 	/**
-	 * Gets the privilege level for the specified numerical level.
+	 * Gets the privilege level for the specified numerical value.
 	 * 
-	 * @param value The numerical level.
+	 * @param value The numerical value.
 	 * @return The privilege level.
-	 * @throws IllegalArgumentException If the numerical level is invalid.
+	 * @throws IllegalArgumentException If the specified value is out of bounds.
 	 */
 	public static PrivilegeLevel valueOf(int value) {
 		PrivilegeLevel[] values = values();
 		if (value < 0 || value >= values.length) {
-			throw new IndexOutOfBoundsException("Invalid privilege level integer value supplied");
+			throw new IndexOutOfBoundsException("Invalid privilege level integer value supplied " + value + ".");
 		}
 		return values[value];
 	}

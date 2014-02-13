@@ -74,17 +74,17 @@ public final class LoginService extends Service {
 		}
 
 		if (!rootNode.getName().equals("login")) {
-			throw new IOException("unexpected root node name");
+			throw new IOException("Unexpected root node name.");
 		}
 
 		XmlNode loaderNode = rootNode.getChild("loader");
 		if (loaderNode == null || !loaderNode.hasValue()) {
-			throw new IOException("no loader child node or value");
+			throw new IOException("No loader child node or value.");
 		}
 
 		XmlNode saverNode = rootNode.getChild("saver");
 		if (saverNode == null || !saverNode.hasValue()) {
-			throw new IOException("no saver child node or value");
+			throw new IOException("No saver child node or value.");
 		}
 
 		Class<?> loaderClazz = Class.forName(loaderNode.getValue());

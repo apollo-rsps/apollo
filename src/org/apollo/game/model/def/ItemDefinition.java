@@ -56,7 +56,7 @@ public final class ItemDefinition {
 		for (int id = 0; id < definitions.length; id++) {
 			ItemDefinition def = definitions[id];
 			if (def.getId() != id) {
-				throw new RuntimeException("Item definition id mismatch!");
+				throw new RuntimeException("Item definition id mismatch.");
 			}
 			if (def.isNote()) {
 				def.toNote();
@@ -190,7 +190,7 @@ public final class ItemDefinition {
 	 */
 	public String getGroundAction(int id) {
 		if (id < 0 || id >= groundActions.length) {
-			throw new IndexOutOfBoundsException("ground action id is out of bounds");
+			throw new IndexOutOfBoundsException("Ground action id is out of bounds.");
 		}
 		return groundActions[id];
 	}
@@ -213,7 +213,7 @@ public final class ItemDefinition {
 	 */
 	public String getInventoryAction(int id) {
 		if (id < 0 || id >= inventoryActions.length) {
-			throw new IndexOutOfBoundsException("inventory action id is out of bounds");
+			throw new IndexOutOfBoundsException("Inventory action id is out of bounds.");
 		}
 		return inventoryActions[id];
 	}
@@ -308,7 +308,7 @@ public final class ItemDefinition {
 	 */
 	public void setGroundAction(int id, String action) {
 		if (id < 0 || id >= groundActions.length) {
-			throw new IndexOutOfBoundsException("ground action id is out of bounds");
+			throw new IndexOutOfBoundsException("Ground action id is out of bounds.");
 		}
 		groundActions[id] = action;
 	}
@@ -322,7 +322,7 @@ public final class ItemDefinition {
 	 */
 	public void setInventoryAction(int id, String action) {
 		if (id < 0 || id >= inventoryActions.length) {
-			throw new IndexOutOfBoundsException("inventory action id is out of bounds");
+			throw new IndexOutOfBoundsException("Inventory action id is out of bounds.");
 		}
 		inventoryActions[id] = action;
 	}
