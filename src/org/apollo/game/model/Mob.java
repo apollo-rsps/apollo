@@ -116,8 +116,11 @@ public abstract class Mob extends Entity {
 	 */
 	public void damage(int damage, int type, boolean secondary) {
 		Skill hitpoints = skillSet.getSkill(Skill.HITPOINTS);
-		blockSet.add(SynchronizationBlock.createHitUpdateBlock(damage, type, hitpoints.getCurrentLevel(),
-				hitpoints.getMaximumLevel(), secondary));
+		int current = hitpoints.getCurrentLevel() - damage, maximum = hitpoints.getMaximumLevel();
+		current = current < 0 ? 0 : current;
+
+		blockSet.add(SynchronizationBlock.createHitUpdateBlock(damage, type, current, maximum, secondary));
+		skillSet.setSkill(Skill.HITPOINTS, new Skill(hitpoints.getExperience(), current, maximum));
 	}
 
 	/**
