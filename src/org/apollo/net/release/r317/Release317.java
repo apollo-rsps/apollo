@@ -10,6 +10,7 @@ import org.apollo.game.event.impl.IdAssignmentEvent;
 import org.apollo.game.event.impl.IgnoreListEvent;
 import org.apollo.game.event.impl.LogoutEvent;
 import org.apollo.game.event.impl.NpcSynchronizationEvent;
+import org.apollo.game.event.impl.OpenDialogueInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
 import org.apollo.game.event.impl.PlayerSynchronizationEvent;
@@ -133,6 +134,7 @@ public final class Release317 extends Release {
 		register(155, new SecondNpcActionEventDecoder());
 		register(17, new ThirdNpcActionEventDecoder());
 		register(236, new TakeTileItemEventDecoder());
+		register(40, new DialogueContinueEventDecoder());
 
 		register(188, new AddFriendEventDecoder());
 		register(133, new AddIgnoreEventDecoder());
@@ -167,6 +169,7 @@ public final class Release317 extends Release {
 		register(PositionEvent.class, new PositionEventEncoder());
 		register(UpdateRunEnergyEvent.class, new UpdateRunEnergyEventEncoder());
 		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
+		register(OpenDialogueInterfaceEvent.class, new OpenDialogueInterfaceEventEncoder());
 
 		register(ForwardPrivateMessageEvent.class, new ForwardPrivateMessageEventEncoder());
 		register(FriendServerStatusEvent.class, new FriendServerStatusEventEncoder());

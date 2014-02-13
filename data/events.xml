@@ -22,7 +22,14 @@
   <event>
     <type>org.apollo.game.event.impl.ButtonEvent</type>
     <chain>
+      <handler>org.apollo.game.event.handler.impl.DialogueButtonHandler</handler>
       <handler>org.apollo.game.event.handler.impl.BankButtonEventHandler</handler>
+    </chain>
+  </event>
+  <event>
+    <type>org.apollo.game.event.impl.DialogueContinueEvent</type>
+    <chain>
+      <handler>org.apollo.game.event.handler.impl.DialogueContinueEventHandler</handler>
     </chain>
   </event>
   <event>

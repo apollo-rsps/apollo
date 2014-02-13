@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
+import org.apollo.game.event.impl.OpenDialogueInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
 import org.apollo.game.model.Player;
+import org.apollo.game.model.inter.dialogue.DialogueListener;
 
 /**
  * Represents the set of interfaces the player has open.
@@ -35,9 +37,14 @@ public final class InterfaceSet {
 	private EnterAmountListener amountListener;
 
 	/**
+	 * The current chat box dialogue listener.
+	 */
+	private DialogueListener dialogueListener;
+
+	/**
 	 * A map of open interfaces.
 	 */
-	private Map<InterfaceType, Integer> interfaces = new HashMap<InterfaceType, Integer>();
+	private Map<InterfaceType, Integer> interfaces = new HashMap<>();
 
 	/**
 	 * The current listener.
@@ -59,6 +66,19 @@ public final class InterfaceSet {
 	}
 
 	/**
+	 * Called when the player has clicked the specified button. Notifies the current dialogue listener.
+	 * 
+	 * @param button The button.
+	 * @return {@code true} if the event handler chain should be broken.
+	 */
+	public boolean buttonClicked(int button) {
+		if (dialogueListener != null) {
+			return dialogueListener.buttonClicked(button);
+		}
+		return false;
+	}
+
+	/**
 	 * Closes the current open interface(s).
 	 */
 	public void close() {
@@ -70,7 +90,8 @@ public final class InterfaceSet {
 	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any events.
 	 */
 	private void closeAndNotify() {
-		amountListener = null; // TODO should we notify??
+		amountListener = null;
+		dialogueListener = null;
 
 		interfaces.clear();
 		if (listener != null) {
@@ -90,6 +111,25 @@ public final class InterfaceSet {
 	}
 
 	/**
+	 * Checks if this interface set contains the specified interface type.
+	 * 
+	 * @param type The interface's type.
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean contains(InterfaceType type) {
+		return interfaces.containsKey(type);
+	}
+
+	/**
+	 * Called when the player has clicked the "Click here to continue" button on a dialogue.
+	 */
+	public void continueRequested() {
+		if (dialogueListener != null) {
+			dialogueListener.continued();
+		}
+	}
+
+	/**
 	 * Called when the client has entered the specified amount. Notifies the current listener.
 	 * 
 	 * @param amount The amount.
@@ -106,6 +146,31 @@ public final class InterfaceSet {
 	 */
 	public void interfaceClosed() {
 		closeAndNotify();
+	}
+
+	/**
+	 * Opens a chat box dialogue.
+	 * 
+	 * @param listener The listener for the dialogue.
+	 * @param dialogueId The dialogue's id.
+	 */
+	public void openDialogue(DialogueListener listener, int dialogueId) {
+		closeAndNotify();
+
+		this.dialogueListener = listener;
+		this.listener = listener;
+
+		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
+		player.send(new OpenDialogueInterfaceEvent(dialogueId));
+	}
+
+	/**
+	 * Opens a chat box dialogue.
+	 * 
+	 * @param dialogueId The dialogue's id.
+	 */
+	public void openDialogue(int dialogueId) {
+		openDialogue(null, dialogueId);
 	}
 
 	/**

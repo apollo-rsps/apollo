@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event which opens an interface.
+ * An {@link Event} that opens an interface.
  * 
  * @author Graham
  */
