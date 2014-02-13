@@ -4,7 +4,7 @@ import org.apollo.game.event.impl.ChatEvent;
 import org.apollo.game.model.settings.PrivilegeLevel;
 
 /**
- * The chat {@link SynchronizationBlock}.
+ * The chat {@link SynchronizationBlock}. Only players can utilise this block.
  * 
  * @author Graham
  */
@@ -22,6 +22,9 @@ public final class ChatBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates the chat block.
+	 * 
+	 * @param privilegeLevel The {@link PrivilegeLevel} of the player who said the message.
+	 * @param chatEvent The {@link ChatEvent}.
 	 */
 	ChatBlock(PrivilegeLevel privilegeLevel, ChatEvent chatEvent) {
 		this.privilegeLevel = privilegeLevel;
@@ -47,7 +50,7 @@ public final class ChatBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the privilege level of the player who said the message.
+	 * Gets the {@link PrivilegeLevel} of the player who said the message.
 	 * 
 	 * @return The privilege level.
 	 */

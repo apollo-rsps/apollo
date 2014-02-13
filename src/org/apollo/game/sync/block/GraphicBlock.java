@@ -3,7 +3,7 @@ package org.apollo.game.sync.block;
 import org.apollo.game.model.Graphic;
 
 /**
- * The graphic {@link SynchronizationBlock}.
+ * The graphic {@link SynchronizationBlock}. Both players and npcs can utilise this block.
  * 
  * @author Graham
  */
@@ -24,7 +24,7 @@ public final class GraphicBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the graphic.
+	 * Gets the {@link Graphic}.
 	 * 
 	 * @return The graphic.
 	 */

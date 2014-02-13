@@ -2,12 +2,11 @@ package org.apollo.game.sync.block;
 
 /**
  * The secondary hit update {@link SynchronizationBlock}. This is used for when multiple attacks happen at once (for
- * example, the dragon-dagger special attack). This block can be implemented by both players and npcs.
- * 
+ * example, the dragon-dagger special attack). Both players and npcs can utilise this block.
  * 
  * @author Major
  */
-public class SecondaryHitUpdateBlock extends SynchronizationBlock {
+public final class SecondaryHitUpdateBlock extends SynchronizationBlock {
 
 	/**
 	 * The mob's current health.

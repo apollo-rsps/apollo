@@ -1,14 +1,11 @@
 package org.apollo.game.sync.block;
 
 /**
- * The interacting mob {@link SynchronizationBlock}.
- * <p>
- * Note: As all Apollo events should be immutable to avoid concurrency issues, this uses the index of the mob rather
- * than the actual mob. This should not be changed.
+ * The interacting mob {@link SynchronizationBlock}. Both players and npcs can utilise this block.
  * 
  * @author Major
  */
-public class InteractingMobBlock extends SynchronizationBlock {
+public final class InteractingMobBlock extends SynchronizationBlock {
 
 	/**
 	 * The index of the mob.
