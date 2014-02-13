@@ -7,7 +7,7 @@ import org.apollo.game.event.impl.PlayerDesignEvent;
 import org.apollo.game.model.Player;
 
 /**
- * A handler which handles {@link PlayerDesignEvent}s.
+ * An {@link EventHandler} that handles {@link PlayerDesignEvent}s.
  * 
  * @author Graham
  */

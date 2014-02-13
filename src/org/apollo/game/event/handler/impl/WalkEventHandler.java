@@ -8,7 +8,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.WalkingQueue;
 
 /**
- * A handler for the {@link WalkEvent}.
+ * A{@link EventHandler} that handles {@link WalkEvent}s.
  * 
  * @author Graham
  */

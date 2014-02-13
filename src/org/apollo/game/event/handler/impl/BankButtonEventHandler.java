@@ -6,7 +6,7 @@ import org.apollo.game.event.impl.ButtonEvent;
 import org.apollo.game.model.Player;
 
 /**
- * An {@link EventHandler} which responds to {@link ButtonEvent}s for withdrawing items as notes.
+ * An {@link EventHandler} that responds to {@link ButtonEvent}s for withdrawing items as notes.
  * 
  * @author Graham
  */

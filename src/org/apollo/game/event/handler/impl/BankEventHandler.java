@@ -10,7 +10,7 @@ import org.apollo.game.model.inter.bank.BankUtils;
 import org.apollo.game.model.inter.bank.BankWithdrawEnterAmountListener;
 
 /**
- * An event handler which handles withdrawing and depositing items from/to a player's bank.
+ * An {@link EventHandler} that handles withdrawing and depositing items from/to a player's bank.
  * 
  * @author Graham
  */
@@ -21,7 +21,7 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 	 * 
 	 * @param option The option.
 	 * @return The amount.
-	 * @throws IllegalArgumentException If the option is not legal.
+	 * @throws IllegalArgumentException If the option is invalid.
 	 */
 	private static final int optionToAmount(int option) {
 		switch (option) {
@@ -51,10 +51,8 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 		if (amount == -1) {
 			player.getInterfaceSet().openEnterAmountDialog(
 					new BankDepositEnterAmountListener(player, event.getSlot(), event.getId()));
-		} else {
-			if (!BankUtils.deposit(player, event.getSlot(), event.getId(), amount)) {
-				ctx.breakHandlerChain();
-			}
+		} else if (!BankUtils.deposit(player, event.getSlot(), event.getId(), amount)) {
+			ctx.breakHandlerChain();
 		}
 	}
 

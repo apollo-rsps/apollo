@@ -10,7 +10,7 @@ import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
- * An event handler which removes equipped items.
+ * An {@link EventHandler} that removes equipped items.
  * 
  * @author Graham
  * @author Major

@@ -8,7 +8,7 @@ import org.apollo.game.model.Player;
 import org.apollo.game.model.settings.Gender;
 
 /**
- * A handler which verifies {@link PlayerDesignEvent}s.
+ * An {@link EventHandler} that verifies {@link PlayerDesignEvent}s.
  * 
  * @author Graham
  */

@@ -8,7 +8,7 @@ import org.apollo.game.model.Player;
 import org.apollo.game.model.World;
 
 /**
- * An {@link EventHandler} which dispatches {@link CommandEvent}s.
+ * An {@link EventHandler} that dispatches {@link CommandEvent}s.
  * 
  * @author Graham
  */
