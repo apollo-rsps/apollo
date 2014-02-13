@@ -7,7 +7,7 @@ import org.apollo.game.model.Player;
 import org.apollo.game.sync.block.SynchronizationBlock;
 
 /**
- * An event handler which broadcasts public chat messages.
+ * An {@link EventHandler} that broadcasts public chat messages.
  * 
  * @author Graham
  */

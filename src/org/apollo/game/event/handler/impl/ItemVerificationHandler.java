@@ -10,15 +10,12 @@ import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
- * An {@link EventHandler} which verifies {@link InventoryItemEvent}s.
+ * An {@link EventHandler} that verifies {@link InventoryItemEvent}s.
  * 
  * @author Chris Fletcher
  */
 public final class ItemVerificationHandler extends EventHandler<InventoryItemEvent> {
 
-	/**
-	 * Checks if the information provided by the event is valid, breaking the handler chain if it isn't.
-	 */
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, InventoryItemEvent event) {
 		Inventory inventory;
@@ -35,6 +32,7 @@ public final class ItemVerificationHandler extends EventHandler<InventoryItemEve
 			inventory = player.getBank();
 			break;
 		default:
+			ctx.breakHandlerChain();
 			return;
 		}
 

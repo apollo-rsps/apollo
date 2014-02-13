@@ -13,7 +13,7 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 import org.apollo.util.LanguageUtil;
 
 /**
- * An event handler which equips items.
+ * An {@link EventHandler} that equips items.
  * 
  * @author Major
  * @author Graham

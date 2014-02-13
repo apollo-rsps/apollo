@@ -10,7 +10,7 @@ import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
- * An {@link EventHandler} which verifies the target item in {@link ItemOnItemEvent}s.
+ * An {@link EventHandler} that verifies the target item in {@link ItemOnItemEvent}s.
  * 
  * @author Chris Fletcher
  */
@@ -32,6 +32,7 @@ public final class ItemOnItemVerificationHandler extends EventHandler<ItemOnItem
 			inventory = player.getBank();
 			break;
 		default:
+			ctx.breakHandlerChain();
 			return;
 		}
 

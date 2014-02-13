@@ -6,7 +6,7 @@ import org.apollo.game.event.impl.ChatEvent;
 import org.apollo.game.model.Player;
 
 /**
- * An event handler which verifies chat events.
+ * An {@link EventHandler} that verifies {@link ChatEvent}s.
  * 
  * @author Graham
  */
