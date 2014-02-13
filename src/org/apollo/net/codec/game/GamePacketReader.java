@@ -42,7 +42,7 @@ public final class GamePacketReader {
 	 */
 	private void checkBitAccess() {
 		if (mode != AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("For bit-based calls to work, the mode must be bit access");
+			throw new IllegalStateException("For bit-based calls to work, the mode must be bit access.");
 		}
 	}
 
@@ -53,7 +53,7 @@ public final class GamePacketReader {
 	 */
 	private void checkByteAccess() {
 		if (mode != AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("For byte-based calls to work, the mode must be byte access");
+			throw new IllegalStateException("For byte-based calls to work, the mode must be byte access.");
 		}
 	}
 
@@ -81,7 +81,7 @@ public final class GamePacketReader {
 					} else if (transformation == DataTransformation.SUBTRACT) {
 						longValue |= 128 - buffer.readByte() & 0xFFL;
 					} else {
-						throw new IllegalArgumentException("unknown transformation");
+						throw new IllegalArgumentException("Unknown transformation.");
 					}
 				} else {
 					longValue |= (buffer.readByte() & 0xFFL) << i * 8;
@@ -97,7 +97,7 @@ public final class GamePacketReader {
 					} else if (transformation == DataTransformation.SUBTRACT) {
 						longValue |= 128 - buffer.readByte() & 0xFFL;
 					} else {
-						throw new IllegalArgumentException("unknown transformation");
+						throw new IllegalArgumentException("Unknown transformation.");
 					}
 				} else {
 					longValue |= (buffer.readByte() & 0xFFL) << i * 8;
@@ -105,10 +105,10 @@ public final class GamePacketReader {
 			}
 		} else if (order == DataOrder.MIDDLE) {
 			if (transformation != DataTransformation.NONE) {
-				throw new IllegalArgumentException("middle endian cannot be transformed");
+				throw new IllegalArgumentException("Middle endian cannot be transformed.");
 			}
 			if (type != DataType.INT) {
-				throw new IllegalArgumentException("middle endian can only be used with an integer");
+				throw new IllegalArgumentException("Middle endian can only be used with an integer.");
 			}
 			longValue |= (buffer.readByte() & 0xFF) << 8;
 			longValue |= buffer.readByte() & 0xFF;
@@ -116,17 +116,17 @@ public final class GamePacketReader {
 			longValue |= (buffer.readByte() & 0xFF) << 16;
 		} else if (order == DataOrder.INVERSED_MIDDLE) {
 			if (transformation != DataTransformation.NONE) {
-				throw new IllegalArgumentException("inversed middle endian cannot be transformed");
+				throw new IllegalArgumentException("Inversed middle endian cannot be transformed.");
 			}
 			if (type != DataType.INT) {
-				throw new IllegalArgumentException("inversed middle endian can only be used with an integer");
+				throw new IllegalArgumentException("Inversed middle endian can only be used with an integer.");
 			}
 			longValue |= (buffer.readByte() & 0xFF) << 16;
 			longValue |= (buffer.readByte() & 0xFF) << 24;
 			longValue |= buffer.readByte() & 0xFF;
 			longValue |= (buffer.readByte() & 0xFF) << 8;
 		} else {
-			throw new IllegalArgumentException("unknown order");
+			throw new IllegalArgumentException("Unknown order.");
 		}
 		return longValue;
 	}
@@ -151,7 +151,7 @@ public final class GamePacketReader {
 	 */
 	public int getBits(int numBits) {
 		if (numBits < 0 || numBits > 32) {
-			throw new IllegalArgumentException("Number of bits must be between 1 and 32 inclusive");
+			throw new IllegalArgumentException("Number of bits must be between 1 and 32 inclusive.");
 		}
 
 		checkBitAccess();
@@ -365,7 +365,7 @@ public final class GamePacketReader {
 	public long getUnsigned(DataType type, DataOrder order, DataTransformation transformation) {
 		long longValue = get(type, order, transformation);
 		if (type == DataType.LONG) {
-			throw new IllegalArgumentException("due to java restrictions, longs must be read as signed types");
+			throw new IllegalArgumentException("Due to java restrictions, longs must be read as signed types.");
 		}
 		return longValue & 0xFFFFFFFFFFFFFFFFL;
 	}
@@ -406,7 +406,7 @@ public final class GamePacketReader {
 	 */
 	public void switchToBitAccess() {
 		if (mode == AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("Already in bit access mode");
+			throw new IllegalStateException("Already in bit access mode.");
 		}
 		mode = AccessMode.BIT_ACCESS;
 		bitIndex = buffer.readerIndex() * 8;
@@ -419,7 +419,7 @@ public final class GamePacketReader {
 	 */
 	public void switchToByteAccess() {
 		if (mode == AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("Already in byte access mode");
+			throw new IllegalStateException("Already in byte access mode.");
 		}
 		mode = AccessMode.BYTE_ACCESS;
 		buffer.readerIndex((bitIndex + 7) / 8);

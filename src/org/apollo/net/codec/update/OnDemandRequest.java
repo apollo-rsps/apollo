@@ -48,7 +48,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 			case 2:
 				return LOW;
 			default:
-				throw new IllegalArgumentException("priority out of range");
+				throw new IllegalArgumentException("Priority out of range.");
 			}
 		}
 

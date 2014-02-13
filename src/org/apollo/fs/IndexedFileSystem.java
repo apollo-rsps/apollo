@@ -81,7 +81,7 @@ public final class IndexedFileSystem implements Closeable {
 			}
 		}
 		if (indexCount <= 0) {
-			throw new FileNotFoundException("No index file(s) present");
+			throw new FileNotFoundException("No index file(s) present.");
 		}
 
 		File oldEngineData = new File(base.getAbsolutePath() + "/main_file_cache.dat");
@@ -91,7 +91,7 @@ public final class IndexedFileSystem implements Closeable {
 		} else if (newEngineData.exists() && !oldEngineData.isDirectory()) {
 			data = new RandomAccessFile(newEngineData, readOnly ? "r" : "rw");
 		} else {
-			throw new FileNotFoundException("no data file present");
+			throw new FileNotFoundException("No data file present.");
 		}
 	}
 
@@ -141,7 +141,7 @@ public final class IndexedFileSystem implements Closeable {
 				return crcTable.duplicate();
 			}
 		}
-		throw new IOException("cannot get CRC table from a writable file system");
+		throw new IOException("Cannot get CRC table from a writable file system.");
 	}
 
 	/**
@@ -207,11 +207,11 @@ public final class IndexedFileSystem implements Closeable {
 			// if we still have more data to read, check the validity of the header
 			if (size > read) {
 				if (nextType != descriptor.getType() + 1) {
-					throw new IOException("file type mismatch.");
+					throw new IOException("File type mismatch.");
 				}
 
 				if (nextFile != descriptor.getFile()) {
-					throw new IOException("file id mismatch.");
+					throw new IOException("File id mismatch.");
 				}
 			}
 		}
@@ -241,7 +241,7 @@ public final class IndexedFileSystem implements Closeable {
 	 */
 	private int getFileCount(int type) throws IOException {
 		if (type < 0 || type >= indices.length) {
-			throw new IndexOutOfBoundsException("file type out of bounds");
+			throw new IndexOutOfBoundsException("File type out of bounds.");
 		}
 
 		RandomAccessFile indexFile = indices[type];
@@ -260,7 +260,7 @@ public final class IndexedFileSystem implements Closeable {
 	private Index getIndex(FileDescriptor descriptor) throws IOException {
 		int index = descriptor.getType();
 		if (index < 0 || index >= indices.length) {
-			throw new IndexOutOfBoundsException("file descriptor type out of bounds");
+			throw new IndexOutOfBoundsException("File descriptor type out of bounds.");
 		}
 
 		byte[] buffer = new byte[FileSystemConstants.INDEX_SIZE];
@@ -271,7 +271,7 @@ public final class IndexedFileSystem implements Closeable {
 				indexFile.seek(ptr);
 				indexFile.readFully(buffer);
 			} else {
-				throw new FileNotFoundException("could not find find index");
+				throw new FileNotFoundException("Could not find find index.");
 			}
 		}
 

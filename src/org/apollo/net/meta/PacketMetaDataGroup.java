@@ -17,14 +17,14 @@ public final class PacketMetaDataGroup {
 	 */
 	public static PacketMetaDataGroup createFromArray(int[] lengthArray) {
 		if (lengthArray.length != 256) {
-			throw new IllegalArgumentException("length array must be 256");
+			throw new IllegalArgumentException("Array length must be 256.");
 		}
 		PacketMetaDataGroup grp = new PacketMetaDataGroup();
 		for (int i = 0; i < lengthArray.length; i++) {
 			int length = lengthArray[i];
 			PacketMetaData metaData = null;
 			if (length < -3) {
-				throw new IllegalArgumentException("no packet length can have a value less than -3");
+				throw new IllegalArgumentException("No packet length can have a value less than -3.");
 			} else if (length == -2) {
 				metaData = PacketMetaData.createVariableShort();
 			} else if (length == -1) {
@@ -58,7 +58,7 @@ public final class PacketMetaDataGroup {
 	 */
 	public PacketMetaData getMetaData(int opcode) {
 		if (opcode < 0 || opcode >= packets.length) {
-			throw new IllegalArgumentException("opcode is out of bounds");
+			throw new IllegalArgumentException("Opcode is out of bounds.");
 		}
 		return packets[opcode];
 	}

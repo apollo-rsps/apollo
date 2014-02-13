@@ -76,7 +76,7 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 					ctx.attr(NetworkConstants.SESSION_KEY).set(new UpdateSession(ctx.channel(), serverContext));
 					break;
 				default:
-					throw new IllegalStateException("Invalid service id");
+					throw new IllegalStateException("Invalid service id.");
 				}
 			}
 		} else {

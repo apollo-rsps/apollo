@@ -72,7 +72,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 			decodePayload(ctx, in, out);
 			break;
 		default:
-			throw new IllegalStateException("Invalid game decoder state");
+			throw new IllegalStateException("Invalid game decoder state.");
 		}
 	}
 
@@ -113,7 +113,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 			PacketMetaData metaData = release.getIncomingPacketMetaData(opcode);
 			if (metaData == null) {
-				throw new IOException("Illegal opcode: " + opcode);
+				throw new IOException("Illegal opcode: " + opcode + ".");
 			}
 
 			type = metaData.getType();
@@ -130,7 +130,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 				setState(GameDecoderState.GAME_LENGTH);
 				break;
 			default:
-				throw new IOException("Illegal packet type: " + type);
+				throw new IOException("Illegal packet type: " + type + ".");
 			}
 		}
 	}

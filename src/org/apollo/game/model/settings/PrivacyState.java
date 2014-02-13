@@ -33,12 +33,12 @@ public enum PrivacyState {
 	 * 
 	 * @param value The numerical value.
 	 * @return The privacy state.
-	 * @throws IllegalArgumentException If the numerical value is invalid.
+	 * @throws IllegalArgumentException If the specified value is out of bounds.
 	 */
 	public static PrivacyState valueOf(int value) {
 		PrivacyState[] values = values();
 		if (value < 0 || value >= values.length) {
-			throw new IllegalArgumentException("Invalid privacy option integer value specified: " + value);
+			throw new IllegalArgumentException("Invalid privacy option integer value specified: " + value + ".");
 		}
 		return values[value];
 	}

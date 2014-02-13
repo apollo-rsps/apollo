@@ -153,7 +153,7 @@ public final class SkillSet {
 	 */
 	private void checkBounds(int id) {
 		if (id < 0 || id >= skills.length) {
-			throw new IndexOutOfBoundsException("skill id is out of bounds");
+			throw new IndexOutOfBoundsException("Skill id is out of bounds.");
 		}
 	}
 

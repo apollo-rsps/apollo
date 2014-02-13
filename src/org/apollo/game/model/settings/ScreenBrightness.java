@@ -32,12 +32,12 @@ public enum ScreenBrightness {
 	 * 
 	 * @param value The numerical value.
 	 * @return The screen brightness.
-	 * @throws IllegalArgumentException If the numerical value is invalid.
+	 * @throws IllegalArgumentException If the specified value is out of bounds.
 	 */
 	public static ScreenBrightness valueOf(int value) {
 		ScreenBrightness[] values = values();
 		if (value < 0 || value >= values.length) {
-			throw new IllegalArgumentException("Invalid screen brightness integer value specified");
+			throw new IllegalArgumentException("Invalid screen brightness integer value specified " + value + ".");
 		}
 		return values[value];
 	}

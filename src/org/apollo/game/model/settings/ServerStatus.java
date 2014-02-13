@@ -45,4 +45,19 @@ public enum ServerStatus {
 		return code;
 	}
 
+	/**
+	 * Gets the server status for the specified numerical value.
+	 * 
+	 * @param value The value.
+	 * @return The server status.
+	 * @throws IndexOutOfBoundsException If the specified value is out of bounds.
+	 */
+	public static ServerStatus valueOf(int value) {
+		ServerStatus[] values = values();
+		if (value < 0 || value >= values.length) {
+			throw new IndexOutOfBoundsException("Invalid server status integer value supplied " + value + ".");
+		}
+		return values[value];
+	}
+
 }

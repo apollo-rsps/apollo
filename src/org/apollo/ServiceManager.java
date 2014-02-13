@@ -74,16 +74,16 @@ public final class ServiceManager {
 		}
 
 		if (!rootNode.getName().equals("services")) {
-			throw new IOException("unexpected name of root node");
+			throw new IOException("Unexpected name of root node.");
 		}
 
 		for (XmlNode childNode : rootNode) {
 			if (!childNode.getName().equals("service")) {
-				throw new IOException("unexpected name of child node");
+				throw new IOException("Unexpected name of child node.");
 			}
 
 			if (!childNode.hasValue()) {
-				throw new IOException("child node must have a value!");
+				throw new IOException("Child node must have a value.");
 			}
 
 			Class<? extends Service> clazz = (Class<? extends Service>) Class.forName(childNode.getValue());

@@ -119,7 +119,7 @@ public final class XmlParser {
 		rootNode = null;
 		xmlReader.parse(source);
 		if (rootNode == null) {
-			throw new SAXException("no root element!");
+			throw new SAXException("No root element.");
 		}
 		return rootNode;
 	}

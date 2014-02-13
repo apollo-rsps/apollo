@@ -43,7 +43,7 @@ public final class NpcDefinition {
 		for (int id = 0; id < definitions.length; id++) {
 			NpcDefinition def = definitions[id];
 			if (def.getId() != id) {
-				throw new RuntimeException("Npc definition id mismatch!");
+				throw new RuntimeException("Npc definition id mismatch.");
 			}
 		}
 	}
@@ -143,7 +143,7 @@ public final class NpcDefinition {
 	 */
 	public String getInteraction(int slot) {
 		if (slot < 0 || slot >= interactions.length) {
-			throw new IndexOutOfBoundsException("npc interaction id is out of bounds");
+			throw new IndexOutOfBoundsException("Npc interaction id is out of bounds.");
 		}
 		return interactions[slot];
 	}
@@ -238,7 +238,7 @@ public final class NpcDefinition {
 	 */
 	public boolean hasInteraction(int slot) {
 		if (slot < 0 || slot >= interactions.length) {
-			throw new IndexOutOfBoundsException("npc interaction id is out of bounds");
+			throw new IndexOutOfBoundsException("Npc interaction id is out of bounds.");
 		}
 		return interactions[slot] != null;
 	}
@@ -315,7 +315,7 @@ public final class NpcDefinition {
 	 */
 	public void setInteraction(int slot, String interaction) {
 		if (slot < 0 || slot >= interactions.length) {
-			throw new IndexOutOfBoundsException("npc interaction id is out of bounds");
+			throw new IndexOutOfBoundsException("Npc interaction id is out of bounds.");
 		}
 		interactions[slot] = interaction;
 	}

@@ -58,28 +58,28 @@ public final class EventHandlerChainParser {
 			InstantiationException, IllegalAccessException {
 		XmlNode rootNode = parser.parse(is);
 		if (!rootNode.getName().equals("events")) {
-			throw new IOException("root node name is not 'events'");
+			throw new IOException("Root node name is not 'events'.");
 		}
 
 		Map<Class<? extends Event>, EventHandlerChain<?>> chains = new HashMap<Class<? extends Event>, EventHandlerChain<?>>();
 
 		for (XmlNode eventNode : rootNode) {
 			if (!eventNode.getName().equals("event")) {
-				throw new IOException("only expected nodes named 'event' beneath the root node");
+				throw new IOException("Only expected nodes named 'event' beneath the root node.");
 			}
 
 			XmlNode typeNode = eventNode.getChild("type");
 			if (typeNode == null) {
-				throw new IOException("no node named 'type' beneath current event node");
+				throw new IOException("No node named 'type' beneath current event node.");
 			}
 			XmlNode chainNode = eventNode.getChild("chain");
 			if (chainNode == null) {
-				throw new IOException("no node named 'chain' beneath current event node");
+				throw new IOException("No node named 'chain' beneath current event node.");
 			}
 
 			String eventClassName = typeNode.getValue();
 			if (eventClassName == null) {
-				throw new IOException("type node must have a value");
+				throw new IOException("Type node must have a value.");
 			}
 
 			Class<? extends Event> eventClass = (Class<? extends Event>) Class.forName(eventClassName);
@@ -87,12 +87,12 @@ public final class EventHandlerChainParser {
 
 			for (XmlNode handlerNode : chainNode) {
 				if (!handlerNode.getName().equals("handler")) {
-					throw new IOException("only expected nodes named 'handler' beneath the root node");
+					throw new IOException("Only expected nodes named 'handler' beneath the root node.");
 				}
 
 				String handlerClassName = handlerNode.getValue();
 				if (handlerClassName == null) {
-					throw new IOException("handler node must have a value");
+					throw new IOException("Handler node must have a value.");
 				}
 
 				Class<? extends EventHandler<?>> handlerClass = (Class<? extends EventHandler<?>>) Class

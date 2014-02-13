@@ -40,7 +40,7 @@ public final class NameUtil {
 	 */
 	public static long encodeBase37(String name) {
 		if (name.length() > 12) {
-			throw new IllegalArgumentException("name too long");
+			throw new IllegalArgumentException("Name too long.");
 		}
 		long l = 0L;
 		for (int i = 0; i < name.length(); i++) {

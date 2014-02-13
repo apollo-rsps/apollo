@@ -99,7 +99,7 @@ public final class Archive {
 				return entry;
 			}
 		}
-		throw new FileNotFoundException("could not find entry: " + name);
+		throw new FileNotFoundException("Could not find entry: " + name + ".");
 	}
 
 }

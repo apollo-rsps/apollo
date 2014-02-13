@@ -73,7 +73,7 @@ public final class GamePacketBuilder {
 	 */
 	private void checkBitAccess() {
 		if (mode != AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("For bit-based calls to work, the mode must be bit access");
+			throw new IllegalStateException("For bit-based calls to work, the mode must be bit access.");
 		}
 	}
 
@@ -84,7 +84,7 @@ public final class GamePacketBuilder {
 	 */
 	private void checkByteAccess() {
 		if (mode != AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("For byte-based calls to work, the mode must be byte access");
+			throw new IllegalStateException("For byte-based calls to work, the mode must be byte access.");
 		}
 	}
 
@@ -121,7 +121,7 @@ public final class GamePacketBuilder {
 					} else if (transformation == DataTransformation.SUBTRACT) {
 						buffer.writeByte((byte) (128 - longValue));
 					} else {
-						throw new IllegalArgumentException("unknown transformation");
+						throw new IllegalArgumentException("Unknown transformation.");
 					}
 				} else {
 					buffer.writeByte((byte) (longValue >> i * 8));
@@ -137,7 +137,7 @@ public final class GamePacketBuilder {
 					} else if (transformation == DataTransformation.SUBTRACT) {
 						buffer.writeByte((byte) (128 - longValue));
 					} else {
-						throw new IllegalArgumentException("unknown transformation");
+						throw new IllegalArgumentException("Unknown transformation.");
 					}
 				} else {
 					buffer.writeByte((byte) (longValue >> i * 8));
@@ -145,10 +145,10 @@ public final class GamePacketBuilder {
 			}
 		} else if (order == DataOrder.MIDDLE) {
 			if (transformation != DataTransformation.NONE) {
-				throw new IllegalArgumentException("middle endian cannot be transformed");
+				throw new IllegalArgumentException("Middle endian cannot be transformed.");
 			}
 			if (type != DataType.INT) {
-				throw new IllegalArgumentException("middle endian can only be used with an integer");
+				throw new IllegalArgumentException("Middle endian can only be used with an integer,");
 			}
 			buffer.writeByte((byte) (longValue >> 8));
 			buffer.writeByte((byte) longValue);
@@ -156,17 +156,17 @@ public final class GamePacketBuilder {
 			buffer.writeByte((byte) (longValue >> 16));
 		} else if (order == DataOrder.INVERSED_MIDDLE) {
 			if (transformation != DataTransformation.NONE) {
-				throw new IllegalArgumentException("inversed middle endian cannot be transformed");
+				throw new IllegalArgumentException("Inversed middle endian cannot be transformed,");
 			}
 			if (type != DataType.INT) {
-				throw new IllegalArgumentException("inversed middle endian can only be used with an integer");
+				throw new IllegalArgumentException("Inversed middle endian can only be used with an integer,");
 			}
 			buffer.writeByte((byte) (longValue >> 16));
 			buffer.writeByte((byte) (longValue >> 24));
 			buffer.writeByte((byte) longValue);
 			buffer.writeByte((byte) (longValue >> 8));
 		} else {
-			throw new IllegalArgumentException("unknown order");
+			throw new IllegalArgumentException("Unknown order.");
 		}
 	}
 
@@ -230,7 +230,7 @@ public final class GamePacketBuilder {
 	 */
 	public void putBits(int numBits, int value) {
 		if (numBits < 0 || numBits > 32) {
-			throw new IllegalArgumentException("Number of bits must be between 1 and 32 inclusive");
+			throw new IllegalArgumentException("Number of bits must be between 1 and 32 inclusive.");
 		}
 
 		checkBitAccess();
@@ -357,7 +357,7 @@ public final class GamePacketBuilder {
 	public void putRawBuilder(GamePacketBuilder builder) {
 		checkByteAccess();
 		if (builder.type != PacketType.RAW) {
-			throw new IllegalArgumentException("Builder must be raw!");
+			throw new IllegalArgumentException("Builder must be raw.");
 		}
 		builder.checkByteAccess();
 		putBytes(builder.buffer);
@@ -372,7 +372,7 @@ public final class GamePacketBuilder {
 	public void putRawBuilderReverse(GamePacketBuilder builder) {
 		checkByteAccess();
 		if (builder.type != PacketType.RAW) {
-			throw new IllegalArgumentException("Builder must be raw!");
+			throw new IllegalArgumentException("Builder must be raw.");
 		}
 		builder.checkByteAccess();
 		putBytesReverse(builder.buffer);
@@ -413,7 +413,7 @@ public final class GamePacketBuilder {
 	 */
 	public void switchToBitAccess() {
 		if (mode == AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("Already in bit access mode");
+			throw new IllegalStateException("Already in bit access mode.");
 		}
 		mode = AccessMode.BIT_ACCESS;
 		bitIndex = buffer.writerIndex() * 8;
@@ -426,7 +426,7 @@ public final class GamePacketBuilder {
 	 */
 	public void switchToByteAccess() {
 		if (mode == AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("Already in byte access mode");
+			throw new IllegalStateException("Already in byte access mode.");
 		}
 		mode = AccessMode.BYTE_ACCESS;
 		buffer.writerIndex((bitIndex + 7) / 8);
@@ -440,10 +440,10 @@ public final class GamePacketBuilder {
 	 */
 	public GamePacket toGamePacket() {
 		if (type == PacketType.RAW) {
-			throw new IllegalStateException("Raw packets cannot be converted to a game packet");
+			throw new IllegalStateException("Raw packets cannot be converted to a game packet.");
 		}
 		if (mode != AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("Must be in byte access mode to convert to a packet");
+			throw new IllegalStateException("Must be in byte access mode to convert to a packet.");
 		}
 		return new GamePacket(opcode, type, buffer);
 	}

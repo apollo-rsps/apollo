@@ -37,7 +37,7 @@ public final class HandshakeDecoder extends ByteToMessageDecoder {
 				ctx.channel().writeAndFlush(buf);
 				break;
 			default:
-				throw new IllegalArgumentException("Invalid service id");
+				throw new IllegalArgumentException("Invalid service id.");
 			}
 
 			ctx.pipeline().remove(this);

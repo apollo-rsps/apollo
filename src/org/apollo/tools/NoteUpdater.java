@@ -26,7 +26,7 @@ public final class NoteUpdater {
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length != 1) {
-			throw new IllegalArgumentException("Usage:\njava -cp ... org.apollo.tools.NoteUpdater [release]");
+			throw new IllegalArgumentException("Usage:\njava -cp ... org.apollo.tools.NoteUpdater [release].");
 		}
 		String release = args[0];
 

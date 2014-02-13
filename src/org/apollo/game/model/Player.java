@@ -700,7 +700,7 @@ public final class Player extends Mob {
 	public void sendQuestInterface(List<String> text) {
 		int size = text.size(), lines = InterfaceConstants.QUEST_TEXT.length;
 		if (size > lines) {
-			throw new IllegalArgumentException("List contains too much text for this interface.");
+			throw new IllegalArgumentException("List contains too much text to display on this interface.");
 		}
 
 		for (int pos = 0; pos < lines; pos++) {

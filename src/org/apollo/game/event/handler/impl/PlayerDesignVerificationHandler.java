@@ -42,7 +42,7 @@ public final class PlayerDesignVerificationHandler extends EventHandler<PlayerDe
 		} else if (gender == Gender.FEMALE) {
 			return validFemaleStyle(appearance);
 		}
-		throw new IllegalArgumentException("player can only be either male or female");
+		throw new IllegalArgumentException("Player can only be either male or female.");
 	}
 
 	/**
