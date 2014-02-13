@@ -40,7 +40,7 @@ public final class PluginMetaData {
 	/**
 	 * The plugin's version.
 	 */
-	private final int version;
+	private final double version;
 
 	/**
 	 * Creates the plugin meta data.
@@ -54,7 +54,7 @@ public final class PluginMetaData {
 	 * @param version The plugin's version.
 	 */
 	public PluginMetaData(String id, String name, String description, String[] authors, String[] scripts,
-			String[] dependencies, int version) {
+			String[] dependencies, double version) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -123,7 +123,7 @@ public final class PluginMetaData {
 	 * 
 	 * @return The plugin's version.
 	 */
-	public int getVersion() {
+	public double getVersion() {
 		return version;
 	}
 
