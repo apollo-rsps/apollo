@@ -3,7 +3,7 @@ package org.apollo.game.sync.block;
 import org.apollo.game.model.Position;
 
 /**
- * The turn to position {@link SynchronizationBlock}.
+ * The turn to position {@link SynchronizationBlock}. Both players and npcs can utilise this block.
  * 
  * @author Graham
  */
@@ -24,7 +24,7 @@ public final class TurnToPositionBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the position to turn to.
+	 * Gets the {@link Position} to turn to.
 	 * 
 	 * @return The position to turn to.
 	 */

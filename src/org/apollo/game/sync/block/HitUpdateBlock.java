@@ -1,11 +1,11 @@
 package org.apollo.game.sync.block;
 
 /**
- * The hit update {@link SynchronizationBlock}. Both npcs and players can implement this block.
+ * The hit update {@link SynchronizationBlock}. Both npcs and players can utilise this block.
  * 
  * @author Major
  */
-public class HitUpdateBlock extends SynchronizationBlock {
+public final class HitUpdateBlock extends SynchronizationBlock {
 
 	/**
 	 * The mob's current health.
@@ -28,7 +28,7 @@ public class HitUpdateBlock extends SynchronizationBlock {
 	private final int type;
 
 	/**
-	 * Creates a new Hit Update block.
+	 * Creates the hit update block.
 	 * 
 	 * @param damage The damage dealt by the hit.
 	 * @param type The type of hit.

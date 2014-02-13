@@ -18,7 +18,7 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
 public abstract class SynchronizationBlock {
 
 	/**
-	 * Creates an animation block with the specified animation.
+	 * Creates an {@link AnimationBlock} with the specified animation.
 	 * 
 	 * @param animation The animation.
 	 * @return The animation block.
@@ -28,7 +28,7 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates an appearance block for the specified player.
+	 * Creates an {@link AppearanceBlock} for the specified player.
 	 * 
 	 * @param player The player.
 	 * @return The appearance block.
@@ -40,7 +40,7 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates a chat block for the specified player.
+	 * Creates a {@link ChatBlock} for the specified player.
 	 * 
 	 * @param player The player.
 	 * @param chatEvent The chat event.
@@ -51,7 +51,7 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates a new force chat block with the specified message.
+	 * Creates a {@link ForceChatBlock} with the specified message.
 	 * 
 	 * @param message The message.
 	 * @return The force chat block.
@@ -61,13 +61,13 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates a new force movement block with the specified parameters.
+	 * Creates a {@link ForceMovement} block with the specified parameters.
 	 * 
 	 * @param initialPosition The initial {@link Position} of the player.
-	 * @param finalPosition The final {@link Position} of the player
+	 * @param finalPosition The final position of the player
 	 * @param travelDurationX The length of time (in game pulses) the player's movement along the X axis will last.
 	 * @param travelDurationY The length of time (in game pulses) the player's movement along the Y axis will last.
-	 * @param direction The direction the player should move.
+	 * @param direction The {@link Direction} the player should move.
 	 * @return The force movement block.
 	 */
 	public static SynchronizationBlock createForceMovementBlock(Position initialPosition, Position finalPosition,
@@ -76,7 +76,7 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates a graphic block with the specified graphic.
+	 * Creates a {@link GraphicBlock} with the specified graphic.
 	 * 
 	 * @param graphic The graphic.
 	 * @return The graphic block.
@@ -86,7 +86,8 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates a new hit or secondary hit update block
+	 * Creates a {@link HitUpdateBlock} or {@link SecondaryHitUpdateBlock}, depending on the value of the
+	 * {@code secondary} flag.
 	 * 
 	 * @param damage The damage dealt by the hit.
 	 * @param type The type of hit.
@@ -102,7 +103,7 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates an interacting mob block with the specified index.
+	 * Creates an {@link InteractingMobBlock} with the specified index.
 	 * 
 	 * @param index The index of the mob being interacted with.
 	 * @return The interacting mob block.
@@ -112,7 +113,7 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates a transform block with the specified id.
+	 * Creates a {@link TransformBlock} with the specified id.
 	 * 
 	 * @param id The id.
 	 * @return The transform block.
@@ -122,7 +123,7 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates a turn to position block with the specified position.
+	 * Creates a {@link TurnToPositionBlock} with the specified {@link Position}.
 	 * 
 	 * @param position The position.
 	 * @return The turn to position block.

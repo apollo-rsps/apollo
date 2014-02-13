@@ -4,15 +4,15 @@ import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 
 /**
- * The Force Movement {@link SynchronizationBlock}.
- * 
- * @note This block is used to force a player to walk to a set location. The player can then perform an action (e.g. an
- *       animation), as used in the Agility skill, hence this block earning the name 'Asynchronous Animation/Walking',
- *       although the action is not restricted to animations.
+ * The Force Movement {@link SynchronizationBlock}. Only players can utilise this block.
+ * <p>
+ * Note: This block is used to force a player to walk to a set location. The player can then perform an action (e.g. an
+ * animation), as used in the Agility skill, hence this block earning the name 'Asynchronous Animation/Walking',
+ * although the action is not restricted to animations.
  * 
  * @author Major
  */
-public class ForceMovementBlock extends SynchronizationBlock {
+public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * The direction the player is moving.
@@ -30,22 +30,22 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	private final Position initialPosition;
 
 	/**
-	 * The length of time (in game pulses) the player's movement along the X axis will last.
+	 * The length of time (in game pulses) the player's movement along the X-axis will last.
 	 */
 	private final int travelDurationX;
 
 	/**
-	 * The length of time (in game pulses) the player's movement along the Y axis will last.
+	 * The length of time (in game pulses) the player's movement along the Y-axis will last.
 	 */
 	private final int travelDurationY;
 
 	/**
-	 * Creates a new Force Movement block.
+	 * Creates a new force movement block.
 	 * 
 	 * @param initialPosition The initial {@link Position} of the player.
 	 * @param finalPosition The final {@link Position} of the player
-	 * @param travelDurationX The length of time (in game pulses) the player's movement along the X axis will last.
-	 * @param travelDurationY The length of time (in game pulses) the player's movement along the Y axis will last.
+	 * @param travelDurationX The length of time (in game pulses) the player's movement along the X-axis will last.
+	 * @param travelDurationY The length of time (in game pulses) the player's movement along the Y-axis will last.
 	 * @param direction The direction the player should move.
 	 */
 	ForceMovementBlock(Position initialPosition, Position finalPosition, int travelDurationX, int travelDurationY,
@@ -58,22 +58,12 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the direction the player should move.
+	 * Gets the {@link Direction} the player should move.
 	 * 
 	 * @return The direction.
 	 */
 	public Direction getDirection() {
 		return direction;
-	}
-
-	/**
-	 * Gets the final position. This shouldn't be used to get the initial X and Y coordinates, see {@link #getFinalX()}
-	 * and {@link #getFinalY()}.
-	 * 
-	 * @return The final {@link Position}.
-	 */
-	public Position getFinalPosition() {
-		return finalPosition;
 	}
 
 	/**
@@ -95,16 +85,6 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the initial position. This shouldn't be used to get the initial X and Y coordinates, see
-	 * {@link #getInitialX()} and {@link #getInitialY()}.
-	 * 
-	 * @return The initial {@link Position}.
-	 */
-	public Position getInitialPosition() {
-		return initialPosition;
-	}
-
-	/**
 	 * Gets the X coordinate of the initial {@link Position}.
 	 * 
 	 * @return The X coordinate.
@@ -123,7 +103,7 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the length of time (in game pulses) the player's movement along the Y axis will last.
+	 * Gets the length of time (in game pulses) the player's movement along the X-axis will last.
 	 * 
 	 * @return The time period.
 	 */
@@ -132,7 +112,7 @@ public class ForceMovementBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the length of time (in game pulses) the player's movement along the Y axis will last.
+	 * Gets the length of time (in game pulses) the player's movement along the Y-axis will last.
 	 * 
 	 * @return The time period.
 	 */

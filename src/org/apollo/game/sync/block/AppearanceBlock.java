@@ -4,7 +4,7 @@ import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Inventory;
 
 /**
- * The appearance {@link SynchronizationBlock}.
+ * The appearance {@link SynchronizationBlock}. Only players can utilise this block.
  * 
  * @author Graham
  */
@@ -51,14 +51,32 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	private final int skill;
 
 	/**
-	 * Creates the appearance block.
+	 * Creates the appearance block. Assumes that the player is not appearing as an npc.
 	 * 
-	 * @param name The player's username.
-	 * @param appearance The appearance.
+	 * @param name The player's username, encoded to base 37.
+	 * @param appearance The {@link Appearance}.
 	 * @param combat The player's combat.
 	 * @param skill The player's skill, or 0 if showing the combat level.
 	 * @param equipment The player's equipment.
-	 * @param npcId The npc id of the player, if they are appearing as an npc (otherwise {@code -1}).
+	 * @param prayerIcon The prayer icon id of this player.
+	 * @param headIcon The head icon id of this player.
+	 */
+	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int prayerIcon,
+			int headIcon) {
+		this(name, appearance, combat, skill, equipment, prayerIcon, headIcon, -1);
+	}
+
+	/**
+	 * Creates the appearance block.
+	 * 
+	 * @param name The player's username, encoded to base 37.
+	 * @param appearance The {@link Appearance}.
+	 * @param combat The player's combat.
+	 * @param skill The player's skill, or 0 if showing the combat level.
+	 * @param equipment The player's equipment.
+	 * @param prayerIcon The prayer icon id of this player.
+	 * @param headIcon The head icon id of this player.
+	 * @param npcId The npc id of the player, if they are appearing as an npc, (otherwise {@code -1}).
 	 */
 	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int prayerIcon,
 			int headIcon, int npcId) {
@@ -82,7 +100,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the player's appearance.
+	 * Gets the player's {@link Appearance}.
 	 * 
 	 * @return The player's appearance.
 	 */
@@ -127,7 +145,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the npc id the player is appearing as, if any.
+	 * Gets the npc id the player is appearing as, or {@code -1} if the player is not appearing as one.
 	 * 
 	 * @return The npc id.
 	 */

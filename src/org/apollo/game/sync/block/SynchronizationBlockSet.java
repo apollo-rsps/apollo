@@ -22,8 +22,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 	 */
 	public void add(SynchronizationBlock block) {
 		Class<? extends SynchronizationBlock> clazz = block.getClass();
-		blocks.put(clazz, block); // this will overwrite old updates. best thing
-									// to do?
+		blocks.put(clazz, block);
 	}
 
 	/**
@@ -41,7 +40,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 	}
 
 	/**
-	 * Checks if this set contains the specified block.
+	 * Checks if this set contains the specified {@link SynchronizationBlock}.
 	 * 
 	 * @param clazz The block's class.
 	 * @return {@code true} if so, {@code false} if not.
@@ -51,7 +50,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 	}
 
 	/**
-	 * Gets a block.
+	 * Gets a {@link SynchronizationBlock} from this set.
 	 * 
 	 * @param <T> The type of block.
 	 * @param clazz The block's class.
@@ -63,18 +62,19 @@ public final class SynchronizationBlockSet implements Cloneable {
 	}
 
 	/**
-	 * Removes a block.
+	 * Removes a {@link SynchronizationBlock} from this set.
 	 * 
 	 * @param clazz The block's class.
 	 */
-	public void remove(Class<? extends SynchronizationBlock> clazz) {
-		blocks.remove(clazz);
+	@SuppressWarnings("unchecked")
+	public <T extends SynchronizationBlock> T remove(Class<? extends SynchronizationBlock> clazz) {
+		return (T) blocks.remove(clazz);
 	}
 
 	/**
-	 * Gets the size of the set.
+	 * Gets the size of this set.
 	 * 
-	 * @return The size of the set.
+	 * @return The size.
 	 */
 	public int size() {
 		return blocks.size();

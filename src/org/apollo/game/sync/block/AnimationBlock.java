@@ -3,14 +3,14 @@ package org.apollo.game.sync.block;
 import org.apollo.game.model.Animation;
 
 /**
- * The animation {@link SynchronizationBlock}.
+ * The animation {@link SynchronizationBlock}. Both npcs and players can utilise this block.
  * 
  * @author Graham
  */
 public final class AnimationBlock extends SynchronizationBlock {
 
 	/**
-	 * The {@link Animation}.
+	 * The animation.
 	 */
 	private final Animation animation;
 
