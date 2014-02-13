@@ -77,6 +77,6 @@ def update_friends(player, world=0)
   while iterator.has_next
     other = iterator.next
     next if other == player
-    other.send(SendFriendEvent.new(username, world)) if (player.friends_with(other.username) || player.private_chat_privacy == PrivacyState::ON)
+    other.send(SendFriendEvent.new(username, world)) if (player.friends_with(other.username) || player.friend_privacy == PrivacyState::ON)
   end
 end
