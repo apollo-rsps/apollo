@@ -23,7 +23,7 @@ on :event, :add_friend do |ctx, player, event|
 
     player.send(SendFriendEvent.new(friend_username, friend.world_id)) unless friend.friend_privacy == PrivacyState::OFF # new friend's private chat state is not off, so notify the player
   elsif friend.friend_privacy == PrivacyState::ON # new friend doesn't have the player added but their private chat state is on
-	  player.send(SendFriendEvent.new(friend_username, friend.world_id)) # so we can let the player know what world they're on
+   player.send(SendFriendEvent.new(friend_username, friend.world_id)) # so we can let the player know what world they're on
   end
 end
 
@@ -59,6 +59,7 @@ on :login do |player|
   update_friends(player, player.world_id)
 end
 
+# Notifies the player's friends that the player has logged out.
 on :logout do |player|
   update_friends(player, 0)
 end
