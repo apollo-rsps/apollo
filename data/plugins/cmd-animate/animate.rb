@@ -3,6 +3,7 @@ require 'java'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Graphic'
 
+# Makes the player perform the animation with the specified id.
 on :command, :animate, RIGHTS_MOD do |player, command|
   args = command.arguments
   unless args.length == 1
@@ -13,6 +14,7 @@ on :command, :animate, RIGHTS_MOD do |player, command|
   player.play_animation(Animation.new(args[0].to_i))
 end
 
+# Makes the player perform the graphic with the specified id.
 on :command, :graphic, RIGHTS_MOD do |player, command|
   args = command.arguments
   unless args.length == 1
