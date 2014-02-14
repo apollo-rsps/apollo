@@ -59,4 +59,8 @@ public final class Npc extends Mob {
 		return EntityType.NPC;
 	}
 
+	@Override
+	public String toString() {
+		return "[" + Npc.class.getName() + ": id=" + definition.getId() + ", name=" + definition.getName() + "]";
+	}
 }
