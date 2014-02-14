@@ -9,7 +9,6 @@ import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.scheduling.impl.SkillNormalizationTask;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
-import org.apollo.util.MobRepository;
 
 /**
  * A {@link Mob} is a living entity in the world, such as a player or NPC.
@@ -29,12 +28,12 @@ public abstract class Mob extends Entity {
 	private transient Action<?> action;
 
 	/**
-	 * This mob's set of {@link SynchronizationBlock}s.
+	 * This mob's set of synchronization blocks.
 	 */
 	protected transient SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
 
 	/**
-	 * This mob's {@link NpcDefinition). A {@link Player} only uses this if they are appearing as an npc in-game.
+	 * This mob's npc definition. A player only uses this if they are appearing as an npc in-game.
 	 */
 	protected NpcDefinition definition;
 
@@ -44,12 +43,17 @@ public abstract class Mob extends Entity {
 	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
 
 	/**
-	 * This mob's first movement {@link Direction}.
+	 * The position this mob is facing towards.
+	 */
+	private transient Position facingPosition = position;
+
+	/**
+	 * This mob's first movement direction.
 	 */
 	private transient Direction firstDirection = Direction.NONE;
 
 	/**
-	 * The index of this mob in the {@link MobRepository} it belongs to.
+	 * The index of this mob.
 	 */
 	protected int index = -1;
 
@@ -59,12 +63,12 @@ public abstract class Mob extends Entity {
 	protected final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
 
 	/**
-	 * This mob's {@link List} of local npcs.
+	 * This mob's list of local npcs.
 	 */
 	private final transient List<Npc> localNpcs = new ArrayList<Npc>();
 
 	/**
-	 * This mob's {@link List} of local players.
+	 * This mob's list of local players.
 	 */
 	private final transient List<Player> localPlayers = new ArrayList<Player>();
 
@@ -99,7 +103,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the {@link SynchronizationBlockSet}.
+	 * Gets this mob's {@link SynchronizationBlockSet}.
 	 * 
 	 * @return The block set.
 	 */
@@ -112,7 +116,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param damage The damage dealt.
 	 * @param type The type of damage.
-	 * @param secondary Whether this should be dealt as a secondary hit or not.
+	 * @param secondary If the damage should be dealt as a secondary hit.
 	 */
 	public void damage(int damage, int type, boolean secondary) {
 		Skill hitpoints = skillSet.getSkill(Skill.HITPOINTS);
@@ -124,7 +128,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the directions as an array.
+	 * Gets this mob's movement {@link Direction}s, as an array.
 	 * 
 	 * @return A zero, one or two element array containing the directions (in order).
 	 */
@@ -137,7 +141,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the mob's equipment.
+	 * Gets this mob's equipment.
 	 * 
 	 * @return The mob's equipment.
 	 */
@@ -166,7 +170,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the mob's inventory.
+	 * Gets this mob's inventory.
 	 * 
 	 * @return The inventory.
 	 */
@@ -175,7 +179,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the local npc {@link List}.
+	 * Gets this mob's local npc {@link List}.
 	 * 
 	 * @return The list.
 	 */
@@ -184,7 +188,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the local player {@link List}.
+	 * Gets this mob' local player {@link List}.
 	 * 
 	 * @return The list.
 	 */
@@ -202,7 +206,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the second {@link Direction}.
+	 * Gets this mob's second movement {@link Direction}.
 	 * 
 	 * @return The direction.
 	 */
@@ -220,7 +224,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the {@link WalkingQueue}.
+	 * Gets this mob's {@link WalkingQueue}.
 	 * 
 	 * @return The walking queue.
 	 */
@@ -238,7 +242,7 @@ public abstract class Mob extends Entity {
 	/**
 	 * Checks if this mob is active.
 	 * 
-	 * @return {@code true} if so, {@code false} if not.
+	 * @return {@code true} if the mob is active, {@code false} if not.
 	 */
 	public boolean isActive() {
 		return index != -1;
@@ -254,7 +258,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Plays the specified {@link Animation}.
+	 * Makes this mob perform the specified {@link Animation}.
 	 * 
 	 * @param animation The animation.
 	 */
@@ -263,7 +267,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Plays the specified {@link Graphic}.
+	 * Makes this mob perform the specified {@link Graphic}.
 	 * 
 	 * @param graphic The graphic.
 	 */
@@ -272,7 +276,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Resets the block set.
+	 * Resets this mob's block set.
 	 */
 	public void resetBlockSet() {
 		blockSet = new SynchronizationBlockSet();
@@ -288,7 +292,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Sets the next directions for this mob.
+	 * Sets the next movement {@link Direction}s for this mob.
 	 * 
 	 * @param first The first direction.
 	 * @param second The second direction.
@@ -310,7 +314,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Sets the position of this mob.
+	 * Sets the{@link Position} of this mob.
 	 * 
 	 * @param position The position.
 	 */
@@ -319,8 +323,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Forces this mob to shout a message. Note that messages can only be shown in the chat box if they are said by a
-	 * player.
+	 * Forces this mob to shout a message. Only messages said by a player can be shown in the chat box.
 	 * 
 	 * @param message The message.
 	 * @param chatOnly If the message should only be shown in the player's chat box, or above their head too.
@@ -356,7 +359,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Stops the current action.
+	 * Stops this mob's current action.
 	 */
 	public void stopAction() {
 		if (action != null) {
@@ -366,14 +369,14 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Stops the current {@link Animation}.
+	 * Stops this mob's current {@link Animation}.
 	 */
 	public void stopAnimation() {
 		playAnimation(Animation.STOP_ANIMATION);
 	}
 
 	/**
-	 * Stops the current {@link Graphic}.
+	 * Stops this mob's current {@link Graphic}.
 	 */
 	public void stopGraphic() {
 		playGraphic(Graphic.STOP_GRAPHIC);
@@ -386,19 +389,29 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public void teleport(Position position) {
-		teleporting = true;
 		this.position = position;
+		teleporting = true;
 		walkingQueue.clear();
 		stopAction(); // TODO do it on any movement is a must... walking queue perhaps?
 	}
 
 	/**
-	 * Turns the mob to face the specified {@link Position}.
+	 * Gets the {@link Position} this mob is facing towards.
+	 * 
+	 * @return The position.
+	 */
+	public Position getFacingPosition() {
+		return facingPosition;
+	}
+
+	/**
+	 * Turns this mob to face the specified {@link Position}.
 	 * 
 	 * @param position The position to face.
 	 */
 	public void turnTo(Position position) {
 		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(position));
+		this.facingPosition = position;
 	}
 
 	/**

@@ -75,6 +75,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 					&& !localNpcs.contains(npc)) {
 				localNpcs.add(npc);
 				added++;
+				npc.turnTo(npc.getFacingPosition());
 				blockSet = npc.getBlockSet();
 				segments.add(new AddNpcSegment(blockSet, npc.getIndex(), npc.getPosition(), npc.getNpcDefinition()
 						.getId()));
