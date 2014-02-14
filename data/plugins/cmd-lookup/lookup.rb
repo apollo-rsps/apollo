@@ -1,4 +1,5 @@
 require 'java'
+
 java_import 'org.apollo.game.model.Player'
 java_import 'org.apollo.game.model.def.ItemDefinition'
 java_import 'org.apollo.game.model.def.NpcDefinition'
@@ -18,15 +19,11 @@ on :command, :lookup, RIGHTS_ADMIN do |player, command|
     player.send_message("Invalid syntax - ::lookup [npc/object/item] [name]") 
     return
   end
-
-  Kernel.const_get("#{type.capitalize}Definition").definitions.each do |definition|
-    if definition.name.to_s.downcase == name
-      player.send_message("That #{type} has id #{definition.id}.")
-      return
-    end
-  end
-
-  player.send_message("Could not find an #{type} called #{name}.")
+  
+  ids = locate_entity(type, name)
+  
+  message = ids.length == 0 ? "Could not find an #{type} called #{name}." : "Possible ids are: #{ids.join(" ")}" 
+  player.send_message(message)
 end
 
 on :command, :iteminfo, RIGHTS_ADMIN do |player, command|
@@ -57,4 +54,17 @@ on :command, :npcinfo, RIGHTS_ADMIN do |player, command|
   is_combative = definition.has_combat_level ? "has a combat level of #{definition.combat_level}" : "does not have a combat level"
   player.send_message("Npc #{id} is called #{definition.name} and #{is_combative}.")
   player.send_message("Its description is \"#{definition.description}\".")
+end
+
+# Locates an entity with the specified type (e.g. npc) and name, returning possible ids as an array.
+def locate_entity(type, name, immediate=false)
+  ids = []
+  name.downcase!
+  Kernel.const_get("#{type.capitalize}Definition").definitions.each do |definition|
+    if definition.name.to_s.downcase == name
+      ids << definition.id
+      return ids[0] if immediate
+      return ids if ids.length == 10
+    end
+  end
 end
