@@ -34,9 +34,9 @@ public final class PrivacyOptionEvent extends Event {
 	 * @param tradePrivacy The privacy state of the player's trade chat.
 	 */
 	public PrivacyOptionEvent(int chatPrivacy, int friendPrivacy, int tradePrivacy) {
-		this.chatPrivacy = PrivacyState.valueOf(chatPrivacy);
-		this.friendPrivacy = PrivacyState.valueOf(friendPrivacy);
-		this.tradePrivacy = PrivacyState.valueOf(tradePrivacy);
+		this.chatPrivacy = PrivacyState.valueOf(chatPrivacy, true);
+		this.friendPrivacy = PrivacyState.valueOf(friendPrivacy, false);
+		this.tradePrivacy = PrivacyState.valueOf(tradePrivacy, false);
 	}
 
 	/**
