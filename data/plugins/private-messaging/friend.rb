@@ -19,15 +19,11 @@ on :event, :add_friend do |ctx, player, event|
   if friend == nil # the friend the player added is offline
     player.send(SendFriendEvent.new(friend_username, 0))
   elsif friend.friends_with(player_username) # new friend already has the player added
-    unless player.friend_privacy == PrivacyState::OFF # player's private chat state is not off
-      friend.send(SendFriendEvent.new(player_username, player.world_id)) # ... so we can tell the friend what world they're on
-    end
+    friend.send(SendFriendEvent.new(player_username, player.world_id)) unless player.friend_privacy == PrivacyState::OFF # player's private chat state is not off, so notify the friend
 
-    unless friend.friend_privacy == PrivacyState::OFF # new friend's private chat state is not off 
-      player.send(SendFriendEvent.new(friend_username, friend.world_id)) # ... so we can let the player know what world they're on
-    end
-  elsif friend.friend_privacy == PrivacyState::ON # new friend doesn't have the player added but their private chat state is online
-	  player.send(SendFriendEvent.new(friend_username, friend.world_id)) # ... so we can let the player know what world they're on
+    player.send(SendFriendEvent.new(friend_username, friend.world_id)) unless friend.friend_privacy == PrivacyState::OFF # new friend's private chat state is not off, so notify the player
+  elsif friend.friend_privacy == PrivacyState::ON # new friend doesn't have the player added but their private chat state is on
+	  player.send(SendFriendEvent.new(friend_username, friend.world_id)) # so we can let the player know what world they're on
   end
 end
 
@@ -37,10 +33,10 @@ on :event, :remove_friend do |ctx, player, event|
   player_username = player.username
 
   player.remove_friend(friend_username)
-  friend = World.world.get_player(friend_username)
-  next if friend == nil
-
-  friend.send(SendFriendEvent.new(player_username, 0)) if (friend.friends_with(player_username) && player.friend_privacy != PrivacyState::ON)
+  if (World.world.is_player_online(friend_username))
+    friend = World.world.get_player(friend_username)
+    friend.send(SendFriendEvent.new(player_username, 0)) if (friend.friends_with(player_username) && player.friend_privacy != PrivacyState::ON)
+  end
 end
 
 # Update the friend server status and send the friend/ignore lists of the player logging in.
