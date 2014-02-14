@@ -63,4 +63,5 @@ public final class Npc extends Mob {
 	public String toString() {
 		return "[" + Npc.class.getName() + ": id=" + definition.getId() + ", name=" + definition.getName() + "]";
 	}
+
 }
