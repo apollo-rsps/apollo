@@ -251,13 +251,7 @@ public final class Inventory implements Cloneable {
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean contains(int id) {
-		for (int i = 0; i < capacity; i++) {
-			Item item = items[i];
-			if (item != null && item.getId() == id) {
-				return true;
-			}
-		}
-		return false;
+		return slotOf(id) != -1;
 	}
 
 	/**
@@ -301,6 +295,34 @@ public final class Inventory implements Cloneable {
 	public Item get(int slot) {
 		checkBounds(slot);
 		return items[slot];
+	}
+
+	/**
+	 * Gets the amount of items with the specified id in this inventory.
+	 * 
+	 * @param id The id.
+	 * @return The number of matching items, or {@code 0} if none were found.
+	 */
+	public int getAmount(int id) {
+		if (isStackable(ItemDefinition.lookup(id))) {
+			int slot = slotOf(id);
+			if (slot != -1) {
+				return items[slot].getAmount();
+			}
+			return 0;
+		}
+
+		int amount = 0, usedSlots = 0;
+		for (int i = 0; i < capacity && usedSlots <= size; i++) {
+			Item item = items[i];
+			if (item != null) {
+				if (item.getId() == id) {
+					amount++;
+				}
+				usedSlots++;
+			}
+		}
+		return amount;
 	}
 
 	/**
@@ -382,8 +404,8 @@ public final class Inventory implements Cloneable {
 	 * @return The amount that was removed.
 	 */
 	public int remove(int id, int amount) {
-		ItemDefinition def = ItemDefinition.lookup(id);
-		boolean stackable = isStackable(def);
+		ItemDefinition definition = ItemDefinition.lookup(id);
+		boolean stackable = isStackable(definition);
 		if (stackable) {
 			for (int slot = 0; slot < capacity; slot++) {
 				Item item = items[slot];
@@ -503,6 +525,26 @@ public final class Inventory implements Cloneable {
 	 */
 	public int size() {
 		return size;
+	}
+
+	/**
+	 * Gets the inventory slot for the specified id.
+	 * 
+	 * @param id The id.
+	 * @return The first slot containing the specified item, or {@code -1} if none of the slots matched the conditions.
+	 */
+	public int slotOf(int id) {
+		int usedSlots = 0;
+		for (int slot = 0; slot < capacity && usedSlots <= size; slot++) {
+			Item item = items[slot];
+			if (item != null) {
+				if (item.getId() == id) {
+					return slot;
+				}
+				usedSlots++;
+			}
+		}
+		return -1;
 	}
 
 	/**
