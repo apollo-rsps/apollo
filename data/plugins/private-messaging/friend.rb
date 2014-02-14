@@ -16,17 +16,17 @@ on :event, :add_friend do |ctx, player, event|
   player.add_friend(friend_username)
   friend = World.world.get_player(friend_username)
 
-  if (friend == nil) # the friend the player added is offline
+  if friend == nil # the friend the player added is offline
     player.send(SendFriendEvent.new(friend_username, 0))
-  elsif (friend.friends_with(player_username)) # new friend already has the player added
-    unless (player.friend_privacy == PrivacyState::OFF) # player's private chat state is not off
+  elsif friend.friends_with(player_username) # new friend already has the player added
+    unless player.friend_privacy == PrivacyState::OFF # player's private chat state is not off
       friend.send(SendFriendEvent.new(player_username, player.world_id)) # ... so we can tell the friend what world they're on
     end
 
-    unless (friend.friend_privacy == PrivacyState::OFF) # new friend's private chat state is not off 
+    unless friend.friend_privacy == PrivacyState::OFF # new friend's private chat state is not off 
       player.send(SendFriendEvent.new(friend_username, friend.world_id)) # ... so we can let the player know what world they're on
     end
-  elsif (friend.friend_privacy == PrivacyState::ON) # new friend doesn't have the player added but their private chat state is online
+  elsif friend.friend_privacy == PrivacyState::ON # new friend doesn't have the player added but their private chat state is online
 	  player.send(SendFriendEvent.new(friend_username, friend.world_id)) # ... so we can let the player know what world they're on
   end
 end
@@ -46,15 +46,17 @@ end
 # Update the friend server status and send the friend/ignore lists of the player logging in.
 on :login do |player|
   player.send(FriendServerStatusEvent.new(ServerStatus::CONNECTING))
-
   player.send(IgnoreListEvent.new(player.ignored_usernames)) if player.ignored_usernames.size > 0
 
+  username = player.username
   world = World.world
-  iterator = player.friend_usernames.iterator
+  iterator = player.friend_usernames.iterator # Iterate the player's friend list and notify the player that they are online if they are
   while iterator.has_next
-    username = iterator.next
-    world_id = world.is_player_online(username) ? world.get_player(username).world_id : 0;
-    player.send(SendFriendEvent.new(username, world_id))
+    friend_username = iterator.next
+    friend = world.get_player(friend_username)
+    friend_world_id = (friend == nil || !viewable?(friend, username)) ? 0 : friend.world_id
+
+    player.send(SendFriendEvent.new(friend_username, friend_world_id))
   end
 
   player.send(FriendServerStatusEvent.new(ServerStatus::ONLINE))
@@ -76,7 +78,15 @@ def update_friends(player, world=0)
 
   while iterator.has_next
     other = iterator.next
-    next if other == player
-    other.send(SendFriendEvent.new(username, world)) if (player.friends_with(other.username) || player.friend_privacy == PrivacyState::ON)
+    next if (!other.friends_with(username) || other == player)
+
+    world = viewable?(player, other.username) ? world : 0
+    other.send(SendFriendEvent.new(username, world))
   end
+end
+
+# Checks if the specified player can be viewed by the player with the specified other username
+def viewable?(player, other_username)
+  privacy = player.friend_privacy
+  return privacy != PrivacyState::OFF && player.friends_with(other_username) || privacy == PrivacyState::ON
 end
