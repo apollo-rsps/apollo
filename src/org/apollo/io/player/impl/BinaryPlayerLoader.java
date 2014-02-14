@@ -35,7 +35,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 	/**
 	 * The default spawn position.
 	 */
-	private static final Position SPAWN_POSITION = new Position(3222, 3222);
+	private static final Position SPAWN_POSITION = new Position(3093, 3104);
 
 	@Override
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws IOException {

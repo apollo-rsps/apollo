@@ -18,7 +18,7 @@ public final class DummyPlayerLoader implements PlayerLoader {
 	/**
 	 * The default spawn position for players loaded by this loader.
 	 */
-	private static final Position DEFAULT_POSITION = new Position(3222, 3222);
+	private static final Position DEFAULT_POSITION = new Position(3093, 3104);
 
 	@Override
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) {
