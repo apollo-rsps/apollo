@@ -20,12 +20,13 @@ on :command, :lookup, RIGHTS_ADMIN do |player, command|
     return
   end
   
-  ids = locate_entity(type, name)
+  ids = locate_entity(type, name).join(" ")
   
-  message = ids.length == 0 ? "Could not find an #{type} called #{name}." : "Possible ids are: #{ids.join(" ")}" 
+  message = ids.empty? ? "Could not find an #{type} called #{name}." : "Possible ids are: #{ids}" 
   player.send_message(message)
 end
 
+# Sends the user a message with information about the item with the specified id.
 on :command, :iteminfo, RIGHTS_ADMIN do |player, command|
   args = command.arguments
   unless args.length == 1
@@ -41,6 +42,7 @@ on :command, :iteminfo, RIGHTS_ADMIN do |player, command|
   player.send_message("Its description is \"#{definition.description}\".")
 end
 
+# Sends the user a message with information about the npc with the specified id.
 on :command, :npcinfo, RIGHTS_ADMIN do |player, command|
   args = command.arguments
   unless args.length == 1
@@ -57,14 +59,12 @@ on :command, :npcinfo, RIGHTS_ADMIN do |player, command|
 end
 
 # Locates an entity with the specified type (e.g. npc) and name, returning possible ids as an array.
-def locate_entity(type, name, immediate=false)
+def locate_entity(type, name, limit=5)
   ids = []
   name.downcase!
   Kernel.const_get("#{type.capitalize}Definition").definitions.each do |definition|
-    if definition.name.to_s.downcase == name
-      ids << definition.id
-      return ids[0] if immediate
-      return ids if ids.length == 10
-    end
+    break if ids.length == limit
+    ids << definition.id.to_i if definition.name.to_s.downcase == name
   end
+  return ids
 end
