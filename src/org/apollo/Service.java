@@ -10,24 +10,24 @@ public abstract class Service {
 	/**
 	 * The server context.
 	 */
-	private ServerContext ctx;
+	private ServerContext context;
 
 	/**
-	 * Gets the server context.
+	 * Gets the {@link ServerContext}.
 	 * 
 	 * @return The context.
 	 */
 	public final ServerContext getContext() {
-		return ctx;
+		return context;
 	}
 
 	/**
-	 * Sets the server context.
+	 * Sets the {@link ServerContext}.
 	 * 
-	 * @param ctx The context.
+	 * @param context The context.
 	 */
-	public final void setContext(ServerContext ctx) {
-		this.ctx = ctx;
+	public final void setContext(ServerContext context) {
+		this.context = context;
 	}
 
 	/**
