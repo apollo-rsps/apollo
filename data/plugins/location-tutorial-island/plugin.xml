@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<plugin>
+  <id>location-tutorial-island</id>
+  <version>0.1</version>
+  <name>Tutorial Island</name>
+  <description>Adds funtionality to Tutorial island.</description>
+  <authors>
+    <author>Major</author>
+  </authors>
+  <scripts>
+    <script>npcs.rb</script>
+  </scripts>
+  <dependencies>
+    <dependency>entity-spawning</dependency>
+  </dependencies>
+</plugin>
