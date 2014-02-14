@@ -81,7 +81,7 @@ public final class PluginMetaDataParser {
 		String id = idNode.getValue();
 		String name = nameNode.getValue();
 		String description = descriptionNode.getValue();
-		int version = Integer.parseInt(versionNode.getValue());
+		double version = Double.parseDouble(versionNode.getValue());
 
 		if (id == null || name == null || description == null) {
 			throw new IOException("Id, name and description must have values.");

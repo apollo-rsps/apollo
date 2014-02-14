@@ -35,11 +35,15 @@ public enum PrivacyState {
 	 * @return The privacy state.
 	 * @throws IllegalArgumentException If the specified value is out of bounds.
 	 */
-	public static PrivacyState valueOf(int value) {
+	public static PrivacyState valueOf(int value, boolean chat) {
 		PrivacyState[] values = values();
+		if (!chat && value != 0) {
+			value++;
+		}
 		if (value < 0 || value >= values.length) {
 			throw new IllegalArgumentException("Invalid privacy option integer value specified: " + value + ".");
 		}
+
 		return values[value];
 	}
 

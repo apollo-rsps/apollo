@@ -57,9 +57,9 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			boolean members = in.readBoolean();
 
 			// read settings
-			PrivacyState privacyPublicChat = PrivacyState.valueOf(in.readByte());
-			PrivacyState privacyPrivateChat = PrivacyState.valueOf(in.readByte());
-			PrivacyState privacyTradeCompete = PrivacyState.valueOf(in.readByte());
+			PrivacyState chatPrivacy = PrivacyState.valueOf(in.readByte(), true);
+			PrivacyState friendPrivacy = PrivacyState.valueOf(in.readByte(), false);
+			PrivacyState tradePrivacy = PrivacyState.valueOf(in.readByte(), false);
 			int runEnergy = in.readByte();
 			ScreenBrightness brightness = ScreenBrightness.valueOf(in.readByte());
 
@@ -85,9 +85,9 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			Player player = new Player(credentials, new Position(x, y, height));
 			player.setPrivilegeLevel(privilegeLevel);
 			player.setMembers(members);
-			player.setChatPrivacy(privacyPublicChat);
-			player.setFriendPrivacy(privacyPrivateChat);
-			player.setTradePrivacy(privacyTradeCompete);
+			player.setChatPrivacy(chatPrivacy);
+			player.setFriendPrivacy(friendPrivacy);
+			player.setTradePrivacy(tradePrivacy);
 			player.setRunEnergy(runEnergy);
 			player.setScreenBrightness(brightness);
 

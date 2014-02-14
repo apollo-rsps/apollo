@@ -15,11 +15,11 @@ public final class PrivacyOptionEventDecoder extends EventDecoder<PrivacyOptionE
 
 	@Override
 	public PrivacyOptionEvent decode(GamePacket packet) {
-		final GamePacketReader reader = new GamePacketReader(packet);
+		GamePacketReader reader = new GamePacketReader(packet);
 
-		final int publicChatState = (int) reader.getUnsigned(DataType.BYTE);
-		final int privateChatState = (int) reader.getUnsigned(DataType.BYTE);
-		final int tradeChatState = (int) reader.getUnsigned(DataType.BYTE);
+		int publicChatState = (int) reader.getUnsigned(DataType.BYTE);
+		int privateChatState = (int) reader.getUnsigned(DataType.BYTE);
+		int tradeChatState = (int) reader.getUnsigned(DataType.BYTE);
 
 		return new PrivacyOptionEvent(publicChatState, privateChatState, tradeChatState);
 	}
