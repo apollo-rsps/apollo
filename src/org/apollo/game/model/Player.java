@@ -693,6 +693,15 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sends a message to the player.
+	 * 
+	 * @param message The message.
+	 */
+	public void sendMessage(String message, boolean filterable) {
+		send(new ServerMessageEvent(message, filterable));
+	}
+
+	/**
 	 * Sends the quest interface
 	 * 
 	 * @param text The text to display on the interface.
