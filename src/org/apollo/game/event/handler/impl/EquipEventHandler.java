@@ -23,7 +23,7 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, ItemOptionEvent event) {
 		if (event.getOption() != 2 || event.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID) {
-			ctx.breakHandlerChain();
+			return;
 		}
 
 		int inventorySlot = event.getSlot();
@@ -32,7 +32,6 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 		EquipmentDefinition definition = EquipmentDefinition.lookup(equippingId);
 
 		if (definition == null) {
-			ctx.breakHandlerChain();
 			return;
 		}
 
