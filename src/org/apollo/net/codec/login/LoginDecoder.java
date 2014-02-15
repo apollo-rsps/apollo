@@ -135,9 +135,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
 		if (buffer.readableBytes() >= loginLength) {
 			ByteBuf payload = buffer.readBytes(loginLength);
-			if (payload.readUnsignedByte() != 0xFF) {
-				throw new Exception("Invalid magic id.");
-			}
+			int clientVersion = 255 - payload.readUnsignedByte();
 
 			int releaseNumber = payload.readUnsignedShort();
 
@@ -195,13 +193,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			for (int i = 0; i < seed.length; i++) {
 				seed[i] += 50;
 			}
+
 			IsaacRandom encodingRandom = new IsaacRandom(seed);
 
 			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid);
 			IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
 			LoginRequest request = new LoginRequest(credentials, randomPair, reconnecting, lowMemory, releaseNumber,
-					archiveCrcs);
+					archiveCrcs, clientVersion);
 
 			out.add(request);
 			if (buffer.isReadable()) {

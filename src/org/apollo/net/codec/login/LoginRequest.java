@@ -16,6 +16,11 @@ public final class LoginRequest {
 	private final int[] archiveCrcs;
 
 	/**
+	 * The version denoting whether the client has been modified or not.
+	 */
+	private final int clientVersion;
+
+	/**
 	 * The player's credentials.
 	 */
 	private final PlayerCredentials credentials;
@@ -51,13 +56,14 @@ public final class LoginRequest {
 	 * @param archiveCrcs The archive CRCs.
 	 */
 	public LoginRequest(PlayerCredentials credentials, IsaacRandomPair randomPair, boolean lowMemory,
-			boolean reconnecting, int releaseNumber, int[] archiveCrcs) {
+			boolean reconnecting, int releaseNumber, int[] archiveCrcs, int clientVersion) {
 		this.credentials = credentials;
 		this.randomPair = randomPair;
 		this.lowMemory = lowMemory;
 		this.reconnecting = reconnecting;
 		this.releaseNumber = releaseNumber;
 		this.archiveCrcs = archiveCrcs;
+		this.clientVersion = clientVersion;
 	}
 
 	/**
@@ -67,6 +73,15 @@ public final class LoginRequest {
 	 */
 	public int[] getArchiveCrcs() {
 		return archiveCrcs;
+	}
+
+	/**
+	 * Gets the value denoting the client's (modified) version.
+	 * 
+	 * @return The client version.
+	 */
+	public int getClientVersion() {
+		return clientVersion;
 	}
 
 	/**

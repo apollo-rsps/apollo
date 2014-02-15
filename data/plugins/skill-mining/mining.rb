@@ -38,7 +38,7 @@ class MiningAction < DistancedAction
   # the ore
   def start_mine(pickaxe)
     @started = true
-    mob.send_message "You swing your pick at the rock."
+    mob.send_message("You swing your pick at the rock.", true)
     mob.turn_to @position
     mob.play_animation pickaxe.animation
     @counter = pickaxe.pulses
@@ -51,14 +51,14 @@ class MiningAction < DistancedAction
 
     # verify the mob can mine with their pickaxe
     if not (pickaxe != nil and level >= pickaxe.level)
-      mob.send_message "You do not have a pickaxe for which you have the level to use."
+      mob.send_message('You do not have a pickaxe for which you have the level to use.')
       stop
       return
     end
 
     # verify the mob can mine the ore
     if ore.level > level
-      mob.send_message "You do not have the required level to mine this rock."
+      mob.send_message('You do not have the required level to mine this rock.')
       stop
       return
     end
