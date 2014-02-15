@@ -40,6 +40,9 @@ def parse_hash(npc, hash)
       # TODO
     elsif key == :delta_bounds
       # TODO
+    elsif key == :circular_bounds
+      radius = value
+      # TODO
     elsif key == :spawn_animation
       npc.play_animation(Animation.new(value))
     elsif key == :spawn_graphic
