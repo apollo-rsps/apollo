@@ -1,5 +1,6 @@
 package org.apollo.net.release.r377;
 
+import org.apollo.game.event.impl.AddTileItemEvent;
 import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.ConfigEvent;
 import org.apollo.game.event.impl.DisplayTabInterfaceEvent;
@@ -17,9 +18,10 @@ import org.apollo.game.event.impl.PlayerSynchronizationEvent;
 import org.apollo.game.event.impl.PositionEvent;
 import org.apollo.game.event.impl.PrivacyOptionEvent;
 import org.apollo.game.event.impl.RegionChangeEvent;
+import org.apollo.game.event.impl.RemoveTileItemEvent;
 import org.apollo.game.event.impl.SendFriendEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
-import org.apollo.game.event.impl.SetTileItemEvent;
+import org.apollo.game.event.impl.UpdateTileItemEvent;
 import org.apollo.game.event.impl.SetWidgetItemModelEvent;
 import org.apollo.game.event.impl.SetWidgetModelAnimationEvent;
 import org.apollo.game.event.impl.SetWidgetNpcModelEvent;
@@ -115,6 +117,8 @@ public final class Release377 extends Release {
 		register(79, new ButtonEventDecoder());
 		register(110, new ClosedInterfaceEventDecoder());
 		register(75, new EnteredAmountEventDecoder());
+		register(226, new DialogueContinueEventDecoder());
+
 		register(1, new ItemOnItemEventDecoder());
 		register(36, new MagicOnItemEventDecoder());
 
@@ -131,7 +135,6 @@ public final class Release377 extends Release {
 		register(112, new SecondNpcActionEventDecoder());
 		register(13, new ThirdNpcActionEventDecoder());
 		register(71, new TakeTileItemEventDecoder());
-		register(226, new DialogueContinueEventDecoder());
 
 		register(120, new AddFriendEventDecoder());
 		register(217, new AddIgnoreEventDecoder());
@@ -162,11 +165,14 @@ public final class Release377 extends Release {
 		register(SetWidgetModelAnimationEvent.class, new SetWidgetModelAnimationEventEncoder());
 		register(ConfigEvent.class, new ConfigEventEncoder());
 		register(DisplayTabInterfaceEvent.class, new DisplayTabInterfaceEventEncoder());
-		register(SetTileItemEvent.class, new SetTileItemEventEncoder());
 		register(PositionEvent.class, new PositionEventEncoder());
 		register(UpdateRunEnergyEvent.class, new UpdateRunEnergyEventEncoder());
 		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
 		register(OpenDialogueInterfaceEvent.class, new OpenDialogueInterfaceEventEncoder());
+
+		register(AddTileItemEvent.class, new AddTileItemEventEncoder());
+		register(UpdateTileItemEvent.class, new UpdateTileItemEventEncoder());
+		register(RemoveTileItemEvent.class, new RemoveTileItemEventEncoder());
 
 		register(ForwardPrivateMessageEvent.class, new ForwardPrivateMessageEventEncoder());
 		register(FriendServerStatusEvent.class, new FriendServerStatusEventEncoder());
