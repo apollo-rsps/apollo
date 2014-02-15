@@ -13,19 +13,24 @@ import org.apollo.game.model.Entity;
 public final class Sector {
 
 	/**
-	 * The width and height of the sector, in tiles.
+	 * The width and height of a sector, in tiles.
 	 */
 	public static final int SECTOR_SIZE = 8;
 
 	/**
-	 * The {@link SectorCoordinates} of this sector.
+	 * The sector coordinates of this sector.
 	 */
 	private final SectorCoordinates coordinates;
 
 	/**
-	 * A {@link List} of every {@link Entity} in this sector.
+	 * A list of every entity in this sector.
 	 */
-	private final List<Entity> entities = new ArrayList<Entity>();
+	private final List<Entity> entities = new ArrayList<>();
+
+	/**
+	 * A list of listeners registered to this sector.
+	 */
+	private final List<SectorListener> listeners = new ArrayList<>();
 
 	/**
 	 * Creates a new sector.
@@ -54,7 +59,11 @@ public final class Sector {
 	 * @return {@code true} if the entity was added, otherwise {@code false}.
 	 */
 	public boolean addEntity(Entity entity) {
-		return entities.add(entity);
+		if (entities.add(entity)) {
+			notifyListeners(entity);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -67,13 +76,28 @@ public final class Sector {
 	}
 
 	/**
+	 * Notifies the listeners registered to this sector that an update has occurred.
+	 * 
+	 * @param entity The entity that was updated.
+	 */
+	public void notifyListeners(Entity entity) {
+		for (SectorListener listener : listeners) {
+			listener.execute(this, entity);
+		}
+	}
+
+	/**
 	 * Removes a {@link Entity} from this sector.
 	 * 
 	 * @param entity The entity.
 	 * @return {@code true} if the entity was removed, otherwise {@code false}.
 	 */
 	public boolean removeEntity(Entity entity) {
-		return entities.remove(entity);
+		if (entities.remove(entity)) {
+			notifyListeners(entity);
+			return true;
+		}
+		return false;
 	}
 
 }
