@@ -124,14 +124,14 @@ public final class World {
 	private int releaseNumber;
 
 	/**
-	 * This world's {@link SectorRepository}.
-	 */
-	private final SectorRepository sectorRepository = new SectorRepository(false);
-
-	/**
 	 * The scheduler.
 	 */
 	private final Scheduler scheduler = new Scheduler();
+
+	/**
+	 * This world's {@link SectorRepository}.
+	 */
+	private final SectorRepository sectorRepository = new SectorRepository(false);
 
 	/**
 	 * Creates the world.
@@ -212,6 +212,15 @@ public final class World {
 	 */
 	public int getReleaseNumber() {
 		return releaseNumber;
+	}
+
+	/**
+	 * Gets this world's {@link SectorRepository}.
+	 * 
+	 * @return The sector repository.
+	 */
+	public SectorRepository getSectorRepository() {
+		return sectorRepository;
 	}
 
 	/**
