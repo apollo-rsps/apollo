@@ -463,6 +463,38 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
+	 * Removes {@code amount} of the item at the specified {@code slot}, under the condition that this item matches the
+	 * specified {@code id}. If the item is not stacked, it will only remove the single item at the slot (meaning it
+	 * will ignore any amount higher than 1). This means that this method will under no circumstances make any changes
+	 * to other slots.
+	 * 
+	 * @param slot The slot.
+	 * @param id The item id.
+	 * @param amount The amount to remove.
+	 * @return The amount that was removed (0 if nothing was removed).
+	 */
+	public int removeSlot(int slot, int id, int amount) {
+		if (amount == 0) {
+			return 0;
+		}
+
+		Item item = items[slot];
+		if (item != null && item.getId() == id) {
+			int currentAmount = item.getAmount();
+			int removed = currentAmount;
+			if (removed > amount) {
+				removed = amount;
+			}
+
+			int remainder = currentAmount - removed;
+			set(slot, remainder > 0 ? new Item(item.getId(), remainder) : null);
+
+			return removed;
+		}
+		return 0;
+	}
+
+	/**
 	 * Removes the item (if any) that is in the specified slot.
 	 * 
 	 * @param slot
