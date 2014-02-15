@@ -67,6 +67,12 @@ public final class Player extends Mob {
 	private transient Deque<Point> clicks = new ArrayDeque<Point>();
 
 	/**
+	 * The version of the client this player is using. This is not the same as the release number, instead denoting the
+	 * custom version.
+	 */
+	private transient int clientVersion;
+
+	/**
 	 * This player's credentials.
 	 */
 	private PlayerCredentials credentials;
@@ -182,6 +188,11 @@ public final class Player extends Mob {
 	private transient int worldId = 1;
 
 	/**
+	 * Indicates whether this player has the message filter enabled.
+	 */
+	private boolean filteringMessages = false;
+
+	/**
 	 * Creates the {@link Player}.
 	 * 
 	 * @param credentials The player's credentials.
@@ -288,6 +299,15 @@ public final class Player extends Mob {
 	 */
 	public Deque<Point> getClicks() {
 		return clicks;
+	}
+
+	/**
+	 * Gets the value denoting the clients modified version (0 if it is an unmodified jagex client).
+	 * 
+	 * @return The version.
+	 */
+	public int getClientVersion() {
+		return clientVersion;
 	}
 
 	/**
@@ -689,7 +709,7 @@ public final class Player extends Mob {
 	 * @param message The message.
 	 */
 	public void sendMessage(String message) {
-		send(new ServerMessageEvent(message));
+		sendMessage(message, false);
 	}
 
 	/**
@@ -698,7 +718,11 @@ public final class Player extends Mob {
 	 * @param message The message.
 	 */
 	public void sendMessage(String message, boolean filterable) {
-		send(new ServerMessageEvent(message, filterable));
+		if (clientVersion > 0) {
+			send(new ServerMessageEvent(message, filterable));
+		} else if (!filterable || !filteringMessages) {
+			send(new ServerMessageEvent(message));
+		}
 	}
 
 	/**
@@ -750,6 +774,15 @@ public final class Player extends Mob {
 	 */
 	public void setChatPrivacy(PrivacyState chatPrivacy) {
 		this.chatPrivacy = chatPrivacy;
+	}
+
+	/**
+	 * Sets the value denoting the client's modified version.
+	 * 
+	 * @param clientVersion The client version.
+	 */
+	public void setClientVersion(int clientVersion) {
+		this.clientVersion = clientVersion;
 	}
 
 	/**
@@ -904,6 +937,24 @@ public final class Player extends Mob {
 		if (interfaceSet.size() > 0) {
 			interfaceSet.close();
 		}
+	}
+
+	/**
+	 * Toggles the message filter.
+	 * 
+	 * @return The new value of the filter.
+	 */
+	public boolean toggleMessageFilter() {
+		return filteringMessages = !filteringMessages;
+	}
+
+	/**
+	 * Indicates whether the message filter is enabled.
+	 * 
+	 * @return {@code true} if the filter is enabled, otherwise {@code false}.
+	 */
+	public boolean messageFilterEnabled() {
+		return filteringMessages;
 	}
 
 	/**

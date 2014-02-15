@@ -90,7 +90,7 @@ public final class LoginSession extends Session {
 		Player player = response.getPlayer();
 		int rights = player == null ? 0 : player.getPrivilegeLevel().toInteger();
 		boolean log = false;
-		
+
 		if (player != null) {
 			GameSession session = new GameSession(channel, serverContext, player);
 			player.setSession(session, false /* TODO */);
