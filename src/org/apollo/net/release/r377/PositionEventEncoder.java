@@ -14,7 +14,7 @@ import org.apollo.net.release.EventEncoder;
  * @author Chris Fletcher
  * @author Major
  */
-final class PositionEventEncoder extends EventEncoder<PositionEvent> {
+public final class PositionEventEncoder extends EventEncoder<PositionEvent> {
 
 	@Override
 	public GamePacket encode(PositionEvent event) {
