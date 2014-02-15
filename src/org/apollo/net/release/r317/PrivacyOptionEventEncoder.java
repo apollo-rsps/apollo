@@ -17,9 +17,9 @@ public final class PrivacyOptionEventEncoder extends EventEncoder<PrivacyOptionE
 	public GamePacket encode(final PrivacyOptionEvent event) {
 		final GamePacketBuilder builder = new GamePacketBuilder(206);
 
-		builder.put(DataType.BYTE, event.getChatPrivacy().toInteger());
-		builder.put(DataType.BYTE, event.getFriendPrivacy().toInteger());
-		builder.put(DataType.BYTE, event.getTradePrivacy().toInteger());
+		builder.put(DataType.BYTE, event.getChatPrivacy().toInteger(true));
+		builder.put(DataType.BYTE, event.getFriendPrivacy().toInteger(true));
+		builder.put(DataType.BYTE, event.getTradePrivacy().toInteger(true));
 
 		return builder.toGamePacket();
 	}
