@@ -26,7 +26,12 @@ public enum PrivacyState {
 	/**
 	 * Represents the 'off' state, when only messages from moderators are displayed.
 	 */
-	OFF(3);
+	OFF(3),
+
+	/**
+	 * Represents the 'filterable' state - a custom state that filters 'unnecessary' server messages.
+	 */
+	FILTERABLE(4);
 
 	/**
 	 * Gets the privacy state for the specified numerical value.

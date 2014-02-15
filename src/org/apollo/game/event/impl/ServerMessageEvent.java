@@ -20,7 +20,17 @@ public final class ServerMessageEvent extends Event {
 	 * @param message The message.
 	 */
 	public ServerMessageEvent(String message) {
-		this.message = message;
+		this(message, false);
+	}
+
+	/**
+	 * Creates a server message event.
+	 * 
+	 * @param message The message.
+	 * @param filterable If the message can be filtered.
+	 */
+	public ServerMessageEvent(String message, boolean filterable) {
+		this.message = message + (filterable ? ":filterable:" : "");
 	}
 
 	/**
