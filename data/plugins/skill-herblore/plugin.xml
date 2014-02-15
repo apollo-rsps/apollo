@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <plugin>
   <id>skill-herblore</id>
-  <version>1</version>
+  <version>0.9</version>
   <name>Herblore</name>
   <description>Adds the Herblore skill.</description>
   <authors>

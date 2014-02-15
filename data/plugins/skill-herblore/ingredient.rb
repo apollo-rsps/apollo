@@ -53,7 +53,7 @@ class Ingredient
 end
 
 # An ingredient which needs to be grinded before being usable for Herblore.
-class GrindedIngredient < Ingredient
+class GroundIngredient < Ingredient
   include HerbloreMethod
 
   attr_reader :raw
@@ -227,7 +227,7 @@ end
 
 # Appends a grinded ingredient to the ItemOnItemEvent handler interception.
 def append_grinded(id, raw)
-  grinded = GrindedIngredient.new(id, raw)
+  grinded = GroundIngredient.new(id, raw)
   append_herblore_item(grinded, PESTLE_MORTAR, raw)
   return grinded
 end
