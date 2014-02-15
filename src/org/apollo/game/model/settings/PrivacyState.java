@@ -1,7 +1,9 @@
 package org.apollo.game.model.settings;
 
 /**
- * An enumeration representing the different privacy states for public, private and trade chat.
+ * An enumeration representing the different privacy states for public, private and trade chat. This enumeration relies
+ * on the ordering of the elements within, which should be as follows: {@code ON}, {@code HIDE}, {@code FRIENDS},
+ * {@code OFF}, {@code FILTERABLE}.
  * 
  * @author Kyle Stevenson
  */
@@ -29,7 +31,8 @@ public enum PrivacyState {
 	OFF(3),
 
 	/**
-	 * Represents the 'filterable' state - a custom state that filters 'unnecessary' server messages.
+	 * Represents the 'filterable' state - a custom state that filters 'unnecessary' server messages. This state only
+	 * applies to public chat.
 	 */
 	FILTERABLE(4);
 

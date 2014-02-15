@@ -1,7 +1,8 @@
 package org.apollo.game.model.settings;
 
 /**
- * Represents the status of the friend server.
+ * Represents the status of the friend server. This enumeration relies on the ordering of the elements within, which
+ * should be as follows: {@code OFFLINE}, {@code CONNECTING}, {@code ONLINE}.
  * 
  * @author Major
  */
@@ -10,31 +11,17 @@ public enum ServerStatus {
 	/**
 	 * Indicates the friend server is offline.
 	 */
-	OFFLINE(0),
+	OFFLINE,
 
 	/**
 	 * Indicates the friend server is being connected to.
 	 */
-	CONNECTING(1),
+	CONNECTING,
 
 	/**
 	 * Indicates the friend server is online and connected.
 	 */
-	ONLINE(2);
-
-	/**
-	 * The code of the server status.
-	 */
-	private final int code;
-
-	/**
-	 * Creates a new server status.
-	 * 
-	 * @param code The code.
-	 */
-	private ServerStatus(int code) {
-		this.code = code;
-	}
+	ONLINE;
 
 	/**
 	 * Gets the code of this server status.
@@ -42,7 +29,7 @@ public enum ServerStatus {
 	 * @return The code.
 	 */
 	public int getCode() {
-		return code;
+		return ordinal();
 	}
 
 	/**

@@ -1,7 +1,8 @@
 package org.apollo.game.model.settings;
 
 /**
- * An enumeration with the different privilege levels a player can have.
+ * An enumeration with the different privilege levels a player can have. This enumeration relies on the ordering of the
+ * elements within, which should be as follows: {@code STANDARD}, {@code MODERATOR}, {@code ADMINISTRATOR}.
  * 
  * @author Graham
  */
@@ -10,17 +11,17 @@ public enum PrivilegeLevel {
 	/**
 	 * A standard (rights 0) account.
 	 */
-	STANDARD(0),
+	STANDARD,
 
 	/**
 	 * A player moderator (rights 1) account.
 	 */
-	MODERATOR(1),
+	MODERATOR,
 
 	/**
 	 * An administrator (rights 2) account.
 	 */
-	ADMINISTRATOR(2);
+	ADMINISTRATOR;
 
 	/**
 	 * Gets the privilege level for the specified numerical value.
@@ -38,26 +39,12 @@ public enum PrivilegeLevel {
 	}
 
 	/**
-	 * The numerical level used in the protocol.
-	 */
-	private final int value;
-
-	/**
-	 * Creates the privilege level.
+	 * Gets the numerical value of this privilege level.
 	 * 
-	 * @param value The numerical level.
-	 */
-	private PrivilegeLevel(int value) {
-		this.value = value;
-	}
-
-	/**
-	 * Gets the numerical level.
-	 * 
-	 * @return The numerical level used in the protocol.
+	 * @return The numerical value used in the protocol.
 	 */
 	public int toInteger() {
-		return value;
+		return ordinal();
 	}
 
 }

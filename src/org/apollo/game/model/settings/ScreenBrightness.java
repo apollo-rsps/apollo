@@ -1,7 +1,8 @@
 package org.apollo.game.model.settings;
 
 /**
- * An enumeration representing
+ * An enumeration representing the brightness of a player's screen. This enumeration relies on the ordering of the
+ * elements within, which should be as follows: {@code DARK}, {@code NORMAL}, {@code BRIGHT}, {@code VERY_BRIGHT}.
  * 
  * @author Major
  */
@@ -10,22 +11,22 @@ public enum ScreenBrightness {
 	/**
 	 * Represents the 'dark' screen brightness.
 	 */
-	DARK(0),
+	DARK,
 
 	/**
 	 * Represents the 'normal' screen brightness.
 	 */
-	NORMAL(1),
+	NORMAL,
 
 	/**
 	 * Represents the 'bright' screen brightness.
 	 */
-	BRIGHT(2),
+	BRIGHT,
 
 	/**
 	 * Represents the 'very bright' screen brightness.
 	 */
-	VERY_BRIGHT(3);
+	VERY_BRIGHT;
 
 	/**
 	 * Gets the screen brightness for the specified numerical value.
@@ -43,26 +44,12 @@ public enum ScreenBrightness {
 	}
 
 	/**
-	 * The numerical value of this brightness.
-	 */
-	private final int value;
-
-	/**
-	 * Creates the screen brightness.
-	 * 
-	 * @param value The numerical value.
-	 */
-	private ScreenBrightness(int value) {
-		this.value = value;
-	}
-
-	/**
 	 * Converts this screen brightness to an integer.
 	 * 
 	 * @return The numerical value.
 	 */
 	public int toInteger() {
-		return value;
+		return ordinal();
 	}
 
 }
