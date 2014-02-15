@@ -1,7 +1,8 @@
 package org.apollo.game.model.settings;
 
 /**
- * An enumeration containing the two genders (male and female).
+ * An enumeration containing the two genders (male and female). This enumeration relies on the ordering of the elements
+ * within, which should be as follows: {@code MALE}, {@code FEMALE}.
  * 
  * @author Graham
  */
