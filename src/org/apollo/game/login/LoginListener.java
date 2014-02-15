@@ -3,7 +3,7 @@ package org.apollo.game.login;
 import org.apollo.game.model.Player;
 
 /**
- * An interface that should be implemented for actions that should be executed when the player logs in.
+ * A class that should be extended for actions that should be executed when the player logs in.
  * 
  * @author Major
  */
