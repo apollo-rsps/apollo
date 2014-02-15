@@ -126,7 +126,7 @@ public final class World {
 	/**
 	 * This world's {@link SectorRepository}.
 	 */
-	private final SectorRepository repository = new SectorRepository(false);
+	private final SectorRepository sectorRepository = new SectorRepository(false);
 
 	/**
 	 * The scheduler.
@@ -278,7 +278,7 @@ public final class World {
 		boolean success = true;
 
 		for (Entity entity : entities) {
-			Sector sector = repository.get(SectorCoordinates.fromPosition(entity.getPosition()));
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(entity.getPosition()));
 			success &= sector.addEntity(entity);
 		}
 		return success;
@@ -302,6 +302,9 @@ public final class World {
 
 		if (success) {
 			logger.info("Registered npc: " + npc + " [count=" + npcRepository.size() + "]");
+
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
+			sector.addEntity(npc);
 		} else {
 			logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
 		}
@@ -319,10 +322,13 @@ public final class World {
 			return RegistrationStatus.ALREADY_ONLINE;
 		}
 
-		boolean success = playerRepository.add(player);
+		boolean success = playerRepository.add(player)
+				& players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player) == null;
 		if (success) {
-			players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player);
 			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
+
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
+			sector.addEntity(player);
 			return RegistrationStatus.OK;
 		}
 
@@ -348,6 +354,9 @@ public final class World {
 	public void unregister(final Npc npc) {
 		if (npcRepository.remove(npc)) {
 			logger.info("Unregistered npc: " + npc + " [count=" + npcRepository.size() + "]");
+
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
+			sector.removeEntity(npc);
 		} else {
 			logger.warning("Could not find npc " + npc + " to unregister!");
 		}
@@ -359,8 +368,12 @@ public final class World {
 	 * @param player The player.
 	 */
 	public void unregister(final Player player) {
-		if (playerRepository.remove(player) & players.remove(NameUtil.encodeBase37(player.getUsername().toLowerCase())) == player) {
+		if (playerRepository.remove(player)
+				& players.remove(NameUtil.encodeBase37(player.getUsername().toLowerCase())) == player) {
 			logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
+
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
+			sector.removeEntity(player);
 			logoutDispatcher.dispatch(player);
 		} else {
 			logger.warning("Could not find player " + player + " to unregister!");
