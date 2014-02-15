@@ -74,8 +74,8 @@ public enum PrivacyState {
 	 * 
 	 * @return The numerical value used by the client.
 	 */
-	public int toInteger() {
-		return value;
+	public int toInteger(boolean chat) {
+		return chat ? value : (value == 0 ? 0 : value - 1);
 	}
 
 }
