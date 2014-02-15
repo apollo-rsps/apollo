@@ -41,7 +41,9 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws IOException {
 		File file = BinaryPlayerUtil.getFile(credentials.getUsername());
 		if (!file.exists()) {
-			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, new Player(credentials, SPAWN_POSITION));
+			Player player = new Player(credentials, SPAWN_POSITION);
+			player.getBank().add(995, 25); // 25 coins
+			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
 		}
 
 		try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
