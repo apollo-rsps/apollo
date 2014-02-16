@@ -69,13 +69,21 @@ public enum PrivacyState {
 		this.value = value;
 	}
 
+	/*
+	 * Horrible workarounds are required here because public chat supports ON, HIDE, FRIENDS, and OFF, but trade and
+	 * private only support ON, FRIENDS, and OFF.
+	 */
+
 	/**
 	 * Converts this privacy state to an integer.
 	 * 
 	 * @return The numerical value used by the client.
 	 */
 	public int toInteger(boolean chat) {
-		return chat ? value : (value == 0 ? 0 : value - 1);
+		if (chat) {
+			return value;
+		}
+		return value == 0 ? 0 : value - 1;
 	}
 
 }
