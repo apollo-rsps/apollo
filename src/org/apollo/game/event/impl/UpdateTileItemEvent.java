@@ -28,8 +28,7 @@ public final class UpdateTileItemEvent extends Event {
 	/**
 	 * Creates a new event that updates the previous amount of the item.
 	 * 
-	 * @param id The id of the item.
-	 * @param amount The amount of the item.
+	 * @param id The item to be placed.
 	 * @param previousAmount The previous amount of the item.
 	 */
 	public UpdateTileItemEvent(Item item, int previousAmount) {
@@ -39,12 +38,9 @@ public final class UpdateTileItemEvent extends Event {
 	/**
 	 * Creates a new set tile item event.
 	 * 
-	 * @param id The id of the item.
-	 * @param amount The new amount of the item.
-	 * @param stackable Whether the item is stackable or not.
-	 * @param positionOffset The offset from the client's base position.
-	 * @param updating If the item is being updated or not.
+	 * @param id The item to be placed.
 	 * @param previousAmount The previous amount of the item.
+	 * @param positionOffset The offset from the client's base position.
 	 */
 	public UpdateTileItemEvent(Item item, int previousAmount, int positionOffset) {
 		this.item = item;
