@@ -961,15 +961,13 @@ public final class Player extends Mob {
 	 * Toggles whether the player is running or not.
 	 */
 	public void toggleRunning() {
-		running = !running;
-		walkingQueue.setRunningQueue(running);
+		walkingQueue.setRunningQueue(running = !running);
 		send(new ConfigEvent(173, running ? 1 : 0));
 	}
 
 	@Override
 	public String toString() {
-		return Player.class.getName() + " [username=" + credentials.getUsername() + ", privilege=" + privilegeLevel
-				+ "]";
+		return Player.class.getName() + " [username=" + getUsername() + ", privilege=" + privilegeLevel + "]";
 	}
 
 }
