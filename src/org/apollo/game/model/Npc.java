@@ -12,6 +12,11 @@ import org.apollo.game.sync.block.SynchronizationBlock;
 public final class Npc extends Mob {
 
 	/**
+	 * The positions representing the bounds (i.e. walking limits) of this npc.
+	 */
+	private Position[] boundary;
+
+	/**
 	 * Creates a new npc with the specified id and {@link Position}.
 	 * 
 	 * @param id The id.
@@ -33,12 +38,52 @@ public final class Npc extends Mob {
 	}
 
 	/**
+	 * Gets the boundary of this npc.
+	 * 
+	 * @return The boundary.
+	 */
+	public Position[] getBoundary() {
+		return boundary;
+	}
+
+	@Override
+	public EntityType getEntityType() {
+		return EntityType.NPC;
+	}
+
+	/**
 	 * Gets the id of this npc. Shorthand for {@link #getDefinition().getId()}.
 	 * 
 	 * @return The id.
 	 */
 	public int getId() {
 		return definition.getId();
+	}
+
+	/**
+	 * Indicates whether or not this npc is bound to a specific set of coordinates.
+	 * 
+	 * @return {@code true} if the npc is bound, otherwise {@code false}.
+	 */
+	public boolean isBound() {
+		return boundary == null;
+	}
+
+	/**
+	 * Sets the boundary of this npc.
+	 * 
+	 * @param boundary The boundary.
+	 */
+	public void setBoundary(Position[] boundary) {
+		if (boundary.length != 4) {
+			throw new IllegalArgumentException("Boundary count must be 4.");
+		}
+		this.boundary = boundary;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + Npc.class.getName() + ": id=" + definition.getId() + ", name=" + definition.getName() + "]";
 	}
 
 	/**
@@ -52,16 +97,6 @@ public final class Npc extends Mob {
 		}
 		definition = NpcDefinition.lookup(id);
 		blockSet.add(SynchronizationBlock.createTransformBlock(id));
-	}
-
-	@Override
-	public EntityType getEntityType() {
-		return EntityType.NPC;
-	}
-
-	@Override
-	public String toString() {
-		return "[" + Npc.class.getName() + ": id=" + definition.getId() + ", name=" + definition.getName() + "]";
 	}
 
 }
