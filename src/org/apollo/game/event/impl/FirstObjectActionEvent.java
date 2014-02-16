@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.model.Position;
 
 /**
- * An event sent when the first option at an object is used.
+ * The first {@link ObjectActionEvent}.
  * 
  * @author Graham
  */

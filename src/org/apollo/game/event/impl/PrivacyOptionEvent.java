@@ -4,7 +4,8 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.settings.PrivacyState;
 
 /**
- * An {@link Event} sent by the client or server to update the chat and trade privacy state.
+ * An {@link Event} sent both by and to the client to update the public chat, private (friend) chat, and trade chat
+ * privacy state.
  * 
  * @author Kyle Stevenson
  * @author Major

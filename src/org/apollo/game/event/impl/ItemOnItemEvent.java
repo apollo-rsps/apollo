@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 /**
- * An event which is sent by the client when a player uses one inventory item on another.
+ * An {@link Event} sent by the client when a player uses one inventory item on another.
  * 
  * @author Chris Fletcher
  */

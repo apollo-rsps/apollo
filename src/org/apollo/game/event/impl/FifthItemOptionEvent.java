@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 /**
- * The fifth {@link ItemOptionEvent}, used mainly for dropping items.
+ * The fifth {@link ItemOptionEvent}.
  * 
  * @author Chris Fletcher
  */

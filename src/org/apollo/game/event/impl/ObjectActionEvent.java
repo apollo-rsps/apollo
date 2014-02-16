@@ -4,7 +4,9 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Position;
 
 /**
- * An {@link Event} which represents some sort of action at an object.
+ * An {@link Event} sent by the client that represents some sort of action on an object. Note that the actual event sent
+ * by the client is one of the five object action events, but this is the event that should be intercepted (and the
+ * option verified).
  * 
  * @author Graham
  */

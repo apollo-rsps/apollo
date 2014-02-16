@@ -7,7 +7,7 @@ import org.apollo.game.event.Event;
  * 
  * @author Major
  */
-public class UpdateRunEnergyEvent extends Event {
+public final class UpdateRunEnergyEvent extends Event {
 
 	/**
 	 * The run energy.

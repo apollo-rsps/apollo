@@ -5,7 +5,7 @@ import java.util.List;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} which is sent to the client that updates the ignored user list.
+ * An {@link Event} sent to the client that updates the ignored user list.
  * 
  * @author Major
  */

@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} sent by the client when a player is removed from a friends list.
+ * An {@link Event} sent by the client when a player removes someone from their friends list.
  * 
  * @author Major
  */

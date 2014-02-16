@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event sent to the client to adjust a certain config or attribute setting.
+ * An {@link Event} sent to the client to adjust a certain config or attribute setting.
  * 
  * @author Chris Fletcher
  */

@@ -4,8 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Position;
 
 /**
- * An {@link Event} which tells the client to focus on a specific {@link Position} (on which an action should be
- * performed).
+ * An {@link Event} sent to the client to focus on a specific {@link Position} (on which an action should be performed).
  * 
  * @author Chris Fletcher
  */

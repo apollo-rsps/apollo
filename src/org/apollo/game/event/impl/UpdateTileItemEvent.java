@@ -4,7 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Item;
 
 /**
- * An {@link Event} sent to tell the client to update the amount of an item display on a tile.
+ * An {@link Event} sent to the client to update the amount of an item display on a tile.
  * 
  * @author Major
  */

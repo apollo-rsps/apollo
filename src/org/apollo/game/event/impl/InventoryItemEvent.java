@@ -3,8 +3,8 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} which represents some sort of action on an item in an inventory. Note that this is the parent of
- * both the item option and action event classes, and so cannot be used to determine when one of those events is fired.
+ * An {@link Event} that represents some sort of action on an item in an inventory. Note that this is the parent of both
+ * item option and item action event, and so cannot be used to determine when one of those events is fired.
  * 
  * @author Chris Fletcher
  */

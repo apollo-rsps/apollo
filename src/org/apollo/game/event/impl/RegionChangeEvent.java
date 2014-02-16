@@ -4,7 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Position;
 
 /**
- * An event which indicates that the client should load the specified region.
+ * An {@link Event sent to the client instructing it to load the specified region.
  * 
  * @author Graham
  */

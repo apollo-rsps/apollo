@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 /**
- * The second {@link ItemOptionEvent}, used for equipping an item (amongst others?).
+ * The second {@link ItemOptionEvent}.
  * 
  * @author Chris Fletcher
  */

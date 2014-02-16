@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event which is sent to the client with a server-side message.
+ * An {@link Event} sent to the client to display a server message.
  * 
  * @author Graham
  */

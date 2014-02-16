@@ -4,7 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.settings.ServerStatus;
 
 /**
- * An {@link Event} sent by the server to update the friend server status.
+ * An {@link Event} sent to the client to update the friend server status.
  * 
  * @author Major
  */
