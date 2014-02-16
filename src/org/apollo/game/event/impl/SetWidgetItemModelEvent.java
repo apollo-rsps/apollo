@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event sent to the client to change an interface's item model.
+ * An {@link Event} sent to the client to set a widget's displayed item model.
  * 
  * @author Chris Fletcher
  */

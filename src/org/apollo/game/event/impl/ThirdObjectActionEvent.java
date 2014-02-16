@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.model.Position;
 
 /**
- * An event sent when the third option at an object is used.
+ * The third {@link ObjectActionEvent}.
  * 
  * @author Graham
  */

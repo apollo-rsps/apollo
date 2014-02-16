@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event sent when a player clicks a button.
+ * An {@link Event} sent by the client when a player clicks a button.
  * 
  * @author Graham
  */

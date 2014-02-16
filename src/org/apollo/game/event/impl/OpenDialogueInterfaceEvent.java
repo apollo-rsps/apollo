@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} that opens a dialogue interface (an interface that appears in the chat box).
+ * An {@link Event} sent to the client that opens a dialogue interface (an interface that appears in the chat box).
  * 
  * @author Chris Fletcher
  */

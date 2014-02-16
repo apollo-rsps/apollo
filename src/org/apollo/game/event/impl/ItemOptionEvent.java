@@ -1,8 +1,9 @@
 package org.apollo.game.event.impl;
 
 /**
- * An {@link InventoryItemEvent} which is sent by the client when an item's option is clicked (e.g. equip, eat, drink,
- * etc).
+ * An {@link InventoryItemEvent} sent by the client when an item's option is clicked (e.g. equip, eat, drink, etc). Note
+ * that the actual event sent by the client is one of the five item option events, but this is the event that should be
+ * intercepted (and the option verified).
  * 
  * @author Chris Fletcher
  */

@@ -4,7 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Position;
 
 /**
- * An event which the client sends to request that the player walks somewhere.
+ * An {@link Event} sent by the client to request that the player walks somewhere.
  * 
  * @author Graham
  */

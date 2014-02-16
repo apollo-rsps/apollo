@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event which is sent to the client to make a mob model on an interface play a certain animation.
+ * An {@link Event} sent to the client to set a widget's displayed mob's animation.
  * 
  * @author Chris Fletcher
  */

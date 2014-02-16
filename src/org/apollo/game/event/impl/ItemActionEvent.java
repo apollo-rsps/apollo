@@ -3,7 +3,9 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} which represents some sort of action on an item.
+ * An {@link Event} sent by the client that represents some sort of action on an item. Note that the actual event sent
+ * by the client is one of the five item action events, but this is the event that should be intercepted (and the option
+ * verified).
  * 
  * @author Chris Fletcher
  */

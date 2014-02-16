@@ -8,11 +8,11 @@ import org.apollo.game.model.Position;
 import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**
- * An event which is sent to synchronize npcs with players.
+ * An {@link Event} sent to the client to synchronize npcs with players.
  * 
  * @author Major
  */
-public class NpcSynchronizationEvent extends Event {
+public final class NpcSynchronizationEvent extends Event {
 
 	/**
 	 * The amount of local npcs.

@@ -4,7 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.settings.PrivilegeLevel;
 
 /**
- * An {@link Event} that forwards a private message to a client.
+ * An {@link Event} sent to the client that forwards a private message.
  * 
  * @author Major
  */

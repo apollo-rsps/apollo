@@ -4,7 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Position;
 
 /**
- * An {@link Event} sent by the client indicating a request to pick up an item on a tile.
+ * An {@link Event} sent by the client to pick up an item on a tile.
  * 
  * @author Major
  */

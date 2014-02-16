@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 /**
- * An event sent by the client when a player casts a spell on an inventory item.
+ * An {@link Event} sent by the client when a player casts a spell on an inventory item.
  * 
  * @author Chris Fletcher
  */

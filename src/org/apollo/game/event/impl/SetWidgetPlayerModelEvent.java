@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event sent to the client to set an interface's player model.
+ * An {@link Event} sent to the client to set a widget's displayed player model.
  * 
  * @author Chris Fletcher
  */

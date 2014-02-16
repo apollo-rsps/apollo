@@ -4,7 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Appearance;
 
 /**
- * An event sent by the client when the player modifies their design.
+ * An {@link Event} sent by the client when the player modifies their design.
  * 
  * @author Graham
  */

@@ -4,7 +4,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.model.Item;
 
 /**
- * An event which updates all the items in an interface.
+ * An {@link Event} sent to the client that updates all the items in an interface.
  * 
  * @author Graham
  */

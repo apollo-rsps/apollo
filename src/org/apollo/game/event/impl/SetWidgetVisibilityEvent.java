@@ -3,8 +3,8 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event which changes the state of a hidden interface component (i.e./e.g. the special attack bar on the weapon
- * tab).
+ * An {@link Event} sent to the client that changes the state of a hidden widget component (e.g. the special attack bar
+ * on the weapon tab).
  * 
  * @author Chris Fletcher
  */

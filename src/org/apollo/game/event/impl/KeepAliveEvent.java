@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event which is periodically sent by the client to keep a connection alive.
+ * An {@link Event} periodically sent by the client to keep a connection alive.
  * 
  * @author Graham
  */

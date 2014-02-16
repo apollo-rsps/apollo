@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event sent to the client to change the interface of a tab.
+ * An {@link Event} sent to the client to change the interface of a tab.
  * 
  * @author Graham
  */

@@ -3,14 +3,14 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * Represents a change in the client's focus (if it is the active window).
+ * An {@link Event} sent by the client to indicate a change in the client's focus (i.e. if it is the active window).
  * 
  * @author Major
  */
-public class FocusUpdateEvent extends Event {
+public final class FocusUpdateEvent extends Event {
 
 	/**
-	 * Dictates whether the client is focused or not.
+	 * Indicates whether the client is focused or not.
 	 */
 	private final boolean focused;
 

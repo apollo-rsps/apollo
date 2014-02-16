@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event which specifies the local id and membership status of the current player.
+ * An {@link Event} sent to the client that specifies the local id and membership status of the current player.
  * 
  * @author Graham
  */

@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} sent to open an interface and temporary sidebar overlay.
+ * An {@link Event} sent to the client to open an interface and temporary sidebar overlay.
  * 
  * @author Graham
  */

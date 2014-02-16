@@ -7,7 +7,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**
- * An event which is sent to synchronize the players.
+ * An {@link Event} sent to the client to synchronize players.
  * 
  * @author Graham
  */

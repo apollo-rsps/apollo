@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} sent to the client to instruct it to remove an item from a tile.
+ * An {@link Event} sent to the client to remove an item from a tile.
  * 
  * @author Major
  */

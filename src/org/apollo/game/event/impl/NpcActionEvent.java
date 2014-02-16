@@ -3,16 +3,18 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} representing the clicking of an npc menu action.
+ * An {@link Event} sent by the client representing the clicking of an npc menu action. Note that the actual event sent
+ * by the client is one of the three npc action events, but this is the event that should be intercepted (and the option
+ * verified).
  * 
  * @author Major
  */
 public abstract class NpcActionEvent extends Event {
 
 	/**
-	 * The action number .
+	 * The option number .
 	 */
-	private final int action;
+	private final int option;
 
 	/**
 	 * The npc index.
@@ -22,21 +24,21 @@ public abstract class NpcActionEvent extends Event {
 	/**
 	 * Creates a new npc action event.
 	 * 
-	 * @param action The action number.
+	 * @param option The option number.
 	 * @param index The index of the npc.
 	 */
-	public NpcActionEvent(int action, int index) {
-		this.action = action;
+	public NpcActionEvent(int option, int index) {
+		this.option = option;
 		this.index = index;
 	}
 
 	/**
-	 * Gets the menu action number clicked.
+	 * Gets the menu action number (i.e. the action event 'option') clicked.
 	 * 
-	 * @return The action number.
+	 * @return The option number.
 	 */
-	public int getAction() {
-		return action;
+	public int getOption() {
+		return option;
 	}
 
 	/**

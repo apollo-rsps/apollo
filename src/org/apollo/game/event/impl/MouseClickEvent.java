@@ -3,11 +3,11 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} sent when the player clicks with their mouse (or mousekeys etc).
+ * An {@link Event} sent by the client when the player clicks with their mouse (or mousekeys etc).
  * 
  * @author Major
  */
-public class MouseClickEvent extends Event {
+public final class MouseClickEvent extends Event {
 
 	/**
 	 * The number of clicks on this point (i.e. the point ({@link #x}, {@link #y})).

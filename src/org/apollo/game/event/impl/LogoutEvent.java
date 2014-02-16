@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An event sent to the client which logs it out cleanly.
+ * An {@link Event} sent to the client that cleanly logs it out.
  * 
  * @author Graham
  */

@@ -3,7 +3,7 @@ package org.apollo.game.event.impl;
 import org.apollo.game.event.Event;
 
 /**
- * An {@link Event} that is sent by the client when the player clicks "Click here to continue" button on a dialogue
+ * An {@link Event} sent by the client when the player clicks the "Click here to continue" button on a dialogue
  * interface.
  * 
  * @author Chris Fletcher
