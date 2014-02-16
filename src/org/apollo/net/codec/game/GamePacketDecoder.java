@@ -1,7 +1,6 @@
 package org.apollo.net.codec.game;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
@@ -88,9 +87,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	private Object decodeLength(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
 		if (buffer.isReadable()) {
 			length = buffer.readUnsignedByte();
-			if (length == 0) {
-				decodeZeroLengthPacket(ctx, buffer, out);
-			} else {
+			if (length != 0) {
 				setState(GameDecoderState.GAME_PAYLOAD);
 			}
 		}
@@ -120,9 +117,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 			switch (type) {
 			case FIXED:
 				length = metaData.getLength();
-				if (length == 0) {
-					decodeZeroLengthPacket(ctx, buffer, out);
-				} else {
+				if (length != 0) {
 					setState(GameDecoderState.GAME_PAYLOAD);
 				}
 				break;
@@ -150,22 +145,6 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 			setState(GameDecoderState.GAME_OPCODE);
 			out.add(new GamePacket(opcode, type, payload));
 		}
-	}
-
-	/**
-	 * Decodes a zero length packet. This hackery is required as Netty will throw an exception if we return a frame but
-	 * have read nothing!
-	 * 
-	 * @param ctx The channel handler context.
-	 * @param channel The channel.
-	 * @param buffer The buffer.
-	 * @return The frame, or {@code null}.
-	 * @throws Exception If an error occurs.
-	 */
-	private void decodeZeroLengthPacket(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
-		ByteBuf payload = Unpooled.EMPTY_BUFFER;
-		setState(GameDecoderState.GAME_OPCODE);
-		out.add(new GamePacket(opcode, type, payload));
 	}
 
 }
