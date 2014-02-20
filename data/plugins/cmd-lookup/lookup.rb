@@ -9,7 +9,7 @@ on :command, :lookup, RIGHTS_ADMIN do |player, command|
   args = command.arguments.to_a
   unless args.length > 1
     player.send_message('Invalid syntax - ::lookup [npc/object/item] [name]')
-    return
+    next
   end
   
   type = args.shift.downcase
@@ -17,10 +17,10 @@ on :command, :lookup, RIGHTS_ADMIN do |player, command|
 
   if ['npc', 'object', 'item'].index(type) == nil
     player.send_message('Invalid syntax - ::lookup [npc/object/item] [name]') 
-    return
+    next
   end
   
-  ids = locate_entity(type, name).join(", ")
+  ids = locate_entity(type, name).join(', ')
   
   message = ids.empty? ? "Could not find an #{type} called #{name}." : "Possible ids are: #{ids}." 
   player.send_message(message)
@@ -31,7 +31,7 @@ on :command, :iteminfo, RIGHTS_ADMIN do |player, command|
   args = command.arguments
   unless args.length == 1
     player.send_message('Invalid syntax - ::iteminfo [item id]')
-    return
+    next
   end
 
   id = args[0].to_i
@@ -46,8 +46,8 @@ end
 on :command, :npcinfo, RIGHTS_ADMIN do |player, command|
   args = command.arguments
   unless args.length == 1
-    player.send_message("Invalid syntax - ::npcinfo [npc id]")
-    return
+    player.send_message('Invalid syntax - ::npcinfo [npc id]')
+    next
   end
 
   id = args[0].to_i
