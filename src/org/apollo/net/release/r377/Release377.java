@@ -33,6 +33,7 @@ import org.apollo.game.event.impl.UpdateItemsEvent;
 import org.apollo.game.event.impl.UpdateRunEnergyEvent;
 import org.apollo.game.event.impl.UpdateSkillEvent;
 import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
+import org.apollo.game.event.impl.UpdateWeightEvent;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
 
@@ -169,6 +170,7 @@ public final class Release377 extends Release {
 		register(UpdateRunEnergyEvent.class, new UpdateRunEnergyEventEncoder());
 		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
 		register(OpenDialogueInterfaceEvent.class, new OpenDialogueInterfaceEventEncoder());
+		register(UpdateWeightEvent.class, new UpdateWeightEventEncoder());
 
 		register(AddTileItemEvent.class, new AddTileItemEventEncoder());
 		register(UpdateTileItemEvent.class, new UpdateTileItemEventEncoder());
