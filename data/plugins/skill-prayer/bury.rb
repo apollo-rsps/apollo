@@ -10,10 +10,9 @@ BONES = {}
 
 # Represents a bone with a name, id, and experience.
 class Bone
- attr_reader :name, :id, :exp
+ attr_reader :id, :exp
 
-  def initialize(name, id, exp)
-    @name = name
+  def initialize(id, exp)
     @id = id
     @exp = exp
   end
@@ -58,7 +57,7 @@ end
 # Appends a bone to the array
 def append_bone(hash)
   raise 'Hash must contain an id and an experience value.' unless hash.has_key?(:id) && hash.has_key?(:experience)
-  name = hash[:name], id = hash[:id], experience = hash[:experience]
+  id = hash[:id], experience = hash[:experience]
 
   BONES[id] = Bone.new(name, id, experience)
 end
