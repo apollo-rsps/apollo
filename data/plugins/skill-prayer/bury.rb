@@ -4,7 +4,6 @@ java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Skill'
 
-PRAYER_SKILL_ID = Skill::PRAYER
 BURY_BONE_ANIMATION = 827
 BONES = {}
 
@@ -36,7 +35,7 @@ class BuryBoneAction < Action
     if mob.inventory.get(@slot).id == @bone.id
       mob.send_message('You bury the bones.')
       mob.inventory.reset(@slot)
-      mob.skill_set.add_experience(PRAYER_SKILL_ID, @bone.exp)
+      mob.skill_set.add_experience(Skill::PRAYER, @bone.exp)
     end
     stop
   end
