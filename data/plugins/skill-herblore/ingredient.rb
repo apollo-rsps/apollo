@@ -88,9 +88,7 @@ class GrindingDialogueListener < DialogueAdapter
   # Called when a button has been clicked whilst the dialogue was opened.
   def buttonClicked(button)
     amount = get_amount(button)
-    if amount == 0
-      return false
-    end
+    return false if amount == 0
 
     interfaces = @player.interface_set
     interfaces.close
@@ -226,7 +224,7 @@ class GrindingAction < Action
 end
 
 # Appends a grinded ingredient to the ItemOnItemEvent handler interception.
-def append_grinded(id, raw)
+def append_ground(id, raw)
   grinded = GroundIngredient.new(id, raw)
   append_herblore_item(grinded, PESTLE_MORTAR, raw)
   return grinded
@@ -251,8 +249,8 @@ YEW_ROOTS          = Ingredient.new(6049)
 MAGIC_ROOTS        = Ingredient.new(6051)
 
 # Grinded ingredients
-UNICORN_HORN_DUST = append_grinded(235,  237)
-DRAGON_SCALE_DUST = append_grinded(241,  243)
-CHOCOLATE_DUST    = append_grinded(1975, 1973)
-CRUSHED_NEST      = append_grinded(6693, 5075)
-GROUND_MUD_RUNE   = append_grinded(9594, 4698)
+UNICORN_HORN_DUST = append_ground(235,  237)
+DRAGON_SCALE_DUST = append_ground(241,  243)
+CHOCOLATE_DUST    = append_ground(1975, 1973)
+CRUSHED_NEST      = append_ground(6693, 5075)
+GROUND_MUD_RUNE   = append_ground(9594, 4698)

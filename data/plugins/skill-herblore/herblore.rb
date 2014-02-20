@@ -10,9 +10,10 @@ HERBLORE_ID = Skill::HERBLORE
 HERBLORE_DIALOGUE = 4429
 
 HERBLORE_ITEM = {}
-HERBLORE_ITEM_ITEM = {}
+HERBLORE_ITEM_ON_ITEM = {}
 
 DRINK_ITEM = {}
+
 
 # A module which describes an invocable method of the Herblore skill.
 module HerbloreMethod
@@ -29,12 +30,12 @@ end
 on :event, :item_on_item do |ctx, player, event|
   primary = event.id
   secondary = event.target_id
-  hash = HERBLORE_ITEM_ITEM[primary]
+  hash = HERBLORE_ITEM_ON_ITEM[primary]
 
   if hash == nil
     secondary = event.id
     primary = event.target_id
-    hash = HERBLORE_ITEM_ITEM[primary]
+    hash = HERBLORE_ITEM_ON_ITEM[primary]
   end
 
   if hash != nil
@@ -70,11 +71,11 @@ def append_herblore_item(method, key, secondary = -1)
   if secondary == -1
     HERBLORE_ITEM[key] = method
   else
-    hash = HERBLORE_ITEM_ITEM[key]
+    hash = HERBLORE_ITEM_ON_ITEM[key]
     hash = {} if hash == nil
 
     hash[secondary] = method
-    HERBLORE_ITEM_ITEM[key] = hash
+    HERBLORE_ITEM_ON_ITEM[key] = hash
   end
 end
 
