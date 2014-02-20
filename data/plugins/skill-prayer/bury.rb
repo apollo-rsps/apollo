@@ -20,6 +20,7 @@ class Bone
 
 end
 
+
 # An action where a bone in a player's inventory is buried.
 class BuryBoneAction < Action
   
@@ -27,6 +28,7 @@ class BuryBoneAction < Action
     super(2, false, mob)
     @slot = slot
     @bone = bone
+
     mob.play_animation(Animation.new(BURY_BONE_ANIMATION))
     mob.send_message('You dig a hole in the ground...')
   end
@@ -42,7 +44,7 @@ class BuryBoneAction < Action
 
 end
 
-# Intercepts the item option event, 
+# Intercepts the first item option event, 
 on :event, :item_option do |ctx, player, event|
   if event.option == 1
     bone = BONES[event.id]
@@ -57,6 +59,7 @@ end
 def append_bone(hash)
   raise 'Hash must contain an id and an experience value.' unless hash.has_key?(:id) && hash.has_key?(:experience)
   name = hash[:name], id = hash[:id], experience = hash[:experience]
+
   BONES[id] = Bone.new(name, id, experience)
 end
 
