@@ -59,7 +59,7 @@ def append_bone(hash)
   raise 'Hash must contain an id and an experience value.' unless hash.has_key?(:id) && hash.has_key?(:experience)
   id = hash[:id], experience = hash[:experience]
 
-  BONES[id] = Bone.new(name, id, experience)
+  BONES[id] = Bone.new(id, experience)
 end
 
 append_bone :name => :regular_bones,     :id => 526,  :experience => 5
