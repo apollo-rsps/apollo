@@ -7,7 +7,7 @@
 # Optional arguments are as follows:
 #   :face - the direction the npc should face when it spawns. Supported options are :north, :north_east, :east, :south_east, :south, :south_west, :west, and :north_west
 #   :bounds - the rectangular bound that the npc can wander about in. Order is [top-left x-coordinate, top-left y-coordinate, bottom-right x-coordinate, bottom-right y-coordinate]
-#   :delta_bounds - the rectangular bound that the npc can wander about in, as a difference from the spawn point. Order is identical to :bounds. Should not be used with :bounds.
+#   :delta_bounds - the rectangular bound that the npc can wander about in, as a difference from the spawn point. Order is [x-delta, y-delta]. Should not be used with :bounds.
 #   :spawn_animation - the animation that will be played when the npc spawns.
 #   :spawn_graphic - the graphic that will be played when the npc spawns.
 
