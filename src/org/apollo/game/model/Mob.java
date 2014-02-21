@@ -58,6 +58,11 @@ public abstract class Mob extends Entity {
 	protected int index = -1;
 
 	/**
+	 * The mob this mob is interacting with.
+	 */
+	protected Mob interactingMob;
+
+	/**
 	 * This mob's inventory.
 	 */
 	protected final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
@@ -419,8 +424,18 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param index The index of the interacting mob.
 	 */
-	public void updateInteractingMob(int index) {
-		blockSet.add(SynchronizationBlock.createInteractingMobBlock(index));
+	public void updateInteractingMob(final Mob mob) {
+		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.index));
+		this.interactingMob = mob;
+	}
+
+	/**
+	 * Gets the mob this mob is interacting with.
+	 * 
+	 * @return The mob.
+	 */
+	public Mob getInteractingMob() {
+		return interactingMob;
 	}
 
 }
