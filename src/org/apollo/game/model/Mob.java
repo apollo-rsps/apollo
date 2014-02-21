@@ -112,7 +112,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The block set.
 	 */
-	public SynchronizationBlockSet getBlockSet() {
+	public final SynchronizationBlockSet getBlockSet() {
 		return blockSet;
 	}
 
@@ -267,7 +267,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param animation The animation.
 	 */
-	public void playAnimation(Animation animation) {
+	public final void playAnimation(Animation animation) {
 		blockSet.add(SynchronizationBlock.createAnimationBlock(animation));
 	}
 
@@ -276,7 +276,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param graphic The graphic.
 	 */
-	public void playGraphic(Graphic graphic) {
+	public final void playGraphic(Graphic graphic) {
 		blockSet.add(SynchronizationBlock.createGraphicBlock(graphic));
 	}
 
@@ -359,8 +359,7 @@ public abstract class Mob extends Entity {
 			}
 			stopAction();
 		}
-		this.action = action;
-		return World.getWorld().schedule(action);
+		return World.getWorld().schedule(this.action = action);
 	}
 
 	/**
@@ -414,7 +413,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param position The position to face.
 	 */
-	public void turnTo(Position position) {
+	public final void turnTo(Position position) {
 		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(position));
 		this.facingPosition = position;
 	}
@@ -422,9 +421,9 @@ public abstract class Mob extends Entity {
 	/**
 	 * Updates this mob's interacting mob.
 	 * 
-	 * @param index The index of the interacting mob.
+	 * @param mob The mob.
 	 */
-	public void updateInteractingMob(final Mob mob) {
+	public final void setInteractingMob(Mob mob) {
 		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.index));
 		this.interactingMob = mob;
 	}
