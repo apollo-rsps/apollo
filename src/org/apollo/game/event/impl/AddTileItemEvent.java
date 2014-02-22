@@ -21,7 +21,7 @@ public final class AddTileItemEvent extends Event {
 	private final int positionOffset;
 
 	/**
-	 * Creates am add tile item event.
+	 * Creates an add tile item event.
 	 * 
 	 * @param item The item to add to the tile.
 	 */
@@ -30,7 +30,7 @@ public final class AddTileItemEvent extends Event {
 	}
 
 	/**
-	 * Creates am add tile item event.
+	 * Creates an add tile item event.
 	 * 
 	 * @param item The item to add to the tile.
 	 * @param positionOffset The offset from the 'base' position.
