@@ -29,6 +29,24 @@ public final class SlottedItem {
 	}
 
 	/**
+	 * Gets the id of the {@link Item}.
+	 * 
+	 * @return The id.
+	 */
+	public int getId() {
+		return item.getId();
+	}
+
+	/**
+	 * Gets the amount of the {@link Item}.
+	 * 
+	 * @return The amount.
+	 */
+	public int getamount() {
+		return item.getAmount();
+	}
+
+	/**
 	 * Gets the item.
 	 * 
 	 * @return The item.
