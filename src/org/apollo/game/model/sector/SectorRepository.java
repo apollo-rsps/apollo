@@ -34,7 +34,6 @@ public final class SectorRepository {
 	 * Adds a {@link Sector} to the repository.
 	 * 
 	 * @param sector The sector.
-	 * @return {@code false} if another sector was replaced, otherwise {@code true}.
 	 * @throws IllegalArgumentException If the provided sector is null.
 	 * @throws UnsupportedOperationException If the coordinates of the provided sector are already mapped (and hence the
 	 *             existing sector would be replaced), and removal of sectors is not permitted.
@@ -89,8 +88,6 @@ public final class SectorRepository {
 	 * Removes a {@link Sector} from the repository, if permitted.
 	 * 
 	 * @param sector The sector to remove.
-	 * @return {@code true} unless the coordinates of the provided sector were the key to another sector, or the sector
-	 *         did not exist in the first place.
 	 * @throws UnsupportedOperationException If this method is called on a repository that does not permit removal.
 	 */
 	public void remove(Sector sector) {
