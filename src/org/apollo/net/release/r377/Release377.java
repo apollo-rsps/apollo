@@ -1,5 +1,6 @@
 package org.apollo.net.release.r377;
 
+import org.apollo.game.event.impl.AddGlobalTileItemEvent;
 import org.apollo.game.event.impl.AddTileItemEvent;
 import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.ConfigEvent;
@@ -171,6 +172,7 @@ public final class Release377 extends Release {
 		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
 		register(OpenDialogueInterfaceEvent.class, new OpenDialogueInterfaceEventEncoder());
 		register(UpdateWeightEvent.class, new UpdateWeightEventEncoder());
+		register(AddGlobalTileItemEvent.class, new AddGlobalTileItemEventEncoder());
 
 		register(AddTileItemEvent.class, new AddTileItemEventEncoder());
 		register(UpdateTileItemEvent.class, new UpdateTileItemEventEncoder());
