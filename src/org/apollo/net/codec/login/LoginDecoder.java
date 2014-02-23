@@ -179,12 +179,10 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			String username = BufferUtil.readString(securePayload);
 			String password = BufferUtil.readString(securePayload);
 
-			if (!(username.length() < 13 || password.length() > 5 && password.length() < 21)) {
-				throw new Exception("Invalid username or password length.");
-			}
-			
-			if (username.isEmpty() || password.isEmpty()) {
-				throw new Exception("Invalid username or password.");
+			if (password.length() < 6 || password.length() > 20) {
+				throw new Exception("Invalid password.");
+			} else if (username.isEmpty() || username.length() > 12) {
+				throw new Exception("Invalid username.");
 			}
 
 			int[] seed = new int[4];
