@@ -50,7 +50,8 @@ class FinishedPotion
     action = FinishedMixingAction.new(player, primary, secondary, self)
     listener = FinishedMixingDialogueListener.new(player, action)
 
-    open_dialogue(player, @item.id, listener)  end
+    open_dialogue(player, @item.id, listener) 
+  end
 end
 
 # A DialogueAdapter used for mixing potions. It is also used as an EnterAmountListener for the amount of mixing actions.
