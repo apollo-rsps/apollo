@@ -13,6 +13,11 @@ import org.apollo.game.model.skill.SkillListener;
 public final class SkillSet {
 
 	/**
+	 * The minimum amounts of experience required for the levels.
+	 */
+	private static final int[] EXPERIENCE_FOR_LEVEL = new int[100];
+
+	/**
 	 * The maximum allowed experience.
 	 */
 	public static final double MAXIMUM_EXP = 200_000_000;
@@ -22,23 +27,26 @@ public final class SkillSet {
 	 */
 	private static final int SKILL_COUNT = 21;
 
+	static {
+		int points = 0, output = 0;
+		for (int lvl = 1; lvl <= 99; lvl++) {
+			EXPERIENCE_FOR_LEVEL[lvl] = output;
+			points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0));
+			output = (int) Math.floor(points / 4);
+		}
+	}
+
 	/**
 	 * Gets the minimum experience required for the specified level.
 	 * 
 	 * @param level The level.
 	 * @return The minimum experience.
 	 */
-	public static double getExperienceForLevel(int level) {
-		int points = 0;
-		int output = 0;
-		for (int lvl = 1; lvl <= level; lvl++) {
-			points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0));
-			if (lvl >= level) {
-				return output;
-			}
-			output = (int) Math.floor(points / 4);
+	public static int getExperienceForLevel(int level) {
+		if (level < 1 || level > 99) {
+			throw new IllegalArgumentException("Level must be between 1 and 99, inclusive.");
 		}
-		return 0;
+		return EXPERIENCE_FOR_LEVEL[level];
 	}
 
 	/**
@@ -48,13 +56,12 @@ public final class SkillSet {
 	 * @return The minimum level.
 	 */
 	public static int getLevelForExperience(double experience) {
-		int points = 0, output = 0;
-
-		for (int lvl = 1; lvl <= 99; lvl++) {
-			points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0));
-			output = (int) Math.floor(points / 4);
-			if (output >= experience + 1) {
-				return lvl;
+		if (experience < 0 || experience > MAXIMUM_EXP) {
+			throw new IllegalArgumentException("Experience must be between 0 and 200,000,000, inclusive.");
+		}
+		for (int level = 1; level <= 98; level++) {
+			if (experience < EXPERIENCE_FOR_LEVEL[level + 1]) {
+				return level;
 			}
 		}
 		return 99;
