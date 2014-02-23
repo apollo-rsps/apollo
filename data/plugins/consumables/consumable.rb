@@ -1,0 +1,41 @@
+require 'java'
+
+# A map of item ids to consumables.
+CONSUMABLES = {}
+
+CONSUME_ANIMATION_ID = 829
+
+# An item that can be consumed to produce a skill effect.
+class Consumable    
+  attr_reader :name, :id
+
+  def initialize(name, id, sound_id)
+    @name = name.to_s.gsub(/_/, ' ')
+    @id = id
+    @sound_id = sound_id
+  end
+
+  def consume(player)
+  # Override to provide specific functionality.
+  end
+
+end
+
+# Appends a consumable to the map, with its id as the key.
+def append_consumable(consumable)
+  CONSUMABLES[consumable.id] = consumable
+end
+
+# Intercepts the first item option event and consumes the consumable, if necessary.
+on :event, :item_option do |ctx, player, event|
+  if (event.option == 1)
+    consumable = CONSUMABLES[event.id]
+    unless consumable == nil
+      player.inventory.reset(event.slot)
+      player.play_animation(Animation.new(CONSUME_ANIMATION_ID))
+      consumable.consume(player)
+
+      ctx.break_handler_chain
+    end
+  end
+end
