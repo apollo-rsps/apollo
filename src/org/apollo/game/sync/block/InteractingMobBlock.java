@@ -17,7 +17,7 @@ public final class InteractingMobBlock extends SynchronizationBlock {
 	 * 
 	 * @param mobIndex The index of the current interacting mob.
 	 */
-	public InteractingMobBlock(int mobIndex) {
+	InteractingMobBlock(int mobIndex) {
 		this.mobIndex = mobIndex;
 	}
 

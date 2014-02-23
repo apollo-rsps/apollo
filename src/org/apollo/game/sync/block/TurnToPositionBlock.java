@@ -19,7 +19,7 @@ public final class TurnToPositionBlock extends SynchronizationBlock {
 	 * 
 	 * @param position The position to turn to.
 	 */
-	public TurnToPositionBlock(Position position) {
+	TurnToPositionBlock(Position position) {
 		this.position = position;
 	}
 

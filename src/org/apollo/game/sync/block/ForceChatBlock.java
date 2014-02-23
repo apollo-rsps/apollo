@@ -18,7 +18,7 @@ public final class ForceChatBlock extends SynchronizationBlock {
 	 * 
 	 * @param message The message.
 	 */
-	public ForceChatBlock(String message) {
+	ForceChatBlock(String message) {
 		this.message = message;
 	}
 
