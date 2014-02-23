@@ -108,9 +108,9 @@ public final class Skill {
 	public static final int FARMING = 19;
 
 	/**
-	 * The runecrafting id.
+	 * The runecraft id.
 	 */
-	public static final int RUNECRAFTING = 20;
+	public static final int RUNECRAFT = 20;
 
 	/**
 	 * The skill names.
