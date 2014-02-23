@@ -6,7 +6,6 @@ require 'java'
 java_import 'org.apollo.game.event.impl.SetWidgetItemModelEvent'
 java_import 'org.apollo.game.model.Skill'
 
-HERBLORE_ID = Skill::HERBLORE
 HERBLORE_DIALOGUE = 4429
 
 HERBLORE_ITEM = {}
@@ -88,7 +87,7 @@ end
 # Utility method for checking if a player's Herblore (maximum) level is at a required height. Also informs the player if this is not the case with use of the action 
 # variable, like so:   "You need a Herblore level of at least #{required.to_s} to #{action}."
 def check_skill(player, required, action)
-  if required > player.skill_set.skill(HERBLORE_ID).current_level
+  if required > player.skill_set.skill(HERBLORE_SKILL_ID).current_level
     player.send_message("You need a Herblore level of at least #{required} to #{action}.")
     return false
   end
