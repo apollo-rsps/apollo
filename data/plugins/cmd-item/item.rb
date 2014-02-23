@@ -10,7 +10,8 @@ on :command, :item, RIGHTS_ADMIN do |player, command|
     next
   end
  
-  id = args[0].to_i, amount = args.length == 2 ? args[1].to_i : 1
+  id = args[0].to_i
+  amount = args.length == 2 ? args[1].to_i : 1
   if (id < 0 || id >= ItemDefinition.count)
     player.send_message('The item id you specified is out of bounds!')
     next
@@ -27,7 +28,8 @@ on :command, :remove, RIGHTS_MOD do |player, command|
     next
   end
 
-  id = args[0].to_i, amount = args.length == 2 ? args[1].to_i : 1
+  id = args[0].to_i
+  amount = args.length == 2 ? args[1].to_i : 1
   if (id < 0 || id >= ItemDefinition.count)
     player.send_message('The item id you specified is out of bounds!')
     next
