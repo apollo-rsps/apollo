@@ -50,6 +50,7 @@ class ConsumeAction < Action
   def equals(other)
     return (mob == other.mob && @consumable.id == other.consumable.id)
   end
+  
 end
 
 # Intercepts the first item option event and consumes the consumable, if necessary.

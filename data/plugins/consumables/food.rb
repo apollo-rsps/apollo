@@ -19,8 +19,7 @@ class Food < Consumable
   # Restore the appropriate amount of hitpoints when consumed.
   def consume(player)
     hitpoints = player.skill_set.skill(HITPOINTS_SKILL_ID)
-    new_curr = hitpoints.current_level + @restoration
-    new_curr = hitpoints.maximum_level if new_curr > hitpoints.maximum_level
+    new_curr = [ hitpoints.current_level + @restoration, hitpoints.maximum_level ].min
 
     player.skill_set.set_skill(HITPOINTS_SKILL_ID, Skill.new(hitpoints.experience, new_curr, hitpoints.maximum_level))
     player.send_message("You eat the #{name}.", true)

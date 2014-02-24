@@ -13,7 +13,7 @@ class Potion < Consumable
   end
 
   def consume(player)
-    index = @doses.find_index(@id)
+    index = @doses.find_index(id)
 
     unless index + 1 == @doses.length
       player.inventory.add(@doses[index + 1])
@@ -44,9 +44,8 @@ class BoostingPotion < Potion
 
   def drink(player)
     @skill_ids.each do |id|
-      skill = player.skill_set.skill(id); current = skill.current_level; max = skill.maximum_level
-
-      level = current > max ? max : current
+      skill = player.skill_set.skill(id); max = skill.maximum_level
+      level = [ skill.current_level, max ].min
 
       new_current = @boost.call(max, level).floor
       player.skill_set.set_skill(id, Skill.new(skill.experience, new_current, max))
@@ -68,10 +67,9 @@ end
 
 # Appends a potion to the list of consumables.
 def append_potion(hash)
-  regular_potion = (hash.size == 2)
   class_name = 'Potion'; keys = [ :name, :doses ]
 
-  unless regular_potion
+  unless (hash.size == 2)
     keys << :skills << :boost
     class_name.insert(0, 'Boosting')
   end
