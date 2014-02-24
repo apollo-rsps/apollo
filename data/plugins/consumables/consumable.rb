@@ -26,15 +26,38 @@ def append_consumable(consumable)
   CONSUMABLES[consumable.id] = consumable
 end
 
+class ConsumeAction < Action
+  attr_reader :consumable
+
+  def initialize(player, slot, consumable)
+    super(0, true, player)
+    @consumable = consumable
+    @slot = slot
+    @executions = 0
+  end
+
+  def execute()
+    if @executions == 0
+      mob.inventory.reset(@slot)
+      consumable.consume(mob)
+      mob.play_animation(Animation.new(CONSUME_ANIMATION_ID))
+      @executions += 1
+    else
+      stop
+    end
+  end
+
+  def equals(other)
+    return (mob == other.mob && @consumable.id == other.consumable.id)
+  end
+end
+
 # Intercepts the first item option event and consumes the consumable, if necessary.
 on :event, :item_option do |ctx, player, event|
   if (event.option == 1)
     consumable = CONSUMABLES[event.id]
     unless consumable == nil
-      player.inventory.reset(event.slot)
-      player.play_animation(Animation.new(CONSUME_ANIMATION_ID))
-      consumable.consume(player)
-
+      player.start_action(ConsumeAction.new(player, event.slot, consumable))
       ctx.break_handler_chain
     end
   end
