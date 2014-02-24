@@ -10,6 +10,9 @@
   <scripts>
     <script>consumable.rb</script>
     <script>food.rb</script>
+    <script>potions.rb</script>
   </scripts>
-  <dependencies />
+  <dependencies>
+    <dependency>skill-herblore</dependency>
+  </dependencies>
 </plugin>
