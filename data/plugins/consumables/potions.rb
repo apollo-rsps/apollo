@@ -13,12 +13,12 @@ class Potion < Consumable
   end
 
   def consume(player)
-    index = @doses.find_index(id)
+    index = @doses.find_index(id) + 1
 
-    unless index + 1 == @doses.length
-      player.inventory.add(@doses[index + 1])
+    unless index == @doses.length
+      player.inventory.add(@doses[index])
       player.send_message("You drink some of your #{name} potion.", true)      
-      player.send_message("You have #{@doses.length - index - 1} dose#{"s" unless index == 2} of potion left.", true)
+      player.send_message("You have #{@doses.length - index} dose#{"s" unless index == 3} of potion left.", true)
     else
       player.send_message('You drink the last of your potion.')
       player.inventory.add(EMPTY_VIAL_ID)
