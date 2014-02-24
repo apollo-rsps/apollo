@@ -310,8 +310,6 @@ public final class World {
 		boolean success = npcRepository.add(npc);
 
 		if (success) {
-			logger.info("Registered npc: " + npc + " [count=" + npcRepository.size() + "]");
-
 			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
 			sector.addEntity(npc);
 		} else {
@@ -362,8 +360,6 @@ public final class World {
 	 */
 	public void unregister(final Npc npc) {
 		if (npcRepository.remove(npc)) {
-			logger.info("Unregistered npc: " + npc + " [count=" + npcRepository.size() + "]");
-
 			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
 			sector.removeEntity(npc);
 		} else {
