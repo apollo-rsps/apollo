@@ -93,6 +93,11 @@ public final class Player extends Mob {
 	private transient boolean excessivePlayers = false;
 
 	/**
+	 * Indicates whether this player has the message filter enabled.
+	 */
+	private boolean filteringMessages = false;
+
+	/**
 	 * The privacy state of this player's private chat.
 	 */
 	private PrivacyState friendPrivacy = PrivacyState.ON;
@@ -186,11 +191,6 @@ public final class Player extends Mob {
 	 * The id of the world this player is in.
 	 */
 	private transient int worldId = 1;
-
-	/**
-	 * Indicates whether this player has the message filter enabled.
-	 */
-	private boolean filteringMessages = false;
 
 	/**
 	 * Creates the {@link Player}.
@@ -629,6 +629,15 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Indicates whether the message filter is enabled.
+	 * 
+	 * @return {@code true} if the filter is enabled, otherwise {@code false}.
+	 */
+	public boolean messageFilterEnabled() {
+		return filteringMessages;
+	}
+
+	/**
 	 * Removes the specified username from this player's friend list.
 	 * 
 	 * @param username The username.
@@ -946,15 +955,6 @@ public final class Player extends Mob {
 	 */
 	public boolean toggleMessageFilter() {
 		return filteringMessages = !filteringMessages;
-	}
-
-	/**
-	 * Indicates whether the message filter is enabled.
-	 * 
-	 * @return {@code true} if the filter is enabled, otherwise {@code false}.
-	 */
-	public boolean messageFilterEnabled() {
-		return filteringMessages;
 	}
 
 	/**

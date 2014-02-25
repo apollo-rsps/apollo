@@ -10,41 +10,6 @@ import java.io.Serializable;
 public abstract class Entity implements Serializable {
 
 	/**
-	 * The generated serial UID.
-	 */
-	private static final long serialVersionUID = 5968243763380631014L;
-
-	/**
-	 * The position of this entity.
-	 */
-	protected Position position;
-
-	/**
-	 * Creates a new entity with the specified position.
-	 * 
-	 * @param position The position.
-	 */
-	public Entity(Position position) {
-		this.position = position;
-	}
-
-	/**
-	 * Gets the {@link EntityType} of this entity.
-	 * 
-	 * @return The type.
-	 */
-	public abstract EntityType getEntityType();
-
-	/**
-	 * Gets the {@link Position} of this entity.
-	 * 
-	 * @return The position.
-	 */
-	public Position getPosition() {
-		return position;
-	}
-
-	/**
 	 * Represents a type of {@link Entity}.
 	 * 
 	 * @author Major
@@ -80,6 +45,41 @@ public abstract class Entity implements Serializable {
 		 * A permanent object appearing on the map, loaded from the game resources.
 		 */
 		STATIC_OBJECT;
+	}
+
+	/**
+	 * The generated serial UID.
+	 */
+	private static final long serialVersionUID = 5968243763380631014L;
+
+	/**
+	 * The position of this entity.
+	 */
+	protected Position position;
+
+	/**
+	 * Creates a new entity with the specified position.
+	 * 
+	 * @param position The position.
+	 */
+	public Entity(Position position) {
+		this.position = position;
+	}
+
+	/**
+	 * Gets the {@link EntityType} of this entity.
+	 * 
+	 * @return The type.
+	 */
+	public abstract EntityType getEntityType();
+
+	/**
+	 * Gets the {@link Position} of this entity.
+	 * 
+	 * @return The position.
+	 */
+	public Position getPosition() {
+		return position;
 	}
 
 }
