@@ -120,7 +120,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 		GamePacketBuilder playerProperties = new GamePacketBuilder();
 
 		playerProperties.put(DataType.BYTE, appearance.getGender().toInteger());
-		playerProperties.put(DataType.BYTE, block.getPrayerIcon());
+		playerProperties.put(DataType.BYTE, 0);
 
 		if (block.appearingAsNpc()) {
 			playerProperties.put(DataType.BYTE, 255);
