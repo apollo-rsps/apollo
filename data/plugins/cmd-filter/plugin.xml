@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <plugin>
-  <id>message-filter</id>
+  <id>cmd-filter</id>
   <version>1</version>
-  <name>Message Filter</name>
-  <description>Adds support for a server-side message filter, for clients that have not been edited.</description>
+  <name>Filter commandr</name>
+  <description>Adds a command to toggle a server-side message filter, for clients that have not been edited.</description>
   <authors>
     <author>Major</author>
   </authors>
