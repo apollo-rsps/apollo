@@ -108,15 +108,6 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets this mob's {@link SynchronizationBlockSet}.
-	 * 
-	 * @return The block set.
-	 */
-	public final SynchronizationBlockSet getBlockSet() {
-		return blockSet;
-	}
-
-	/**
 	 * Deals damage to this mob.
 	 * 
 	 * @param damage The damage dealt.
@@ -130,6 +121,15 @@ public abstract class Mob extends Entity {
 
 		blockSet.add(SynchronizationBlock.createHitUpdateBlock(damage, type, current, maximum, secondary));
 		skillSet.setSkill(Skill.HITPOINTS, new Skill(hitpoints.getExperience(), current, maximum));
+	}
+
+	/**
+	 * Gets this mob's {@link SynchronizationBlockSet}.
+	 * 
+	 * @return The block set.
+	 */
+	public final SynchronizationBlockSet getBlockSet() {
+		return blockSet;
 	}
 
 	/**
@@ -155,6 +155,15 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Gets the {@link Position} this mob is facing towards.
+	 * 
+	 * @return The position.
+	 */
+	public Position getFacingPosition() {
+		return facingPosition;
+	}
+
+	/**
 	 * Gets the first {@link Direction}.
 	 * 
 	 * @return The direction.
@@ -172,6 +181,15 @@ public abstract class Mob extends Entity {
 		synchronized (this) {
 			return index;
 		}
+	}
+
+	/**
+	 * Gets the mob this mob is interacting with.
+	 * 
+	 * @return The mob.
+	 */
+	public Mob getInteractingMob() {
+		return interactingMob;
 	}
 
 	/**
@@ -319,12 +337,31 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Updates this mob's interacting mob.
+	 * 
+	 * @param mob The mob.
+	 */
+	public final void setInteractingMob(Mob mob) {
+		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.index));
+		this.interactingMob = mob;
+	}
+
+	/**
 	 * Sets the{@link Position} of this mob.
 	 * 
 	 * @param position The position.
 	 */
 	public void setPosition(Position position) {
 		this.position = position;
+	}
+
+	/**
+	 * Sets whether this mob is teleporting or not.
+	 * 
+	 * @param teleporting {@code true} if the mob is teleporting, {@code false} if not.
+	 */
+	public void setTeleporting(boolean teleporting) {
+		this.teleporting = teleporting;
 	}
 
 	/**
@@ -335,15 +372,6 @@ public abstract class Mob extends Entity {
 	 */
 	public void shout(String message, boolean chatOnly) {
 		blockSet.add(SynchronizationBlock.createForceChatBlock(message));
-	}
-
-	/**
-	 * Sets whether this mob is teleporting or not.
-	 * 
-	 * @param teleporting {@code true} if the mob is teleporting, {@code false} if not.
-	 */
-	public void setTeleporting(boolean teleporting) {
-		this.teleporting = teleporting;
 	}
 
 	/**
@@ -400,15 +428,6 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets the {@link Position} this mob is facing towards.
-	 * 
-	 * @return The position.
-	 */
-	public Position getFacingPosition() {
-		return facingPosition;
-	}
-
-	/**
 	 * Turns this mob to face the specified {@link Position}.
 	 * 
 	 * @param position The position to face.
@@ -416,25 +435,6 @@ public abstract class Mob extends Entity {
 	public final void turnTo(Position position) {
 		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(position));
 		this.facingPosition = position;
-	}
-
-	/**
-	 * Updates this mob's interacting mob.
-	 * 
-	 * @param mob The mob.
-	 */
-	public final void setInteractingMob(Mob mob) {
-		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.index));
-		this.interactingMob = mob;
-	}
-
-	/**
-	 * Gets the mob this mob is interacting with.
-	 * 
-	 * @return The mob.
-	 */
-	public Mob getInteractingMob() {
-		return interactingMob;
 	}
 
 }
