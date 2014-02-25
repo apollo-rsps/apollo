@@ -135,7 +135,7 @@ public final class Player extends Mob {
 	/**
 	 * This player's prayer icon.
 	 */
-	private int prayerIcon = 0;
+	private int prayerIcon = -1;
 
 	/**
 	 * The privilege level.
