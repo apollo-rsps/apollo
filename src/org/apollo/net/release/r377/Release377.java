@@ -22,6 +22,7 @@ import org.apollo.game.event.impl.RegionChangeEvent;
 import org.apollo.game.event.impl.RemoveTileItemEvent;
 import org.apollo.game.event.impl.SendFriendEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
+import org.apollo.game.event.impl.SetPlayerActionEvent;
 import org.apollo.game.event.impl.UpdateTileItemEvent;
 import org.apollo.game.event.impl.SetWidgetItemModelEvent;
 import org.apollo.game.event.impl.SetWidgetModelAnimationEvent;
@@ -172,8 +173,9 @@ public final class Release377 extends Release {
 		register(PrivacyOptionEvent.class, new PrivacyOptionEventEncoder());
 		register(OpenDialogueInterfaceEvent.class, new OpenDialogueInterfaceEventEncoder());
 		register(UpdateWeightEvent.class, new UpdateWeightEventEncoder());
-		register(AddGlobalTileItemEvent.class, new AddGlobalTileItemEventEncoder());
+		register(SetPlayerActionEvent.class, new SetPlayerActionEventEncoder());
 
+		register(AddGlobalTileItemEvent.class, new AddGlobalTileItemEventEncoder());
 		register(AddTileItemEvent.class, new AddTileItemEventEncoder());
 		register(UpdateTileItemEvent.class, new UpdateTileItemEventEncoder());
 		register(RemoveTileItemEvent.class, new RemoveTileItemEventEncoder());
