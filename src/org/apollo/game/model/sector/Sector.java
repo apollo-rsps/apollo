@@ -76,6 +76,15 @@ public final class Sector {
 	}
 
 	/**
+	 * Gets the {@link List} of {@link Entity}s.
+	 * 
+	 * @return The list.
+	 */
+	public List<Entity> getEntities() {
+		return new ArrayList<>(entities);
+	}
+
+	/**
 	 * Notifies the listeners registered to this sector that an update has occurred.
 	 * 
 	 * @param entity The entity that was updated.

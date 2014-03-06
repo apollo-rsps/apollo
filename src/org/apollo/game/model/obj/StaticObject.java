@@ -19,11 +19,6 @@ public final class StaticObject extends Entity {
 	private final ObjectDefinition definition;
 
 	/**
-	 * The object's id.
-	 */
-	private final int id;
-
-	/**
 	 * The object's rotation.
 	 */
 	private final int rotation;
@@ -36,14 +31,13 @@ public final class StaticObject extends Entity {
 	/**
 	 * Creates a new static object.
 	 * 
-	 * @param def The object's id.
+	 * @param id The object's id.
 	 * @param position The position.
 	 * @param type The type code of the object.
 	 * @param rotation The rotation of the object.
 	 */
 	public StaticObject(int id, Position position, int type, int rotation) {
 		super(position);
-		this.id = id;
 		this.type = type;
 		this.rotation = rotation;
 		definition = ObjectDefinition.lookup(id);
@@ -61,15 +55,6 @@ public final class StaticObject extends Entity {
 	@Override
 	public EntityType getEntityType() {
 		return EntityType.STATIC_OBJECT;
-	}
-
-	/**
-	 * Gets the id of the object.
-	 * 
-	 * @return The object id.
-	 */
-	public int getId() {
-		return id;
 	}
 
 	/**
@@ -92,7 +77,8 @@ public final class StaticObject extends Entity {
 
 	@Override
 	public String toString() {
-		return StaticObject.class.getName() + " [id=" + id + ", type=" + type + ", rotation=" + rotation + "]";
+		return StaticObject.class.getName() + " [id=" + definition.getId() + ", type=" + type + ", rotation="
+				+ rotation + "]";
 	}
 
 }
