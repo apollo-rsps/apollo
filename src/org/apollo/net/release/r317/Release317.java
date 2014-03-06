@@ -4,6 +4,7 @@ import org.apollo.game.event.impl.AddGlobalTileItemEvent;
 import org.apollo.game.event.impl.AddTileItemEvent;
 import org.apollo.game.event.impl.CloseInterfaceEvent;
 import org.apollo.game.event.impl.ConfigEvent;
+import org.apollo.game.event.impl.DisplayCrossbonesEvent;
 import org.apollo.game.event.impl.DisplayTabInterfaceEvent;
 import org.apollo.game.event.impl.EnterAmountEvent;
 import org.apollo.game.event.impl.ForwardPrivateMessageEvent;
@@ -177,6 +178,7 @@ public final class Release317 extends Release {
 		register(OpenDialogueInterfaceEvent.class, new OpenDialogueInterfaceEventEncoder());
 		register(UpdateWeightEvent.class, new UpdateWeightEventEncoder());
 		register(SetPlayerActionEvent.class, new SetPlayerActionEventEncoder());
+		register(DisplayCrossbonesEvent.class, new DisplayCrossbonesEventEncoder());
 
 		register(AddGlobalTileItemEvent.class, new AddGlobalTileItemEventEncoder());
 		register(AddTileItemEvent.class, new AddTileItemEventEncoder());
