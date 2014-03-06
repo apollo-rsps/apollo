@@ -224,7 +224,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param definition The definition.
 	 */
-	public NpcDefinition getNpcDefinition() {
+	public NpcDefinition getDefinition() {
 		return definition;
 	}
 

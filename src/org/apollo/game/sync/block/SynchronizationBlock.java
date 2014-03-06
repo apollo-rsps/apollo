@@ -36,7 +36,7 @@ public abstract class SynchronizationBlock {
 	public static SynchronizationBlock createAppearanceBlock(Player player) {
 		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), player.getSkillSet()
 				.getCombatLevel(), 0, player.getEquipment(), player.getPrayerIcon(), player.getHeadIcon(),
-				player.getNpcDefinition() == null ? -1 : player.getNpcDefinition().getId());
+				player.getDefinition() == null ? -1 : player.getDefinition().getId());
 	}
 
 	/**
