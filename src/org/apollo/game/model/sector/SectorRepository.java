@@ -1,6 +1,8 @@
 package org.apollo.game.model.sector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,6 +84,15 @@ public final class SectorRepository {
 			add(sector = new Sector(coordinates));
 		}
 		return sector;
+	}
+
+	/**
+	 * Gets the {@link List} of {@link Sector}s.
+	 * 
+	 * @return The list.
+	 */
+	public List<Sector> getSectors() {
+		return new ArrayList<>(sectors.values());
 	}
 
 	/**
