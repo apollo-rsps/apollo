@@ -22,7 +22,7 @@ class MiningAction < DistancedAction
   def find_pickaxe
     PICKAXE_IDS.each do |id|
       weapon = mob.equipment.get(EquipmentConstants::WEAPON)
-      if weapon.id == id
+      if weapon != nil && weapon.id == id
         return PICKAXES[id]
       end
 
@@ -73,7 +73,7 @@ class MiningAction < DistancedAction
 
         if mob.inventory.add(ore.id)
           ore_def = ItemDefinition.lookup(@ore.id) # TODO: split off into some method
-          name = ore_def.name.sub(/ ore$/, "").downcase
+          name = ore_def.name.sub(/ ore$/, '').downcase
 
           mob.send_message("You manage to mine some #{name}.")
           skills.add_experience(MINING_SKILL_ID, ore.exp)
@@ -124,11 +124,11 @@ class ProspectingAction < DistancedAction
     if not @started
       @started = true
 
-      mob.send_message("You examine the rock for ores...")
+      mob.send_message('You examine the rock for ores...')
       mob.turn_to(@position)
     else
       ore_def = ItemDefinition.lookup(@ore.id)
-      name = ore_def.name.sub(/ ore$/, "").downcase
+      name = ore_def.name.sub(/ ore$/, '').downcase
 
       mob.send_message("This rock contains #{name}.")
 
