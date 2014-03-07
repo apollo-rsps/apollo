@@ -57,7 +57,7 @@ class ProcLoginListener < LoginListener
   end
 
   def execute(player)
-    @block.call player
+    @block.call(player)
   end
 end
 
@@ -69,7 +69,7 @@ class ProcLogoutListener < LogoutListener
   end
 
   def execute(player)
-    @block.call player
+    @block.call(player)
   end
 end
 
@@ -109,14 +109,14 @@ end
 # behaviour is undefined (and most likely it'll be bad).
 def schedule(*args, &block)
   if block_given?
-    raise "invalid combination of arguments" unless args.length == 1 or args.length == 2
+    raise 'Invalid combination of arguments.' unless args.length == 1 or args.length == 2
     delay = args[0]
     immediate = args.length == 2 ? args[1] : false
     World.world.schedule(ProcScheduledTask.new(delay, immediate, block))
   elsif args.length == 1
     World.world.schedule(args[0])
   else
-    raise "invalid combination of arguments"
+    raise 'Invalid combination of arguments.'
   end
 end
 
@@ -126,6 +126,8 @@ end
 #   * :command
 #   * :event
 #   * :button
+#   * :login
+#   * :logout
 #
 # A command takes one or two arguments (the command name and optionally the
 # minimum rights level to use it). The minimum rights level defaults to
@@ -141,20 +143,20 @@ def on(type, *args, &block)
     when :command then on_command(args, block)
     when :event   then on_event(args, block)
     when :button  then on_button(args, block)
-    when :login   then on_login(args, block)
-    when :logout  then on_logout(args, block)
-    else raise "unknown event type"
+    when :login   then on_login(block)
+    when :logout  then on_logout(block)
+    else raise 'Unknown event type.'
   end
 end
 
 # Defines an action to be taken upon a button press.
 def on_button(args, proc)
-  raise "button must have one argument" unless args.length == 1
+  raise 'Button must have one argument.' unless args.length == 1
 
   id = args[0].to_i
 
   on :event, :button do |ctx, player, event|
-    proc.call player if event.widget_id == id
+    proc.call(player) if event.widget_id == id
   end
 end
 
@@ -165,9 +167,9 @@ def on_event(args, proc)
   raise "event must have one argument" unless args.length == 1
 
   event = args[0]
-  if event.is_a? Symbol
-    class_name = event.to_s.camelize.concat("Event")
-    event = Java::JavaClass.for_name("org.apollo.game.event.impl.".concat(class_name))
+  if event.is_a?(Symbol)
+    class_name = event.to_s.camelize.concat('Event')
+    event = Java::JavaClass.for_name("org.apollo.game.event.impl.#{class_name}")
   end
 
   $ctx.add_last_event_handler(event, ProcEventHandler.new(proc))
@@ -175,21 +177,20 @@ end
 
 # Defines an action to be taken upon a command.
 def on_command(args, proc)
-  raise "command event must have one or two arguments" unless (1..2).include? args.length
+  raise 'Command event must have one or two arguments.' unless (1..2).include?(args.length)
 
   rights = args.length == 2 ? args[1] : RIGHTS_STANDARD
-
   $ctx.add_command_listener(args[0].to_s, ProcCommandListener.new(rights, proc))
 end
 
 # Defines an action to be taken upon login.
-def on_login(args, proc)
-  $ctx.add_login_listener ProcLoginListener.new(proc)
+def on_login(proc)
+  $ctx.add_login_listener(ProcLoginListener.new(proc))
 end
 
 # Defines an action to be taken upon logout.
-def on_logout(args, proc)
-  $ctx.add_logout_listener ProcLogoutListener.new(proc)
+def on_logout(proc)
+  $ctx.add_logout_listener(ProcLogoutListener.new(proc))
 end
 
 # Ids of in-game skills.
