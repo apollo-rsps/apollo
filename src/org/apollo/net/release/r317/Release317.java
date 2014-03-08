@@ -39,7 +39,6 @@ import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
 import org.apollo.game.event.impl.UpdateWeightEvent;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
-import org.apollo.net.release.r377.ItemOnObjectEventDecoder;
 
 /**
  * A {@link Release} implementation for the 317 protocol.
