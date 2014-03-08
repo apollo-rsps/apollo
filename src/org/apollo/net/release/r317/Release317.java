@@ -39,6 +39,7 @@ import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
 import org.apollo.game.event.impl.UpdateWeightEvent;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
+import org.apollo.net.release.r377.ItemOnObjectEventDecoder;
 
 /**
  * A {@link Release} implementation for the 317 protocol.
@@ -142,6 +143,7 @@ public final class Release317 extends Release {
 		register(155, new SecondNpcActionEventDecoder());
 		register(17, new ThirdNpcActionEventDecoder());
 		register(236, new TakeTileItemEventDecoder());
+		register(192, new ItemOnObjectEventDecoder());
 
 		register(188, new AddFriendEventDecoder());
 		register(133, new AddIgnoreEventDecoder());
