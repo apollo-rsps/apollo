@@ -54,7 +54,7 @@ public final class StaticObject extends Entity {
 
 	@Override
 	public EntityType getEntityType() {
-		return EntityType.STATIC_OBJECT;
+		return EntityType.GAME_OBJECT;
 	}
 
 	/**

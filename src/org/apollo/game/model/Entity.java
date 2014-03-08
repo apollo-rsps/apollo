@@ -22,7 +22,7 @@ public abstract class Entity implements Serializable {
 		DROPPED_ITEM,
 
 		/**
-		 * A temporary object.
+		 * An object appearing in the game world.
 		 */
 		GAME_OBJECT,
 
@@ -39,12 +39,7 @@ public abstract class Entity implements Serializable {
 		/**
 		 * A projectile (e.g. an arrow).
 		 */
-		PROJECTILE,
-
-		/**
-		 * A permanent object appearing on the map, loaded from the game resources.
-		 */
-		STATIC_OBJECT;
+		PROJECTILE;
 	}
 
 	/**
