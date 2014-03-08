@@ -218,7 +218,6 @@ public final class WalkingQueue {
 
 		Point next = points.poll();
 		if (next != null) {
-			mob.stopAction();
 			first = next.direction;
 			position = next.position;
 
