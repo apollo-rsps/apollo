@@ -139,6 +139,7 @@ public final class Release377 extends Release {
 		register(112, new SecondNpcActionEventDecoder());
 		register(13, new ThirdNpcActionEventDecoder());
 		register(71, new TakeTileItemEventDecoder());
+		register(152, new ItemOnObjectEventDecoder());
 
 		register(120, new AddFriendEventDecoder());
 		register(217, new AddIgnoreEventDecoder());
