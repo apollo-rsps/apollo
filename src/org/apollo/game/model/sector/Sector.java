@@ -145,6 +145,11 @@ public final class Sector {
 	 */
 	public boolean removeEntity(Entity entity) {
 		List<Entity> entities = this.entities.get(entity.getPosition());
+		if (entities == null) {
+			this.entities.put(entity.getPosition(), new ArrayList<Entity>());
+			return false;
+		}
+
 		if (entities.remove(entity)) {
 			notifyListeners(entity);
 			return true;
