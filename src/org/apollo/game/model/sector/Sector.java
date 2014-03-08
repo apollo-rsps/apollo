@@ -1,9 +1,13 @@
 package org.apollo.game.model.sector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apollo.game.model.Entity;
+import org.apollo.game.model.Entity.EntityType;
+import org.apollo.game.model.Position;
 
 /**
  * Represents an 8x8 area of the map.
@@ -23,9 +27,9 @@ public final class Sector {
 	private final SectorCoordinates coordinates;
 
 	/**
-	 * A list of every entity in this sector.
+	 * A map of positions to entities in that position.
 	 */
-	private final List<Entity> entities = new ArrayList<>();
+	private final Map<Position, List<Entity>> entities = new HashMap<>();
 
 	/**
 	 * A list of listeners registered to this sector.
@@ -56,14 +60,32 @@ public final class Sector {
 	 * register it to this sector.
 	 * 
 	 * @param entity The entity.
-	 * @return {@code true} if the entity was added, otherwise {@code false}.
+	 * @return {@code true} if the entity was added successfully, otherwise {@code false}.
 	 */
 	public boolean addEntity(Entity entity) {
+		Position position = entity.getPosition();
+		List<Entity> entities = this.entities.get(position);
+		if (entities == null) {
+			entities = new ArrayList<>();
+		}
+
 		if (entities.add(entity)) {
+			this.entities.put(position, entities);
 			notifyListeners(entity);
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Checks if this sector contains the specified entity.
+	 * 
+	 * @param entity The entity.
+	 * @return {@code true} if this sector contains the entity, otherwise {@code false}.
+	 */
+	public boolean contains(Entity entity) {
+		List<Entity> entities = this.entities.get(entity.getPosition());
+		return entities.contains(entity);
 	}
 
 	/**
@@ -76,12 +98,32 @@ public final class Sector {
 	}
 
 	/**
-	 * Gets the {@link List} of {@link Entity}s.
+	 * Gets a copy of the {@link List} of {@link Entity}s.
 	 * 
+	 * @param position The position containing the entities.
 	 * @return The list.
 	 */
-	public List<Entity> getEntities() {
-		return new ArrayList<>(entities);
+	public List<Entity> getEntities(Position position) {
+		return new ArrayList<>(entities.get(position));
+	}
+
+	/**
+	 * Gets a copy of the {@link List} of {@link Entity}s with the specified {@link EntityType}.
+	 * 
+	 * @param position The {@link Position} containing the entities.
+	 * @param type The {@link EntityType}.
+	 * @return The list of entities.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> List<T> getEntities(Position position, EntityType type) {
+		List<Entity> entities = getEntities(position);
+		List<T> filtered = new ArrayList<>();
+		for (Entity entity : entities) {
+			if (entity.getEntityType() == type) {
+				filtered.add((T) entity);
+			}
+		}
+		return filtered;
 	}
 
 	/**
@@ -102,6 +144,7 @@ public final class Sector {
 	 * @return {@code true} if the entity was removed, otherwise {@code false}.
 	 */
 	public boolean removeEntity(Entity entity) {
+		List<Entity> entities = this.entities.get(entity.getPosition());
 		if (entities.remove(entity)) {
 			notifyListeners(entity);
 			return true;

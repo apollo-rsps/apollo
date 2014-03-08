@@ -9,12 +9,12 @@ import java.util.List;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.obj.StaticObject;
+import org.apollo.game.model.obj.GameObject;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
 
 /**
- * Decodes map object data from the {@code map_index.dat} file into {@link StaticObject}s.
+ * Decodes map object data from the {@code map_index.dat} file into {@link GameObject}s.
  * 
  * @author Chris Fletcher
  */
@@ -40,7 +40,7 @@ public final class StaticObjectDecoder {
 	 * @return The decoded objects.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public StaticObject[] decode() throws IOException {
+	public GameObject[] decode() throws IOException {
 		Archive versionList = Archive.decode(fs.getFile(0, 5));
 		ByteBuffer buffer = versionList.getEntry("map_index").getBuffer();
 
@@ -60,17 +60,17 @@ public final class StaticObjectDecoder {
 			boolean members = (buffer.get() & 0xFF) == 1;
 		}
 
-		List<StaticObject> objects = new ArrayList<StaticObject>();
+		List<GameObject> objects = new ArrayList<GameObject>();
 
 		for (int i = 0; i < indices; i++) {
 			ByteBuffer compressed = fs.getFile(4, landscapes[i]);
 			ByteBuffer uncompressed = ByteBuffer.wrap(CompressionUtil.ungzip(compressed));
 
-			Collection<StaticObject> areaObjects = parseArea(areas[i], uncompressed);
+			Collection<GameObject> areaObjects = parseArea(areas[i], uncompressed);
 			objects.addAll(areaObjects);
 		}
 
-		return objects.toArray(new StaticObject[objects.size()]);
+		return objects.toArray(new GameObject[objects.size()]);
 	}
 
 	/**
@@ -80,8 +80,8 @@ public final class StaticObjectDecoder {
 	 * @param buffer The buffer which holds the area's data.
 	 * @return A collection of all parsed objects.
 	 */
-	private Collection<StaticObject> parseArea(int area, ByteBuffer buffer) {
-		List<StaticObject> objects = new ArrayList<StaticObject>();
+	private Collection<GameObject> parseArea(int area, ByteBuffer buffer) {
+		List<GameObject> objects = new ArrayList<GameObject>();
 
 		int x = (area >> 8 & 0xFF) * 64;
 		int y = (area & 0xFF) * 64;
@@ -108,7 +108,7 @@ public final class StaticObjectDecoder {
 
 				Position pos = new Position(x + localX, y + localY, height);
 
-				StaticObject object = new StaticObject(id, pos, type, rotation);
+				GameObject object = new GameObject(id, pos, type, rotation);
 				objects.add(object);
 			}
 		}

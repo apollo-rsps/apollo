@@ -21,7 +21,7 @@ import org.apollo.game.model.def.EquipmentDefinition;
 import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.def.ObjectDefinition;
-import org.apollo.game.model.obj.StaticObject;
+import org.apollo.game.model.obj.GameObject;
 import org.apollo.game.model.sector.Sector;
 import org.apollo.game.model.sector.SectorCoordinates;
 import org.apollo.game.model.sector.SectorRepository;
@@ -259,7 +259,7 @@ public final class World {
 		logger.info("Loaded " + objDefs.length + " object definitions.");
 
 		StaticObjectDecoder staticDecoder = new StaticObjectDecoder(fs);
-		StaticObject[] objects = staticDecoder.decode();
+		GameObject[] objects = staticDecoder.decode();
 		placeEntities(objects);
 		logger.info("Loaded " + objects.length + " static objects.");
 

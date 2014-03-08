@@ -69,7 +69,7 @@ public final class SectorRepository {
 	public boolean contains(SectorCoordinates coordinates) {
 		return sectors.containsKey(coordinates);
 	}
-
+	
 	/**
 	 * Gets a {@link Sector} with the specified {@link SectorCoordinates}. If the sector does not exist (i.e.
 	 * {@link #sectors}{@code .get()} returns {@code null}) then a new sector is created, submitted to the repository,
