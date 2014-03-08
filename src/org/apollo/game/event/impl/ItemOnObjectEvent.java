@@ -1,6 +1,7 @@
 package org.apollo.game.event.impl;
 
 import org.apollo.game.event.Event;
+import org.apollo.game.model.Position;
 
 /**
  * An {@link Event} sent by the client when an item is used on an object.
@@ -15,14 +16,9 @@ public final class ItemOnObjectEvent extends InventoryItemEvent {
 	private final int objectId;
 
 	/**
-	 * The x coordinate of the object.
+	 * The position of the object.
 	 */
-	private final int x;
-
-	/**
-	 * The y coordinate of the object.
-	 */
-	private final int y;
+	private final Position position;
 
 	/**
 	 * Creates an item on object event.
@@ -37,8 +33,7 @@ public final class ItemOnObjectEvent extends InventoryItemEvent {
 	public ItemOnObjectEvent(int interfaceId, int id, int slot, int objectId, int x, int y) {
 		super(0, interfaceId, id, slot);
 		this.objectId = objectId;
-		this.x = x;
-		this.y = y;
+		this.position = new Position(x, y);
 	}
 
 	/**
@@ -51,21 +46,12 @@ public final class ItemOnObjectEvent extends InventoryItemEvent {
 	}
 
 	/**
-	 * Gets the x coordinate of the object.
+	 * Gets the position of the object.
 	 * 
-	 * @return The x coordinate.
+	 * @return The position.
 	 */
-	public int getX() {
-		return x;
-	}
-
-	/**
-	 * Gets the y coordinate of the object.
-	 * 
-	 * @return The y coordinate.
-	 */
-	public int getY() {
-		return y;
+	public Position getPosition() {
+		return position;
 	}
 
 }
