@@ -60,6 +60,12 @@
     </chain>
   </event>
   <event>
+    <type>org.apollo.game.event.impl.ItemOnObjectEvent</type>
+    <chain>
+      <handler>org.apollo.game.event.handler.impl.ItemOnObjectVerificationHandler</handler>
+    </chain>
+  </event>
+  <event>
     <type>org.apollo.game.event.impl.ClosedInterfaceEvent</type>
     <chain>
       <handler>org.apollo.game.event.handler.impl.ClosedInterfaceEventHandler</handler>
