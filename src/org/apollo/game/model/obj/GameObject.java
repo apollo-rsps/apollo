@@ -5,32 +5,48 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.def.ObjectDefinition;
 
 /**
- * Represents an in-game object.
+ * Represents an object in the game world.
  * 
+ * @author Chris Fletcher
  * @author Major
  */
 @SuppressWarnings("serial")
 public final class GameObject extends Entity {
 
 	/**
-	 * The object definition.
+	 * The object's definition.
 	 */
 	private final ObjectDefinition definition;
 
 	/**
-	 * Creates the game object.
-	 * 
-	 * @param definition The object's definition.
+	 * The object's rotation.
 	 */
-	public GameObject(ObjectDefinition definition, Position position) {
+	private final int rotation;
+
+	/**
+	 * The object type.
+	 */
+	private final int type;
+
+	/**
+	 * Creates a new static object.
+	 * 
+	 * @param id The object's id.
+	 * @param position The position.
+	 * @param type The type code of the object.
+	 * @param rotation The rotation of the object.
+	 */
+	public GameObject(int id, Position position, int type, int rotation) {
 		super(position);
-		this.definition = definition;
+		this.type = type;
+		this.rotation = rotation;
+		definition = ObjectDefinition.lookup(id);
 	}
 
 	/**
-	 * Gets the object's definition.
+	 * Gets the definition of this object.
 	 * 
-	 * @return The definition.
+	 * @return The object's definition.
 	 */
 	public ObjectDefinition getDefinition() {
 		return definition;
@@ -39,6 +55,30 @@ public final class GameObject extends Entity {
 	@Override
 	public EntityType getEntityType() {
 		return EntityType.GAME_OBJECT;
+	}
+
+	/**
+	 * Gets the object's rotation.
+	 * 
+	 * @return The rotation.
+	 */
+	public int getRotation() {
+		return rotation;
+	}
+
+	/**
+	 * Gets the type code of the object.
+	 * 
+	 * @return The type.
+	 */
+	public int getType() {
+		return type;
+	}
+
+	@Override
+	public String toString() {
+		return GameObject.class.getName() + " [id=" + definition.getId() + ", type=" + type + ", rotation=" + rotation
+				+ "]";
 	}
 
 }
