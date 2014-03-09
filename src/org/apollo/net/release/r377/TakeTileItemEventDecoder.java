@@ -14,7 +14,7 @@ import org.apollo.net.release.EventDecoder;
  * 
  * @author Major
  */
-public class TakeTileItemEventDecoder extends EventDecoder<TakeTileItemEvent> {
+public final class TakeTileItemEventDecoder extends EventDecoder<TakeTileItemEvent> {
 
 	@Override
 	public TakeTileItemEvent decode(GamePacket packet) {

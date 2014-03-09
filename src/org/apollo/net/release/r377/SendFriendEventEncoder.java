@@ -12,7 +12,7 @@ import org.apollo.util.NameUtil;
  * 
  * @author Major
  */
-public class SendFriendEventEncoder extends EventEncoder<SendFriendEvent> {
+public final class SendFriendEventEncoder extends EventEncoder<SendFriendEvent> {
 
 	@Override
 	public GamePacket encode(SendFriendEvent event) {

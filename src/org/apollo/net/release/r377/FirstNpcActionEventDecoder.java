@@ -12,7 +12,7 @@ import org.apollo.net.release.EventDecoder;
  * 
  * @author Major
  */
-public class FirstNpcActionEventDecoder extends EventDecoder<FirstNpcActionEvent> {
+public final class FirstNpcActionEventDecoder extends EventDecoder<FirstNpcActionEvent> {
 
 	@Override
 	public FirstNpcActionEvent decode(GamePacket packet) {

@@ -12,7 +12,7 @@ import org.apollo.util.NameUtil;
  * 
  * @author Major
  */
-public class AddFriendEventDecoder extends EventDecoder<AddFriendEvent> {
+public final class AddFriendEventDecoder extends EventDecoder<AddFriendEvent> {
 
 	@Override
 	public AddFriendEvent decode(GamePacket packet) {
