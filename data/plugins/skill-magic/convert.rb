@@ -83,4 +83,4 @@ def append_convert(button, level, elements, experience, reward)
 end
 
 append_convert  1159, 15, { EARTH => 2, WATER => 2, NATURE => 1 },   25, 1963 # Bones to bananas
-append_convert 15877, 60, { NATURE => 2, WATER => 4, EARTH => 4 }, 35.5, 6883 # Bones to peaches
+#append_convert 15877, 60, { NATURE => 2, WATER => 4, EARTH => 4 }, 35.5, 6883 # Bones to peaches

@@ -174,13 +174,12 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * Opens the enter amount dialog.
+	 * Opens the enter amount dialogue.
 	 * 
 	 * @param listener The enter amount listener.
 	 */
-	public void openEnterAmountDialog(EnterAmountListener listener) {
+	public void openEnterAmountDialogue(EnterAmountListener listener) {
 		amountListener = listener;
-
 		player.send(new EnterAmountEvent());
 	}
 
@@ -204,7 +203,6 @@ public final class InterfaceSet {
 		this.listener = listener;
 
 		interfaces.put(InterfaceType.WINDOW, windowId);
-
 		player.send(new OpenInterfaceEvent(windowId));
 	}
 

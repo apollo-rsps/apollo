@@ -49,7 +49,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			out.writeByte(position.getHeight());
 
 			// write appearance
-			out.writeBoolean(player.hasDesignedAvatar());
+			out.writeBoolean(player.isNewPlayer());
 			Appearance appearance = player.getAppearance();
 			out.writeByte(appearance.getGender().toInteger());
 			int[] style = appearance.getStyle();

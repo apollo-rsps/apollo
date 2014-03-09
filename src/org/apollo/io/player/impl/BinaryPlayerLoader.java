@@ -93,7 +93,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			player.setRunEnergy(runEnergy);
 			player.setScreenBrightness(brightness);
 
-			player.setDesigned(designed);
+			player.setNew(designed);
 			player.setAppearance(new Appearance(gender, style, colors));
 
 			// read inventories

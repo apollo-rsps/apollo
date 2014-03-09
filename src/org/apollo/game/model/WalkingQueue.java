@@ -43,6 +43,7 @@ public final class WalkingQueue {
 		public String toString() {
 			return Point.class.getName() + " [direction=" + direction + ", position=" + position + "]";
 		}
+
 	}
 
 	/**
@@ -58,12 +59,12 @@ public final class WalkingQueue {
 	/**
 	 * The old queue of directions.
 	 */
-	private final Deque<Point> oldPoints = new ArrayDeque<Point>();
+	private final Deque<Point> oldPoints = new ArrayDeque<>();
 
 	/**
 	 * The queue of directions.
 	 */
-	private final Deque<Point> points = new ArrayDeque<Point>();
+	private final Deque<Point> points = new ArrayDeque<>();
 
 	/**
 	 * Flag indicating if this queue (only) should be ran.
@@ -100,7 +101,7 @@ public final class WalkingQueue {
 			return true;
 		}
 
-		Queue<Position> travelBackQueue = new ArrayDeque<Position>();
+		Queue<Position> travelBackQueue = new ArrayDeque<>();
 
 		Point oldPoint;
 		while ((oldPoint = oldPoints.pollLast()) != null) {
@@ -159,10 +160,8 @@ public final class WalkingQueue {
 	 * @param step The step to add.
 	 */
 	public void addStep(Position step) {
+		int x = step.getX(), y = step.getY();
 		Point last = getLast();
-
-		int x = step.getX();
-		int y = step.getY();
 
 		int deltaX = x - last.position.getX();
 		int deltaY = y - last.position.getY();
@@ -212,9 +211,7 @@ public final class WalkingQueue {
 	 */
 	public void pulse() {
 		Position position = mob.getPosition();
-
-		Direction first = Direction.NONE;
-		Direction second = Direction.NONE;
+		Direction first = Direction.NONE, second = Direction.NONE;
 
 		Point next = points.poll();
 		if (next != null) {

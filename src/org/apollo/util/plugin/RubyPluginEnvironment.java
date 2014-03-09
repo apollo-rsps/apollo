@@ -30,7 +30,12 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 
 	@Override
 	public void parse(InputStream is, String name) {
-		container.runScriptlet(is, name);
+		try {
+			container.runScriptlet(is, name);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error parsing scriptlet " + name + ".");
+		}
 	}
 
 	/**

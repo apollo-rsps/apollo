@@ -8,14 +8,14 @@ package org.apollo.game.model;
 public enum Direction {
 
 	/**
-	 * East movement.
-	 */
-	EAST(4),
-
-	/**
 	 * No movement.
 	 */
 	NONE(-1),
+
+	/**
+	 * North west movement.
+	 */
+	NORTH_WEST(0),
 
 	/**
 	 * North movement.
@@ -28,9 +28,19 @@ public enum Direction {
 	NORTH_EAST(2),
 
 	/**
-	 * North west movement.
+	 * West movement.
 	 */
-	NORTH_WEST(0),
+	WEST(3),
+
+	/**
+	 * East movement.
+	 */
+	EAST(4),
+
+	/**
+	 * South west movement.
+	 */
+	SOUTH_WEST(5),
 
 	/**
 	 * South movement.
@@ -40,17 +50,7 @@ public enum Direction {
 	/**
 	 * South east movement.
 	 */
-	SOUTH_EAST(7),
-
-	/**
-	 * South west movement.
-	 */
-	SOUTH_WEST(5),
-
-	/**
-	 * West movement.
-	 */
-	WEST(3);
+	SOUTH_EAST(7);
 
 	/**
 	 * An empty direction array.

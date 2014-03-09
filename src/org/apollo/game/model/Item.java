@@ -15,6 +15,11 @@ public final class Item {
 	private final int amount;
 
 	/**
+	 * The item definition.
+	 */
+	private final ItemDefinition definition;
+
+	/**
 	 * The item's id.
 	 */
 	private final int id;
@@ -41,6 +46,7 @@ public final class Item {
 		}
 		this.id = id;
 		this.amount = amount;
+		this.definition = ItemDefinition.lookup(id);
 	}
 
 	/**
@@ -53,12 +59,12 @@ public final class Item {
 	}
 
 	/**
-	 * Gets the {@link ItemDefinition} which describes this item.
+	 * Gets the {@link ItemDefinition} that describes this item.
 	 * 
 	 * @return The definition.
 	 */
 	public ItemDefinition getDefinition() {
-		return ItemDefinition.lookup(id);
+		return definition;
 	}
 
 	/**

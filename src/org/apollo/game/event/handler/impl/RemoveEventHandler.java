@@ -6,7 +6,6 @@ import org.apollo.game.event.impl.ItemActionEvent;
 import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Player;
-import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
@@ -27,7 +26,7 @@ public final class RemoveEventHandler extends EventHandler<ItemActionEvent> {
 			Item item = equipment.get(slot);
 			int id = item.getId();
 
-			if (inventory.freeSlots() == 0 && !ItemDefinition.lookup(id).isStackable()) {
+			if (inventory.freeSlots() == 0 && !item.getDefinition().isStackable()) {
 				inventory.forceCapacityExceeded();
 				ctx.breakHandlerChain();
 				return;

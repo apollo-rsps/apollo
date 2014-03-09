@@ -62,7 +62,7 @@ public final class Graphic {
 	/**
 	 * Gets the graphic's delay.
 	 * 
-	 * @return The graphic's delay.
+	 * @return The delay.
 	 */
 	public int getDelay() {
 		return delay;
@@ -71,7 +71,7 @@ public final class Graphic {
 	/**
 	 * Gets the graphic's height.
 	 * 
-	 * @return The graphic's height.
+	 * @return The height.
 	 */
 	public int getHeight() {
 		return height;
@@ -80,7 +80,7 @@ public final class Graphic {
 	/**
 	 * Gets the graphic's id.
 	 * 
-	 * @return The graphic's id.
+	 * @return The id.
 	 */
 	public int getId() {
 		return id;

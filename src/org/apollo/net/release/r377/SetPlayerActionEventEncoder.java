@@ -5,6 +5,7 @@ import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;
+import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.EventEncoder;
 
 /**
@@ -16,7 +17,7 @@ public final class SetPlayerActionEventEncoder extends EventEncoder<SetPlayerAct
 
 	@Override
 	public GamePacket encode(SetPlayerActionEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(157);
+		GamePacketBuilder builder = new GamePacketBuilder(157, PacketType.VARIABLE_BYTE);
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, event.getSlot());
 		builder.putString(event.getText());
 		builder.put(DataType.BYTE, event.isPrimaryAction() ? 0 : 1);

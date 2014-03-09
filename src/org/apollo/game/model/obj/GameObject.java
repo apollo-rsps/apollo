@@ -10,7 +10,6 @@ import org.apollo.game.model.def.ObjectDefinition;
  * @author Chris Fletcher
  * @author Major
  */
-@SuppressWarnings("serial")
 public final class GameObject extends Entity {
 
 	/**
@@ -29,7 +28,7 @@ public final class GameObject extends Entity {
 	private final int type;
 
 	/**
-	 * Creates a new static object.
+	 * Creates a game object.
 	 * 
 	 * @param id The object's id.
 	 * @param position The position.

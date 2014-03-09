@@ -62,6 +62,7 @@ public final class World {
 		 * Indicates the world is full.
 		 */
 		WORLD_FULL;
+
 	}
 
 	/**
@@ -233,8 +234,9 @@ public final class World {
 	 */
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
 		this.releaseNumber = release;
-		ItemDefinitionDecoder itemDefParser = new ItemDefinitionDecoder(fs);
-		ItemDefinition[] itemDefs = itemDefParser.decode();
+
+		ItemDefinitionDecoder itemDefDecoder = new ItemDefinitionDecoder(fs);
+		ItemDefinition[] itemDefs = itemDefDecoder.decode();
 		ItemDefinition.init(itemDefs);
 		logger.info("Loaded " + itemDefs.length + " item definitions.");
 
@@ -339,8 +341,7 @@ public final class World {
 			return RegistrationStatus.OK;
 		}
 
-		logger.warning("Failed to register player (server full): " + player + " [count=" + playerRepository.size()
-				+ "]");
+		logger.warning("Failed to register player: " + player + " [count=" + playerRepository.size() + "]");
 		return RegistrationStatus.WORLD_FULL;
 	}
 

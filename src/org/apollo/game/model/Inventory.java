@@ -89,12 +89,10 @@ public final class Inventory implements Cloneable {
 	public Inventory(int capacity, StackMode mode) {
 		if (capacity < 0) {
 			throw new IllegalArgumentException("Capacity cannot be negative.");
-		}
-		if (mode == null) {
+		} else if (mode == null) {
 			throw new NullPointerException("Stacking mode cannot be null.");
 		}
-		this.capacity = capacity;
-		items = new Item[capacity];
+		items = new Item[this.capacity = capacity];
 		this.mode = mode;
 	}
 
@@ -117,10 +115,7 @@ public final class Inventory implements Cloneable {
 	 */
 	public int add(int id, int amount) {
 		Item item = add(new Item(id, amount));
-		if (item != null) {
-			return item.getAmount();
-		}
-		return 0;
+		return item != null ? item.getAmount() : 0;
 	}
 
 	/**
@@ -140,8 +135,7 @@ public final class Inventory implements Cloneable {
 				Item other = items[slot];
 				if (other != null && other.getId() == id) {
 					long total = item.getAmount() + other.getAmount();
-					int amount;
-					int remaining;
+					int amount, remaining;
 					if (total > Integer.MAX_VALUE) {
 						amount = (int) (total - Integer.MAX_VALUE);
 						remaining = (int) (total - amount);
@@ -335,18 +329,18 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Checks if the item specified by the definition should be stacked.
+	 * Checks if the item with the specified {@link ItemDefinition} should be stacked.
 	 * 
-	 * @param def The definition.
+	 * @param definition The item definition.
 	 * @return {@code true} if the item should be stacked, {@code false} otherwise.
 	 */
-	private boolean isStackable(ItemDefinition def) {
+	private boolean isStackable(ItemDefinition definition) {
 		if (mode == StackMode.STACK_ALWAYS) {
 			return true;
 		} else if (mode == StackMode.STACK_STACKABLE_ITEMS) {
-			return def.isStackable();
+			return definition.isStackable();
 		}
-		return false; // will be STACK_NEVER
+		return false;
 	}
 
 	/**
@@ -378,9 +372,8 @@ public final class Inventory implements Cloneable {
 	 */
 	private void notifyItemUpdated(int slot) {
 		if (firingEvents) {
-			Item item = items[slot];
 			for (InventoryListener listener : listeners) {
-				listener.itemUpdated(this, slot, item);
+				listener.itemUpdated(this, slot, items[slot]);
 			}
 		}
 	}
@@ -539,11 +532,12 @@ public final class Inventory implements Cloneable {
 	public void shift() {
 		Item[] old = items;
 		items = new Item[capacity];
-		for (int i = 0, pos = 0; i < items.length; i++) {
-			if (old[i] != null) {
-				items[pos++] = old[i];
+		for (int slot = 0, pos = 0; slot < items.length; slot++) {
+			if (old[slot] != null) {
+				items[pos++] = old[slot];
 			}
 		}
+
 		if (firingEvents) {
 			notifyItemsUpdated();
 		}
@@ -602,6 +596,7 @@ public final class Inventory implements Cloneable {
 	public void swap(boolean insert, int oldSlot, int newSlot) {
 		checkBounds(oldSlot);
 		checkBounds(newSlot);
+
 		if (insert) {
 			if (newSlot > oldSlot) {
 				for (int slot = oldSlot; slot < newSlot; slot++) {
@@ -614,9 +609,9 @@ public final class Inventory implements Cloneable {
 			}
 			forceRefresh();
 		} else {
-			Item tmp = items[oldSlot];
+			Item item = items[oldSlot];
 			items[oldSlot] = items[newSlot];
-			items[newSlot] = tmp;
+			items[newSlot] = item;
 			notifyItemUpdated(oldSlot);
 			notifyItemUpdated(newSlot);
 		}

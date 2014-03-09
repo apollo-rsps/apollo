@@ -40,11 +40,9 @@ public final class Appearance {
 	public Appearance(Gender gender, int[] style, int[] colors) {
 		if (gender == null || style == null || colors == null) {
 			throw new NullPointerException("No arguments can be null.");
-		}
-		if (style.length != 7) {
+		} else if (style.length != 7) {
 			throw new IllegalArgumentException("The style array must have 7 elements.");
-		}
-		if (colors.length != 5) {
+		} else if (colors.length != 5) {
 			throw new IllegalArgumentException("The colors array must have 5 elements.");
 		}
 		this.gender = gender;

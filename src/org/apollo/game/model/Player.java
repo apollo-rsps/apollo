@@ -17,8 +17,10 @@ import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
 import org.apollo.game.event.impl.UpdateRunEnergyEvent;
 import org.apollo.game.model.Inventory.StackMode;
 import org.apollo.game.model.inter.InterfaceConstants;
+import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inter.InterfaceSet;
 import org.apollo.game.model.inter.bank.BankConstants;
+import org.apollo.game.model.inter.bank.BankInterfaceListener;
 import org.apollo.game.model.inv.AppearanceInventoryListener;
 import org.apollo.game.model.inv.FullInventoryListener;
 import org.apollo.game.model.inv.InventoryListener;
@@ -27,7 +29,6 @@ import org.apollo.game.model.settings.PrivacyState;
 import org.apollo.game.model.settings.PrivilegeLevel;
 import org.apollo.game.model.settings.ScreenBrightness;
 import org.apollo.game.model.skill.LevelUpSkillListener;
-import org.apollo.game.model.skill.SkillListener;
 import org.apollo.game.model.skill.SynchronizationSkillListener;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.net.session.GameSession;
@@ -40,11 +41,6 @@ import org.apollo.util.Point;
  * @author Graham
  */
 public final class Player extends Mob {
-
-	/**
-	 * The generated serial uid.
-	 */
-	private static final long serialVersionUID = -5865532568677077237L;
 
 	/**
 	 * The player's appearance.
@@ -64,7 +60,7 @@ public final class Player extends Mob {
 	/**
 	 * A deque of this player's mouse clicks.
 	 */
-	private transient Deque<Point> clicks = new ArrayDeque<Point>();
+	private transient Deque<Point> clicks = new ArrayDeque<>();
 
 	/**
 	 * The version of the client this player is using. This is not the same as the release number, instead denoting the
@@ -76,11 +72,6 @@ public final class Player extends Mob {
 	 * This player's credentials.
 	 */
 	private PlayerCredentials credentials;
-
-	/**
-	 * A flag indicating if the player has designed their avatar.
-	 */
-	private boolean designedAvatar = false;
 
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
@@ -131,6 +122,11 @@ public final class Player extends Mob {
 	 * The membership flag.
 	 */
 	private transient boolean members = false;
+
+	/**
+	 * A flag indicating if the player is new.
+	 */
+	private boolean newPlayer = false;
 
 	/**
 	 * This player's prayer icon.
@@ -200,8 +196,8 @@ public final class Player extends Mob {
 	 */
 	public Player(PlayerCredentials credentials, Position position) {
 		super(position);
-		init();
 		this.credentials = credentials;
+		init();
 	}
 
 	/**
@@ -478,15 +474,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Checks if the player has designed their avatar.
-	 * 
-	 * @return A flag indicating if the player has designed their avatar.
-	 */
-	public boolean hasDesignedAvatar() {
-		return designedAvatar;
-	}
-
-	/**
 	 * Indicates whether or not the player with the specified username is on this player's ignore list.
 	 * 
 	 * @param username The username of the player.
@@ -535,22 +522,17 @@ public final class Player extends Mob {
 	 * Initialises the player's inventories.
 	 */
 	private void initInventories() {
-		// inventory full listeners
 		InventoryListener fullInventoryListener = new FullInventoryListener(this,
 				FullInventoryListener.FULL_INVENTORY_MESSAGE);
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
-
-		// equipment appearance listener
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 
-		// synchronization listeners
 		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
 				SynchronizationInventoryListener.INVENTORY_ID);
 		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
 		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
 				SynchronizationInventoryListener.EQUIPMENT_ID);
 
-		// add the listeners
 		inventory.addListener(syncInventoryListener);
 		inventory.addListener(fullInventoryListener);
 		bank.addListener(syncBankListener);
@@ -563,17 +545,8 @@ public final class Player extends Mob {
 	 * Initialises the player's skills.
 	 */
 	private void initSkills() {
-		SkillSet skills = getSkillSet();
-
-		// synchronization listener
-		SkillListener syncListener = new SynchronizationSkillListener(this);
-
-		// level up listener
-		SkillListener levelUpListener = new LevelUpSkillListener(this);
-
-		// add the listeners
-		skills.addListener(syncListener);
-		skills.addListener(levelUpListener);
+		skillSet.addListener(new SynchronizationSkillListener(this));
+		skillSet.addListener(new LevelUpSkillListener(this));
 	}
 
 	/**
@@ -601,6 +574,15 @@ public final class Player extends Mob {
 	 */
 	public boolean isMembers() {
 		return members;
+	}
+
+	/**
+	 * Checks if this player has logged in before.
+	 * 
+	 * @return A flag indicating if the player is new.
+	 */
+	public boolean isNewPlayer() {
+		return newPlayer;
 	}
 
 	/**
@@ -635,6 +617,22 @@ public final class Player extends Mob {
 	 */
 	public boolean messageFilterEnabled() {
 		return filteringMessages;
+	}
+
+	/**
+	 * Opens this player's bank.
+	 */
+	public void openBank() {
+		InventoryListener invListener = new SynchronizationInventoryListener(this, BankConstants.SIDEBAR_INVENTORY_ID);
+		InventoryListener bankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
+
+		inventory.addListener(invListener);
+		bank.addListener(bankListener);
+		inventory.forceRefresh();
+		bank.forceRefresh();
+
+		InterfaceListener interListener = new BankInterfaceListener(this, invListener, bankListener);
+		interfaceSet.openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID, BankConstants.SIDEBAR_ID);
 	}
 
 	/**
@@ -694,8 +692,7 @@ public final class Player extends Mob {
 	private void sendInitialEvents() {
 		send(new IdAssignmentEvent(index, members)); // TODO should this be sent when we reconnect?
 		sendMessage("Welcome to RuneScape.");
-
-		if (!designedAvatar) {
+		if (!newPlayer) {
 			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
 		}
 
@@ -795,15 +792,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the design flag.
-	 * 
-	 * @param designedAvatar A flag indicating if the player has designed their avatar.
-	 */
-	public void setDesigned(boolean designedAvatar) {
-		this.designedAvatar = designedAvatar;
-	}
-
-	/**
 	 * Sets the friend {@link PrivacyState}.
 	 * 
 	 * @param friendPrivacy The privacy state.
@@ -858,6 +846,15 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sets the new player flag.
+	 * 
+	 * @param newPlayer A flag indicating if the player has played before.
+	 */
+	public void setNew(boolean newPlayer) {
+		this.newPlayer = newPlayer;
+	}
+
+	/**
 	 * Sets the player's prayer icon.
 	 * 
 	 * @param prayerIcon The prayer icon.
@@ -890,8 +887,7 @@ public final class Player extends Mob {
 	 * @param runEnergy The energy.
 	 */
 	public void setRunEnergy(int runEnergy) {
-		this.runEnergy = runEnergy;
-		send(new UpdateRunEnergyEvent(runEnergy));
+		send(new UpdateRunEnergyEvent(this.runEnergy = runEnergy));
 	}
 
 	/**

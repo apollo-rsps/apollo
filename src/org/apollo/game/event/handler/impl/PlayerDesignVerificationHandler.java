@@ -16,7 +16,7 @@ public final class PlayerDesignVerificationHandler extends EventHandler<PlayerDe
 
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, PlayerDesignEvent event) {
-		if (!valid(event.getAppearance()) || player.hasDesignedAvatar()) {
+		if (!valid(event.getAppearance()) || player.isNewPlayer()) {
 			ctx.breakHandlerChain();
 		}
 	}

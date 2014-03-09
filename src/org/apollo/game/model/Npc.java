@@ -8,7 +8,6 @@ import org.apollo.game.sync.block.SynchronizationBlock;
  * 
  * @author Major
  */
-@SuppressWarnings("serial")
 public final class Npc extends Mob {
 
 	/**
