@@ -24,14 +24,14 @@ public final class ItemOnObjectEvent extends InventoryItemEvent {
 	 * Creates an item on object event.
 	 * 
 	 * @param interfaceId The interface id.
-	 * @param id The item id.
-	 * @param slot The slot the item is in.
+	 * @param itemId The item id.
+	 * @param itemSlot The slot the item is in.
 	 * @param objectId The object id.
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
-	public ItemOnObjectEvent(int interfaceId, int id, int slot, int objectId, int x, int y) {
-		super(0, interfaceId, id, slot);
+	public ItemOnObjectEvent(int interfaceId, int itemId, int itemSlot, int objectId, int x, int y) {
+		super(0, interfaceId, itemId, itemSlot);
 		this.objectId = objectId;
 		this.position = new Position(x, y);
 	}
