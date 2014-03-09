@@ -5,8 +5,7 @@ java_import 'org.apollo.game.event.impl.DisplayTabInterfaceEvent'
 java_import 'org.apollo.game.model.EquipmentConstants'
 java_import 'org.apollo.game.model.Skill'
 
-MAGIC_ID = Skill::MAGIC
-DISPLAY_SPELLBOOK = DisplayTabInterfaceEvent.new 6
+DISPLAY_SPELLBOOK = DisplayTabInterfaceEvent.new(6)
 
 class Spell
   attr_reader :level, :elements, :experience
@@ -16,6 +15,7 @@ class Spell
     @elements = elements
     @experience = experience
   end
+
 end
 
 class SpellAction < Action
@@ -45,8 +45,8 @@ class SpellAction < Action
   
   def check_skill
     required = @spell.level
-    if required > mob.skill_set.skill(MAGIC_ID).maximum_level
-      mob.send_message "You need a Magic level of at least #{required} to cast this spell."
+    if required > mob.skill_set.skill(MAGIC_SKILL_ID).maximum_level
+      mob.send_message("You need a Magic level of at least #{required} to cast this spell.")
       return false
     end
     
@@ -58,7 +58,7 @@ class SpellAction < Action
     
     elements.each do |element, amount|
       unless element.check_remove(mob, amount, false)
-        mob.send_message "You do not have enough #{element.name}s to cast this spell."
+        mob.send_message("You do not have enough #{element.name}s to cast this spell.")
         return false
       end
     end
@@ -73,14 +73,14 @@ class SpellAction < Action
   def equals(other)
     return (get_class == other.get_class and @spell == other.spell)
   end
+
 end
 
 class ItemSpellAction < SpellAction
   attr_reader :slot, :item
 
   def initialize(mob, spell, slot, item)
-    super(mob, spell)
-    
+    super(mob, spell)    
     @slot = slot
     @item = item
   end
@@ -89,9 +89,9 @@ class ItemSpellAction < SpellAction
   def execute
     if @pulses == 0
       if illegal_item?
-        mob.send_message "You cannot use that spell on this item!"
+        mob.send_message('You cannot use that spell on this item!')
         stop
-        return
+        next
       end
       
       id = @item.id
@@ -100,9 +100,9 @@ class ItemSpellAction < SpellAction
       @spell.elements.each do |element, amount|
         element.runes.each do |rune|
           if id == rune && !element.check_remove(mob, amount + 1, false)
-            mob.send_message("You do not have enough " + element.name + "s to cast this spell.")
+            mob.send_message("You do not have enough #{element.name}s to cast this spell.")
             stop
-            return
+            return false
           end
         end
       end
@@ -116,17 +116,18 @@ class ItemSpellAction < SpellAction
     # Override this method if necessary
     return false
   end
+
 end
 
-# MagicOnItemEvent handling
+# Intercepts the magic on item event.
 on :event, :magic_on_item do |ctx, player, event|
   spell = event.spell_id
   
   alch = ALCHEMY_SPELLS[spell]
   if alch != nil
     slot = event.slot
-    item = player.inventory.get slot
-    player.start_action AlchemyAction.new(player, alch, slot, item)
+    item = player.inventory.get(slot)
+    player.start_action(AlchemyAction.new(player, alch, slot, item))
     ctx.break_handler_chain
     return
   end
@@ -134,19 +135,19 @@ on :event, :magic_on_item do |ctx, player, event|
   ench = ENCHANT_SPELLS[event.id]
   if ench != nil and ench.button == spell
     slot = event.slot
-    item = player.inventory.get slot
-    player.start_action EnchantAction.new(player, ench, slot, item, ENCHANT_ITEMS[item.id])
+    item = player.inventory.get(slot)
+    player.start_action(EnchantAction.new(player, ench, slot, item, ENCHANT_ITEMS[item.id]))
     ctx.break_handler_chain
   end
 end
 
-# ButtonEvent handling
+# Intercepts the button event
 on :event, :button do |ctx, player, event|
   button = event.widget_id
 
   tele = TELEPORT_SPELLS[button]
   if tele != nil
-    player.start_action TeleportingAction.new(player, tele)
+    player.start_action(TeleportingAction.new(player, tele))
     ctx.break_handler_chain
     return
   end

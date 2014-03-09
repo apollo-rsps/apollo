@@ -10,11 +10,11 @@ TELEPORT_SPELLS = {}
 
 MODERN_TELE_ANIM = Animation.new(714)
 MODERN_TELE_END_ANIM = Animation.new(715)
-MODERN_TELE_GFX = Graphic.new(308, 15, 100)
+MODERN_TELE_GRAPHIC = Graphic.new(308, 15, 100)
 
-ANCIENT_TELE_END_GFX = Graphic.new(455)
+ANCIENT_TELE_END_GRAPHIC = Graphic.new(455)
 ANCIENT_TELE_ANIM = Animation.new(1979)
-ANCIENT_TELE_GFX = Graphic.new(392)
+ANCIENT_TELE_GRAPHIC = Graphic.new(392)
 
 class TeleportSpell < Spell
   attr_reader :ancient, :destination, :experience, :name
@@ -25,6 +25,7 @@ class TeleportSpell < Spell
     @destination = destination
     @name = name
   end
+
 end
 
 class TeleportingAction < SpellAction
@@ -38,37 +39,34 @@ class TeleportingAction < SpellAction
   end
   
   def execute_modern
-    player = mob
     if @pulses == 0
-      player.play_animation(MODERN_TELE_ANIM)
+      mob.play_animation(MODERN_TELE_ANIM)
     elsif @pulses == 1
-      player.play_graphic(MODERN_TELE_GFX)
+      mob.play_graphic(MODERN_TELE_GRAPHIC)
       delay = 1
     elsif @pulses == 2
-      player.stop_graphic
-      player.play_animation(MODERN_TELE_END_ANIM)
-      
-      destination = @spell.destination
-      player.teleport(destination)
-      player.skill_set.add_experience(MAGIC_ID, @spell.experience)
+      mob.stop_graphic
+      mob.play_animation(MODERN_TELE_END_ANIM)      
+      mob.teleport(@spell.destination)
+      mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)
       stop
     end
   end
   
   def execute_ancient
-    player = mob
     if @pulses == 0
-      player.play_graphic(ANCIENT_TELE_GFX)
-      player.play_animation(ANCIENT_TELE_ANIM)
+      mob.play_graphic(ANCIENT_TELE_GRAPHIC)
+      mob.play_animation(ANCIENT_TELE_ANIM)
       delay = 2
     elsif @pulses == 1
-      player.stop_graphic
-      player.stop_animation
-      player.teleport(@spell.destination)
-      player.skill_set.add_experience(MAGIC_ID, @spell.experience)
+      mob.stop_graphic
+      mob.stop_animation
+      mob.teleport(@spell.destination)
+      mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)
       stop
     end
   end
+
 end
 
 def append_tele(ancient, button, level, elements, x, y, experience, name)
