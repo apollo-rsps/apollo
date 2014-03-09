@@ -19,7 +19,7 @@ public final class ItemOnObjectVerificationHandler extends EventHandler<ItemOnOb
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, ItemOnObjectEvent event) {
 		if (event.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID
-				|| event.getInterfaceId() != BankConstants.SIDEBAR_INVENTORY_ID) {
+				&& event.getInterfaceId() != BankConstants.SIDEBAR_INVENTORY_ID) {
 			ctx.breakHandlerChain();
 			return;
 		}
