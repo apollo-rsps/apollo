@@ -136,6 +136,7 @@ public final class Release317 extends Release {
 		register(78, spamEventDecoder);
 		register(165, spamEventDecoder);
 		register(189, spamEventDecoder);
+		register(210, spamEventDecoder);
 		register(226, spamEventDecoder);
 
 		register(72, new FirstNpcActionEventDecoder());
@@ -143,6 +144,12 @@ public final class Release317 extends Release {
 		register(17, new ThirdNpcActionEventDecoder());
 		register(236, new TakeTileItemEventDecoder());
 		register(192, new ItemOnObjectEventDecoder());
+
+		register(128, new FirstPlayerActionEventDecoder());
+		register(153, new SecondPlayerActionEventDecoder());
+		register(73, new ThirdPlayerActionEventDecoder());
+		register(139, new FourthPlayerActionEventDecoder());
+		register(39, new FifthPlayerActionEventDecoder());
 
 		register(188, new AddFriendEventDecoder());
 		register(133, new AddIgnoreEventDecoder());
