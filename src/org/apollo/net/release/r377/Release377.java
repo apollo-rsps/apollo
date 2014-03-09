@@ -141,6 +141,12 @@ public final class Release377 extends Release {
 		register(71, new TakeTileItemEventDecoder());
 		register(152, new ItemOnObjectEventDecoder());
 
+		register(245, new FirstPlayerActionEventDecoder());
+		register(233, new SecondPlayerActionEventDecoder());
+		register(194, new ThirdPlayerActionEventDecoder());
+		register(116, new FourthPlayerActionEventDecoder());
+		register(45, new FifthPlayerActionEventDecoder());
+
 		register(120, new AddFriendEventDecoder());
 		register(217, new AddIgnoreEventDecoder());
 		register(141, new RemoveFriendEventDecoder());
