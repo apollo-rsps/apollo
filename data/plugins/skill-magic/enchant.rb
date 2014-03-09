@@ -25,21 +25,20 @@ class EnchantSpell < Spell
   attr_reader :button, :animation, :graphic, :delay
   
   def initialize(button, level, elements, animation, graphic, delay, experience)
-    super level, elements, experience
-    
+    super(level, elements, experience)    
     @button = button
     @animation = animation
     @graphic = graphic
     @delay = delay
   end
+
 end
 
 class EnchantAction < ItemSpellAction
   attr_reader :reward
   
   def initialize(player, enchant, slot, item, reward)
-    super(player, enchant, slot, item)
-    
+    super(player, enchant, slot, item)    
     @reward = Item.new(reward)
   end
   
@@ -48,20 +47,18 @@ class EnchantAction < ItemSpellAction
   end
   
   def execute_action
-    player = character
     if @pulses == 0
-      player.play_animation @spell.animation
-      player.play_graphic @spell.graphic
-      player.send DISPLAY_SPELLBOOK
+      mob.play_animation(@spell.animation)
+      mob.play_graphic(@spell.graphic)
+      mob.send(DISPLAY_SPELLBOOK)
       
-      player.inventory.set @slot, @reward
-      player.skill_set.add_experience MAGIC_ID, @spell.experience
+      mob.inventory.set(@slot, @reward)
+      mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)
       
-      set_delay @spell.delay
+      set_delay(@spell.delay)
     elsif @pulses == 1
-      player.stop_animation
-      player.stop_graphic
-      
+      mob.stop_animation
+      mob.stop_graphic      
       stop
     end
   end
@@ -75,11 +72,11 @@ def append_enchant(button, level, elements, item, animation, graphic, delay, exp
 end
 
 SAPPHIRE_ELEMENTS = { WATER => 1, COSMIC => 1 }
-EMERALD_ELEMENTS = { AIR => 1, COSMIC => 1 }
-RUBY_ELEMENTS = { FIRE => 5, COSMIC => 1 }
-DIAMOND_ELEMENTS = { EARTH => 10, COSMIC => 1 }
-DSTONE_ELEMENTS = { WATER => 15, EARTH => 15, COSMIC => 1 }
-ONYX_ELEMENTS = { EARTH => 20, FIRE => 20, COSMIC => 1 }
+EMERALD_ELEMENTS  = { AIR => 1, COSMIC => 1 }
+RUBY_ELEMENTS     = { FIRE => 5, COSMIC => 1 }
+DIAMOND_ELEMENTS  = { EARTH => 10, COSMIC => 1 }
+DSTONE_ELEMENTS   = { WATER => 15, EARTH => 15, COSMIC => 1 }
+ONYX_ELEMENTS     = { EARTH => 20, FIRE => 20, COSMIC => 1 }
 
 # Sapphire
 append_enchant 1155, 7, SAPPHIRE_ELEMENTS, 1637, RING_ANIM, RING_GFX, 2, 17.5, 2550 # Ring

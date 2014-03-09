@@ -8,34 +8,32 @@ CONVERT_SPELLS = {}
 BONES_ID = 526
 
 CONVERT_ANIM = Animation.new(722)
-CONVERT_GFX = Graphic.new(141, 0, 100)
+CONVERT_GRAPHIC = Graphic.new(141, 0, 100)
 
 class ConvertSpell < Spell
   attr_reader :reward
   
   def initialize(level, elements, experience, reward)
-    super(level, elements, experience)
-    
+    super(level, elements, experience)    
     @reward = Item.new(reward)
   end
+
 end
 
 class ConvertingAction < SpellAction
   attr_reader :slots
 
   def initialize(player, spell, slots)
-    super(player, spell)
-    
+    super(player, spell)    
     @slots = slots
   end
 
   def execute_action
-    player = character
     if @pulses == 0
-      player.play_animation CONVERT_ANIM
-      player.play_graphic CONVERT_GFX
+      mob.play_animation(CONVERT_ANIM)
+      mob.play_graphic(CONVERT_GRAPHIC)
       
-      inventory = player.inventory
+      inventory = mob.inventory
       firing = (@slots.length * 2) < inventory.capacity
       
       inventory.stop_firing_events unless firing # In the case of many changes, wait with firing events
@@ -50,16 +48,15 @@ class ConvertingAction < SpellAction
         inventory.force_refresh
       end
       
-      player.skill_set.add_experience MAGIC_ID, @spell.experience
-      
-      set_delay 2
+      mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)      
+      set_delay(2)
     elsif @pulses == 1
-      player.stop_animation
-      player.stop_graphic
-      
+      mob.stop_animation
+      mob.stop_graphic      
       stop
     end
   end
+
 end
 
 def bone_slots(player)
@@ -73,9 +70,7 @@ def bone_slots(player)
     break unless counter <= size
     
     item = items[slot]
-    if item != nil and item.id == BONES_ID
-      slots << slot
-    end
+    slots << slot if (item != nil and item.id == BONES_ID)
     
     counter += 1
   end
@@ -84,9 +79,8 @@ def bone_slots(player)
 end
 
 def append_convert(button, level, elements, experience, reward)
-  convert = ConvertSpell.new(level, elements, experience, reward)
-  CONVERT_SPELLS[button] = convert
+  CONVERT_SPELLS[button] = ConvertSpell.new(level, elements, experience, reward)
 end
 
-append_convert 1159, 15, { EARTH => 2, WATER => 2, NATURE => 1 }, 25, 1963 # Bones to bananas
+append_convert  1159, 15, { EARTH => 2, WATER => 2, NATURE => 1 },   25, 1963 # Bones to bananas
 append_convert 15877, 60, { NATURE => 2, WATER => 4, EARTH => 4 }, 35.5, 6883 # Bones to peaches
