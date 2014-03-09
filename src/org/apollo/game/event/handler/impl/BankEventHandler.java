@@ -49,7 +49,7 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 	private void deposit(EventHandlerContext ctx, Player player, ItemActionEvent event) {
 		int amount = optionToAmount(event.getOption());
 		if (amount == -1) {
-			player.getInterfaceSet().openEnterAmountDialog(
+			player.getInterfaceSet().openEnterAmountDialogue(
 					new BankDepositEnterAmountListener(player, event.getSlot(), event.getId()));
 		} else if (!BankUtils.deposit(player, event.getSlot(), event.getId(), amount)) {
 			ctx.breakHandlerChain();
@@ -58,14 +58,12 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, ItemActionEvent event) {
-		if (!player.getInterfaceSet().contains(BankConstants.BANK_WINDOW_ID)) {
-			return;
-		}
-
-		if (event.getInterfaceId() == BankConstants.SIDEBAR_INVENTORY_ID) {
-			deposit(ctx, player, event);
-		} else if (event.getInterfaceId() == BankConstants.BANK_INVENTORY_ID) {
-			withdraw(ctx, player, event);
+		if (player.getInterfaceSet().contains(BankConstants.BANK_WINDOW_ID)) {
+			if (event.getInterfaceId() == BankConstants.SIDEBAR_INVENTORY_ID) {
+				deposit(ctx, player, event);
+			} else if (event.getInterfaceId() == BankConstants.BANK_INVENTORY_ID) {
+				withdraw(ctx, player, event);
+			}
 		}
 	}
 
@@ -79,7 +77,7 @@ public final class BankEventHandler extends EventHandler<ItemActionEvent> {
 	private void withdraw(EventHandlerContext ctx, Player player, ItemActionEvent event) {
 		int amount = optionToAmount(event.getOption());
 		if (amount == -1) {
-			player.getInterfaceSet().openEnterAmountDialog(
+			player.getInterfaceSet().openEnterAmountDialogue(
 					new BankWithdrawEnterAmountListener(player, event.getSlot(), event.getId()));
 		} else if (!BankUtils.withdraw(player, event.getSlot(), event.getId(), amount)) {
 			ctx.breakHandlerChain();

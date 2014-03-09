@@ -16,7 +16,7 @@ public final class PlayerDesignEventHandler extends EventHandler<PlayerDesignEve
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, PlayerDesignEvent event) {
 		player.setAppearance(event.getAppearance());
-		player.setDesigned(true);
+		player.setNew(true);
 		player.send(new CloseInterfaceEvent());
 	}
 

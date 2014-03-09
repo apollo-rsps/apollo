@@ -248,9 +248,8 @@ POISON_IVY_BERRIES = Ingredient.new(6018)
 YEW_ROOTS          = Ingredient.new(6049)
 MAGIC_ROOTS        = Ingredient.new(6051)
 
-# Grinded ingredients
+# Ground ingredients
 UNICORN_HORN_DUST = append_ground(235,  237)
 DRAGON_SCALE_DUST = append_ground(241,  243)
 CHOCOLATE_DUST    = append_ground(1975, 1973)
-CRUSHED_NEST      = append_ground(6693, 5075)
-GROUND_MUD_RUNE   = append_ground(9594, 4698)
+# CRUSHED_NEST      = append_ground(6693, 5075)

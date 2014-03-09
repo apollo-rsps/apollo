@@ -12,17 +12,17 @@ import org.apollo.game.event.Event;
 public abstract class NpcActionEvent extends Event {
 
 	/**
-	 * The option number .
+	 * The option number.
 	 */
 	private final int option;
 
 	/**
-	 * The npc index.
+	 * The index of the clicked npc.
 	 */
 	private final int index;
 
 	/**
-	 * Creates a new npc action event.
+	 * Creates an npc action event.
 	 * 
 	 * @param option The option number.
 	 * @param index The index of the npc.

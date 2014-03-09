@@ -10,7 +10,7 @@ public final class WorldConstants {
 	/**
 	 * The maximum number of npcs.
 	 */
-	public static final int MAXIMUM_NPCS = 2000;
+	public static final int MAXIMUM_NPCS = 32768;
 
 	/**
 	 * The maximum number of players.

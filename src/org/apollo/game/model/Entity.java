@@ -1,13 +1,11 @@
 package org.apollo.game.model;
 
-import java.io.Serializable;
-
 /**
  * Represents an in-game entity, such as a mob, object, projectile etc.
  * 
  * @author Major
  */
-public abstract class Entity implements Serializable {
+public abstract class Entity {
 
 	/**
 	 * Represents a type of {@link Entity}.
@@ -40,12 +38,8 @@ public abstract class Entity implements Serializable {
 		 * A projectile (e.g. an arrow).
 		 */
 		PROJECTILE;
-	}
 
-	/**
-	 * The generated serial UID.
-	 */
-	private static final long serialVersionUID = 5968243763380631014L;
+	}
 
 	/**
 	 * The position of this entity.
@@ -64,7 +58,7 @@ public abstract class Entity implements Serializable {
 	/**
 	 * Gets the {@link EntityType} of this entity.
 	 * 
-	 * @return The type.
+	 * @return The entity type.
 	 */
 	public abstract EntityType getEntityType();
 

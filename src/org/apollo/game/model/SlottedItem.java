@@ -33,7 +33,7 @@ public final class SlottedItem {
 	 * 
 	 * @return The amount.
 	 */
-	public int getamount() {
+	public int getAmount() {
 		return item.getAmount();
 	}
 

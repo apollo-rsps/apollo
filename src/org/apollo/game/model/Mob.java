@@ -18,11 +18,6 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
 public abstract class Mob extends Entity {
 
 	/**
-	 * The generated serial uid.
-	 */
-	private static final long serialVersionUID = 8342608309450355638L;
-
-	/**
 	 * This mob's current action.
 	 */
 	private transient Action<?> action;
@@ -33,7 +28,7 @@ public abstract class Mob extends Entity {
 	protected transient SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
 
 	/**
-	 * This mob's npc definition. A player only uses this if they are appearing as an npc in-game.
+	 * This mob's npc definition. A player only uses this if they are appearing as an npc.
 	 */
 	protected NpcDefinition definition;
 
@@ -424,7 +419,7 @@ public abstract class Mob extends Entity {
 		this.position = position;
 		teleporting = true;
 		walkingQueue.clear();
-		stopAction(); // TODO do it on any movement is a must... walking queue perhaps?
+		stopAction();
 	}
 
 	/**
@@ -433,8 +428,7 @@ public abstract class Mob extends Entity {
 	 * @param position The position to face.
 	 */
 	public final void turnTo(Position position) {
-		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(position));
-		this.facingPosition = position;
+		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(this.facingPosition = position));
 	}
 
 }

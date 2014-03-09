@@ -80,7 +80,7 @@ public final class SkillSet {
 	/**
 	 * A list of skill listeners.
 	 */
-	private final List<SkillListener> listeners = new ArrayList<SkillListener>();
+	private final List<SkillListener> listeners = new ArrayList<>();
 
 	/**
 	 * The skills.
@@ -102,7 +102,6 @@ public final class SkillSet {
 	 */
 	public void addExperience(int id, double experience) {
 		checkBounds(id);
-
 		Skill old = skills[id];
 
 		double newExperience = old.getExperience() + experience;
@@ -218,14 +217,13 @@ public final class SkillSet {
 	 */
 	public void normalize() {
 		for (int id = 0; id < skills.length; id++) {
-			int current = skills[id].getCurrentLevel();
-			int max = skills[id].getMaximumLevel();
+			int current = skills[id].getCurrentLevel(), max = skills[id].getMaximumLevel();
 
 			if (current == max) {
 				continue;
 			}
-			current += current < max ? 1 : -1;
 
+			current += current < max ? 1 : -1;
 			setSkill(id, new Skill(skills[id].getExperience(), current, max));
 		}
 	}

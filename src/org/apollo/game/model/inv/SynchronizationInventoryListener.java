@@ -35,7 +35,7 @@ public final class SynchronizationInventoryListener extends InventoryAdapter {
 	private final Player player;
 
 	/**
-	 * Creates the syncrhonization inventory listener.
+	 * Creates the synchronization inventory listener.
 	 * 
 	 * @param player The player.
 	 * @param interfaceId The interface id.
