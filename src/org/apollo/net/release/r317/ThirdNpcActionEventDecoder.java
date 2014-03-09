@@ -9,11 +9,11 @@ import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.EventDecoder;
 
 /**
- * The {@link EventDecoder} for the {@link ThirdNpcActionEvent}.
+ * An {@link EventDecoder} for the {@link ThirdNpcActionEvent}.
  * 
  * @author Major
  */
-public class ThirdNpcActionEventDecoder extends EventDecoder<ThirdNpcActionEvent> {
+public final class ThirdNpcActionEventDecoder extends EventDecoder<ThirdNpcActionEvent> {
 
 	@Override
 	public ThirdNpcActionEvent decode(GamePacket packet) {

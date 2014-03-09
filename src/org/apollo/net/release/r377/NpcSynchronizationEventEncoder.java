@@ -31,7 +31,7 @@ import org.apollo.net.release.EventEncoder;
  * 
  * @author Major
  */
-public class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizationEvent> {
+public final class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchronizationEvent> {
 
 	@Override
 	public GamePacket encode(NpcSynchronizationEvent event) {

@@ -12,7 +12,7 @@ import org.apollo.net.release.EventDecoder;
  * 
  * @author Major
  */
-public class ArrowKeyEventDecoder extends EventDecoder<ArrowKeyEvent> {
+public final class ArrowKeyEventDecoder extends EventDecoder<ArrowKeyEvent> {
 
 	@Override
 	public ArrowKeyEvent decode(GamePacket packet) {

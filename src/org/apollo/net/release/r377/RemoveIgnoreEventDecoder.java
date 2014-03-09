@@ -12,7 +12,7 @@ import org.apollo.util.NameUtil;
  * 
  * @author Major
  */
-public class RemoveIgnoreEventDecoder extends EventDecoder<RemoveIgnoreEvent> {
+public final class RemoveIgnoreEventDecoder extends EventDecoder<RemoveIgnoreEvent> {
 
 	@Override
 	public RemoveIgnoreEvent decode(GamePacket packet) {

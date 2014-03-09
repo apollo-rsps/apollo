@@ -11,7 +11,7 @@ import org.apollo.net.release.EventDecoder;
  * 
  * @author Major
  */
-public class FocusUpdateEventDecoder extends EventDecoder<FocusUpdateEvent> {
+public final class FocusUpdateEventDecoder extends EventDecoder<FocusUpdateEvent> {
 
 	@Override
 	public FocusUpdateEvent decode(GamePacket packet) {

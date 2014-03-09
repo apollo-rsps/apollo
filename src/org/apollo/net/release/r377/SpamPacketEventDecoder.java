@@ -9,7 +9,7 @@ import org.apollo.net.release.EventDecoder;
  * 
  * @author Major
  */
-public class SpamPacketEventDecoder extends EventDecoder<SpamPacketEvent> {
+public final class SpamPacketEventDecoder extends EventDecoder<SpamPacketEvent> {
 
 	@Override
 	public SpamPacketEvent decode(GamePacket packet) {

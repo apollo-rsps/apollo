@@ -11,7 +11,7 @@ import org.apollo.net.release.EventEncoder;
  * 
  * @author Major
  */
-public class FriendServerStatusEventEncoder extends EventEncoder<FriendServerStatusEvent> {
+public final class FriendServerStatusEventEncoder extends EventEncoder<FriendServerStatusEvent> {
 
 	@Override
 	public GamePacket encode(FriendServerStatusEvent event) {

@@ -11,7 +11,7 @@ import org.apollo.net.release.EventDecoder;
  * 
  * @author Major
  */
-public class MouseClickEventDecoder extends EventDecoder<MouseClickEvent> {
+public final class MouseClickEventDecoder extends EventDecoder<MouseClickEvent> {
 
 	@Override
 	public MouseClickEvent decode(GamePacket packet) {
