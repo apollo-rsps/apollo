@@ -101,27 +101,27 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * Puts an Animation block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putAnimationBlock(AnimationBlock block, GamePacketBuilder blockBuilder) {
+	private void putAnimationBlock(AnimationBlock block, GamePacketBuilder builder) {
 		Animation animation = block.getAnimation();
-		blockBuilder.put(DataType.SHORT, animation.getId());
-		blockBuilder.put(DataType.BYTE, DataTransformation.ADD, animation.getDelay());
+		builder.put(DataType.SHORT, animation.getId());
+		builder.put(DataType.BYTE, DataTransformation.ADD, animation.getDelay());
 	}
 
 	/**
 	 * Puts an Appearance block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putAppearanceBlock(AppearanceBlock block, GamePacketBuilder blockBuilder) {
+	private void putAppearanceBlock(AppearanceBlock block, GamePacketBuilder builder) {
 		Appearance appearance = block.getAppearance();
 		GamePacketBuilder playerProperties = new GamePacketBuilder();
 
 		playerProperties.put(DataType.BYTE, appearance.getGender().toInteger());
-		playerProperties.put(DataType.BYTE, block.getHeadIcon()); // skull icon
-		playerProperties.put(DataType.BYTE, block.getPrayerIcon()); // prayer icon
+		playerProperties.put(DataType.BYTE, block.isSkulled() ? 1 : 0);
+		playerProperties.put(DataType.BYTE, block.getHeadIcon());
 
 		if (block.appearingAsNpc()) {
 			playerProperties.put(DataType.BYTE, 255);
@@ -220,17 +220,17 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 		playerProperties.put(DataType.BYTE, block.getCombatLevel());
 		playerProperties.put(DataType.SHORT, block.getSkillLevel());
 
-		blockBuilder.put(DataType.BYTE, playerProperties.getLength());
-		blockBuilder.putRawBuilderReverse(playerProperties);
+		builder.put(DataType.BYTE, playerProperties.getLength());
+		builder.putRawBuilderReverse(playerProperties);
 	}
 
 	/**
 	 * Puts the blocks for the specified segment.
 	 * 
 	 * @param segment The segment.
-	 * @param blockBuilder The block builder.
+	 * @param builder The block builder.
 	 */
-	private void putBlocks(SynchronizationSegment segment, GamePacketBuilder blockBuilder) {
+	private void putBlocks(SynchronizationSegment segment, GamePacketBuilder builder) {
 		SynchronizationBlockSet blockSet = segment.getBlockSet();
 		if (blockSet.size() > 0) {
 			int mask = 0;
@@ -268,42 +268,41 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 
 			if (mask >= 0x100) {
 				mask |= 0x20;
-				blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, mask);
+				builder.put(DataType.SHORT, DataOrder.LITTLE, mask);
 			} else {
-				blockBuilder.put(DataType.BYTE, mask);
+				builder.put(DataType.BYTE, mask);
 			}
 
 			if (blockSet.contains(AnimationBlock.class)) {
-				putAnimationBlock(blockSet.get(AnimationBlock.class), blockBuilder);
+				putAnimationBlock(blockSet.get(AnimationBlock.class), builder);
 			}
 			if (blockSet.contains(ForceChatBlock.class)) {
-				putForceChatBlock(blockSet.get(ForceChatBlock.class), blockBuilder);
+				putForceChatBlock(blockSet.get(ForceChatBlock.class), builder);
 			}
 			if (blockSet.contains(ForceMovementBlock.class)) {
-				putForceMovementBlock(blockSet.get(ForceMovementBlock.class), blockBuilder);
+				putForceMovementBlock(blockSet.get(ForceMovementBlock.class), builder);
 			}
 			if (blockSet.contains(InteractingMobBlock.class)) {
-				putInteractingMobBlock(blockSet.get(InteractingMobBlock.class), blockBuilder);
+				putInteractingMobBlock(blockSet.get(InteractingMobBlock.class), builder);
 			}
 			if (blockSet.contains(TurnToPositionBlock.class)) {
-				putTurnToPositionBlock(blockSet.get(TurnToPositionBlock.class), blockBuilder);
+				putTurnToPositionBlock(blockSet.get(TurnToPositionBlock.class), builder);
 			}
 			if (blockSet.contains(GraphicBlock.class)) {
-				putGraphicBlock(blockSet.get(GraphicBlock.class), blockBuilder);
+				putGraphicBlock(blockSet.get(GraphicBlock.class), builder);
 			}
 			if (blockSet.contains(AppearanceBlock.class)) {
-				putAppearanceBlock(blockSet.get(AppearanceBlock.class), blockBuilder);
+				putAppearanceBlock(blockSet.get(AppearanceBlock.class), builder);
 			}
 			if (blockSet.contains(SecondaryHitUpdateBlock.class)) {
-				putSecondHitUpdateBlock(blockSet.get(SecondaryHitUpdateBlock.class), blockBuilder);
+				putSecondHitUpdateBlock(blockSet.get(SecondaryHitUpdateBlock.class), builder);
 			}
 			if (blockSet.contains(ChatBlock.class)) {
-				putChatBlock(blockSet.get(ChatBlock.class), blockBuilder);
+				putChatBlock(blockSet.get(ChatBlock.class), builder);
 			}
 			if (blockSet.contains(HitUpdateBlock.class)) {
-				putHitUpdateBlock(blockSet.get(HitUpdateBlock.class), blockBuilder);
+				putHitUpdateBlock(blockSet.get(HitUpdateBlock.class), builder);
 			}
-
 		}
 	}
 
@@ -311,14 +310,14 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * Puts a chat block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putChatBlock(ChatBlock block, GamePacketBuilder blockBuilder) {
+	private void putChatBlock(ChatBlock block, GamePacketBuilder builder) {
 		byte[] bytes = block.getCompressedMessage();
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, block.getTextEffects() << 8 | block.getTextColor());
-		blockBuilder.put(DataType.BYTE, DataTransformation.NEGATE, block.getPrivilegeLevel().toInteger());
-		blockBuilder.put(DataType.BYTE, DataTransformation.ADD, bytes.length);
-		blockBuilder.putBytes(DataTransformation.ADD, bytes);
+		builder.put(DataType.SHORT, DataOrder.LITTLE, block.getTextEffects() << 8 | block.getTextColor());
+		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getPrivilegeLevel().toInteger());
+		builder.put(DataType.BYTE, DataTransformation.ADD, bytes.length);
+		builder.putBytes(DataTransformation.ADD, bytes);
 	}
 
 	/**
@@ -351,12 +350,12 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * Puts a graphic block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder blockBuilder) {
+	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder builder) {
 		Graphic graphic = block.getGraphic();
-		blockBuilder.put(DataType.SHORT, DataTransformation.ADD, graphic.getId());
-		blockBuilder.put(DataType.INT, DataOrder.MIDDLE, graphic.getHeight() << 16 & 0xFFFF0000 | graphic.getDelay()
+		builder.put(DataType.SHORT, DataTransformation.ADD, graphic.getId());
+		builder.put(DataType.INT, DataOrder.MIDDLE, graphic.getHeight() << 16 & 0xFFFF0000 | graphic.getDelay()
 				& 0x0000FFFF);
 	}
 
@@ -452,12 +451,12 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 	 * Puts a turn to position block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder blockBuilder) {
-		Position pos = block.getPosition();
-		blockBuilder.put(DataType.SHORT, pos.getX() * 2 + 1);
-		blockBuilder.put(DataType.SHORT, pos.getY() * 2 + 1);
+	private void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
+		Position position = block.getPosition();
+		builder.put(DataType.SHORT, position.getX() * 2 + 1);
+		builder.put(DataType.SHORT, position.getY() * 2 + 1);
 	}
 
 }

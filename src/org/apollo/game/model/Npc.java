@@ -11,6 +11,11 @@ import org.apollo.game.sync.block.SynchronizationBlock;
 public final class Npc extends Mob {
 
 	/**
+	 * This npc's id.
+	 */
+	private int id;
+
+	/**
 	 * The positions representing the bounds (i.e. walking limits) of this npc.
 	 */
 	private Position[] boundary;
@@ -34,6 +39,7 @@ public final class Npc extends Mob {
 	public Npc(NpcDefinition definition, Position position) {
 		super(position);
 		this.definition = definition;
+		this.id = definition.getId();
 	}
 
 	/**
@@ -51,12 +57,12 @@ public final class Npc extends Mob {
 	}
 
 	/**
-	 * Gets the id of this npc. Shorthand for {@link #getDefinition().getId()}.
+	 * Gets the id of this npc.
 	 * 
 	 * @return The id.
 	 */
 	public int getId() {
-		return definition.getId();
+		return id;
 	}
 
 	/**
@@ -94,7 +100,7 @@ public final class Npc extends Mob {
 		if (id < 0 || id >= NpcDefinition.count()) {
 			throw new IllegalArgumentException("Id to transform to is out of bounds.");
 		}
-		definition = NpcDefinition.lookup(id);
+		definition = NpcDefinition.lookup(this.id = id);
 		blockSet.add(SynchronizationBlock.createTransformBlock(id));
 	}
 

@@ -88,21 +88,21 @@ public final class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchr
 	 * Puts an animation block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putAnimationBlock(AnimationBlock block, GamePacketBuilder blockBuilder) {
+	private void putAnimationBlock(AnimationBlock block, GamePacketBuilder builder) {
 		Animation animation = block.getAnimation();
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, animation.getId());
-		blockBuilder.put(DataType.BYTE, animation.getDelay());
+		builder.put(DataType.SHORT, DataOrder.LITTLE, animation.getId());
+		builder.put(DataType.BYTE, animation.getDelay());
 	}
 
 	/**
 	 * Puts the blocks for the specified segment.
 	 * 
 	 * @param segment The segment.
-	 * @param blockBuilder The block builder.
+	 * @param builder The block builder.
 	 */
-	private void putBlocks(SynchronizationSegment segment, GamePacketBuilder blockBuilder) {
+	private void putBlocks(SynchronizationSegment segment, GamePacketBuilder builder) {
 		SynchronizationBlockSet blockSet = segment.getBlockSet();
 		if (blockSet.size() > 0) {
 			int mask = 0;
@@ -139,38 +139,38 @@ public final class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchr
 				mask |= 0x4;
 			}
 
-			blockBuilder.put(DataType.BYTE, mask);
+			builder.put(DataType.BYTE, mask);
 
 			if (blockSet.contains(AnimationBlock.class)) {
-				putAnimationBlock(blockSet.get(AnimationBlock.class), blockBuilder);
+				putAnimationBlock(blockSet.get(AnimationBlock.class), builder);
 			}
 
 			if (blockSet.contains(HitUpdateBlock.class)) {
-				putHitUpdateBlock(blockSet.get(HitUpdateBlock.class), blockBuilder);
+				putHitUpdateBlock(blockSet.get(HitUpdateBlock.class), builder);
 			}
 
 			if (blockSet.contains(GraphicBlock.class)) {
-				putGraphicBlock(blockSet.get(GraphicBlock.class), blockBuilder);
+				putGraphicBlock(blockSet.get(GraphicBlock.class), builder);
 			}
 
 			if (blockSet.contains(InteractingMobBlock.class)) {
-				putInteractingMobBlock(blockSet.get(InteractingMobBlock.class), blockBuilder);
+				putInteractingMobBlock(blockSet.get(InteractingMobBlock.class), builder);
 			}
 
 			if (blockSet.contains(ForceChatBlock.class)) {
-				putForceChatBlock(blockSet.get(ForceChatBlock.class), blockBuilder);
+				putForceChatBlock(blockSet.get(ForceChatBlock.class), builder);
 			}
 
 			if (blockSet.contains(SecondaryHitUpdateBlock.class)) {
-				putSecondHitUpdateBlock(blockSet.get(SecondaryHitUpdateBlock.class), blockBuilder);
+				putSecondHitUpdateBlock(blockSet.get(SecondaryHitUpdateBlock.class), builder);
 			}
 
 			if (blockSet.contains(TransformBlock.class)) {
-				putTransformBlock(blockSet.get(TransformBlock.class), blockBuilder);
+				putTransformBlock(blockSet.get(TransformBlock.class), builder);
 			}
 
 			if (blockSet.contains(TurnToPositionBlock.class)) {
-				putTurnToPositionBlock(blockSet.get(TurnToPositionBlock.class), blockBuilder);
+				putTurnToPositionBlock(blockSet.get(TurnToPositionBlock.class), builder);
 			}
 		}
 	}
@@ -189,12 +189,12 @@ public final class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchr
 	 * Puts a graphic block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder blockBuilder) {
+	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder builder) {
 		Graphic graphic = block.getGraphic();
-		blockBuilder.put(DataType.SHORT, graphic.getId());
-		blockBuilder.put(DataType.INT, graphic.getDelay());
+		builder.put(DataType.SHORT, graphic.getId());
+		builder.put(DataType.INT, graphic.getDelay());
 	}
 
 	/**
@@ -290,12 +290,12 @@ public final class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchr
 	 * Puts a turn to position block into the specified builder.
 	 * 
 	 * @param block The block.
-	 * @param blockBuilder The builder.
+	 * @param builder The builder.
 	 */
-	private void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder blockBuilder) {
-		Position pos = block.getPosition();
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, pos.getX() * 2 + 1);
-		blockBuilder.put(DataType.SHORT, DataOrder.LITTLE, pos.getY() * 2 + 1);
+	private void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
+		Position position = block.getPosition();
+		builder.put(DataType.SHORT, DataOrder.LITTLE, position.getX() * 2 + 1);
+		builder.put(DataType.SHORT, DataOrder.LITTLE, position.getY() * 2 + 1);
 	}
 
 }
