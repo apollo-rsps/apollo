@@ -7,13 +7,12 @@ import java.util.List;
 import org.apollo.game.event.impl.NpcSynchronizationEvent;
 import org.apollo.game.model.Npc;
 import org.apollo.game.model.Player;
+import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.game.sync.seg.AddNpcSegment;
 import org.apollo.game.sync.seg.MovementSegment;
 import org.apollo.game.sync.seg.RemoveMobSegment;
 import org.apollo.game.sync.seg.SynchronizationSegment;
-import org.apollo.util.MobRepository;
 
 /**
  * A {@link SynchronizationTask} which synchronizes npcs with the specified {@link Player}.
@@ -44,15 +43,15 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 
 	@Override
 	public void run() {
-		SynchronizationBlockSet blockSet = player.getBlockSet();
 		List<Npc> localNpcs = player.getLocalNpcList();
+		List<SynchronizationSegment> segments = new ArrayList<>();
 		int oldLocalNpcs = localNpcs.size();
-		List<SynchronizationSegment> segments = new ArrayList<SynchronizationSegment>();
+		final Position playerPosition = player.getPosition();
 
 		for (Iterator<Npc> it = localNpcs.iterator(); it.hasNext();) {
 			Npc npc = it.next();
 			if (!npc.isActive() || npc.isTeleporting()
-					|| npc.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
+					|| npc.getPosition().getLongestDelta(playerPosition) > player.getViewingDistance()) {
 				it.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
@@ -62,8 +61,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 
 		int added = 0;
 
-		MobRepository<Npc> repository = World.getWorld().getNpcRepository();
-		for (Npc npc : repository) {
+		for (Npc npc : World.getWorld().getNpcRepository()) {
 			if (localNpcs.size() >= 255) {
 				player.flagExcessiveNpcs();
 				break;
@@ -71,19 +69,17 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 				break;
 			}
 
-			if (npc.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
-					&& !localNpcs.contains(npc)) {
+			Position npcPosition = npc.getPosition();
+			if (npcPosition.isWithinDistance(playerPosition, player.getViewingDistance()) && !localNpcs.contains(npc)
+					&& npcPosition.getHeight() == playerPosition.getHeight()) {
 				localNpcs.add(npc);
 				added++;
 				npc.turnTo(npc.getFacingPosition());
-				blockSet = npc.getBlockSet();
-				segments.add(new AddNpcSegment(blockSet, npc.getIndex(), npc.getPosition(), npc.getDefinition()
-						.getId()));
+				segments.add(new AddNpcSegment(npc.getBlockSet(), npc.getIndex(), npcPosition, npc.getId()));
 			}
 		}
 
-		NpcSynchronizationEvent event = new NpcSynchronizationEvent(player.getPosition(), segments, oldLocalNpcs);
-		player.send(event);
+		player.send(new NpcSynchronizationEvent(playerPosition, segments, oldLocalNpcs));
 	}
 
 }

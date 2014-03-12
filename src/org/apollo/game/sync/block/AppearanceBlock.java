@@ -26,9 +26,9 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	private final Inventory equipment;
 
 	/**
-	 * The player's head icon.
+	 * Whether or not the player is skulled.
 	 */
-	private final int headIcon;
+	private final boolean isSkulled;
 
 	/**
 	 * The player's name.
@@ -43,7 +43,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	/**
 	 * The player's prayer icon.
 	 */
-	private final int prayerIcon;
+	private final int headIcon;
 
 	/**
 	 * The player's total skill level (or 0).
@@ -58,12 +58,12 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 * @param combat The player's combat.
 	 * @param skill The player's skill, or 0 if showing the combat level.
 	 * @param equipment The player's equipment.
-	 * @param prayerIcon The prayer icon id of this player.
-	 * @param headIcon The head icon id of this player.
+	 * @param headIcon The head icon id of the player.
+	 * @param isSkulled Whether or not the player is skulled.
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int prayerIcon,
-			int headIcon) {
-		this(name, appearance, combat, skill, equipment, prayerIcon, headIcon, -1);
+	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon,
+			boolean isSkulled) {
+		this(name, appearance, combat, skill, equipment, headIcon, isSkulled, -1);
 	}
 
 	/**
@@ -74,19 +74,19 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 * @param combat The player's combat.
 	 * @param skill The player's skill, or 0 if showing the combat level.
 	 * @param equipment The player's equipment.
-	 * @param prayerIcon The prayer icon id of this player.
-	 * @param headIcon The head icon id of this player.
+	 * @param headIcon The prayer icon id of this player.
+	 * @param isSkulled Whether or not the player is skulled.
 	 * @param npcId The npc id of the player, if they are appearing as an npc, (otherwise {@code -1}).
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int prayerIcon,
-			int headIcon, int npcId) {
+	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon,
+			boolean isSkulled, int npcId) {
 		this.name = name;
 		this.appearance = appearance;
 		this.combat = combat;
 		this.skill = skill;
 		this.equipment = equipment.clone();
-		this.prayerIcon = prayerIcon;
 		this.headIcon = headIcon;
+		this.isSkulled = isSkulled;
 		this.npcId = npcId;
 	}
 
@@ -127,12 +127,12 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the player's head icon.
+	 * Whether or not the player is skulled.
 	 * 
-	 * @return The head icon.
+	 * @return {@code true} if the player is skulled, otherwise {@code false}.
 	 */
-	public int getHeadIcon() {
-		return headIcon;
+	public boolean isSkulled() {
+		return isSkulled;
 	}
 
 	/**
@@ -154,12 +154,12 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	}
 
 	/**
-	 * Gets the player's prayer icon.
+	 * Gets the player's head icon.
 	 * 
-	 * @return The prayer icon.
+	 * @return The head icon.
 	 */
-	public int getPrayerIcon() {
-		return prayerIcon;
+	public int getHeadIcon() {
+		return headIcon;
 	}
 
 	/**

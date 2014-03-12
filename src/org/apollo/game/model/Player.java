@@ -99,9 +99,9 @@ public final class Player extends Mob {
 	private List<String> friends = new ArrayList<>();
 
 	/**
-	 * This player's head icon.
+	 * Whether or not the player is skulled.
 	 */
-	private int headIcon = -1;
+	private boolean isSkulled = false;
 
 	/**
 	 * The list of usernames of players this player has ignored.
@@ -348,12 +348,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets the player's head icon.
+	 * Indicates whether or not the player is skulled
 	 * 
-	 * @return The head icon.
+	 * @return {@code true} if the player is skulled, otherwise {@code false}.
 	 */
-	public int getHeadIcon() {
-		return headIcon;
+	public boolean isSkulled() {
+		return isSkulled;
 	}
 
 	/**
@@ -810,12 +810,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the player's head icon.
+	 * Sets whether or not the player is skulled.
 	 * 
-	 * @param headIcon The head icon.
+	 * @param isSkulled Whether or not the player is skulled.
 	 */
-	public void setHeadIcon(int headIcon) {
-		this.headIcon = headIcon;
+	public void setSkulled(boolean isSkulled) {
+		this.isSkulled = isSkulled;
 	}
 
 	/**
