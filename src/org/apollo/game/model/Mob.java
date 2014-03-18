@@ -65,12 +65,12 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's list of local npcs.
 	 */
-	private final transient List<Npc> localNpcs = new ArrayList<Npc>();
+	private final transient List<Npc> localNpcs = new ArrayList<>();
 
 	/**
 	 * This mob's list of local players.
 	 */
-	private final transient List<Player> localPlayers = new ArrayList<Player>();
+	private final transient List<Player> localPlayers = new ArrayList<>();
 
 	/**
 	 * This mob's second movement direction.
