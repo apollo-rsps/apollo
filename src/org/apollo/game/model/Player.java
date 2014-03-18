@@ -141,7 +141,7 @@ public final class Player extends Mob {
 	/**
 	 * A temporary queue of events sent during the login process.
 	 */
-	private final transient Deque<Event> queuedEvents = new ArrayDeque<Event>();
+	private final transient Deque<Event> queuedEvents = new ArrayDeque<>();
 
 	/**
 	 * A flag indicating if the region changed in the last cycle.
