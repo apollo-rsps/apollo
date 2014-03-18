@@ -46,7 +46,7 @@ public abstract class NpcActionEvent extends Event {
 	 * 
 	 * @return The npc index.
 	 */
-	public int getNpcIndex() {
+	public int getIndex() {
 		return index;
 	}
 
