@@ -1,0 +1,4 @@
+<login>
+	<loader>org.apollo.io.player.imp.BinaryPlayerLoader</loader>
+	<saver>org.apollo.io.player.imp.BinaryPlayerSaver</saver>
+</login>
