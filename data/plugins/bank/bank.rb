@@ -14,8 +14,8 @@ class BankAction < DistancedAction
   end
 
   def executeAction
-    character.turn_to @position
-    BankUtils.open_bank character
+    mob.turn_to @position
+    BankUtils.open_bank mob
     stop
   end
 
