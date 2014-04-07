@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<plugin>
+  <id>cmd-giverights</id>
+  <version>1</version>
+  <name>Give Rights Command</name>
+  <description>Sets the players rights.</description>
+  <authors>
+    <author>MitchZinck</author>
+  </authors>
+  <scripts>
+    <script>giverights.rb</script>
+  </scripts>
+  <dependencies />
+</plugin>
