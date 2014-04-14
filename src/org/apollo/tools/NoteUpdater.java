@@ -30,38 +30,31 @@ public final class NoteUpdater {
 		}
 		String release = args[0];
 
-		DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/note-" + release
-				+ ".dat")));
-		try {
-			IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true);
-			try {
-				ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
-				ItemDefinition[] defs = decoder.decode();
-				ItemDefinition.init(defs);
+		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/note-"
+				+ release + ".dat")));
+				IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true)) {
+			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
+			ItemDefinition[] defs = decoder.decode();
+			ItemDefinition.init(defs);
 
-				os.writeShort(defs.length);
-				Map<Integer, Integer> itemToNote = new HashMap<Integer, Integer>();
+			os.writeShort(defs.length);
+			Map<Integer, Integer> itemToNote = new HashMap<Integer, Integer>();
 
-				for (int id = 0; id < defs.length; id++) {
-					ItemDefinition def = ItemDefinition.lookup(id);
-					if (def.isNote()) {
-						itemToNote.put(def.getNoteInfoId(), def.getId());
-					}
+			for (int id = 0; id < defs.length; id++) {
+				ItemDefinition def = ItemDefinition.lookup(id);
+				if (def.isNote()) {
+					itemToNote.put(def.getNoteInfoId(), def.getId());
 				}
-
-				for (int id = 0; id < defs.length; id++) {
-					if (itemToNote.containsKey(id)) {
-						os.writeBoolean(true); // notable
-						os.writeShort(itemToNote.get(id));
-					} else {
-						os.writeBoolean(false); // not notable
-					}
-				}
-			} finally {
-				fs.close();
 			}
-		} finally {
-			os.close();
+
+			for (int id = 0; id < defs.length; id++) {
+				if (itemToNote.containsKey(id)) {
+					os.writeBoolean(true); // notable
+					os.writeShort(itemToNote.get(id));
+				} else {
+					os.writeBoolean(false); // not notable
+				}
+			}
 		}
 	}
 

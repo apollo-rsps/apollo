@@ -51,12 +51,9 @@ public final class HypertextResourceProvider extends ResourceProvider {
 			return null;
 		}
 
-		RandomAccessFile raf = new RandomAccessFile(file, "r");
 		ByteBuffer buffer;
-		try {
+		try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
 			buffer = raf.getChannel().map(MapMode.READ_ONLY, 0, raf.length());
-		} finally {
-			raf.close();
 		}
 
 		return buffer;

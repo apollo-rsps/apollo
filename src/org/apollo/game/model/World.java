@@ -240,14 +240,11 @@ public final class World {
 		ItemDefinition.init(itemDefs);
 		logger.info("Loaded " + itemDefs.length + " item definitions.");
 
-		InputStream is = new BufferedInputStream(new FileInputStream("data/equipment-" + release + ".dat"));
-		try {
+		try (InputStream is = new BufferedInputStream(new FileInputStream("data/equipment-" + release + ".dat"))) {
 			EquipmentDefinitionParser parser = new EquipmentDefinitionParser(is);
 			EquipmentDefinition[] defs = parser.parse();
 			EquipmentDefinition.init(defs);
 			logger.info("Loaded " + defs.length + " equipment definitions.");
-		} finally {
-			is.close();
 		}
 
 		NpcDefinitionDecoder npcDecoder = new NpcDefinitionDecoder(fs);

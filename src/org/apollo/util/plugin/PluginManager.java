@@ -72,16 +72,13 @@ public final class PluginManager {
 			if (plugin.isDirectory() && !plugin.getName().startsWith(".")) {
 				File xml = new File(plugin, "plugin.xml");
 				if (xml.exists()) {
-					InputStream is = new FileInputStream(xml);
-					try {
+					try (InputStream is = new FileInputStream(xml)) {
 						PluginMetaDataParser parser = new PluginMetaDataParser(is);
 						PluginMetaData meta = parser.parse();
 						for (String author : meta.getAuthors()) {
 							authors.add(author);
 						}
 						plugins.add(meta);
-					} finally {
-						is.close();
 					}
 				}
 			}

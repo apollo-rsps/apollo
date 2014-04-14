@@ -1170,37 +1170,30 @@ public final class EquipmentUpdater {
 		}
 		String release = args[0];
 
-		DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-"
+		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-"
 				+ release + ".dat")));
-		try {
-			IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true);
-			try {
-				ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
-				ItemDefinition[] definitions = decoder.decode();
-				ItemDefinition.init(definitions);
+				IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true)) {
+			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
+			ItemDefinition[] definitions = decoder.decode();
+			ItemDefinition.init(definitions);
 
-				os.writeShort(definitions.length);
-				for (int id = 0; id < definitions.length; id++) {
-					ItemDefinition def = ItemDefinition.lookup(id);
-					int type = getWeaponType(def);
-					os.writeByte(type);
-					if (type != -1) {
-						os.writeBoolean(isTwoHanded(def));
-						os.writeBoolean(isFullBody(def));
-						os.writeBoolean(isFullHat(def));
-						os.writeBoolean(isFullMask(def));
-						os.writeByte(getAttackRequirement(def));
-						os.writeByte(getStrengthRequirement(def));
-						os.writeByte(getDefenceRequirement(def));
-						os.writeByte(getRangedRequirement(def));
-						os.writeByte(getMagicRequirement(def));
-					}
+			os.writeShort(definitions.length);
+			for (int id = 0; id < definitions.length; id++) {
+				ItemDefinition def = ItemDefinition.lookup(id);
+				int type = getWeaponType(def);
+				os.writeByte(type);
+				if (type != -1) {
+					os.writeBoolean(isTwoHanded(def));
+					os.writeBoolean(isFullBody(def));
+					os.writeBoolean(isFullHat(def));
+					os.writeBoolean(isFullMask(def));
+					os.writeByte(getAttackRequirement(def));
+					os.writeByte(getStrengthRequirement(def));
+					os.writeByte(getDefenceRequirement(def));
+					os.writeByte(getRangedRequirement(def));
+					os.writeByte(getMagicRequirement(def));
 				}
-			} finally {
-				fs.close();
 			}
-		} finally {
-			os.close();
 		}
 	}
 
