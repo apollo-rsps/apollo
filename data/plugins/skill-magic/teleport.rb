@@ -35,7 +35,7 @@ class TeleportingAction < SpellAction
   end
   
   def execute_action
-    @spell.ancient ? execute_modern : execute_ancient
+    @spell.ancient ? execute_ancient : execute_modern
   end
   
   def execute_modern
@@ -58,7 +58,7 @@ class TeleportingAction < SpellAction
       mob.play_graphic(ANCIENT_TELE_GRAPHIC)
       mob.play_animation(ANCIENT_TELE_ANIM)
       delay = 2
-    elsif @pulses == 1
+    elsif @pulses == 2
       mob.stop_graphic
       mob.stop_animation
       mob.teleport(@spell.destination)
