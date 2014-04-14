@@ -9,7 +9,7 @@ import org.apollo.game.model.Mob;
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.
  * 
  * @author Graham
- * @param <T> The type of mob..
+ * @param <T> The type of mob.
  */
 public final class MobRepository<T extends Mob> implements Iterable<T> {
 
@@ -52,9 +52,11 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 					break;
 				}
 			}
+
 			if (mob == null) {
 				throw new NoSuchElementException("Mob does not exist.");
 			}
+
 			previousIndex = index;
 			index++;
 			return mob;
@@ -106,6 +108,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		if (size == mobs.length) {
 			return false;
 		}
+
 		int index = -1;
 		for (int i = pointer; i < mobs.length; i++) {
 			if (mobs[i] == null) {
@@ -113,6 +116,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 				break;
 			}
 		}
+
 		if (index == -1) {
 			for (int i = 0; i < pointer; i++) {
 				if (mobs[i] == null) {
@@ -121,11 +125,14 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 				}
 			}
 		}
+
 		if (index == -1) {
 			return false; // shouldn't happen, but just in case
 		}
+
 		mobs[index] = mob;
 		mob.setIndex(index + 1);
+
 		if (index == mobs.length - 1) {
 			pointer = 0;
 		} else {
@@ -161,6 +168,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		if (index < 0 || index >= mobs.length) {
 			return false;
 		}
+
 		if (mobs[index] == mob) {
 			mobs[index] = null;
 			mob.setIndex(-1);
