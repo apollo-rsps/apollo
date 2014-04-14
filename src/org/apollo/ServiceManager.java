@@ -66,11 +66,8 @@ public final class ServiceManager {
 		XmlParser parser = new XmlParser();
 		XmlNode rootNode;
 
-		InputStream is = new FileInputStream("data/services.xml");
-		try {
+		try (InputStream is = new FileInputStream("data/services.xml")) {
 			rootNode = parser.parse(is);
-		} finally {
-			is.close();
 		}
 
 		if (!rootNode.getName().equals("services")) {

@@ -66,11 +66,8 @@ public final class LoginService extends Service {
 		XmlParser parser = new XmlParser();
 		XmlNode rootNode;
 
-		InputStream is = new FileInputStream("data/login.xml");
-		try {
+		try (InputStream is = new FileInputStream("data/login.xml")) {
 			rootNode = parser.parse(is);
-		} finally {
-			is.close();
 		}
 
 		if (!rootNode.getName().equals("login")) {

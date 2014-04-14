@@ -45,11 +45,8 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 	 */
 	private void parseBootstrapper() throws IOException {
 		File bootstrap = new File("./data/plugins/bootstrap.rb");
-		InputStream is = new FileInputStream(bootstrap);
-		try {
+		try (InputStream is = new FileInputStream(bootstrap)) {
 			parse(is, bootstrap.getAbsolutePath());
-		} finally {
-			is.close();
 		}
 	}
 

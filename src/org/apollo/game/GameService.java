@@ -99,16 +99,12 @@ public final class GameService extends Service {
 	 */
 	private void init() throws IOException, SAXException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
-		InputStream is = new FileInputStream("data/events.xml");
-		try {
+		try (InputStream is = new FileInputStream("data/events.xml")) {
 			EventHandlerChainParser chainGroupParser = new EventHandlerChainParser(is);
 			chainGroup = chainGroupParser.parse();
-		} finally {
-			is.close();
 		}
 
-		is = new FileInputStream("data/synchronizer.xml");
-		try {
+		try (InputStream is = new FileInputStream("data/synchronizer.xml")) {
 			XmlParser parser = new XmlParser();
 			XmlNode rootNode = parser.parse(is);
 
@@ -123,16 +119,11 @@ public final class GameService extends Service {
 
 			Class<?> clazz = Class.forName(activeNode.getValue());
 			synchronizer = (ClientSynchronizer) clazz.newInstance();
-		} finally {
-			is.close();
 		}
 
-		is = new FileInputStream("data/rsa.xml");
-		try {
+		try (InputStream is = new FileInputStream("data/rsa.xml")) {
 			RsaKeyParser parser = new RsaKeyParser(is);
 			parser.parse();
-		} finally {
-			is.close();
 		}
 	}
 
