@@ -273,7 +273,7 @@ class FinishedMixingAction < MixingAction
     name = @potion.item.definition.name.sub('(3)', '')
 
     player.send_message("You add the #{ingredient} to the mixture to make an #{name}.", true)
-    player.skill_set.add_experience(HERBLORE_ID, @potion.experience)
+    player.skill_set.add_experience(HERBLORE_SKILL_ID, @potion.experience)
 
     inventory = player.inventory
       
