@@ -62,10 +62,10 @@ public final class PlayerCredentials {
 	}
 
 	/**
-	 * Gets the crypted password
+	 * Gets the hashed password
 	 * @return The password (either the original loaded from file or scrypted) 
 	 */
-	public String getCryptedPassword() {
+	public String getHashedPassword() {
 		return password.startsWith("$s0$") ? password : SCryptUtil.scrypt(password, 16384, 8, 1);
 	}
 	
