@@ -17,8 +17,6 @@ import org.apollo.io.player.PlayerSaver;
 import org.apollo.util.NameUtil;
 import org.apollo.util.StreamUtil;
 
-import com.lambdaworks.crypto.SCryptUtil;
-
 /**
  * A {@link PlayerSaver} implementation that saves player data to a binary file.
  * 
