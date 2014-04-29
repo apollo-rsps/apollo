@@ -25,6 +25,8 @@ import org.apollo.security.PlayerCredentials;
 import org.apollo.util.NameUtil;
 import org.apollo.util.StreamUtil;
 
+import com.lambdaworks.crypto.SCryptUtil;
+
 /**
  * A {@link PlayerLoader} implementation that loads data from a binary file.
  * 
@@ -51,9 +53,12 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			String name = StreamUtil.readString(in);
 			String pass = StreamUtil.readString(in);
 
-			if (!name.equalsIgnoreCase(credentials.getUsername()) || !pass.equalsIgnoreCase(credentials.getPassword())) {
+			if (!name.equalsIgnoreCase(credentials.getUsername()) || !SCryptUtil.check(credentials.getPassword(), pass)) {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_INVALID_CREDENTIALS);
 			}
+			
+			// set the credentials password to the scrypted one
+			credentials.setPassword(pass);
 
 			PrivilegeLevel privilegeLevel = PrivilegeLevel.valueOf(in.readByte());
 			boolean members = in.readBoolean();
