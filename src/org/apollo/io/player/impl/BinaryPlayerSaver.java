@@ -31,7 +31,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 		try (DataOutputStream out = new DataOutputStream(new FileOutputStream(file))) {
 			// write credentials and privileges
 			StreamUtil.writeString(out, player.getUsername());
-			StreamUtil.writeString(out, player.getCredentials().getPassword());
+			StreamUtil.writeString(out, player.getCredentials().getHashedPassword());
 			out.writeByte(player.getPrivilegeLevel().toInteger());
 			out.writeBoolean(player.isMembers());
 

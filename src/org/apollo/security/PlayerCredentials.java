@@ -2,6 +2,8 @@ package org.apollo.security;
 
 import org.apollo.util.NameUtil;
 
+import com.lambdaworks.crypto.SCryptUtil;
+
 /**
  * Holds the credentials for a player.
  * 
@@ -17,7 +19,7 @@ public final class PlayerCredentials {
 	/**
 	 * The player's password.
 	 */
-	private final String password;
+	private String password;
 
 	/**
 	 * The computer's unique identifier.
@@ -57,6 +59,23 @@ public final class PlayerCredentials {
 	 */
 	public long getEncodedUsername() {
 		return encodedUsername;
+	}
+
+	/**
+	 * Gets the hashed password
+	 * @return The password (either the original loaded from file or scrypted) 
+	 */
+	public String getHashedPassword() {
+		return password.startsWith("$s0$") ? password : SCryptUtil.scrypt(password, 16384, 8, 1);
+	}
+	
+	/**
+	 * Sets the player's password
+	 * 
+	 * @param password The player's new password
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	/**
