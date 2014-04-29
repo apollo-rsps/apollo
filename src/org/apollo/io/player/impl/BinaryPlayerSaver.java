@@ -17,6 +17,8 @@ import org.apollo.io.player.PlayerSaver;
 import org.apollo.util.NameUtil;
 import org.apollo.util.StreamUtil;
 
+import com.lambdaworks.crypto.SCryptUtil;
+
 /**
  * A {@link PlayerSaver} implementation that saves player data to a binary file.
  * 
@@ -31,7 +33,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 		try (DataOutputStream out = new DataOutputStream(new FileOutputStream(file))) {
 			// write credentials and privileges
 			StreamUtil.writeString(out, player.getUsername());
-			StreamUtil.writeString(out, player.getCredentials().getPassword());
+			StreamUtil.writeString(out, player.getCredentials().getCryptedPassword());
 			out.writeByte(player.getPrivilegeLevel().toInteger());
 			out.writeBoolean(player.isMembers());
 
