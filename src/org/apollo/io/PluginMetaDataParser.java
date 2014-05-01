@@ -1,5 +1,6 @@
 package org.apollo.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -60,11 +61,12 @@ public final class PluginMetaDataParser {
 	/**
 	 * Parses the XML and creates a meta data object.
 	 * 
+	 * @param base The base path for this plugin
 	 * @return The meta data object.
 	 * @throws SAXException If a SAX error occurs.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public PluginMetaData parse() throws IOException, SAXException {
+	public PluginMetaData parse(File base) throws IOException, SAXException {
 		XmlNode rootNode = parser.parse(is);
 		if (!rootNode.getName().equals("plugin")) {
 			throw new IOException("Root node must be named plugin.");
@@ -116,7 +118,7 @@ public final class PluginMetaDataParser {
 			}
 		}
 
-		return new PluginMetaData(id, name, description, authors, scripts, dependencies, version);
+		return new PluginMetaData(id, base, name, description, authors, scripts, dependencies, version);
 	}
 
 }
