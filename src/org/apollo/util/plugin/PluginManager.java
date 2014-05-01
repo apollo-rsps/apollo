@@ -66,20 +66,34 @@ public final class PluginManager {
 	 * @throws SAXException If a SAX error occurs.
 	 */
 	private Collection<PluginMetaData> findPlugins() throws IOException, SAXException {
+		return findPlugins(new File("./data/plugins"));
+	}
+
+	/**
+	 * Finds plugins and loads their meta data.
+	 * 
+	 * @param dir The directory to search
+	 * 
+	 * @return A collection of plugin meta data objects.
+	 * @throws IOException If an I/O error occurs.
+	 * @throws SAXException If a SAX error occurs.
+	 */
+	private Collection<PluginMetaData> findPlugins(File dir) throws IOException, SAXException {
 		Collection<PluginMetaData> plugins = new ArrayList<PluginMetaData>();
-		File dir = new File("./data/plugins");
 		for (File plugin : dir.listFiles()) {
 			if (plugin.isDirectory() && !plugin.getName().startsWith(".")) {
 				File xml = new File(plugin, "plugin.xml");
 				if (xml.exists()) {
 					try (InputStream is = new FileInputStream(xml)) {
 						PluginMetaDataParser parser = new PluginMetaDataParser(is);
-						PluginMetaData meta = parser.parse();
+						PluginMetaData meta = parser.parse(plugin);
 						for (String author : meta.getAuthors()) {
 							authors.add(author);
 						}
 						plugins.add(meta);
 					}
+				} else {
+					plugins.addAll(findPlugins(plugin));
 				}
 			}
 		}
@@ -163,7 +177,7 @@ public final class PluginManager {
 		String[] scripts = plugin.getScripts();
 
 		for (String script : scripts) {
-			File scriptFile = new File("./data/plugins/" + plugin.getId() + "/" + script);
+			File scriptFile = new File(plugin.getBase(), script);
 			InputStream is = new FileInputStream(scriptFile);
 			env.parse(is, scriptFile.getAbsolutePath());
 		}
