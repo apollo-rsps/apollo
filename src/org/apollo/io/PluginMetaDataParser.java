@@ -61,7 +61,7 @@ public final class PluginMetaDataParser {
 	/**
 	 * Parses the XML and creates a meta data object.
 	 * 
-	 * @param base The base path for this plugin (Directory or Jar file)
+	 * @param base The base path for this plugin
 	 * @return The meta data object.
 	 * @throws SAXException If a SAX error occurs.
 	 * @throws IOException If an I/O error occurs.
