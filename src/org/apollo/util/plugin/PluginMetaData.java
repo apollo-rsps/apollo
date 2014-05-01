@@ -1,5 +1,7 @@
 package org.apollo.util.plugin;
 
+import java.io.File;
+
 /**
  * Contains attributes which describe a plugin.
  * 
@@ -43,6 +45,11 @@ public final class PluginMetaData {
 	private final double version;
 
 	/**
+	 * The plugin's base folder
+	 */
+	private final File base;
+
+	/**
 	 * Creates the plugin meta data.
 	 * 
 	 * @param id The plugin's id.
@@ -53,9 +60,10 @@ public final class PluginMetaData {
 	 * @param dependencies The plugin's dependencies.
 	 * @param version The plugin's version.
 	 */
-	public PluginMetaData(String id, String name, String description, String[] authors, String[] scripts,
+	public PluginMetaData(String id, File base, String name, String description, String[] authors, String[] scripts,
 			String[] dependencies, double version) {
 		this.id = id;
+		this.base = base;
 		this.name = name;
 		this.description = description;
 		this.authors = authors;
@@ -127,4 +135,12 @@ public final class PluginMetaData {
 		return version;
 	}
 
+	/**
+	 * Gets the plugin's base folder.
+	 * 
+	 * @return The plugin's base folder (where plugin.xml is)
+	 */
+	public File getBase() {
+		return base;
+	}
 }
