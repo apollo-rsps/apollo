@@ -76,13 +76,21 @@ end
 # An EventHandler which executes a Proc object with three arguments: the chain
 # context, the player and the event.
 class ProcEventHandler < EventHandler
-  def initialize(block)
+  def initialize(block, event_filter, event_filter_value)
     super() # required (with brackets!), see http://jira.codehaus.org/browse/JRUBY-679
     @block = block
+    @event_filter = event_filter
+    @event_filter_value = event_filter_value
   end
 
   def handle(ctx, player, event)
-    @block.call(ctx, player, event)
+    if @event_filter == ""
+      @block.call(ctx, player, event)
+    else
+      if event.send(@event_filter) == event_filter_value
+          @block.call(ctx, player, event)
+      end
+    end
   end
 end
 
@@ -164,15 +172,20 @@ end
 # The event can either be a symbol with the lower case, underscored class name
 # or the class itself.
 def on_event(args, proc)
-  raise "event must have one argument" unless args.length == 1
+  raise "event must have one or three arguments" unless (args.length == 1 || args.length == 3)
 
   event = args[0]
   if event.is_a?(Symbol)
     class_name = event.to_s.camelize.concat('Event')
     event = Java::JavaClass.for_name("org.apollo.game.event.impl.#{class_name}")
   end
-
-  $ctx.add_last_event_handler(event, ProcEventHandler.new(proc))
+  event_filter = ""
+  event_filter_value = ""
+  if args.length == 3
+    event_filter = args[1].to_s
+    event_filter_value = args[2]
+  end
+  $ctx.add_last_event_handler(event, ProcEventHandler.new(proc, event_filter, event_filter_value))
 end
 
 # Defines an action to be taken upon a command.
