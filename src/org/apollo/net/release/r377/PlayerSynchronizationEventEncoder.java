@@ -120,7 +120,7 @@ public final class PlayerSynchronizationEventEncoder extends EventEncoder<Player
 		GamePacketBuilder playerProperties = new GamePacketBuilder();
 
 		playerProperties.put(DataType.BYTE, appearance.getGender().toInteger());
-		playerProperties.put(DataType.BYTE, block.isSkulled() ? 1 : 0);
+		playerProperties.put(DataType.BYTE, block.isSkulled() ? 1 : -1);
 		playerProperties.put(DataType.BYTE, block.getHeadIcon());
 
 		if (block.appearingAsNpc()) {
