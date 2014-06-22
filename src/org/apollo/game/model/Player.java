@@ -581,7 +581,7 @@ public final class Player extends Mob {
 	 * 
 	 * @return A flag indicating if the player is new.
 	 */
-	public boolean isNewPlayer() {
+	public boolean isNew() {
 		return newPlayer;
 	}
 
