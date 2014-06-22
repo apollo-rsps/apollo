@@ -56,7 +56,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			if (!name.equalsIgnoreCase(credentials.getUsername()) || !SCryptUtil.check(credentials.getPassword(), pass)) {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_INVALID_CREDENTIALS);
 			}
-			
+
 			// set the credentials password to the scrypted one
 			credentials.setPassword(pass);
 
