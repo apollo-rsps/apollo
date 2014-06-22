@@ -329,7 +329,7 @@ public final class World {
 		}
 
 		boolean success = playerRepository.add(player)
-				& players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player) == null;
+				&& players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player) == null;
 		if (success) {
 			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 
