@@ -140,11 +140,12 @@ end
 # player who clicked the button.
 def on(type, *args, &block)
   case type
-    when :command then on_command(args, block)
-    when :event   then on_event(args, block)
-    when :button  then on_button(args, block)
-    when :login   then on_login(block)
-    when :logout  then on_logout(block)
+    when :command     then on_command(args, block)
+    when :event       then on_event(args, block)
+    when :button      then on_button(args, block)
+    when :login       then on_login(block)
+    when :logout      then on_logout(block)
+    when :first_login then on_first_login(block)
     else raise 'Unknown event type.'
   end
 end
@@ -191,6 +192,15 @@ end
 # Defines an action to be taken upon logout.
 def on_logout(proc)
   $ctx.add_logout_listener(ProcLogoutListener.new(proc))
+end
+
+# Defines an action to be taken upon first login.
+def on_first_login(proc)
+  on :login do |player|
+    if player.is_new()
+      proc(player)
+    end
+  end
 end
 
 # Ids of in-game skills.
