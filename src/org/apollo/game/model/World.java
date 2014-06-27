@@ -328,9 +328,12 @@ public final class World {
 			return RegistrationStatus.ALREADY_ONLINE;
 		}
 
-		boolean success = playerRepository.add(player)
-				&& players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player) == null;
+		boolean success = playerRepository.add(player);
 		if (success) {
+			if (players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player) != null) {
+				logger.info("Error adding the player to the username map - someone with that name already exists.");
+				return RegistrationStatus.ALREADY_ONLINE;
+			}
 			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 
 			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
