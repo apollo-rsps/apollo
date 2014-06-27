@@ -18,7 +18,7 @@ public final class ThirdNpcActionEventDecoder extends EventDecoder<ThirdNpcActio
 	@Override
 	public ThirdNpcActionEvent decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+		int index = (int) reader.getSigned(DataType.SHORT);
 		return new ThirdNpcActionEvent(index);
 	}
 

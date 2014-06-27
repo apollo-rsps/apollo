@@ -76,7 +76,7 @@ public final class NpcSynchronizationEventEncoder extends EventEncoder<NpcSynchr
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		Position npc = event.getPosition();
 		Position other = seg.getPosition();
-		builder.putBits(14, seg.getIndex());
+		builder.putBits(14, seg.getIndex() - 1);
 		builder.putBits(5, other.getY() - npc.getY());
 		builder.putBits(5, other.getX() - npc.getX());
 		builder.putBits(1, 0); // discard walking queue
