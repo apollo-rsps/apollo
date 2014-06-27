@@ -178,6 +178,20 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		return false;
 	}
 
+    /**
+     * Gets the mob at the given index
+     *
+     * @param index The index of the mob
+     * @return The mob instance
+     */
+    public Mob get(int index) {
+        if (index < 0 || index >= mobs.length) {
+            throw new IndexOutOfBoundsException("Mob index is out of bounds.");
+        }
+
+        return mobs[index];
+    }
+
 	/**
 	 * Gets the size of this repository.
 	 * 
