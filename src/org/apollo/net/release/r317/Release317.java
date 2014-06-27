@@ -138,6 +138,7 @@ public final class Release317 extends Release {
 		register(189, spamEventDecoder);
 		register(210, spamEventDecoder);
 		register(226, spamEventDecoder);
+        register(121, spamEventDecoder);
 
 		register(155, new FirstNpcActionEventDecoder());
 		register(17, new SecondNpcActionEventDecoder());
