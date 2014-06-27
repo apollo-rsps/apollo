@@ -118,12 +118,12 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 			switch (type) {
 			case FIXED:
 				length = metaData.getLength();
-                if (length == 0) {
-                    setState(GameDecoderState.GAME_OPCODE);
-                    out.add(new GamePacket(opcode, type, Unpooled.EMPTY_BUFFER));
-                } else {
-                    setState(GameDecoderState.GAME_PAYLOAD);
-                }
+				if (length == 0) {
+					setState(GameDecoderState.GAME_OPCODE);
+					out.add(new GamePacket(opcode, type, Unpooled.EMPTY_BUFFER));
+				} else {
+					setState(GameDecoderState.GAME_PAYLOAD);
+				}
 				break;
 			case VARIABLE_BYTE:
 				setState(GameDecoderState.GAME_LENGTH);
