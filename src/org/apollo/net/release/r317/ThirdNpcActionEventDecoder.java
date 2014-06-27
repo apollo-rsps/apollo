@@ -1,8 +1,6 @@
 package org.apollo.net.release.r317;
 
 import org.apollo.game.event.impl.ThirdNpcActionEvent;
-import org.apollo.net.codec.game.DataOrder;
-import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;
@@ -18,7 +16,7 @@ public final class ThirdNpcActionEventDecoder extends EventDecoder<ThirdNpcActio
 	@Override
 	public ThirdNpcActionEvent decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+        int index = (int) reader.getSigned(DataType.SHORT);
 		return new ThirdNpcActionEvent(index);
 	}
 
