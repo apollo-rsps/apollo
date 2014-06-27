@@ -109,7 +109,7 @@ public abstract class SynchronizationBlock {
 	 * @return The interacting mob block.
 	 */
 	public static SynchronizationBlock createInteractingMobBlock(int index) {
-		return new InteractingMobBlock(index);
+		return new InteractingMobBlock(index - 1);
 	}
 
 	/**
