@@ -29,7 +29,7 @@ public abstract class NpcActionEvent extends Event {
 	 */
 	public NpcActionEvent(int option, int index) {
 		this.option = option;
-		this.index = index;
+		this.index = index - 1;
 	}
 
 	/**
