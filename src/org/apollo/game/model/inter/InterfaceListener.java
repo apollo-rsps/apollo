@@ -5,6 +5,7 @@ package org.apollo.game.model.inter;
  * 
  * @author Graham
  */
+@FunctionalInterface
 public interface InterfaceListener {
 
 	/**
