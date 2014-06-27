@@ -109,10 +109,9 @@ public abstract class Mob extends Entity {
 	 * @param type The type of damage.
 	 * @param secondary If the damage should be dealt as a secondary hit.
 	 */
-	public void damage(int damage, int type, boolean secondary) {
+	public final void damage(int damage, int type, boolean secondary) {
 		Skill hitpoints = skillSet.getSkill(Skill.HITPOINTS);
-		int current = hitpoints.getCurrentLevel() - damage, maximum = hitpoints.getMaximumLevel();
-		current = current < 0 ? 0 : current;
+		int current = Math.max(hitpoints.getCurrentLevel() - damage, 0), maximum = hitpoints.getMaximumLevel();
 
 		blockSet.add(SynchronizationBlock.createHitUpdateBlock(damage, type, current, maximum, secondary));
 		skillSet.setSkill(Skill.HITPOINTS, new Skill(hitpoints.getExperience(), current, maximum));
@@ -132,7 +131,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return A zero, one or two element array containing the directions (in order).
 	 */
-	public Direction[] getDirections() {
+	public final Direction[] getDirections() {
 		if (firstDirection != Direction.NONE) {
 			return secondDirection == Direction.NONE ? new Direction[] { firstDirection } : new Direction[] {
 					firstDirection, secondDirection };
@@ -145,7 +144,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The mob's equipment.
 	 */
-	public Inventory getEquipment() {
+	public final Inventory getEquipment() {
 		return equipment;
 	}
 
@@ -154,7 +153,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The position.
 	 */
-	public Position getFacingPosition() {
+	public final Position getFacingPosition() {
 		return facingPosition;
 	}
 
@@ -163,7 +162,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The direction.
 	 */
-	public Direction getFirstDirection() {
+	public final Direction getFirstDirection() {
 		return firstDirection;
 	}
 
@@ -172,7 +171,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The index.
 	 */
-	public int getIndex() {
+	public final int getIndex() {
 		synchronized (this) {
 			return index;
 		}
@@ -183,7 +182,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The mob.
 	 */
-	public Mob getInteractingMob() {
+	public final Mob getInteractingMob() {
 		return interactingMob;
 	}
 
@@ -192,7 +191,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The inventory.
 	 */
-	public Inventory getInventory() {
+	public final Inventory getInventory() {
 		return inventory;
 	}
 
@@ -201,7 +200,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The list.
 	 */
-	public List<Npc> getLocalNpcList() {
+	public final List<Npc> getLocalNpcList() {
 		return localNpcs;
 	}
 
@@ -210,7 +209,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The list.
 	 */
-	public List<Player> getLocalPlayerList() {
+	public final List<Player> getLocalPlayerList() {
 		return localPlayers;
 	}
 
@@ -219,7 +218,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param definition The definition.
 	 */
-	public NpcDefinition getDefinition() {
+	public final NpcDefinition getDefinition() {
 		return definition;
 	}
 
@@ -228,7 +227,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The direction.
 	 */
-	public Direction getSecondDirection() {
+	public final Direction getSecondDirection() {
 		return secondDirection;
 	}
 
@@ -237,7 +236,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The skill set.
 	 */
-	public SkillSet getSkillSet() {
+	public final SkillSet getSkillSet() {
 		return skillSet;
 	}
 
@@ -246,7 +245,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return The walking queue.
 	 */
-	public WalkingQueue getWalkingQueue() {
+	public final WalkingQueue getWalkingQueue() {
 		return walkingQueue;
 	}
 
@@ -262,7 +261,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return {@code true} if the mob is active, {@code false} if not.
 	 */
-	public boolean isActive() {
+	public final boolean isActive() {
 		return index != -1;
 	}
 
@@ -271,7 +270,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public boolean isTeleporting() {
+	public final boolean isTeleporting() {
 		return teleporting;
 	}
 
@@ -296,8 +295,16 @@ public abstract class Mob extends Entity {
 	/**
 	 * Resets this mob's block set.
 	 */
-	public void resetBlockSet() {
+	public final void resetBlockSet() {
 		blockSet = new SynchronizationBlockSet();
+	}
+
+	/**
+	 * Resets the mob this mob is interacting with.
+	 */
+	public final void resetInteractingMob() {
+		interactingMob = null;
+		blockSet.add(SynchronizationBlock.createInteractingMobBlock(65535));
 	}
 
 	/**
@@ -305,7 +312,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param definition The definition.
 	 */
-	public void setDefinition(NpcDefinition definition) {
+	public final void setDefinition(NpcDefinition definition) {
 		this.definition = definition;
 	}
 
@@ -315,7 +322,7 @@ public abstract class Mob extends Entity {
 	 * @param first The first direction.
 	 * @param second The second direction.
 	 */
-	public void setDirections(Direction first, Direction second) {
+	public final void setDirections(Direction first, Direction second) {
 		firstDirection = first;
 		secondDirection = second;
 	}
@@ -325,7 +332,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param index The index.
 	 */
-	public void setIndex(int index) {
+	public final void setIndex(int index) {
 		synchronized (this) {
 			this.index = index;
 		}
@@ -337,8 +344,8 @@ public abstract class Mob extends Entity {
 	 * @param mob The mob.
 	 */
 	public final void setInteractingMob(Mob mob) {
+		interactingMob = mob;
 		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.index));
-		this.interactingMob = mob;
 	}
 
 	/**
@@ -346,7 +353,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param position The position.
 	 */
-	public void setPosition(Position position) {
+	public final void setPosition(Position position) {
 		this.position = position;
 	}
 
@@ -355,7 +362,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param teleporting {@code true} if the mob is teleporting, {@code false} if not.
 	 */
-	public void setTeleporting(boolean teleporting) {
+	public final void setTeleporting(boolean teleporting) {
 		this.teleporting = teleporting;
 	}
 
@@ -375,7 +382,7 @@ public abstract class Mob extends Entity {
 	 * @param action The new action.
 	 * @return A flag indicating if the action was started.
 	 */
-	public boolean startAction(Action<?> action) {
+	public final boolean startAction(Action<?> action) {
 		if (this.action != null) {
 			if (this.action.equals(action)) {
 				return false;
@@ -388,7 +395,7 @@ public abstract class Mob extends Entity {
 	/**
 	 * Stops this mob's current action.
 	 */
-	public void stopAction() {
+	public final void stopAction() {
 		if (action != null) {
 			action.stop();
 			action = null;
@@ -398,14 +405,14 @@ public abstract class Mob extends Entity {
 	/**
 	 * Stops this mob's current {@link Animation}.
 	 */
-	public void stopAnimation() {
+	public final void stopAnimation() {
 		playAnimation(Animation.STOP_ANIMATION);
 	}
 
 	/**
 	 * Stops this mob's current {@link Graphic}.
 	 */
-	public void stopGraphic() {
+	public final void stopGraphic() {
 		playGraphic(Graphic.STOP_GRAPHIC);
 	}
 
