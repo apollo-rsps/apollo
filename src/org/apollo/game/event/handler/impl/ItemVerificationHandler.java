@@ -32,7 +32,7 @@ public final class ItemVerificationHandler extends EventHandler<InventoryItemEve
 			inventory = player.getBank();
 			break;
 		default:
-			ctx.breakHandlerChain();
+			//ctx.breakHandlerChain();
 			return;
 		}
 
