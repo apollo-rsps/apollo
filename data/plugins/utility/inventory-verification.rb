@@ -11,14 +11,14 @@ def valid_inventory_action(inventory, event)
     raise "Event argument is not an instance of org.apollo.game.event.impl.ItemActionEvent."
   end
 
-  slot = event.get_slot()
+  slot = event.slot
 
-  if slot < 0 or slot > inventory.capacity()
+  if slot < 0 or slot > inventory.capacity
     return false
   end
 
   item = inventory.get(slot)
-  if item.nil? or item.get_id() != event.get_id()
+  if item.nil? or item.id != event.id
     return false
   end
 
