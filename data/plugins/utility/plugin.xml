@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<plugin>
+  <id>utility</id>
+  <version>0.1</version>
+  <name>utility</name>
+  <description>A set of scripts to aid development</description>
+  <authors>
+    <author>Stuart</author>
+  </authors>
+  <scripts>
+    <script>inventory-verification.rb</script>
+  </scripts>
+  <dependencies />
+</plugin>
