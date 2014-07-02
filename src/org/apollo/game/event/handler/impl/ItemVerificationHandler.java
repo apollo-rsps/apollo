@@ -31,6 +31,9 @@ public final class ItemVerificationHandler extends EventHandler<InventoryItemEve
 		case BankConstants.BANK_INVENTORY_ID:
 			inventory = player.getBank();
 			break;
+        case 3900: // Shop buying interface id
+        case 3823: // shop selling interface id
+            return;
 		default:
 			ctx.breakHandlerChain();
 			return;
