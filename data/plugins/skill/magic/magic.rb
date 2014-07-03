@@ -2,8 +2,8 @@ require 'java'
 
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.event.impl.DisplayTabInterfaceEvent'
-java_import 'org.apollo.game.model.EquipmentConstants'
-java_import 'org.apollo.game.model.Skill'
+java_import 'org.apollo.game.model.entity.EquipmentConstants'
+java_import 'org.apollo.game.model.entity.Skill'
 
 DISPLAY_SPELLBOOK = DisplayTabInterfaceEvent.new(6)
 

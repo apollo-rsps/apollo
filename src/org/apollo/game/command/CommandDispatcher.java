@@ -3,7 +3,7 @@ package org.apollo.game.command;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * A class that dispatches {@link Command}s to {@link CommandListener}s.

@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apollo.game.event.impl.PlayerSynchronizationEvent;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.ChatBlock;
 import org.apollo.game.sync.block.SynchronizationBlock;

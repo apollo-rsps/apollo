@@ -1,8 +1,11 @@
-package org.apollo.game.model;
+package org.apollo.game.model.entity;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Queue;
+
+import org.apollo.game.model.Direction;
+import org.apollo.game.model.Position;
 
 /**
  * A queue of {@link Direction}s which a {@link Mob} will follow.

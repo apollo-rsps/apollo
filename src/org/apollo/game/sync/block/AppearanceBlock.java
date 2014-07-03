@@ -1,7 +1,7 @@
 package org.apollo.game.sync.block;
 
 import org.apollo.game.model.Appearance;
-import org.apollo.game.model.Inventory;
+import org.apollo.game.model.inv.Inventory;
 
 /**
  * The appearance {@link SynchronizationBlock}. Only players can utilise this block.

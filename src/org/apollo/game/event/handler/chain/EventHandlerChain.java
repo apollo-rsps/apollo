@@ -3,7 +3,7 @@ package org.apollo.game.event.handler.chain;
 import org.apollo.game.event.Event;
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * A chain of event handlers.

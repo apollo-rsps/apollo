@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apollo.game.model.Player;
 import org.apollo.game.model.World;
+import org.apollo.game.model.entity.Player;
 import org.apollo.util.plugin.PluginManager;
 
 /**

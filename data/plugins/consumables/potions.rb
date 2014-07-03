@@ -1,6 +1,6 @@
 require 'java'
 
-java_import 'org.apollo.game.model.Skill'
+java_import 'org.apollo.game.model.entity.Skill'
 
 DRINK_POTION_SOUND = 334
 

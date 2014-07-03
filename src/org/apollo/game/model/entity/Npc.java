@@ -1,5 +1,6 @@
-package org.apollo.game.model;
+package org.apollo.game.model.entity;
 
+import org.apollo.game.model.Position;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.sync.block.SynchronizationBlock;
 

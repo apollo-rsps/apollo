@@ -3,8 +3,8 @@ package org.apollo.game.event.impl;
 import java.util.List;
 
 import org.apollo.game.event.Event;
-import org.apollo.game.model.Npc;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.entity.Npc;
 import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**

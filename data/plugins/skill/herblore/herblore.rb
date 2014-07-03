@@ -4,7 +4,7 @@
 require 'java'
 
 java_import 'org.apollo.game.event.impl.SetWidgetItemModelEvent'
-java_import 'org.apollo.game.model.Skill'
+java_import 'org.apollo.game.model.entity.Skill'
 
 HERBLORE_DIALOGUE = 4429
 

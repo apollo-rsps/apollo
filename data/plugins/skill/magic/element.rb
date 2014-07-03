@@ -1,6 +1,6 @@
 require 'java'
 
-java_import 'org.apollo.game.model.EquipmentConstants'
+java_import 'org.apollo.game.model.entity.EquipmentConstants'
 
 AIR_ELEMENTS = {}
 WATER_ELEMENTS = {}

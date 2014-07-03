@@ -1,6 +1,6 @@
 package org.apollo.game.model.def;
 
-import org.apollo.game.model.Npc;
+import org.apollo.game.model.entity.Npc;
 
 /**
  * Represents a type of {@link Npc}.

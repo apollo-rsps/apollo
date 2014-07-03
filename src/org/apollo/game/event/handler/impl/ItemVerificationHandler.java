@@ -3,10 +3,10 @@ package org.apollo.game.event.handler.impl;
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.InventoryItemEvent;
-import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.bank.BankConstants;
+import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**

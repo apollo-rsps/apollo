@@ -1,11 +1,11 @@
 require 'java'
 
-java_import 'org.apollo.game.model.Entity'
-java_import 'org.apollo.game.model.Player'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.def.ItemDefinition'
 java_import 'org.apollo.game.model.def.NpcDefinition'
 java_import 'org.apollo.game.model.def.ObjectDefinition'
+java_import 'org.apollo.game.model.entity.Entity'
+java_import 'org.apollo.game.model.entity.Player'
 
 on :command, :lookup, RIGHTS_ADMIN do |player, command|
   args = command.arguments.to_a

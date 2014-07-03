@@ -1,6 +1,6 @@
 require 'java'
-java_import 'org.apollo.game.model.SkillSet'
-java_import 'org.apollo.game.model.Skill'
+java_import 'org.apollo.game.model.entity.SkillSet'
+java_import 'org.apollo.game.model.entity.Skill'
 
 # Maximises the player's skill set.
 on :command, :max, RIGHTS_ADMIN do |player, command|

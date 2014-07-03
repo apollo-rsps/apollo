@@ -16,7 +16,7 @@ import org.apollo.game.event.Event;
 import org.apollo.game.event.handler.chain.EventHandlerChain;
 import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
 import org.apollo.game.event.impl.LogoutEvent;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * A game session.

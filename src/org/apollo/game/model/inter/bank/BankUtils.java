@@ -1,10 +1,10 @@
 package org.apollo.game.model.inter.bank;
 
-import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.def.ItemDefinition;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.InterfaceListener;
+import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.InventoryListener;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 

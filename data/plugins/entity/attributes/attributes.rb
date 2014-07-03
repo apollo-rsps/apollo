@@ -1,16 +1,11 @@
 require 'java'
 
-java_import 'org.apollo.game.model.Entity'
+java_import 'org.apollo.game.model.entity.Entity'
 
 # Maps attribute names (i.e. symbols) to attribute definitions.
 ATTRIBUTE_DEFINITIONS = {}
 
 class Entity
-
-  # The map of strings to attributes.
-  def attributes
-    @attributes ||= {}
-  end
   
   # Overridies method_missing
   def method_missing(symbol, *args)
@@ -20,11 +15,13 @@ class Entity
       raise "Error - expected argument count of 1, received #{args.length}" unless args.length == 1
       
       name = name[0...-1].strip # Drop the equals and preceeding whitespace
-      attributes[name] = args[0]
+      attributes[name] = args[0].is_a?(Symbol) ? args[0].to_s : args[0]
     elsif ATTRIBUTE_DEFINITIONS[name] == nil
       super(symbol, *args)
     else
-      return attributes[name] || ATTRIBUTE_DEFINITIONS[name].default
+      if attributes[name] == nil then return ATTRIBUTE_DEFINITIONS[name].default end
+
+      return ATTRIBUTE_DEFINITIONS[name].type == :symbol ? attributes[name].to_sym : attributes[name]
     end
   end
 
@@ -36,7 +33,7 @@ end
 
 # An attribute belonging to an entity.
 class AttributeDefinition
-  attr_reader :default, :persistence
+  attr_reader :default, :type, :persistence
 
   def initialize(default, persistence=:transient)
     @default = default

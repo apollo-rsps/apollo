@@ -24,7 +24,6 @@ import org.apollo.game.event.impl.RemoveTileItemEvent;
 import org.apollo.game.event.impl.SendFriendEvent;
 import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SetPlayerActionEvent;
-import org.apollo.game.event.impl.UpdateTileItemEvent;
 import org.apollo.game.event.impl.SetWidgetItemModelEvent;
 import org.apollo.game.event.impl.SetWidgetModelAnimationEvent;
 import org.apollo.game.event.impl.SetWidgetNpcModelEvent;
@@ -36,6 +35,7 @@ import org.apollo.game.event.impl.UpdateItemsEvent;
 import org.apollo.game.event.impl.UpdateRunEnergyEvent;
 import org.apollo.game.event.impl.UpdateSkillEvent;
 import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
+import org.apollo.game.event.impl.UpdateTileItemEvent;
 import org.apollo.game.event.impl.UpdateWeightEvent;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
@@ -138,7 +138,7 @@ public final class Release317 extends Release {
 		register(189, spamEventDecoder);
 		register(210, spamEventDecoder);
 		register(226, spamEventDecoder);
-        register(121, spamEventDecoder);
+		register(121, spamEventDecoder);
 
 		register(155, new FirstNpcActionEventDecoder());
 		register(17, new SecondNpcActionEventDecoder());

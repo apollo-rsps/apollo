@@ -1,8 +1,8 @@
 require 'java'
 
-java_import 'org.apollo.game.model.Npc'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.Position'
+java_import 'org.apollo.game.model.entity.Npc'
 
 # An array of npcs that cannot be spawned.
 blacklist = []

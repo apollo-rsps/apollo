@@ -1,7 +1,7 @@
 package org.apollo.game.event.handler;
 
 import org.apollo.game.event.Event;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * A class which handles events.

@@ -3,9 +3,9 @@ package org.apollo.game.event.handler.impl;
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.WalkEvent;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.WalkingQueue;
+import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.WalkingQueue;
 
 /**
  * A{@link EventHandler} that handles {@link WalkEvent}s.

@@ -1,6 +1,6 @@
 package org.apollo.io.player.impl;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.io.player.PlayerSaver;
 
 public final class JdbcPlayerSaver implements PlayerSaver {

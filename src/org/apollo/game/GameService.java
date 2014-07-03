@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.apollo.Service;
 import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.World;
 import org.apollo.game.model.World.RegistrationStatus;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.ClientSynchronizer;
 import org.apollo.io.EventHandlerChainParser;
 import org.apollo.io.RsaKeyParser;

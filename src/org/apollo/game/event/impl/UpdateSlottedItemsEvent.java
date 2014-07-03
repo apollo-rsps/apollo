@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 import org.apollo.game.event.Event;
-import org.apollo.game.model.SlottedItem;
+import org.apollo.game.model.inv.SlottedItem;
 
 /**
  * An {@link Event} sent to the client that updates a single item in an interface.

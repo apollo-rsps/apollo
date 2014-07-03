@@ -1,6 +1,6 @@
 package org.apollo.game.command;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.settings.PrivilegeLevel;
 
 /**

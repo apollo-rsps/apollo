@@ -4,8 +4,8 @@ import org.apollo.game.command.Command;
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.CommandEvent;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.World;
+import org.apollo.game.model.entity.Player;
 
 /**
  * An {@link EventHandler} that dispatches {@link CommandEvent}s.

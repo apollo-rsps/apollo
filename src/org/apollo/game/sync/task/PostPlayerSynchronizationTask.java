@@ -1,6 +1,6 @@
 package org.apollo.game.sync.task;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * A {@link SynchronizationTask} which does post-synchronization work for the specified {@link Player}.

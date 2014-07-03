@@ -1,6 +1,6 @@
 package org.apollo.io.player;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * An interface which may be implemented by others which are capable of saving players. For example, implementations

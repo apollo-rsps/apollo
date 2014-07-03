@@ -1,7 +1,7 @@
 require 'java'
 java_import 'org.apollo.game.action.DistancedAction'
 java_import 'org.apollo.game.model.Animation'
-java_import 'org.apollo.game.model.Skill'
+java_import 'org.apollo.game.model.entity.Skill'
 
 # TODO: this shouldn't use the punch animation/delay, but should use the one
 # from the active weapon/attack style (according to Scu11 anyway).

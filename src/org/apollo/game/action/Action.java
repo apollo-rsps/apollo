@@ -1,6 +1,6 @@
 package org.apollo.game.action;
 
-import org.apollo.game.model.Mob;
+import org.apollo.game.model.entity.Mob;
 import org.apollo.game.scheduling.ScheduledTask;
 
 /**
