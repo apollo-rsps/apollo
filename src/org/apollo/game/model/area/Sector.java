@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Entity.EntityType;
-import org.apollo.game.model.Position;
 
 /**
- * Represents an 8x8 area of the map.
+ * An 8x8 area of the map.
  * 
  * @author Major
  */
@@ -57,7 +58,8 @@ public final class Sector {
 
 	/**
 	 * Adds a {@link Entity} from to sector. Note that this does not spawn the entity, or do any other action other than
-	 * register it to this sector.
+	 * register it to this sector. The return value of this method should also be monitored - if this method fails (i.e.
+	 * returns {@code false}), the entity should <strong>not</strong> be registered in the world.
 	 * 
 	 * @param entity The entity.
 	 * @return {@code true} if the entity was added successfully, otherwise {@code false}.
@@ -84,8 +86,7 @@ public final class Sector {
 	 * @return {@code true} if this sector contains the entity, otherwise {@code false}.
 	 */
 	public boolean contains(Entity entity) {
-		List<Entity> entities = this.entities.get(entity.getPosition());
-		return entities.contains(entity);
+		return entities.get(entity.getPosition()).contains(entity);
 	}
 
 	/**
@@ -116,14 +117,8 @@ public final class Sector {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> List<T> getEntities(Position position, EntityType type) {
-		List<Entity> entities = getEntities(position);
-		List<T> filtered = new ArrayList<>();
-		for (Entity entity : entities) {
-			if (entity.getEntityType() == type) {
-				filtered.add((T) entity);
-			}
-		}
-		return filtered;
+		return (List<T>) entities.get(position).stream().filter((e) -> e.getEntityType() == type)
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -132,9 +127,7 @@ public final class Sector {
 	 * @param entity The entity that was updated.
 	 */
 	public void notifyListeners(Entity entity) {
-		for (SectorListener listener : listeners) {
-			listener.execute(this, entity);
-		}
+		listeners.forEach((l) -> l.execute(this, entity));
 	}
 
 	/**
@@ -144,9 +137,10 @@ public final class Sector {
 	 * @return {@code true} if the entity was removed, otherwise {@code false}.
 	 */
 	public boolean removeEntity(Entity entity) {
-		List<Entity> entities = this.entities.get(entity.getPosition());
+		Position position = entity.getPosition();
+		List<Entity> entities = this.entities.get(position);
 		if (entities == null) {
-			this.entities.put(entity.getPosition(), new ArrayList<Entity>());
+			this.entities.put(position, new ArrayList<>());
 			return false;
 		}
 

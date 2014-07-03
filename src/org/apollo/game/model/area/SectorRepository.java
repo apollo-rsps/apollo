@@ -19,7 +19,7 @@ public final class SectorRepository {
 	private final boolean permitRemoval;
 
 	/**
-	 * A {@link Map} of {@link SectorCoordinates} that correspond to the appropriate {@link Sector}s..
+	 * A {@link Map} of {@link SectorCoordinates} that correspond to the appropriate {@link Sector}s.
 	 */
 	private final Map<SectorCoordinates, Sector> sectors = new HashMap<>();
 
@@ -69,7 +69,7 @@ public final class SectorRepository {
 	public boolean contains(SectorCoordinates coordinates) {
 		return sectors.containsKey(coordinates);
 	}
-	
+
 	/**
 	 * Gets a {@link Sector} with the specified {@link SectorCoordinates}. If the sector does not exist (i.e.
 	 * {@link #sectors}{@code .get()} returns {@code null}) then a new sector is created, submitted to the repository,
@@ -81,7 +81,8 @@ public final class SectorRepository {
 	public Sector get(SectorCoordinates coordinates) {
 		Sector sector = sectors.get(coordinates);
 		if (sector == null) {
-			add(sector = new Sector(coordinates));
+			sector = new Sector(coordinates);
+			add(sector);
 		}
 		return sector;
 	}
