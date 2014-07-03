@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 import org.apollo.game.event.Event;
-import org.apollo.game.model.Skill;
+import org.apollo.game.model.entity.Skill;
 
 /**
  * An {@link Event} sent to the client to update a player's skill level.

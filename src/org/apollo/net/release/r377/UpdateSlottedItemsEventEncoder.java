@@ -2,7 +2,7 @@ package org.apollo.net.release.r377;
 
 import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.SlottedItem;
+import org.apollo.game.model.inv.SlottedItem;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;

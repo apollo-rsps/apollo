@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apollo.game.model.Entity;
-import org.apollo.game.model.Entity.EntityType;
+import org.apollo.game.model.entity.Entity;
+import org.apollo.game.model.entity.Entity.EntityType;
 import org.apollo.game.model.Position;
 
 /**

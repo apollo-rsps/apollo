@@ -7,8 +7,8 @@ import io.netty.channel.ChannelHandlerContext;
 
 import org.apollo.ServerContext;
 import org.apollo.game.GameService;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.World.RegistrationStatus;
+import org.apollo.game.model.entity.Player;
 import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.login.LoginService;
 import org.apollo.net.ApolloHandler;

@@ -8,7 +8,7 @@ import org.apollo.game.event.impl.EnterAmountEvent;
 import org.apollo.game.event.impl.OpenDialogueInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceEvent;
 import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.dialogue.DialogueListener;
 
 /**

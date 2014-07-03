@@ -3,12 +3,12 @@ package org.apollo.game.event.handler.impl;
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.ItemOptionEvent;
-import org.apollo.game.model.EquipmentConstants;
-import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.Player;
-import org.apollo.game.model.Skill;
 import org.apollo.game.model.def.EquipmentDefinition;
+import org.apollo.game.model.entity.EquipmentConstants;
+import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.Skill;
+import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 import org.apollo.util.LanguageUtil;
 

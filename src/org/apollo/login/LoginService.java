@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apollo.Service;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.io.player.PlayerLoader;
 import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.io.player.PlayerSaver;

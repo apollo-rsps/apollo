@@ -3,7 +3,7 @@ package org.apollo.login;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.io.player.PlayerSaver;
 import org.apollo.net.session.GameSession;
 

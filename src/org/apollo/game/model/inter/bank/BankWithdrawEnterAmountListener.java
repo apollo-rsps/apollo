@@ -1,6 +1,6 @@
 package org.apollo.game.model.inter.bank;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.EnterAmountListener;
 
 /**

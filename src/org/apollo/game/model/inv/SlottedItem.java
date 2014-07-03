@@ -1,4 +1,6 @@
-package org.apollo.game.model;
+package org.apollo.game.model.inv;
+
+import org.apollo.game.model.Item;
 
 /**
  * A class which contains an {@link Item} and its corresponding slot.

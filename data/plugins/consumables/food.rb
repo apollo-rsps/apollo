@@ -1,8 +1,8 @@
 require 'java'
 
 java_import 'org.apollo.game.model.Animation'
-java_import 'org.apollo.game.model.Player'
-java_import 'org.apollo.game.model.Skill'
+java_import 'org.apollo.game.model.entity.Skill'
+java_import 'org.apollo.game.model.entity.Player'
 
 EAT_FOOD_SOUND = 317
 

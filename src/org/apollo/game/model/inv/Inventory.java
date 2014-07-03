@@ -1,10 +1,10 @@
-package org.apollo.game.model;
+package org.apollo.game.model.inv;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apollo.game.model.Item;
 import org.apollo.game.model.def.ItemDefinition;
-import org.apollo.game.model.inv.InventoryListener;
 
 /**
  * Represents an inventory - a collection of {@link Item}s.

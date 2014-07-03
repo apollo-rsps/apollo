@@ -2,12 +2,12 @@ require 'java'
 
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.model.Animation'
-java_import 'org.apollo.game.model.Skill'
+java_import 'org.apollo.game.model.entity.Skill'
 
 BURY_BONE_ANIMATION = 827
 BONES = {}
 
-# Represents a bone with a name, id, and experience.
+# Represents a bone with an id and experience value.
 class Bone
  attr_reader :id, :exp
 

@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apollo.game.model.Entity;
-import org.apollo.game.model.Entity.EntityType;
+import org.apollo.game.model.entity.Entity;
+import org.apollo.game.model.entity.Entity.EntityType;
 import org.apollo.game.model.Position;
 
 /**
@@ -146,7 +146,7 @@ public final class Sector {
 	public boolean removeEntity(Entity entity) {
 		List<Entity> entities = this.entities.get(entity.getPosition());
 		if (entities == null) {
-			this.entities.put(entity.getPosition(), new ArrayList<Entity>());
+			this.entities.put(entity.getPosition(), new ArrayList<>());
 			return false;
 		}
 

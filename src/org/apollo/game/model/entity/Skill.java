@@ -1,4 +1,4 @@
-package org.apollo.game.model;
+package org.apollo.game.model.entity;
 
 /**
  * Represents a single skill.

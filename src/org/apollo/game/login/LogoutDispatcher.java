@@ -3,7 +3,7 @@ package org.apollo.game.login;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * A class that dispatches {@link Player}s to {@link LogoutListener}s.

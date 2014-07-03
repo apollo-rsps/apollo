@@ -4,7 +4,7 @@ import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.PlayerDesignEvent;
 import org.apollo.game.model.Appearance;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.settings.Gender;
 
 /**

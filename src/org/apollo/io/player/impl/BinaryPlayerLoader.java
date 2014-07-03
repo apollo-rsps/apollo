@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apollo.game.model.Appearance;
-import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.Skill;
-import org.apollo.game.model.SkillSet;
+import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.Skill;
+import org.apollo.game.model.entity.SkillSet;
+import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.settings.Gender;
 import org.apollo.game.model.settings.PrivacyState;
 import org.apollo.game.model.settings.PrivilegeLevel;

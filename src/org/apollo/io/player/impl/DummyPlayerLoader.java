@@ -1,7 +1,7 @@
 package org.apollo.io.player.impl;
 
-import org.apollo.game.model.Player;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.settings.PrivilegeLevel;
 import org.apollo.io.player.PlayerLoader;
 import org.apollo.io.player.PlayerLoaderResponse;

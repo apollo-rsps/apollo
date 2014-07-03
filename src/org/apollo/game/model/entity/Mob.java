@@ -1,11 +1,18 @@
-package org.apollo.game.model;
+package org.apollo.game.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apollo.game.action.Action;
-import org.apollo.game.model.Inventory.StackMode;
+import org.apollo.game.model.Animation;
+import org.apollo.game.model.Direction;
+import org.apollo.game.model.Graphic;
+import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.def.NpcDefinition;
+import org.apollo.game.model.inv.Inventory;
+import org.apollo.game.model.inv.InventoryConstants;
+import org.apollo.game.model.inv.Inventory.StackMode;
 import org.apollo.game.scheduling.impl.SkillNormalizationTask;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;

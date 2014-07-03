@@ -1,6 +1,6 @@
 package org.apollo.io.player;
 
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 import org.apollo.net.codec.login.LoginConstants;
 
 /**

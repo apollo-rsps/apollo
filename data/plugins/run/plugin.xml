@@ -10,5 +10,7 @@
   <scripts>
     <script>run.rb</script>
   </scripts>
-  <dependencies />
+  <dependencies>
+    <dependency>attributes</dependency>
+  </dependencies>
 </plugin>

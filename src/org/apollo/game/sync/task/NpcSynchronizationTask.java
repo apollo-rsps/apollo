@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apollo.game.event.impl.NpcSynchronizationEvent;
-import org.apollo.game.model.Npc;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.entity.Npc;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.seg.AddNpcSegment;
 import org.apollo.game.sync.seg.MovementSegment;
 import org.apollo.game.sync.seg.RemoveMobSegment;

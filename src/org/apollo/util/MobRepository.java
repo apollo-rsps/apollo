@@ -3,7 +3,7 @@ package org.apollo.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.apollo.game.model.Mob;
+import org.apollo.game.model.entity.Mob;
 
 /**
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.

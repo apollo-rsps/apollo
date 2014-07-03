@@ -1,7 +1,7 @@
 package org.apollo.net.release.r317;
 
 import org.apollo.game.event.impl.UpdateSkillEvent;
-import org.apollo.game.model.Skill;
+import org.apollo.game.model.entity.Skill;
 import org.apollo.net.codec.game.DataOrder;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;

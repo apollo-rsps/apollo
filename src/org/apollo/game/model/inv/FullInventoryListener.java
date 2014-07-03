@@ -2,8 +2,7 @@ package org.apollo.game.model.inv;
 
 import org.apollo.game.event.Event;
 import org.apollo.game.event.impl.ServerMessageEvent;
-import org.apollo.game.model.Inventory;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * An {@link InventoryListener} which sends a message to a player when an inventory has run out of space.

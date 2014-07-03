@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apollo.game.model.Item;
-import org.apollo.game.model.Skill;
+import org.apollo.game.model.entity.Skill;
 
 /**
  * Represents a type of {@link Item} which may be equipped.

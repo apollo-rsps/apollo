@@ -1,8 +1,8 @@
 require 'java'
 
 java_import 'org.apollo.game.action.DistancedAction'
-java_import 'org.apollo.game.model.EquipmentConstants'
 java_import 'org.apollo.game.model.def.ItemDefinition'
+java_import 'org.apollo.game.model.entity.EquipmentConstants'
 
 PROSPECT_PULSES = 3
 ORE_SIZE = 1

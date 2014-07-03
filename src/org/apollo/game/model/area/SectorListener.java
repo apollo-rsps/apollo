@@ -1,6 +1,6 @@
 package org.apollo.game.model.area;
 
-import org.apollo.game.model.Entity;
+import org.apollo.game.model.entity.Entity;
 
 /**
  * A class that should be extended by listeners that execute actions when an entity is added or removed from the sector.

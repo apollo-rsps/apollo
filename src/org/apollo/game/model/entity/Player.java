@@ -1,4 +1,4 @@
-package org.apollo.game.model;
+package org.apollo.game.model.entity;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,7 +15,9 @@ import org.apollo.game.event.impl.ServerMessageEvent;
 import org.apollo.game.event.impl.SetWidgetTextEvent;
 import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
 import org.apollo.game.event.impl.UpdateRunEnergyEvent;
-import org.apollo.game.model.Inventory.StackMode;
+import org.apollo.game.model.Appearance;
+import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.inter.InterfaceConstants;
 import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inter.InterfaceSet;
@@ -23,8 +25,11 @@ import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inter.bank.BankInterfaceListener;
 import org.apollo.game.model.inv.AppearanceInventoryListener;
 import org.apollo.game.model.inv.FullInventoryListener;
+import org.apollo.game.model.inv.Inventory;
+import org.apollo.game.model.inv.InventoryConstants;
 import org.apollo.game.model.inv.InventoryListener;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
+import org.apollo.game.model.inv.Inventory.StackMode;
 import org.apollo.game.model.settings.PrivacyState;
 import org.apollo.game.model.settings.PrivilegeLevel;
 import org.apollo.game.model.settings.ScreenBrightness;

@@ -3,8 +3,8 @@ package org.apollo.game.event.handler.impl;
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.ButtonEvent;
+import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.InterfaceType;
-import org.apollo.game.model.Player;
 
 /**
  * An {@link EventHandler} which intercepts button clicks on dialogues, and forwards the event to the current listener.

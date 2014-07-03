@@ -1,6 +1,5 @@
 package org.apollo.game.model.inv;
 
-import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
 
 /**

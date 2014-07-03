@@ -3,10 +3,10 @@ require 'java'
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Graphic'
-java_import 'org.apollo.game.model.Npc'
 java_import 'org.apollo.game.model.Position'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.def.NpcDefinition'
+java_import 'org.apollo.game.model.entity.Npc'
 
 # Information about npc spawning
 #
@@ -61,16 +61,12 @@ end
 # Applies a decoded hash (one aquired using parse_hash) to the specified npc.
 def apply_decoded_hash(npc, hash)
   hash.each do |key, value|
-    if key == :face
-      npc.turn_to(value)
-    elsif key == :boundary
-      npc.boundary = value
-    elsif key == :spawn_animation
-      npc.play_animation(Animation.new(value))
-    elsif key == :spawn_graphic
-      npc.play_graphic(Graphic.new(value))
-    else
-      raise "Unrecognised key #{key} - value #{value}."
+    case key
+      when :face            then npc.turn_to(value)
+      when :boundary        then npc.boundary = value
+      when :spawn_animation then npc.play_animation(Animation.new(value))
+      when :spawn_graphic   then npc.play_graphic(Graphic.new(value))
+      else raise "Unrecognised key #{key} - value #{value}."
     end
   end
 end
@@ -78,23 +74,20 @@ end
 # Parses the remaining key-value pairs in the hash.
 def decode_hash(position, hash)
   decoded = {}
-  hash.each do |key, value| 
-    if key == :face
-      facing_position = direction_to_position(value, position)
-      decoded[:face] = facing_position
-    elsif key == :bounds
-      decoded[:boundary] = value
-    elsif key == :delta_bounds
-      dx, dy, x, y, z = value[0], value[1], position.x, position.y, position.height
-      raise 'Delta values cannot be < 0.' if dx < 0 || dy < 0
+  hash.each do |key, value|
+    case key
+      when :face
+        facing_position = direction_to_position(value, position)
+        decoded[:face] = facing_position
+      when :delta_bounds
+        dx, dy, x, y, z = value[0], value[1], position.x, position.y, position.height
+        raise 'Delta values cannot be less than 0.' if dx < 0 || dy < 0
 
-      decoded[:boundary] = [ Position.new(x + dx, y, z), Position.new(x, y + dy, z), Position.new(x - dx, y, z), Position.new(x, y - dy, z) ]
-    elsif key == :spawn_animation
-      decoded[:spawn_animation] = Animation.new(value)
-    elsif key == :spawn_graphic
-      decoded[:spawn_graphic] = Graphic.new(value)
-    else
-      raise "Unrecognised key #{key} - value #{value}."
+        decoded[:boundary] = [ Position.new(x + dx, y, z), Position.new(x, y + dy, z), Position.new(x - dx, y, z), Position.new(x, y - dy, z) ]
+      when :bounds          then decoded[:boundary] = value
+      when :spawn_animation then decoded[:spawn_animation] = Animation.new(value)
+      when :spawn_graphic   then decoded[:spawn_graphic] = Graphic.new(value)
+      else raise "Unrecognised key #{key} - value #{value}."
     end
   end
   return decoded

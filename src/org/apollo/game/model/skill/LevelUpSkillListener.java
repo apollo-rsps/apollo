@@ -1,8 +1,8 @@
 package org.apollo.game.model.skill;
 
-import org.apollo.game.model.Player;
-import org.apollo.game.model.Skill;
-import org.apollo.game.model.SkillSet;
+import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.Skill;
+import org.apollo.game.model.entity.SkillSet;
 import org.apollo.util.LanguageUtil;
 
 /**

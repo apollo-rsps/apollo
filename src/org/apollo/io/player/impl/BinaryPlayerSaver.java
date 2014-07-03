@@ -5,14 +5,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apollo.game.model.Appearance;
-import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.Player;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.Skill;
-import org.apollo.game.model.SkillSet;
+import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.Skill;
+import org.apollo.game.model.entity.SkillSet;
+import org.apollo.game.model.inv.Inventory;
 import org.apollo.io.player.PlayerSaver;
 import org.apollo.util.NameUtil;
 import org.apollo.util.StreamUtil;
@@ -87,6 +88,34 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			for (String username : usernames) {
 				out.writeLong(NameUtil.encodeBase37(username));
 			}
+
+			for (Entry<String, Object> attribute : player.getAttributes()) {
+				saveAttribute(out, attribute);
+			}
+		}
+	}
+
+	/**
+	 * Writes an attribute to the specified output stream.
+	 * 
+	 * @param out The output stream.
+	 * @param attribute The attribute.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	private void saveAttribute(DataOutputStream out, Entry<String, Object> attribute) throws IOException {
+		StreamUtil.writeString(out, attribute.getKey());
+		Object value = attribute.getValue();
+		if (value instanceof String) {
+			out.writeByte(0);
+			StreamUtil.writeString(out, (String) value);
+		} else if (value instanceof Integer) {
+			out.writeByte(1);
+			out.writeInt((Integer) value);
+		} else if (value instanceof Boolean) {
+			out.writeByte(2);
+			out.writeByte(((Boolean) value) ? 1 : 0);
+		} else {
+			throw new IllegalArgumentException("Undefined attribute type " + value + ".");
 		}
 	}
 

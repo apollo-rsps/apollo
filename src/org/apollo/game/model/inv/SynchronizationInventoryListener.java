@@ -2,10 +2,8 @@ package org.apollo.game.model.inv;
 
 import org.apollo.game.event.impl.UpdateItemsEvent;
 import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
-import org.apollo.game.model.Inventory;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.Player;
-import org.apollo.game.model.SlottedItem;
+import org.apollo.game.model.entity.Player;
 
 /**
  * An {@link InventoryListener} which synchronizes the state of the server's inventory with the client's.

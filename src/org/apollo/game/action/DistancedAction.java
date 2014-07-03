@@ -1,7 +1,7 @@
 package org.apollo.game.action;
 
-import org.apollo.game.model.Mob;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.entity.Mob;
 
 /**
  * An @{link Action} which fires when a distance requirement is met.

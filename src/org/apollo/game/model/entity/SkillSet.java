@@ -1,4 +1,4 @@
-package org.apollo.game.model;
+package org.apollo.game.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;

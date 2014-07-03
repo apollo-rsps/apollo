@@ -2,10 +2,10 @@ require 'java'
 
 java_import 'org.apollo.game.event.impl.FriendServerStatusEvent'
 java_import 'org.apollo.game.event.impl.SendFriendEvent'
-java_import 'org.apollo.game.model.Player'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.settings.ServerStatus'
 java_import 'org.apollo.game.model.settings.PrivacyState'
+java_import 'org.apollo.game.model.entity.Player'
 
 
 # Processes an add friend event, updating the logged-in status of the player (and the person they added) if necessary.

@@ -3,7 +3,7 @@ package org.apollo.game.event.handler.impl;
 import org.apollo.game.event.handler.EventHandler;
 import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.ClosedInterfaceEvent;
-import org.apollo.game.model.Player;
+import org.apollo.game.model.entity.Player;
 
 /**
  * An {@link EventHandler} for the {@link ClosedInterfaceEvent}.
@@ -14,6 +14,7 @@ public final class ClosedInterfaceEventHandler extends EventHandler<ClosedInterf
 
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, ClosedInterfaceEvent event) {
+		System.out.println("closing interface");
 		player.getInterfaceSet().interfaceClosed();
 	}
 
