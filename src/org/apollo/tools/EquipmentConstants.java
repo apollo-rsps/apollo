@@ -62,8 +62,9 @@ public final class EquipmentConstants {
 	/**
 	 * Hats.
 	 */
-	public static final String[] HATS = { "helm", "hood", "coif", "Coif", "hat", "partyhat", "Hat", "full helm (t)",
-			"full helm (g)", "hat (t)", "hat (g)", "cav", "boater", "helmet", "mask", "Helm of neitiznot" };
+	public static final String[] HATS = { "tiara", "helm", "hood", "coif", "Coif", "hat", "partyhat", "Hat",
+			"full helm (t)", "full helm (g)", "hat (t)", "hat (g)", "cav", "boater", "helmet", "mask",
+			"Helm of neitiznot" };
 
 	/**
 	 * Legs.
