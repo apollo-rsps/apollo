@@ -7,7 +7,8 @@ import org.apollo.game.model.entity.Player;
  * 
  * @author Major
  */
-public abstract class LoginListener {
+@FunctionalInterface
+public interface LoginListener {
 
 	/**
 	 * Executes the action for this listener.

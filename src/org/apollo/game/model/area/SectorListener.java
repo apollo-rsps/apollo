@@ -7,7 +7,8 @@ import org.apollo.game.model.entity.Entity;
  * 
  * @author Major
  */
-public abstract class SectorListener {
+@FunctionalInterface
+public interface SectorListener {
 
 	/**
 	 * Executes the action for this listener.
