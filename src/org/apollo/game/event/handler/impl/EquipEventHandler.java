@@ -32,6 +32,7 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 		EquipmentDefinition definition = EquipmentDefinition.lookup(equippingId);
 
 		if (definition == null) {
+			// We don't break the chain here or any item option events won't work!
 			return;
 		}
 
@@ -59,7 +60,6 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 				&& (currentlyEquipped == null || currentlyEquipped.getId() == equippingId)) {
 			equipment.set(definition.getSlot(), equipping);
 			inventory.reset(inventorySlot);
-			ctx.breakHandlerChain();
 			return;
 		}
 
@@ -94,7 +94,6 @@ public final class EquipEventHandler extends EventHandler<ItemOptionEvent> {
 			if (previous != null) {
 				inventory.add(previous);
 			}
-			ctx.breakHandlerChain();
 		}
 	}
 
