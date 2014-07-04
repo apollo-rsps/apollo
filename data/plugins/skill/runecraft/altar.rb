@@ -38,11 +38,12 @@ on :event, :object_action do |ctx, player, event|
     object_id = event.id
     if (altar = PORTALS[object_id]) != nil # Get the altar associated with this exit portal.
       player.start_action(TeleportAction.new(player, altar.entrance_position, 1, altar.exit_position))
+      ctx.break_handler_chain
     elsif (rune = RUNES[object_id]) != nil # Get the rune associated with this altar.
       altar = CRAFTING_ALTARS[object_id]
       player.start_action(RunecraftingAction.new(player, rune, altar.crafting_centre))
+      ctx.break_handler_chain
     end
-    ctx.break_handler_chain
   end
 end
 
