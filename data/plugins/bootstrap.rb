@@ -50,7 +50,9 @@ class ProcCommandListener < CommandListener
 end
 
 # A LoginListener that executes a Proc object with the player argument.
-class ProcLoginListener < LoginListener
+class ProcLoginListener 
+  java_implements LoginListener
+
   def initialize(block)
     super()
     @block = block
@@ -62,7 +64,9 @@ class ProcLoginListener < LoginListener
 end
 
 # A LogoutListener that executes a Proc object with the player argument.
-class ProcLogoutListener < LogoutListener
+class ProcLogoutListener 
+  java_implements LogoutListener
+
   def initialize(block)
     super()
     @block = block
