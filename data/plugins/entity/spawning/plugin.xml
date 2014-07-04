@@ -9,7 +9,6 @@
   </authors>
   <scripts>
     <script>npc-spawn.rb</script>
-    <script>item-spawn.rb</script>
   </scripts>
   <dependencies />
 </plugin>
