@@ -6,12 +6,14 @@
   <description>Adds the Runecraft skill.</description>
   <authors>
     <author>Major</author>
+    <author>BugCrusher</author>
   </authors>
   <scripts>
     <script>altar.rb</script>
     <script>rune.rb</script>
     <script>runecraft.rb</script>
     <script>talisman.rb</script>
+    <script>tiara.rb</script>
   </scripts>
   <dependencies />
 </plugin>
