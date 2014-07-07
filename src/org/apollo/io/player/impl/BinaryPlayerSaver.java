@@ -114,7 +114,10 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 		} else if (value instanceof Boolean) {
 			out.writeByte(2);
 			out.writeByte(((Boolean) value) ? 1 : 0);
-		} else {
+		} else if (value instanceof Long){
+            out.writeByte(3);
+            out.writeLong((Long) value);
+        } else {
 			throw new IllegalArgumentException("Undefined attribute type " + value + ".");
 		}
 	}

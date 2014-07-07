@@ -6,6 +6,7 @@ java_import 'org.apollo.game.model.def.ItemDefinition'
 COMBINATION_RUNES = {}
 
 BINDING_NECKLACE_ID = 5521
+declare_attribute :binding_necklace_charge, 15, :synchronized
 
 # Represents a combinationrune that can be crafted.
 class CombinationRune
@@ -116,9 +117,15 @@ class CombinationRunecraftingAction < DistancedAction
 
       #Calculation of the number of combination runes to add
       amulet = player.equipment.get(EquipmentConstants::AMULET)
-      if amulet != nil && amulet == BINDING_NECKLACE_ID
+      puts amulet.to_s
+      if amulet != nil && amulet.id == BINDING_NECKLACE_ID
         #100% success rate
         added = amount
+        @player.binding_necklace_charge -= 1
+        if @player.binding_necklace_charge <= 0
+          crumbles = true
+          @player.binding_necklace_charge = 15
+        end
       else
         #50% success rate
         #A repetition of the 50% chance for each essence
@@ -128,7 +135,15 @@ class CombinationRunecraftingAction < DistancedAction
 
       #Crafting of the combination runes
       @player.inventory.add(@rune.id, added)
-      @player.send_message("Your craft the rune essence into #{added > 1 ? 'some ' + @rune.name + 's' : 'an ' + @rune.name}.", true)
+      if added == 0
+        @player.send_message("Your fail to craft a " + @rune.name + ".", true)
+      else
+        @player.send_message("Your craft the rune essence into #{added > 1 ? 'some ' + @rune.name + 's' : 'a ' + @rune.name}.", true)
+      end
+      if crumbles
+        @player.send_message("Your binding necklace crumbles.", true)
+        player.equipment.reset(EquipmentConstants::AMULET)
+      end
       @player.skill_set.add_experience(RUNECRAFT_SKILL_ID, added * @experience)
       stop
     end

@@ -16,5 +16,7 @@
     <script>tiara.rb</script>
     <script>combinationRune.rb</script>
   </scripts>
-  <dependencies />
+  <dependencies>
+      <dependency>attributes</dependency>
+  </dependencies>
 </plugin>
