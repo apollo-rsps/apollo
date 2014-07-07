@@ -99,7 +99,7 @@ end
 #Create tiara
 on :event, :item_on_object do |ctx, player, event|
   tiara= TIARAS_BY_TALISMAN[event.id]; altar = CRAFTING_ALTARS[event.object_id]
-  if (tiara != nil && altar != nil)
+  if (tiara != nil && altar != nil && tiara.altar == altar.entrance_altar)
     player.start_action(CreateTiaraAction.new(player, event.position, tiara, altar))
     ctx.break_handler_chain
   end
@@ -110,6 +110,7 @@ end
 class CreateTiaraAction < DistancedAction
   def initialize(player, position, tiara, altar)
     super(0, true, player, position, 2)
+    @position = position
     @player = player
     @tiara = tiara
     @altar = altar
@@ -117,16 +118,13 @@ class CreateTiaraAction < DistancedAction
 
   def execute_action
     if(@player.inventory.contains(TIARA_ITEM_ID) && @player.inventory.contains(@tiara.talisman))
-      if @tiara.altar == @altar.entrance_altar
-        @player.inventory.remove(@tiara.talisman)
-        @player.inventory.remove(TIARA_ITEM_ID)
-        @player.inventory.add(@tiara.tiara_id)
-        @player.skill_set.addExperience(RUNECRAFT_SKILL_ID, @tiara.experience)
-        @player.play_animation(RUNECRAFTING_ANIMATION)
-        @player.play_graphic(RUNECRAFTING_GRAPHIC)
-      else
-        @player.send_message("You can't use that talisman on this altar.")
-      end
+      @player.inventory.remove(@tiara.talisman)
+      @player.inventory.remove(TIARA_ITEM_ID)
+      @player.inventory.add(@tiara.tiara_id)
+      @player.skill_set.addExperience(RUNECRAFT_SKILL_ID, @tiara.experience)
+      @player.turn_to(@position)
+      @player.play_animation(RUNECRAFTING_ANIMATION)
+      @player.play_graphic(RUNECRAFTING_GRAPHIC)
     else
       @player.send_message("You need to have a talisman and blank tiara to enchant a tiara.")
     end
@@ -134,7 +132,7 @@ class CreateTiaraAction < DistancedAction
   end
 
   def equals(other)
-    return (get_class == other.get_class && @player == other.player && @tiara == other.tiara)
+    return (get_class == other.get_class && @player == other.player)
   end
 end
 
