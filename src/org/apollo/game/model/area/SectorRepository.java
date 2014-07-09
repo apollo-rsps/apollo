@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apollo.game.model.Position;
+
 /**
  * A repository of sectors, backed by a {@link HashMap} of {@link SectorCoordinates} that correspond to their
  * appropriate {@link Sector}s.
@@ -71,9 +73,19 @@ public final class SectorRepository {
     }
 
     /**
-     * Gets a {@link Sector} with the specified {@link SectorCoordinates}. If the sector does not exist (i.e.
-     * {@link #sectors}{@code .get()} returns {@code null}) then a new sector is created, submitted to the repository,
-     * and returned.
+     * Gets the {@link Sector} that contains the specified {@link Position}. If the sector does not exist in this
+     * repository then a new sector is created, submitted to the repository, and returned.
+     * 
+     * @param position The position.
+     * @return The sector.
+     */
+    public Sector fromPosition(Position position) {
+	return get(SectorCoordinates.fromPosition(position));
+    }
+
+    /**
+     * Gets a {@link Sector} with the specified {@link SectorCoordinates}. If the sector does not exist in this
+     * repository then a new sector is created, submitted to the repository, and returned.
      * 
      * @param coordinates The coordinates.
      * @return The sector.
