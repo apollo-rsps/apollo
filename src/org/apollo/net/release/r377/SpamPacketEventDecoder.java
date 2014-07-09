@@ -11,9 +11,9 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class SpamPacketEventDecoder extends EventDecoder<SpamPacketEvent> {
 
-	@Override
-	public SpamPacketEvent decode(GamePacket packet) {
-		return new SpamPacketEvent(packet.getPayload().array());
-	}
+    @Override
+    public SpamPacketEvent decode(GamePacket packet) {
+	return new SpamPacketEvent(packet.getPayload().array());
+    }
 
 }

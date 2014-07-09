@@ -14,12 +14,12 @@ import org.apollo.util.NameUtil;
  */
 public final class SendFriendEventEncoder extends EventEncoder<SendFriendEvent> {
 
-	@Override
-	public GamePacket encode(SendFriendEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(78);
-		builder.put(DataType.LONG, NameUtil.encodeBase37(event.getUsername()));
-		builder.put(DataType.BYTE, event.getWorld());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(SendFriendEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(78);
+	builder.put(DataType.LONG, NameUtil.encodeBase37(event.getUsername()));
+	builder.put(DataType.BYTE, event.getWorld());
+	return builder.toGamePacket();
+    }
 
 }

@@ -14,14 +14,14 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class AddGlobalTileItemEventEncoder extends EventEncoder<AddGlobalTileItemEvent> {
 
-	@Override
-	public GamePacket encode(AddGlobalTileItemEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(215);
-		builder.put(DataType.SHORT, DataTransformation.ADD, event.getId());
-		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, event.getPositionOffset());
-		builder.put(DataType.SHORT, DataTransformation.ADD, event.getIndex());
-		builder.put(DataType.SHORT, event.getAmount());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(AddGlobalTileItemEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(215);
+	builder.put(DataType.SHORT, DataTransformation.ADD, event.getId());
+	builder.put(DataType.BYTE, DataTransformation.SUBTRACT, event.getPositionOffset());
+	builder.put(DataType.SHORT, DataTransformation.ADD, event.getIndex());
+	builder.put(DataType.SHORT, event.getAmount());
+	return builder.toGamePacket();
+    }
 
 }

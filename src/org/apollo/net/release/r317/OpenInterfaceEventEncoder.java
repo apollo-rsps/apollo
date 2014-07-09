@@ -13,11 +13,11 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class OpenInterfaceEventEncoder extends EventEncoder<OpenInterfaceEvent> {
 
-	@Override
-	public GamePacket encode(OpenInterfaceEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(97);
-		builder.put(DataType.SHORT, event.getId());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(OpenInterfaceEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(97);
+	builder.put(DataType.SHORT, event.getId());
+	return builder.toGamePacket();
+    }
 
 }

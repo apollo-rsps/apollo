@@ -9,43 +9,43 @@ import org.apollo.game.event.Event;
  */
 public final class ConfigEvent extends Event {
 
-	/**
-	 * The identifier.
-	 */
-	private final int id;
+    /**
+     * The identifier.
+     */
+    private final int id;
 
-	/**
-	 * The value.
-	 */
-	private final int value;
+    /**
+     * The value.
+     */
+    private final int value;
 
-	/**
-	 * Creates a new config event.
-	 * 
-	 * @param id The config's identifier.
-	 * @param value The value.
-	 */
-	public ConfigEvent(int id, int value) {
-		this.id = id;
-		this.value = value;
-	}
+    /**
+     * Creates a new config event.
+     * 
+     * @param id The config's identifier.
+     * @param value The value.
+     */
+    public ConfigEvent(int id, int value) {
+	this.id = id;
+	this.value = value;
+    }
 
-	/**
-	 * Gets the config's identifier.
-	 * 
-	 * @return The config id.
-	 */
-	public int getId() {
-		return id;
-	}
+    /**
+     * Gets the config's identifier.
+     * 
+     * @return The config id.
+     */
+    public int getId() {
+	return id;
+    }
 
-	/**
-	 * Gets the config's value.
-	 * 
-	 * @return The config value.
-	 */
-	public int getValue() {
-		return value;
-	}
+    /**
+     * Gets the config's value.
+     * 
+     * @return The config value.
+     */
+    public int getValue() {
+	return value;
+    }
 
 }

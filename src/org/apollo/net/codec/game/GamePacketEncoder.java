@@ -18,48 +18,48 @@ import org.apollo.net.meta.PacketType;
  */
 public final class GamePacketEncoder extends MessageToMessageEncoder<GamePacket> {
 
-	/**
-	 * The random number generator.
-	 */
-	private final IsaacRandom random;
+    /**
+     * The random number generator.
+     */
+    private final IsaacRandom random;
 
-	/**
-	 * Creates the {@link GamePacketEncoder}.
-	 * 
-	 * @param random The random number generator.
-	 */
-	public GamePacketEncoder(IsaacRandom random) {
-		this.random = random;
+    /**
+     * Creates the {@link GamePacketEncoder}.
+     * 
+     * @param random The random number generator.
+     */
+    public GamePacketEncoder(IsaacRandom random) {
+	this.random = random;
+    }
+
+    @Override
+    protected void encode(ChannelHandlerContext ctx, GamePacket msg, List<Object> out) throws Exception {
+	GamePacket packet = (GamePacket) msg;
+	PacketType type = packet.getType();
+	int headerLength = 1;
+	int payloadLength = packet.getLength();
+	if (type == PacketType.VARIABLE_BYTE) {
+	    headerLength++;
+	    if (payloadLength >= 256) {
+		throw new Exception("Payload too long for variable byte packet.");
+	    }
+	} else if (type == PacketType.VARIABLE_SHORT) {
+	    headerLength += 2;
+	    if (payloadLength >= 65536) {
+		throw new Exception("Payload too long for variable short packet.");
+	    }
 	}
 
-	@Override
-	protected void encode(ChannelHandlerContext ctx, GamePacket msg, List<Object> out) throws Exception {
-		GamePacket packet = (GamePacket) msg;
-		PacketType type = packet.getType();
-		int headerLength = 1;
-		int payloadLength = packet.getLength();
-		if (type == PacketType.VARIABLE_BYTE) {
-			headerLength++;
-			if (payloadLength >= 256) {
-				throw new Exception("Payload too long for variable byte packet.");
-			}
-		} else if (type == PacketType.VARIABLE_SHORT) {
-			headerLength += 2;
-			if (payloadLength >= 65536) {
-				throw new Exception("Payload too long for variable short packet.");
-			}
-		}
-
-		ByteBuf buffer = Unpooled.buffer(headerLength + payloadLength);
-		buffer.writeByte(packet.getOpcode() + random.nextInt() & 0xFF);
-		if (type == PacketType.VARIABLE_BYTE) {
-			buffer.writeByte(payloadLength);
-		} else if (type == PacketType.VARIABLE_SHORT) {
-			buffer.writeShort(payloadLength);
-		}
-		buffer.writeBytes(packet.getPayload());
-
-		out.add(buffer);
+	ByteBuf buffer = Unpooled.buffer(headerLength + payloadLength);
+	buffer.writeByte(packet.getOpcode() + random.nextInt() & 0xFF);
+	if (type == PacketType.VARIABLE_BYTE) {
+	    buffer.writeByte(payloadLength);
+	} else if (type == PacketType.VARIABLE_SHORT) {
+	    buffer.writeShort(payloadLength);
 	}
+	buffer.writeBytes(packet.getPayload());
+
+	out.add(buffer);
+    }
 
 }

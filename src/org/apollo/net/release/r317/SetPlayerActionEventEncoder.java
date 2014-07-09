@@ -15,13 +15,13 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class SetPlayerActionEventEncoder extends EventEncoder<SetPlayerActionEvent> {
 
-	@Override
-	public GamePacket encode(SetPlayerActionEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(104, PacketType.VARIABLE_BYTE);
-		builder.put(DataType.BYTE, DataTransformation.NEGATE, event.getSlot());
-		builder.put(DataType.BYTE, DataTransformation.ADD, event.isPrimaryAction() ? 0 : 1);
-		builder.putString(event.getText());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(SetPlayerActionEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(104, PacketType.VARIABLE_BYTE);
+	builder.put(DataType.BYTE, DataTransformation.NEGATE, event.getSlot());
+	builder.put(DataType.BYTE, DataTransformation.ADD, event.isPrimaryAction() ? 0 : 1);
+	builder.putString(event.getText());
+	return builder.toGamePacket();
+    }
 
 }

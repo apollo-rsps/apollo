@@ -15,16 +15,16 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class UpdateSkillEventEncoder extends EventEncoder<UpdateSkillEvent> {
 
-	@Override
-	public GamePacket encode(UpdateSkillEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(134);
-		Skill skill = event.getSkill();
+    @Override
+    public GamePacket encode(UpdateSkillEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(134);
+	Skill skill = event.getSkill();
 
-		builder.put(DataType.BYTE, event.getId());
-		builder.put(DataType.INT, DataOrder.MIDDLE, (int) skill.getExperience());
-		builder.put(DataType.BYTE, skill.getCurrentLevel());
+	builder.put(DataType.BYTE, event.getId());
+	builder.put(DataType.INT, DataOrder.MIDDLE, (int) skill.getExperience());
+	builder.put(DataType.BYTE, skill.getCurrentLevel());
 
-		return builder.toGamePacket();
-	}
+	return builder.toGamePacket();
+    }
 
 }

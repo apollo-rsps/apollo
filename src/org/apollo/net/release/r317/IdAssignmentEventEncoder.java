@@ -15,12 +15,12 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class IdAssignmentEventEncoder extends EventEncoder<IdAssignmentEvent> {
 
-	@Override
-	public GamePacket encode(IdAssignmentEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(249);
-		builder.put(DataType.BYTE, DataTransformation.ADD, event.isMembers() ? 1 : 0);
-		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getId());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(IdAssignmentEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(249);
+	builder.put(DataType.BYTE, DataTransformation.ADD, event.isMembers() ? 1 : 0);
+	builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getId());
+	return builder.toGamePacket();
+    }
 
 }

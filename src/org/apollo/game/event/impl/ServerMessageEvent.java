@@ -9,37 +9,37 @@ import org.apollo.game.event.Event;
  */
 public final class ServerMessageEvent extends Event {
 
-	/**
-	 * The message.
-	 */
-	private final String message;
+    /**
+     * The message.
+     */
+    private final String message;
 
-	/**
-	 * Creates a server message event.
-	 * 
-	 * @param message The message.
-	 */
-	public ServerMessageEvent(String message) {
-		this(message, false);
-	}
+    /**
+     * Creates a server message event.
+     * 
+     * @param message The message.
+     */
+    public ServerMessageEvent(String message) {
+	this(message, false);
+    }
 
-	/**
-	 * Creates a server message event.
-	 * 
-	 * @param message The message.
-	 * @param filterable If the message can be filtered.
-	 */
-	public ServerMessageEvent(String message, boolean filterable) {
-		this.message = message + (filterable ? ":filterable:" : "");
-	}
+    /**
+     * Creates a server message event.
+     * 
+     * @param message The message.
+     * @param filterable If the message can be filtered.
+     */
+    public ServerMessageEvent(String message, boolean filterable) {
+	this.message = message + (filterable ? ":filterable:" : "");
+    }
 
-	/**
-	 * Gets the message.
-	 * 
-	 * @return The message.
-	 */
-	public String getMessage() {
-		return message;
-	}
+    /**
+     * Gets the message.
+     * 
+     * @return The message.
+     */
+    public String getMessage() {
+	return message;
+    }
 
 }

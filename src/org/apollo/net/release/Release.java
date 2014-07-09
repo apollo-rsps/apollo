@@ -14,101 +14,101 @@ import org.apollo.net.meta.PacketMetaDataGroup;
  */
 public abstract class Release {
 
-	/**
-	 * The decoders.
-	 */
-	private final EventDecoder<?>[] decoders = new EventDecoder<?>[256];
+    /**
+     * The decoders.
+     */
+    private final EventDecoder<?>[] decoders = new EventDecoder<?>[256];
 
-	/**
-	 * The encoders.
-	 */
-	private final Map<Class<? extends Event>, EventEncoder<?>> encoders = new HashMap<Class<? extends Event>, EventEncoder<?>>();
+    /**
+     * The encoders.
+     */
+    private final Map<Class<? extends Event>, EventEncoder<?>> encoders = new HashMap<Class<? extends Event>, EventEncoder<?>>();
 
-	/**
-	 * The incoming packet meta data.
-	 */
-	private final PacketMetaDataGroup incomingPacketMetaData;
+    /**
+     * The incoming packet meta data.
+     */
+    private final PacketMetaDataGroup incomingPacketMetaData;
 
-	/**
-	 * The release number, e.g. {@code 317}.
-	 */
-	private final int releaseNumber;
+    /**
+     * The release number, e.g. {@code 317}.
+     */
+    private final int releaseNumber;
 
-	/**
-	 * Creates the release.
-	 * 
-	 * @param releaseNumber The release number.
-	 * @param incomingPacketMetaData The incoming packet meta data.
-	 */
-	public Release(int releaseNumber, PacketMetaDataGroup incomingPacketMetaData) {
-		this.releaseNumber = releaseNumber;
-		this.incomingPacketMetaData = incomingPacketMetaData;
+    /**
+     * Creates the release.
+     * 
+     * @param releaseNumber The release number.
+     * @param incomingPacketMetaData The incoming packet meta data.
+     */
+    public Release(int releaseNumber, PacketMetaDataGroup incomingPacketMetaData) {
+	this.releaseNumber = releaseNumber;
+	this.incomingPacketMetaData = incomingPacketMetaData;
+    }
+
+    /**
+     * Gets the {@link EventDecoder} for the specified opcode.
+     * 
+     * @param opcode The opcode.
+     * @return The {@link EventDecoder}.
+     */
+    public final EventDecoder<?> getEventDecoder(int opcode) {
+	if (opcode < 0 || opcode >= decoders.length) {
+	    throw new IndexOutOfBoundsException("Opcode is out of bounds.");
 	}
+	return decoders[opcode];
+    }
 
-	/**
-	 * Gets the {@link EventDecoder} for the specified opcode.
-	 * 
-	 * @param opcode The opcode.
-	 * @return The {@link EventDecoder}.
-	 */
-	public final EventDecoder<?> getEventDecoder(int opcode) {
-		if (opcode < 0 || opcode >= decoders.length) {
-			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
-		}
-		return decoders[opcode];
-	}
+    /**
+     * Gets an {@link EventEncoder} for the specified event type.
+     * 
+     * @param type The type of event.
+     * @return The {@link EventEncoder}.
+     */
+    @SuppressWarnings("unchecked")
+    public <E extends Event> EventEncoder<E> getEventEncoder(Class<E> type) {
+	return (EventEncoder<E>) encoders.get(type);
+    }
 
-	/**
-	 * Gets an {@link EventEncoder} for the specified event type.
-	 * 
-	 * @param type The type of event.
-	 * @return The {@link EventEncoder}.
-	 */
-	@SuppressWarnings("unchecked")
-	public <E extends Event> EventEncoder<E> getEventEncoder(Class<E> type) {
-		return (EventEncoder<E>) encoders.get(type);
-	}
+    /**
+     * Gets meta data for the specified incoming packet.
+     * 
+     * @param opcode The opcode of the incoming packet.
+     * @return The {@link PacketMetaData} object.
+     */
+    public final PacketMetaData getIncomingPacketMetaData(int opcode) {
+	return incomingPacketMetaData.getMetaData(opcode);
+    }
 
-	/**
-	 * Gets meta data for the specified incoming packet.
-	 * 
-	 * @param opcode The opcode of the incoming packet.
-	 * @return The {@link PacketMetaData} object.
-	 */
-	public final PacketMetaData getIncomingPacketMetaData(int opcode) {
-		return incomingPacketMetaData.getMetaData(opcode);
-	}
+    /**
+     * Gets the release number.
+     * 
+     * @return The release number.
+     */
+    public final int getReleaseNumber() {
+	return releaseNumber;
+    }
 
-	/**
-	 * Gets the release number.
-	 * 
-	 * @return The release number.
-	 */
-	public final int getReleaseNumber() {
-		return releaseNumber;
-	}
+    /**
+     * Registers a {@link EventEncoder} for the specified event type.
+     * 
+     * @param type The event type.
+     * @param encoder The {@link EventEncoder}.
+     */
+    public final <E extends Event> void register(Class<E> type, EventEncoder<E> encoder) {
+	encoders.put(type, encoder);
+    }
 
-	/**
-	 * Registers a {@link EventEncoder} for the specified event type.
-	 * 
-	 * @param type The event type.
-	 * @param encoder The {@link EventEncoder}.
-	 */
-	public final <E extends Event> void register(Class<E> type, EventEncoder<E> encoder) {
-		encoders.put(type, encoder);
+    /**
+     * Registers a {@link EventDecoder} for the specified opcode.
+     * 
+     * @param opcode The opcode, between 0 and 255 inclusive.
+     * @param decoder The {@link EventDecoder}.
+     */
+    public final <E extends Event> void register(int opcode, EventDecoder<E> decoder) {
+	if (opcode < 0 || opcode >= decoders.length) {
+	    throw new IndexOutOfBoundsException("Opcode is out of bounds.");
 	}
-
-	/**
-	 * Registers a {@link EventDecoder} for the specified opcode.
-	 * 
-	 * @param opcode The opcode, between 0 and 255 inclusive.
-	 * @param decoder The {@link EventDecoder}.
-	 */
-	public final <E extends Event> void register(int opcode, EventDecoder<E> decoder) {
-		if (opcode < 0 || opcode >= decoders.length) {
-			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
-		}
-		decoders[opcode] = decoder;
-	}
+	decoders[opcode] = decoder;
+    }
 
 }

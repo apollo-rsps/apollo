@@ -13,34 +13,34 @@ import java.util.concurrent.Phaser;
  */
 public final class PhasedSynchronizationTask extends SynchronizationTask {
 
-	/**
-	 * The phaser.
-	 */
-	private final Phaser phaser;
+    /**
+     * The phaser.
+     */
+    private final Phaser phaser;
 
-	/**
-	 * The task.
-	 */
-	private final SynchronizationTask task;
+    /**
+     * The task.
+     */
+    private final SynchronizationTask task;
 
-	/**
-	 * Creates the phased synchronization task.
-	 * 
-	 * @param phaser The phaser.
-	 * @param task The task.
-	 */
-	public PhasedSynchronizationTask(Phaser phaser, SynchronizationTask task) {
-		this.phaser = phaser;
-		this.task = task;
+    /**
+     * Creates the phased synchronization task.
+     * 
+     * @param phaser The phaser.
+     * @param task The task.
+     */
+    public PhasedSynchronizationTask(Phaser phaser, SynchronizationTask task) {
+	this.phaser = phaser;
+	this.task = task;
+    }
+
+    @Override
+    public void run() {
+	try {
+	    task.run();
+	} finally {
+	    phaser.arriveAndDeregister();
 	}
-
-	@Override
-	public void run() {
-		try {
-			task.run();
-		} finally {
-			phaser.arriveAndDeregister();
-		}
-	}
+    }
 
 }

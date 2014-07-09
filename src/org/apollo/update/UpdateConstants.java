@@ -7,11 +7,11 @@ package org.apollo.update;
  */
 public final class UpdateConstants {
 
-	/**
-	 * Default private constructor to prevent instantiation by other classes.
-	 */
-	private UpdateConstants() {
+    /**
+     * Default private constructor to prevent instantiation by other classes.
+     */
+    private UpdateConstants() {
 
-	}
+    }
 
 }

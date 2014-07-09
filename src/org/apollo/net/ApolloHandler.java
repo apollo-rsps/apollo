@@ -25,63 +25,63 @@ import org.apollo.net.session.UpdateSession;
 @Sharable
 public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 
-	/**
-	 * The logger for this class.
-	 */
-	private static final Logger logger = Logger.getLogger(ApolloHandler.class.getName());
+    /**
+     * The logger for this class.
+     */
+    private static final Logger logger = Logger.getLogger(ApolloHandler.class.getName());
 
-	/**
-	 * The server context.
-	 */
-	private final ServerContext serverContext;
+    /**
+     * The server context.
+     */
+    private final ServerContext serverContext;
 
-	/**
-	 * Creates the Apollo event handler.
-	 * 
-	 * @param context The server context.
-	 */
-	public ApolloHandler(ServerContext context) {
-		serverContext = context;
+    /**
+     * Creates the Apollo event handler.
+     * 
+     * @param context The server context.
+     */
+    public ApolloHandler(ServerContext context) {
+	serverContext = context;
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+	Channel channel = ctx.channel();
+	Session session = ctx.attr(NetworkConstants.SESSION_KEY).getAndRemove();
+	if (session != null) {
+	    session.destroy();
 	}
+	logger.info("Channel disconnected: " + channel);
+	channel.close();
+    }
 
-	@Override
-	public void channelInactive(ChannelHandlerContext ctx) {
-		Channel channel = ctx.channel();
-		Session session = ctx.attr(NetworkConstants.SESSION_KEY).getAndRemove();
-		if (session != null) {
-			session.destroy();
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
+	logger.log(Level.WARNING, "Exception occured for channel: " + ctx.channel() + ", closing...", e);
+	ctx.channel().close();
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+	if (ctx.attr(NetworkConstants.SESSION_KEY).get() == null) {
+	    if (msg instanceof HttpRequest || msg instanceof JagGrabRequest) {
+		new UpdateSession(ctx.channel(), serverContext).messageReceived(msg);
+	    } else {
+		HandshakeMessage handshakeMessage = (HandshakeMessage) msg;
+		switch (handshakeMessage.getServiceId()) {
+		case HandshakeConstants.SERVICE_GAME:
+		    ctx.attr(NetworkConstants.SESSION_KEY).set(new LoginSession(ctx, serverContext));
+		    break;
+		case HandshakeConstants.SERVICE_UPDATE:
+		    ctx.attr(NetworkConstants.SESSION_KEY).set(new UpdateSession(ctx.channel(), serverContext));
+		    break;
+		default:
+		    throw new IllegalStateException("Invalid service id.");
 		}
-		logger.info("Channel disconnected: " + channel);
-		channel.close();
+	    }
+	} else {
+	    ctx.attr(NetworkConstants.SESSION_KEY).get().messageReceived(msg);
 	}
-
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
-		logger.log(Level.WARNING, "Exception occured for channel: " + ctx.channel() + ", closing...", e);
-		ctx.channel().close();
-	}
-
-	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) {
-		if (ctx.attr(NetworkConstants.SESSION_KEY).get() == null) {
-			if (msg instanceof HttpRequest || msg instanceof JagGrabRequest) {
-				new UpdateSession(ctx.channel(), serverContext).messageReceived(msg);
-			} else {
-				HandshakeMessage handshakeMessage = (HandshakeMessage) msg;
-				switch (handshakeMessage.getServiceId()) {
-				case HandshakeConstants.SERVICE_GAME:
-					ctx.attr(NetworkConstants.SESSION_KEY).set(new LoginSession(ctx, serverContext));
-					break;
-				case HandshakeConstants.SERVICE_UPDATE:
-					ctx.attr(NetworkConstants.SESSION_KEY).set(new UpdateSession(ctx.channel(), serverContext));
-					break;
-				default:
-					throw new IllegalStateException("Invalid service id.");
-				}
-			}
-		} else {
-			ctx.attr(NetworkConstants.SESSION_KEY).get().messageReceived(msg);
-		}
-	}
+    }
 
 }

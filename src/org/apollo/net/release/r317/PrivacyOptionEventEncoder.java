@@ -13,15 +13,15 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class PrivacyOptionEventEncoder extends EventEncoder<PrivacyOptionEvent> {
 
-	@Override
-	public GamePacket encode(final PrivacyOptionEvent event) {
-		final GamePacketBuilder builder = new GamePacketBuilder(206);
+    @Override
+    public GamePacket encode(final PrivacyOptionEvent event) {
+	final GamePacketBuilder builder = new GamePacketBuilder(206);
 
-		builder.put(DataType.BYTE, event.getChatPrivacy().toInteger(true));
-		builder.put(DataType.BYTE, event.getFriendPrivacy().toInteger(true));
-		builder.put(DataType.BYTE, event.getTradePrivacy().toInteger(true));
+	builder.put(DataType.BYTE, event.getChatPrivacy().toInteger(true));
+	builder.put(DataType.BYTE, event.getFriendPrivacy().toInteger(true));
+	builder.put(DataType.BYTE, event.getTradePrivacy().toInteger(true));
 
-		return builder.toGamePacket();
-	}
+	return builder.toGamePacket();
+    }
 
 }

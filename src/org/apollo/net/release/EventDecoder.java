@@ -12,12 +12,12 @@ import org.apollo.net.codec.game.GamePacket;
  */
 public abstract class EventDecoder<E extends Event> {
 
-	/**
-	 * Decodes the specified packet into an event.
-	 * 
-	 * @param packet The packet.
-	 * @return The event.
-	 */
-	public abstract E decode(GamePacket packet);
+    /**
+     * Decodes the specified packet into an event.
+     * 
+     * @param packet The packet.
+     * @return The event.
+     */
+    public abstract E decode(GamePacket packet);
 
 }

@@ -26,76 +26,76 @@ import java.util.List;
  */
 public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMessageDecoder {
 
-	/**
-	 * The current state.
-	 */
-	private T state;
+    /**
+     * The current state.
+     */
+    private T state;
 
-	/**
-	 * Creates the stateful frame decoder with the specified initial state.
-	 * 
-	 * @param state The initial state.
-	 * @throws NullPointerException If the state is {@code null}.
-	 */
-	public StatefulFrameDecoder(T state) {
-		this(state, false);
+    /**
+     * Creates the stateful frame decoder with the specified initial state.
+     * 
+     * @param state The initial state.
+     * @throws NullPointerException If the state is {@code null}.
+     */
+    public StatefulFrameDecoder(T state) {
+	this(state, false);
+    }
+
+    /**
+     * Creates the stateful frame decoder with the specified initial state and unwrap flag.
+     * 
+     * @param state The initial state.
+     * @param unwrap The unwrap flag.
+     * @throws NullPointerException If the state is {@code null}.
+     */
+    public StatefulFrameDecoder(T state, boolean unwrap) {
+	setState(state);
+    }
+
+    @Override
+    protected final void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+	decode(ctx, in, out, state);
+    }
+
+    /**
+     * Decodes the received packets into a frame.
+     * 
+     * @param ctx The current context of this handler.
+     * @param channel The channel.
+     * @param buffer The cumulative buffer, which may contain zero or more bytes.
+     * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
+     */
+    protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) throws Exception;
+
+    @Override
+    protected final void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+	decodeLast(ctx, in, out, state);
+    }
+
+    /**
+     * Decodes remaining data before the channel is closed into a frame. You may override this method, but it is not
+     * required. If you do not, remaining data will be discarded!
+     * 
+     * @param ctx The current context of this handler.
+     * @param channel The channel.
+     * @param buffer The cumulative buffer, which may contain zero or more bytes.
+     * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
+     */
+    protected void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) {
+
+    }
+
+    /**
+     * Sets a new state.
+     * 
+     * @param state The new state.
+     * @throws NullPointerException If the state is {@code null}.
+     */
+    public final void setState(T state) {
+	if (state == null) {
+	    throw new NullPointerException("state");
 	}
-
-	/**
-	 * Creates the stateful frame decoder with the specified initial state and unwrap flag.
-	 * 
-	 * @param state The initial state.
-	 * @param unwrap The unwrap flag.
-	 * @throws NullPointerException If the state is {@code null}.
-	 */
-	public StatefulFrameDecoder(T state, boolean unwrap) {
-		setState(state);
-	}
-
-	@Override
-	protected final void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		decode(ctx, in, out, state);
-	}
-
-	/**
-	 * Decodes the received packets into a frame.
-	 * 
-	 * @param ctx The current context of this handler.
-	 * @param channel The channel.
-	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
-	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
-	 */
-	protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) throws Exception;
-
-	@Override
-	protected final void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
-		decodeLast(ctx, in, out, state);
-	}
-
-	/**
-	 * Decodes remaining data before the channel is closed into a frame. You may override this method, but it is not
-	 * required. If you do not, remaining data will be discarded!
-	 * 
-	 * @param ctx The current context of this handler.
-	 * @param channel The channel.
-	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
-	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
-	 */
-	protected void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) {
-
-	}
-
-	/**
-	 * Sets a new state.
-	 * 
-	 * @param state The new state.
-	 * @throws NullPointerException If the state is {@code null}.
-	 */
-	public final void setState(T state) {
-		if (state == null) {
-			throw new NullPointerException("state");
-		}
-		this.state = state;
-	}
+	this.state = state;
+    }
 
 }

@@ -13,11 +13,11 @@ import org.apollo.game.model.inter.InterfaceType;
  */
 public final class DialogueContinueEventHandler extends EventHandler<DialogueContinueEvent> {
 
-	@Override
-	public void handle(EventHandlerContext ctx, Player player, DialogueContinueEvent event) {
-		if (player.getInterfaceSet().contains(InterfaceType.DIALOGUE)) {
-			player.getInterfaceSet().continueRequested();
-		}
+    @Override
+    public void handle(EventHandlerContext ctx, Player player, DialogueContinueEvent event) {
+	if (player.getInterfaceSet().contains(InterfaceType.DIALOGUE)) {
+	    player.getInterfaceSet().continueRequested();
 	}
+    }
 
 }

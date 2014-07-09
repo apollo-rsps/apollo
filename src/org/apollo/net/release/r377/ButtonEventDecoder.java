@@ -13,11 +13,11 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class ButtonEventDecoder extends EventDecoder<ButtonEvent> {
 
-	@Override
-	public ButtonEvent decode(GamePacket packet) {
-		GamePacketReader reader = new GamePacketReader(packet);
-		int interfaceId = (int) reader.getUnsigned(DataType.SHORT);
-		return new ButtonEvent(interfaceId);
-	}
+    @Override
+    public ButtonEvent decode(GamePacket packet) {
+	GamePacketReader reader = new GamePacketReader(packet);
+	int interfaceId = (int) reader.getUnsigned(DataType.SHORT);
+	return new ButtonEvent(interfaceId);
+    }
 
 }

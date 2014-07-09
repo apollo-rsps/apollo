@@ -10,27 +10,27 @@ import org.apollo.game.event.Event;
  */
 public final class DialogueContinueEvent extends Event {
 
-	/**
-	 * The interface id.
-	 */
-	private final int interfaceId;
+    /**
+     * The interface id.
+     */
+    private final int interfaceId;
 
-	/**
-	 * Creates a new dialogue continue event.
-	 * 
-	 * @param interfaceId The interface id.
-	 */
-	public DialogueContinueEvent(int interfaceId) {
-		this.interfaceId = interfaceId;
-	}
+    /**
+     * Creates a new dialogue continue event.
+     * 
+     * @param interfaceId The interface id.
+     */
+    public DialogueContinueEvent(int interfaceId) {
+	this.interfaceId = interfaceId;
+    }
 
-	/**
-	 * Gets the interface id of the button.
-	 * 
-	 * @return The interface id.
-	 */
-	public int getInterfaceId() {
-		return interfaceId;
-	}
+    /**
+     * Gets the interface id of the button.
+     * 
+     * @return The interface id.
+     */
+    public int getInterfaceId() {
+	return interfaceId;
+    }
 
 }

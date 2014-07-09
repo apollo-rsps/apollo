@@ -10,27 +10,27 @@ import org.apollo.game.model.Position;
  */
 public final class RegionChangeEvent extends Event {
 
-	/**
-	 * The position of the region to load.
-	 */
-	private final Position position;
+    /**
+     * The position of the region to load.
+     */
+    private final Position position;
 
-	/**
-	 * Creates the region changed event.
-	 * 
-	 * @param position The position of the region.
-	 */
-	public RegionChangeEvent(Position position) {
-		this.position = position;
-	}
+    /**
+     * Creates the region changed event.
+     * 
+     * @param position The position of the region.
+     */
+    public RegionChangeEvent(Position position) {
+	this.position = position;
+    }
 
-	/**
-	 * Gets the position of the region to load.
-	 * 
-	 * @return The position of the region to load.
-	 */
-	public Position getPosition() {
-		return position;
-	}
+    /**
+     * Gets the position of the region to load.
+     * 
+     * @return The position of the region to load.
+     */
+    public Position getPosition() {
+	return position;
+    }
 
 }

@@ -17,20 +17,20 @@ import org.apollo.util.NameUtil;
  */
 public final class ForwardPrivateMessageEventEncoder extends EventEncoder<ForwardPrivateMessageEvent> {
 
-	/**
-	 * The amount of messages sent globally, offset by a random variable x, {@code 0 <= x < 100,000,000}.
-	 */
-	private static AtomicInteger messageCounter = new AtomicInteger((int) (Math.random() * 100_000_000));
+    /**
+     * The amount of messages sent globally, offset by a random variable x, {@code 0 <= x < 100,000,000}.
+     */
+    private static AtomicInteger messageCounter = new AtomicInteger((int) (Math.random() * 100_000_000));
 
-	@Override
-	public GamePacket encode(ForwardPrivateMessageEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(135, PacketType.VARIABLE_BYTE);
+    @Override
+    public GamePacket encode(ForwardPrivateMessageEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(135, PacketType.VARIABLE_BYTE);
 
-		builder.put(DataType.LONG, NameUtil.encodeBase37(event.getSenderUsername()));
-		builder.put(DataType.INT, messageCounter.incrementAndGet());
-		builder.put(DataType.BYTE, event.getSenderPrivilege().toInteger());
-		builder.putBytes(event.getCompressedMessage());
-		return builder.toGamePacket();
-	}
+	builder.put(DataType.LONG, NameUtil.encodeBase37(event.getSenderUsername()));
+	builder.put(DataType.INT, messageCounter.incrementAndGet());
+	builder.put(DataType.BYTE, event.getSenderPrivilege().toInteger());
+	builder.putBytes(event.getCompressedMessage());
+	return builder.toGamePacket();
+    }
 
 }

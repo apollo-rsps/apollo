@@ -10,34 +10,34 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
  */
 public final class TeleportSegment extends SynchronizationSegment {
 
-	/**
-	 * The destination.
-	 */
-	private final Position destination;
+    /**
+     * The destination.
+     */
+    private final Position destination;
 
-	/**
-	 * Creates the teleport segment.
-	 * 
-	 * @param blockSet The block set.
-	 * @param destination The destination.
-	 */
-	public TeleportSegment(SynchronizationBlockSet blockSet, Position destination) {
-		super(blockSet);
-		this.destination = destination;
-	}
+    /**
+     * Creates the teleport segment.
+     * 
+     * @param blockSet The block set.
+     * @param destination The destination.
+     */
+    public TeleportSegment(SynchronizationBlockSet blockSet, Position destination) {
+	super(blockSet);
+	this.destination = destination;
+    }
 
-	/**
-	 * Gets the destination.
-	 * 
-	 * @return The destination.
-	 */
-	public Position getDestination() {
-		return destination;
-	}
+    /**
+     * Gets the destination.
+     * 
+     * @return The destination.
+     */
+    public Position getDestination() {
+	return destination;
+    }
 
-	@Override
-	public SegmentType getType() {
-		return SegmentType.TELEPORT;
-	}
+    @Override
+    public SegmentType getType() {
+	return SegmentType.TELEPORT;
+    }
 
 }

@@ -15,13 +15,13 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class FifthItemActionEventDecoder extends EventDecoder<FifthItemActionEvent> {
 
-	@Override
-	public FifthItemActionEvent decode(GamePacket packet) {
-		GamePacketReader reader = new GamePacketReader(packet);
-		int slot = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-		int id = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-		int interfaceId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-		return new FifthItemActionEvent(interfaceId, id, slot);
-	}
+    @Override
+    public FifthItemActionEvent decode(GamePacket packet) {
+	GamePacketReader reader = new GamePacketReader(packet);
+	int slot = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+	int id = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+	int interfaceId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+	return new FifthItemActionEvent(interfaceId, id, slot);
+    }
 
 }

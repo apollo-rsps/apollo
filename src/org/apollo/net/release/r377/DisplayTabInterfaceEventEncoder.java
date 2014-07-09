@@ -14,11 +14,11 @@ import org.apollo.net.release.EventEncoder;
  */
 final class DisplayTabInterfaceEventEncoder extends EventEncoder<DisplayTabInterfaceEvent> {
 
-	@Override
-	public GamePacket encode(DisplayTabInterfaceEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(252);
-		builder.put(DataType.BYTE, DataTransformation.NEGATE, event.getTab());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(DisplayTabInterfaceEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(252);
+	builder.put(DataType.BYTE, DataTransformation.NEGATE, event.getTab());
+	return builder.toGamePacket();
+    }
 
 }

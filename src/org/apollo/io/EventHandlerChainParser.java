@@ -22,93 +22,93 @@ import org.xml.sax.SAXException;
  */
 public final class EventHandlerChainParser {
 
-	/**
-	 * The source {@link InputStream}.
-	 */
-	private final InputStream is;
+    /**
+     * The source {@link InputStream}.
+     */
+    private final InputStream is;
 
-	/**
-	 * The {@link XmlParser} instance.
-	 */
-	private final XmlParser parser;
+    /**
+     * The {@link XmlParser} instance.
+     */
+    private final XmlParser parser;
 
-	/**
-	 * Creates the event chain parser.
-	 * 
-	 * @param is The source {@link InputStream}.
-	 * @throws SAXException If a SAX error occurs.
-	 */
-	public EventHandlerChainParser(InputStream is) throws SAXException {
-		this.is = is;
-		parser = new XmlParser();
+    /**
+     * Creates the event chain parser.
+     * 
+     * @param is The source {@link InputStream}.
+     * @throws SAXException If a SAX error occurs.
+     */
+    public EventHandlerChainParser(InputStream is) throws SAXException {
+	this.is = is;
+	parser = new XmlParser();
+    }
+
+    /**
+     * Parses the XML and produces a group of {@link EventHandlerChain}s.
+     * 
+     * @throws IOException If an I/O error occurs.
+     * @throws SAXException If a SAX error occurs.
+     * @throws ClassNotFoundException If a class was not found.
+     * @throws IllegalAccessException If a class was accessed illegally.
+     * @throws InstantiationException If a class could not be instantiated.
+     * @return An {@link EventHandlerChainGroup}.
+     */
+    @SuppressWarnings("unchecked")
+    public EventHandlerChainGroup parse() throws IOException, SAXException, ClassNotFoundException,
+	    InstantiationException, IllegalAccessException {
+	XmlNode rootNode = parser.parse(is);
+	if (!rootNode.getName().equals("events")) {
+	    throw new IOException("Root node name is not 'events'.");
 	}
 
-	/**
-	 * Parses the XML and produces a group of {@link EventHandlerChain}s.
-	 * 
-	 * @throws IOException If an I/O error occurs.
-	 * @throws SAXException If a SAX error occurs.
-	 * @throws ClassNotFoundException If a class was not found.
-	 * @throws IllegalAccessException If a class was accessed illegally.
-	 * @throws InstantiationException If a class could not be instantiated.
-	 * @return An {@link EventHandlerChainGroup}.
-	 */
-	@SuppressWarnings("unchecked")
-	public EventHandlerChainGroup parse() throws IOException, SAXException, ClassNotFoundException,
-			InstantiationException, IllegalAccessException {
-		XmlNode rootNode = parser.parse(is);
-		if (!rootNode.getName().equals("events")) {
-			throw new IOException("Root node name is not 'events'.");
+	Map<Class<? extends Event>, EventHandlerChain<?>> chains = new HashMap<Class<? extends Event>, EventHandlerChain<?>>();
+
+	for (XmlNode eventNode : rootNode) {
+	    if (!eventNode.getName().equals("event")) {
+		throw new IOException("Only expected nodes named 'event' beneath the root node.");
+	    }
+
+	    XmlNode typeNode = eventNode.getChild("type");
+	    if (typeNode == null) {
+		throw new IOException("No node named 'type' beneath current event node.");
+	    }
+	    XmlNode chainNode = eventNode.getChild("chain");
+	    if (chainNode == null) {
+		throw new IOException("No node named 'chain' beneath current event node.");
+	    }
+
+	    String eventClassName = typeNode.getValue();
+	    if (eventClassName == null) {
+		throw new IOException("Type node must have a value.");
+	    }
+
+	    Class<? extends Event> eventClass = (Class<? extends Event>) Class.forName(eventClassName);
+	    List<EventHandler<?>> handlers = new ArrayList<EventHandler<?>>();
+
+	    for (XmlNode handlerNode : chainNode) {
+		if (!handlerNode.getName().equals("handler")) {
+		    throw new IOException("Only expected nodes named 'handler' beneath the root node.");
 		}
 
-		Map<Class<? extends Event>, EventHandlerChain<?>> chains = new HashMap<Class<? extends Event>, EventHandlerChain<?>>();
-
-		for (XmlNode eventNode : rootNode) {
-			if (!eventNode.getName().equals("event")) {
-				throw new IOException("Only expected nodes named 'event' beneath the root node.");
-			}
-
-			XmlNode typeNode = eventNode.getChild("type");
-			if (typeNode == null) {
-				throw new IOException("No node named 'type' beneath current event node.");
-			}
-			XmlNode chainNode = eventNode.getChild("chain");
-			if (chainNode == null) {
-				throw new IOException("No node named 'chain' beneath current event node.");
-			}
-
-			String eventClassName = typeNode.getValue();
-			if (eventClassName == null) {
-				throw new IOException("Type node must have a value.");
-			}
-
-			Class<? extends Event> eventClass = (Class<? extends Event>) Class.forName(eventClassName);
-			List<EventHandler<?>> handlers = new ArrayList<EventHandler<?>>();
-
-			for (XmlNode handlerNode : chainNode) {
-				if (!handlerNode.getName().equals("handler")) {
-					throw new IOException("Only expected nodes named 'handler' beneath the root node.");
-				}
-
-				String handlerClassName = handlerNode.getValue();
-				if (handlerClassName == null) {
-					throw new IOException("Handler node must have a value.");
-				}
-
-				Class<? extends EventHandler<?>> handlerClass = (Class<? extends EventHandler<?>>) Class
-						.forName(handlerClassName);
-				EventHandler<?> handler = handlerClass.newInstance();
-				handlers.add(handler);
-			}
-
-			EventHandler<?>[] handlersArray = handlers.toArray(new EventHandler<?>[handlers.size()]);
-			@SuppressWarnings("rawtypes")
-			EventHandlerChain<?> chain = new EventHandlerChain(handlersArray);
-
-			chains.put(eventClass, chain);
+		String handlerClassName = handlerNode.getValue();
+		if (handlerClassName == null) {
+		    throw new IOException("Handler node must have a value.");
 		}
 
-		return new EventHandlerChainGroup(chains);
+		Class<? extends EventHandler<?>> handlerClass = (Class<? extends EventHandler<?>>) Class
+			.forName(handlerClassName);
+		EventHandler<?> handler = handlerClass.newInstance();
+		handlers.add(handler);
+	    }
+
+	    EventHandler<?>[] handlersArray = handlers.toArray(new EventHandler<?>[handlers.size()]);
+	    @SuppressWarnings("rawtypes")
+	    EventHandlerChain<?> chain = new EventHandlerChain(handlersArray);
+
+	    chains.put(eventClass, chain);
 	}
+
+	return new EventHandlerChainGroup(chains);
+    }
 
 }

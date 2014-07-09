@@ -16,14 +16,14 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class ThirdObjectActionEventDecoder extends EventDecoder<ThirdObjectActionEvent> {
 
-	@Override
-	public ThirdObjectActionEvent decode(GamePacket packet) {
-		// TODO ripped out of some Winterlove-based server, so probably wrong
-		GamePacketReader reader = new GamePacketReader(packet);
-		int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-		int y = (int) reader.getUnsigned(DataType.SHORT);
-		int id = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-		return new ThirdObjectActionEvent(id, new Position(x, y));
-	}
+    @Override
+    public ThirdObjectActionEvent decode(GamePacket packet) {
+	// TODO ripped out of some Winterlove-based server, so probably wrong
+	GamePacketReader reader = new GamePacketReader(packet);
+	int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+	int y = (int) reader.getUnsigned(DataType.SHORT);
+	int id = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+	return new ThirdObjectActionEvent(id, new Position(x, y));
+    }
 
 }

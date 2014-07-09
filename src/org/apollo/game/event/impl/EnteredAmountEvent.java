@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class EnteredAmountEvent extends Event {
 
-	/**
-	 * The amount.
-	 */
-	private final int amount;
+    /**
+     * The amount.
+     */
+    private final int amount;
 
-	/**
-	 * Creates the entered amount event.
-	 * 
-	 * @param amount The amount.
-	 */
-	public EnteredAmountEvent(int amount) {
-		this.amount = amount;
-	}
+    /**
+     * Creates the entered amount event.
+     * 
+     * @param amount The amount.
+     */
+    public EnteredAmountEvent(int amount) {
+	this.amount = amount;
+    }
 
-	/**
-	 * Gets the amount.
-	 * 
-	 * @return The amount.
-	 */
-	public int getAmount() {
-		return amount;
-	}
+    /**
+     * Gets the amount.
+     * 
+     * @return The amount.
+     */
+    public int getAmount() {
+	return amount;
+    }
 
 }

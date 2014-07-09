@@ -16,28 +16,28 @@ import org.apollo.net.release.Release;
  */
 public final class GameEventDecoder extends MessageToMessageDecoder<GamePacket> {
 
-	/**
-	 * The current release.
-	 */
-	private final Release release;
+    /**
+     * The current release.
+     */
+    private final Release release;
 
-	/**
-	 * Creates the game event decoder with the specified release.
-	 * 
-	 * @param release The release.
-	 */
-	public GameEventDecoder(Release release) {
-		this.release = release;
-	}
+    /**
+     * Creates the game event decoder with the specified release.
+     * 
+     * @param release The release.
+     */
+    public GameEventDecoder(Release release) {
+	this.release = release;
+    }
 
-	@Override
-	protected void decode(ChannelHandlerContext ctx, GamePacket packet, List<Object> out) {
-		EventDecoder<?> decoder = release.getEventDecoder(packet.getOpcode());
-		if (decoder != null) {
-			out.add(decoder.decode(packet));
-		} else {
-			System.out.println("Unidentified packet received - opcode: " + packet.getOpcode() + ".");
-		}
+    @Override
+    protected void decode(ChannelHandlerContext ctx, GamePacket packet, List<Object> out) {
+	EventDecoder<?> decoder = release.getEventDecoder(packet.getOpcode());
+	if (decoder != null) {
+	    out.add(decoder.decode(packet));
+	} else {
+	    System.out.println("Unidentified packet received - opcode: " + packet.getOpcode() + ".");
 	}
+    }
 
 }

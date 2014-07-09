@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class SpamPacketEvent extends Event {
 
-	/**
-	 * Data sent by the spam packet.
-	 */
-	private final byte[] data;
+    /**
+     * Data sent by the spam packet.
+     */
+    private final byte[] data;
 
-	/**
-	 * Creates a new spam packet event.
-	 * 
-	 * @param data The data sent.
-	 */
-	public SpamPacketEvent(byte[] data) {
-		this.data = data;
-	}
+    /**
+     * Creates a new spam packet event.
+     * 
+     * @param data The data sent.
+     */
+    public SpamPacketEvent(byte[] data) {
+	this.data = data;
+    }
 
-	/**
-	 * Gets the data sent.
-	 * 
-	 * @return The data.
-	 */
-	public byte[] getData() {
-		return data;
-	}
+    /**
+     * Gets the data sent.
+     * 
+     * @return The data.
+     */
+    public byte[] getData() {
+	return data;
+    }
 
 }

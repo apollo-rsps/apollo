@@ -14,12 +14,12 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class RemoveTileItemEventEncoder extends EventEncoder<RemoveTileItemEvent> {
 
-	@Override
-	public GamePacket encode(RemoveTileItemEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(156);
-		builder.put(DataType.BYTE, DataTransformation.ADD, event.getPositionOffset());
-		builder.put(DataType.SHORT, event.getId());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(RemoveTileItemEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(156);
+	builder.put(DataType.BYTE, DataTransformation.ADD, event.getPositionOffset());
+	builder.put(DataType.SHORT, event.getId());
+	return builder.toGamePacket();
+    }
 
 }

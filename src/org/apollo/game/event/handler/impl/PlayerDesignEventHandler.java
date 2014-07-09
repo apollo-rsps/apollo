@@ -13,11 +13,11 @@ import org.apollo.game.model.entity.Player;
  */
 public final class PlayerDesignEventHandler extends EventHandler<PlayerDesignEvent> {
 
-	@Override
-	public void handle(EventHandlerContext ctx, Player player, PlayerDesignEvent event) {
-		player.setAppearance(event.getAppearance());
-		player.setNew(true);
-		player.send(new CloseInterfaceEvent());
-	}
+    @Override
+    public void handle(EventHandlerContext ctx, Player player, PlayerDesignEvent event) {
+	player.setAppearance(event.getAppearance());
+	player.setNew(true);
+	player.send(new CloseInterfaceEvent());
+    }
 
 }

@@ -12,310 +12,310 @@ import org.apollo.game.model.skill.SkillListener;
  */
 public final class SkillSet {
 
-	/**
-	 * The minimum amounts of experience required for the levels.
-	 */
-	private static final int[] EXPERIENCE_FOR_LEVEL = new int[100];
+    /**
+     * The minimum amounts of experience required for the levels.
+     */
+    private static final int[] EXPERIENCE_FOR_LEVEL = new int[100];
 
-	/**
-	 * The maximum allowed experience.
-	 */
-	public static final double MAXIMUM_EXP = 200_000_000;
+    /**
+     * The maximum allowed experience.
+     */
+    public static final double MAXIMUM_EXP = 200_000_000;
 
-	/**
-	 * The number of skills.
-	 */
-	private static final int SKILL_COUNT = 21;
+    /**
+     * The number of skills.
+     */
+    private static final int SKILL_COUNT = 21;
 
-	static {
-		int points = 0, output = 0;
-		for (int lvl = 1; lvl <= 99; lvl++) {
-			EXPERIENCE_FOR_LEVEL[lvl] = output;
-			points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0));
-			output = (int) Math.floor(points / 4);
-		}
+    static {
+	int points = 0, output = 0;
+	for (int lvl = 1; lvl <= 99; lvl++) {
+	    EXPERIENCE_FOR_LEVEL[lvl] = output;
+	    points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0));
+	    output = (int) Math.floor(points / 4);
 	}
+    }
 
-	/**
-	 * Gets the minimum experience required for the specified level.
-	 * 
-	 * @param level The level.
-	 * @return The minimum experience.
-	 */
-	public static int getExperienceForLevel(int level) {
-		if (level < 1 || level > 99) {
-			throw new IllegalArgumentException("Level must be between 1 and 99, inclusive.");
-		}
-		return EXPERIENCE_FOR_LEVEL[level];
+    /**
+     * Gets the minimum experience required for the specified level.
+     * 
+     * @param level The level.
+     * @return The minimum experience.
+     */
+    public static int getExperienceForLevel(int level) {
+	if (level < 1 || level > 99) {
+	    throw new IllegalArgumentException("Level must be between 1 and 99, inclusive.");
 	}
+	return EXPERIENCE_FOR_LEVEL[level];
+    }
 
-	/**
-	 * Gets the minimum level to get the specified experience.
-	 * 
-	 * @param experience The experience.
-	 * @return The minimum level.
-	 */
-	public static int getLevelForExperience(double experience) {
-		if (experience < 0 || experience > MAXIMUM_EXP) {
-			throw new IllegalArgumentException("Experience must be between 0 and 200,000,000, inclusive.");
-		}
-		for (int level = 1; level <= 98; level++) {
-			if (experience < EXPERIENCE_FOR_LEVEL[level + 1]) {
-				return level;
-			}
-		}
-		return 99;
+    /**
+     * Gets the minimum level to get the specified experience.
+     * 
+     * @param experience The experience.
+     * @return The minimum level.
+     */
+    public static int getLevelForExperience(double experience) {
+	if (experience < 0 || experience > MAXIMUM_EXP) {
+	    throw new IllegalArgumentException("Experience must be between 0 and 200,000,000, inclusive.");
 	}
-
-	/**
-	 * The combat level for this skill set.
-	 */
-	private int combatLevel = 3;
-
-	/**
-	 * A flag indicating if events are being fired.
-	 */
-	private boolean firingEvents = true;
-
-	/**
-	 * A list of skill listeners.
-	 */
-	private final List<SkillListener> listeners = new ArrayList<>();
-
-	/**
-	 * The skills.
-	 */
-	private final Skill[] skills = new Skill[SKILL_COUNT];
-
-	/**
-	 * Creates the skill set.
-	 */
-	public SkillSet() {
-		init();
+	for (int level = 1; level <= 98; level++) {
+	    if (experience < EXPERIENCE_FOR_LEVEL[level + 1]) {
+		return level;
+	    }
 	}
+	return 99;
+    }
 
-	/**
-	 * Adds experience to the specified skill.
-	 * 
-	 * @param id The skill id.
-	 * @param experience The amount of experience.
-	 */
-	public void addExperience(int id, double experience) {
-		checkBounds(id);
-		Skill old = skills[id];
+    /**
+     * The combat level for this skill set.
+     */
+    private int combatLevel = 3;
 
-		double newExperience = old.getExperience() + experience;
-		newExperience = newExperience > MAXIMUM_EXP ? MAXIMUM_EXP : newExperience;
+    /**
+     * A flag indicating if events are being fired.
+     */
+    private boolean firingEvents = true;
 
-		int newCurrentLevel = old.getCurrentLevel();
-		int newMaximumLevel = getLevelForExperience(newExperience);
+    /**
+     * A list of skill listeners.
+     */
+    private final List<SkillListener> listeners = new ArrayList<>();
 
-		int delta = newMaximumLevel - old.getMaximumLevel();
-		newCurrentLevel += delta > 0 ? delta : 0;
+    /**
+     * The skills.
+     */
+    private final Skill[] skills = new Skill[SKILL_COUNT];
 
-		setSkill(id, new Skill(newExperience, newCurrentLevel, newMaximumLevel));
+    /**
+     * Creates the skill set.
+     */
+    public SkillSet() {
+	init();
+    }
 
-		if (delta > 0) {
-			notifyLevelledUp(id); // here so it notifies using the updated skill
-		}
+    /**
+     * Adds experience to the specified skill.
+     * 
+     * @param id The skill id.
+     * @param experience The amount of experience.
+     */
+    public void addExperience(int id, double experience) {
+	checkBounds(id);
+	Skill old = skills[id];
+
+	double newExperience = old.getExperience() + experience;
+	newExperience = newExperience > MAXIMUM_EXP ? MAXIMUM_EXP : newExperience;
+
+	int newCurrentLevel = old.getCurrentLevel();
+	int newMaximumLevel = getLevelForExperience(newExperience);
+
+	int delta = newMaximumLevel - old.getMaximumLevel();
+	newCurrentLevel += delta > 0 ? delta : 0;
+
+	setSkill(id, new Skill(newExperience, newCurrentLevel, newMaximumLevel));
+
+	if (delta > 0) {
+	    notifyLevelledUp(id); // here so it notifies using the updated skill
 	}
+    }
 
-	/**
-	 * Adds a {@link SkillListener} to this set.
-	 * 
-	 * @param listener The listener.
-	 */
-	public boolean addListener(SkillListener listener) {
-		return listeners.add(listener);
+    /**
+     * Adds a {@link SkillListener} to this set.
+     * 
+     * @param listener The listener.
+     */
+    public boolean addListener(SkillListener listener) {
+	return listeners.add(listener);
+    }
+
+    /**
+     * Calculates the combat level for this skill set.
+     * 
+     * @return The combat level.
+     */
+    public void calculateCombatLevel() {
+	int attack = skills[Skill.ATTACK].getMaximumLevel();
+	int defence = skills[Skill.DEFENCE].getMaximumLevel();
+	int strength = skills[Skill.STRENGTH].getMaximumLevel();
+	int hitpoints = skills[Skill.HITPOINTS].getMaximumLevel();
+	int prayer = skills[Skill.PRAYER].getMaximumLevel();
+	int ranged = skills[Skill.RANGED].getMaximumLevel();
+	int magic = skills[Skill.MAGIC].getMaximumLevel();
+
+	double base = (defence + hitpoints + Math.floor(prayer / 2)) * 0.25;
+	double melee = (attack + strength) * 0.325;
+	double range = ranged * 0.4875;
+	double mage = magic * 0.4875;
+
+	this.combatLevel = (int) (base + Math.max(melee, Math.max(range, mage)));
+    }
+
+    /**
+     * Checks the bounds of the id.
+     * 
+     * @param id The id.
+     * @throws IndexOutOfBoundsException If the id is out of bounds.
+     */
+    private void checkBounds(int id) {
+	if (id < 0 || id >= skills.length) {
+	    throw new IndexOutOfBoundsException("Skill id is out of bounds.");
 	}
+    }
 
-	/**
-	 * Calculates the combat level for this skill set.
-	 * 
-	 * @return The combat level.
-	 */
-	public void calculateCombatLevel() {
-		int attack = skills[Skill.ATTACK].getMaximumLevel();
-		int defence = skills[Skill.DEFENCE].getMaximumLevel();
-		int strength = skills[Skill.STRENGTH].getMaximumLevel();
-		int hitpoints = skills[Skill.HITPOINTS].getMaximumLevel();
-		int prayer = skills[Skill.PRAYER].getMaximumLevel();
-		int ranged = skills[Skill.RANGED].getMaximumLevel();
-		int magic = skills[Skill.MAGIC].getMaximumLevel();
+    /**
+     * Forces this skill set to refresh.
+     */
+    public void forceRefresh() {
+	notifySkillsUpdated();
+    }
 
-		double base = (defence + hitpoints + Math.floor(prayer / 2)) * 0.25;
-		double melee = (attack + strength) * 0.325;
-		double range = ranged * 0.4875;
-		double mage = magic * 0.4875;
+    /**
+     * Gets the combat level of this skill set.
+     * 
+     * @return The combat level.
+     */
+    public int getCombatLevel() {
+	return combatLevel;
+    }
 
-		this.combatLevel = (int) (base + Math.max(melee, Math.max(range, mage)));
+    /**
+     * Gets a skill by its id.
+     * 
+     * @param id The id.
+     * @return The skill.
+     */
+    public Skill getSkill(int id) {
+	checkBounds(id);
+	return skills[id];
+    }
+
+    /**
+     * Gets the total level for this skill set.
+     * 
+     * @return The total level.
+     */
+    public int getTotalLevel() {
+	int total = 0;
+	for (Skill skill : skills) {
+	    total += skill.getMaximumLevel();
 	}
+	return total;
+    }
 
-	/**
-	 * Checks the bounds of the id.
-	 * 
-	 * @param id The id.
-	 * @throws IndexOutOfBoundsException If the id is out of bounds.
-	 */
-	private void checkBounds(int id) {
-		if (id < 0 || id >= skills.length) {
-			throw new IndexOutOfBoundsException("Skill id is out of bounds.");
-		}
+    /**
+     * Initialises the skill set.
+     */
+    private void init() {
+	for (int id = 0; id < skills.length; id++) {
+	    skills[id] = (id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1));
 	}
+    }
 
-	/**
-	 * Forces this skill set to refresh.
-	 */
-	public void forceRefresh() {
-		notifySkillsUpdated();
+    /**
+     * Normalizes the skills in this set.
+     */
+    public void normalize() {
+	for (int id = 0; id < skills.length; id++) {
+	    int current = skills[id].getCurrentLevel(), max = skills[id].getMaximumLevel();
+
+	    if (current == max) {
+		continue;
+	    }
+
+	    current += current < max ? 1 : -1;
+	    setSkill(id, new Skill(skills[id].getExperience(), current, max));
 	}
+    }
 
-	/**
-	 * Gets the combat level of this skill set.
-	 * 
-	 * @return The combat level.
-	 */
-	public int getCombatLevel() {
-		return combatLevel;
+    /**
+     * Notifies listeners that a skill has been levelled up.
+     * 
+     * @param id The skill's id.
+     */
+    private void notifyLevelledUp(int id) {
+	checkBounds(id);
+	if (firingEvents) {
+	    for (SkillListener listener : listeners) {
+		listener.levelledUp(this, id, skills[id]);
+	    }
 	}
+    }
 
-	/**
-	 * Gets a skill by its id.
-	 * 
-	 * @param id The id.
-	 * @return The skill.
-	 */
-	public Skill getSkill(int id) {
-		checkBounds(id);
-		return skills[id];
+    /**
+     * Notifies listeners that the skills in this listener have been updated.
+     */
+    private void notifySkillsUpdated() {
+	if (firingEvents) {
+	    for (SkillListener listener : listeners) {
+		listener.skillsUpdated(this);
+	    }
 	}
+    }
 
-	/**
-	 * Gets the total level for this skill set.
-	 * 
-	 * @return The total level.
-	 */
-	public int getTotalLevel() {
-		int total = 0;
-		for (Skill skill : skills) {
-			total += skill.getMaximumLevel();
-		}
-		return total;
+    /**
+     * Notifies listeners that a skill has been updated.
+     * 
+     * @param id The skill's id.
+     */
+    private void notifySkillUpdated(int id) {
+	checkBounds(id);
+	if (firingEvents) {
+	    for (SkillListener listener : listeners) {
+		listener.skillUpdated(this, id, skills[id]);
+	    }
 	}
+    }
 
-	/**
-	 * Initialises the skill set.
-	 */
-	private void init() {
-		for (int id = 0; id < skills.length; id++) {
-			skills[id] = (id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1));
-		}
-	}
+    /**
+     * Removes all the {@link SkillListener}s.
+     */
+    public void removeAllListeners() {
+	listeners.clear();
+    }
 
-	/**
-	 * Normalizes the skills in this set.
-	 */
-	public void normalize() {
-		for (int id = 0; id < skills.length; id++) {
-			int current = skills[id].getCurrentLevel(), max = skills[id].getMaximumLevel();
+    /**
+     * Removes a {@link SkillListener}.
+     * 
+     * @param listener The listener to remove.
+     */
+    public boolean removeListener(SkillListener listener) {
+	return listeners.remove(listener);
+    }
 
-			if (current == max) {
-				continue;
-			}
+    /**
+     * Sets a {@link Skill}.
+     * 
+     * @param id The id.
+     * @param skill The skill.
+     */
+    public void setSkill(int id, Skill skill) {
+	checkBounds(id);
+	skills[id] = skill;
+	notifySkillUpdated(id);
+    }
 
-			current += current < max ? 1 : -1;
-			setSkill(id, new Skill(skills[id].getExperience(), current, max));
-		}
-	}
+    /**
+     * Gets the number of {@link Skill}s in this set.
+     * 
+     * @return The number of skills.
+     */
+    public int size() {
+	return skills.length;
+    }
 
-	/**
-	 * Notifies listeners that a skill has been levelled up.
-	 * 
-	 * @param id The skill's id.
-	 */
-	private void notifyLevelledUp(int id) {
-		checkBounds(id);
-		if (firingEvents) {
-			for (SkillListener listener : listeners) {
-				listener.levelledUp(this, id, skills[id]);
-			}
-		}
-	}
+    /**
+     * Starts the firing of events.
+     */
+    public void startFiringEvents() {
+	firingEvents = true;
+    }
 
-	/**
-	 * Notifies listeners that the skills in this listener have been updated.
-	 */
-	private void notifySkillsUpdated() {
-		if (firingEvents) {
-			for (SkillListener listener : listeners) {
-				listener.skillsUpdated(this);
-			}
-		}
-	}
-
-	/**
-	 * Notifies listeners that a skill has been updated.
-	 * 
-	 * @param id The skill's id.
-	 */
-	private void notifySkillUpdated(int id) {
-		checkBounds(id);
-		if (firingEvents) {
-			for (SkillListener listener : listeners) {
-				listener.skillUpdated(this, id, skills[id]);
-			}
-		}
-	}
-
-	/**
-	 * Removes all the {@link SkillListener}s.
-	 */
-	public void removeAllListeners() {
-		listeners.clear();
-	}
-
-	/**
-	 * Removes a {@link SkillListener}.
-	 * 
-	 * @param listener The listener to remove.
-	 */
-	public boolean removeListener(SkillListener listener) {
-		return listeners.remove(listener);
-	}
-
-	/**
-	 * Sets a {@link Skill}.
-	 * 
-	 * @param id The id.
-	 * @param skill The skill.
-	 */
-	public void setSkill(int id, Skill skill) {
-		checkBounds(id);
-		skills[id] = skill;
-		notifySkillUpdated(id);
-	}
-
-	/**
-	 * Gets the number of {@link Skill}s in this set.
-	 * 
-	 * @return The number of skills.
-	 */
-	public int size() {
-		return skills.length;
-	}
-
-	/**
-	 * Starts the firing of events.
-	 */
-	public void startFiringEvents() {
-		firingEvents = true;
-	}
-
-	/**
-	 * Stops events from being fired.
-	 */
-	public void stopFiringEvents() {
-		firingEvents = false;
-	}
+    /**
+     * Stops events from being fired.
+     */
+    public void stopFiringEvents() {
+	firingEvents = false;
+    }
 
 }

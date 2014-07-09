@@ -9,43 +9,43 @@ import org.apollo.game.event.Event;
  */
 public final class IdAssignmentEvent extends Event {
 
-	/**
-	 * The id of this player.
-	 */
-	private final int id;
+    /**
+     * The id of this player.
+     */
+    private final int id;
 
-	/**
-	 * The membership flag.
-	 */
-	private final boolean members;
+    /**
+     * The membership flag.
+     */
+    private final boolean members;
 
-	/**
-	 * Creates the local id event.
-	 * 
-	 * @param id The id.
-	 * @param members The membership flag.
-	 */
-	public IdAssignmentEvent(int id, boolean members) {
-		this.id = id;
-		this.members = members;
-	}
+    /**
+     * Creates the local id event.
+     * 
+     * @param id The id.
+     * @param members The membership flag.
+     */
+    public IdAssignmentEvent(int id, boolean members) {
+	this.id = id;
+	this.members = members;
+    }
 
-	/**
-	 * Gets the id.
-	 * 
-	 * @return The id.
-	 */
-	public int getId() {
-		return id;
-	}
+    /**
+     * Gets the id.
+     * 
+     * @return The id.
+     */
+    public int getId() {
+	return id;
+    }
 
-	/**
-	 * Gets the membership flag.
-	 * 
-	 * @return The membership flag.
-	 */
-	public boolean isMembers() {
-		return members;
-	}
+    /**
+     * Gets the membership flag.
+     * 
+     * @return The membership flag.
+     */
+    public boolean isMembers() {
+	return members;
+    }
 
 }

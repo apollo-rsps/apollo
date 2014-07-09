@@ -13,11 +13,11 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class EnteredAmountEventDecoder extends EventDecoder<EnteredAmountEvent> {
 
-	@Override
-	public EnteredAmountEvent decode(GamePacket packet) {
-		GamePacketReader reader = new GamePacketReader(packet);
-		int amount = (int) reader.getUnsigned(DataType.INT);
-		return new EnteredAmountEvent(amount);
-	}
+    @Override
+    public EnteredAmountEvent decode(GamePacket packet) {
+	GamePacketReader reader = new GamePacketReader(packet);
+	int amount = (int) reader.getUnsigned(DataType.INT);
+	return new EnteredAmountEvent(amount);
+    }
 
 }
