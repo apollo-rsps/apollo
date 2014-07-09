@@ -57,6 +57,15 @@ public final class GameObject extends Entity {
     }
 
     /**
+     * Gets the id of this object.
+     * 
+     * @return The id.
+     */
+    public int getId() {
+	return definition.getId();
+    }
+
+    /**
      * Gets the object's rotation.
      * 
      * @return The rotation.

@@ -9,7 +9,7 @@ import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 
 /**
- * An {@link EventHandler} that verifies {@link org.apollo.game.event.impl.NpcActionEvent}
+ * A verification {@link EventHandler} for the {@link NpcActionEvent}.
  *
  * @author Stuart
  */
@@ -26,6 +26,13 @@ public final class NpcActionVerificationHandler extends EventHandler<NpcActionEv
 
 	if (npc == null || !player.getPosition().isWithinDistance(npc.getPosition(), 15)) {
 	    ctx.breakHandlerChain();
+	    return;
+	}
+
+	// TODO is this right?
+	if (event.getOption() >= npc.getDefinition().getInteractions().length) {
+	    ctx.breakHandlerChain();
+	    return;
 	}
     }
 

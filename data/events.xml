@@ -90,10 +90,16 @@
       <handler>org.apollo.game.event.handler.impl.ItemVerificationHandler</handler>
     </chain>
   </event>
-    <event>
-        <type>org.apollo.game.event.impl.NpcActionEvent</type>
-        <chain>
-            <handler>org.apollo.game.event.handler.impl.NpcActionVerificationHandler</handler>
-        </chain>
-    </event>
+  <event>
+    <type>org.apollo.game.event.impl.NpcActionEvent</type>
+    <chain>
+      <handler>org.apollo.game.event.handler.impl.NpcActionVerificationHandler</handler>
+    </chain>
+  </event>
+  <event>
+    <type>org.apollo.game.event.impl.ObjectActionEvent</type>
+    <chain>
+      <handler>org.apollo.game.event.handler.impl.ObjectActionVerificationHandler</handler>
+    </chain>
+  </event>
 </events>
