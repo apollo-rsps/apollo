@@ -17,30 +17,30 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class UpdateItemsEventEncoder extends EventEncoder<UpdateItemsEvent> {
 
-	@Override
-	public GamePacket encode(UpdateItemsEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(206, PacketType.VARIABLE_SHORT);
+    @Override
+    public GamePacket encode(UpdateItemsEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(206, PacketType.VARIABLE_SHORT);
 
-		Item[] items = event.getItems();
+	Item[] items = event.getItems();
 
-		builder.put(DataType.SHORT, event.getInterfaceId());
-		builder.put(DataType.SHORT, items.length);
+	builder.put(DataType.SHORT, event.getInterfaceId());
+	builder.put(DataType.SHORT, items.length);
 
-		for (Item item : items) {
-			int id = item == null ? -1 : item.getId();
-			int amount = item == null ? 0 : item.getAmount();
+	for (Item item : items) {
+	    int id = item == null ? -1 : item.getId();
+	    int amount = item == null ? 0 : item.getAmount();
 
-			builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, id + 1);
+	    builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, id + 1);
 
-			if (amount > 254) {
-				builder.put(DataType.BYTE, DataTransformation.NEGATE, 255);
-				builder.put(DataType.INT, DataOrder.LITTLE, amount);
-			} else {
-				builder.put(DataType.BYTE, DataTransformation.NEGATE, amount);
-			}
-		}
-
-		return builder.toGamePacket();
+	    if (amount > 254) {
+		builder.put(DataType.BYTE, DataTransformation.NEGATE, 255);
+		builder.put(DataType.INT, DataOrder.LITTLE, amount);
+	    } else {
+		builder.put(DataType.BYTE, DataTransformation.NEGATE, amount);
+	    }
 	}
+
+	return builder.toGamePacket();
+    }
 
 }

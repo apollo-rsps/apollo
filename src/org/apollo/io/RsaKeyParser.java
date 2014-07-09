@@ -16,51 +16,51 @@ import org.xml.sax.SAXException;
  */
 public final class RsaKeyParser {
 
-	/**
-	 * The source {@link InputStream}.
-	 */
-	private final InputStream is;
+    /**
+     * The source {@link InputStream}.
+     */
+    private final InputStream is;
 
-	/**
-	 * The {@link XmlParser} instance.
-	 */
-	private final XmlParser parser;
+    /**
+     * The {@link XmlParser} instance.
+     */
+    private final XmlParser parser;
 
-	/**
-	 * Creates the RSA specification parser.
-	 * 
-	 * @param is The source {@link InputStream}.
-	 * @throws SAXException If a SAX error occurs.
-	 */
-	public RsaKeyParser(InputStream is) throws SAXException {
-		this.is = is;
-		parser = new XmlParser();
+    /**
+     * Creates the RSA specification parser.
+     * 
+     * @param is The source {@link InputStream}.
+     * @throws SAXException If a SAX error occurs.
+     */
+    public RsaKeyParser(InputStream is) throws SAXException {
+	this.is = is;
+	parser = new XmlParser();
+    }
+
+    /**
+     * Parses the {@code rsa.xml} file.
+     * 
+     * @throws SAXException If a SAX error occurs.
+     * @throws IOException
+     */
+    public void parse() throws SAXException, IOException {
+	XmlNode rootNode = parser.parse(is);
+	if (!rootNode.getName().equals("rsa")) {
+	    throw new IOException("Root node name is not 'rsa'.");
 	}
 
-	/**
-	 * Parses the {@code rsa.xml} file.
-	 * 
-	 * @throws SAXException If a SAX error occurs.
-	 * @throws IOException
-	 */
-	public void parse() throws SAXException, IOException {
-		XmlNode rootNode = parser.parse(is);
-		if (!rootNode.getName().equals("rsa")) {
-			throw new IOException("Root node name is not 'rsa'.");
-		}
-
-		XmlNode modulusNode = rootNode.getChild("modulus");
-		if (modulusNode == null) {
-			throw new IOException("No node named 'modulus' beneath root node.");
-		}
-
-		XmlNode exponentNode = rootNode.getChild("private-exponent");
-		if (exponentNode == null) {
-			throw new IOException("No node named 'private-exponent' beneath root node.");
-		}
-
-		NetworkConstants.RSA_MODULUS = new BigInteger(modulusNode.getValue());
-		NetworkConstants.RSA_EXPONENT = new BigInteger(exponentNode.getValue());
+	XmlNode modulusNode = rootNode.getChild("modulus");
+	if (modulusNode == null) {
+	    throw new IOException("No node named 'modulus' beneath root node.");
 	}
+
+	XmlNode exponentNode = rootNode.getChild("private-exponent");
+	if (exponentNode == null) {
+	    throw new IOException("No node named 'private-exponent' beneath root node.");
+	}
+
+	NetworkConstants.RSA_MODULUS = new BigInteger(modulusNode.getValue());
+	NetworkConstants.RSA_EXPONENT = new BigInteger(exponentNode.getValue());
+    }
 
 }

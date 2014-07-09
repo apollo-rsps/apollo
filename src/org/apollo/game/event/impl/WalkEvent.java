@@ -10,46 +10,46 @@ import org.apollo.game.model.Position;
  */
 public final class WalkEvent extends Event {
 
-	/**
-	 * The running flag.
-	 */
-	private boolean run;
+    /**
+     * The running flag.
+     */
+    private boolean run;
 
-	/**
-	 * The steps.
-	 */
-	private final Position[] steps;
+    /**
+     * The steps.
+     */
+    private final Position[] steps;
 
-	/**
-	 * Creates the event.
-	 * 
-	 * @param steps The steps array.
-	 * @param run The run flag.
-	 */
-	public WalkEvent(Position[] steps, boolean run) {
-		if (steps.length < 0) {
-			throw new IllegalArgumentException("Number of steps must not be negative.");
-		}
-		this.steps = steps;
-		this.run = run;
+    /**
+     * Creates the event.
+     * 
+     * @param steps The steps array.
+     * @param run The run flag.
+     */
+    public WalkEvent(Position[] steps, boolean run) {
+	if (steps.length < 0) {
+	    throw new IllegalArgumentException("Number of steps must not be negative.");
 	}
+	this.steps = steps;
+	this.run = run;
+    }
 
-	/**
-	 * Gets the steps array.
-	 * 
-	 * @return An array of steps.
-	 */
-	public Position[] getSteps() {
-		return steps;
-	}
+    /**
+     * Gets the steps array.
+     * 
+     * @return An array of steps.
+     */
+    public Position[] getSteps() {
+	return steps;
+    }
 
-	/**
-	 * Checks if the steps should be ran (ctrl+click).
-	 * 
-	 * @return {@code true} if so, {@code false} otherwise.
-	 */
-	public boolean isRunning() {
-		return run;
-	}
+    /**
+     * Checks if the steps should be ran (ctrl+click).
+     * 
+     * @return {@code true} if so, {@code false} otherwise.
+     */
+    public boolean isRunning() {
+	return run;
+    }
 
 }

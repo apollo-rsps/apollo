@@ -11,36 +11,36 @@ import org.apollo.util.NameUtil;
  */
 public final class BinaryPlayerUtil {
 
-	/**
-	 * The saved games directory.
-	 */
-	private static final File SAVED_GAMES_DIRECTORY = new File("data/savedGames");
+    /**
+     * The saved games directory.
+     */
+    private static final File SAVED_GAMES_DIRECTORY = new File("data/savedGames");
 
-	/**
-	 * Creates the saved games directory if it does not exist.
-	 */
-	static {
-		if (!SAVED_GAMES_DIRECTORY.exists()) {
-			SAVED_GAMES_DIRECTORY.mkdir();
-		}
+    /**
+     * Creates the saved games directory if it does not exist.
+     */
+    static {
+	if (!SAVED_GAMES_DIRECTORY.exists()) {
+	    SAVED_GAMES_DIRECTORY.mkdir();
 	}
+    }
 
-	/**
-	 * Gets the save {@link File} for the specified player.
-	 * 
-	 * @param username The username of the player.
-	 * @return The file.
-	 */
-	public static File getFile(String username) {
-		username = NameUtil.decodeBase37(NameUtil.encodeBase37(username));
-		return new File(SAVED_GAMES_DIRECTORY, username + ".dat");
-	}
+    /**
+     * Gets the save {@link File} for the specified player.
+     * 
+     * @param username The username of the player.
+     * @return The file.
+     */
+    public static File getFile(String username) {
+	username = NameUtil.decodeBase37(NameUtil.encodeBase37(username));
+	return new File(SAVED_GAMES_DIRECTORY, username + ".dat");
+    }
 
-	/**
-	 * Default private constructor to prevent instantiation.
-	 */
-	private BinaryPlayerUtil() {
+    /**
+     * Default private constructor to prevent instantiation.
+     */
+    private BinaryPlayerUtil() {
 
-	}
+    }
 
 }

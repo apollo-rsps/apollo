@@ -11,9 +11,9 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class KeepAliveEventDecoder extends EventDecoder<KeepAliveEvent> {
 
-	@Override
-	public KeepAliveEvent decode(GamePacket packet) {
-		return new KeepAliveEvent();
-	}
+    @Override
+    public KeepAliveEvent decode(GamePacket packet) {
+	return new KeepAliveEvent();
+    }
 
 }

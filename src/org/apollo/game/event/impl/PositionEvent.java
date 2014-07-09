@@ -10,43 +10,43 @@ import org.apollo.game.model.Position;
  */
 public final class PositionEvent extends Event {
 
-	/**
-	 * The base position.
-	 */
-	private final Position base;
+    /**
+     * The base position.
+     */
+    private final Position base;
 
-	/**
-	 * The target position.
-	 */
-	private final Position position;
+    /**
+     * The target position.
+     */
+    private final Position position;
 
-	/**
-	 * Creates a new position event.
-	 * 
-	 * @param base The base from which the position is being focused on.
-	 * @param position The position to focus on.
-	 */
-	public PositionEvent(Position base, Position position) {
-		this.base = base;
-		this.position = position;
-	}
+    /**
+     * Creates a new position event.
+     * 
+     * @param base The base from which the position is being focused on.
+     * @param position The position to focus on.
+     */
+    public PositionEvent(Position base, Position position) {
+	this.base = base;
+	this.position = position;
+    }
 
-	/**
-	 * Gets the base position.
-	 * 
-	 * @return The position.
-	 */
-	public Position getBase() {
-		return base;
-	}
+    /**
+     * Gets the base position.
+     * 
+     * @return The position.
+     */
+    public Position getBase() {
+	return base;
+    }
 
-	/**
-	 * Gets the position to focus on.
-	 * 
-	 * @return The target position.
-	 */
-	public Position getPosition() {
-		return position;
-	}
+    /**
+     * Gets the position to focus on.
+     * 
+     * @return The target position.
+     */
+    public Position getPosition() {
+	return position;
+    }
 
 }

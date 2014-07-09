@@ -14,11 +14,11 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class SecondNpcActionEventDecoder extends EventDecoder<SecondNpcActionEvent> {
 
-	@Override
-	public SecondNpcActionEvent decode(GamePacket packet) {
-		GamePacketReader reader = new GamePacketReader(packet);
-		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-		return new SecondNpcActionEvent(index);
-	}
+    @Override
+    public SecondNpcActionEvent decode(GamePacket packet) {
+	GamePacketReader reader = new GamePacketReader(packet);
+	int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+	return new SecondNpcActionEvent(index);
+    }
 
 }

@@ -11,55 +11,55 @@ import org.apollo.net.release.Release;
  */
 public final class ServerContext {
 
-	/**
-	 * The current release.
-	 */
-	private final Release release;
+    /**
+     * The current release.
+     */
+    private final Release release;
 
-	/**
-	 * The service manager.
-	 */
-	private final ServiceManager serviceManager;
+    /**
+     * The service manager.
+     */
+    private final ServiceManager serviceManager;
 
-	/**
-	 * Creates a new server context.
-	 * 
-	 * @param release The current release.
-	 * @param serviceManager The service manager.
-	 */
-	ServerContext(Release release, ServiceManager serviceManager) {
-		this.release = release;
-		this.serviceManager = serviceManager;
-		this.serviceManager.setContext(this);
-	}
+    /**
+     * Creates a new server context.
+     * 
+     * @param release The current release.
+     * @param serviceManager The service manager.
+     */
+    ServerContext(Release release, ServiceManager serviceManager) {
+	this.release = release;
+	this.serviceManager = serviceManager;
+	this.serviceManager.setContext(this);
+    }
 
-	/**
-	 * Gets the current release.
-	 * 
-	 * @return The current release.
-	 */
-	public Release getRelease() {
-		return release;
-	}
+    /**
+     * Gets the current release.
+     * 
+     * @return The current release.
+     */
+    public Release getRelease() {
+	return release;
+    }
 
-	/**
-	 * Gets a service. This method is shorthand for {@code getServiceManager().getService(...)}.
-	 * 
-	 * @param <S> The type of service.
-	 * @param clazz The service class.
-	 * @return The service, or {@code null} if it could not be found.
-	 */
-	public <S extends Service> S getService(Class<S> clazz) {
-		return serviceManager.getService(clazz);
-	}
+    /**
+     * Gets a service. This method is shorthand for {@code getServiceManager().getService(...)}.
+     * 
+     * @param <S> The type of service.
+     * @param clazz The service class.
+     * @return The service, or {@code null} if it could not be found.
+     */
+    public <S extends Service> S getService(Class<S> clazz) {
+	return serviceManager.getService(clazz);
+    }
 
-	/**
-	 * Gets the service manager.
-	 * 
-	 * @return The service manager.
-	 */
-	public ServiceManager getServiceManager() {
-		return serviceManager;
-	}
+    /**
+     * Gets the service manager.
+     * 
+     * @return The service manager.
+     */
+    public ServiceManager getServiceManager() {
+	return serviceManager;
+    }
 
 }

@@ -12,10 +12,10 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class CloseInterfaceEventEncoder extends EventEncoder<CloseInterfaceEvent> {
 
-	@Override
-	public GamePacket encode(CloseInterfaceEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(219);
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(CloseInterfaceEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(219);
+	return builder.toGamePacket();
+    }
 
 }

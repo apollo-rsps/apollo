@@ -13,34 +13,34 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
  */
 public abstract class SynchronizationSegment {
 
-	/**
-	 * The {@link SynchronizationBlockSet}.
-	 */
-	private final SynchronizationBlockSet blockSet;
+    /**
+     * The {@link SynchronizationBlockSet}.
+     */
+    private final SynchronizationBlockSet blockSet;
 
-	/**
-	 * Creates the segment.
-	 * 
-	 * @param blockSet The block set.
-	 */
-	public SynchronizationSegment(SynchronizationBlockSet blockSet) {
-		this.blockSet = blockSet;
-	}
+    /**
+     * Creates the segment.
+     * 
+     * @param blockSet The block set.
+     */
+    public SynchronizationSegment(SynchronizationBlockSet blockSet) {
+	this.blockSet = blockSet;
+    }
 
-	/**
-	 * Gets the block set.
-	 * 
-	 * @return The block set.
-	 */
-	public final SynchronizationBlockSet getBlockSet() {
-		return blockSet;
-	}
+    /**
+     * Gets the block set.
+     * 
+     * @return The block set.
+     */
+    public final SynchronizationBlockSet getBlockSet() {
+	return blockSet;
+    }
 
-	/**
-	 * Gets the type of segment.
-	 * 
-	 * @return The type of segment.
-	 */
-	public abstract SegmentType getType();
+    /**
+     * Gets the type of segment.
+     * 
+     * @return The type of segment.
+     */
+    public abstract SegmentType getType();
 
 }

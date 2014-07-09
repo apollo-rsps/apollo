@@ -24,37 +24,37 @@ import org.apollo.util.MobRepository;
  */
 public final class SequentialClientSynchronizer extends ClientSynchronizer {
 
-	@Override
-	public void synchronize() {
-		MobRepository<Player> players = World.getWorld().getPlayerRepository();
-		MobRepository<Npc> npcs = World.getWorld().getNpcRepository();
+    @Override
+    public void synchronize() {
+	MobRepository<Player> players = World.getWorld().getPlayerRepository();
+	MobRepository<Npc> npcs = World.getWorld().getNpcRepository();
 
-		for (Player player : players) {
-			SynchronizationTask task = new PrePlayerSynchronizationTask(player);
-			task.run();
-		}
-
-		for (Npc npc : npcs) {
-			SynchronizationTask task = new PreNpcSynchronizationTask(npc);
-			task.run();
-		}
-
-		for (Player player : players) {
-			SynchronizationTask task = new PlayerSynchronizationTask(player);
-			task.run();
-			task = new NpcSynchronizationTask(player);
-			task.run();
-		}
-
-		for (Player player : players) {
-			SynchronizationTask task = new PostPlayerSynchronizationTask(player);
-			task.run();
-		}
-
-		for (Npc npc : npcs) {
-			SynchronizationTask task = new PostNpcSynchronizationTask(npc);
-			task.run();
-		}
+	for (Player player : players) {
+	    SynchronizationTask task = new PrePlayerSynchronizationTask(player);
+	    task.run();
 	}
+
+	for (Npc npc : npcs) {
+	    SynchronizationTask task = new PreNpcSynchronizationTask(npc);
+	    task.run();
+	}
+
+	for (Player player : players) {
+	    SynchronizationTask task = new PlayerSynchronizationTask(player);
+	    task.run();
+	    task = new NpcSynchronizationTask(player);
+	    task.run();
+	}
+
+	for (Player player : players) {
+	    SynchronizationTask task = new PostPlayerSynchronizationTask(player);
+	    task.run();
+	}
+
+	for (Npc npc : npcs) {
+	    SynchronizationTask task = new PostNpcSynchronizationTask(npc);
+	    task.run();
+	}
+    }
 
 }

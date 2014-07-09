@@ -12,13 +12,13 @@ import org.apollo.game.model.entity.Player;
  */
 public final class ChatVerificationHandler extends EventHandler<ChatEvent> {
 
-	@Override
-	public void handle(EventHandlerContext ctx, Player player, ChatEvent event) {
-		int color = event.getTextColor();
-		int effects = event.getTextEffects();
-		if (color < 0 || color > 11 || effects < 0 || effects > 5) {
-			ctx.breakHandlerChain();
-		}
+    @Override
+    public void handle(EventHandlerContext ctx, Player player, ChatEvent event) {
+	int color = event.getTextColor();
+	int effects = event.getTextEffects();
+	if (color < 0 || color > 11 || effects < 0 || effects > 5) {
+	    ctx.breakHandlerChain();
 	}
+    }
 
 }

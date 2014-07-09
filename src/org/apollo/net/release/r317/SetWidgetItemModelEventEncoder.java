@@ -14,15 +14,15 @@ import org.apollo.net.release.EventEncoder;
  */
 final class SetWidgetItemModelEventEncoder extends EventEncoder<SetWidgetItemModelEvent> {
 
-	@Override
-	public GamePacket encode(SetWidgetItemModelEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(246);
+    @Override
+    public GamePacket encode(SetWidgetItemModelEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(246);
 
-		builder.put(DataType.SHORT, DataOrder.LITTLE, event.getInterfaceId());
-		builder.put(DataType.SHORT, event.getZoom());
-		builder.put(DataType.SHORT, event.getModelId());
+	builder.put(DataType.SHORT, DataOrder.LITTLE, event.getInterfaceId());
+	builder.put(DataType.SHORT, event.getZoom());
+	builder.put(DataType.SHORT, event.getModelId());
 
-		return builder.toGamePacket();
-	}
+	return builder.toGamePacket();
+    }
 
 }

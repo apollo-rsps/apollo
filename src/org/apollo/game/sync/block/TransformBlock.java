@@ -7,27 +7,27 @@ package org.apollo.game.sync.block;
  */
 public final class TransformBlock extends SynchronizationBlock {
 
-	/**
-	 * The id to transform to.
-	 */
-	private final int id;
+    /**
+     * The id to transform to.
+     */
+    private final int id;
 
-	/**
-	 * Creates a new transform block.
-	 * 
-	 * @param id The id.
-	 */
-	TransformBlock(int id) {
-		this.id = id;
-	}
+    /**
+     * Creates a new transform block.
+     * 
+     * @param id The id.
+     */
+    TransformBlock(int id) {
+	this.id = id;
+    }
 
-	/**
-	 * Gets the id of the npc to transform into.
-	 * 
-	 * @return The id.
-	 */
-	public int getId() {
-		return id;
-	}
+    /**
+     * Gets the id of the npc to transform into.
+     * 
+     * @return The id.
+     */
+    public int getId() {
+	return id;
+    }
 
 }

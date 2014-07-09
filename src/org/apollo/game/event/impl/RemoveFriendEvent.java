@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class RemoveFriendEvent extends Event {
 
-	/**
-	 * The username of the defriended player.
-	 */
-	private final String username;
+    /**
+     * The username of the defriended player.
+     */
+    private final String username;
 
-	/**
-	 * Creates a new defriend user event.
-	 * 
-	 * @param username The defriended player's username.
-	 */
-	public RemoveFriendEvent(String username) {
-		this.username = username;
-	}
+    /**
+     * Creates a new defriend user event.
+     * 
+     * @param username The defriended player's username.
+     */
+    public RemoveFriendEvent(String username) {
+	this.username = username;
+    }
 
-	/**
-	 * Gets the username of the defriended player.
-	 * 
-	 * @return The username.
-	 */
-	public String getUsername() {
-		return username;
-	}
+    /**
+     * Gets the username of the defriended player.
+     * 
+     * @return The username.
+     */
+    public String getUsername() {
+	return username;
+    }
 
 }

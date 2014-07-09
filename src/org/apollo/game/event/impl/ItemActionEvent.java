@@ -11,16 +11,16 @@ import org.apollo.game.event.Event;
  */
 public abstract class ItemActionEvent extends InventoryItemEvent {
 
-	/**
-	 * Creates the item action event.
-	 * 
-	 * @param option The option number.
-	 * @param interfaceId The interface id.
-	 * @param id The id.
-	 * @param slot The slot.
-	 */
-	public ItemActionEvent(int option, int interfaceId, int id, int slot) {
-		super(option, interfaceId, id, slot);
-	}
+    /**
+     * Creates the item action event.
+     * 
+     * @param option The option number.
+     * @param interfaceId The interface id.
+     * @param id The id.
+     * @param slot The slot.
+     */
+    public ItemActionEvent(int option, int interfaceId, int id, int slot) {
+	super(option, interfaceId, id, slot);
+    }
 
 }

@@ -12,10 +12,10 @@ import org.apollo.game.model.entity.Player;
  */
 public final class ClosedInterfaceEventHandler extends EventHandler<ClosedInterfaceEvent> {
 
-	@Override
-	public void handle(EventHandlerContext ctx, Player player, ClosedInterfaceEvent event) {
-		System.out.println("closing interface");
-		player.getInterfaceSet().interfaceClosed();
-	}
+    @Override
+    public void handle(EventHandlerContext ctx, Player player, ClosedInterfaceEvent event) {
+	System.out.println("closing interface");
+	player.getInterfaceSet().interfaceClosed();
+    }
 
 }

@@ -14,9 +14,9 @@ package org.apollo.game.sync;
  */
 public abstract class ClientSynchronizer {
 
-	/**
-	 * Synchronizes the state of the clients with the state of the server.
-	 */
-	public abstract void synchronize();
+    /**
+     * Synchronizes the state of the clients with the state of the server.
+     */
+    public abstract void synchronize();
 
 }

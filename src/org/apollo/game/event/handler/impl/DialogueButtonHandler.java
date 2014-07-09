@@ -13,15 +13,15 @@ import org.apollo.game.model.inter.InterfaceType;
  */
 public final class DialogueButtonHandler extends EventHandler<ButtonEvent> {
 
-	@Override
-	public void handle(EventHandlerContext ctx, Player player, ButtonEvent event) {
-		if (player.getInterfaceSet().contains(InterfaceType.DIALOGUE)) {
-			boolean breakChain = player.getInterfaceSet().buttonClicked(event.getWidgetId());
+    @Override
+    public void handle(EventHandlerContext ctx, Player player, ButtonEvent event) {
+	if (player.getInterfaceSet().contains(InterfaceType.DIALOGUE)) {
+	    boolean breakChain = player.getInterfaceSet().buttonClicked(event.getWidgetId());
 
-			if (breakChain) {
-				ctx.breakHandlerChain();
-			}
-		}
+	    if (breakChain) {
+		ctx.breakHandlerChain();
+	    }
 	}
+    }
 
 }

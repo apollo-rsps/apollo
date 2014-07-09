@@ -10,12 +10,12 @@ import org.apollo.game.model.entity.Player;
  */
 public interface PlayerSaver {
 
-	/**
-	 * Saves a player.
-	 * 
-	 * @param player The player to save.
-	 * @throws Exception If an error occurs.
-	 */
-	public void savePlayer(Player player) throws Exception;
+    /**
+     * Saves a player.
+     * 
+     * @param player The player to save.
+     * @throws Exception If an error occurs.
+     */
+    public void savePlayer(Player player) throws Exception;
 
 }

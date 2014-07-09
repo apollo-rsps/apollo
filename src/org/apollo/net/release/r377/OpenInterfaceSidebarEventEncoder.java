@@ -15,12 +15,12 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class OpenInterfaceSidebarEventEncoder extends EventEncoder<OpenInterfaceSidebarEvent> {
 
-	@Override
-	public GamePacket encode(OpenInterfaceSidebarEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(128);
-		builder.put(DataType.SHORT, DataTransformation.ADD, event.getInterfaceId());
-		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getSidebarId());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(OpenInterfaceSidebarEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(128);
+	builder.put(DataType.SHORT, DataTransformation.ADD, event.getInterfaceId());
+	builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getSidebarId());
+	return builder.toGamePacket();
+    }
 
 }

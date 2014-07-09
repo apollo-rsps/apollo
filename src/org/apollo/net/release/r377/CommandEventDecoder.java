@@ -12,10 +12,10 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class CommandEventDecoder extends EventDecoder<CommandEvent> {
 
-	@Override
-	public CommandEvent decode(GamePacket packet) {
-		GamePacketReader reader = new GamePacketReader(packet);
-		return new CommandEvent(reader.getString());
-	}
+    @Override
+    public CommandEvent decode(GamePacket packet) {
+	GamePacketReader reader = new GamePacketReader(packet);
+	return new CommandEvent(reader.getString());
+    }
 
 }

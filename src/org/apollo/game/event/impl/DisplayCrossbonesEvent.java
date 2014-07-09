@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class DisplayCrossbonesEvent extends Event {
 
-	/**
-	 * Whether or not the crossbones should be displayed.
-	 */
-	private final boolean display;
+    /**
+     * Whether or not the crossbones should be displayed.
+     */
+    private final boolean display;
 
-	/**
-	 * Creates a display crossbones event.
-	 * 
-	 * @param display Whether or not the crossbones should be displayed.
-	 */
-	public DisplayCrossbonesEvent(boolean display) {
-		this.display = display;
-	}
+    /**
+     * Creates a display crossbones event.
+     * 
+     * @param display Whether or not the crossbones should be displayed.
+     */
+    public DisplayCrossbonesEvent(boolean display) {
+	this.display = display;
+    }
 
-	/**
-	 * Indicates whether the crossbones will be displayed.
-	 * 
-	 * @return {@code true} if the crossbones will be displayed, otherwise {@code false}.
-	 */
-	public boolean isDisplayed() {
-		return display;
-	}
+    /**
+     * Indicates whether the crossbones will be displayed.
+     * 
+     * @return {@code true} if the crossbones will be displayed, otherwise {@code false}.
+     */
+    public boolean isDisplayed() {
+	return display;
+    }
 
 }

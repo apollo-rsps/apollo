@@ -14,12 +14,12 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class SwitchTabInterfaceEventEncoder extends EventEncoder<SwitchTabInterfaceEvent> {
 
-	@Override
-	public GamePacket encode(SwitchTabInterfaceEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(10);
-		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, event.getTabId());
-		builder.put(DataType.SHORT, DataTransformation.ADD, event.getInterfaceId());
-		return builder.toGamePacket();
-	}
+    @Override
+    public GamePacket encode(SwitchTabInterfaceEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(10);
+	builder.put(DataType.BYTE, DataTransformation.SUBTRACT, event.getTabId());
+	builder.put(DataType.SHORT, DataTransformation.ADD, event.getInterfaceId());
+	return builder.toGamePacket();
+    }
 
 }

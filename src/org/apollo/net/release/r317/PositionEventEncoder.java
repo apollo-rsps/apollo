@@ -15,15 +15,15 @@ import org.apollo.net.release.EventEncoder;
  */
 final class PositionEventEncoder extends EventEncoder<PositionEvent> {
 
-	@Override
-	public GamePacket encode(PositionEvent event) {
-		GamePacketBuilder builder = new GamePacketBuilder(85);
-		Position base = event.getBase(), pos = event.getPosition();
+    @Override
+    public GamePacket encode(PositionEvent event) {
+	GamePacketBuilder builder = new GamePacketBuilder(85);
+	Position base = event.getBase(), pos = event.getPosition();
 
-		builder.put(DataType.BYTE, DataTransformation.NEGATE, pos.getLocalY(base));
-		builder.put(DataType.BYTE, DataTransformation.NEGATE, pos.getLocalX(base));
+	builder.put(DataType.BYTE, DataTransformation.NEGATE, pos.getLocalY(base));
+	builder.put(DataType.BYTE, DataTransformation.NEGATE, pos.getLocalX(base));
 
-		return builder.toGamePacket();
-	}
+	return builder.toGamePacket();
+    }
 
 }

@@ -16,36 +16,36 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
  */
 public final class ItemOnItemVerificationHandler extends EventHandler<ItemOnItemEvent> {
 
-	@Override
-	public void handle(EventHandlerContext ctx, Player player, ItemOnItemEvent event) {
-		Inventory inventory;
+    @Override
+    public void handle(EventHandlerContext ctx, Player player, ItemOnItemEvent event) {
+	Inventory inventory;
 
-		switch (event.getInterfaceId()) {
-		case SynchronizationInventoryListener.INVENTORY_ID:
-		case BankConstants.SIDEBAR_INVENTORY_ID:
-			inventory = player.getInventory();
-			break;
-		case SynchronizationInventoryListener.EQUIPMENT_ID:
-			inventory = player.getEquipment();
-			break;
-		case BankConstants.BANK_INVENTORY_ID:
-			inventory = player.getBank();
-			break;
-		default:
-			ctx.breakHandlerChain();
-			return;
-		}
-
-		int slot = event.getTargetSlot();
-		if (slot < 0 || slot >= inventory.capacity()) {
-			ctx.breakHandlerChain();
-			return;
-		}
-
-		Item item = inventory.get(slot);
-		if (item == null || item.getId() != event.getTargetId()) {
-			ctx.breakHandlerChain();
-		}
+	switch (event.getInterfaceId()) {
+	case SynchronizationInventoryListener.INVENTORY_ID:
+	case BankConstants.SIDEBAR_INVENTORY_ID:
+	    inventory = player.getInventory();
+	    break;
+	case SynchronizationInventoryListener.EQUIPMENT_ID:
+	    inventory = player.getEquipment();
+	    break;
+	case BankConstants.BANK_INVENTORY_ID:
+	    inventory = player.getBank();
+	    break;
+	default:
+	    ctx.breakHandlerChain();
+	    return;
 	}
+
+	int slot = event.getTargetSlot();
+	if (slot < 0 || slot >= inventory.capacity()) {
+	    ctx.breakHandlerChain();
+	    return;
+	}
+
+	Item item = inventory.get(slot);
+	if (item == null || item.getId() != event.getTargetId()) {
+	    ctx.breakHandlerChain();
+	}
+    }
 
 }

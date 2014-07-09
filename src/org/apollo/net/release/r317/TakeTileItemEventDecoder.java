@@ -15,13 +15,13 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class TakeTileItemEventDecoder extends EventDecoder<TakeTileItemEvent> {
 
-	@Override
-	public TakeTileItemEvent decode(GamePacket packet) {
-		GamePacketReader reader = new GamePacketReader(packet);
-		int y = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-		int id = (int) reader.getUnsigned(DataType.SHORT);
-		int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-		return new TakeTileItemEvent(id, new Position(x, y));
-	}
+    @Override
+    public TakeTileItemEvent decode(GamePacket packet) {
+	GamePacketReader reader = new GamePacketReader(packet);
+	int y = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+	int id = (int) reader.getUnsigned(DataType.SHORT);
+	int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+	return new TakeTileItemEvent(id, new Position(x, y));
+    }
 
 }

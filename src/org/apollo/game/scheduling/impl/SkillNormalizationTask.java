@@ -11,28 +11,28 @@ import org.apollo.game.scheduling.ScheduledTask;
  */
 public final class SkillNormalizationTask extends ScheduledTask {
 
-	/**
-	 * The mob.
-	 */
-	private final Mob mob;
+    /**
+     * The mob.
+     */
+    private final Mob mob;
 
-	/**
-	 * Creates the skill normalization task.
-	 * 
-	 * @param mob The mob.
-	 */
-	public SkillNormalizationTask(Mob mob) {
-		super(100, false);
-		this.mob = mob;
-	}
+    /**
+     * Creates the skill normalization task.
+     * 
+     * @param mob The mob.
+     */
+    public SkillNormalizationTask(Mob mob) {
+	super(100, false);
+	this.mob = mob;
+    }
 
-	@Override
-	public void execute() {
-		if (!mob.isActive()) {
-			stop();
-		} else {
-			mob.getSkillSet().normalize();
-		}
+    @Override
+    public void execute() {
+	if (!mob.isActive()) {
+	    stop();
+	} else {
+	    mob.getSkillSet().normalize();
 	}
+    }
 
 }

@@ -10,43 +10,43 @@ import net.burtleburtle.bob.rand.IsaacRandom;
  */
 public final class IsaacRandomPair {
 
-	/**
-	 * The random number generator used to decode data.
-	 */
-	private final IsaacRandom decodingRandom;
+    /**
+     * The random number generator used to decode data.
+     */
+    private final IsaacRandom decodingRandom;
 
-	/**
-	 * The random number generator used to encode data.
-	 */
-	private final IsaacRandom encodingRandom;
+    /**
+     * The random number generator used to encode data.
+     */
+    private final IsaacRandom encodingRandom;
 
-	/**
-	 * Creates the pair of random number generators.
-	 * 
-	 * @param encodingRandom The random number generator used for encoding.
-	 * @param decodingRandom The random number generator used for decoding.
-	 */
-	public IsaacRandomPair(IsaacRandom encodingRandom, IsaacRandom decodingRandom) {
-		this.encodingRandom = encodingRandom;
-		this.decodingRandom = decodingRandom;
-	}
+    /**
+     * Creates the pair of random number generators.
+     * 
+     * @param encodingRandom The random number generator used for encoding.
+     * @param decodingRandom The random number generator used for decoding.
+     */
+    public IsaacRandomPair(IsaacRandom encodingRandom, IsaacRandom decodingRandom) {
+	this.encodingRandom = encodingRandom;
+	this.decodingRandom = decodingRandom;
+    }
 
-	/**
-	 * Gets the random number generator used for decoding.
-	 * 
-	 * @return The random number generator used for decoding.
-	 */
-	public IsaacRandom getDecodingRandom() {
-		return decodingRandom;
-	}
+    /**
+     * Gets the random number generator used for decoding.
+     * 
+     * @return The random number generator used for decoding.
+     */
+    public IsaacRandom getDecodingRandom() {
+	return decodingRandom;
+    }
 
-	/**
-	 * Gets the random number generator used for encoding.
-	 * 
-	 * @return The random number generator used for encoding.
-	 */
-	public IsaacRandom getEncodingRandom() {
-		return encodingRandom;
-	}
+    /**
+     * Gets the random number generator used for encoding.
+     * 
+     * @return The random number generator used for encoding.
+     */
+    public IsaacRandom getEncodingRandom() {
+	return encodingRandom;
+    }
 
 }

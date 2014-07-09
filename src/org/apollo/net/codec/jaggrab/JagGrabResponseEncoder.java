@@ -12,9 +12,9 @@ import java.util.List;
  */
 public final class JagGrabResponseEncoder extends MessageToMessageEncoder<JagGrabResponse> {
 
-	@Override
-	protected void encode(ChannelHandlerContext ctx, JagGrabResponse response, List<Object> out) {
-		out.add(response.getFileData());
-	}
+    @Override
+    protected void encode(ChannelHandlerContext ctx, JagGrabResponse response, List<Object> out) {
+	out.add(response.getFileData());
+    }
 
 }

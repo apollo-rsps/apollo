@@ -9,14 +9,14 @@ import org.apollo.game.model.Position;
  */
 public final class ThirdObjectActionEvent extends ObjectActionEvent {
 
-	/**
-	 * Creates the third object action event.
-	 * 
-	 * @param id The id.
-	 * @param position The position.
-	 */
-	public ThirdObjectActionEvent(int id, Position position) {
-		super(3, id, position);
-	}
+    /**
+     * Creates the third object action event.
+     * 
+     * @param id The id.
+     * @param position The position.
+     */
+    public ThirdObjectActionEvent(int id, Position position) {
+	super(3, id, position);
+    }
 
 }

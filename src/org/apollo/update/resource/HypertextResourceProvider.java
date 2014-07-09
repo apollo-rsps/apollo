@@ -14,49 +14,49 @@ import java.nio.channels.FileChannel.MapMode;
  */
 public final class HypertextResourceProvider extends ResourceProvider {
 
-	/**
-	 * The base directory from which documents are served.
-	 */
-	private final File base;
+    /**
+     * The base directory from which documents are served.
+     */
+    private final File base;
 
-	/**
-	 * Creates a new hypertext resource provider with the specified base directory.
-	 * 
-	 * @param base The base directory.
-	 */
-	public HypertextResourceProvider(File base) {
-		this.base = base;
+    /**
+     * Creates a new hypertext resource provider with the specified base directory.
+     * 
+     * @param base The base directory.
+     */
+    public HypertextResourceProvider(File base) {
+	this.base = base;
+    }
+
+    @Override
+    public boolean accept(String path) throws IOException {
+	File file = new File(base, path);
+	URI target = file.toURI().normalize();
+	if (target.toASCIIString().startsWith(base.toURI().normalize().toASCIIString())) {
+	    if (file.isDirectory()) {
+		file = new File(file, "index.html");
+	    }
+	    return file.exists();
+	}
+	return false;
+    }
+
+    @Override
+    public ByteBuffer get(String path) throws IOException {
+	File file = new File(base, path);
+	if (file.isDirectory()) {
+	    file = new File(file, "index.html");
+	}
+	if (!file.exists()) {
+	    return null;
 	}
 
-	@Override
-	public boolean accept(String path) throws IOException {
-		File file = new File(base, path);
-		URI target = file.toURI().normalize();
-		if (target.toASCIIString().startsWith(base.toURI().normalize().toASCIIString())) {
-			if (file.isDirectory()) {
-				file = new File(file, "index.html");
-			}
-			return file.exists();
-		}
-		return false;
+	ByteBuffer buffer;
+	try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+	    buffer = raf.getChannel().map(MapMode.READ_ONLY, 0, raf.length());
 	}
 
-	@Override
-	public ByteBuffer get(String path) throws IOException {
-		File file = new File(base, path);
-		if (file.isDirectory()) {
-			file = new File(file, "index.html");
-		}
-		if (!file.exists()) {
-			return null;
-		}
-
-		ByteBuffer buffer;
-		try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
-			buffer = raf.getChannel().map(MapMode.READ_ONLY, 0, raf.length());
-		}
-
-		return buffer;
-	}
+	return buffer;
+    }
 
 }

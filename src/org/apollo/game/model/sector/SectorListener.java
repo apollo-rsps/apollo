@@ -9,12 +9,12 @@ import org.apollo.game.model.entity.Entity;
  */
 public abstract class SectorListener {
 
-	/**
-	 * Executes the action for this listener.
-	 * 
-	 * @param The sector that was updated.
-	 * @param entity The affected entity.
-	 */
-	public abstract void execute(Sector sector, Entity entity);
+    /**
+     * Executes the action for this listener.
+     * 
+     * @param The sector that was updated.
+     * @param entity The affected entity.
+     */
+    public abstract void execute(Sector sector, Entity entity);
 
 }

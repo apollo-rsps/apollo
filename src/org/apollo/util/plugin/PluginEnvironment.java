@@ -9,19 +9,19 @@ import java.io.InputStream;
  */
 public interface PluginEnvironment {
 
-	/**
-	 * Parses the input stream.
-	 * 
-	 * @param is The input stream.
-	 * @param name The name of the file.
-	 */
-	public void parse(InputStream is, String name);
+    /**
+     * Parses the input stream.
+     * 
+     * @param is The input stream.
+     * @param name The name of the file.
+     */
+    public void parse(InputStream is, String name);
 
-	/**
-	 * Sets the context for this environment.
-	 * 
-	 * @param context The context.
-	 */
-	public void setContext(PluginContext context);
+    /**
+     * Sets the context for this environment.
+     * 
+     * @param context The context.
+     */
+    public void setContext(PluginContext context);
 
 }

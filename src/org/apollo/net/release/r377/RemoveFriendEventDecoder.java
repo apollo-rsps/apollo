@@ -14,11 +14,11 @@ import org.apollo.util.NameUtil;
  */
 public final class RemoveFriendEventDecoder extends EventDecoder<RemoveFriendEvent> {
 
-	@Override
-	public RemoveFriendEvent decode(GamePacket packet) {
-		GamePacketReader reader = new GamePacketReader(packet);
-		String username = NameUtil.decodeBase37(reader.getSigned(DataType.LONG));
-		return new RemoveFriendEvent(username);
-	}
+    @Override
+    public RemoveFriendEvent decode(GamePacket packet) {
+	GamePacketReader reader = new GamePacketReader(packet);
+	String username = NameUtil.decodeBase37(reader.getSigned(DataType.LONG));
+	return new RemoveFriendEvent(username);
+    }
 
 }

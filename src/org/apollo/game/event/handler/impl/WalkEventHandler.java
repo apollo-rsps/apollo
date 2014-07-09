@@ -14,28 +14,28 @@ import org.apollo.game.model.entity.WalkingQueue;
  */
 public final class WalkEventHandler extends EventHandler<WalkEvent> {
 
-	@Override
-	public void handle(EventHandlerContext ctx, Player player, WalkEvent event) {
-		WalkingQueue queue = player.getWalkingQueue();
+    @Override
+    public void handle(EventHandlerContext ctx, Player player, WalkEvent event) {
+	WalkingQueue queue = player.getWalkingQueue();
 
-		Position[] steps = event.getSteps();
-		for (int i = 0; i < steps.length; i++) {
-			Position step = steps[i];
-			if (i == 0) {
-				if (!queue.addFirstStep(step)) {
-					return; // ignore packet
-				}
-			} else {
-				queue.addStep(step);
-			}
+	Position[] steps = event.getSteps();
+	for (int i = 0; i < steps.length; i++) {
+	    Position step = steps[i];
+	    if (i == 0) {
+		if (!queue.addFirstStep(step)) {
+		    return; // ignore packet
 		}
-
-		queue.setRunningQueue(event.isRunning() || player.isRunning());
-
-		if (queue.size() > 0) {
-			player.stopAction();
-		}
-		player.getInterfaceSet().close();
+	    } else {
+		queue.addStep(step);
+	    }
 	}
+
+	queue.setRunningQueue(event.isRunning() || player.isRunning());
+
+	if (queue.size() > 0) {
+	    player.stopAction();
+	}
+	player.getInterfaceSet().close();
+    }
 
 }
