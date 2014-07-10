@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 import org.apollo.game.event.Event;
-import org.apollo.game.model.settings.ServerStatus;
+import org.apollo.game.model.entity.setting.ServerStatus;
 
 /**
  * An {@link Event} sent to the client to update the friend server status.

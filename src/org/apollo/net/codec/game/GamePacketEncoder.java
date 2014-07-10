@@ -12,7 +12,7 @@ import net.burtleburtle.bob.rand.IsaacRandom;
 import org.apollo.net.meta.PacketType;
 
 /**
- * A {@link OneToOneEncoder} which encodes in-game packets.
+ * A {@link MessageToMessageEncoder} which encodes in-game packets.
  * 
  * @author Graham
  */

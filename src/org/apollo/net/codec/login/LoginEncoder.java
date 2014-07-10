@@ -7,7 +7,7 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 import java.util.List;
 
 /**
- * A class which encodes login response messages.
+ * A {@link MessageToMessageEncoder} which encodes login response messages.
  * 
  * @author Graham
  */

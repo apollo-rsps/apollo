@@ -10,7 +10,7 @@ import org.apollo.net.release.EventDecoder;
 import org.apollo.net.release.Release;
 
 /**
- * A {@link OneToOneDecoder} that decodes {@link GamePacket}s into {@link Event}s.
+ * A {@link MessageToMessageDecoder} that decodes {@link GamePacket}s into {@link Event}s.
  * 
  * @author Graham
  */

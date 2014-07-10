@@ -12,8 +12,8 @@ import org.apollo.net.codec.update.UpdateDecoder;
 import org.apollo.net.codec.update.UpdateEncoder;
 
 /**
- * A {@link FrameDecoder} which decodes the handshake and makes changes to the pipeline as appropriate for the selected
- * service.
+ * A {@link ByteToMessageDecoder} which decodes the handshake and makes changes to the pipeline as appropriate for the
+ * selected service.
  * 
  * @author Graham
  */

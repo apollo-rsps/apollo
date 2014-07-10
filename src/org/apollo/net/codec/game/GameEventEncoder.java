@@ -10,7 +10,7 @@ import org.apollo.net.release.EventEncoder;
 import org.apollo.net.release.Release;
 
 /**
- * A {@link OneToOneEncoder} which encodes {@link Event}s into {@link GamePacket}s.
+ * A {@link MessageToMessageEncoder} which encodes {@link Event}s into {@link GamePacket}s.
  * 
  * @author Graham
  */

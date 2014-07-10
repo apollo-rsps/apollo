@@ -1,8 +1,8 @@
 package org.apollo.net;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpRequest;
 
@@ -18,7 +18,7 @@ import org.apollo.net.session.Session;
 import org.apollo.net.session.UpdateSession;
 
 /**
- * An implementation of {@link SimpleChannelUpstreamHandler} which handles incoming upstream events from Netty.
+ * An implementation of {@link ChannelInboundHandlerAdapter} which handles incoming upstream events from Netty.
  * 
  * @author Graham
  */
