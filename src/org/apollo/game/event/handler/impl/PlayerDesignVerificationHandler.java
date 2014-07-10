@@ -5,7 +5,7 @@ import org.apollo.game.event.handler.EventHandlerContext;
 import org.apollo.game.event.impl.PlayerDesignEvent;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.settings.Gender;
+import org.apollo.game.model.entity.setting.Gender;
 
 /**
  * An {@link EventHandler} that verifies {@link PlayerDesignEvent}s.

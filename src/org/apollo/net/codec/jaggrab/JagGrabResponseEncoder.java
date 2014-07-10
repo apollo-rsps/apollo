@@ -6,7 +6,7 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 import java.util.List;
 
 /**
- * A {@link OneToOneEncoder} for the JAGGRAB protocol.
+ * A {@link MessageToMessageEncoder} for the JAGGRAB protocol.
  * 
  * @author Graham
  */

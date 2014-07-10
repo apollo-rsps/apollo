@@ -15,7 +15,7 @@ import org.apollo.net.codec.jaggrab.JagGrabRequestDecoder;
 import org.apollo.net.codec.jaggrab.JagGrabResponseEncoder;
 
 /**
- * A {@link ChannelPipelineFactory} for the JAGGRAB protocol.
+ * A {@link ChannelInitializer} for the JAGGRAB protocol.
  * 
  * @author Graham
  */

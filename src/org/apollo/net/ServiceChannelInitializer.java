@@ -8,7 +8,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.apollo.net.codec.handshake.HandshakeDecoder;
 
 /**
- * A {@link ChannelPipelineFactory} which creates {@link ChannelPipeline}s for the service pipeline.
+ * A {@link ChannelInitializer} for the service pipeline.
  * 
  * @author Graham
  */

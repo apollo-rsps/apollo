@@ -1,4 +1,4 @@
-package org.apollo.game.model.settings;
+package org.apollo.game.model.entity.setting;
 
 /**
  * An enumeration representing the different privacy states for public, private and trade chat. This enumeration relies

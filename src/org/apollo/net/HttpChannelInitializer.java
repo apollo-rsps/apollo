@@ -9,7 +9,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 
 /**
- * A {@link ChannelPipelineFactory} for the HTTP protocol.
+ * A {@link ChannelInitializer} for the HTTP protocol.
  * 
  * @author Graham
  */

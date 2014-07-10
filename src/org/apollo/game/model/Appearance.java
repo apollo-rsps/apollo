@@ -1,6 +1,6 @@
 package org.apollo.game.model;
 
-import org.apollo.game.model.settings.Gender;
+import org.apollo.game.model.entity.setting.Gender;
 
 /**
  * Represents the appearance of a player.
