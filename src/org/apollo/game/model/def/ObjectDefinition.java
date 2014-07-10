@@ -1,6 +1,6 @@
 package org.apollo.game.model.def;
 
-import org.apollo.game.model.obj.GameObject;
+import org.apollo.game.model.entity.GameObject;
 
 /**
  * Represents a type of {@link GameObject}.

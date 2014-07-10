@@ -9,7 +9,7 @@ import java.util.List;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.obj.GameObject;
+import org.apollo.game.model.entity.GameObject;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
 
