@@ -86,7 +86,15 @@ public final class Sector {
      * @return {@code true} if this sector contains the entity, otherwise {@code false}.
      */
     public boolean contains(Entity entity) {
-	return entities.get(entity.getPosition()).contains(entity);
+	Position position = entity.getPosition();
+	List<Entity> entities = this.entities.get(position);
+
+	if (entities == null) {
+	    this.entities.put(position, new ArrayList<>());
+	    return false;
+	}
+
+	return this.entities.get(position).contains(entity);
     }
 
     /**
@@ -105,7 +113,13 @@ public final class Sector {
      * @return The list.
      */
     public List<Entity> getEntities(Position position) {
-	return new ArrayList<>(entities.get(position));
+	List<Entity> entities = this.entities.get(position);
+	if (entities == null) {
+	    entities = new ArrayList<>();
+	    this.entities.put(position, entities);
+	}
+
+	return new ArrayList<>(entities);
     }
 
     /**
@@ -117,8 +131,13 @@ public final class Sector {
      */
     @SuppressWarnings("unchecked")
     public <T extends Entity> List<T> getEntities(Position position, EntityType type) {
-	return (List<T>) entities.get(position).stream().filter((e) -> e.getEntityType() == type)
-		.collect(Collectors.toList());
+	List<Entity> entities = this.entities.get(position);
+	if (entities == null) {
+	    entities = new ArrayList<>();
+	    this.entities.put(position, entities);
+	}
+
+	return (List<T>) entities.stream().filter((e) -> e.getEntityType() == type).collect(Collectors.toList());
     }
 
     /**
