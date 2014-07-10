@@ -10,8 +10,8 @@ import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.GameObject;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.obj.GameObject;
 
 /**
  * A verification {@link EventHandler} for the {@link ObjectActionEvent}.

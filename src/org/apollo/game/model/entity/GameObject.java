@@ -1,8 +1,7 @@
-package org.apollo.game.model.obj;
+package org.apollo.game.model.entity;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.def.ObjectDefinition;
-import org.apollo.game.model.entity.Entity;
 
 /**
  * Represents an object in the game world.
@@ -18,9 +17,9 @@ public final class GameObject extends Entity {
     private final ObjectDefinition definition;
 
     /**
-     * The object's rotation.
+     * The object's orientation.
      */
-    private final int rotation;
+    private final int orientation;
 
     /**
      * The object type.
@@ -33,12 +32,12 @@ public final class GameObject extends Entity {
      * @param id The object's id.
      * @param position The position.
      * @param type The type code of the object.
-     * @param rotation The rotation of the object.
+     * @param orientation The orientation of the object.
      */
-    public GameObject(int id, Position position, int type, int rotation) {
+    public GameObject(int id, Position position, int type, int orientation) {
 	super(position);
 	this.type = type;
-	this.rotation = rotation;
+	this.orientation = orientation;
 	definition = ObjectDefinition.lookup(id);
     }
 
@@ -57,7 +56,7 @@ public final class GameObject extends Entity {
     }
 
     /**
-     * Gets the id of this object.
+     * Gets this object's id.
      * 
      * @return The id.
      */
@@ -66,16 +65,16 @@ public final class GameObject extends Entity {
     }
 
     /**
-     * Gets the object's rotation.
+     * Gets this object's orientation.
      * 
-     * @return The rotation.
+     * @return The orientation.
      */
     public int getRotation() {
-	return rotation;
+	return orientation;
     }
 
     /**
-     * Gets the type code of the object.
+     * Gets this object's type.
      * 
      * @return The type.
      */
@@ -85,8 +84,8 @@ public final class GameObject extends Entity {
 
     @Override
     public String toString() {
-	return GameObject.class.getName() + " [id=" + definition.getId() + ", type=" + type + ", rotation=" + rotation
-		+ "]";
+	return GameObject.class.getName() + " [id=" + definition.getId() + ", type=" + type + ", rotation="
+		+ orientation + "]";
     }
 
 }
