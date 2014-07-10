@@ -289,7 +289,7 @@ public final class World {
 	boolean success = true;
 
 	for (Entity entity : entities) {
-	    Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(entity.getPosition()));
+	    Sector sector = sectorRepository.fromPosition(entity.getPosition());
 	    success &= sector.addEntity(entity);
 	}
 	return success;
