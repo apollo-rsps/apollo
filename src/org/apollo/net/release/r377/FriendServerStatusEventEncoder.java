@@ -13,10 +13,10 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class FriendServerStatusEventEncoder extends EventEncoder<FriendServerStatusEvent> {
 
-    @Override
-    public GamePacket encode(FriendServerStatusEvent event) {
-	GamePacketBuilder builder = new GamePacketBuilder(251);
-	builder.put(DataType.BYTE, event.getStatusCode());
-	return builder.toGamePacket();
-    }
+	@Override
+	public GamePacket encode(FriendServerStatusEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(251);
+		builder.put(DataType.BYTE, event.getStatusCode());
+		return builder.toGamePacket();
+	}
 }

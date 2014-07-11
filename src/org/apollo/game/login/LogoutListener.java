@@ -10,11 +10,11 @@ import org.apollo.game.model.entity.Player;
 @FunctionalInterface
 public interface LogoutListener {
 
-    /**
-     * Executes the action for this listener.
-     * 
-     * @param player The player.
-     */
-    public abstract void execute(Player player);
+	/**
+	 * Executes the action for this listener.
+	 * 
+	 * @param player The player.
+	 */
+	public abstract void execute(Player player);
 
 }

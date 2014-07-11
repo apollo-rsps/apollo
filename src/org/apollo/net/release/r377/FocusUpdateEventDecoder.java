@@ -13,10 +13,10 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class FocusUpdateEventDecoder extends EventDecoder<FocusUpdateEvent> {
 
-    @Override
-    public FocusUpdateEvent decode(GamePacket packet) {
-	GamePacketReader decoder = new GamePacketReader(packet);
-	return new FocusUpdateEvent(decoder.getUnsigned(DataType.BYTE) == 1);
-    }
+	@Override
+	public FocusUpdateEvent decode(GamePacket packet) {
+		GamePacketReader decoder = new GamePacketReader(packet);
+		return new FocusUpdateEvent(decoder.getUnsigned(DataType.BYTE) == 1);
+	}
 
 }

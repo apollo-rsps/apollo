@@ -7,15 +7,15 @@ package org.apollo.game.event.impl;
  */
 public final class FifthItemOptionEvent extends ItemOptionEvent {
 
-    /**
-     * Creates the fifth item option event.
-     * 
-     * @param interfaceId The interface id.
-     * @param id The id.
-     * @param slot The slot.
-     */
-    public FifthItemOptionEvent(int interfaceId, int id, int slot) {
-	super(5, interfaceId, id, slot);
-    }
+	/**
+	 * Creates the fifth item option event.
+	 * 
+	 * @param interfaceId The interface id.
+	 * @param id The id.
+	 * @param slot The slot.
+	 */
+	public FifthItemOptionEvent(int interfaceId, int id, int slot) {
+		super(5, interfaceId, id, slot);
+	}
 
 }

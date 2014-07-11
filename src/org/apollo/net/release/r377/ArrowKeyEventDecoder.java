@@ -14,12 +14,12 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class ArrowKeyEventDecoder extends EventDecoder<ArrowKeyEvent> {
 
-    @Override
-    public ArrowKeyEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
-	int roll = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	int yaw = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	return new ArrowKeyEvent(roll, yaw);
-    }
+	@Override
+	public ArrowKeyEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
+		int roll = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		int yaw = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		return new ArrowKeyEvent(roll, yaw);
+	}
 
 }

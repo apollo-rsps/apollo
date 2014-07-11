@@ -9,265 +9,265 @@ import org.apollo.game.model.entity.GameObject;
  */
 public final class ObjectDefinition {
 
-    /**
-     * The array of game object definitions.
-     */
-    private static ObjectDefinition[] definitions;
+	/**
+	 * The array of game object definitions.
+	 */
+	private static ObjectDefinition[] definitions;
 
-    /**
-     * Gets the total number of object definitions.
-     * 
-     * @return The count.
-     */
-    public static int count() {
-	return definitions.length;
-    }
-
-    /**
-     * Gets the array of object definitions.
-     * 
-     * @return The definitions.
-     */
-    public static ObjectDefinition[] getDefinitions() {
-	return definitions;
-    }
-
-    /**
-     * Initialises the object definitions.
-     * 
-     * @param definitions The decoded definitions.
-     * @throws RuntimeException If there is an id mismatch.
-     */
-    public static void init(ObjectDefinition[] definitions) {
-	ObjectDefinition.definitions = definitions;
-	for (int id = 0; id < definitions.length; id++) {
-	    ObjectDefinition def = definitions[id];
-	    if (def.getId() != id) {
-		throw new RuntimeException("Item definition id mismatch.");
-	    }
+	/**
+	 * Gets the total number of object definitions.
+	 * 
+	 * @return The count.
+	 */
+	public static int count() {
+		return definitions.length;
 	}
-    }
 
-    /**
-     * Gets the object definition for the specified id.
-     * 
-     * @param id The id of the object.
-     * @return The definition.
-     * @throws IndexOutOfBoundsException If the id is out of bounds.
-     */
-    public static ObjectDefinition lookup(int id) {
-	if (id < 0 || id > definitions.length) {
-	    throw new IndexOutOfBoundsException(ObjectDefinition.class.getName() + " lookup index " + id
-		    + " out of bounds.");
+	/**
+	 * Gets the array of object definitions.
+	 * 
+	 * @return The definitions.
+	 */
+	public static ObjectDefinition[] getDefinitions() {
+		return definitions;
 	}
-	return definitions[id];
-    }
 
-    /**
-     * The object's description.
-     */
-    private String description;
+	/**
+	 * Initialises the object definitions.
+	 * 
+	 * @param definitions The decoded definitions.
+	 * @throws RuntimeException If there is an id mismatch.
+	 */
+	public static void init(ObjectDefinition[] definitions) {
+		ObjectDefinition.definitions = definitions;
+		for (int id = 0; id < definitions.length; id++) {
+			ObjectDefinition def = definitions[id];
+			if (def.getId() != id) {
+				throw new RuntimeException("Item definition id mismatch.");
+			}
+		}
+	}
 
-    /**
-     * This object's height.
-     */
-    private int height;
+	/**
+	 * Gets the object definition for the specified id.
+	 * 
+	 * @param id The id of the object.
+	 * @return The definition.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
+	 */
+	public static ObjectDefinition lookup(int id) {
+		if (id < 0 || id > definitions.length) {
+			throw new IndexOutOfBoundsException(ObjectDefinition.class.getName() + " lookup index " + id
+					+ " out of bounds.");
+		}
+		return definitions[id];
+	}
 
-    /**
-     * The object's id.
-     */
-    private final int id;
+	/**
+	 * The object's description.
+	 */
+	private String description;
 
-    /**
-     * Denotes whether this object is impenetrable or not.
-     */
-    private boolean impenetrable;
+	/**
+	 * This object's height.
+	 */
+	private int height;
 
-    /**
-     * Denotes whether this object has actions associated with it or not.
-     */
-    private boolean interactive;
+	/**
+	 * The object's id.
+	 */
+	private final int id;
 
-    /**
-     * The object's menu actions.
-     */
-    private String[] menuActions;
+	/**
+	 * Denotes whether this object is impenetrable or not.
+	 */
+	private boolean impenetrable;
 
-    /**
-     * The object's name.
-     */
-    private String name;
+	/**
+	 * Denotes whether this object has actions associated with it or not.
+	 */
+	private boolean interactive;
 
-    /**
-     * Denotes whether the object can be walked over or not.
-     */
-    private boolean solid;
+	/**
+	 * The object's menu actions.
+	 */
+	private String[] menuActions;
 
-    /**
-     * This object's width.
-     */
-    private int width;
+	/**
+	 * The object's name.
+	 */
+	private String name;
 
-    /**
-     * Creates a new object definition.
-     * 
-     * @param id The id of the object.
-     */
-    public ObjectDefinition(int id) {
-	this.id = id;
-    }
+	/**
+	 * Denotes whether the object can be walked over or not.
+	 */
+	private boolean solid;
 
-    /**
-     * Gets the description of this object.
-     * 
-     * @return The description.
-     */
-    public String getDescription() {
-	return description;
-    }
+	/**
+	 * This object's width.
+	 */
+	private int width;
 
-    /**
-     * Gets the height of this object.
-     * 
-     * @return The height.
-     */
-    public int getHeight() {
-	return width;
-    }
+	/**
+	 * Creates a new object definition.
+	 * 
+	 * @param id The id of the object.
+	 */
+	public ObjectDefinition(int id) {
+		this.id = id;
+	}
 
-    /**
-     * Gets the id of this object.
-     * 
-     * @return The id.
-     */
-    public int getId() {
-	return id;
-    }
+	/**
+	 * Gets the description of this object.
+	 * 
+	 * @return The description.
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * Gets the menu actions of this object.
-     * 
-     * @return The menu actions.
-     */
-    public String[] getMenuActions() {
-	return menuActions;
-    }
+	/**
+	 * Gets the height of this object.
+	 * 
+	 * @return The height.
+	 */
+	public int getHeight() {
+		return width;
+	}
 
-    /**
-     * Gets the name of this object.
-     * 
-     * @return The name.
-     */
-    public String getName() {
-	return name;
-    }
+	/**
+	 * Gets the id of this object.
+	 * 
+	 * @return The id.
+	 */
+	public int getId() {
+		return id;
+	}
 
-    /**
-     * Gets the with of this object.
-     * 
-     * @return The width.
-     */
-    public int getWidth() {
-	return height;
-    }
+	/**
+	 * Gets the menu actions of this object.
+	 * 
+	 * @return The menu actions.
+	 */
+	public String[] getMenuActions() {
+		return menuActions;
+	}
 
-    /**
-     * Indicates the impenetrability of this object.
-     * 
-     * @return {@code true} if this object is impenetrable, otherwise {@code false}.
-     */
-    public boolean isImpenetrable() {
-	return impenetrable;
-    }
+	/**
+	 * Gets the name of this object.
+	 * 
+	 * @return The name.
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Indicates the interactivity of this object.
-     * 
-     * @return {@code true} if the object is interactive, otherwise {@code false}.
-     */
-    public boolean isInteractive() {
-	return interactive;
-    }
+	/**
+	 * Gets the with of this object.
+	 * 
+	 * @return The width.
+	 */
+	public int getWidth() {
+		return height;
+	}
 
-    /**
-     * Indicates the solidity of this object.
-     * 
-     * @return {@code true} if this object is solid, otherwise {@code false}.
-     */
-    public boolean isSolid() {
-	return solid;
-    }
+	/**
+	 * Indicates the impenetrability of this object.
+	 * 
+	 * @return {@code true} if this object is impenetrable, otherwise {@code false}.
+	 */
+	public boolean isImpenetrable() {
+		return impenetrable;
+	}
 
-    /**
-     * Sets the description of this object.
-     * 
-     * @param description The description.
-     */
-    public void setDescription(String description) {
-	this.description = description;
-    }
+	/**
+	 * Indicates the interactivity of this object.
+	 * 
+	 * @return {@code true} if the object is interactive, otherwise {@code false}.
+	 */
+	public boolean isInteractive() {
+		return interactive;
+	}
 
-    /**
-     * Sets the height of this object.
-     * 
-     * @param height The height.
-     */
-    public void setHeight(int height) {
-	this.height = height;
-    }
+	/**
+	 * Indicates the solidity of this object.
+	 * 
+	 * @return {@code true} if this object is solid, otherwise {@code false}.
+	 */
+	public boolean isSolid() {
+		return solid;
+	}
 
-    /**
-     * Sets the impenetrability of this object.
-     * 
-     * @param impenetrable The impenetrability.
-     */
-    public void setImpenetrable(boolean impenetrable) {
-	this.impenetrable = impenetrable;
-    }
+	/**
+	 * Sets the description of this object.
+	 * 
+	 * @param description The description.
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    /**
-     * Sets the interactivity of this object.
-     * 
-     * @param interactive The interactivity.
-     */
-    public void setInteractive(boolean interactive) {
-	this.interactive = interactive;
-    }
+	/**
+	 * Sets the height of this object.
+	 * 
+	 * @param height The height.
+	 */
+	public void setHeight(int height) {
+		this.height = height;
+	}
 
-    /**
-     * Sets the menu actions of this object.
-     * 
-     * @param menuActions The menu actions.
-     */
-    public void setMenuActions(String[] menuActions) {
-	this.menuActions = menuActions;
-    }
+	/**
+	 * Sets the impenetrability of this object.
+	 * 
+	 * @param impenetrable The impenetrability.
+	 */
+	public void setImpenetrable(boolean impenetrable) {
+		this.impenetrable = impenetrable;
+	}
 
-    /**
-     * Sets the name of this object.
-     * 
-     * @param name The name.
-     */
-    public void setName(String name) {
-	this.name = name;
-    }
+	/**
+	 * Sets the interactivity of this object.
+	 * 
+	 * @param interactive The interactivity.
+	 */
+	public void setInteractive(boolean interactive) {
+		this.interactive = interactive;
+	}
 
-    /**
-     * Sets the solidity of this object.
-     * 
-     * @param solid The solidity.
-     */
-    public void setSolid(boolean solid) {
-	this.solid = solid;
-    }
+	/**
+	 * Sets the menu actions of this object.
+	 * 
+	 * @param menuActions The menu actions.
+	 */
+	public void setMenuActions(String[] menuActions) {
+		this.menuActions = menuActions;
+	}
 
-    /**
-     * Sets the width of this object.
-     * 
-     * @param width The width.
-     */
-    public void setWidth(int width) {
-	this.width = width;
-    }
+	/**
+	 * Sets the name of this object.
+	 * 
+	 * @param name The name.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * Sets the solidity of this object.
+	 * 
+	 * @param solid The solidity.
+	 */
+	public void setSolid(boolean solid) {
+		this.solid = solid;
+	}
+
+	/**
+	 * Sets the width of this object.
+	 * 
+	 * @param width The width.
+	 */
+	public void setWidth(int width) {
+		this.width = width;
+	}
 
 }

@@ -44,349 +44,349 @@ import org.apollo.util.plugin.PluginManager;
  */
 public final class World {
 
-    /**
-     * Represents the different status codes for registering a player.
-     * 
-     * @author Graham
-     */
-    public enum RegistrationStatus {
+	/**
+	 * Represents the different status codes for registering a player.
+	 * 
+	 * @author Graham
+	 */
+	public enum RegistrationStatus {
+
+		/**
+		 * Indicates that the player is already online.
+		 */
+		ALREADY_ONLINE,
+
+		/**
+		 * Indicates that the player was registered successfully.
+		 */
+		OK,
+
+		/**
+		 * Indicates the world is full.
+		 */
+		WORLD_FULL;
+
+	}
 
 	/**
-	 * Indicates that the player is already online.
+	 * The logger for this class.
 	 */
-	ALREADY_ONLINE,
+	private static final Logger logger = Logger.getLogger(World.class.getName());
 
 	/**
-	 * Indicates that the player was registered successfully.
+	 * The world.
 	 */
-	OK,
+	private static final World world = new World();
 
 	/**
-	 * Indicates the world is full.
+	 * Gets the world.
+	 * 
+	 * @return The world.
 	 */
-	WORLD_FULL;
-
-    }
-
-    /**
-     * The logger for this class.
-     */
-    private static final Logger logger = Logger.getLogger(World.class.getName());
-
-    /**
-     * The world.
-     */
-    private static final World world = new World();
-
-    /**
-     * Gets the world.
-     * 
-     * @return The world.
-     */
-    public static World getWorld() {
-	return world;
-    }
-
-    /**
-     * The command dispatcher.
-     */
-    private final CommandDispatcher commandDispatcher = new CommandDispatcher();
-
-    /**
-     * The login dispatcher.
-     */
-    private final LoginDispatcher loginDispatcher = new LoginDispatcher();
-
-    /**
-     * The logout dispatcher.
-     */
-    private final LogoutDispatcher logoutDispatcher = new LogoutDispatcher();
-
-    /**
-     * The {@link MobRepository} of {@link Npc}s.
-     */
-    private final MobRepository<Npc> npcRepository = new MobRepository<>(WorldConstants.MAXIMUM_NPCS);
-
-    /**
-     * The {@link MobRepository} of {@link Player}s.
-     */
-    private final MobRepository<Player> playerRepository = new MobRepository<>(WorldConstants.MAXIMUM_PLAYERS);
-
-    /**
-     * A {@link Map} of player usernames and the player objects.
-     */
-    private final Map<Long, Player> players = new HashMap<>();
-
-    /**
-     * The {@link PluginManager}. TODO: better place than here!!
-     */
-    private PluginManager pluginManager;
-
-    /**
-     * The release number (i.e. version) of this world.
-     */
-    private int releaseNumber;
-
-    /**
-     * The scheduler.
-     */
-    private final Scheduler scheduler = new Scheduler();
-
-    /**
-     * This world's {@link SectorRepository}.
-     */
-    private final SectorRepository sectorRepository = new SectorRepository(false);
-
-    /**
-     * Creates the world.
-     */
-    private World() {
-
-    }
-
-    /**
-     * Gets the command dispatcher.
-     * 
-     * @return The command dispatcher.
-     */
-    public CommandDispatcher getCommandDispatcher() {
-	return commandDispatcher;
-    }
-
-    /**
-     * Gets the {@link LoginDispatcher}.
-     * 
-     * @return The dispatcher.
-     */
-    public LoginDispatcher getLoginDispatcher() {
-	return loginDispatcher;
-    }
-
-    /**
-     * Gets the {@link LogoutDispatcher}.
-     * 
-     * @return The dispatcher.
-     */
-    public LogoutDispatcher getLogoutDispatcher() {
-	return logoutDispatcher;
-    }
-
-    /**
-     * Gets the npc repository.
-     * 
-     * @return The npc repository.
-     */
-    public MobRepository<Npc> getNpcRepository() {
-	return npcRepository;
-    }
-
-    /**
-     * Gets the {@link Player} with the specified username. Note that this will return {@code null} if the player is
-     * offline.
-     * 
-     * @param username The username.
-     * @return The player.
-     */
-    public Player getPlayer(String username) {
-	return players.get(NameUtil.encodeBase37(username.toLowerCase()));
-    }
-
-    /**
-     * Gets the player repository.
-     * 
-     * @return The player repository.
-     */
-    public MobRepository<Player> getPlayerRepository() {
-	return playerRepository;
-    }
-
-    /**
-     * Gets the plugin manager. TODO should this be here?
-     * 
-     * @return The plugin manager.
-     */
-    public PluginManager getPluginManager() {
-	return pluginManager;
-    }
-
-    /**
-     * Gets the release number of this world.
-     * 
-     * @return The release number.
-     */
-    public int getReleaseNumber() {
-	return releaseNumber;
-    }
-
-    /**
-     * Gets this world's {@link SectorRepository}.
-     * 
-     * @return The sector repository.
-     */
-    public SectorRepository getSectorRepository() {
-	return sectorRepository;
-    }
-
-    /**
-     * Initialises the world by loading definitions from the specified file system.
-     * 
-     * @param release The release number.
-     * @param fs The file system.
-     * @param manager The plugin manager. TODO move this.
-     * @throws IOException If an I/O error occurs.
-     */
-    public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
-	this.releaseNumber = release;
-
-	ItemDefinitionDecoder itemDefDecoder = new ItemDefinitionDecoder(fs);
-	ItemDefinition[] itemDefs = itemDefDecoder.decode();
-	ItemDefinition.init(itemDefs);
-	logger.info("Loaded " + itemDefs.length + " item definitions.");
-
-	try (InputStream is = new BufferedInputStream(new FileInputStream("data/equipment-" + release + ".dat"))) {
-	    EquipmentDefinitionParser parser = new EquipmentDefinitionParser(is);
-	    EquipmentDefinition[] defs = parser.parse();
-	    EquipmentDefinition.init(defs);
-	    logger.info("Loaded " + defs.length + " equipment definitions.");
+	public static World getWorld() {
+		return world;
 	}
 
-	NpcDefinitionDecoder npcDecoder = new NpcDefinitionDecoder(fs);
-	NpcDefinition[] npcDefs = npcDecoder.decode();
-	NpcDefinition.init(npcDefs);
-	logger.info("Loaded " + npcDefs.length + " npc definitions.");
+	/**
+	 * The command dispatcher.
+	 */
+	private final CommandDispatcher commandDispatcher = new CommandDispatcher();
 
-	ObjectDefinitionDecoder objectDecoder = new ObjectDefinitionDecoder(fs);
-	ObjectDefinition[] objDefs = objectDecoder.decode();
-	ObjectDefinition.init(objDefs);
-	logger.info("Loaded " + objDefs.length + " object definitions.");
+	/**
+	 * The login dispatcher.
+	 */
+	private final LoginDispatcher loginDispatcher = new LoginDispatcher();
 
-	StaticObjectDecoder staticDecoder = new StaticObjectDecoder(fs);
-	GameObject[] objects = staticDecoder.decode();
-	placeEntities(objects);
-	logger.info("Loaded " + objects.length + " static objects.");
+	/**
+	 * The logout dispatcher.
+	 */
+	private final LogoutDispatcher logoutDispatcher = new LogoutDispatcher();
 
-	manager.start();
-	pluginManager = manager; // TODO move!!
-    }
+	/**
+	 * The {@link MobRepository} of {@link Npc}s.
+	 */
+	private final MobRepository<Npc> npcRepository = new MobRepository<>(WorldConstants.MAXIMUM_NPCS);
 
-    /**
-     * Checks if the {@link Player} with the specified name is online.
-     * 
-     * @param username The name.
-     * @return {@code true} if the player is online, otherwise {@code false}.
-     */
-    public boolean isPlayerOnline(String username) {
-	return players.get(NameUtil.encodeBase37(username.toLowerCase())) != null;
-    }
+	/**
+	 * The {@link MobRepository} of {@link Player}s.
+	 */
+	private final MobRepository<Player> playerRepository = new MobRepository<>(WorldConstants.MAXIMUM_PLAYERS);
 
-    /**
-     * Adds entities to sectors in the {@link SectorRepository}.
-     * 
-     * @param entities The entities.
-     * @return {@code true} if all entities were added successfully, otherwise {@code false}.
-     */
-    private boolean placeEntities(Entity... entities) {
-	boolean success = true;
+	/**
+	 * A {@link Map} of player usernames and the player objects.
+	 */
+	private final Map<Long, Player> players = new HashMap<>();
 
-	for (Entity entity : entities) {
-	    Sector sector = sectorRepository.fromPosition(entity.getPosition());
-	    success &= sector.addEntity(entity);
-	}
-	return success;
-    }
+	/**
+	 * The {@link PluginManager}. TODO: better place than here!!
+	 */
+	private PluginManager pluginManager;
 
-    /**
-     * Pulses the world.
-     */
-    public void pulse() {
-	scheduler.pulse();
-    }
+	/**
+	 * The release number (i.e. version) of this world.
+	 */
+	private int releaseNumber;
 
-    /**
-     * Registers the specified npc.
-     * 
-     * @param npc The npc.
-     * @return {@code true} if the npc registered successfully, otherwise {@code false}.
-     */
-    public boolean register(final Npc npc) {
-	boolean success = npcRepository.add(npc);
+	/**
+	 * The scheduler.
+	 */
+	private final Scheduler scheduler = new Scheduler();
 
-	if (success) {
-	    Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
-	    sector.addEntity(npc);
-	} else {
-	    logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
-	}
-	return success;
-    }
+	/**
+	 * This world's {@link SectorRepository}.
+	 */
+	private final SectorRepository sectorRepository = new SectorRepository(false);
 
-    /**
-     * Registers the specified player.
-     * 
-     * @param player The player.
-     * @return A {@link RegistrationStatus}.
-     */
-    public RegistrationStatus register(final Player player) {
-	if (isPlayerOnline(player.getUsername())) {
-	    return RegistrationStatus.ALREADY_ONLINE;
+	/**
+	 * Creates the world.
+	 */
+	private World() {
+
 	}
 
-	boolean success = playerRepository.add(player);
-	if (success) {
-	    if (players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player) != null) {
-		logger.info("Error adding the player to the username map - someone with that name already exists.");
-		return RegistrationStatus.ALREADY_ONLINE;
-	    }
-	    logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
-
-	    Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
-	    sector.addEntity(player);
-	    return RegistrationStatus.OK;
+	/**
+	 * Gets the command dispatcher.
+	 * 
+	 * @return The command dispatcher.
+	 */
+	public CommandDispatcher getCommandDispatcher() {
+		return commandDispatcher;
 	}
 
-	logger.warning("Failed to register player: " + player + " [count=" + playerRepository.size() + "]");
-	return RegistrationStatus.WORLD_FULL;
-    }
-
-    /**
-     * Schedules a new task.
-     * 
-     * @param task The {@link ScheduledTask}.
-     */
-    public boolean schedule(ScheduledTask task) {
-	return scheduler.schedule(task);
-    }
-
-    /**
-     * Unregisters the specified {@link Npc}.
-     * 
-     * @param npc The npc.
-     */
-    public void unregister(final Npc npc) {
-	if (npcRepository.remove(npc)) {
-	    Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
-	    sector.removeEntity(npc);
-	} else {
-	    logger.warning("Could not find npc " + npc + " to unregister!");
+	/**
+	 * Gets the {@link LoginDispatcher}.
+	 * 
+	 * @return The dispatcher.
+	 */
+	public LoginDispatcher getLoginDispatcher() {
+		return loginDispatcher;
 	}
-    }
 
-    /**
-     * Unregisters the specified player.
-     * 
-     * @param player The player.
-     */
-    public void unregister(final Player player) {
-	if (playerRepository.remove(player)
-		& players.remove(NameUtil.encodeBase37(player.getUsername().toLowerCase())) == player) {
-	    logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
-
-	    Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
-	    sector.removeEntity(player);
-	    logoutDispatcher.dispatch(player);
-	} else {
-	    logger.warning("Could not find player " + player + " to unregister!");
+	/**
+	 * Gets the {@link LogoutDispatcher}.
+	 * 
+	 * @return The dispatcher.
+	 */
+	public LogoutDispatcher getLogoutDispatcher() {
+		return logoutDispatcher;
 	}
-    }
+
+	/**
+	 * Gets the npc repository.
+	 * 
+	 * @return The npc repository.
+	 */
+	public MobRepository<Npc> getNpcRepository() {
+		return npcRepository;
+	}
+
+	/**
+	 * Gets the {@link Player} with the specified username. Note that this will return {@code null} if the player is
+	 * offline.
+	 * 
+	 * @param username The username.
+	 * @return The player.
+	 */
+	public Player getPlayer(String username) {
+		return players.get(NameUtil.encodeBase37(username.toLowerCase()));
+	}
+
+	/**
+	 * Gets the player repository.
+	 * 
+	 * @return The player repository.
+	 */
+	public MobRepository<Player> getPlayerRepository() {
+		return playerRepository;
+	}
+
+	/**
+	 * Gets the plugin manager. TODO should this be here?
+	 * 
+	 * @return The plugin manager.
+	 */
+	public PluginManager getPluginManager() {
+		return pluginManager;
+	}
+
+	/**
+	 * Gets the release number of this world.
+	 * 
+	 * @return The release number.
+	 */
+	public int getReleaseNumber() {
+		return releaseNumber;
+	}
+
+	/**
+	 * Gets this world's {@link SectorRepository}.
+	 * 
+	 * @return The sector repository.
+	 */
+	public SectorRepository getSectorRepository() {
+		return sectorRepository;
+	}
+
+	/**
+	 * Initialises the world by loading definitions from the specified file system.
+	 * 
+	 * @param release The release number.
+	 * @param fs The file system.
+	 * @param manager The plugin manager. TODO move this.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
+		this.releaseNumber = release;
+
+		ItemDefinitionDecoder itemDefDecoder = new ItemDefinitionDecoder(fs);
+		ItemDefinition[] itemDefs = itemDefDecoder.decode();
+		ItemDefinition.init(itemDefs);
+		logger.info("Loaded " + itemDefs.length + " item definitions.");
+
+		try (InputStream is = new BufferedInputStream(new FileInputStream("data/equipment-" + release + ".dat"))) {
+			EquipmentDefinitionParser parser = new EquipmentDefinitionParser(is);
+			EquipmentDefinition[] defs = parser.parse();
+			EquipmentDefinition.init(defs);
+			logger.info("Loaded " + defs.length + " equipment definitions.");
+		}
+
+		NpcDefinitionDecoder npcDecoder = new NpcDefinitionDecoder(fs);
+		NpcDefinition[] npcDefs = npcDecoder.decode();
+		NpcDefinition.init(npcDefs);
+		logger.info("Loaded " + npcDefs.length + " npc definitions.");
+
+		ObjectDefinitionDecoder objectDecoder = new ObjectDefinitionDecoder(fs);
+		ObjectDefinition[] objDefs = objectDecoder.decode();
+		ObjectDefinition.init(objDefs);
+		logger.info("Loaded " + objDefs.length + " object definitions.");
+
+		StaticObjectDecoder staticDecoder = new StaticObjectDecoder(fs);
+		GameObject[] objects = staticDecoder.decode();
+		placeEntities(objects);
+		logger.info("Loaded " + objects.length + " static objects.");
+
+		manager.start();
+		pluginManager = manager; // TODO move!!
+	}
+
+	/**
+	 * Checks if the {@link Player} with the specified name is online.
+	 * 
+	 * @param username The name.
+	 * @return {@code true} if the player is online, otherwise {@code false}.
+	 */
+	public boolean isPlayerOnline(String username) {
+		return players.get(NameUtil.encodeBase37(username.toLowerCase())) != null;
+	}
+
+	/**
+	 * Adds entities to sectors in the {@link SectorRepository}.
+	 * 
+	 * @param entities The entities.
+	 * @return {@code true} if all entities were added successfully, otherwise {@code false}.
+	 */
+	private boolean placeEntities(Entity... entities) {
+		boolean success = true;
+
+		for (Entity entity : entities) {
+			Sector sector = sectorRepository.fromPosition(entity.getPosition());
+			success &= sector.addEntity(entity);
+		}
+		return success;
+	}
+
+	/**
+	 * Pulses the world.
+	 */
+	public void pulse() {
+		scheduler.pulse();
+	}
+
+	/**
+	 * Registers the specified npc.
+	 * 
+	 * @param npc The npc.
+	 * @return {@code true} if the npc registered successfully, otherwise {@code false}.
+	 */
+	public boolean register(final Npc npc) {
+		boolean success = npcRepository.add(npc);
+
+		if (success) {
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
+			sector.addEntity(npc);
+		} else {
+			logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
+		}
+		return success;
+	}
+
+	/**
+	 * Registers the specified player.
+	 * 
+	 * @param player The player.
+	 * @return A {@link RegistrationStatus}.
+	 */
+	public RegistrationStatus register(final Player player) {
+		if (isPlayerOnline(player.getUsername())) {
+			return RegistrationStatus.ALREADY_ONLINE;
+		}
+
+		boolean success = playerRepository.add(player);
+		if (success) {
+			if (players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player) != null) {
+				logger.info("Error adding the player to the username map - someone with that name already exists.");
+				return RegistrationStatus.ALREADY_ONLINE;
+			}
+			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
+
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
+			sector.addEntity(player);
+			return RegistrationStatus.OK;
+		}
+
+		logger.warning("Failed to register player: " + player + " [count=" + playerRepository.size() + "]");
+		return RegistrationStatus.WORLD_FULL;
+	}
+
+	/**
+	 * Schedules a new task.
+	 * 
+	 * @param task The {@link ScheduledTask}.
+	 */
+	public boolean schedule(ScheduledTask task) {
+		return scheduler.schedule(task);
+	}
+
+	/**
+	 * Unregisters the specified {@link Npc}.
+	 * 
+	 * @param npc The npc.
+	 */
+	public void unregister(final Npc npc) {
+		if (npcRepository.remove(npc)) {
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
+			sector.removeEntity(npc);
+		} else {
+			logger.warning("Could not find npc " + npc + " to unregister!");
+		}
+	}
+
+	/**
+	 * Unregisters the specified player.
+	 * 
+	 * @param player The player.
+	 */
+	public void unregister(final Player player) {
+		if (playerRepository.remove(player)
+				& players.remove(NameUtil.encodeBase37(player.getUsername().toLowerCase())) == player) {
+			logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
+
+			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
+			sector.removeEntity(player);
+			logoutDispatcher.dispatch(player);
+		} else {
+			logger.warning("Could not find player " + player + " to unregister!");
+		}
+	}
 
 }

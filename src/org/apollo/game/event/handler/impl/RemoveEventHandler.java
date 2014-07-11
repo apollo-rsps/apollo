@@ -16,43 +16,43 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
  */
 public final class RemoveEventHandler extends EventHandler<ItemActionEvent> {
 
-    @Override
-    public void handle(EventHandlerContext ctx, Player player, ItemActionEvent event) {
-	if (event.getOption() == 1 && event.getInterfaceId() == SynchronizationInventoryListener.EQUIPMENT_ID) {
-	    Inventory inventory = player.getInventory();
-	    Inventory equipment = player.getEquipment();
+	@Override
+	public void handle(EventHandlerContext ctx, Player player, ItemActionEvent event) {
+		if (event.getOption() == 1 && event.getInterfaceId() == SynchronizationInventoryListener.EQUIPMENT_ID) {
+			Inventory inventory = player.getInventory();
+			Inventory equipment = player.getEquipment();
 
-	    int slot = event.getSlot();
-	    Item item = equipment.get(slot);
-	    int id = item.getId();
+			int slot = event.getSlot();
+			Item item = equipment.get(slot);
+			int id = item.getId();
 
-	    if (inventory.freeSlots() == 0 && !item.getDefinition().isStackable()) {
-		inventory.forceCapacityExceeded();
-		ctx.breakHandlerChain();
-		return;
-	    }
+			if (inventory.freeSlots() == 0 && !item.getDefinition().isStackable()) {
+				inventory.forceCapacityExceeded();
+				ctx.breakHandlerChain();
+				return;
+			}
 
-	    boolean removed = true;
+			boolean removed = true;
 
-	    inventory.stopFiringEvents();
-	    equipment.stopFiringEvents();
+			inventory.stopFiringEvents();
+			equipment.stopFiringEvents();
 
-	    try {
-		int remaining = inventory.add(id, item.getAmount());
-		removed = remaining == 0;
-		equipment.set(slot, removed ? null : new Item(id, remaining));
-	    } finally {
-		inventory.startFiringEvents();
-		equipment.startFiringEvents();
-	    }
+			try {
+				int remaining = inventory.add(id, item.getAmount());
+				removed = remaining == 0;
+				equipment.set(slot, removed ? null : new Item(id, remaining));
+			} finally {
+				inventory.startFiringEvents();
+				equipment.startFiringEvents();
+			}
 
-	    if (removed) {
-		inventory.forceRefresh();
-		equipment.forceRefresh(slot);
-	    } else {
-		inventory.forceCapacityExceeded();
-	    }
+			if (removed) {
+				inventory.forceRefresh();
+				equipment.forceRefresh(slot);
+			} else {
+				inventory.forceCapacityExceeded();
+			}
+		}
 	}
-    }
 
 }

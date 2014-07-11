@@ -20,49 +20,49 @@ import org.apollo.game.model.entity.Player;
  */
 public final class ObjectActionVerificationHandler extends EventHandler<ObjectActionEvent> {
 
-    @Override
-    public void handle(EventHandlerContext ctx, Player player, ObjectActionEvent event) {
-	int id = event.getId();
-	if (id < 0 || id >= ObjectDefinition.count()) {
-	    ctx.breakHandlerChain();
-	    return;
+	@Override
+	public void handle(EventHandlerContext ctx, Player player, ObjectActionEvent event) {
+		int id = event.getId();
+		if (id < 0 || id >= ObjectDefinition.count()) {
+			ctx.breakHandlerChain();
+			return;
+		}
+
+		Position position = event.getPosition();
+		Sector sector = World.getWorld().getSectorRepository().fromPosition(position);
+		List<GameObject> objects = sector.getEntities(position, EntityType.GAME_OBJECT);
+
+		if (!containsObject(id, objects)) {
+			ctx.breakHandlerChain();
+			return;
+		}
+
+		if (!player.getPosition().isWithinDistance(position, 15)) {
+			ctx.breakHandlerChain();
+			return;
+		}
+
+		// TODO is this right?
+		if (event.getOption() >= ObjectDefinition.lookup(id).getMenuActions().length) {
+			ctx.breakHandlerChain();
+			return;
+		}
 	}
 
-	Position position = event.getPosition();
-	Sector sector = World.getWorld().getSectorRepository().fromPosition(position);
-	List<GameObject> objects = sector.getEntities(position, EntityType.GAME_OBJECT);
-
-	if (!containsObject(id, objects)) {
-	    ctx.breakHandlerChain();
-	    return;
+	/**
+	 * Indicates whether or not the {@link List} of {@link GameObject}s contains the object with the specified id.
+	 * 
+	 * @param id The id of the object.
+	 * @param objects The list of objects.
+	 * @return {@code true} if the list does contain the object with the specified id, otherwise {@code false}.
+	 */
+	private boolean containsObject(int id, List<GameObject> objects) {
+		for (GameObject object : objects) {
+			if (object.getId() == id) {
+				return true;
+			}
+		}
+		return false;
 	}
-
-	if (!player.getPosition().isWithinDistance(position, 15)) {
-	    ctx.breakHandlerChain();
-	    return;
-	}
-
-	// TODO is this right?
-	if (event.getOption() >= ObjectDefinition.lookup(id).getMenuActions().length) {
-	    ctx.breakHandlerChain();
-	    return;
-	}
-    }
-
-    /**
-     * Indicates whether or not the {@link List} of {@link GameObject}s contains the object with the specified id.
-     * 
-     * @param id The id of the object.
-     * @param objects The list of objects.
-     * @return {@code true} if the list does contain the object with the specified id, otherwise {@code false}.
-     */
-    private boolean containsObject(int id, List<GameObject> objects) {
-	for (GameObject object : objects) {
-	    if (object.getId() == id) {
-		return true;
-	    }
-	}
-	return false;
-    }
 
 }

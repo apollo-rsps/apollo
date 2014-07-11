@@ -11,39 +11,39 @@ import java.util.Iterator;
  */
 public final class EnumerationUtil {
 
-    /**
-     * Returns an {@link Iterator} which wraps around the specified {@link Enumeration}.
-     * 
-     * @param <E> The type of object that is iterated over.
-     * @param enumeration The {@link Enumeration}.
-     * @return An {@link Iterator}.
-     */
-    public static <E> Iterator<E> asIterator(final Enumeration<E> enumeration) {
-	return new Iterator<E>() {
+	/**
+	 * Returns an {@link Iterator} which wraps around the specified {@link Enumeration}.
+	 * 
+	 * @param <E> The type of object that is iterated over.
+	 * @param enumeration The {@link Enumeration}.
+	 * @return An {@link Iterator}.
+	 */
+	public static <E> Iterator<E> asIterator(final Enumeration<E> enumeration) {
+		return new Iterator<E>() {
 
-	    @Override
-	    public boolean hasNext() {
-		return enumeration.hasMoreElements();
-	    }
+			@Override
+			public boolean hasNext() {
+				return enumeration.hasMoreElements();
+			}
 
-	    @Override
-	    public E next() {
-		return enumeration.nextElement();
-	    }
+			@Override
+			public E next() {
+				return enumeration.nextElement();
+			}
 
-	    @Override
-	    public void remove() {
-		throw new UnsupportedOperationException("Cannot remove an element using this wrapper.");
-	    }
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Cannot remove an element using this wrapper.");
+			}
 
-	};
-    }
+		};
+	}
 
-    /**
-     * Default private constructor to prevent instantiation by other classes.
-     */
-    private EnumerationUtil() {
+	/**
+	 * Default private constructor to prevent instantiation by other classes.
+	 */
+	private EnumerationUtil() {
 
-    }
+	}
 
 }

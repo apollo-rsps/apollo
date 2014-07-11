@@ -9,27 +9,27 @@ import io.netty.buffer.ByteBuf;
  */
 public final class JagGrabResponse {
 
-    /**
-     * The file data.
-     */
-    private final ByteBuf fileData;
+	/**
+	 * The file data.
+	 */
+	private final ByteBuf fileData;
 
-    /**
-     * Creates the response.
-     * 
-     * @param fileData The file data.
-     */
-    public JagGrabResponse(ByteBuf fileData) {
-	this.fileData = fileData;
-    }
+	/**
+	 * Creates the response.
+	 * 
+	 * @param fileData The file data.
+	 */
+	public JagGrabResponse(ByteBuf fileData) {
+		this.fileData = fileData;
+	}
 
-    /**
-     * Gets the file data.
-     * 
-     * @return The file data.
-     */
-    public ByteBuf getFileData() {
-	return fileData;
-    }
+	/**
+	 * Gets the file data.
+	 * 
+	 * @return The file data.
+	 */
+	public ByteBuf getFileData() {
+		return fileData;
+	}
 
 }

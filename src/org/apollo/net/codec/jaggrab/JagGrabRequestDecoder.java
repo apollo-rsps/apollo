@@ -12,14 +12,14 @@ import java.util.List;
  */
 public final class JagGrabRequestDecoder extends MessageToMessageDecoder<String> {
 
-    @Override
-    protected void decode(ChannelHandlerContext ctx, String request, List<Object> out) {
-	if (request.startsWith("JAGGRAB /")) {
-	    String filePath = request.substring(8).trim();
-	    out.add(new JagGrabRequest(filePath));
-	} else {
-	    throw new IllegalArgumentException("Corrupted request line.");
+	@Override
+	protected void decode(ChannelHandlerContext ctx, String request, List<Object> out) {
+		if (request.startsWith("JAGGRAB /")) {
+			String filePath = request.substring(8).trim();
+			out.add(new JagGrabRequest(filePath));
+		} else {
+			throw new IllegalArgumentException("Corrupted request line.");
+		}
 	}
-    }
 
 }

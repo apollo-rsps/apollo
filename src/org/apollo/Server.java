@@ -32,144 +32,144 @@ import org.apollo.util.plugin.PluginManager;
  */
 public final class Server {
 
-    /**
-     * The logger for this class.
-     */
-    private static final Logger logger = Logger.getLogger(Server.class.getName());
+	/**
+	 * The logger for this class.
+	 */
+	private static final Logger logger = Logger.getLogger(Server.class.getName());
 
-    /**
-     * The entry point of the Apollo server application.
-     * 
-     * @param args The command-line arguments passed to the application.
-     */
-    public static void main(String[] args) {
-	try {
-	    Server server = new Server();
-	    server.init(args.length == 1 ? args[0] : Release317.class.getName());
+	/**
+	 * The entry point of the Apollo server application.
+	 * 
+	 * @param args The command-line arguments passed to the application.
+	 */
+	public static void main(String[] args) {
+		try {
+			Server server = new Server();
+			server.init(args.length == 1 ? args[0] : Release317.class.getName());
 
-	    SocketAddress service = new InetSocketAddress(NetworkConstants.SERVICE_PORT);
-	    SocketAddress http = new InetSocketAddress(NetworkConstants.HTTP_PORT);
-	    SocketAddress jaggrab = new InetSocketAddress(NetworkConstants.JAGGRAB_PORT);
+			SocketAddress service = new InetSocketAddress(NetworkConstants.SERVICE_PORT);
+			SocketAddress http = new InetSocketAddress(NetworkConstants.HTTP_PORT);
+			SocketAddress jaggrab = new InetSocketAddress(NetworkConstants.JAGGRAB_PORT);
 
-	    server.start();
-	    server.bind(service, http, jaggrab);
-	} catch (Throwable t) {
-	    logger.log(Level.SEVERE, "Error whilst starting server.", t);
-	}
-    }
-
-    /**
-     * The server's context.
-     */
-    private ServerContext context;
-
-    /**
-     * The {@link ServerBootstrap} for the HTTP listener.
-     */
-    private final ServerBootstrap httpBootstrap = new ServerBootstrap();
-
-    /**
-     * The {@link ServerBootstrap} for the JAGGRAB listener.
-     */
-    private final ServerBootstrap jagGrabBootstrap = new ServerBootstrap();
-
-    /**
-     * The {@link ServerBootstrap} for the service listener.
-     */
-    private final ServerBootstrap serviceBootstrap = new ServerBootstrap();
-
-    /**
-     * The event loop group.
-     */
-    private final EventLoopGroup loopGroup = new NioEventLoopGroup();
-
-    /**
-     * The service manager.
-     */
-    private final ServiceManager serviceManager;
-
-    /**
-     * Creates the Apollo server.
-     * 
-     * @throws Exception If an error occurs whilst creating services.
-     */
-    public Server() throws Exception {
-	logger.info("Starting Apollo...");
-	serviceManager = new ServiceManager();
-    }
-
-    /**
-     * Binds the server to the specified address.
-     * 
-     * @param serviceAddress The service address to bind to.
-     * @param httpAddress The HTTP address to bind to.
-     * @param jagGrabAddress The JAGGRAB address to bind to.
-     */
-    public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
-	logger.info("Binding service listener to address: " + serviceAddress + "...");
-	serviceBootstrap.bind(serviceAddress);
-
-	logger.info("Binding HTTP listener to address: " + httpAddress + "...");
-	try {
-	    httpBootstrap.bind(httpAddress);
-	} catch (Throwable t) {
-	    logger.log(Level.WARNING,
-		    "Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
+			server.start();
+			server.bind(service, http, jaggrab);
+		} catch (Throwable t) {
+			logger.log(Level.SEVERE, "Error whilst starting server.", t);
+		}
 	}
 
-	logger.info("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
-	jagGrabBootstrap.bind(jagGrabAddress);
+	/**
+	 * The server's context.
+	 */
+	private ServerContext context;
 
-	logger.info("Ready for connections.");
-    }
+	/**
+	 * The {@link ServerBootstrap} for the HTTP listener.
+	 */
+	private final ServerBootstrap httpBootstrap = new ServerBootstrap();
 
-    /**
-     * Initialises the server.
-     * 
-     * @param releaseClassName The class name of the current active {@link Release}.
-     * @throws ClassNotFoundException If the release class could not be found.
-     * @throws IllegalAccessException If the release class could not be accessed.
-     * @throws InstantiationException If the release class could not be instantiated.
-     */
-    public void init(String releaseClassName) throws ClassNotFoundException, InstantiationException,
-	    IllegalAccessException {
-	Class<?> clazz = Class.forName(releaseClassName);
-	Release release = (Release) clazz.newInstance();
+	/**
+	 * The {@link ServerBootstrap} for the JAGGRAB listener.
+	 */
+	private final ServerBootstrap jagGrabBootstrap = new ServerBootstrap();
 
-	logger.info("Initialized release #" + release.getReleaseNumber() + ".");
+	/**
+	 * The {@link ServerBootstrap} for the service listener.
+	 */
+	private final ServerBootstrap serviceBootstrap = new ServerBootstrap();
 
-	serviceBootstrap.group(loopGroup);
-	httpBootstrap.group(loopGroup);
-	jagGrabBootstrap.group(loopGroup);
+	/**
+	 * The event loop group.
+	 */
+	private final EventLoopGroup loopGroup = new NioEventLoopGroup();
 
-	context = new ServerContext(release, serviceManager);
-	ApolloHandler handler = new ApolloHandler(context);
+	/**
+	 * The service manager.
+	 */
+	private final ServiceManager serviceManager;
 
-	ChannelInitializer<SocketChannel> serviceInitializer = new ServiceChannelInitializer(handler);
-	serviceBootstrap.channel(NioServerSocketChannel.class);
-	serviceBootstrap.childHandler(serviceInitializer);
+	/**
+	 * Creates the Apollo server.
+	 * 
+	 * @throws Exception If an error occurs whilst creating services.
+	 */
+	public Server() throws Exception {
+		logger.info("Starting Apollo...");
+		serviceManager = new ServiceManager();
+	}
 
-	ChannelInitializer<SocketChannel> httpInitializer = new HttpChannelInitializer(handler);
-	httpBootstrap.channel(NioServerSocketChannel.class);
-	httpBootstrap.childHandler(httpInitializer);
+	/**
+	 * Binds the server to the specified address.
+	 * 
+	 * @param serviceAddress The service address to bind to.
+	 * @param httpAddress The HTTP address to bind to.
+	 * @param jagGrabAddress The JAGGRAB address to bind to.
+	 */
+	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
+		logger.info("Binding service listener to address: " + serviceAddress + "...");
+		serviceBootstrap.bind(serviceAddress);
 
-	ChannelInitializer<SocketChannel> jagGrabInitializer = new JagGrabChannelInitializer(handler);
-	jagGrabBootstrap.channel(NioServerSocketChannel.class);
-	jagGrabBootstrap.childHandler(jagGrabInitializer);
-    }
+		logger.info("Binding HTTP listener to address: " + httpAddress + "...");
+		try {
+			httpBootstrap.bind(httpAddress);
+		} catch (Throwable t) {
+			logger.log(Level.WARNING,
+					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
+		}
 
-    /**
-     * Starts the server.
-     * 
-     * @throws Exception If an error occurs.
-     */
-    public void start() throws Exception {
-	PluginManager manager = new PluginManager(new PluginContext(context));
-	serviceManager.startAll();
+		logger.info("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
+		jagGrabBootstrap.bind(jagGrabAddress);
 
-	int releaseNo = context.getRelease().getReleaseNumber();
-	IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + releaseNo), true);
-	World.getWorld().init(releaseNo, fs, manager);
-    }
+		logger.info("Ready for connections.");
+	}
+
+	/**
+	 * Initialises the server.
+	 * 
+	 * @param releaseClassName The class name of the current active {@link Release}.
+	 * @throws ClassNotFoundException If the release class could not be found.
+	 * @throws IllegalAccessException If the release class could not be accessed.
+	 * @throws InstantiationException If the release class could not be instantiated.
+	 */
+	public void init(String releaseClassName) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
+		Class<?> clazz = Class.forName(releaseClassName);
+		Release release = (Release) clazz.newInstance();
+
+		logger.info("Initialized release #" + release.getReleaseNumber() + ".");
+
+		serviceBootstrap.group(loopGroup);
+		httpBootstrap.group(loopGroup);
+		jagGrabBootstrap.group(loopGroup);
+
+		context = new ServerContext(release, serviceManager);
+		ApolloHandler handler = new ApolloHandler(context);
+
+		ChannelInitializer<SocketChannel> serviceInitializer = new ServiceChannelInitializer(handler);
+		serviceBootstrap.channel(NioServerSocketChannel.class);
+		serviceBootstrap.childHandler(serviceInitializer);
+
+		ChannelInitializer<SocketChannel> httpInitializer = new HttpChannelInitializer(handler);
+		httpBootstrap.channel(NioServerSocketChannel.class);
+		httpBootstrap.childHandler(httpInitializer);
+
+		ChannelInitializer<SocketChannel> jagGrabInitializer = new JagGrabChannelInitializer(handler);
+		jagGrabBootstrap.channel(NioServerSocketChannel.class);
+		jagGrabBootstrap.childHandler(jagGrabInitializer);
+	}
+
+	/**
+	 * Starts the server.
+	 * 
+	 * @throws Exception If an error occurs.
+	 */
+	public void start() throws Exception {
+		PluginManager manager = new PluginManager(new PluginContext(context));
+		serviceManager.startAll();
+
+		int releaseNo = context.getRelease().getReleaseNumber();
+		IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + releaseNo), true);
+		World.getWorld().init(releaseNo, fs, manager);
+	}
 
 }

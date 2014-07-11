@@ -6,9 +6,9 @@ import org.apollo.security.PlayerCredentials;
 
 public final class JdbcPlayerLoader implements PlayerLoader {
 
-    @Override
-    public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception {
-	return null;
-    }
+	@Override
+	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception {
+		return null;
+	}
 
 }

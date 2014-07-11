@@ -11,74 +11,74 @@ import org.apollo.net.meta.PacketType;
  */
 public final class GamePacket {
 
-    /**
-     * The length.
-     */
-    private final int length;
+	/**
+	 * The length.
+	 */
+	private final int length;
 
-    /**
-     * The opcode.
-     */
-    private final int opcode;
+	/**
+	 * The opcode.
+	 */
+	private final int opcode;
 
-    /**
-     * The payload.
-     */
-    private final ByteBuf payload;
+	/**
+	 * The payload.
+	 */
+	private final ByteBuf payload;
 
-    /**
-     * The packet type.
-     */
-    private final PacketType type;
+	/**
+	 * The packet type.
+	 */
+	private final PacketType type;
 
-    /**
-     * Creates the game packet.
-     * 
-     * @param opcode The opcode.
-     * @param type The packet type.
-     * @param payload The payload.
-     */
-    public GamePacket(int opcode, PacketType type, ByteBuf payload) {
-	this.opcode = opcode;
-	this.type = type;
-	length = payload.readableBytes();
-	this.payload = payload;
-    }
+	/**
+	 * Creates the game packet.
+	 * 
+	 * @param opcode The opcode.
+	 * @param type The packet type.
+	 * @param payload The payload.
+	 */
+	public GamePacket(int opcode, PacketType type, ByteBuf payload) {
+		this.opcode = opcode;
+		this.type = type;
+		length = payload.readableBytes();
+		this.payload = payload;
+	}
 
-    /**
-     * Gets the payload length.
-     * 
-     * @return The payload length.
-     */
-    public int getLength() {
-	return length;
-    }
+	/**
+	 * Gets the payload length.
+	 * 
+	 * @return The payload length.
+	 */
+	public int getLength() {
+		return length;
+	}
 
-    /**
-     * Gets the opcode.
-     * 
-     * @return The opcode.
-     */
-    public int getOpcode() {
-	return opcode;
-    }
+	/**
+	 * Gets the opcode.
+	 * 
+	 * @return The opcode.
+	 */
+	public int getOpcode() {
+		return opcode;
+	}
 
-    /**
-     * Gets the payload.
-     * 
-     * @return The payload.
-     */
-    public ByteBuf getPayload() {
-	return payload;
-    }
+	/**
+	 * Gets the payload.
+	 * 
+	 * @return The payload.
+	 */
+	public ByteBuf getPayload() {
+		return payload;
+	}
 
-    /**
-     * Gets the packet type.
-     * 
-     * @return The packet type.
-     */
-    public PacketType getType() {
-	return type;
-    }
+	/**
+	 * Gets the packet type.
+	 * 
+	 * @return The packet type.
+	 */
+	public PacketType getType() {
+		return type;
+	}
 
 }

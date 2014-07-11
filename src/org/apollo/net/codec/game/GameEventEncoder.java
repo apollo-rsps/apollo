@@ -16,27 +16,27 @@ import org.apollo.net.release.Release;
  */
 public final class GameEventEncoder extends MessageToMessageEncoder<Event> {
 
-    /**
-     * The current release.
-     */
-    private final Release release;
+	/**
+	 * The current release.
+	 */
+	private final Release release;
 
-    /**
-     * Creates the game event encoder with the specified release.
-     * 
-     * @param release The release.
-     */
-    public GameEventEncoder(Release release) {
-	this.release = release;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected void encode(ChannelHandlerContext ctx, Event event, List<Object> out) {
-	EventEncoder<Event> encoder = (EventEncoder<Event>) release.getEventEncoder(event.getClass());
-	if (encoder != null) {
-	    out.add(encoder.encode(event));
+	/**
+	 * Creates the game event encoder with the specified release.
+	 * 
+	 * @param release The release.
+	 */
+	public GameEventEncoder(Release release) {
+		this.release = release;
 	}
-    }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void encode(ChannelHandlerContext ctx, Event event, List<Object> out) {
+		EventEncoder<Event> encoder = (EventEncoder<Event>) release.getEventEncoder(event.getClass());
+		if (encoder != null) {
+			out.add(encoder.encode(event));
+		}
+	}
 
 }

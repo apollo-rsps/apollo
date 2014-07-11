@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class ButtonEvent extends Event {
 
-    /**
-     * The widget id.
-     */
-    private final int widgetId;
+	/**
+	 * The widget id.
+	 */
+	private final int widgetId;
 
-    /**
-     * Creates the button event.
-     * 
-     * @param widgetId The widget id.
-     */
-    public ButtonEvent(int widgetId) {
-	this.widgetId = widgetId;
-    }
+	/**
+	 * Creates the button event.
+	 * 
+	 * @param widgetId The widget id.
+	 */
+	public ButtonEvent(int widgetId) {
+		this.widgetId = widgetId;
+	}
 
-    /**
-     * Gets the widget id.
-     * 
-     * @return The widget id.
-     */
-    public int getWidgetId() {
-	return widgetId;
-    }
+	/**
+	 * Gets the widget id.
+	 * 
+	 * @return The widget id.
+	 */
+	public int getWidgetId() {
+		return widgetId;
+	}
 
 }

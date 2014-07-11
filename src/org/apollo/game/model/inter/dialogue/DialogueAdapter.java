@@ -7,19 +7,19 @@ package org.apollo.game.model.inter.dialogue;
  */
 public abstract class DialogueAdapter implements DialogueListener {
 
-    @Override
-    public boolean buttonClicked(int button) {
-	return false;
-    }
+	@Override
+	public boolean buttonClicked(int button) {
+		return false;
+	}
 
-    @Override
-    public void continued() {
+	@Override
+	public void continued() {
 
-    }
+	}
 
-    @Override
-    public void interfaceClosed() {
+	@Override
+	public void interfaceClosed() {
 
-    }
+	}
 
 }

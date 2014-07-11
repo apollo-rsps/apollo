@@ -15,18 +15,18 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class ItemOnObjectEventDecoder extends EventDecoder<ItemOnObjectEvent> {
 
-    @Override
-    public ItemOnObjectEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
+	@Override
+	public ItemOnObjectEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
 
-	int objectId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	int interfaceId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	int itemId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	int y = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	int slot = (int) reader.getUnsigned(DataType.SHORT);
-	int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+		int objectId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		int interfaceId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		int itemId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		int y = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		int slot = (int) reader.getUnsigned(DataType.SHORT);
+		int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
 
-	return new ItemOnObjectEvent(interfaceId, itemId, slot, objectId, x, y);
-    }
+		return new ItemOnObjectEvent(interfaceId, itemId, slot, objectId, x, y);
+	}
 
 }

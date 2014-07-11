@@ -11,9 +11,9 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class ClosedInterfaceEventDecoder extends EventDecoder<ClosedInterfaceEvent> {
 
-    @Override
-    public ClosedInterfaceEvent decode(GamePacket packet) {
-	return new ClosedInterfaceEvent();
-    }
+	@Override
+	public ClosedInterfaceEvent decode(GamePacket packet) {
+		return new ClosedInterfaceEvent();
+	}
 
 }

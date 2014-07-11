@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class FocusUpdateEvent extends Event {
 
-    /**
-     * Indicates whether the client is focused or not.
-     */
-    private final boolean focused;
+	/**
+	 * Indicates whether the client is focused or not.
+	 */
+	private final boolean focused;
 
-    /**
-     * Creates a new focus update event.
-     * 
-     * @param update The data received.
-     */
-    public FocusUpdateEvent(boolean focused) {
-	this.focused = focused;
-    }
+	/**
+	 * Creates a new focus update event.
+	 * 
+	 * @param update The data received.
+	 */
+	public FocusUpdateEvent(boolean focused) {
+		this.focused = focused;
+	}
 
-    /**
-     * Indicates whether or not the client is focused.
-     * 
-     * @return {@code true} if the client is focused, otherwise {@code false}.
-     */
-    public boolean isFocused() {
-	return focused;
-    }
+	/**
+	 * Indicates whether or not the client is focused.
+	 * 
+	 * @return {@code true} if the client is focused, otherwise {@code false}.
+	 */
+	public boolean isFocused() {
+		return focused;
+	}
 
 }

@@ -15,11 +15,11 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class FirstPlayerActionEventDecoder extends EventDecoder<FirstPlayerActionEvent> {
 
-    @Override
-    public FirstPlayerActionEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
-	int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-	return new FirstPlayerActionEvent(index);
-    }
+	@Override
+	public FirstPlayerActionEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
+		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+		return new FirstPlayerActionEvent(index);
+	}
 
 }

@@ -7,52 +7,52 @@ package org.apollo.net.codec.game;
  */
 public enum DataType {
 
-    /**
-     * A byte.
-     */
-    BYTE(1),
+	/**
+	 * A byte.
+	 */
+	BYTE(1),
 
-    /**
-     * An integer.
-     */
-    INT(4),
+	/**
+	 * An integer.
+	 */
+	INT(4),
 
-    /**
-     * A long.
-     */
-    LONG(8),
+	/**
+	 * A long.
+	 */
+	LONG(8),
 
-    /**
-     * A short.
-     */
-    SHORT(2),
+	/**
+	 * A short.
+	 */
+	SHORT(2),
 
-    /**
-     * A 'tri byte' - a group of three bytes.
-     */
-    TRI_BYTE(3);
+	/**
+	 * A 'tri byte' - a group of three bytes.
+	 */
+	TRI_BYTE(3);
 
-    /**
-     * The number of bytes this type occupies.
-     */
-    private final int bytes;
+	/**
+	 * The number of bytes this type occupies.
+	 */
+	private final int bytes;
 
-    /**
-     * Creates a data type.
-     * 
-     * @param bytes The number of bytes it occupies.
-     */
-    private DataType(int bytes) {
-	this.bytes = bytes;
-    }
+	/**
+	 * Creates a data type.
+	 * 
+	 * @param bytes The number of bytes it occupies.
+	 */
+	private DataType(int bytes) {
+		this.bytes = bytes;
+	}
 
-    /**
-     * Gets the number of bytes the data type occupies.
-     * 
-     * @return The number of bytes.
-     */
-    public int getBytes() {
-	return bytes;
-    }
+	/**
+	 * Gets the number of bytes the data type occupies.
+	 * 
+	 * @return The number of bytes.
+	 */
+	public int getBytes() {
+		return bytes;
+	}
 
 }

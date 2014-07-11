@@ -15,15 +15,15 @@ import org.apollo.net.release.EventDecoder;
  */
 final class FourthItemOptionEventDecoder extends EventDecoder<FourthItemOptionEvent> {
 
-    @Override
-    public FourthItemOptionEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
+	@Override
+	public FourthItemOptionEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
 
-	int interfaceId = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-	int slot = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE);
-	int id = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
+		int interfaceId = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+		int slot = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE);
+		int id = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
 
-	return new FourthItemOptionEvent(interfaceId, id, slot);
-    }
+		return new FourthItemOptionEvent(interfaceId, id, slot);
+	}
 
 }

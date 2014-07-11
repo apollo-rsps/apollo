@@ -7,64 +7,64 @@ package org.apollo.game.event.impl;
  */
 public final class ItemOnItemEvent extends InventoryItemEvent {
 
-    /**
-     * The id of the target item.
-     */
-    private final int targetId;
+	/**
+	 * The id of the target item.
+	 */
+	private final int targetId;
 
-    /**
-     * The interface id of the target item.
-     */
-    private final int targetInterface;
+	/**
+	 * The interface id of the target item.
+	 */
+	private final int targetInterface;
 
-    /**
-     * The slot of the target item.
-     */
-    private final int targetSlot;
+	/**
+	 * The slot of the target item.
+	 */
+	private final int targetSlot;
 
-    /**
-     * Creates a new item-on-item event.
-     * 
-     * @param usedInterface The interface id of the used item.
-     * @param usedId The id of the used item.
-     * @param usedSlot The slot of the target item.
-     * @param targetInterface The interface id of the target item.
-     * @param targetId The id of the target item.
-     * @param targetSlot The slot of the target item.
-     */
-    public ItemOnItemEvent(int usedInterface, int usedId, int usedSlot, int targetInterface, int targetId,
-	    int targetSlot) {
-	super(0, usedInterface, usedId, usedSlot);
-	this.targetInterface = targetInterface;
-	this.targetSlot = targetSlot;
-	this.targetId = targetId;
-    }
+	/**
+	 * Creates a new item-on-item event.
+	 * 
+	 * @param usedInterface The interface id of the used item.
+	 * @param usedId The id of the used item.
+	 * @param usedSlot The slot of the target item.
+	 * @param targetInterface The interface id of the target item.
+	 * @param targetId The id of the target item.
+	 * @param targetSlot The slot of the target item.
+	 */
+	public ItemOnItemEvent(int usedInterface, int usedId, int usedSlot, int targetInterface, int targetId,
+			int targetSlot) {
+		super(0, usedInterface, usedId, usedSlot);
+		this.targetInterface = targetInterface;
+		this.targetSlot = targetSlot;
+		this.targetId = targetId;
+	}
 
-    /**
-     * Gets the id of the target item.
-     * 
-     * @return The target item's interface id.
-     */
-    public int getTargetId() {
-	return targetId;
-    }
+	/**
+	 * Gets the id of the target item.
+	 * 
+	 * @return The target item's interface id.
+	 */
+	public int getTargetId() {
+		return targetId;
+	}
 
-    /**
-     * Gets the interface id of the target item.
-     * 
-     * @return The target item's interface id.
-     */
-    public int getTargetInterfaceId() {
-	return targetInterface;
-    }
+	/**
+	 * Gets the interface id of the target item.
+	 * 
+	 * @return The target item's interface id.
+	 */
+	public int getTargetInterfaceId() {
+		return targetInterface;
+	}
 
-    /**
-     * Gets the slot of the target item.
-     * 
-     * @return The slot of the target item.
-     */
-    public int getTargetSlot() {
-	return targetSlot;
-    }
+	/**
+	 * Gets the slot of the target item.
+	 * 
+	 * @return The slot of the target item.
+	 */
+	public int getTargetSlot() {
+		return targetSlot;
+	}
 
 }

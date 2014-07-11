@@ -9,43 +9,43 @@ import org.apollo.game.event.Event;
  */
 public final class OpenInterfaceSidebarEvent extends Event {
 
-    /**
-     * The interface id.
-     */
-    private final int interfaceId;
+	/**
+	 * The interface id.
+	 */
+	private final int interfaceId;
 
-    /**
-     * The sidebar id.
-     */
-    private final int sidebarId;
+	/**
+	 * The sidebar id.
+	 */
+	private final int sidebarId;
 
-    /**
-     * Creates the open interface sidebar event.
-     * 
-     * @param interfaceId The interface id.
-     * @param sidebarId The sidebar id.
-     */
-    public OpenInterfaceSidebarEvent(int interfaceId, int sidebarId) {
-	this.interfaceId = interfaceId;
-	this.sidebarId = sidebarId;
-    }
+	/**
+	 * Creates the open interface sidebar event.
+	 * 
+	 * @param interfaceId The interface id.
+	 * @param sidebarId The sidebar id.
+	 */
+	public OpenInterfaceSidebarEvent(int interfaceId, int sidebarId) {
+		this.interfaceId = interfaceId;
+		this.sidebarId = sidebarId;
+	}
 
-    /**
-     * Gets the interface id.
-     * 
-     * @return The interface id.
-     */
-    public int getInterfaceId() {
-	return interfaceId;
-    }
+	/**
+	 * Gets the interface id.
+	 * 
+	 * @return The interface id.
+	 */
+	public int getInterfaceId() {
+		return interfaceId;
+	}
 
-    /**
-     * Gets the sidebar id.
-     * 
-     * @return The sidebar id.
-     */
-    public int getSidebarId() {
-	return sidebarId;
-    }
+	/**
+	 * Gets the sidebar id.
+	 * 
+	 * @return The sidebar id.
+	 */
+	public int getSidebarId() {
+		return sidebarId;
+	}
 
 }

@@ -10,27 +10,27 @@ import org.apollo.game.model.Appearance;
  */
 public final class PlayerDesignEvent extends Event {
 
-    /**
-     * The appearance.
-     */
-    private final Appearance appearance;
+	/**
+	 * The appearance.
+	 */
+	private final Appearance appearance;
 
-    /**
-     * Creates the player design event.
-     * 
-     * @param appearance The appearance.
-     */
-    public PlayerDesignEvent(Appearance appearance) {
-	this.appearance = appearance;
-    }
+	/**
+	 * Creates the player design event.
+	 * 
+	 * @param appearance The appearance.
+	 */
+	public PlayerDesignEvent(Appearance appearance) {
+		this.appearance = appearance;
+	}
 
-    /**
-     * Gets the appearance.
-     * 
-     * @return The appearance.
-     */
-    public Appearance getAppearance() {
-	return appearance;
-    }
+	/**
+	 * Gets the appearance.
+	 * 
+	 * @return The appearance.
+	 */
+	public Appearance getAppearance() {
+		return appearance;
+	}
 
 }

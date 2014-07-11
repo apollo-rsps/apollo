@@ -13,15 +13,15 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class PrivacyOptionEventDecoder extends EventDecoder<PrivacyOptionEvent> {
 
-    @Override
-    public PrivacyOptionEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
+	@Override
+	public PrivacyOptionEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
 
-	int publicChatState = (int) reader.getUnsigned(DataType.BYTE);
-	int privateChatState = (int) reader.getUnsigned(DataType.BYTE);
-	int tradeChatState = (int) reader.getUnsigned(DataType.BYTE);
+		int publicChatState = (int) reader.getUnsigned(DataType.BYTE);
+		int privateChatState = (int) reader.getUnsigned(DataType.BYTE);
+		int tradeChatState = (int) reader.getUnsigned(DataType.BYTE);
 
-	return new PrivacyOptionEvent(publicChatState, privateChatState, tradeChatState);
-    }
+		return new PrivacyOptionEvent(publicChatState, privateChatState, tradeChatState);
+	}
 
 }

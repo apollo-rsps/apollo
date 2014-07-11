@@ -15,12 +15,12 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class RegionChangeEventEncoder extends EventEncoder<RegionChangeEvent> {
 
-    @Override
-    public GamePacket encode(RegionChangeEvent event) {
-	GamePacketBuilder builder = new GamePacketBuilder(222);
-	builder.put(DataType.SHORT, event.getPosition().getCentralSectorY());
-	builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getPosition().getCentralSectorX());
-	return builder.toGamePacket();
-    }
+	@Override
+	public GamePacket encode(RegionChangeEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(222);
+		builder.put(DataType.SHORT, event.getPosition().getCentralSectorY());
+		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, event.getPosition().getCentralSectorX());
+		return builder.toGamePacket();
+	}
 
 }

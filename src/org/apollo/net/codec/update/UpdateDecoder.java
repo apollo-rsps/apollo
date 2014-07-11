@@ -16,16 +16,16 @@ import org.apollo.net.codec.update.OnDemandRequest.Priority;
  */
 public final class UpdateDecoder extends ByteToMessageDecoder {
 
-    @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
-	if (buffer.readableBytes() >= 4) {
-	    int type = buffer.readUnsignedByte() + 1;
-	    int file = buffer.readUnsignedShort();
-	    Priority priority = Priority.valueOf(buffer.readUnsignedByte());
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+		if (buffer.readableBytes() >= 4) {
+			int type = buffer.readUnsignedByte() + 1;
+			int file = buffer.readUnsignedShort();
+			Priority priority = Priority.valueOf(buffer.readUnsignedByte());
 
-	    FileDescriptor desc = new FileDescriptor(type, file);
-	    out.add(new OnDemandRequest(desc, priority));
+			FileDescriptor desc = new FileDescriptor(type, file);
+			out.add(new OnDemandRequest(desc, priority));
+		}
 	}
-    }
 
 }

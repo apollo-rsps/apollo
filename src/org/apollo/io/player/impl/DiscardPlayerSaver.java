@@ -10,9 +10,9 @@ import org.apollo.io.player.PlayerSaver;
  */
 public final class DiscardPlayerSaver implements PlayerSaver {
 
-    @Override
-    public void savePlayer(Player player) {
-	/* discard player */
-    }
+	@Override
+	public void savePlayer(Player player) {
+		/* discard player */
+	}
 
 }

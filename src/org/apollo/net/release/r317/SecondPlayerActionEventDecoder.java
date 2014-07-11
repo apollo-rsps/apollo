@@ -14,11 +14,11 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class SecondPlayerActionEventDecoder extends EventDecoder<SecondPlayerActionEvent> {
 
-    @Override
-    public SecondPlayerActionEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
-	int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	return new SecondPlayerActionEvent(index);
-    }
+	@Override
+	public SecondPlayerActionEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
+		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		return new SecondPlayerActionEvent(index);
+	}
 
 }

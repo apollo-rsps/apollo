@@ -13,11 +13,11 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class DisplayCrossbonesEventEncoder extends EventEncoder<DisplayCrossbonesEvent> {
 
-    @Override
-    public GamePacket encode(DisplayCrossbonesEvent event) {
-	GamePacketBuilder builder = new GamePacketBuilder(233);
-	builder.put(DataType.BYTE, event.isDisplayed() ? 1 : 0);
-	return builder.toGamePacket();
-    }
+	@Override
+	public GamePacket encode(DisplayCrossbonesEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(233);
+		builder.put(DataType.BYTE, event.isDisplayed() ? 1 : 0);
+		return builder.toGamePacket();
+	}
 
 }

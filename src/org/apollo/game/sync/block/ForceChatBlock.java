@@ -8,27 +8,27 @@ package org.apollo.game.sync.block;
  */
 public final class ForceChatBlock extends SynchronizationBlock {
 
-    /**
-     * The chat text.
-     */
-    private final String message;
+	/**
+	 * The chat text.
+	 */
+	private final String message;
 
-    /**
-     * Creates the force chat block.
-     * 
-     * @param message The message.
-     */
-    ForceChatBlock(String message) {
-	this.message = message;
-    }
+	/**
+	 * Creates the force chat block.
+	 * 
+	 * @param message The message.
+	 */
+	ForceChatBlock(String message) {
+		this.message = message;
+	}
 
-    /**
-     * Gets the message being sent by this block.
-     * 
-     * @return The message.
-     */
-    public String getMessage() {
-	return message;
-    }
+	/**
+	 * Gets the message being sent by this block.
+	 * 
+	 * @return The message.
+	 */
+	public String getMessage() {
+		return message;
+	}
 
 }

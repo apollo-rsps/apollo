@@ -15,14 +15,14 @@ import org.apollo.net.release.EventEncoder;
  */
 final class SetWidgetNpcModelEventEncoder extends EventEncoder<SetWidgetNpcModelEvent> {
 
-    @Override
-    public GamePacket encode(SetWidgetNpcModelEvent event) {
-	GamePacketBuilder builder = new GamePacketBuilder(162);
+	@Override
+	public GamePacket encode(SetWidgetNpcModelEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(162);
 
-	builder.put(DataType.SHORT, DataTransformation.ADD, event.getModelId());
-	builder.put(DataType.SHORT, DataOrder.LITTLE, event.getInterfaceId());
+		builder.put(DataType.SHORT, DataTransformation.ADD, event.getModelId());
+		builder.put(DataType.SHORT, DataOrder.LITTLE, event.getInterfaceId());
 
-	return builder.toGamePacket();
-    }
+		return builder.toGamePacket();
+	}
 
 }

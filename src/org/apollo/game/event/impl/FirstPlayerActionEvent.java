@@ -7,13 +7,13 @@ package org.apollo.game.event.impl;
  */
 public final class FirstPlayerActionEvent extends PlayerActionEvent {
 
-    /**
-     * Creates a first player action event.
-     * 
-     * @param playerIndex The index of the clicked player.
-     */
-    public FirstPlayerActionEvent(int playerIndex) {
-	super(1, playerIndex);
-    }
+	/**
+	 * Creates a first player action event.
+	 * 
+	 * @param playerIndex The index of the clicked player.
+	 */
+	public FirstPlayerActionEvent(int playerIndex) {
+		super(1, playerIndex);
+	}
 
 }
