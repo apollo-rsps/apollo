@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class AddIgnoreEvent extends Event {
 
-    /**
-     * The username of the ignored player.
-     */
-    private final String username;
+	/**
+	 * The username of the ignored player.
+	 */
+	private final String username;
 
-    /**
-     * Creates a new ignore player event.
-     * 
-     * @param username The ignored player's username.
-     */
-    public AddIgnoreEvent(String username) {
-	this.username = username;
-    }
+	/**
+	 * Creates a new ignore player event.
+	 * 
+	 * @param username The ignored player's username.
+	 */
+	public AddIgnoreEvent(String username) {
+		this.username = username;
+	}
 
-    /**
-     * Gets the username of the ignored player.
-     * 
-     * @return The username.
-     */
-    public String getUsername() {
-	return username;
-    }
+	/**
+	 * Gets the username of the ignored player.
+	 * 
+	 * @return The username.
+	 */
+	public String getUsername() {
+		return username;
+	}
 
 }

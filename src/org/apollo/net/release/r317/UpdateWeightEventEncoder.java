@@ -13,11 +13,11 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class UpdateWeightEventEncoder extends EventEncoder<UpdateWeightEvent> {
 
-    @Override
-    public GamePacket encode(UpdateWeightEvent event) {
-	GamePacketBuilder builder = new GamePacketBuilder(240);
-	builder.put(DataType.SHORT, event.getWeight());
-	return builder.toGamePacket();
-    }
+	@Override
+	public GamePacket encode(UpdateWeightEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(240);
+		builder.put(DataType.SHORT, event.getWeight());
+		return builder.toGamePacket();
+	}
 
 }

@@ -7,15 +7,15 @@ package org.apollo.game.event.impl;
  */
 public final class SecondItemOptionEvent extends ItemOptionEvent {
 
-    /**
-     * Creates the second item option event.
-     * 
-     * @param interfaceId The interface id.
-     * @param id The id.
-     * @param slot The slot.
-     */
-    public SecondItemOptionEvent(int interfaceId, int id, int slot) {
-	super(2, interfaceId, id, slot);
-    }
+	/**
+	 * Creates the second item option event.
+	 * 
+	 * @param interfaceId The interface id.
+	 * @param id The id.
+	 * @param slot The slot.
+	 */
+	public SecondItemOptionEvent(int interfaceId, int id, int slot) {
+		super(2, interfaceId, id, slot);
+	}
 
 }

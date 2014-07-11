@@ -9,27 +9,27 @@ import org.apollo.game.model.Animation;
  */
 public final class AnimationBlock extends SynchronizationBlock {
 
-    /**
-     * The animation.
-     */
-    private final Animation animation;
+	/**
+	 * The animation.
+	 */
+	private final Animation animation;
 
-    /**
-     * Creates the animation block.
-     * 
-     * @param animation The animation.
-     */
-    AnimationBlock(Animation animation) {
-	this.animation = animation;
-    }
+	/**
+	 * Creates the animation block.
+	 * 
+	 * @param animation The animation.
+	 */
+	AnimationBlock(Animation animation) {
+		this.animation = animation;
+	}
 
-    /**
-     * Gets the {@link Animation}.
-     * 
-     * @return The animation.
-     */
-    public Animation getAnimation() {
-	return animation;
-    }
+	/**
+	 * Gets the {@link Animation}.
+	 * 
+	 * @return The animation.
+	 */
+	public Animation getAnimation() {
+		return animation;
+	}
 
 }

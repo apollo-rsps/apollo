@@ -19,35 +19,35 @@ import org.apollo.net.codec.update.UpdateEncoder;
  */
 public final class HandshakeDecoder extends ByteToMessageDecoder {
 
-    @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
-	if (buffer.isReadable()) {
-	    int id = buffer.readUnsignedByte();
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+		if (buffer.isReadable()) {
+			int id = buffer.readUnsignedByte();
 
-	    switch (id) {
-	    case HandshakeConstants.SERVICE_GAME:
-		ctx.pipeline().addFirst("loginEncoder", new LoginEncoder());
-		ctx.pipeline().addAfter("handshakeDecoder", "loginDecoder", new LoginDecoder());
-		break;
-	    case HandshakeConstants.SERVICE_UPDATE:
-		ctx.pipeline().addFirst("updateEncoder", new UpdateEncoder());
-		ctx.pipeline().addBefore("handler", "updateDecoder", new UpdateDecoder());
-		ByteBuf buf = ctx.alloc().buffer(8);
-		buf.writeLong(0);
-		ctx.channel().writeAndFlush(buf);
-		break;
-	    default:
-		throw new IllegalArgumentException("Invalid service id.");
-	    }
+			switch (id) {
+			case HandshakeConstants.SERVICE_GAME:
+				ctx.pipeline().addFirst("loginEncoder", new LoginEncoder());
+				ctx.pipeline().addAfter("handshakeDecoder", "loginDecoder", new LoginDecoder());
+				break;
+			case HandshakeConstants.SERVICE_UPDATE:
+				ctx.pipeline().addFirst("updateEncoder", new UpdateEncoder());
+				ctx.pipeline().addBefore("handler", "updateDecoder", new UpdateDecoder());
+				ByteBuf buf = ctx.alloc().buffer(8);
+				buf.writeLong(0);
+				ctx.channel().writeAndFlush(buf);
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid service id.");
+			}
 
-	    ctx.pipeline().remove(this);
-	    HandshakeMessage message = new HandshakeMessage(id);
+			ctx.pipeline().remove(this);
+			HandshakeMessage message = new HandshakeMessage(id);
 
-	    out.add(message);
-	    if (buffer.isReadable()) {
-		out.add(buffer.readBytes(buffer.readableBytes()));
-	    }
+			out.add(message);
+			if (buffer.isReadable()) {
+				out.add(buffer.readBytes(buffer.readableBytes()));
+			}
+		}
 	}
-    }
 
 }

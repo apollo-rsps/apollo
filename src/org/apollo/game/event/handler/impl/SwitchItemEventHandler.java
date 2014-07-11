@@ -16,32 +16,32 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
  */
 public final class SwitchItemEventHandler extends EventHandler<SwitchItemEvent> {
 
-    @Override
-    public void handle(EventHandlerContext ctx, Player player, SwitchItemEvent event) {
-	Inventory inventory;
-	boolean insertPermitted = false;
+	@Override
+	public void handle(EventHandlerContext ctx, Player player, SwitchItemEvent event) {
+		Inventory inventory;
+		boolean insertPermitted = false;
 
-	switch (event.getInterfaceId()) {
-	case SynchronizationInventoryListener.INVENTORY_ID:
-	case BankConstants.SIDEBAR_INVENTORY_ID:
-	    inventory = player.getInventory();
-	    break;
-	case SynchronizationInventoryListener.EQUIPMENT_ID:
-	    inventory = player.getEquipment();
-	    break;
-	case BankConstants.BANK_INVENTORY_ID:
-	    inventory = player.getBank();
-	    insertPermitted = true;
-	    break;
-	default:
-	    return; // not a known inventory, ignore
-	}
+		switch (event.getInterfaceId()) {
+		case SynchronizationInventoryListener.INVENTORY_ID:
+		case BankConstants.SIDEBAR_INVENTORY_ID:
+			inventory = player.getInventory();
+			break;
+		case SynchronizationInventoryListener.EQUIPMENT_ID:
+			inventory = player.getEquipment();
+			break;
+		case BankConstants.BANK_INVENTORY_ID:
+			inventory = player.getBank();
+			insertPermitted = true;
+			break;
+		default:
+			return; // not a known inventory, ignore
+		}
 
-	if (event.getOldSlot() >= 0 && event.getNewSlot() >= 0 && event.getOldSlot() < inventory.capacity()
-		&& event.getNewSlot() < inventory.capacity()) {
-	    // events must be fired for it to work if a sidebar inventory overlay is used
-	    inventory.swap(insertPermitted ? event.isInserting() : false, event.getOldSlot(), event.getNewSlot());
+		if (event.getOldSlot() >= 0 && event.getNewSlot() >= 0 && event.getOldSlot() < inventory.capacity()
+				&& event.getNewSlot() < inventory.capacity()) {
+			// events must be fired for it to work if a sidebar inventory overlay is used
+			inventory.swap(insertPermitted ? event.isInserting() : false, event.getOldSlot(), event.getNewSlot());
+		}
 	}
-    }
 
 }

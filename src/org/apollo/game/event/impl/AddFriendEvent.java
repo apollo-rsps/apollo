@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class AddFriendEvent extends Event {
 
-    /**
-     * The username of the befriended player.
-     */
-    private final String username;
+	/**
+	 * The username of the befriended player.
+	 */
+	private final String username;
 
-    /**
-     * Creates a new befriend user event.
-     * 
-     * @param username The befriended player's username.
-     */
-    public AddFriendEvent(String username) {
-	this.username = username;
-    }
+	/**
+	 * Creates a new befriend user event.
+	 * 
+	 * @param username The befriended player's username.
+	 */
+	public AddFriendEvent(String username) {
+		this.username = username;
+	}
 
-    /**
-     * Gets the username of the befriended player.
-     * 
-     * @return The username.
-     */
-    public String getUsername() {
-	return username;
-    }
+	/**
+	 * Gets the username of the befriended player.
+	 * 
+	 * @return The username.
+	 */
+	public String getUsername() {
+		return username;
+	}
 
 }

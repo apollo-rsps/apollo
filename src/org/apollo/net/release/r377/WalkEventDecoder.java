@@ -16,34 +16,34 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class WalkEventDecoder extends EventDecoder<WalkEvent> {
 
-    @Override
-    public WalkEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
+	@Override
+	public WalkEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
 
-	int length = packet.getLength();
-	if (packet.getOpcode() == 213) {
-	    length -= 14; // strip off anti-cheat data
+		int length = packet.getLength();
+		if (packet.getOpcode() == 213) {
+			length -= 14; // strip off anti-cheat data
+		}
+
+		int steps = (length - 5) / 2;
+		int[][] path = new int[steps][2];
+
+		int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+		boolean run = reader.getUnsigned(DataType.BYTE) == 1;
+		int y = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+
+		for (int i = 0; i < steps; i++) {
+			path[i][0] = (int) reader.getSigned(DataType.BYTE);
+			path[i][1] = (int) reader.getSigned(DataType.BYTE, DataTransformation.SUBTRACT);
+		}
+
+		Position[] positions = new Position[steps + 1];
+		positions[0] = new Position(x, y);
+		for (int i = 0; i < steps; i++) {
+			positions[i + 1] = new Position(path[i][0] + x, path[i][1] + y);
+		}
+
+		return new WalkEvent(positions, run);
 	}
-
-	int steps = (length - 5) / 2;
-	int[][] path = new int[steps][2];
-
-	int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-	boolean run = reader.getUnsigned(DataType.BYTE) == 1;
-	int y = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-
-	for (int i = 0; i < steps; i++) {
-	    path[i][0] = (int) reader.getSigned(DataType.BYTE);
-	    path[i][1] = (int) reader.getSigned(DataType.BYTE, DataTransformation.SUBTRACT);
-	}
-
-	Position[] positions = new Position[steps + 1];
-	positions[0] = new Position(x, y);
-	for (int i = 0; i < steps; i++) {
-	    positions[i + 1] = new Position(path[i][0] + x, path[i][1] + y);
-	}
-
-	return new WalkEvent(positions, run);
-    }
 
 }

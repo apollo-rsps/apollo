@@ -9,27 +9,27 @@ import org.apollo.game.event.Event;
  */
 public final class DisplayTabInterfaceEvent extends Event {
 
-    /**
-     * The tab index.
-     */
-    private final int tab;
+	/**
+	 * The tab index.
+	 */
+	private final int tab;
 
-    /**
-     * Creates a new display tab interface event.
-     * 
-     * @param tab The index of the tab to display.
-     */
-    public DisplayTabInterfaceEvent(int tab) {
-	this.tab = tab;
-    }
+	/**
+	 * Creates a new display tab interface event.
+	 * 
+	 * @param tab The index of the tab to display.
+	 */
+	public DisplayTabInterfaceEvent(int tab) {
+		this.tab = tab;
+	}
 
-    /**
-     * Gets the index of the tab to display.
-     * 
-     * @return The tab index.
-     */
-    public int getTab() {
-	return tab;
-    }
+	/**
+	 * Gets the index of the tab to display.
+	 * 
+	 * @return The tab index.
+	 */
+	public int getTab() {
+		return tab;
+	}
 
 }

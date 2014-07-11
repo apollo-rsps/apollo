@@ -13,19 +13,19 @@ import java.util.List;
  */
 public final class LoginEncoder extends MessageToMessageEncoder<LoginResponse> {
 
-    public LoginEncoder() {
-	super(LoginResponse.class);
-    }
-
-    @Override
-    protected void encode(ChannelHandlerContext ctx, LoginResponse response, List<Object> out) {
-	ByteBuf buffer = ctx.alloc().buffer(3);
-	buffer.writeByte(response.getStatus());
-	if (response.getStatus() == LoginConstants.STATUS_OK) {
-	    buffer.writeByte(response.getRights());
-	    buffer.writeByte(response.isFlagged() ? 1 : 0);
+	public LoginEncoder() {
+		super(LoginResponse.class);
 	}
-	out.add(buffer);
-    }
+
+	@Override
+	protected void encode(ChannelHandlerContext ctx, LoginResponse response, List<Object> out) {
+		ByteBuf buffer = ctx.alloc().buffer(3);
+		buffer.writeByte(response.getStatus());
+		if (response.getStatus() == LoginConstants.STATUS_OK) {
+			buffer.writeByte(response.getRights());
+			buffer.writeByte(response.isFlagged() ? 1 : 0);
+		}
+		out.add(buffer);
+	}
 
 }

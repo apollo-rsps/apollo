@@ -14,11 +14,11 @@ import org.apollo.util.NameUtil;
  */
 public final class RemoveIgnoreEventDecoder extends EventDecoder<RemoveIgnoreEvent> {
 
-    @Override
-    public RemoveIgnoreEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
-	String username = NameUtil.decodeBase37(reader.getSigned(DataType.LONG));
-	return new RemoveIgnoreEvent(username);
-    }
+	@Override
+	public RemoveIgnoreEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
+		String username = NameUtil.decodeBase37(reader.getSigned(DataType.LONG));
+		return new RemoveIgnoreEvent(username);
+	}
 
 }

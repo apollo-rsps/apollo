@@ -13,35 +13,35 @@ import org.apollo.game.sync.block.SynchronizationBlock;
  */
 public final class SynchronizationSkillListener extends SkillAdapter {
 
-    /**
-     * The player.
-     */
-    private final Player player;
+	/**
+	 * The player.
+	 */
+	private final Player player;
 
-    /**
-     * Creates the skill synchronization listener.
-     * 
-     * @param player The player.
-     */
-    public SynchronizationSkillListener(Player player) {
-	this.player = player;
-    }
-
-    @Override
-    public void levelledUp(SkillSet set, int id, Skill skill) {
-	player.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(player));
-    }
-
-    @Override
-    public void skillsUpdated(SkillSet set) {
-	for (int id = 0; id < set.size(); id++) {
-	    player.send(new UpdateSkillEvent(id, set.getSkill(id)));
+	/**
+	 * Creates the skill synchronization listener.
+	 * 
+	 * @param player The player.
+	 */
+	public SynchronizationSkillListener(Player player) {
+		this.player = player;
 	}
-    }
 
-    @Override
-    public void skillUpdated(SkillSet set, int id, Skill skill) {
-	player.send(new UpdateSkillEvent(id, skill));
-    }
+	@Override
+	public void levelledUp(SkillSet set, int id, Skill skill) {
+		player.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(player));
+	}
+
+	@Override
+	public void skillsUpdated(SkillSet set) {
+		for (int id = 0; id < set.size(); id++) {
+			player.send(new UpdateSkillEvent(id, set.getSkill(id)));
+		}
+	}
+
+	@Override
+	public void skillUpdated(SkillSet set, int id, Skill skill) {
+		player.send(new UpdateSkillEvent(id, skill));
+	}
 
 }

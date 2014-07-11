@@ -17,16 +17,16 @@ import org.apollo.util.NameUtil;
  */
 public final class IgnoreListEventEncoder extends EventEncoder<IgnoreListEvent> {
 
-    @Override
-    public GamePacket encode(IgnoreListEvent event) {
-	GamePacketBuilder builder = new GamePacketBuilder(214, PacketType.VARIABLE_SHORT);
+	@Override
+	public GamePacket encode(IgnoreListEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(214, PacketType.VARIABLE_SHORT);
 
-	List<String> usernames = event.getUsernames();
-	for (String username : usernames) {
-	    builder.put(DataType.LONG, NameUtil.encodeBase37(username));
+		List<String> usernames = event.getUsernames();
+		for (String username : usernames) {
+			builder.put(DataType.LONG, NameUtil.encodeBase37(username));
+		}
+
+		return builder.toGamePacket();
 	}
-
-	return builder.toGamePacket();
-    }
 
 }

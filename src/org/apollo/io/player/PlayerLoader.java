@@ -10,13 +10,13 @@ import org.apollo.security.PlayerCredentials;
  */
 public interface PlayerLoader {
 
-    /**
-     * Loads a player.
-     * 
-     * @param credentials The player's credentials.
-     * @return The {@link PlayerLoaderResponse}.
-     * @throws Exception If an error occurs.
-     */
-    public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception;
+	/**
+	 * Loads a player.
+	 * 
+	 * @param credentials The player's credentials.
+	 * @return The {@link PlayerLoaderResponse}.
+	 * @throws Exception If an error occurs.
+	 */
+	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception;
 
 }

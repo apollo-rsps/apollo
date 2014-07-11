@@ -13,14 +13,14 @@ import org.apollo.net.release.EventEncoder;
  */
 final class SetWidgetVisibilityEventEncoder extends EventEncoder<SetWidgetVisibilityEvent> {
 
-    @Override
-    public GamePacket encode(SetWidgetVisibilityEvent event) {
-	GamePacketBuilder builder = new GamePacketBuilder(171);
+	@Override
+	public GamePacket encode(SetWidgetVisibilityEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(171);
 
-	builder.put(DataType.BYTE, event.isVisible() ? 0 : 1);
-	builder.put(DataType.SHORT, event.getWidgetId());
+		builder.put(DataType.BYTE, event.isVisible() ? 0 : 1);
+		builder.put(DataType.SHORT, event.getWidgetId());
 
-	return builder.toGamePacket();
-    }
+		return builder.toGamePacket();
+	}
 
 }

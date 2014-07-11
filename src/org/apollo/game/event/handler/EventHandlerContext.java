@@ -9,9 +9,9 @@ import org.apollo.game.event.handler.chain.EventHandlerChain;
  */
 public abstract class EventHandlerContext {
 
-    /**
-     * Breaks the handler chain.
-     */
-    public abstract void breakHandlerChain();
+	/**
+	 * Breaks the handler chain.
+	 */
+	public abstract void breakHandlerChain();
 
 }

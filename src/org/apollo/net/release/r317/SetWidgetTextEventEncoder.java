@@ -15,13 +15,13 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class SetWidgetTextEventEncoder extends EventEncoder<SetWidgetTextEvent> {
 
-    @Override
-    public GamePacket encode(SetWidgetTextEvent event) {
-	GamePacketBuilder builder = new GamePacketBuilder(126, PacketType.VARIABLE_SHORT);
-	builder.putString(event.getText());
-	builder.put(DataType.SHORT, DataTransformation.ADD, event.getInterfaceId());
+	@Override
+	public GamePacket encode(SetWidgetTextEvent event) {
+		GamePacketBuilder builder = new GamePacketBuilder(126, PacketType.VARIABLE_SHORT);
+		builder.putString(event.getText());
+		builder.put(DataType.SHORT, DataTransformation.ADD, event.getInterfaceId());
 
-	return builder.toGamePacket();
-    }
+		return builder.toGamePacket();
+	}
 
 }

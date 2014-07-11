@@ -14,11 +14,11 @@ import org.apollo.net.release.EventDecoder;
  */
 public final class FifthPlayerActionEventDecoder extends EventDecoder<FifthPlayerActionEvent> {
 
-    @Override
-    public FifthPlayerActionEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
-	int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	return new FifthPlayerActionEvent(index);
-    }
+	@Override
+	public FifthPlayerActionEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
+		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		return new FifthPlayerActionEvent(index);
+	}
 
 }

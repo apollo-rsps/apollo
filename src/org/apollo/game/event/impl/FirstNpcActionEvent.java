@@ -7,13 +7,13 @@ package org.apollo.game.event.impl;
  */
 public final class FirstNpcActionEvent extends NpcActionEvent {
 
-    /**
-     * Creates a new first npc action event.
-     * 
-     * @param index The index of the npc.
-     */
-    public FirstNpcActionEvent(int index) {
-	super(1, index);
-    }
+	/**
+	 * Creates a new first npc action event.
+	 * 
+	 * @param index The index of the npc.
+	 */
+	public FirstNpcActionEvent(int index) {
+		super(1, index);
+	}
 
 }

@@ -14,9 +14,9 @@ import org.apollo.net.release.EventEncoder;
  */
 public final class EnterAmountEventEncoder extends EventEncoder<EnterAmountEvent> {
 
-    @Override
-    public GamePacket encode(EnterAmountEvent event) {
-	return new GamePacket(58, PacketType.FIXED, Unpooled.EMPTY_BUFFER);
-    }
+	@Override
+	public GamePacket encode(EnterAmountEvent event) {
+		return new GamePacket(58, PacketType.FIXED, Unpooled.EMPTY_BUFFER);
+	}
 
 }

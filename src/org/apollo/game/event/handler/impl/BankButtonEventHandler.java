@@ -12,23 +12,23 @@ import org.apollo.game.model.entity.Player;
  */
 public final class BankButtonEventHandler extends EventHandler<ButtonEvent> {
 
-    /**
-     * The withdraw as item button id.
-     */
-    private static final int WITHDRAW_AS_ITEM = 5387;
+	/**
+	 * The withdraw as item button id.
+	 */
+	private static final int WITHDRAW_AS_ITEM = 5387;
 
-    /**
-     * The withdraw as note button id.
-     */
-    private static final int WITHDRAW_AS_NOTE = 5386;
+	/**
+	 * The withdraw as note button id.
+	 */
+	private static final int WITHDRAW_AS_NOTE = 5386;
 
-    @Override
-    public void handle(EventHandlerContext ctx, Player player, ButtonEvent event) {
-	if (event.getWidgetId() == WITHDRAW_AS_ITEM) {
-	    player.setWithdrawingNotes(false);
-	} else if (event.getWidgetId() == WITHDRAW_AS_NOTE) {
-	    player.setWithdrawingNotes(true);
+	@Override
+	public void handle(EventHandlerContext ctx, Player player, ButtonEvent event) {
+		if (event.getWidgetId() == WITHDRAW_AS_ITEM) {
+			player.setWithdrawingNotes(false);
+		} else if (event.getWidgetId() == WITHDRAW_AS_NOTE) {
+			player.setWithdrawingNotes(true);
+		}
 	}
-    }
 
 }

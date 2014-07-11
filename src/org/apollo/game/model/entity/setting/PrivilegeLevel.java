@@ -8,43 +8,43 @@ package org.apollo.game.model.entity.setting;
  */
 public enum PrivilegeLevel {
 
-    /**
-     * A standard (rights 0) account.
-     */
-    STANDARD,
+	/**
+	 * A standard (rights 0) account.
+	 */
+	STANDARD,
 
-    /**
-     * A player moderator (rights 1) account.
-     */
-    MODERATOR,
+	/**
+	 * A player moderator (rights 1) account.
+	 */
+	MODERATOR,
 
-    /**
-     * An administrator (rights 2) account.
-     */
-    ADMINISTRATOR;
+	/**
+	 * An administrator (rights 2) account.
+	 */
+	ADMINISTRATOR;
 
-    /**
-     * Gets the privilege level for the specified numerical value.
-     * 
-     * @param value The numerical value.
-     * @return The privilege level.
-     * @throws IllegalArgumentException If the specified value is out of bounds.
-     */
-    public static PrivilegeLevel valueOf(int value) {
-	PrivilegeLevel[] values = values();
-	if (value < 0 || value >= values.length) {
-	    throw new IndexOutOfBoundsException("Invalid privilege level integer value supplied " + value + ".");
+	/**
+	 * Gets the privilege level for the specified numerical value.
+	 * 
+	 * @param value The numerical value.
+	 * @return The privilege level.
+	 * @throws IllegalArgumentException If the specified value is out of bounds.
+	 */
+	public static PrivilegeLevel valueOf(int value) {
+		PrivilegeLevel[] values = values();
+		if (value < 0 || value >= values.length) {
+			throw new IndexOutOfBoundsException("Invalid privilege level integer value supplied " + value + ".");
+		}
+		return values[value];
 	}
-	return values[value];
-    }
 
-    /**
-     * Gets the numerical value of this privilege level.
-     * 
-     * @return The numerical value used in the protocol.
-     */
-    public int toInteger() {
-	return ordinal();
-    }
+	/**
+	 * Gets the numerical value of this privilege level.
+	 * 
+	 * @return The numerical value used in the protocol.
+	 */
+	public int toInteger() {
+		return ordinal();
+	}
 
 }

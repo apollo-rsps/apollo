@@ -15,20 +15,20 @@ import org.apollo.net.release.EventDecoder;
  */
 final class ItemOnItemEventDecoder extends EventDecoder<ItemOnItemEvent> {
 
-    @Override
-    public ItemOnItemEvent decode(GamePacket packet) {
-	GamePacketReader reader = new GamePacketReader(packet);
+	@Override
+	public ItemOnItemEvent decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
 
-	int targetId = (int) reader.getUnsigned(DataType.SHORT);
-	int usedSlot = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		int targetId = (int) reader.getUnsigned(DataType.SHORT);
+		int usedSlot = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
 
-	int usedId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-	int targetInterface = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+		int usedId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		int targetInterface = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
 
-	int targetSlot = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
-	int usedInterface = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
+		int targetSlot = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
+		int usedInterface = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
 
-	return new ItemOnItemEvent(usedInterface, usedId, usedSlot, targetInterface, targetId, targetSlot);
-    }
+		return new ItemOnItemEvent(usedInterface, usedId, usedSlot, targetInterface, targetId, targetSlot);
+	}
 
 }

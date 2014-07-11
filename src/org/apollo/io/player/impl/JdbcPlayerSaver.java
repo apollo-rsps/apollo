@@ -5,9 +5,9 @@ import org.apollo.io.player.PlayerSaver;
 
 public final class JdbcPlayerSaver implements PlayerSaver {
 
-    @Override
-    public void savePlayer(Player player) throws Exception {
+	@Override
+	public void savePlayer(Player player) throws Exception {
 
-    }
+	}
 
 }

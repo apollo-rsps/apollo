@@ -31,215 +31,215 @@ import org.apollo.game.model.inter.dialogue.DialogueListener;
  */
 public final class InterfaceSet {
 
-    /**
-     * The current enter amount listener.
-     */
-    private EnterAmountListener amountListener;
+	/**
+	 * The current enter amount listener.
+	 */
+	private EnterAmountListener amountListener;
 
-    /**
-     * The current chat box dialogue listener.
-     */
-    private DialogueListener dialogueListener;
+	/**
+	 * The current chat box dialogue listener.
+	 */
+	private DialogueListener dialogueListener;
 
-    /**
-     * A map of open interfaces.
-     */
-    private Map<InterfaceType, Integer> interfaces = new HashMap<>();
+	/**
+	 * A map of open interfaces.
+	 */
+	private Map<InterfaceType, Integer> interfaces = new HashMap<>();
 
-    /**
-     * The current listener.
-     */
-    private InterfaceListener listener;
+	/**
+	 * The current listener.
+	 */
+	private InterfaceListener listener;
 
-    /**
-     * The player whose interfaces are being managed.
-     */
-    private final Player player; // TODO: maybe switch to a listener system like the inventory?
+	/**
+	 * The player whose interfaces are being managed.
+	 */
+	private final Player player; // TODO: maybe switch to a listener system like the inventory?
 
-    /**
-     * Creates an interface set.
-     * 
-     * @param player The player.
-     */
-    public InterfaceSet(Player player) {
-	this.player = player;
-    }
-
-    /**
-     * Called when the player has clicked the specified button. Notifies the current dialogue listener.
-     * 
-     * @param button The button.
-     * @return {@code true} if the event handler chain should be broken.
-     */
-    public boolean buttonClicked(int button) {
-	if (dialogueListener != null) {
-	    return dialogueListener.buttonClicked(button);
+	/**
+	 * Creates an interface set.
+	 * 
+	 * @param player The player.
+	 */
+	public InterfaceSet(Player player) {
+		this.player = player;
 	}
-	return false;
-    }
 
-    /**
-     * Closes the current open interface(s).
-     */
-    public void close() {
-	closeAndNotify();
-	player.send(new CloseInterfaceEvent());
-    }
-
-    /**
-     * An internal method for closing the interface, notifying the listener if appropriate, but not sending any events.
-     */
-    private void closeAndNotify() {
-	amountListener = null;
-	dialogueListener = null;
-
-	interfaces.clear();
-	if (listener != null) {
-	    listener.interfaceClosed();
-	    listener = null;
+	/**
+	 * Called when the player has clicked the specified button. Notifies the current dialogue listener.
+	 * 
+	 * @param button The button.
+	 * @return {@code true} if the event handler chain should be broken.
+	 */
+	public boolean buttonClicked(int button) {
+		if (dialogueListener != null) {
+			return dialogueListener.buttonClicked(button);
+		}
+		return false;
 	}
-    }
 
-    /**
-     * Checks if this interface sets contains the specified interface.
-     * 
-     * @param id The interface's id.
-     * @return {@code true} if so, {@code false} if not.
-     */
-    public boolean contains(int id) {
-	return interfaces.containsValue(id);
-    }
-
-    /**
-     * Checks if this interface set contains the specified interface type.
-     * 
-     * @param type The interface's type.
-     * @return {@code true} if so, {@code false} if not.
-     */
-    public boolean contains(InterfaceType type) {
-	return interfaces.containsKey(type);
-    }
-
-    /**
-     * Called when the player has clicked the "Click here to continue" button on a dialogue.
-     */
-    public void continueRequested() {
-	if (dialogueListener != null) {
-	    dialogueListener.continued();
+	/**
+	 * Closes the current open interface(s).
+	 */
+	public void close() {
+		closeAndNotify();
+		player.send(new CloseInterfaceEvent());
 	}
-    }
 
-    /**
-     * Called when the client has entered the specified amount. Notifies the current listener.
-     * 
-     * @param amount The amount.
-     */
-    public void enteredAmount(int amount) {
-	if (amountListener != null) {
-	    amountListener.amountEntered(amount);
-	    amountListener = null;
+	/**
+	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any events.
+	 */
+	private void closeAndNotify() {
+		amountListener = null;
+		dialogueListener = null;
+
+		interfaces.clear();
+		if (listener != null) {
+			listener.interfaceClosed();
+			listener = null;
+		}
 	}
-    }
 
-    /**
-     * Sent by the client when it has closed an interface.
-     */
-    public void interfaceClosed() {
-	closeAndNotify();
-    }
+	/**
+	 * Checks if this interface sets contains the specified interface.
+	 * 
+	 * @param id The interface's id.
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean contains(int id) {
+		return interfaces.containsValue(id);
+	}
 
-    /**
-     * Opens a chat box dialogue.
-     * 
-     * @param listener The listener for the dialogue.
-     * @param dialogueId The dialogue's id.
-     */
-    public void openDialogue(DialogueListener listener, int dialogueId) {
-	closeAndNotify();
+	/**
+	 * Checks if this interface set contains the specified interface type.
+	 * 
+	 * @param type The interface's type.
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean contains(InterfaceType type) {
+		return interfaces.containsKey(type);
+	}
 
-	this.dialogueListener = listener;
-	this.listener = listener;
+	/**
+	 * Called when the player has clicked the "Click here to continue" button on a dialogue.
+	 */
+	public void continueRequested() {
+		if (dialogueListener != null) {
+			dialogueListener.continued();
+		}
+	}
 
-	interfaces.put(InterfaceType.DIALOGUE, dialogueId);
-	player.send(new OpenDialogueInterfaceEvent(dialogueId));
-    }
+	/**
+	 * Called when the client has entered the specified amount. Notifies the current listener.
+	 * 
+	 * @param amount The amount.
+	 */
+	public void enteredAmount(int amount) {
+		if (amountListener != null) {
+			amountListener.amountEntered(amount);
+			amountListener = null;
+		}
+	}
 
-    /**
-     * Opens a chat box dialogue.
-     * 
-     * @param dialogueId The dialogue's id.
-     */
-    public void openDialogue(int dialogueId) {
-	openDialogue(null, dialogueId);
-    }
+	/**
+	 * Sent by the client when it has closed an interface.
+	 */
+	public void interfaceClosed() {
+		closeAndNotify();
+	}
 
-    /**
-     * Opens the enter amount dialogue.
-     * 
-     * @param listener The enter amount listener.
-     */
-    public void openEnterAmountDialogue(EnterAmountListener listener) {
-	amountListener = listener;
-	player.send(new EnterAmountEvent());
-    }
+	/**
+	 * Opens a chat box dialogue.
+	 * 
+	 * @param listener The listener for the dialogue.
+	 * @param dialogueId The dialogue's id.
+	 */
+	public void openDialogue(DialogueListener listener, int dialogueId) {
+		closeAndNotify();
 
-    /**
-     * Opens a window.
-     * 
-     * @param windowId The window's id.
-     */
-    public void openWindow(int windowId) {
-	openWindow(null, windowId);
-    }
+		this.dialogueListener = listener;
+		this.listener = listener;
 
-    /**
-     * Opens a window with the specified listener.
-     * 
-     * @param listener The listener for this interface.
-     * @param windowId The window's id.
-     */
-    public void openWindow(InterfaceListener listener, int windowId) {
-	closeAndNotify();
-	this.listener = listener;
+		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
+		player.send(new OpenDialogueInterfaceEvent(dialogueId));
+	}
 
-	interfaces.put(InterfaceType.WINDOW, windowId);
-	player.send(new OpenInterfaceEvent(windowId));
-    }
+	/**
+	 * Opens a chat box dialogue.
+	 * 
+	 * @param dialogueId The dialogue's id.
+	 */
+	public void openDialogue(int dialogueId) {
+		openDialogue(null, dialogueId);
+	}
 
-    /**
-     * Opens a window and inventory sidebar.
-     * 
-     * @param windowId The window's id.
-     * @param sidebarId The sidebar's id.
-     */
-    public void openWindowWithSidebar(int windowId, int sidebarId) {
-	openWindowWithSidebar(null, windowId, sidebarId);
-    }
+	/**
+	 * Opens the enter amount dialogue.
+	 * 
+	 * @param listener The enter amount listener.
+	 */
+	public void openEnterAmountDialogue(EnterAmountListener listener) {
+		amountListener = listener;
+		player.send(new EnterAmountEvent());
+	}
 
-    /**
-     * Opens a window and inventory sidebar with the specified listener.
-     * 
-     * @param listener The listener for this interface.
-     * @param windowId The window's id.
-     * @param sidebarId The sidebar's id.
-     */
-    public void openWindowWithSidebar(InterfaceListener listener, int windowId, int sidebarId) {
-	closeAndNotify();
-	this.listener = listener;
+	/**
+	 * Opens a window.
+	 * 
+	 * @param windowId The window's id.
+	 */
+	public void openWindow(int windowId) {
+		openWindow(null, windowId);
+	}
 
-	interfaces.put(InterfaceType.WINDOW, windowId);
-	interfaces.put(InterfaceType.SIDEBAR, sidebarId);
+	/**
+	 * Opens a window with the specified listener.
+	 * 
+	 * @param listener The listener for this interface.
+	 * @param windowId The window's id.
+	 */
+	public void openWindow(InterfaceListener listener, int windowId) {
+		closeAndNotify();
+		this.listener = listener;
 
-	player.send(new OpenInterfaceSidebarEvent(windowId, sidebarId));
-    }
+		interfaces.put(InterfaceType.WINDOW, windowId);
+		player.send(new OpenInterfaceEvent(windowId));
+	}
 
-    /**
-     * Gets the size of the interface set.
-     * 
-     * @return The size.
-     */
-    public int size() {
-	return interfaces.size();
-    }
+	/**
+	 * Opens a window and inventory sidebar.
+	 * 
+	 * @param windowId The window's id.
+	 * @param sidebarId The sidebar's id.
+	 */
+	public void openWindowWithSidebar(int windowId, int sidebarId) {
+		openWindowWithSidebar(null, windowId, sidebarId);
+	}
+
+	/**
+	 * Opens a window and inventory sidebar with the specified listener.
+	 * 
+	 * @param listener The listener for this interface.
+	 * @param windowId The window's id.
+	 * @param sidebarId The sidebar's id.
+	 */
+	public void openWindowWithSidebar(InterfaceListener listener, int windowId, int sidebarId) {
+		closeAndNotify();
+		this.listener = listener;
+
+		interfaces.put(InterfaceType.WINDOW, windowId);
+		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
+
+		player.send(new OpenInterfaceSidebarEvent(windowId, sidebarId));
+	}
+
+	/**
+	 * Gets the size of the interface set.
+	 * 
+	 * @return The size.
+	 */
+	public int size() {
+		return interfaces.size();
+	}
 
 }

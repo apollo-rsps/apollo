@@ -21,30 +21,30 @@ import org.apollo.update.resource.VirtualResourceProvider;
  */
 public final class JagGrabRequestWorker extends RequestWorker<JagGrabRequest, ResourceProvider> {
 
-    /**
-     * Creates the JAGGRAB request worker.
-     * 
-     * @param dispatcher The dispatcher.
-     * @param fs The file system.
-     */
-    public JagGrabRequestWorker(UpdateDispatcher dispatcher, IndexedFileSystem fs) {
-	super(dispatcher, new VirtualResourceProvider(fs));
-    }
-
-    @Override
-    protected ChannelRequest<JagGrabRequest> nextRequest(UpdateDispatcher dispatcher) throws InterruptedException {
-	return dispatcher.nextJagGrabRequest();
-    }
-
-    @Override
-    protected void service(ResourceProvider provider, Channel channel, JagGrabRequest request) throws IOException {
-	ByteBuffer buf = provider.get(request.getFilePath());
-	if (buf == null) {
-	    channel.close();
-	} else {
-	    ByteBuf wrapped = Unpooled.wrappedBuffer(buf);
-	    channel.writeAndFlush(new JagGrabResponse(wrapped)).addListener(ChannelFutureListener.CLOSE);
+	/**
+	 * Creates the JAGGRAB request worker.
+	 * 
+	 * @param dispatcher The dispatcher.
+	 * @param fs The file system.
+	 */
+	public JagGrabRequestWorker(UpdateDispatcher dispatcher, IndexedFileSystem fs) {
+		super(dispatcher, new VirtualResourceProvider(fs));
 	}
-    }
+
+	@Override
+	protected ChannelRequest<JagGrabRequest> nextRequest(UpdateDispatcher dispatcher) throws InterruptedException {
+		return dispatcher.nextJagGrabRequest();
+	}
+
+	@Override
+	protected void service(ResourceProvider provider, Channel channel, JagGrabRequest request) throws IOException {
+		ByteBuffer buf = provider.get(request.getFilePath());
+		if (buf == null) {
+			channel.close();
+		} else {
+			ByteBuf wrapped = Unpooled.wrappedBuffer(buf);
+			channel.writeAndFlush(new JagGrabResponse(wrapped)).addListener(ChannelFutureListener.CLOSE);
+		}
+	}
 
 }

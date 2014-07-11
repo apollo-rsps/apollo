@@ -13,9 +13,9 @@ import org.apollo.game.sync.block.SynchronizationBlock;
  */
 public final class ChatEventHandler extends EventHandler<ChatEvent> {
 
-    @Override
-    public void handle(EventHandlerContext ctx, Player player, ChatEvent event) {
-	player.getBlockSet().add(SynchronizationBlock.createChatBlock(player, event));
-    }
+	@Override
+	public void handle(EventHandlerContext ctx, Player player, ChatEvent event) {
+		player.getBlockSet().add(SynchronizationBlock.createChatBlock(player, event));
+	}
 
 }

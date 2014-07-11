@@ -14,16 +14,16 @@ import org.apollo.game.model.entity.Player;
  */
 public final class CommandEventHandler extends EventHandler<CommandEvent> {
 
-    @Override
-    public void handle(EventHandlerContext ctx, Player player, CommandEvent event) {
-	String[] components = event.getCommand().split(" ");
-	String name = components[0];
+	@Override
+	public void handle(EventHandlerContext ctx, Player player, CommandEvent event) {
+		String[] components = event.getCommand().split(" ");
+		String name = components[0];
 
-	String[] arguments = new String[components.length - 1];
-	System.arraycopy(components, 1, arguments, 0, arguments.length);
+		String[] arguments = new String[components.length - 1];
+		System.arraycopy(components, 1, arguments, 0, arguments.length);
 
-	Command command = new Command(name, arguments);
-	World.getWorld().getCommandDispatcher().dispatch(player, command);
-    }
+		Command command = new Command(name, arguments);
+		World.getWorld().getCommandDispatcher().dispatch(player, command);
+	}
 
 }

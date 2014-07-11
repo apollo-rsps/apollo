@@ -11,43 +11,43 @@ import org.apollo.game.event.Event;
  */
 public abstract class PlayerActionEvent extends Event {
 
-    /**
-     * The option number.
-     */
-    private final int option;
+	/**
+	 * The option number.
+	 */
+	private final int option;
 
-    /**
-     * The index of the clicked player.
-     */
-    private final int index;
+	/**
+	 * The index of the clicked player.
+	 */
+	private final int index;
 
-    /**
-     * Creates a player action event.
-     * 
-     * @param option The option number.
-     * @param playerIndex The index of the player.
-     */
-    public PlayerActionEvent(int option, int playerIndex) {
-	this.option = option;
-	this.index = playerIndex;
-    }
+	/**
+	 * Creates a player action event.
+	 * 
+	 * @param option The option number.
+	 * @param playerIndex The index of the player.
+	 */
+	public PlayerActionEvent(int option, int playerIndex) {
+		this.option = option;
+		this.index = playerIndex;
+	}
 
-    /**
-     * Gets the menu action number (i.e. the action event 'option') clicked.
-     * 
-     * @return The option number.
-     */
-    public int getOption() {
-	return option;
-    }
+	/**
+	 * Gets the menu action number (i.e. the action event 'option') clicked.
+	 * 
+	 * @return The option number.
+	 */
+	public int getOption() {
+		return option;
+	}
 
-    /**
-     * Gets the index of the clicked player.
-     * 
-     * @return The index.
-     */
-    public int getIndex() {
-	return index;
-    }
+	/**
+	 * Gets the index of the clicked player.
+	 * 
+	 * @return The index.
+	 */
+	public int getIndex() {
+		return index;
+	}
 
 }

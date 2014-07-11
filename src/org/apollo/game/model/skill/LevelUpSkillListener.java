@@ -12,31 +12,31 @@ import org.apollo.util.LanguageUtil;
  */
 public final class LevelUpSkillListener extends SkillAdapter {
 
-    /**
-     * The player.
-     */
-    private final Player player;
+	/**
+	 * The player.
+	 */
+	private final Player player;
 
-    /**
-     * Creates the level up listener for the specified player.
-     * 
-     * @param player The player.
-     */
-    public LevelUpSkillListener(Player player) {
-	this.player = player;
-    }
-
-    @Override
-    public void levelledUp(SkillSet set, int id, Skill skill) {
-	// TODO show the interface
-	String name = Skill.getName(id);
-	String article = LanguageUtil.getIndefiniteArticle(name);
-	player.sendMessage("You've just advanced " + article + " " + name + " level! You have reached level "
-		+ skill.getMaximumLevel() + ".");
-
-	if (Skill.isCombatSkill(id)) {
-	    player.getSkillSet().calculateCombatLevel();
+	/**
+	 * Creates the level up listener for the specified player.
+	 * 
+	 * @param player The player.
+	 */
+	public LevelUpSkillListener(Player player) {
+		this.player = player;
 	}
-    }
+
+	@Override
+	public void levelledUp(SkillSet set, int id, Skill skill) {
+		// TODO show the interface
+		String name = Skill.getName(id);
+		String article = LanguageUtil.getIndefiniteArticle(name);
+		player.sendMessage("You've just advanced " + article + " " + name + " level! You have reached level "
+				+ skill.getMaximumLevel() + ".");
+
+		if (Skill.isCombatSkill(id)) {
+			player.getSkillSet().calculateCombatLevel();
+		}
+	}
 
 }
