@@ -6,22 +6,20 @@ java_import 'org.apollo.game.model.entity.Entity'
 ATTRIBUTE_DEFINITIONS = {}
 
 class Entity
-  
   # Overridies method_missing
   def method_missing(symbol, *args)
     name = symbol.to_s.strip
-
     if name[-1] == "="
       raise "Error - expected argument count of 1, received #{args.length}" unless args.length == 1
       
       name = name[0...-1].strip # Drop the equals and preceeding whitespace
-      attributes[name] = args[0].is_a?(Symbol) ? args[0].to_s : args[0]
+      set_attribute(name, args[0].is_a?(Symbol) ? args[0].to_s : args[0])
     elsif ATTRIBUTE_DEFINITIONS[name] == nil
       super(symbol, *args)
     else
-      if attributes[name] == nil then return ATTRIBUTE_DEFINITIONS[name].default end
+      if get_attribute(name).nil? then return ATTRIBUTE_DEFINITIONS[name].default end
 
-      return ATTRIBUTE_DEFINITIONS[name].type == :symbol ? attributes[name].to_sym : attributes[name]
+      return ATTRIBUTE_DEFINITIONS[name].type == :symbol ? get_attribute(name).to_sym : get_attribute(name)
     end
   end
 
