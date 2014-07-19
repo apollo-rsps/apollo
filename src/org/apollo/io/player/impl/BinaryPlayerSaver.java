@@ -96,14 +96,18 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			}
 
 			Map<String, Attribute<?>> attributes = player.getAttributes();
-			out.writeInt(attributes.size());
+			int count = 0;
+			for (Entry<String, Attribute<?>> entry : attributes.entrySet()) {
+				count += AttributeMap.getDefinition(entry.getKey()).getPersistence() == AttributePersistence.SERIALIZED ? 1 : 0;
+			};
+			out.writeInt(count);
 
 			for (Entry<String, Attribute<?>> entry : attributes.entrySet()) {
 				String name = entry.getKey();
 				AttributeDefinition<?> definition = AttributeMap.getDefinition(name);
 
 				if (definition.getPersistence() == AttributePersistence.SERIALIZED) {
-					StreamUtil.writeString(out, name);
+					out.writeUTF(name);
 					saveAttribute(out, entry.getValue());
 				}
 			}
@@ -133,7 +137,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			break;
 		case STRING:
 		case SYMBOL:
-			StreamUtil.writeString(out, (String) attribute.getValue());
+			out.writeUTF((String) attribute.getValue());
 			break;
 		default:
 			throw new IllegalArgumentException("Undefined attribute type " + type + ".");

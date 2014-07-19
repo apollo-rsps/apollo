@@ -176,7 +176,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 				break;
 			case STRING:
 			case SYMBOL:
-				attribute = new StringAttribute(StreamUtil.readString(in), type == AttributeType.SYMBOL);
+				attribute = new StringAttribute(in.readUTF(), type == AttributeType.SYMBOL);
 				break;
 			default:
 				throw new IllegalArgumentException("Undefined attribute type: " + type + ".");
