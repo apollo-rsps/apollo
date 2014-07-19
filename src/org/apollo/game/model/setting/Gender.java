@@ -1,4 +1,4 @@
-package org.apollo.game.model.entity.setting;
+package org.apollo.game.model.setting;
 
 /**
  * An enumeration containing the two genders (male and female). This enumeration relies on the ordering of the elements

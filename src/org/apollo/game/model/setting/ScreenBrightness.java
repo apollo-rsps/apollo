@@ -1,4 +1,4 @@
-package org.apollo.game.model.entity.setting;
+package org.apollo.game.model.setting;
 
 /**
  * An enumeration representing the brightness of a player's screen. This enumeration relies on the ordering of the

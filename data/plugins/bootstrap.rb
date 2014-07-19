@@ -20,7 +20,7 @@ java_import 'org.apollo.game.login.LoginListener'
 java_import 'org.apollo.game.login.LogoutListener'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
-java_import 'org.apollo.game.model.settings.PrivilegeLevel'
+java_import 'org.apollo.game.model.setting.PrivilegeLevel'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
 
 # Alias the privilege levels.

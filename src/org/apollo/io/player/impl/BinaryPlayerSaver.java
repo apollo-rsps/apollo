@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apollo.game.model.Appearance;
@@ -13,6 +14,8 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
 import org.apollo.game.model.entity.SkillSet;
+import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeType;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.io.player.PlayerSaver;
 import org.apollo.util.NameUtil;
@@ -89,33 +92,43 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 				out.writeLong(NameUtil.encodeBase37(username));
 			}
 
-			for (Entry<String, Object> attribute : player.getAttributes()) {
+			Map<String, Attribute<?>> attributes = player.getAttributes();
+			out.writeInt(attributes.size());
+			for (Entry<String, Attribute<?>> attribute : player.getAttributes().entrySet()) {
 				saveAttribute(out, attribute);
 			}
 		}
 	}
 
 	/**
-	 * Writes an attribute to the specified output stream.
+	 * Writes an attribute map entry to the specified output stream.
 	 * 
 	 * @param out The output stream.
-	 * @param attribute The attribute.
+	 * @param entry The map entry.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private void saveAttribute(DataOutputStream out, Entry<String, Object> attribute) throws IOException {
-		StreamUtil.writeString(out, attribute.getKey());
-		Object value = attribute.getValue();
-		if (value instanceof String) {
-			out.writeByte(0);
-			StreamUtil.writeString(out, (String) value);
-		} else if (value instanceof Integer) {
-			out.writeByte(1);
-			out.writeInt((Integer) value);
-		} else if (value instanceof Boolean) {
-			out.writeByte(2);
-			out.writeByte(((Boolean) value) ? 1 : 0);
-		} else {
-			throw new IllegalArgumentException("Undefined attribute type " + value + ".");
+	private void saveAttribute(DataOutputStream out, Entry<String, Attribute<?>> entry) throws IOException {
+		StreamUtil.writeString(out, entry.getKey());
+		Attribute<?> attribute = entry.getValue();
+		AttributeType type = attribute.getType();
+
+		out.writeByte(type.getValue());
+		switch (type) {
+		case BOOLEAN:
+			out.writeByte((boolean) attribute.getValue() ? 1 : 0);
+			break;
+		case DOUBLE:
+			out.writeDouble((double) attribute.getValue());
+			break;
+		case LONG:
+			out.writeLong((long) attribute.getValue());
+			break;
+		case STRING:
+		case SYMBOL:
+			StreamUtil.writeString(out, (String) attribute.getValue());
+			break;
+		default:
+			throw new IllegalArgumentException("Undefined attribute type " + type + ".");
 		}
 	}
 

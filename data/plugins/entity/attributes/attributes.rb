@@ -1,64 +1,78 @@
 require 'java'
 
 java_import 'org.apollo.game.model.entity.Entity'
-
-# Maps attribute names (i.e. symbols) to attribute definitions.
-ATTRIBUTE_DEFINITIONS = {}
+java_import 'org.apollo.game.model.entity.attr.Attribute'
+java_import 'org.apollo.game.model.entity.attr.AttributeDefinition'
+java_import 'org.apollo.game.model.entity.attr.AttributeMap'
+java_import 'org.apollo.game.model.entity.attr.AttributeType'
+java_import 'org.apollo.game.model.entity.attr.BooleanAttribute'
+java_import 'org.apollo.game.model.entity.attr.NumericalAttribute'
+java_import 'org.apollo.game.model.entity.attr.StringAttribute'
 
 class Entity
   
-  # Overridies method_missing
+  # Overrides method_missing
   def method_missing(symbol, *args)
     name = symbol.to_s.strip
 
     if name[-1] == "="
-      raise "Error - expected argument count of 1, received #{args.length}" unless args.length == 1
+      raise "Expected argument count of 1, received #{args.length}" unless args.length == 1
       
-      name = name[0...-1].strip # Drop the equals and preceeding whitespace
-      attributes[name] = args[0].is_a?(Symbol) ? args[0].to_s : args[0]
-    elsif ATTRIBUTE_DEFINITIONS[name] == nil
+      puts name
+      name = name[0...-1].strip # Drop the equals
+      set_attribute(name, to_attribute(args[0]))
+    elsif AttributeMap::get_definition(name) == nil
       super(symbol, *args)
     else
-      if attributes[name] == nil then return ATTRIBUTE_DEFINITIONS[name].default end
-
-      return ATTRIBUTE_DEFINITIONS[name].type == :symbol ? attributes[name].to_sym : attributes[name]
+      attribute = get_attribute(name); definition = AttributeMap::get_definition(name)
+      value = attribute == nil ? definition.default : attribute.value
+      
+      return definition.type == AttributeType::SYMBOL ? value.to_sym : value
     end
   end
 
-  def to_s
-    return value.to_s
-  end
-
-end
-
-# An attribute belonging to an entity.
-class AttributeDefinition
-  attr_reader :default, :type, :persistence
-
-  def initialize(default, persistence=:transient)
-    @default = default
-    @type = get_type
-    @persistence = persistence
-  end
-
-  def to_s
-    return "[AttributeDefinition - default=#{default}, type=#{type}, persistence=#{persistence}]."
-  end
-
-  private # Gets the type of an attribute from its default value.
-  def get_type
-    case @default
-      when Fixnum, Integer then type = :number
-      when String then type = :string
-      when Symbol then type = :symbol
-      when TrueClass, FalseClass then type = :boolean
-      else raise "Error - #{value} has an unrecognised attribute type of #{value.class}."
+  # Gets the appropriate attribute for the specified value.
+  private
+  def to_attribute(value)
+    case value
+      when String, Symbol then return StringAttribute.new(value.to_s, value.is_a?(Symbol))
+      when Integer, Float then return NumericalAttribute.new(value)
+      when TrueClass, FalseClass then return BooleanAttribute.new(value)
+      else raise "Undefined attribute type #{value.class}."
     end
   end
 
 end
 
-# Declares an attribute which can then be assigned.
+# Declares an attribute and adds its definition.
 def declare_attribute(name, default, persistence=:transient)
-  ATTRIBUTE_DEFINITIONS[name.to_s] = AttributeDefinition.new(default, persistence)
+  AttributeMap::add_definition(name.to_s, AttributeDefinition.new(default, get_persistence(persistence), get_type(default)))
+end
+
+# Gets the attribute type of the specified value.
+private
+def get_type(value)
+  case value
+    when String  then return AttributeType::STRING
+    when Symbol  then return AttributeType::SYMBOL
+    when Integer then return AttributeType::LONG
+    when Float   then return AttributeType::DOUBLE
+    when TrueClass, FalseClass then return AttributeType::BOOLEAN
+    else raise "Undefined attribute type #{value.class}."
+  end
+end
+
+# Gets the Persistence type of the specified value.
+def get_persistence(persistence)
+  raise "Undefined persistence type #{persistence}." unless persistence == :serialized || persistence == :transient
+
+  return persistence == :serialized ? AttributeDefinition::Persistence::SERIALIZED : AttributeDefinition::Persistence::TRANSIENT
+end
+
+declare_attribute :test, 42, :serialized
+
+on :command, :test do |player, command|
+  player.send_message(player.test.to_s)
+  player.test = 6.5
+  player.send_message(player.test.to_s)
 end
