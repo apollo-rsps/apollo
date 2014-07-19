@@ -4,6 +4,7 @@ java_import 'org.apollo.game.model.entity.Entity'
 java_import 'org.apollo.game.model.entity.attr.Attribute'
 java_import 'org.apollo.game.model.entity.attr.AttributeDefinition'
 java_import 'org.apollo.game.model.entity.attr.AttributeMap'
+java_import 'org.apollo.game.model.entity.attr.AttributePersistence'
 java_import 'org.apollo.game.model.entity.attr.AttributeType'
 java_import 'org.apollo.game.model.entity.attr.BooleanAttribute'
 java_import 'org.apollo.game.model.entity.attr.NumericalAttribute'
@@ -66,13 +67,5 @@ end
 def get_persistence(persistence)
   raise "Undefined persistence type #{persistence}." unless persistence == :serialized || persistence == :transient
 
-  return persistence == :serialized ? AttributeDefinition::Persistence::SERIALIZED : AttributeDefinition::Persistence::TRANSIENT
-end
-
-declare_attribute :test, 42, :serialized
-
-on :command, :test do |player, command|
-  player.send_message(player.test.to_s)
-  player.test = 6.5
-  player.send_message(player.test.to_s)
+  return persistence == :serialized ? AttributePersistence::SERIALIZED : AttributePersistence::TRANSIENT
 end
