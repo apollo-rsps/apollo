@@ -1,11 +1,10 @@
 package org.apollo.game.model.entity;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeMap;
 
 /**
  * Represents an in-game entity, such as a mob, object, projectile etc.
@@ -49,9 +48,9 @@ public abstract class Entity {
 	}
 
 	/**
-	 * A map of attribute names to attributes.
+	 * The attribute map of this entity.
 	 */
-	protected final Map<String, Object> attributes = new HashMap<>(5);
+	protected final AttributeMap attributes = new AttributeMap();
 
 	/**
 	 * The position of this entity.
@@ -73,17 +72,17 @@ public abstract class Entity {
 	 * @param name The name of the attribute.
 	 * @return The value of the attribute.
 	 */
-	public final Object getAttribute(String name) {
-		return attributes.get(name);
+	public final Attribute<?> getAttribute(String name) {
+		return attributes.getAttribute(name);
 	}
 
 	/**
-	 * Gets all of the attributes of this entity, as a {@link Set} of {@link Entry} objects.
+	 * Gets a shallow copy of the attributes of this entity, as a {@link Map}.
 	 * 
-	 * @return The set of attributes.
+	 * @return The map of attributes.
 	 */
-	public final Set<Entry<String, Object>> getAttributes() {
-		return attributes.entrySet();
+	public final Map<String, Attribute<?>> getAttributes() {
+		return attributes.getAttributes();
 	}
 
 	/**
@@ -106,10 +105,10 @@ public abstract class Entity {
 	 * Sets the value of the attribute with the specified name.
 	 * 
 	 * @param name The name of the attribute.
-	 * @param value The value of the attribute.
+	 * @param value The attribute.
 	 */
-	public final void setAttribute(String name, Object value) {
-		attributes.put(name, value);
+	public final void setAttribute(String name, Attribute<?> value) {
+		attributes.setAttribute(name, value);
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.apollo.game.model.entity.setting;
+package org.apollo.game.model.setting;
 
 /**
  * An enumeration with the different privilege levels a player can have. This enumeration relies on the ordering of the

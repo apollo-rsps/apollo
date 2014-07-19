@@ -1,7 +1,7 @@
 package org.apollo.game.event.impl;
 
 import org.apollo.game.event.Event;
-import org.apollo.game.model.entity.setting.PrivilegeLevel;
+import org.apollo.game.model.setting.PrivilegeLevel;
 
 /**
  * An {@link Event} sent to the client that forwards a private message.

@@ -1,4 +1,4 @@
-package org.apollo.game.model.entity.setting;
+package org.apollo.game.model.setting;
 
 /**
  * Represents the status of the friend server. This enumeration relies on the ordering of the elements within, which

@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Item;
@@ -13,11 +15,16 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
 import org.apollo.game.model.entity.SkillSet;
-import org.apollo.game.model.entity.setting.Gender;
-import org.apollo.game.model.entity.setting.PrivacyState;
-import org.apollo.game.model.entity.setting.PrivilegeLevel;
-import org.apollo.game.model.entity.setting.ScreenBrightness;
+import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeType;
+import org.apollo.game.model.entity.attr.BooleanAttribute;
+import org.apollo.game.model.entity.attr.NumericalAttribute;
+import org.apollo.game.model.entity.attr.StringAttribute;
 import org.apollo.game.model.inv.Inventory;
+import org.apollo.game.model.setting.Gender;
+import org.apollo.game.model.setting.PrivacyState;
+import org.apollo.game.model.setting.PrivilegeLevel;
+import org.apollo.game.model.setting.ScreenBrightness;
 import org.apollo.io.player.PlayerLoader;
 import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.net.codec.login.LoginConstants;
@@ -135,8 +142,49 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			}
 			player.setIgnoredUsernames(ignores);
 
+			Map<String, Attribute<?>> attributes = readAttributes(in);
+			attributes.forEach(player::setAttribute);
+
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
 		}
+	}
+
+	/**
+	 * Reads the player's {@link Attribute}s.
+	 * 
+	 * @param in The input stream.
+	 * @return The {@link Map} of attribute names to attributes.
+	 * @throws IOException If there is an error reading from the stream.
+	 */
+	private Map<String, Attribute<?>> readAttributes(DataInputStream in) throws IOException {
+		int count = in.readInt();
+		Map<String, Attribute<?>> attributes = new HashMap<>(count);
+		Attribute<?> attribute;
+
+		for (int i = 0; i < count; i++) {
+			String name = StreamUtil.readString(in);
+			AttributeType type = AttributeType.valueOf(in.read());
+			switch (type) {
+			case BOOLEAN:
+				attribute = new BooleanAttribute(in.read() == 1);
+				break;
+			case DOUBLE:
+				attribute = new NumericalAttribute(in.readDouble());
+				break;
+			case LONG:
+				attribute = new NumericalAttribute(in.readLong());
+				break;
+			case STRING:
+			case SYMBOL:
+				attribute = new StringAttribute(StreamUtil.readString(in), type == AttributeType.SYMBOL);
+				break;
+			default:
+				throw new IllegalArgumentException("Undefined attribute type: " + type + ".");
+			}
+			attributes.put(name, attribute);
+		}
+
+		return attributes;
 	}
 
 	/**

@@ -3,8 +3,8 @@ require 'java'
 java_import 'org.apollo.game.event.impl.FriendServerStatusEvent'
 java_import 'org.apollo.game.event.impl.SendFriendEvent'
 java_import 'org.apollo.game.model.World'
-java_import 'org.apollo.game.model.settings.ServerStatus'
-java_import 'org.apollo.game.model.settings.PrivacyState'
+java_import 'org.apollo.game.model.setting.ServerStatus'
+java_import 'org.apollo.game.model.setting.PrivacyState'
 java_import 'org.apollo.game.model.entity.Player'
 
 

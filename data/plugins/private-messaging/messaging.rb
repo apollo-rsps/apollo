@@ -2,7 +2,7 @@ require 'java'
 
 java_import 'org.apollo.game.event.impl.ForwardPrivateMessageEvent'
 java_import 'org.apollo.game.model.World'
-java_import 'org.apollo.game.model.settings.PrivacyState'
+java_import 'org.apollo.game.model.setting.PrivacyState'
 
 on :event, :private_message do |ctx, player, event|
   friend = World.world.get_player(event.username)
