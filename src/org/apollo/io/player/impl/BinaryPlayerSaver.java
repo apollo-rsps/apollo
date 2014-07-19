@@ -96,21 +96,21 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			}
 
 			Map<String, Attribute<?>> attributes = player.getAttributes();
-			int count = 0;
-			for (Entry<String, Attribute<?>> entry : attributes.entrySet()) {
-				count += AttributeMap.getDefinition(entry.getKey()).getPersistence() == AttributePersistence.SERIALIZED ? 1 : 0;
-			};
-			out.writeInt(count);
-
-			for (Entry<String, Attribute<?>> entry : attributes.entrySet()) {
-				String name = entry.getKey();
-				AttributeDefinition<?> definition = AttributeMap.getDefinition(name);
-
-				if (definition.getPersistence() == AttributePersistence.SERIALIZED) {
-					out.writeUTF(name);
+			java.util.stream.Stream<Entry<String, Attribute<?>>> stream = attributes.entrySet().stream();
+			stream = stream.filter((entry) -> 
+				AttributeMap.getDefinition(entry.getKey()).getPersistence() == AttributePersistence.SERIALIZED
+			);
+			out.writeInt((int)stream.count());
+			stream.forEach((entry) -> {
+				try {
+					out.writeUTF(entry.getKey());
 					saveAttribute(out, entry.getValue());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}
+				
+			});
 		}
 	}
 
