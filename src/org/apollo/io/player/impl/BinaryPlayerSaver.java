@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Item;
@@ -15,10 +15,9 @@ import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
 import org.apollo.game.model.entity.SkillSet;
 import org.apollo.game.model.entity.attr.Attribute;
-import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
-import org.apollo.game.model.entity.attr.AttributeType;
 import org.apollo.game.model.entity.attr.AttributePersistence;
+import org.apollo.game.model.entity.attr.AttributeType;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.io.player.PlayerSaver;
 import org.apollo.util.NameUtil;
@@ -95,17 +94,15 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 				out.writeLong(NameUtil.encodeBase37(username));
 			}
 
-			Map<String, Attribute<?>> attributes = player.getAttributes();
+			Set<Entry<String, Attribute<?>>> attributes = player.getAttributes().entrySet();
+			attributes
+					.removeIf(e -> AttributeMap.getDefinition(e.getKey()).getPersistence() != AttributePersistence.SERIALIZED);
 			out.writeInt(attributes.size());
 
-			for (Entry<String, Attribute<?>> entry : attributes.entrySet()) {
+			for (Entry<String, Attribute<?>> entry : attributes) {
 				String name = entry.getKey();
-				AttributeDefinition<?> definition = AttributeMap.getDefinition(name);
-
-				if (definition.getPersistence() == AttributePersistence.SERIALIZED) {
-					StreamUtil.writeString(out, name);
-					saveAttribute(out, entry.getValue());
-				}
+				StreamUtil.writeString(out, name);
+				saveAttribute(out, entry.getValue());
 			}
 		}
 	}
