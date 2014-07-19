@@ -15,6 +15,8 @@ import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
 import org.apollo.game.model.entity.SkillSet;
 import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeDefinition;
+import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.entity.attr.AttributeType;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.io.player.PlayerSaver;
@@ -94,8 +96,15 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 
 			Map<String, Attribute<?>> attributes = player.getAttributes();
 			out.writeInt(attributes.size());
-			for (Entry<String, Attribute<?>> attribute : player.getAttributes().entrySet()) {
-				saveAttribute(out, attribute);
+
+			for (Entry<String, Attribute<?>> entry : attributes.entrySet()) {
+				String name = entry.getKey();
+				AttributeDefinition<?> definition = AttributeMap.getDefinition(name);
+
+				if (definition.getPersistence() == AttributeDefinition.Persistence.SERIALIZED) {
+					StreamUtil.writeString(out, name);
+					saveAttribute(out, entry.getValue());
+				}
 			}
 		}
 	}
@@ -107,9 +116,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 	 * @param entry The map entry.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private void saveAttribute(DataOutputStream out, Entry<String, Attribute<?>> entry) throws IOException {
-		StreamUtil.writeString(out, entry.getKey());
-		Attribute<?> attribute = entry.getValue();
+	private void saveAttribute(DataOutputStream out, Attribute<?> attribute) throws IOException {
 		AttributeType type = attribute.getType();
 
 		out.writeByte(type.getValue());
