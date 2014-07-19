@@ -18,6 +18,7 @@ import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.entity.attr.AttributeType;
+import org.apollo.game.model.entity.attr.AttributePersistence;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.io.player.PlayerSaver;
 import org.apollo.util.NameUtil;
@@ -101,7 +102,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 				String name = entry.getKey();
 				AttributeDefinition<?> definition = AttributeMap.getDefinition(name);
 
-				if (definition.getPersistence() == AttributeDefinition.Persistence.SERIALIZED) {
+				if (definition.getPersistence() == AttributePersistence.SERIALIZED) {
 					StreamUtil.writeString(out, name);
 					saveAttribute(out, entry.getValue());
 				}

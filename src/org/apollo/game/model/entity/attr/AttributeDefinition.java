@@ -10,23 +10,6 @@ package org.apollo.game.model.entity.attr;
 public final class AttributeDefinition<T> {
 
 	/**
-	 * The persistence state of an attribute - either {@code PERSISTENT} (saved) or {@code TRANSIENT} (not saved).
-	 */
-	public enum Persistence {
-
-		/**
-		 * The serialized persistence type, indicating that the attribute will be saved.
-		 */
-		SERIALIZED,
-
-		/**
-		 * The transient persistence type, indicating that the attribute will not be saved.
-		 */
-		TRANSIENT;
-
-	}
-
-	/**
 	 * The default value of this definition.
 	 */
 	private final T defaultValue;
@@ -34,7 +17,7 @@ public final class AttributeDefinition<T> {
 	/**
 	 * The persistence state of this definition.
 	 */
-	private final Persistence persistence;
+	private final AttributePersistence persistence;
 
 	/**
 	 * The type of this definition.
@@ -45,10 +28,10 @@ public final class AttributeDefinition<T> {
 	 * Creates the attribute definition.
 	 * 
 	 * @param defaultValue The default value.
-	 * @param persistence The {@link Persistence} state.
+	 * @param persistence The {@link AttributePersistence} state.
 	 * @param type The {@link AttributeType}.
 	 */
-	public AttributeDefinition(T defaultValue, Persistence persistence, AttributeType type) {
+	public AttributeDefinition(T defaultValue, AttributePersistence persistence, AttributeType type) {
 		this.defaultValue = defaultValue;
 		this.persistence = persistence;
 		this.type = type;
@@ -68,7 +51,7 @@ public final class AttributeDefinition<T> {
 	 * 
 	 * @return The persistence.
 	 */
-	public Persistence getPersistence() {
+	public AttributePersistence getPersistence() {
 		return persistence;
 	}
 
