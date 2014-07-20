@@ -160,8 +160,8 @@ public final class Position {
 	 * @return The longest horizontal or vertical delta.
 	 */
 	public int getLongestDelta(Position other) {
-		int deltaX = x - other.x;
-		int deltaY = y - other.y;
+		int deltaX = Math.abs(x - other.x);
+		int deltaY = Math.abs(y - other.y);
 		return Math.max(deltaX, deltaY);
 	}
 
