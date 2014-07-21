@@ -14,7 +14,6 @@ public final class ClosedInterfaceEventHandler extends EventHandler<ClosedInterf
 
 	@Override
 	public void handle(EventHandlerContext ctx, Player player, ClosedInterfaceEvent event) {
-		System.out.println("closing interface");
 		player.getInterfaceSet().interfaceClosed();
 	}
 
