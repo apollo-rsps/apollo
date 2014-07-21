@@ -1,42 +1,39 @@
 require 'java'
+
 java_import 'org.apollo.game.action.DistancedAction'
 java_import 'org.apollo.game.model.Animation'
-java_import 'org.apollo.game.model.entity.Skill'
-
-# TODO: this shouldn't use the punch animation/delay, but should use the one
-# from the active weapon/attack style (according to Scu11 anyway).
 
 DUMMY_ID = 823
 DUMMY_SIZE = 1
-PUNCH_ANIMATION = 422
-ANIMATION_PULSES = 0 # TODO: might be more if hitting it actually works instead of showing 'nothing more' msg?
+PUNCH_ANIMATION = Animation.new(422)
+ANIMATION_PULSES = 0
 LEVEL_THRESHOLD = 8
 EXP_PER_HIT = 5
 
 class DummyAction < DistancedAction
   attr_reader :position
 
-  def initialize(character, position)
-    super ANIMATION_PULSES, true, character, position, DUMMY_SIZE
+  def initialize(mob, position)
+    super(ANIMATION_PULSES, true, mob, position, DUMMY_SIZE)
 
     @position = position
     @started = false
   end
 
   def executeAction
-    if not @started
+    unless @started
       @started = true
 
-      character.send_message "You hit the dummy."
-      character.turn_to @position
-      character.play_animation Animation.new(PUNCH_ANIMATION)
+      mob.send_message('You hit the dummy.', true)
+      mob.turn_to(position)
+      mob.play_animation(PUNCH_ANIMATION)
     else
-      skills = character.skill_set
+      skills = mob.skill_set
 
-      if skills.skill(Skill::ATTACK).maximum_level >= LEVEL_THRESHOLD then
-        character.send_message "There is nothing more you can learn from hitting a dummy."
+      if (skills.skill(ATTACK_SKILL_ID).maximum_level >= LEVEL_THRESHOLD)
+        mob.send_message('There is nothing more you can learn from hitting a dummy.')
       else
-        skills.add_experience Skill::ATTACK, EXP_PER_HIT
+        skills.add_experience(ATTACK_SKILL_ID, EXP_PER_HIT)
       end
 
       stop
@@ -49,7 +46,7 @@ class DummyAction < DistancedAction
 end
 
 on :event, :object_action do |ctx, player, event|
-  if event.option == 2 and event.id == DUMMY_ID
-    player.start_action DummyAction.new(player, event.position)
+  if (event.option == 2 and event.id == DUMMY_ID)
+    player.start_action(DummyAction.new(player, event.position))
   end
 end
