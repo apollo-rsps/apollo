@@ -1,10 +1,6 @@
 package org.apollo.game.model.entity;
 
-import java.util.Map;
-
 import org.apollo.game.model.Position;
-import org.apollo.game.model.entity.attr.Attribute;
-import org.apollo.game.model.entity.attr.AttributeMap;
 
 /**
  * Represents an in-game entity, such as a mob, object, projectile etc.
@@ -48,11 +44,6 @@ public abstract class Entity {
 	}
 
 	/**
-	 * The attribute map of this entity.
-	 */
-	protected final AttributeMap attributes = new AttributeMap();
-
-	/**
 	 * The position of this entity.
 	 */
 	protected Position position;
@@ -64,25 +55,6 @@ public abstract class Entity {
 	 */
 	public Entity(Position position) {
 		this.position = position;
-	}
-
-	/**
-	 * Gets the value of the attribute with the specified name.
-	 * 
-	 * @param name The name of the attribute.
-	 * @return The value of the attribute.
-	 */
-	public final Attribute<?> getAttribute(String name) {
-		return attributes.getAttribute(name);
-	}
-
-	/**
-	 * Gets a shallow copy of the attributes of this entity, as a {@link Map}.
-	 * 
-	 * @return The map of attributes.
-	 */
-	public final Map<String, Attribute<?>> getAttributes() {
-		return attributes.getAttributes();
 	}
 
 	/**
@@ -99,16 +71,6 @@ public abstract class Entity {
 	 */
 	public Position getPosition() {
 		return position;
-	}
-
-	/**
-	 * Sets the value of the attribute with the specified name.
-	 * 
-	 * @param name The name of the attribute.
-	 * @param value The attribute.
-	 */
-	public final void setAttribute(String name, Attribute<?> value) {
-		attributes.setAttribute(name, value);
 	}
 
 }

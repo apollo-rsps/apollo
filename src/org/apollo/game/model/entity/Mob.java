@@ -2,6 +2,7 @@ package org.apollo.game.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apollo.game.action.Action;
 import org.apollo.game.model.Animation;
@@ -10,9 +11,11 @@ import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.def.NpcDefinition;
+import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.inv.Inventory;
-import org.apollo.game.model.inv.InventoryConstants;
 import org.apollo.game.model.inv.Inventory.StackMode;
+import org.apollo.game.model.inv.InventoryConstants;
 import org.apollo.game.scheduling.impl.SkillNormalizationTask;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
@@ -21,6 +24,7 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
  * A {@link Mob} is a living entity in the world, such as a player or NPC.
  * 
  * @author Graham
+ * @author Major
  */
 public abstract class Mob extends Entity {
 
@@ -28,21 +32,6 @@ public abstract class Mob extends Entity {
 	 * This mob's current action.
 	 */
 	private transient Action<?> action;
-
-	/**
-	 * This mob's set of synchronization blocks.
-	 */
-	protected transient SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
-
-	/**
-	 * This mob's npc definition. A player only uses this if they are appearing as an npc.
-	 */
-	protected NpcDefinition definition;
-
-	/**
-	 * This mob's equipment.
-	 */
-	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
 
 	/**
 	 * The position this mob is facing towards.
@@ -53,21 +42,6 @@ public abstract class Mob extends Entity {
 	 * This mob's first movement direction.
 	 */
 	private transient Direction firstDirection = Direction.NONE;
-
-	/**
-	 * The index of this mob.
-	 */
-	protected int index = -1;
-
-	/**
-	 * The mob this mob is interacting with.
-	 */
-	protected Mob interactingMob;
-
-	/**
-	 * This mob's inventory.
-	 */
-	protected final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
 
 	/**
 	 * This mob's list of local npcs.
@@ -85,14 +59,49 @@ public abstract class Mob extends Entity {
 	private transient Direction secondDirection = Direction.NONE;
 
 	/**
-	 * This mob's skill set.
-	 */
-	protected final SkillSet skillSet = new SkillSet();
-
-	/**
 	 * Indicates whether this mob is currently teleporting or not.
 	 */
 	private transient boolean teleporting = false;
+
+	/**
+	 * The attribute map of this entity.
+	 */
+	protected final AttributeMap attributes = new AttributeMap();
+
+	/**
+	 * This mob's set of synchronization blocks.
+	 */
+	protected transient SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
+
+	/**
+	 * This mob's npc definition. A player only uses this if they are appearing as an npc.
+	 */
+	protected NpcDefinition definition;
+
+	/**
+	 * This mob's equipment.
+	 */
+	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
+
+	/**
+	 * The index of this mob.
+	 */
+	protected int index = -1;
+
+	/**
+	 * The mob this mob is interacting with.
+	 */
+	protected Mob interactingMob;
+
+	/**
+	 * This mob's inventory.
+	 */
+	protected final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
+
+	/**
+	 * This mob's skill set.
+	 */
+	protected final SkillSet skillSet = new SkillSet();
 
 	/**
 	 * This mob's walking queue.
@@ -125,12 +134,40 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Gets the value of the attribute with the specified name.
+	 * 
+	 * @param name The name of the attribute.
+	 * @return The value of the attribute.
+	 */
+	public final Attribute<?> getAttribute(String name) {
+		return attributes.getAttribute(name);
+	}
+
+	/**
+	 * Gets a shallow copy of the attributes of this entity, as a {@link Map}.
+	 * 
+	 * @return The map of attributes.
+	 */
+	public final Map<String, Attribute<?>> getAttributes() {
+		return attributes.getAttributes();
+	}
+
+	/**
 	 * Gets this mob's {@link SynchronizationBlockSet}.
 	 * 
 	 * @return The block set.
 	 */
 	public final SynchronizationBlockSet getBlockSet() {
 		return blockSet;
+	}
+
+	/**
+	 * Gets this mob's {@link NpcDefinition}.
+	 * 
+	 * @param definition The definition.
+	 */
+	public final NpcDefinition getDefinition() {
+		return definition;
 	}
 
 	/**
@@ -221,15 +258,6 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets this mob's {@link NpcDefinition}.
-	 * 
-	 * @param definition The definition.
-	 */
-	public final NpcDefinition getDefinition() {
-		return definition;
-	}
-
-	/**
 	 * Gets this mob's second movement {@link Direction}.
 	 * 
 	 * @return The direction.
@@ -254,13 +282,6 @@ public abstract class Mob extends Entity {
 	 */
 	public final WalkingQueue getWalkingQueue() {
 		return walkingQueue;
-	}
-
-	/**
-	 * Initialises this mob.
-	 */
-	private void init() {
-		World.getWorld().schedule(new SkillNormalizationTask(this));
 	}
 
 	/**
@@ -312,6 +333,16 @@ public abstract class Mob extends Entity {
 	public final void resetInteractingMob() {
 		interactingMob = null;
 		blockSet.add(SynchronizationBlock.createInteractingMobBlock(65535));
+	}
+
+	/**
+	 * Sets the value of the attribute with the specified name.
+	 * 
+	 * @param name The name of the attribute.
+	 * @param value The attribute.
+	 */
+	public final void setAttribute(String name, Attribute<?> value) {
+		attributes.setAttribute(name, value);
 	}
 
 	/**
@@ -443,6 +474,13 @@ public abstract class Mob extends Entity {
 	 */
 	public final void turnTo(Position position) {
 		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(this.facingPosition = position));
+	}
+
+	/**
+	 * Initialises this mob.
+	 */
+	private void init() {
+		World.getWorld().schedule(new SkillNormalizationTask(this));
 	}
 
 }

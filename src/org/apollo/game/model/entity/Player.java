@@ -26,10 +26,10 @@ import org.apollo.game.model.inter.bank.BankInterfaceListener;
 import org.apollo.game.model.inv.AppearanceInventoryListener;
 import org.apollo.game.model.inv.FullInventoryListener;
 import org.apollo.game.model.inv.Inventory;
+import org.apollo.game.model.inv.Inventory.StackMode;
 import org.apollo.game.model.inv.InventoryConstants;
 import org.apollo.game.model.inv.InventoryListener;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
-import org.apollo.game.model.inv.Inventory.StackMode;
 import org.apollo.game.model.setting.PrivacyState;
 import org.apollo.game.model.setting.PrivilegeLevel;
 import org.apollo.game.model.setting.ScreenBrightness;
@@ -44,6 +44,7 @@ import org.apollo.util.Point;
  * A {@link Player} is a {@link Mob} that a user is controlling.
  * 
  * @author Graham
+ * @author Major
  */
 public final class Player extends Mob {
 
@@ -452,9 +453,9 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets the player's name.
+	 * Gets this player's name.
 	 * 
-	 * @return The player's name.
+	 * @return The name.
 	 */
 	public String getUsername() {
 		return credentials.getUsername();
@@ -573,7 +574,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Checks if this player account has membership.
+	 * Checks if this player has membership.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -591,7 +592,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets whether the player is running or not.
+	 * Checks if this player is running.
 	 * 
 	 * @return {@code true} if the player is running, otherwise {@code false}.
 	 */
@@ -600,9 +601,9 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets the withdrawing notes flag.
+	 * Checks if this player is withdrawing noted items.
 	 * 
-	 * @return The flag.
+	 * @return {@code true} if the player is currently withdrawing notes, otherwise {@code false}.
 	 */
 	public boolean isWithdrawingNotes() {
 		return withdrawingNotes;
@@ -788,7 +789,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the value denoting the client's modified version.
+	 * Sets the value denoting the client's modified version. TODO make this an attribute?
 	 * 
 	 * @param clientVersion The client version.
 	 */
@@ -815,7 +816,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets whether or not the player is skulled.
+	 * Sets whether or not the player is skulled. TODO make this an attribute
 	 * 
 	 * @param isSkulled Whether or not the player is skulled.
 	 */
@@ -851,7 +852,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the new player flag.
+	 * Sets the new player flag. TODO make this an attribute?
 	 * 
 	 * @param newPlayer A flag indicating if the player has played before.
 	 */
@@ -860,7 +861,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the player's prayer icon.
+	 * Sets the player's prayer icon. TODO make this an attribute?
 	 * 
 	 * @param prayerIcon The prayer icon.
 	 */
@@ -887,12 +888,13 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the player's run energy.
+	 * Sets the player's run energy. TODO make this an attribute?
 	 * 
 	 * @param runEnergy The energy.
 	 */
 	public void setRunEnergy(int runEnergy) {
-		send(new UpdateRunEnergyEvent(this.runEnergy = runEnergy));
+		this.runEnergy = runEnergy;
+		send(new UpdateRunEnergyEvent(runEnergy));
 	}
 
 	/**
@@ -928,9 +930,9 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets whether the player is withdrawing notes from the bank.
+	 * Sets whether or not the player is withdrawing notes from the bank.
 	 * 
-	 * @param withdrawingNotes Whether the player is withdrawing noted items or not.
+	 * @param withdrawingNotes Whether or not the player is withdrawing noted items.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
 		this.withdrawingNotes = withdrawingNotes;
@@ -959,16 +961,18 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Toggles whether the player is running or not.
+	 * Toggles the player's run status.
 	 */
 	public void toggleRunning() {
-		walkingQueue.setRunningQueue(running = !running);
+		running = !running;
+		walkingQueue.setRunningQueue(running);
 		send(new ConfigEvent(173, running ? 1 : 0));
 	}
 
 	@Override
 	public String toString() {
-		return Player.class.getName() + " [username=" + getUsername() + ", privilege=" + privilegeLevel + "]";
+		return Player.class.getName() + " [username=" + getUsername() + ", privilege=" + privilegeLevel
+				+ ", clientVersion=" + clientVersion + "]";
 	}
 
 }
