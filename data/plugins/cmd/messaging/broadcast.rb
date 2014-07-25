@@ -1,4 +1,4 @@
-require_java
+require 'java'
 
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
