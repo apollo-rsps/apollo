@@ -100,7 +100,8 @@ public final class SectorRepository {
 	}
 
 	/**
-	 * Gets the {@link List} of {@link Sector}s.
+	 * Gets the {@link List} of {@link Sector}s. This is a shallow copy (i.e. modifying the list will not change the
+	 * repository, but modifying the sectors in the list will change the sectors).
 	 * 
 	 * @return The list.
 	 */
