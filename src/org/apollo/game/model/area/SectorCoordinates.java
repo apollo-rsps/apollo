@@ -46,11 +46,9 @@ public final class SectorCoordinates {
 		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
+
 		final SectorCoordinates other = (SectorCoordinates) obj;
-		if (x != other.x || y != other.y) {
-			return false;
-		}
-		return true;
+		return x == other.x && y == other.y;
 	}
 
 	/**
@@ -73,7 +71,7 @@ public final class SectorCoordinates {
 
 	@Override
 	public int hashCode() {
-		return 61 * (427 + x) + y;
+		return x << 16 | y;
 	}
 
 }
