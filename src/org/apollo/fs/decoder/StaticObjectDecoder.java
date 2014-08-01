@@ -105,11 +105,12 @@ public final class StaticObjectDecoder {
 				int info = buffer.get() & 0xFF;
 				int type = info >> 2;
 				int rotation = info & 3;
+				if (type >= 0 && type <= 3 || type >= 9 && type <= 21) {
+					Position pos = new Position(x + localX, y + localY, height);
 
-				Position pos = new Position(x + localX, y + localY, height);
-
-				GameObject object = new GameObject(id, pos, type, rotation);
-				objects.add(object);
+					GameObject object = new GameObject(id, pos, type, rotation);
+					objects.add(object);
+				}
 			}
 		}
 
