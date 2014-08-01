@@ -10,6 +10,8 @@ import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeMap;
@@ -392,7 +394,15 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public final void setPosition(Position position) {
+		Position old = this.position;
 		this.position = position;
+
+		if (old.getTopLeftSectorX() != position.getTopLeftSectorX()) {
+			SectorRepository repository = World.getWorld().getSectorRepository();
+			Sector oldSector = repository.fromPosition(old), newSector = repository.fromPosition(position);
+			oldSector.removeEntity(this);
+			newSector.addEntity(this);
+		}
 	}
 
 	/**
