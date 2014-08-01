@@ -62,18 +62,14 @@ public final class Position {
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
-		}
-		if (this == obj) {
+		} else if (this == obj) {
 			return true;
-		}
-		if (getClass() != obj.getClass()) {
+		} else if (getClass() != obj.getClass()) {
 			return false;
 		}
+
 		Position other = (Position) obj;
-		if (height != other.height || x != other.x || y != other.y) {
-			return false;
-		}
-		return true;
+		return x == other.x && y == other.y && height == other.height;
 	}
 
 	/**
