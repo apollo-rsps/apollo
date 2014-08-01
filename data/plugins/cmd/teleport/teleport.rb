@@ -19,5 +19,5 @@ on :command, :tele, RIGHTS_ADMIN do |player, command|
   y = args[1].to_i
   z = args.length == 3 ? args[2].to_i : player.position.height
 
-  player.teleport(Position.new(x, y, z) if (0..4).include?(z))
+  player.teleport(Position.new(x, y, z)) if (0..4).include?(z)
 end
