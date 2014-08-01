@@ -148,7 +148,7 @@ public final class ItemDefinitionDecoder {
 			} else if (opcode == 113) {
 				buffer.get();
 			} else if (opcode == 114) {
-				buffer.getShort();
+				buffer.get();
 			} else if (opcode == 115) {
 				definition.setTeam(buffer.get() & 0xFF);
 			}
