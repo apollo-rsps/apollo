@@ -25,17 +25,17 @@ class AreaAction
 
   # Called when the player has entered an area this action is registered to.
   def entered(player)
-    @on_enter.call(player) unless @on_enter == nil
+    @on_enter.call(player) unless @on_enter.nil?
   end
 
   # Called while the player is in area this action is registered to.
   def inside(player)
-    @while_in.call(player) unless @while_in == nil
+    @while_in.call(player) unless @while_in.nil?
   end
 
   # Called when the player has exited an area this action is registered to.
   def exited(player)
-    @on_exit.call(player) unless @on_exit == nil
+    @on_exit.call(player) unless @on_exit.nil?
   end
 
 end
@@ -46,23 +46,23 @@ def area_action(name, &block)
   action.instance_eval(&block)
 end
 
-# Defines a pvp area action.
+# Defines the pvp area action.
 area_action :pvp do
-  on_entry { |player| player.set_attribute("pvp", :boolean, true ) }
-  on_exit  { |player| player.set_attribute("pvp", :boolean, false) }
+  on_entry { |player| player.in_pvp = true }
+  on_exit  { |player| player.in_pvp = true }
 end
 
-# Defines a multi-combat area action.
+# Defines the wilderness area action.
 area_action :wilderness do
 
   on_entry do |player|
-  	player.send(DisplayCrossbonesEvent.new(true))
-    player.set_attribute("wilderness", :boolean, true)
+    player.send(DisplayCrossbonesEvent.new(true))
+    player.in_wilderness = true
   end
 
   on_exit do |player|
     player.send(DisplayCrossbonesEvent.new(false))
-    player.set_attribute("wilderness", :boolean, false)
+    player.in_wilderness = false
   end
 
 end
