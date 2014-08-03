@@ -1,4 +1,4 @@
 <login>
-	<loader>org.apollo.io.player.impl.BinaryPlayerLoader</loader>
-	<saver>org.apollo.io.player.impl.BinaryPlayerSaver</saver>
+	<loader>org.apollo.io.player.impl.DummyPlayerLoader</loader>
+	<saver>org.apollo.io.player.impl.DiscardPlayerSaver</saver>
 </login>
