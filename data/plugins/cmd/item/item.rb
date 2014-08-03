@@ -45,7 +45,7 @@ end
 
 # Gives the player one thousand of each rune.
 on :command, :runes, RIGHTS_ADMIN do |player, command|
-	(554..566).each do |i|
-		player.inventory.add(i, 1000)
-	end
+  (554..566).each do |i|
+    player.inventory.add(i, 1000)
+  end
 end

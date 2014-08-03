@@ -12,7 +12,7 @@ end
 # Checks if the sender is permitted to interact with the friend they have added:
 def interaction_permitted(sender, friend)
   if friend == nil || friend.has_ignored(sender.username)
-  	return false
+    return false
   end
   
   return friend.friends_with(sender.username) ? friend.friend_privacy != PrivacyState::OFF : friend.friend_privacy == PrivacyState::ON

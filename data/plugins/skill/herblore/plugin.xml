@@ -9,10 +9,10 @@
     <author>Major</author>
   </authors>
   <scripts>
-	<script>herblore.rb</script>
-	<script>ingredient.rb</script>
-	<script>herb.rb</script>
-	<script>potion.rb</script>
+  <script>herblore.rb</script>
+  <script>ingredient.rb</script>
+  <script>herb.rb</script>
+  <script>potion.rb</script>
   </scripts>
   <dependencies />
 </plugin>
