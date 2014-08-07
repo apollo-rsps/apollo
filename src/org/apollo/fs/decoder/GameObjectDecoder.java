@@ -18,7 +18,7 @@ import org.apollo.util.CompressionUtil;
  * 
  * @author Chris Fletcher
  */
-public final class StaticObjectDecoder {
+public final class GameObjectDecoder {
 
 	/**
 	 * The {@link IndexedFileSystem}.
@@ -30,7 +30,7 @@ public final class StaticObjectDecoder {
 	 * 
 	 * @param fs The indexed file system.
 	 */
-	public StaticObjectDecoder(IndexedFileSystem fs) {
+	public GameObjectDecoder(IndexedFileSystem fs) {
 		this.fs = fs;
 	}
 

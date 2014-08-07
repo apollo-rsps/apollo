@@ -13,7 +13,7 @@ import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.ItemDefinitionDecoder;
 import org.apollo.fs.decoder.NpcDefinitionDecoder;
 import org.apollo.fs.decoder.ObjectDefinitionDecoder;
-import org.apollo.fs.decoder.StaticObjectDecoder;
+import org.apollo.fs.decoder.GameObjectDecoder;
 import org.apollo.game.command.CommandDispatcher;
 import org.apollo.game.login.LoginDispatcher;
 import org.apollo.game.login.LogoutDispatcher;
@@ -260,7 +260,7 @@ public final class World {
 		ObjectDefinition.init(objDefs);
 		logger.info("Loaded " + objDefs.length + " object definitions.");
 
-		StaticObjectDecoder staticDecoder = new StaticObjectDecoder(fs);
+		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs);
 		GameObject[] objects = staticDecoder.decode();
 		placeEntities(objects);
 		logger.info("Loaded " + objects.length + " static objects.");
