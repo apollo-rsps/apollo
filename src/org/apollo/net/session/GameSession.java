@@ -12,10 +12,10 @@ import java.util.logging.Logger;
 import org.apollo.ServerContext;
 import org.apollo.game.GameConstants;
 import org.apollo.game.GameService;
-import org.apollo.game.event.Event;
-import org.apollo.game.event.handler.chain.EventHandlerChain;
-import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
-import org.apollo.game.event.impl.LogoutEvent;
+import org.apollo.game.message.Message;
+import org.apollo.game.message.handler.MessageHandlerChain;
+import org.apollo.game.message.handler.MessageHandlerChainGroup;
+import org.apollo.game.message.impl.LogoutMessage;
 import org.apollo.game.model.entity.Player;
 
 /**
@@ -36,9 +36,9 @@ public final class GameSession extends Session {
 	private final ServerContext context;
 
 	/**
-	 * The queue of pending {@link Event}s.
+	 * The queue of pending {@link Message}s.
 	 */
-	private final BlockingQueue<Event> eventQueue = new ArrayBlockingQueue<>(GameConstants.EVENTS_PER_PULSE);
+	private final BlockingQueue<Message> messageQueue = new ArrayBlockingQueue<>(GameConstants.MESSAGES_PER_PULSE);
 
 	/**
 	 * The player.
@@ -64,48 +64,48 @@ public final class GameSession extends Session {
 	}
 
 	/**
-	 * Encodes and dispatches the specified event.
+	 * Encodes and dispatches the specified message.
 	 * 
-	 * @param event The event.
+	 * @param message The message.
 	 */
-	public void dispatchEvent(Event event) {
+	public void dispatchMessage(Message message) {
 		Channel channel = getChannel();
 		if (channel.isActive() && channel.isOpen()) {
-			ChannelFuture future = channel.writeAndFlush(event);
-			if (event.getClass() == LogoutEvent.class) {
+			ChannelFuture future = channel.writeAndFlush(message);
+			if (message.getClass() == LogoutMessage.class) {
 				future.addListener(ChannelFutureListener.CLOSE);
 			}
 		}
 	}
 
 	/**
-	 * Handles pending events for this session.
+	 * Handles pending messages for this session.
 	 * 
-	 * @param chainGroup The event chain group.
+	 * @param chainGroup The message chain group.
 	 */
 	@SuppressWarnings("unchecked")
-	public void handlePendingEvents(EventHandlerChainGroup chainGroup) {
-		Event event;
-		while ((event = eventQueue.poll()) != null) {
+	public void handlePendingMessages(MessageHandlerChainGroup chainGroup) {
+		Message message;
+		while ((message = messageQueue.poll()) != null) {
 			// this lookup code really sucks!
 			// TODO improve it!
-			Class<? extends Event> eventType = event.getClass();
-			EventHandlerChain<Event> chain = (EventHandlerChain<Event>) chainGroup.getChain(eventType);
+			Class<? extends Message> messageType = message.getClass();
+			MessageHandlerChain<Message> chain = (MessageHandlerChain<Message>) chainGroup.getChain(messageType);
 
-			while (chain == null && eventType != null) {
-				eventType = (Class<? extends Event>) eventType.getSuperclass();
-				if (eventType == Event.class) {
-					eventType = null;
+			while (chain == null && messageType != null) {
+				messageType = (Class<? extends Message>) messageType.getSuperclass();
+				if (messageType == Message.class) {
+					messageType = null;
 				} else {
-					chain = (EventHandlerChain<Event>) chainGroup.getChain(eventType);
+					chain = (MessageHandlerChain<Message>) chainGroup.getChain(messageType);
 				}
 			}
 
 			if (chain != null) {
 				try {
-					chain.handle(player, event);
+					chain.handle(player, message);
 				} catch (Exception ex) {
-					logger.log(Level.SEVERE, "Error handling event: ", ex);
+					logger.log(Level.SEVERE, "Error handling message: ", ex);
 				}
 			}
 		}
@@ -122,11 +122,10 @@ public final class GameSession extends Session {
 
 	@Override
 	public void messageReceived(Object message) {
-		Event event = (Event) message;
-		if (eventQueue.size() >= GameConstants.EVENTS_PER_PULSE) {
-			logger.warning("Too many events in queue for game session, dropping...");
+		if (messageQueue.size() >= GameConstants.MESSAGES_PER_PULSE) {
+			logger.warning("Too many messages in queue for game session, dropping...");
 		} else {
-			eventQueue.add(event);
+			messageQueue.add((Message) message);
 		}
 	}
 

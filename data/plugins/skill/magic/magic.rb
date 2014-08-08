@@ -1,11 +1,11 @@
 require 'java'
 
 java_import 'org.apollo.game.action.Action'
-java_import 'org.apollo.game.event.impl.DisplayTabInterfaceEvent'
+java_import 'org.apollo.game.message.impl.DisplayTabInterfaceMessage'
 java_import 'org.apollo.game.model.entity.EquipmentConstants'
 java_import 'org.apollo.game.model.entity.Skill'
 
-DISPLAY_SPELLBOOK = DisplayTabInterfaceEvent.new(6)
+DISPLAY_SPELLBOOK = DisplayTabInterfaceMessage.new(6)
 
 class Spell
   attr_reader :level, :elements, :experience
@@ -119,31 +119,31 @@ class ItemSpellAction < SpellAction
 
 end
 
-# Intercepts the magic on item event.
-on :event, :magic_on_item do |ctx, player, event|
-  spell = event.spell_id
+# Intercepts the magic on item message.
+on :message, :magic_on_item do |ctx, player, message|
+  spell = message.spell_id
   
   alch = ALCHEMY_SPELLS[spell]
   if alch != nil
-    slot = event.slot
+    slot = message.slot
     item = player.inventory.get(slot)
     player.start_action(AlchemyAction.new(player, alch, slot, item))
     ctx.break_handler_chain
     return
   end
   
-  ench = ENCHANT_SPELLS[event.id]
+  ench = ENCHANT_SPELLS[message.id]
   if ench != nil and ench.button == spell
-    slot = event.slot
+    slot = message.slot
     item = player.inventory.get(slot)
     player.start_action(EnchantAction.new(player, ench, slot, item, ENCHANT_ITEMS[item.id]))
     ctx.break_handler_chain
   end
 end
 
-# Intercepts the button event
-on :event, :button do |ctx, player, event|
-  button = event.widget_id
+# Intercepts the button message
+on :message, :button do |ctx, player, message|
+  button = message.widget_id
 
   tele = TELEPORT_SPELLS[button]
   if tele != nil

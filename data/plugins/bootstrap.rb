@@ -15,7 +15,7 @@
 require 'java'
 
 java_import 'org.apollo.game.command.CommandListener'
-java_import 'org.apollo.game.event.handler.EventHandler'
+java_import 'org.apollo.game.message.handler.MessageHandler'
 java_import 'org.apollo.game.login.LoginListener'
 java_import 'org.apollo.game.login.LogoutListener'
 java_import 'org.apollo.game.model.World'
@@ -77,18 +77,18 @@ class ProcLogoutListener
   end
 end
 
-# An EventHandler which executes a Proc object with three arguments: the chain
-# context, the player and the event.
-class ProcEventHandler < EventHandler
+# An MessageHandler which executes a Proc object with three arguments: the chain
+# context, the player and the message.
+class ProcMessageHandler < MessageHandler
   def initialize(block, option)
     super() # required (with brackets!), see http://jira.codehaus.org/browse/JRUBY-679
     @block = block
     @option = option
   end
 
-  def handle(ctx, player, event)
-    if (@option == 0 || @option == event.option)
-      @block.call(ctx, player, event)
+  def handle(ctx, player, message)
+    if (@option == 0 || @option == message.option)
+      @block.call(ctx, player, message)
     end
   end
 end
@@ -127,11 +127,11 @@ def schedule(*args, &block)
   end
 end
 
-# Defines some sort of action to take upon an event. The following types of
-# event are currently valid:
+# Defines some sort of action to take upon an message. The following types of
+# message are currently valid:
 #
 #   * :command
-#   * :event
+#   * :message
 #   * :button
 #   * :login
 #   * :logout
@@ -140,19 +140,19 @@ end
 # minimum rights level to use it). The minimum rights level defaults to
 # STANDARD. The block should have two arguments: player and command.
 #
-# An event takes no arguments. The block should have three arguments: the chain
-# context, the player and the event object.
+# An message takes no arguments. The block should have three arguments: the chain
+# context, the player and the message object.
 #
 # A button takes one argument (the id). The block should have one argument: the
 # player who clicked the button.
 def on(type, *args, &block)
   case type
     when :command then on_command(args, block)
-    when :event   then on_event(args, block)
+    when :message   then on_message(args, block)
     when :button  then on_button(args, block)
     when :login   then on_login(block)
     when :logout  then on_logout(block)
-    else raise 'Unknown event type.'
+    else raise 'Unknown message type.'
   end
 end
 
@@ -162,39 +162,39 @@ def on_button(args, proc)
 
   id = args[0].to_i
 
-  on :event, :button do |ctx, player, event|
-    proc.call(player) if event.widget_id == id
+  on :message, :button do |ctx, player, message|
+    proc.call(player) if message.widget_id == id
   end
 end
 
-# Defines an action to be taken upon an event.
-# The event can either be a symbol with the lower-case underscored class name, or the class itself.
-def on_event(args, proc)
-  raise 'Event must have one or two arguments.' unless (1..2).include?(args.length)
+# Defines an action to be taken upon an message.
+# The message can either be a symbol with the lower-case underscored class name, or the class itself.
+def on_message(args, proc)
+  raise 'Message must have one or two arguments.' unless (1..2).include?(args.length)
   numbers = [ 'first', 'second', 'third', 'fourth', 'fifth' ]
-  event = args[0]; option = 0
+  message = args[0]; option = 0
 
   numbers.each_index do |index|
     number = numbers[index]
 
-    if event.to_s.start_with?(number)
+    if message.to_s.start_with?(number)
       option = index + 1
-      event = event[number.length + 1, event.length].to_sym
+      message = message[number.length + 1, message.length].to_sym
       break
     end
   end
 
-  if event.is_a?(Symbol)
-    class_name = event.to_s.camelize.concat('Event')
-    event = Java::JavaClass.for_name("org.apollo.game.event.impl.#{class_name}")
+  if message.is_a?(Symbol)
+    class_name = message.to_s.camelize.concat('Message')
+    message = Java::JavaClass.for_name("org.apollo.game.message.impl.#{class_name}")
   end
 
-  $ctx.add_last_event_handler(event, ProcEventHandler.new(proc, option))
+  $ctx.add_last_message_handler(message, ProcMessageHandler.new(proc, option))
 end
 
 # Defines an action to be taken upon a command.
 def on_command(args, proc)
-  raise 'Command event must have one or two arguments.' unless (1..2).include?(args.length)
+  raise 'Command message must have one or two arguments.' unless (1..2).include?(args.length)
 
   rights = args.length == 2 ? args[1] : RIGHTS_STANDARD
   $ctx.add_command_listener(args[0].to_s, ProcCommandListener.new(rights, proc))

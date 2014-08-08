@@ -3,26 +3,26 @@ package org.apollo.net.release;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apollo.game.event.Event;
+import org.apollo.game.message.Message;
 import org.apollo.net.meta.PacketMetaData;
 import org.apollo.net.meta.PacketMetaDataGroup;
 
 /**
- * A {@link Release} is a distinct client version, for example 317 is a common release used in server emulators.
+ * A {@link Release} is a distinct client version, e.g. {@code 317}.
  * 
  * @author Graham
  */
 public abstract class Release {
 
 	/**
-	 * The decoders.
+	 * The array of message decoders.
 	 */
-	private final EventDecoder<?>[] decoders = new EventDecoder<?>[256];
+	private final MessageDecoder<?>[] decoders = new MessageDecoder<?>[256];
 
 	/**
-	 * The encoders.
+	 * The map of message classes to message encoders.
 	 */
-	private final Map<Class<? extends Event>, EventEncoder<?>> encoders = new HashMap<Class<? extends Event>, EventEncoder<?>>();
+	private final Map<Class<? extends Message>, MessageEncoder<?>> encoders = new HashMap<>();
 
 	/**
 	 * The incoming packet meta data.
@@ -46,30 +46,6 @@ public abstract class Release {
 	}
 
 	/**
-	 * Gets the {@link EventDecoder} for the specified opcode.
-	 * 
-	 * @param opcode The opcode.
-	 * @return The {@link EventDecoder}.
-	 */
-	public final EventDecoder<?> getEventDecoder(int opcode) {
-		if (opcode < 0 || opcode >= decoders.length) {
-			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
-		}
-		return decoders[opcode];
-	}
-
-	/**
-	 * Gets an {@link EventEncoder} for the specified event type.
-	 * 
-	 * @param type The type of event.
-	 * @return The {@link EventEncoder}.
-	 */
-	@SuppressWarnings("unchecked")
-	public <E extends Event> EventEncoder<E> getEventEncoder(Class<E> type) {
-		return (EventEncoder<E>) encoders.get(type);
-	}
-
-	/**
 	 * Gets meta data for the specified incoming packet.
 	 * 
 	 * @param opcode The opcode of the incoming packet.
@@ -77,6 +53,30 @@ public abstract class Release {
 	 */
 	public final PacketMetaData getIncomingPacketMetaData(int opcode) {
 		return incomingPacketMetaData.getMetaData(opcode);
+	}
+
+	/**
+	 * Gets the {@link MessageDecoder} for the specified opcode.
+	 * 
+	 * @param opcode The opcode.
+	 * @return The message decoder.
+	 */
+	public final MessageDecoder<?> getMessageDecoder(int opcode) {
+		if (opcode < 0 || opcode >= decoders.length) {
+			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
+		}
+		return decoders[opcode];
+	}
+
+	/**
+	 * Gets the {@link MessageEncoder} for the specified message type.
+	 * 
+	 * @param type The type of message.
+	 * @return The message encoder.
+	 */
+	@SuppressWarnings("unchecked")
+	public <M extends Message> MessageEncoder<M> getMessageEncoder(Class<M> type) {
+		return (MessageEncoder<M>) encoders.get(type);
 	}
 
 	/**
@@ -89,22 +89,22 @@ public abstract class Release {
 	}
 
 	/**
-	 * Registers a {@link EventEncoder} for the specified event type.
+	 * Registers a {@link MessageEncoder} for the specified message type.
 	 * 
-	 * @param type The event type.
-	 * @param encoder The {@link EventEncoder}.
+	 * @param type The message type.
+	 * @param encoder The message encoder.
 	 */
-	public final <E extends Event> void register(Class<E> type, EventEncoder<E> encoder) {
+	public final <M extends Message> void register(Class<M> type, MessageEncoder<M> encoder) {
 		encoders.put(type, encoder);
 	}
 
 	/**
-	 * Registers a {@link EventDecoder} for the specified opcode.
+	 * Registers a {@link MessageDecoder} for the specified opcode.
 	 * 
 	 * @param opcode The opcode, between 0 and 255 inclusive.
-	 * @param decoder The {@link EventDecoder}.
+	 * @param decoder The message decoder.
 	 */
-	public final <E extends Event> void register(int opcode, EventDecoder<E> decoder) {
+	public final <M extends Message> void register(int opcode, MessageDecoder<M> decoder) {
 		if (opcode < 0 || opcode >= decoders.length) {
 			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
 		}

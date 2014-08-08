@@ -1,6 +1,6 @@
 require 'java'
 
-java_import 'org.apollo.game.event.impl.ConfigEvent'
+java_import 'org.apollo.game.message.impl.ConfigMessage'
 java_import 'org.apollo.game.model.entity.EquipmentConstants'
 java_import 'org.apollo.game.action.DistancedAction'
 
@@ -26,13 +26,13 @@ class Tiara
   end
 
   def send_config(player)
-     player.send(ConfigEvent.new(CHANGE_ALTAR_OBJECT_CONFIG, 1 << @bitshift))
+     player.send(ConfigMessage.new(CHANGE_ALTAR_OBJECT_CONFIG, 1 << @bitshift))
   end
 end
 
 private
 def send_empty_config(player)
-  player.send(ConfigEvent.new(CHANGE_ALTAR_OBJECT_CONFIG, 0))
+  player.send(ConfigMessage.new(CHANGE_ALTAR_OBJECT_CONFIG, 0))
 end
 
 # Appends a tiara to the list.
@@ -43,7 +43,7 @@ def append_tiara(hash)
   TIARAS_BY_TALISMAN[talisman] = TIARAS_BY_ID[tiara_id] = TIARAS_BY_ALTAR[altar] = Tiara.new(tiara_id, altar, talisman, bitshift, experience)
 end
 
-#Set the config upon login
+# Set the config upon login
 on :login do |player|
   hat = player.equipment.get(EquipmentConstants::HAT)
   if hat != nil
@@ -56,45 +56,45 @@ on :login do |player|
   send_empty_config(player)
 end
 
-#Accesses the altar with 1 click when wielding the correct tiara.
-on :event, :second_object_action do |ctx, player, event|
-  object_id = event.id
+# Access the altar with 1 click when wielding the correct tiara.
+on :message, :second_object_action do |ctx, player, message|
+  object_id = message.id
   tiara = TIARAS_BY_ALTAR[object_id]
   if (tiara != nil)
     hat = player.equipment.get(EquipmentConstants::HAT)
     if (hat != nil && hat.id == tiara.tiara_id)
       altar = ENTRANCE_ALTARS[tiara.altar]
       if (altar != nil)
-        player.start_action(TeleportAction.new(player, event.position, 2, altar.entrance_position))
+        player.start_action(TeleportAction.new(player, message.position, 2, altar.entrance_position))
       end
       ctx.break_handler_chain
     end
   end
 end
 
-#Equip tiara
-on :event, :second_item_option do |ctx, player, event|
-  tiara = TIARAS_BY_ID[event.id]
+# Equip tiara
+on :message, :second_item_option do |ctx, player, message|
+  tiara = TIARAS_BY_ID[message.id]
   if (tiara != nil)
     tiara.send_config(player)
     ctx.break_handler_chain
   end
 end
 
-#Unequip tiara
-on :event, :first_item_action do |ctx, player, event|
-  tiara = TIARAS_BY_ID[event.id]
+# Unequip tiara
+on :message, :first_item_action do |ctx, player, message|
+  tiara = TIARAS_BY_ID[message.id]
   if (tiara != nil)
     send_empty_config(player)
     ctx.break_handler_chain
   end
 end
 
-#Create tiara
-on :event, :item_on_object do |ctx, player, event|
-  tiara= TIARAS_BY_TALISMAN[event.id]; altar = CRAFTING_ALTARS[event.object_id]
+#C reate tiara
+on :message, :item_on_object do |ctx, player, message|
+  tiara= TIARAS_BY_TALISMAN[message.id]; altar = CRAFTING_ALTARS[message.object_id]
   if (tiara != nil && altar != nil)
-    player.start_action(CreateTiaraAction.new(player, event.position, tiara, altar))
+    player.start_action(CreateTiaraAction.new(player, message.position, tiara, altar))
     ctx.break_handler_chain
   end
 end

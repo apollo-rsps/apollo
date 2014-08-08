@@ -1,0 +1,24 @@
+package org.apollo.game.message.impl;
+
+/**
+ * An {@link InventoryItemMessage} sent by the client when an item's option is clicked (e.g. equip, eat, drink, etc). Note
+ * that the actual message sent by the client is one of the five item option messages, but this is the message that should be
+ * intercepted (and the option verified).
+ * 
+ * @author Chris Fletcher
+ */
+public abstract class ItemOptionMessage extends InventoryItemMessage {
+
+	/**
+	 * Creates the item option message.
+	 * 
+	 * @param option The option number.
+	 * @param interfaceId The interface id.
+	 * @param id The id.
+	 * @param slot The slot.
+	 */
+	public ItemOptionMessage(int option, int interfaceId, int id, int slot) {
+		super(option, interfaceId, id, slot);
+	}
+
+}

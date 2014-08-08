@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apollo.game.event.impl.NpcSynchronizationEvent;
+import org.apollo.game.message.impl.NpcSynchronizationMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Npc;
@@ -79,7 +79,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 			}
 		}
 
-		player.send(new NpcSynchronizationEvent(playerPosition, segments, oldLocalNpcs));
+		player.send(new NpcSynchronizationMessage(playerPosition, segments, oldLocalNpcs));
 	}
 
 }

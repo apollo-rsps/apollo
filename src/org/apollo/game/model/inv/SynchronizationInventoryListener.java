@@ -1,7 +1,7 @@
 package org.apollo.game.model.inv;
 
-import org.apollo.game.event.impl.UpdateItemsEvent;
-import org.apollo.game.event.impl.UpdateSlottedItemsEvent;
+import org.apollo.game.message.impl.UpdateItemsMessage;
+import org.apollo.game.message.impl.UpdateSlottedItemsMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.entity.Player;
 
@@ -45,12 +45,12 @@ public final class SynchronizationInventoryListener extends InventoryAdapter {
 
 	@Override
 	public void itemsUpdated(Inventory inventory) {
-		player.send(new UpdateItemsEvent(interfaceId, inventory.getItems()));
+		player.send(new UpdateItemsMessage(interfaceId, inventory.getItems()));
 	}
 
 	@Override
 	public void itemUpdated(Inventory inventory, int slot, Item item) {
-		player.send(new UpdateSlottedItemsEvent(interfaceId, new SlottedItem(slot, item)));
+		player.send(new UpdateSlottedItemsMessage(interfaceId, new SlottedItem(slot, item)));
 	}
 
 }

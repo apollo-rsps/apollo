@@ -223,11 +223,11 @@ class GrindingAction < Action
   end
 end
 
-# Appends a grinded ingredient to the ItemOnItemEvent handler interception.
+# Appends a ground ingredient to the ItemOnItemMessage handler interception.
 def append_ground(id, raw)
-  grinded = GroundIngredient.new(id, raw)
-  append_herblore_item(grinded, PESTLE_MORTAR, raw)
-  return grinded
+  ground = GroundIngredient.new(id, raw)
+  append_herblore_item(ground, PESTLE_MORTAR, raw)
+  return ground
 end
 
 # Normal ingredients

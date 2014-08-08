@@ -1,6 +1,6 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.event.impl.ChatEvent;
+import org.apollo.game.message.impl.ChatMessage;
 import org.apollo.game.model.Animation;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
@@ -43,11 +43,11 @@ public abstract class SynchronizationBlock {
 	 * Creates a {@link ChatBlock} for the specified player.
 	 * 
 	 * @param player The player.
-	 * @param chatEvent The chat event.
+	 * @param chatMessage The chat message.
 	 * @return The chat block.
 	 */
-	public static SynchronizationBlock createChatBlock(Player player, ChatEvent chatEvent) {
-		return new ChatBlock(player.getPrivilegeLevel(), chatEvent);
+	public static SynchronizationBlock createChatBlock(Player player, ChatMessage chatMessage) {
+		return new ChatBlock(player.getPrivilegeLevel(), chatMessage);
 	}
 
 	/**

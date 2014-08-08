@@ -1,19 +1,19 @@
 package org.apollo.net.release.r377;
 
-import org.apollo.game.event.impl.MobAnimationResetEvent;
+import org.apollo.game.message.impl.MobAnimationResetMessage;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;
-import org.apollo.net.release.EventEncoder;
+import org.apollo.net.release.MessageEncoder;
 
 /**
- * An {@link EventEncoder} for the {@link MobAnimationResetEvent}.
+ * A {@link MessageEncoder} for the {@link MobAnimationResetMessage}.
  * 
  * @author Major
  */
-public final class MobAnimationResetEventEncoder extends EventEncoder<MobAnimationResetEvent> {
+public final class MobAnimationResetEventEncoder extends MessageEncoder<MobAnimationResetMessage> {
 
 	@Override
-	public GamePacket encode(MobAnimationResetEvent event) {
+	public GamePacket encode(MobAnimationResetMessage message) {
 		return new GamePacketBuilder(13).toGamePacket();
 	}
 

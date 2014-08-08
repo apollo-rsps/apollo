@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apollo.game.event.impl.PlayerSynchronizationEvent;
+import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -107,9 +107,9 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 			}
 		}
 
-		PlayerSynchronizationEvent event = new PlayerSynchronizationEvent(lastKnownRegion, player.getPosition(),
+		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownRegion, player.getPosition(),
 				regionChanged, segment, oldLocalPlayers, segments);
-		player.send(event);
+		player.send(message);
 	}
 
 }

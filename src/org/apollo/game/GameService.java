@@ -10,12 +10,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apollo.Service;
-import org.apollo.game.event.handler.chain.EventHandlerChainGroup;
+import org.apollo.game.message.handler.MessageHandlerChainGroup;
 import org.apollo.game.model.World;
 import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.ClientSynchronizer;
-import org.apollo.io.EventHandlerChainParser;
+import org.apollo.io.MessageHandlerChainParser;
 import org.apollo.login.LoginService;
 import org.apollo.net.session.GameSession;
 import org.apollo.util.NamedThreadFactory;
@@ -37,9 +37,9 @@ public final class GameService extends Service {
 	private static final int UNREGISTERS_PER_CYCLE = 50;
 
 	/**
-	 * The {@link EventHandlerChainGroup}.
+	 * The {@link MessageHandlerChainGroup}.
 	 */
-	private EventHandlerChainGroup chainGroup;
+	private MessageHandlerChainGroup chainGroup;
 
 	/**
 	 * A queue of players to remove.
@@ -78,11 +78,11 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Gets the event handler chains.
+	 * Gets the message handler chains.
 	 * 
-	 * @return The event handler chains.
+	 * @return The message handler chains.
 	 */
-	public EventHandlerChainGroup getEventHandlerChains() {
+	public MessageHandlerChainGroup getMessageHandlerChains() {
 		return chainGroup;
 	}
 
@@ -92,14 +92,14 @@ public final class GameService extends Service {
 	 * @throws IOException If there is an error with the file (e.g. does not exist, cannot be read, does not contain
 	 *             valid nodes).
 	 * @throws SAXException If there is an error parsing the file.
-	 * @throws ClassNotFoundException If an event handler could not be found.
-	 * @throws InstantiationException If an event handler could not be instantiated.
-	 * @throws IllegalAccessException If an event handler could not be accessed.
+	 * @throws ClassNotFoundException If a message handler could not be found.
+	 * @throws InstantiationException If a message handler could not be instantiated.
+	 * @throws IllegalAccessException If a message handler could not be accessed.
 	 */
 	private void init() throws IOException, SAXException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
-		try (InputStream is = new FileInputStream("data/events.xml")) {
-			EventHandlerChainParser chainGroupParser = new EventHandlerChainParser(is);
+		try (InputStream is = new FileInputStream("data/messages.xml")) {
+			MessageHandlerChainParser chainGroupParser = new MessageHandlerChainParser(is);
 			chainGroup = chainGroupParser.parse();
 		}
 
@@ -139,7 +139,7 @@ public final class GameService extends Service {
 			for (Player p : world.getPlayerRepository()) {
 				GameSession session = p.getSession();
 				if (session != null) {
-					session.handlePendingEvents(chainGroup);
+					session.handlePendingMessages(chainGroup);
 				}
 			}
 
