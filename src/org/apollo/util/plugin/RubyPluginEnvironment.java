@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apollo.game.model.World;
 import org.jruby.embed.ScriptingContainer;
 
 /**
@@ -53,6 +54,7 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 	@Override
 	public void setContext(PluginContext context) {
 		container.put("$ctx", context);
+		container.put("$world", World.getWorld());
 	}
 
 }

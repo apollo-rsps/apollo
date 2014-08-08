@@ -7,9 +7,8 @@ java_import 'org.apollo.game.model.area.SectorCoordinates'
 java_import 'org.apollo.game.model.area.SectorRepository'
 java_import 'org.apollo.game.model.def.ItemDefinition'
 
-# :transient :recurrent
 
-def spawn_npc(hash)
+def spawn_item(hash)
   raise 'A name (or id), x coordinate, and y coordinate must be specified to spawn an item' unless (hash.has_key?(:name) || hash.has_key?(:id)) && hash.has_key?(:x) && hash.has_key?(:y)
   
   z = hash.delete(:z)

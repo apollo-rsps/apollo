@@ -14,7 +14,7 @@ on :event, :add_friend do |ctx, player, event|
   player_username = player.username
 
   player.add_friend(friend_username)
-  friend = World.world.get_player(friend_username)
+  friend = $world.get_player(friend_username)
 
   if friend == nil # the friend the player added is offline
     player.send(SendFriendEvent.new(friend_username, 0))
@@ -33,8 +33,8 @@ on :event, :remove_friend do |ctx, player, event|
   player_username = player.username
 
   player.remove_friend(friend_username)
-  if (World.world.is_player_online(friend_username))
-    friend = World.world.get_player(friend_username)
+  if ($world.is_player_online(friend_username))
+    friend = $world.get_player(friend_username)
     friend.send(SendFriendEvent.new(player_username, 0)) if (friend.friends_with(player_username) && player.friend_privacy != PrivacyState::ON)
   end
 end
@@ -45,7 +45,7 @@ on :login do |player|
   player.send(IgnoreListEvent.new(player.ignored_usernames)) if player.ignored_usernames.size > 0
 
   username = player.username
-  world = World.world
+  world = $world
   iterator = player.friend_usernames.iterator # Iterate the player's friend list and notify the player that they are online if they are
   while iterator.has_next
     friend_username = iterator.next
@@ -70,7 +70,7 @@ end
 def update_friends(player, world=0)
   privacy = player.friend_privacy
   
-  iterator = World.world.player_repository.iterator
+  iterator = $world.player_repository.iterator
   username = player.username
 
   while iterator.has_next
