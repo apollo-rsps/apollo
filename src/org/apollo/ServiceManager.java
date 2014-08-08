@@ -26,14 +26,16 @@ public final class ServiceManager {
 	/**
 	 * The service map.
 	 */
-	private Map<Class<? extends Service>, Service> services = new HashMap<Class<? extends Service>, Service>();
+	private Map<Class<? extends Service>, Service> services = new HashMap<>();
 
 	/**
 	 * Creates and initializes the {@link ServiceManager}.
 	 * 
-	 * @throws Exception If an error occurs.
+	 * @throws IOException If there is an error reading from the xml file.
+	 * @throws SAXException If there is an error parsing the xml file.
+	 * @throws ReflectiveOperationException If there is an error accessing or creating services using reflection.
 	 */
-	public ServiceManager() throws Exception {
+	public ServiceManager() throws IOException, SAXException, ReflectiveOperationException {
 		init();
 	}
 
@@ -61,30 +63,30 @@ public final class ServiceManager {
 	@SuppressWarnings("unchecked")
 	private void init() throws SAXException, IOException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
-		logger.info("Registering services...");
+		logger.fine("Registering services...");
 
 		XmlParser parser = new XmlParser();
-		XmlNode rootNode;
+		XmlNode root;
 
 		try (InputStream is = new FileInputStream("data/services.xml")) {
-			rootNode = parser.parse(is);
+			root = parser.parse(is);
 		}
 
-		if (!rootNode.getName().equals("services")) {
+		if (!root.getName().equals("services")) {
 			throw new IOException("Unexpected name of root node.");
 		}
 
-		for (XmlNode childNode : rootNode) {
-			if (!childNode.getName().equals("service")) {
+		for (XmlNode child : root) {
+			if (!child.getName().equals("service")) {
 				throw new IOException("Unexpected name of child node.");
 			}
 
-			if (!childNode.hasValue()) {
+			if (!child.hasValue()) {
 				throw new IOException("Child node must have a value.");
 			}
 
-			Class<? extends Service> clazz = (Class<? extends Service>) Class.forName(childNode.getValue());
-			register((Class<Service>) clazz, clazz.newInstance());
+			Class<? extends Service> service = (Class<? extends Service>) Class.forName(child.getValue());
+			register((Class<Service>) service, service.newInstance());
 		}
 	}
 

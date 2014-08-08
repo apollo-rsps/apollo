@@ -44,6 +44,7 @@ public final class Server {
 	 */
 	public static void main(String[] args) {
 		try {
+			long start = System.currentTimeMillis();
 			Server server = new Server();
 			server.init(args.length == 1 ? args[0] : Release317.class.getName());
 
@@ -53,6 +54,7 @@ public final class Server {
 
 			server.start();
 			server.bind(service, http, jaggrab);
+			logger.fine("Starting apollo took " + (System.currentTimeMillis() - start) + " ms.");
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, "Error whilst starting server.", t);
 		}
@@ -86,7 +88,7 @@ public final class Server {
 	/**
 	 * The service manager.
 	 */
-	private final ServiceManager serviceManager;
+	private final ServiceManager serviceManager = new ServiceManager();
 
 	/**
 	 * Creates the Apollo server.
@@ -95,7 +97,6 @@ public final class Server {
 	 */
 	public Server() throws Exception {
 		logger.info("Starting Apollo...");
-		serviceManager = new ServiceManager();
 	}
 
 	/**
@@ -106,10 +107,10 @@ public final class Server {
 	 * @param jagGrabAddress The JAGGRAB address to bind to.
 	 */
 	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
-		logger.info("Binding service listener to address: " + serviceAddress + "...");
+		logger.fine("Binding service listener to address: " + serviceAddress + "...");
 		serviceBootstrap.bind(serviceAddress);
 
-		logger.info("Binding HTTP listener to address: " + httpAddress + "...");
+		logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
 		try {
 			httpBootstrap.bind(httpAddress);
 		} catch (Throwable t) {
@@ -117,7 +118,7 @@ public final class Server {
 					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
 		}
 
-		logger.info("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
+		logger.fine("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
 		jagGrabBootstrap.bind(jagGrabAddress);
 
 		logger.info("Ready for connections.");
