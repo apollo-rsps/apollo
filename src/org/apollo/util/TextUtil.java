@@ -100,16 +100,16 @@ public final class TextUtil {
 	 * @return The filtered string.
 	 */
 	public static String filterInvalidCharacters(String str) {
-		StringBuilder bldr = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
 		for (char c : str.toLowerCase().toCharArray()) {
 			for (char validChar : FREQUENCY_ORDERED_CHARS) {
 				if (c == validChar) {
-					bldr.append((char) c);
+					builder.append((char) c);
 					break;
 				}
 			}
 		}
-		return bldr.toString();
+		return builder.toString();
 	}
 
 	/**

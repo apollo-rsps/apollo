@@ -14,7 +14,7 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 
 /**
- * A utility class for performing compression/uncompression.
+ * A utility class for performing compression/decompression.
  * 
  * @author Graham
  */
@@ -56,10 +56,10 @@ public final class CompressionUtil {
 	}
 
 	/**
-	 * Unbzip2s the compressed array and places the result into the uncompressed array.
+	 * Unbzip2s the compressed array and places the result into the decompressed array.
 	 * 
 	 * @param compressed The compressed array.
-	 * @param uncompressed The uncompressed array.
+	 * @param uncompressed The decompressed array.
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public static void unbzip2(byte[] compressed, byte[] uncompressed) throws IOException {
@@ -77,10 +77,10 @@ public final class CompressionUtil {
 	}
 
 	/**
-	 * Ungzips the compressed array and places the results into the uncompressed array.
+	 * Ungzips the compressed array and places the results into the decompressed array.
 	 * 
 	 * @param compressed The compressed array.
-	 * @param uncompressed The uncompressed array.
+	 * @param uncompressed The decompressed array.
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public static void ungzip(byte[] compressed, byte[] uncompressed) throws IOException {
@@ -93,15 +93,15 @@ public final class CompressionUtil {
 	 * Ungzips the compressed buffer and places the results into the returning array.
 	 * 
 	 * @param compressed The compressed buffer.
-	 * @return The uncompressed array.
+	 * @return The decompressed array.
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public static byte[] ungzip(ByteBuffer compressed) throws IOException {
 		byte[] data = new byte[compressed.remaining()];
 		compressed.get(data);
-		InputStream is = new GZIPInputStream(new ByteArrayInputStream(data));
 
-		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+		try (InputStream is = new GZIPInputStream(new ByteArrayInputStream(data));
+				ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			while (true) {
 				byte[] buf = new byte[1024];
 				int read = is.read(buf, 0, buf.length);
@@ -112,8 +112,6 @@ public final class CompressionUtil {
 			}
 
 			return os.toByteArray();
-		} finally {
-			is.close();
 		}
 	}
 
