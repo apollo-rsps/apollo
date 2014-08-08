@@ -51,7 +51,7 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 		if (session != null) {
 			session.destroy();
 		}
-		logger.info("Channel disconnected: " + channel);
+		logger.fine("Channel disconnected: " + channel);
 		channel.close();
 	}
 
