@@ -2,18 +2,17 @@ require 'java'
 
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.model.Animation'
-java_import 'org.apollo.game.model.entity.Skill'
 
 BURY_BONE_ANIMATION = 827
 BONES = {}
 
-# Represents a bone with an id and experience value.
+# A bone with an id and experience value.
 class Bone
- attr_reader :id, :exp
+ attr_reader :id, :experience
 
-  def initialize(id, exp)
+  def initialize(id, experience)
     @id = id
-    @exp = exp
+    @experience = experience
   end
 
 end
@@ -21,28 +20,36 @@ end
 
 # An action where a bone in a player's inventory is buried.
 class BuryBoneAction < Action
+  attr_reader :slot, :bone
   
   def initialize(mob, slot, bone)
-    super(1, false, mob)
+    super(1, true, mob)
     @slot = slot
     @bone = bone
-
-    mob.play_animation(Animation.new(BURY_BONE_ANIMATION))
-    mob.send_message('You dig a hole in the ground...')
+    @executions = 0
   end
   
   def execute
-    if mob.inventory.get(@slot).id == @bone.id
-      mob.send_message('You bury the bones.')
-      mob.inventory.reset(@slot)
-      mob.skill_set.add_experience(Skill::PRAYER, @bone.exp)
+    if @executions == 0
+      mob.send_message('You dig a hole in the ground...')
+      @executions += 1
+    elsif @executions == 1
+      if mob.inventory.get(@slot).id == @bone.id
+        mob.play_animation(Animation.new(BURY_BONE_ANIMATION))
+        mob.send_message('You bury the bones.')
+        mob.inventory.reset(@slot)
+        mob.skill_set.add_experience(PRAYER_SKILL_ID, @bone.experience)
+      end
+      stop
     end
-    stop
   end
 
+  def equals(other)
+    return (get_class == other.get_class and @bone == other.bone)
+  end
 end
 
-# Intercepts the first item option message, 
+# Intercepts the first item option message.
 on :message, :first_item_option do |ctx, player, message|
   bone = BONES[message.id]
   unless bone == nil
