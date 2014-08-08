@@ -38,7 +38,7 @@ on :event, :second_object_action do |ctx, player, event|
 end
 
 on :event, :second_npc_action do |ctx, player, event|
-  npc = World.world.npc_repository.get(event.index)
+  npc = $world.npc_repository.get(event.index)
   if BANKER_NPCS.include?(npc.id)
     player.start_action(BankAction.new(player, npc.position))
     ctx.break_handler_chain

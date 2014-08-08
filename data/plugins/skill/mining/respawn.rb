@@ -12,5 +12,5 @@
 # function. The rest of the mining plugin rounds the base respawn times in
 # pulses down where appropriate.
 def respawn_pulses(base, players)
-  base - players * base / (World.world.player_repository.size * 2)
+  base - players * base / ($world.player_repository.size * 2)
 end

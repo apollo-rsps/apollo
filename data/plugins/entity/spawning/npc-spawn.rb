@@ -32,7 +32,7 @@ end
 
 # Spawns the specified npc and applies the properties in the hash.
 def spawn(npc, hash)
-  World.world.register(npc)
+  $world.register(npc)
   unless hash.empty?
     hash = decode_hash(npc.position, hash)   # Use npc.position here because sector registry events (called by World.register) can be hooked
     apply_decoded_hash(npc, hash)            # into and someone might do something daft like move the npc immediately after it gets spawned.

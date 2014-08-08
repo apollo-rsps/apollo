@@ -119,9 +119,9 @@ def schedule(*args, &block)
     raise 'Invalid combination of arguments.' unless (1..2).include?(args.length)
     delay = args[0]
     immediate = args.length == 2 ? args[1] : false
-    World.world.schedule(ProcScheduledTask.new(delay, immediate, block))
+    $world.schedule(ProcScheduledTask.new(delay, immediate, block))
   elsif args.length == 1
-    World.world.schedule(args[0])
+    $world.schedule(args[0])
   else
     raise 'Invalid combination of arguments.'
   end

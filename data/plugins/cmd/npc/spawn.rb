@@ -22,7 +22,7 @@ on :command, :spawn, RIGHTS_ADMIN do |player, command|
 
   position = args.length == 1 ? player.position : Position.new(args[1].to_i, args[2].to_i, player.position.height)
 
-  World.world.register(Npc.new(id, position))
+  $world.register(Npc.new(id, position))
 end
 
 # Mass spawns npcs around the player.
@@ -48,7 +48,7 @@ on :command, :mass, RIGHTS_ADMIN do |player, command|
 
   for x in minX..maxX do
     for y in minY..maxY do
-      World.world.register(Npc.new(id, Position.new(x, y, z)))
+      $world.register(Npc.new(id, Position.new(x, y, z)))
     end
   end
   player.send_message("Mass spawning npcs with id #{id}.")
@@ -56,9 +56,9 @@ end
 
 # Unregisters all npcs from the world npc repository.
 on :command, :clearnpcs, RIGHTS_ADMIN do |player, command|
-  iterator = World.world.npc_repository.iterator
+  iterator = $world.npc_repository.iterator
   while iterator.has_next
-    World.world.unregister(iterator.next)
+    $world.unregister(iterator.next)
   end
   player.send_message('Unregistered all npcs from the world.')
 end
