@@ -36,8 +36,7 @@ class String
   end
 end
 
-# A CommandListener that executes a Proc object with two arguments: the player
-# and the command.
+# A CommandListener that executes a Proc object with two arguments: the player and the command.
 class ProcCommandListener < CommandListener
   def initialize(rights, block)
     super(rights)
@@ -148,7 +147,7 @@ end
 def on(type, *args, &block)
   case type
     when :command then on_command(args, block)
-    when :message   then on_message(args, block)
+    when :message then on_message(args, block)
     when :button  then on_button(args, block)
     when :login   then on_login(block)
     when :logout  then on_logout(block)
@@ -167,7 +166,7 @@ def on_button(args, proc)
   end
 end
 
-# Defines an action to be taken upon an message.
+# Defines an action to be taken upon a message.
 # The message can either be a symbol with the lower-case underscored class name, or the class itself.
 def on_message(args, proc)
   raise 'Message must have one or two arguments.' unless (1..2).include?(args.length)
