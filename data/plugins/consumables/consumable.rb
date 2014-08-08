@@ -54,12 +54,10 @@ class ConsumeAction < Action
 end
 
 # Intercepts the first item option event and consumes the consumable, if necessary.
-on :event, :item_option do |ctx, player, event|
-  if (event.option == 1)
-    consumable = CONSUMABLES[event.id]
-    unless consumable == nil
-      player.start_action(ConsumeAction.new(player, event.slot, consumable))
-      ctx.break_handler_chain
-    end
+on :event, :first_item_option do |ctx, player, event|
+  consumable = CONSUMABLES[event.id]
+  unless consumable == nil
+    player.start_action(ConsumeAction.new(player, event.slot, consumable))
+    ctx.break_handler_chain
   end
 end

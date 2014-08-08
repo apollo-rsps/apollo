@@ -40,7 +40,7 @@ end
 # and the command.
 class ProcCommandListener < CommandListener
   def initialize(rights, block)
-    super rights
+    super(rights)
     @block = block
   end
 
@@ -80,13 +80,16 @@ end
 # An EventHandler which executes a Proc object with three arguments: the chain
 # context, the player and the event.
 class ProcEventHandler < EventHandler
-  def initialize(block)
+  def initialize(block, option)
     super() # required (with brackets!), see http://jira.codehaus.org/browse/JRUBY-679
     @block = block
+    @option = option
   end
 
   def handle(ctx, player, event)
-    @block.call(ctx, player, event)
+    if (@option == 0 || @option == event.option)
+      @block.call(ctx, player, event)
+    end
   end
 end
 
@@ -113,7 +116,7 @@ end
 # behaviour is undefined (and most likely it'll be bad).
 def schedule(*args, &block)
   if block_given?
-    raise 'Invalid combination of arguments.' unless args.length == 1 or args.length == 2
+    raise 'Invalid combination of arguments.' unless (1..2).include?(args.length)
     delay = args[0]
     immediate = args.length == 2 ? args[1] : false
     World.world.schedule(ProcScheduledTask.new(delay, immediate, block))
@@ -165,18 +168,28 @@ def on_button(args, proc)
 end
 
 # Defines an action to be taken upon an event.
-# The event can either be a symbol with the lower case, underscored class name
-# or the class itself.
+# The event can either be a symbol with the lower-case underscored class name, or the class itself.
 def on_event(args, proc)
-  raise "event must have one argument" unless args.length == 1
+  raise 'Event must have one or two arguments.' unless (1..2).include?(args.length)
+  numbers = [ 'first', 'second', 'third', 'fourth', 'fifth' ]
+  event = args[0]; option = 0
 
-  event = args[0]
+  numbers.each_index do |index|
+    number = numbers[index]
+
+    if event.to_s.start_with?(number)
+      option = index + 1
+      event = event[number.length + 1, event.length].to_sym
+      break
+    end
+  end
+
   if event.is_a?(Symbol)
     class_name = event.to_s.camelize.concat('Event')
     event = Java::JavaClass.for_name("org.apollo.game.event.impl.#{class_name}")
   end
 
-  $ctx.add_last_event_handler(event, ProcEventHandler.new(proc))
+  $ctx.add_last_event_handler(event, ProcEventHandler.new(proc, option))
 end
 
 # Defines an action to be taken upon a command.

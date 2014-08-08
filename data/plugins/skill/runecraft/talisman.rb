@@ -30,13 +30,11 @@ def append_talisman(hash)
 end
 
 # Intercepts the item option event.
-on :event, :item_option do |ctx, player, event|
-  if (event.option == 4)
-    talisman = TALISMANS[event.id]
-    if (talisman != nil)
-      player.send_message(talisman.get_message(player.position))
-      ctx.break_handler_chain
-    end
+on :event, :fourth_item_option do |ctx, player, event|
+  talisman = TALISMANS[event.id]
+  if (talisman != nil)
+    player.send_message(talisman.get_message(player.position))
+    ctx.break_handler_chain
   end
 end
 

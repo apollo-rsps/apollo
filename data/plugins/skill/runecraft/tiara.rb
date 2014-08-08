@@ -48,7 +48,7 @@ on :login do |player|
   hat = player.equipment.get(EquipmentConstants::HAT)
   if hat != nil
     tiara = TIARAS_BY_ID[hat]
-    if(tiara != nil)
+    if (tiara != nil)
       tiara.send_config
       return
     end
@@ -57,42 +57,36 @@ on :login do |player|
 end
 
 #Accesses the altar with 1 click when wielding the correct tiara.
-on :event, :object_action do |ctx, player, event|
-  if (event.option == 1)
-    object_id = event.id
-    tiara = TIARAS_BY_ALTAR[object_id]
-    if(tiara != nil)
-      hat = player.equipment.get(EquipmentConstants::HAT)
-        if(hat != nil && hat.id == tiara.tiara_id)
-          altar = ENTRANCE_ALTARS[tiara.altar]
-          if(altar != nil)
-            player.start_action(TeleportAction.new(player, event.position, 2, altar.entrance_position))
-          end
-          ctx.break_handler_chain
-        end
+on :event, :second_object_action do |ctx, player, event|
+  object_id = event.id
+  tiara = TIARAS_BY_ALTAR[object_id]
+  if (tiara != nil)
+    hat = player.equipment.get(EquipmentConstants::HAT)
+    if (hat != nil && hat.id == tiara.tiara_id)
+      altar = ENTRANCE_ALTARS[tiara.altar]
+      if (altar != nil)
+        player.start_action(TeleportAction.new(player, event.position, 2, altar.entrance_position))
+      end
+      ctx.break_handler_chain
     end
   end
 end
 
 #Equip tiara
-on :event, :item_option do |ctx, player, event|
-  if (event.option == 2)
-    tiara = TIARAS_BY_ID[event.id]
-    if(tiara != nil)
-      tiara.send_config(player)
-      ctx.break_handler_chain
-    end
+on :event, :second_item_option, item_option do |ctx, player, event|
+  tiara = TIARAS_BY_ID[event.id]
+  if (tiara != nil)
+    tiara.send_config(player)
+    ctx.break_handler_chain
   end
 end
 
 #Unequip tiara
-on :event, :item_action do |ctx, player, event|
-  if (event.option == 1)
-    tiara = TIARAS_BY_ID[event.id]
-    if(tiara != nil)
-      send_empty_config(player)
-      ctx.break_handler_chain
-    end
+on :event, :first_item_action do |ctx, player, event|
+  tiara = TIARAS_BY_ID[event.id]
+  if (tiara != nil)
+    send_empty_config(player)
+    ctx.break_handler_chain
   end
 end
 

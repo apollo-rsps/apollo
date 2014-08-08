@@ -47,21 +47,19 @@ on :event, :item_on_item do |ctx, player, event|
 end
 
 # The ItemOptionEvent handler for all Herblore-related functions.
-on :event, :item_option do |ctx, player, event|
-  if event.option == 1
-    id = event.id
-    method = HERBLORE_ITEM[id]
+on :event, :first_item_option do |ctx, player, event|
+  id = event.id
+  method = HERBLORE_ITEM[id]
 
-    if method != nil
-      method.invoke(player, id, event.slot)
-      ctx.break_handler_chain
-    end
-    method = DRINK_ITEM[id]
+  if method != nil
+    method.invoke(player, id, event.slot)
+    ctx.break_handler_chain
+  end
+  method = DRINK_ITEM[id]
 
-    if method != nil
-      method.invoke(player, id, event.slot)
-      ctx.break_handler_chain
-    end
+  if method != nil
+    method.invoke(player, id, event.slot)
+    ctx.break_handler_chain
   end
 end
 

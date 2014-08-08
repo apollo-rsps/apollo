@@ -141,22 +141,18 @@ class ProspectingAction < DistancedAction
   end
 end
 
-on :event, :object_action do |ctx, mob, event|
-  if event.option == 1
-    ore = ORES[event.id]
-    if ore != nil
-      mob.start_action(MiningAction.new(mob, event.position, ore))
-    end
+on :event, :first_object_action do |ctx, mob, event|
+  ore = ORES[event.id]
+  if ore != nil
+    mob.start_action(MiningAction.new(mob, event.position, ore))
   end
 end
 
-on :event, :object_action do |ctx, mob, event|
-  if event.option == 2
-    ore = ORES[event.id]
-    if ore != nil
-      mob.start_action(ProspectingAction.new(mob, event.position, ore))
-    elsif EXPIRED_ORES[event.id] != nil
-      mob.start_action(ExpiredProspectingAction.new(mob, event.position))
-    end
+on :event, :second_object_action do |ctx, mob, event|
+  ore = ORES[event.id]
+  if ore != nil
+    mob.start_action(ProspectingAction.new(mob, event.position, ore))
+  elsif EXPIRED_ORES[event.id] != nil
+    mob.start_action(ExpiredProspectingAction.new(mob, event.position))
   end
 end
