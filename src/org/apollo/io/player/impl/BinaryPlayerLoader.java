@@ -52,6 +52,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 		if (!file.exists()) {
 			Player player = new Player(credentials, SPAWN_POSITION);
 			player.getBank().add(995, 25); // 25 coins
+			credentials.setPassword(SCryptUtil.scrypt(credentials.getPassword(), 16384, 8, 1));
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
 		}
 
