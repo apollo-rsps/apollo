@@ -1,6 +1,6 @@
 require 'java'
 
-java_import 'org.apollo.game.event.impl.DisplayCrossbonesEvent'
+java_import 'org.apollo.game.message.impl.DisplayCrossbonesMessage'
 java_import 'org.apollo.game.model.entity.Player'
 
 AREA_ACTIONS = {}
@@ -56,12 +56,12 @@ end
 area_action :wilderness do
 
   on_entry do |player|
-    player.send(DisplayCrossbonesEvent.new(true))
+    player.send(DisplayCrossbonesMessage.new(true))
     player.in_wilderness = true
   end
 
   on_exit do |player|
-    player.send(DisplayCrossbonesEvent.new(false))
+    player.send(DisplayCrossbonesMessage.new(false))
     player.in_wilderness = false
   end
 

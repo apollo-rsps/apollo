@@ -1,12 +1,12 @@
 require 'java'
 
-java_import 'org.apollo.game.event.impl.ForwardPrivateMessageEvent'
+java_import 'org.apollo.game.message.impl.ForwardPrivateChatMessage'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.setting.PrivacyState'
 
-on :event, :private_message do |ctx, player, event|
-  friend = $world.get_player(event.username)
-  friend.send(ForwardPrivateMessageEvent.new(player.username, player.privilege_level, event.compressed_message)) if interaction_permitted(player, friend)
+on :message, :private_message do |ctx, player, message|
+  friend = $world.get_player(message.username)
+  friend.send(ForwardPrivateChatMessage.new(player.username, player.privilege_level, message.compressed_message)) if interaction_permitted(player, friend)
 end
 
 # Checks if the sender is permitted to interact with the friend they have added:

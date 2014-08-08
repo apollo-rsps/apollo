@@ -23,19 +23,19 @@ class Altar
 end
 
 
-# Intercepts the item on object event.
-on :event, :item_on_object do |ctx, player, event|
-  talisman = TALISMANS[event.id]; altar = ENTRANCE_ALTARS[event.object_id]
+# Intercepts the item on object message.
+on :message, :item_on_object do |ctx, player, message|
+  talisman = TALISMANS[message.id]; altar = ENTRANCE_ALTARS[message.object_id]
   if (talisman != nil && altar != nil)
-    player.start_action(TeleportAction.new(player, event.position, 2, altar.entrance_position))
+    player.start_action(TeleportAction.new(player, message.position, 2, altar.entrance_position))
     ctx.break_handler_chain
   end
 end
 
-# Intercepts the first object action event.
-on :event, :object_action do |ctx, player, event|
-  if (event.option == 1)
-    object_id = event.id
+# Intercepts the first object action message.
+on :message, :object_action do |ctx, player, message|
+  if (message.option == 1)
+    object_id = message.id
     if (altar = PORTALS[object_id]) != nil # Get the altar associated with this exit portal.
       player.start_action(TeleportAction.new(player, altar.entrance_position, 1, altar.exit_position))
       ctx.break_handler_chain

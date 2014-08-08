@@ -1,48 +1,48 @@
 require 'java'
 
-java_import 'org.apollo.game.event.impl.FriendServerStatusEvent'
-java_import 'org.apollo.game.event.impl.SendFriendEvent'
+java_import 'org.apollo.game.message.impl.FriendServerStatusMessage'
+java_import 'org.apollo.game.message.impl.SendFriendMessage'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.setting.ServerStatus'
 java_import 'org.apollo.game.model.setting.PrivacyState'
 java_import 'org.apollo.game.model.entity.Player'
 
 
-# Processes an add friend event, updating the logged-in status of the player (and the person they added) if necessary.
-on :event, :add_friend do |ctx, player, event|
-  friend_username = event.username
+# Processes an add friend message, updating the logged-in status of the player (and the person they added) if necessary.
+on :message, :add_friend do |ctx, player, message|
+  friend_username = message.username
   player_username = player.username
 
   player.add_friend(friend_username)
   friend = $world.get_player(friend_username)
 
   if friend == nil # the friend the player added is offline
-    player.send(SendFriendEvent.new(friend_username, 0))
+    player.send(SendFriendMessage.new(friend_username, 0))
   elsif friend.friends_with(player_username) # new friend already has the player added
-    friend.send(SendFriendEvent.new(player_username, player.world_id)) unless player.friend_privacy == PrivacyState::OFF # player's private chat state is not off, so notify the friend
+    friend.send(SendFriendMessage.new(player_username, player.world_id)) unless player.friend_privacy == PrivacyState::OFF # player's private chat state is not off, so notify the friend
 
-    player.send(SendFriendEvent.new(friend_username, friend.world_id)) unless friend.friend_privacy == PrivacyState::OFF # new friend's private chat state is not off, so notify the player
+    player.send(SendFriendMessage.new(friend_username, friend.world_id)) unless friend.friend_privacy == PrivacyState::OFF # new friend's private chat state is not off, so notify the player
   elsif friend.friend_privacy == PrivacyState::ON # new friend doesn't have the player added but their private chat state is on
-   player.send(SendFriendEvent.new(friend_username, friend.world_id)) # so we can let the player know what world they're on
+   player.send(SendFriendMessage.new(friend_username, friend.world_id)) # so we can let the player know what world they're on
   end
 end
 
-# Processes a remove friend event, updating the logged-in status of the player if necessary.
-on :event, :remove_friend do |ctx, player, event|
-  friend_username = event.username
+# Processes a remove friend message, updating the logged-in status of the player if necessary.
+on :message, :remove_friend do |ctx, player, message|
+  friend_username = message.username
   player_username = player.username
 
   player.remove_friend(friend_username)
   if ($world.is_player_online(friend_username))
     friend = $world.get_player(friend_username)
-    friend.send(SendFriendEvent.new(player_username, 0)) if (friend.friends_with(player_username) && player.friend_privacy != PrivacyState::ON)
+    friend.send(SendFriendMessage.new(player_username, 0)) if (friend.friends_with(player_username) && player.friend_privacy != PrivacyState::ON)
   end
 end
 
 # Update the friend server status and send the friend/ignore lists of the player logging in.
 on :login do |player|
-  player.send(FriendServerStatusEvent.new(ServerStatus::CONNECTING))
-  player.send(IgnoreListEvent.new(player.ignored_usernames)) if player.ignored_usernames.size > 0
+  player.send(FriendServerStatusMessage.new(ServerStatus::CONNECTING))
+  player.send(IgnoreListMessage.new(player.ignored_usernames)) if player.ignored_usernames.size > 0
 
   username = player.username
   world = $world
@@ -52,10 +52,10 @@ on :login do |player|
     friend = world.get_player(friend_username)
     friend_world_id = (friend == nil || !viewable?(friend, username)) ? 0 : friend.world_id
 
-    player.send(SendFriendEvent.new(friend_username, friend_world_id))
+    player.send(SendFriendMessage.new(friend_username, friend_world_id))
   end
 
-  player.send(FriendServerStatusEvent.new(ServerStatus::ONLINE))
+  player.send(FriendServerStatusMessage.new(ServerStatus::ONLINE))
   update_friends(player, player.world_id)
 end
 
@@ -78,7 +78,7 @@ def update_friends(player, world=0)
     next if (!other.friends_with(username) || other == player)
 
     world = viewable?(player, other.username) ? world : 0
-    other.send(SendFriendEvent.new(username, world))
+    other.send(SendFriendMessage.new(username, world))
   end
 end
 

@@ -3,7 +3,7 @@
 
 require 'java'
 
-java_import 'org.apollo.game.event.impl.SetWidgetItemModelEvent'
+java_import 'org.apollo.game.message.impl.SetWidgetItemModelMessage'
 java_import 'org.apollo.game.model.entity.Skill'
 
 HERBLORE_DIALOGUE = 4429
@@ -25,15 +25,15 @@ module HerbloreMethod
   end
 end
 
-# The ItemOnItemEvent handler for all Herblore-related functions.
-on :event, :item_on_item do |ctx, player, event|
-  primary = event.id
-  secondary = event.target_id
+# The ItemOnItemMessage handler for all Herblore-related functions.
+on :message, :item_on_item do |ctx, player, message|
+  primary = message.id
+  secondary = message.target_id
   hash = HERBLORE_ITEM_ON_ITEM[primary]
 
   if hash == nil
-    secondary = event.id
-    primary = event.target_id
+    secondary = message.id
+    primary = message.target_id
     hash = HERBLORE_ITEM_ON_ITEM[primary]
   end
 
@@ -46,19 +46,19 @@ on :event, :item_on_item do |ctx, player, event|
   end
 end
 
-# The ItemOptionEvent handler for all Herblore-related functions.
-on :event, :first_item_option do |ctx, player, event|
-  id = event.id
+# The ItemOptionMessage handler for all Herblore-related functions.
+on :message, :first_item_option do |ctx, player, message|
+  id = message.id
   method = HERBLORE_ITEM[id]
 
   if method != nil
-    method.invoke(player, id, event.slot)
+    method.invoke(player, id, message.slot)
     ctx.break_handler_chain
   end
   method = DRINK_ITEM[id]
 
   if method != nil
-    method.invoke(player, id, event.slot)
+    method.invoke(player, id, message.slot)
     ctx.break_handler_chain
   end
 end
@@ -83,7 +83,7 @@ def check_slot(player, slot, id, amount = 1)
 end
 
 # Utility method for checking if a player's Herblore (maximum) level is at a required height. Also informs the player if this is not the case with use of the action 
-# variable, like so:   "You need a Herblore level of at least #{required.to_s} to #{action}."
+# variable, like so: "You need a Herblore level of at least #{required.to_s} to #{action}."
 def check_skill(player, required, action)
   if required > player.skill_set.skill(HERBLORE_SKILL_ID).current_level
     player.send_message("You need a Herblore level of at least #{required} to #{action}.")
@@ -94,6 +94,6 @@ end
 
 # Opens a 'make' dialogue for the specified player, displaying the specified item. Optionally, a listener can be used for the dialogue.
 def open_dialogue(player, item, listener = nil)
-  player.send(SetWidgetItemModelEvent.new(1746, item, 170))
+  player.send(SetWidgetItemModelMessage.new(1746, item, 170))
   player.interface_set.open_dialogue(listener, HERBLORE_DIALOGUE)
 end

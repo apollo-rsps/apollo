@@ -1,6 +1,6 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.event.impl.ChatEvent;
+import org.apollo.game.message.impl.ChatMessage;
 import org.apollo.game.model.setting.PrivilegeLevel;
 
 /**
@@ -11,9 +11,9 @@ import org.apollo.game.model.setting.PrivilegeLevel;
 public final class ChatBlock extends SynchronizationBlock {
 
 	/**
-	 * The {@link ChatEvent}.
+	 * The {@link ChatMessage}.
 	 */
-	private final ChatEvent chatEvent;
+	private final ChatMessage chatMessage;
 
 	/**
 	 * The {@link PrivilegeLevel}.
@@ -24,11 +24,11 @@ public final class ChatBlock extends SynchronizationBlock {
 	 * Creates the chat block.
 	 * 
 	 * @param privilegeLevel The {@link PrivilegeLevel} of the player who said the message.
-	 * @param chatEvent The {@link ChatEvent}.
+	 * @param chatMessage The {@link ChatMessage}.
 	 */
-	ChatBlock(PrivilegeLevel privilegeLevel, ChatEvent chatEvent) {
+	ChatBlock(PrivilegeLevel privilegeLevel, ChatMessage chatMessage) {
 		this.privilegeLevel = privilegeLevel;
-		this.chatEvent = chatEvent;
+		this.chatMessage = chatMessage;
 	}
 
 	/**
@@ -37,7 +37,7 @@ public final class ChatBlock extends SynchronizationBlock {
 	 * @return The compressed message.
 	 */
 	public byte[] getCompressedMessage() {
-		return chatEvent.getCompressedMessage();
+		return chatMessage.getCompressedMessage();
 	}
 
 	/**
@@ -46,7 +46,7 @@ public final class ChatBlock extends SynchronizationBlock {
 	 * @return The message.
 	 */
 	public String getMessage() {
-		return chatEvent.getMessage();
+		return chatMessage.getMessage();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public final class ChatBlock extends SynchronizationBlock {
 	 * @return The text color.
 	 */
 	public int getTextColor() {
-		return chatEvent.getTextColor();
+		return chatMessage.getTextColor();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public final class ChatBlock extends SynchronizationBlock {
 	 * @return The text effects.
 	 */
 	public int getTextEffects() {
-		return chatEvent.getTextEffects();
+		return chatMessage.getTextEffects();
 	}
 
 }

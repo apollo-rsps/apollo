@@ -310,14 +310,14 @@ class FinishedMixingAction < MixingAction
   end
 end
 
-# Appends a finished potion to the ItemOnItemEvent handling interception.
+# Appends a finished potion to the ItemOnItemMessage handling interception.
 def append_finished_potion(item, unfinished, ingredient, level, experience)
   potion = FinishedPotion.new(item, [ unfinished, ingredient ], level, experience)
   append_herblore_item(potion, unfinished.item_id, ingredient.item_id)
   return potion
 end
 
-# Appends an unfinished potion to the ItemOnItemEvent handling interception.
+# Appends an unfinished potion to the ItemOnItemMessage handling interception.
 def append_unfinished_potion(item, herb, level)
   potion = UnfinishedPotion.new(item, herb, level)
   append_herblore_item(potion, herb.item_id, WATER_VIAL_ID)

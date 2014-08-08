@@ -1,7 +1,7 @@
 package org.apollo.game.model.inv;
 
-import org.apollo.game.event.Event;
-import org.apollo.game.event.impl.ServerMessageEvent;
+import org.apollo.game.message.Message;
+import org.apollo.game.message.impl.ServerChatMessage;
 import org.apollo.game.model.entity.Player;
 
 /**
@@ -22,9 +22,9 @@ public final class FullInventoryListener extends InventoryAdapter {
 	public static final String FULL_INVENTORY_MESSAGE = "Not enough inventory space.";
 
 	/**
-	 * The event to send when the capacity has been exceeded.
+	 * The message to send when the capacity has been exceeded.
 	 */
-	private final Event event;
+	private final Message message;
 
 	/**
 	 * The player.
@@ -39,12 +39,12 @@ public final class FullInventoryListener extends InventoryAdapter {
 	 */
 	public FullInventoryListener(Player player, String message) {
 		this.player = player;
-		event = new ServerMessageEvent(message);
+		this.message = new ServerChatMessage(message);
 	}
 
 	@Override
 	public void capacityExceeded(Inventory inventory) {
-		player.send(event);
+		player.send(message);
 	}
 
 }

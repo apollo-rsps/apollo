@@ -3,11 +3,11 @@ package org.apollo.game.model.inter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apollo.game.event.impl.CloseInterfaceEvent;
-import org.apollo.game.event.impl.EnterAmountEvent;
-import org.apollo.game.event.impl.OpenDialogueInterfaceEvent;
-import org.apollo.game.event.impl.OpenInterfaceEvent;
-import org.apollo.game.event.impl.OpenInterfaceSidebarEvent;
+import org.apollo.game.message.impl.CloseInterfaceMessage;
+import org.apollo.game.message.impl.EnterAmountMessage;
+import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
+import org.apollo.game.message.impl.OpenInterfaceMessage;
+import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.dialogue.DialogueListener;
 
@@ -69,7 +69,7 @@ public final class InterfaceSet {
 	 * Called when the player has clicked the specified button. Notifies the current dialogue listener.
 	 * 
 	 * @param button The button.
-	 * @return {@code true} if the event handler chain should be broken.
+	 * @return {@code true} if the message handler chain should be broken.
 	 */
 	public boolean buttonClicked(int button) {
 		if (dialogueListener != null) {
@@ -83,11 +83,12 @@ public final class InterfaceSet {
 	 */
 	public void close() {
 		closeAndNotify();
-		player.send(new CloseInterfaceEvent());
+		player.send(new CloseInterfaceMessage());
 	}
 
 	/**
-	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any events.
+	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any
+	 * messages.
 	 */
 	private void closeAndNotify() {
 		amountListener = null;
@@ -161,7 +162,7 @@ public final class InterfaceSet {
 		this.listener = listener;
 
 		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
-		player.send(new OpenDialogueInterfaceEvent(dialogueId));
+		player.send(new OpenDialogueInterfaceMessage(dialogueId));
 	}
 
 	/**
@@ -180,7 +181,7 @@ public final class InterfaceSet {
 	 */
 	public void openEnterAmountDialogue(EnterAmountListener listener) {
 		amountListener = listener;
-		player.send(new EnterAmountEvent());
+		player.send(new EnterAmountMessage());
 	}
 
 	/**
@@ -203,7 +204,7 @@ public final class InterfaceSet {
 		this.listener = listener;
 
 		interfaces.put(InterfaceType.WINDOW, windowId);
-		player.send(new OpenInterfaceEvent(windowId));
+		player.send(new OpenInterfaceMessage(windowId));
 	}
 
 	/**
@@ -230,7 +231,7 @@ public final class InterfaceSet {
 		interfaces.put(InterfaceType.WINDOW, windowId);
 		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
 
-		player.send(new OpenInterfaceSidebarEvent(windowId, sidebarId));
+		player.send(new OpenInterfaceSidebarMessage(windowId, sidebarId));
 	}
 
 	/**

@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import org.apollo.game.event.Event;
-import org.apollo.game.event.impl.ConfigEvent;
-import org.apollo.game.event.impl.IdAssignmentEvent;
-import org.apollo.game.event.impl.IgnoreListEvent;
-import org.apollo.game.event.impl.LogoutEvent;
-import org.apollo.game.event.impl.SendFriendEvent;
-import org.apollo.game.event.impl.ServerMessageEvent;
-import org.apollo.game.event.impl.SetWidgetTextEvent;
-import org.apollo.game.event.impl.SwitchTabInterfaceEvent;
-import org.apollo.game.event.impl.UpdateRunEnergyEvent;
+import org.apollo.game.message.Message;
+import org.apollo.game.message.impl.ConfigMessage;
+import org.apollo.game.message.impl.IdAssignmentMessage;
+import org.apollo.game.message.impl.IgnoreListMessage;
+import org.apollo.game.message.impl.LogoutMessage;
+import org.apollo.game.message.impl.SendFriendMessage;
+import org.apollo.game.message.impl.ServerChatMessage;
+import org.apollo.game.message.impl.SetWidgetTextMessage;
+import org.apollo.game.message.impl.SwitchTabInterfaceMessage;
+import org.apollo.game.message.impl.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -145,9 +145,9 @@ public final class Player extends Mob {
 	private PrivilegeLevel privilegeLevel = PrivilegeLevel.STANDARD;
 
 	/**
-	 * A temporary queue of events sent during the login process.
+	 * A temporary queue of messages sent during the login process.
 	 */
-	private final transient Deque<Event> queuedEvents = new ArrayDeque<>();
+	private final transient Deque<Message> queuedMessages = new ArrayDeque<>();
 
 	/**
 	 * A flag indicating if the region changed in the last cycle.
@@ -613,7 +613,7 @@ public final class Player extends Mob {
 	 * Logs the player out, if possible.
 	 */
 	public void logout() {
-		send(new LogoutEvent());
+		send(new LogoutMessage());
 	}
 
 	/**
@@ -674,29 +674,29 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sends an {@link Event} to this player.
+	 * Sends an {@link Message} to this player.
 	 * 
-	 * @param event The event.
+	 * @param message The message..
 	 */
-	public void send(Event event) {
+	public void send(Message message) {
 		if (isActive()) {
-			if (!queuedEvents.isEmpty()) {
-				for (Event queuedEvent : queuedEvents) {
-					session.dispatchEvent(queuedEvent);
+			if (!queuedMessages.isEmpty()) {
+				for (Message queuedMessage : queuedMessages) {
+					session.dispatchMessage(queuedMessage);
 				}
-				queuedEvents.clear();
+				queuedMessages.clear();
 			}
-			session.dispatchEvent(event);
+			session.dispatchMessage(message);
 		} else {
-			queuedEvents.add(event);
+			queuedMessages.add(message);
 		}
 	}
 
 	/**
-	 * Sends the initial events.
+	 * Sends the initial messages.
 	 */
-	private void sendInitialEvents() {
-		send(new IdAssignmentEvent(index, members)); // TODO should this be sent when we reconnect?
+	private void sendInitialMessages() {
+		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
 		sendMessage("Welcome to RuneScape.");
 		if (!newPlayer) {
 			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
@@ -704,7 +704,7 @@ public final class Player extends Mob {
 
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
 		for (int tab = 0; tab < tabs.length; tab++) {
-			send(new SwitchTabInterfaceEvent(tab, tabs[tab]));
+			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
 		}
 
 		inventory.forceRefresh();
@@ -731,9 +731,9 @@ public final class Player extends Mob {
 	 */
 	public void sendMessage(String message, boolean filterable) {
 		if (clientVersion > 0) {
-			send(new ServerMessageEvent(message, filterable));
+			send(new ServerChatMessage(message, filterable));
 		} else if (!filterable || !filteringMessages) {
-			send(new ServerMessageEvent(message));
+			send(new ServerChatMessage(message));
 		}
 	}
 
@@ -749,7 +749,7 @@ public final class Player extends Mob {
 		}
 
 		for (int pos = 0; pos < lines; pos++) {
-			send(new SetWidgetTextEvent(InterfaceConstants.QUEST_TEXT[pos], pos < size ? text.get(pos) : ""));
+			send(new SetWidgetTextMessage(InterfaceConstants.QUEST_TEXT[pos], pos < size ? text.get(pos) : ""));
 		}
 		interfaceSet.openWindow(InterfaceConstants.QUEST_INTERFACE);
 	}
@@ -759,13 +759,13 @@ public final class Player extends Mob {
 	 */
 	public void sendUserLists() {
 		if (ignores.size() > 0) {
-			send(new IgnoreListEvent(ignores));
+			send(new IgnoreListMessage(ignores));
 		}
 
 		World world = World.getWorld();
 		for (String username : friends) {
 			int worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
-			send(new SendFriendEvent(username, worldId));
+			send(new SendFriendMessage(username, worldId));
 		}
 	}
 
@@ -894,7 +894,7 @@ public final class Player extends Mob {
 	 */
 	public void setRunEnergy(int runEnergy) {
 		this.runEnergy = runEnergy;
-		send(new UpdateRunEnergyEvent(runEnergy));
+		send(new UpdateRunEnergyMessage(runEnergy));
 	}
 
 	/**
@@ -915,7 +915,7 @@ public final class Player extends Mob {
 	public void setSession(GameSession session, boolean reconnecting) {
 		this.session = session;
 		if (!reconnecting) {
-			sendInitialEvents();
+			sendInitialMessages();
 		}
 		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 	}
@@ -966,7 +966,7 @@ public final class Player extends Mob {
 	public void toggleRunning() {
 		running = !running;
 		walkingQueue.setRunningQueue(running);
-		send(new ConfigEvent(173, running ? 1 : 0));
+		send(new ConfigMessage(173, running ? 1 : 0));
 	}
 
 	@Override

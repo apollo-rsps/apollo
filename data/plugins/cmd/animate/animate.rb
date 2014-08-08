@@ -22,6 +22,5 @@ on :command, :graphic, RIGHTS_MOD do |player, command|
     return
   end
 
-  player.send(DisplayCrossbonesEvent.new(true ))
   player.play_graphic(Graphic.new(args[0].to_i))
 end

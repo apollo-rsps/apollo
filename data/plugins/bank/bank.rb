@@ -29,16 +29,16 @@ class BankAction < DistancedAction
   end
 end
 
-# Intercepts the object action event
-on :event, :second_object_action do |ctx, player, event|
-  if event.id == BANK_BOOTH_ID
-    player.start_action(BankAction.new(player, event.position))
+# Intercepts the object action message
+on :message, :second_object_action do |ctx, player, message|
+  if message.id == BANK_BOOTH_ID
+    player.start_action(BankAction.new(player, message.position))
     ctx.break_handler_chain
   end
 end
 
-on :event, :second_npc_action do |ctx, player, event|
-  npc = $world.npc_repository.get(event.index)
+on :message, :second_npc_action do |ctx, player, message|
+  npc = $world.npc_repository.get(message.index)
   if BANKER_NPCS.include?(npc.id)
     player.start_action(BankAction.new(player, npc.position))
     ctx.break_handler_chain

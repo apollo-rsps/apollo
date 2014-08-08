@@ -13,8 +13,8 @@ import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.login.LoginService;
 import org.apollo.net.ApolloHandler;
 import org.apollo.net.NetworkConstants;
-import org.apollo.net.codec.game.GameEventDecoder;
-import org.apollo.net.codec.game.GameEventEncoder;
+import org.apollo.net.codec.game.GameMessageDecoder;
+import org.apollo.net.codec.game.GameMessageEncoder;
 import org.apollo.net.codec.game.GamePacketDecoder;
 import org.apollo.net.codec.game.GamePacketEncoder;
 import org.apollo.net.codec.login.LoginConstants;
@@ -115,13 +115,13 @@ public final class LoginSession extends Session {
 			IsaacRandomPair randomPair = request.getRandomPair();
 			Release release = serverContext.getRelease();
 
-			channel.pipeline().addFirst("eventEncoder", new GameEventEncoder(release));
+			channel.pipeline().addFirst("eventEncoder", new GameMessageEncoder(release));
 			channel.pipeline().addBefore("eventEncoder", "gameEncoder",
 					new GamePacketEncoder(randomPair.getEncodingRandom()));
 
 			channel.pipeline().addBefore("handler", "gameDecoder",
 					new GamePacketDecoder(randomPair.getDecodingRandom(), serverContext.getRelease()));
-			channel.pipeline().addAfter("gameDecoder", "eventDecoder", new GameEventDecoder(release));
+			channel.pipeline().addAfter("gameDecoder", "eventDecoder", new GameMessageDecoder(release));
 
 			channel.pipeline().remove("loginDecoder");
 			channel.pipeline().remove("loginEncoder");

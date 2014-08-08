@@ -65,7 +65,7 @@ class HerbIdentificationAction < Action
   end
 end
 
-# Appends a herb to the InventoryItemEvent interception.
+# Appends a herb to the InventoryItemMessage interception.
 def append_herb(item_id, unidentified, level, experience)
   herb = Herb.new(item_id, unidentified, level, experience)
   append_herblore_item(herb, unidentified) 

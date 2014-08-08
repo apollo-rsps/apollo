@@ -1,23 +1,23 @@
 package org.apollo.net.release.r317;
 
-import org.apollo.game.event.impl.DialogueContinueEvent;
+import org.apollo.game.message.impl.DialogueContinueMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;
-import org.apollo.net.release.EventDecoder;
+import org.apollo.net.release.MessageDecoder;
 
 /**
- * An {@link EventDecoder} for the {@link DialogueContinueEvent}.
+ * A {@link MessageDecoder} for the {@link DialogueContinueMessage}.
  * 
  * @author Chris Fletcher
  */
-final class DialogueContinueEventDecoder extends EventDecoder<DialogueContinueEvent> {
+final class DialogueContinueMessageDecoder extends MessageDecoder<DialogueContinueMessage> {
 
 	@Override
-	public DialogueContinueEvent decode(GamePacket packet) {
+	public DialogueContinueMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 		int interfaceId = (int) reader.getUnsigned(DataType.SHORT);
-		return new DialogueContinueEvent(interfaceId);
+		return new DialogueContinueMessage(interfaceId);
 	}
 
 }

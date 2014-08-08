@@ -8,9 +8,9 @@ package org.apollo.game;
 public final class GameConstants {
 
 	/**
-	 * The maximum events per pulse per session.
+	 * The maximum amount of messages to process per pulse (per session).
 	 */
-	public static final int EVENTS_PER_PULSE = 10;
+	public static final int MESSAGES_PER_PULSE = 10;
 
 	/**
 	 * The delay between consecutive pulses, in milliseconds.

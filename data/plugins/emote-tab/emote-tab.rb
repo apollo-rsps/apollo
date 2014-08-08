@@ -11,9 +11,9 @@ ANIMATIONS = {
   666 => Animation::GLASS_WALL,   168 => Animation::YES,          13383 => Animation::GOBLIN_BOW 
 }
 
-# Intercept the ButtonEvent
-on :event, :button do |ctx, player, event|
-  anim = ANIMATIONS[event.widget_id]
+# Intercept the button message.
+on :message, :button do |ctx, player, message|
+  anim = ANIMATIONS[message.widget_id]
   unless anim == nil
     player.play_animation(anim)
     ctx.break_handler_chain
