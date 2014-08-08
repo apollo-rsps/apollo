@@ -10,10 +10,10 @@ import java.util.logging.Logger;
 
 import org.apollo.Service;
 import org.apollo.fs.IndexedFileSystem;
+import org.apollo.fs.decoder.GameObjectDecoder;
 import org.apollo.fs.decoder.ItemDefinitionDecoder;
 import org.apollo.fs.decoder.NpcDefinitionDecoder;
 import org.apollo.fs.decoder.ObjectDefinitionDecoder;
-import org.apollo.fs.decoder.GameObjectDecoder;
 import org.apollo.game.command.CommandDispatcher;
 import org.apollo.game.login.LoginDispatcher;
 import org.apollo.game.login.LogoutDispatcher;
@@ -241,29 +241,29 @@ public final class World {
 		ItemDefinitionDecoder itemDefDecoder = new ItemDefinitionDecoder(fs);
 		ItemDefinition[] itemDefs = itemDefDecoder.decode();
 		ItemDefinition.init(itemDefs);
-		logger.info("Loaded " + itemDefs.length + " item definitions.");
+		logger.fine("Loaded " + itemDefs.length + " item definitions.");
 
 		try (InputStream is = new BufferedInputStream(new FileInputStream("data/equipment-" + release + ".dat"))) {
 			EquipmentDefinitionParser parser = new EquipmentDefinitionParser(is);
 			EquipmentDefinition[] defs = parser.parse();
 			EquipmentDefinition.init(defs);
-			logger.info("Loaded " + defs.length + " equipment definitions.");
+			logger.fine("Loaded " + defs.length + " equipment definitions.");
 		}
 
 		NpcDefinitionDecoder npcDecoder = new NpcDefinitionDecoder(fs);
 		NpcDefinition[] npcDefs = npcDecoder.decode();
 		NpcDefinition.init(npcDefs);
-		logger.info("Loaded " + npcDefs.length + " npc definitions.");
+		logger.fine("Loaded " + npcDefs.length + " npc definitions.");
 
 		ObjectDefinitionDecoder objectDecoder = new ObjectDefinitionDecoder(fs);
 		ObjectDefinition[] objDefs = objectDecoder.decode();
 		ObjectDefinition.init(objDefs);
-		logger.info("Loaded " + objDefs.length + " object definitions.");
+		logger.fine("Loaded " + objDefs.length + " object definitions.");
 
 		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs);
 		GameObject[] objects = staticDecoder.decode();
 		placeEntities(objects);
-		logger.info("Loaded " + objects.length + " static objects.");
+		logger.fine("Loaded " + objects.length + " static objects.");
 
 		manager.start();
 		pluginManager = manager; // TODO move!!
