@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 import org.apollo.game.model.Position;
 
 /**
- * An {@link Message sent to the client instructing it to load the specified region.
+ * A {@link Message sent to the client instructing it to load the specified region.
  * 
  * @author Graham
  */

@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 import org.apollo.net.codec.game.GamePacket;
 
 /**
- * A {@link MessageDecoder} decodes a {@link GamePacket} into an {@link Message} object which can be processed by the
+ * A {@link MessageDecoder} decodes a {@link GamePacket} into a {@link Message} object which can be processed by the
  * server.
  * 
  * @author Graham

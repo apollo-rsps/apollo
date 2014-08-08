@@ -674,7 +674,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sends an {@link Message} to this player.
+	 * Sends a {@link Message} to this player.
 	 * 
 	 * @param message The message..
 	 */

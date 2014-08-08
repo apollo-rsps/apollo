@@ -30,7 +30,7 @@ public final class MessageHandlerChainParser {
 	/**
 	 * The {@link XmlParser} instance.
 	 */
-	private final XmlParser parser;
+	private final XmlParser parser = new XmlParser();
 
 	/**
 	 * Creates the message chain parser.
@@ -40,7 +40,6 @@ public final class MessageHandlerChainParser {
 	 */
 	public MessageHandlerChainParser(InputStream is) throws SAXException {
 		this.is = is;
-		parser = new XmlParser();
 	}
 
 	/**
@@ -51,7 +50,7 @@ public final class MessageHandlerChainParser {
 	 * @throws ClassNotFoundException If a class was not found.
 	 * @throws IllegalAccessException If a class was accessed illegally.
 	 * @throws InstantiationException If a class could not be instantiated.
-	 * @return An {@link MessageHandlerChainGroup}.
+	 * @return A {@link MessageHandlerChainGroup}.
 	 */
 	@SuppressWarnings("unchecked")
 	public MessageHandlerChainGroup parse() throws IOException, SAXException, ClassNotFoundException,
