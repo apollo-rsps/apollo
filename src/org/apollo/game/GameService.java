@@ -16,7 +16,6 @@ import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.ClientSynchronizer;
 import org.apollo.io.EventHandlerChainParser;
-import org.apollo.io.RsaKeyParser;
 import org.apollo.login.LoginService;
 import org.apollo.net.session.GameSession;
 import org.apollo.util.NamedThreadFactory;
@@ -119,11 +118,6 @@ public final class GameService extends Service {
 
 			Class<?> clazz = Class.forName(activeNode.getValue());
 			synchronizer = (ClientSynchronizer) clazz.newInstance();
-		}
-
-		try (InputStream is = new FileInputStream("data/rsa.xml")) {
-			RsaKeyParser parser = new RsaKeyParser(is);
-			parser.parse();
 		}
 	}
 
