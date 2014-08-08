@@ -73,7 +73,7 @@ on :event, :second_object_action do |ctx, player, event|
 end
 
 #Equip tiara
-on :event, :second_item_option, item_option do |ctx, player, event|
+on :event, :second_item_option do |ctx, player, event|
   tiara = TIARAS_BY_ID[event.id]
   if (tiara != nil)
     tiara.send_config(player)
