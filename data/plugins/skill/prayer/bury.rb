@@ -43,13 +43,11 @@ class BuryBoneAction < Action
 end
 
 # Intercepts the first item option event, 
-on :event, :item_option do |ctx, player, event|
-  if event.option == 1
-    bone = BONES[event.id]
-    unless bone == nil
-      player.start_action(BuryBoneAction.new(player, event.slot, bone))
-      ctx.break_handler_chain
-    end
+on :event, :first_item_option do |ctx, player, event|
+  bone = BONES[event.id]
+  unless bone == nil
+    player.start_action(BuryBoneAction.new(player, event.slot, bone))
+    ctx.break_handler_chain
   end
 end
 
