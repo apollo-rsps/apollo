@@ -11,6 +11,6 @@
     <script>lookup.rb</script>
   </scripts>
   <dependencies>
-    <dependency>entity-spawning</dependency>
+    <dependency>util</dependency>
   </dependencies>
 </plugin>
