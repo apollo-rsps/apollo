@@ -69,7 +69,7 @@ public abstract class Entity {
 	 * 
 	 * @return The position.
 	 */
-	public Position getPosition() {
+	public final Position getPosition() {
 		return position;
 	}
 

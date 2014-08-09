@@ -8,27 +8,27 @@ import java.util.Map;
 import org.apollo.game.model.Position;
 
 /**
- * A repository of sectors, backed by a {@link HashMap} of {@link SectorCoordinates} that correspond to their
- * appropriate {@link Sector}s.
+ * A repository of {@link Sector Sectors}, backed by a {@link HashMap} of {@link SectorCoordinates} that correspond to
+ * their appropriate sectors.
  * 
  * @author Major
  */
 public final class SectorRepository {
 
 	/**
-	 * Indicates whether sectors can be removed from this repository.
+	 * Whether or not sectors can be removed from this repository.
 	 */
 	private final boolean permitRemoval;
 
 	/**
-	 * A {@link Map} of {@link SectorCoordinates} that correspond to the appropriate {@link Sector}s.
+	 * The map of sector coordinates that correspond to the appropriate sectors.
 	 */
 	private final Map<SectorCoordinates, Sector> sectors = new HashMap<>();
 
 	/**
 	 * Creates a new sector repository.
 	 * 
-	 * @param permitRemoval If removal (of {@link Sector}s) from this repository should be permitted.
+	 * @param permitRemoval If removal (of {@link Sector Sectors}) from this repository should be permitted.
 	 */
 	public SectorRepository(boolean permitRemoval) {
 		this.permitRemoval = permitRemoval;
@@ -100,8 +100,8 @@ public final class SectorRepository {
 	}
 
 	/**
-	 * Gets the {@link List} of {@link Sector}s. This is a shallow copy (i.e. modifying the list will not change the
-	 * repository, but modifying the sectors in the list will change the sectors).
+	 * Gets the {@link List} of {@link Sector Sectors}. This is a shallow copy (i.e. modifying the list will not change
+	 * the repository, but modifying the sectors in the list will change the sectors in this repository).
 	 * 
 	 * @return The list.
 	 */

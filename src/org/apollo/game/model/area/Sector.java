@@ -1,6 +1,7 @@
 package org.apollo.game.model.area;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,25 +59,20 @@ public final class Sector {
 
 	/**
 	 * Adds a {@link Entity} from to sector. Note that this does not spawn the entity, or do any other action other than
-	 * register it to this sector. The return value of this method should also be monitored - if this method fails (i.e.
-	 * returns {@code false}), the entity should <strong>not</strong> be registered in the world.
+	 * register it to this sector.
 	 * 
 	 * @param entity The entity.
-	 * @return {@code true} if the entity was added successfully, otherwise {@code false}.
 	 */
-	public boolean addEntity(Entity entity) {
+	public void addEntity(Entity entity) {
 		Position position = entity.getPosition();
 		List<Entity> entities = this.entities.get(position);
 		if (entities == null) {
 			entities = new ArrayList<>();
 		}
 
-		if (entities.add(entity)) {
-			this.entities.put(position, entities);
-			notifyListeners(entity);
-			return true;
-		}
-		return false;
+		entities.add(entity);
+		this.entities.put(position, entities);
+		notifyListeners(entity);
 	}
 
 	/**
@@ -89,12 +85,7 @@ public final class Sector {
 		Position position = entity.getPosition();
 		List<Entity> entities = this.entities.get(position);
 
-		if (entities == null) {
-			this.entities.put(position, new ArrayList<>());
-			return false;
-		}
-
-		return this.entities.get(position).contains(entity);
+		return entities != null && entities.contains(entity);
 	}
 
 	/**
@@ -115,8 +106,8 @@ public final class Sector {
 	public List<Entity> getEntities(Position position) {
 		List<Entity> entities = this.entities.get(position);
 		if (entities == null) {
-			entities = new ArrayList<>();
-			this.entities.put(position, entities);
+			this.entities.put(position, new ArrayList<>());
+			return Collections.emptyList();
 		}
 
 		return new ArrayList<>(entities);
@@ -133,11 +124,11 @@ public final class Sector {
 	public <T extends Entity> List<T> getEntities(Position position, EntityType type) {
 		List<Entity> entities = this.entities.get(position);
 		if (entities == null) {
-			entities = new ArrayList<>();
-			this.entities.put(position, entities);
+			this.entities.put(position, new ArrayList<>());
+			return Collections.emptyList();
 		}
 
-		return (List<T>) entities.stream().filter((e) -> e.getEntityType() == type).collect(Collectors.toList());
+		return (List<T>) entities.stream().filter(e -> e.getEntityType() == type).collect(Collectors.toList());
 	}
 
 	/**
@@ -146,7 +137,7 @@ public final class Sector {
 	 * @param entity The entity that was updated.
 	 */
 	public void notifyListeners(Entity entity) {
-		listeners.forEach((l) -> l.execute(this, entity));
+		listeners.forEach(l -> l.execute(this, entity));
 	}
 
 	/**

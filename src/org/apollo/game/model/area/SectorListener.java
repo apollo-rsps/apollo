@@ -13,7 +13,7 @@ public interface SectorListener {
 	/**
 	 * Executes the action for this listener.
 	 * 
-	 * @param The sector that was updated.
+	 * @param sector The sector that was updated.
 	 * @param entity The affected entity.
 	 */
 	public abstract void execute(Sector sector, Entity entity);
