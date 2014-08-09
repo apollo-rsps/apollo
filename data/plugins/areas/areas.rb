@@ -35,7 +35,7 @@ end
 
 # Creates a new area and registers it with the supplied coordinates.
 def area(hash)
-  raise 'Hash must contain a name, coordinates, and actions pair.' unless hash.has_key?(:name) && hash.has_key?(:coordinates) && hash.has_key?(:actions)
+  raise 'Hash must contain a name, coordinates, and actions pair.' unless hash.has_keys?(:name, :coordinates, :actions)
   name = hash[:name]; coordinates = hash[:coordinates]; actions = hash[:actions]
 
   AREAS << Area.new(name, coordinates, actions.is_a?(Symbol) ? [actions] : actions)

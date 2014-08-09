@@ -46,7 +46,5 @@ class DummyAction < DistancedAction
 end
 
 on :message, :second_object_action do |ctx, player, message|
-  if (message.id == DUMMY_ID)
-    player.start_action(DummyAction.new(player, message.position))
-  end
+  player.start_action(DummyAction.new(player, message.position)) if message.id == DUMMY_ID
 end

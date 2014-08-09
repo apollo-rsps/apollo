@@ -1,7 +1,7 @@
 # Information about npc spawning
 #
 # Npcs are passed to spawn npc as a hash. Every key and every non-integer value must be a Symbol. Every hash must implement the following:
-#   :name or :id - the name or the id of the npc. Use of :name is recommended. If this npc shares its name with another, append the specific id after the name (e.g. :woman_4)
+#   :name - the name of the npc. If this npc shares its name with another, append the specific id after the name (e.g. :woman_4)
 #   :x - the x coordinate where the npc will spawn.
 #   :y - the y coordinate where the npc will spawn.
 # Optional arguments are as follows:

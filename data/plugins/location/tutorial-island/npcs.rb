@@ -1,7 +1,7 @@
 # Information about npc spawning
 #
 # Npcs are passed to spawn npc as a hash. Every key and every non-integer value must be a Symbol. Every hash must implement the following:
-#   :name or :id - the name or the id of the npc. Use of :name is recommended. If this npc shares its name with another, append the specific id after the name (e.g. :woman_4)
+#   :name - the name of the npc. If this npc shares its name with another, append the specific id after the name (e.g. :woman_4)
 #   :x - the x coordinate where the npc will spawn.
 #   :y - the y coordinate where the npc will spawn.
 # Optional arguments are as follows:
@@ -11,6 +11,8 @@
 #   :spawn_animation - the animation that will be played when the npc spawns.
 #   :spawn_graphic - the graphic that will be played when the npc spawns.
 
+
+# Functional npcs
 
 # 'Above-ground' npcs
 
@@ -31,6 +33,17 @@ spawn_npc :name => :combat_instructor, :x => 3104, :y => 9506
 # Non-humanoid npcs
 
 spawn_npc :name => :fishing_spot_316, :x => 3102, :y => 3093
+
+spawn_npc :name => :chicken, :x => 3140, :y => 3095
+spawn_npc :name => :chicken, :x => 3140, :y => 3093
+spawn_npc :name => :chicken, :x => 3138, :y => 3092
+spawn_npc :name => :chicken, :x => 3137, :y => 3094
+spawn_npc :name => :chicken, :x => 3138, :y => 3095
+
+
+# 'Below-ground' npcs
+# Note: They aren't actually on a different plane, they're just in a different location that pretends to be underground.
+
 spawn_npc :name => :giant_rat_87,     :x => 3105, :y => 9514
 spawn_npc :name => :giant_rat_87,     :x => 3105, :y => 9517
 spawn_npc :name => :giant_rat_87,     :x => 3106, :y => 9514
@@ -39,8 +52,3 @@ spawn_npc :name => :giant_rat_87,     :x => 3105, :y => 9519
 spawn_npc :name => :giant_rat_87,     :x => 3109, :y => 9516
 spawn_npc :name => :giant_rat_87,     :x => 3108, :y => 9520
 spawn_npc :name => :giant_rat_87,     :x => 3102, :y => 9517
-spawn_npc :name => :chicken_41,       :x => 3140, :y => 3095
-spawn_npc :name => :chicken_41,       :x => 3140, :y => 3093
-spawn_npc :name => :chicken_41,       :x => 3138, :y => 3092
-spawn_npc :name => :chicken_41,       :x => 3137, :y => 3094
-spawn_npc :name => :chicken_41,       :x => 3138, :y => 3095

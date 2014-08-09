@@ -11,7 +11,7 @@ java_import 'org.apollo.game.model.entity.Npc'
 # Information about npc spawning
 #
 # Npcs are passed to spawn npc as a hash. Every key and every non-integer value must be a Symbol. Every hash must implement the following:
-#   :name or :id - the name or the id of the npc. Use of :name is recommended. If this npc shares its name with another, append the specific id after the name (e.g. :woman_4)
+#   :name - the name of the npc. If this npc shares its name with another, append the specific id after the name (e.g. :woman_4)
 #   :x - the x coordinate where the npc will spawn.
 #   :y - the y coordinate where the npc will spawn.
 # Optional arguments are as follows:
@@ -25,7 +25,7 @@ java_import 'org.apollo.game.model.entity.Npc'
 
 # Spawns an npc with the properties specified in the hash.
 def spawn_npc(hash)
-  raise 'A name (or id), x coordinate, and y coordinate must be specified to spawn an npc.' unless (hash.has_key?(:name) || hash.has_key?(:id)) && hash.has_key?(:x) && hash.has_key?(:y)
+  raise 'A name (or id), x coordinate, and y coordinate must be specified to spawn an npc.' unless (hash.has_key?(:name) || hash.has_key?(:id)) && hash.has_keys?(:x, :y)
   npc = get_npc(hash)
   spawn(npc, hash)
 end
@@ -41,7 +41,7 @@ end
 
 # Returns an npc with the id and position specified by the hash.
 def get_npc(hash)
-  id = hash.delete(:id) || lookup_npc(hash.delete(:name))
+  id = lookup_npc(hash.delete(:name))
 
   z = hash.delete(:z)
   position = Position.new(hash.delete(:x), hash.delete(:y), z == nil ? 0 : z)
@@ -64,22 +64,23 @@ end
 # Parses the remaining key-value pairs in the hash.
 def decode_hash(position, hash)
   decoded = {}
+
   hash.each do |key, value|
     case key
       when :face
-        facing_position = direction_to_position(value, position)
-        decoded[:face] = facing_position
+        decoded[:face] = direction_to_position(value, position)
       when :delta_bounds
         dx, dy, x, y, z = value[0], value[1], position.x, position.y, position.height
-        raise 'Delta values cannot be less than 0.' if dx < 0 || dy < 0
+        raise 'Delta values cannot be less than 0.' if (dx < 0 || dy < 0)
 
         decoded[:boundary] = [ Position.new(x + dx, y, z), Position.new(x, y + dy, z), Position.new(x - dx, y, z), Position.new(x, y - dy, z) ]
       when :bounds          then decoded[:boundary] = value
       when :spawn_animation then decoded[:spawn_animation] = Animation.new(value)
-      when :spawn_graphic   then decoded[:spawn_graphic] = Graphic.new(value)
+      when :spawn_graphic   then decoded[:spawn_graphic  ] = Graphic.new(value)
       else raise "Unrecognised key #{key} - value #{value}."
     end
   end
+
   return decoded
 end
 

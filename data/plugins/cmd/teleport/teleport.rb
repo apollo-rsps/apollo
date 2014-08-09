@@ -10,10 +10,7 @@ end
 # Teleports the player to the specified position.
 on :command, :tele, RIGHTS_ADMIN do |player, command|
   args = command.arguments
-  unless (2..3).include?(args.length)
-    player.send_message('Invalid syntax - ::tele [x] [y] [optional-z]')
-    return
-  end
+  next unless valid_arg_length(args, (2..3), player, 'Invalid syntax - ::tele [x] [y] [optional-z]')
 
   x = args[0].to_i
   y = args[1].to_i

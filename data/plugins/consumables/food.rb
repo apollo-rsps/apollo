@@ -29,7 +29,7 @@ end
 
 # Appends a food item to the list of consumables.
 def append_food(hash)
-  raise 'Hash must contain a name, id, and a restoration value.' unless (hash.has_key?(:name) && hash.has_key?(:id) && hash.has_key?(:restoration))
+  raise 'Hash must contain a name, id, and a restoration value.' unless (hash.has_keys?(:name, :id, :restoration))
   name = hash[:name]; id = hash[:id]; restoration = hash[:restoration]
 
   append_consumable(Food.new(name, id, restoration))
