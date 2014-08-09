@@ -41,17 +41,7 @@ end
 
 # Returns an npc with the id and position specified by the hash.
 def get_npc(hash)
-  id = hash.delete(:id)
-
-  if id == nil
-    name = hash.delete(:name).to_s.gsub('_', ' ')
-    if name.include?(' ')
-      id = name[name.rindex(' ') + 1, name.length - 1].to_i
-    end
-    id = locate_entity('npc', name, 1).first if id == nil || id == 0
-  end
-
-  raise "The npc called #{name} could not be identified." if id == nil
+  id = hash.delete(:id) || lookup_npc(hash.delete(:name))
 
   z = hash.delete(:z)
   position = Position.new(hash.delete(:x), hash.delete(:y), z == nil ? 0 : z)
@@ -110,21 +100,6 @@ def direction_to_position(direction, position)
     else return position
   end
 end
-
-
-# Locates an entity with the specified type (e.g. npc) and name, returning possible ids as an array.
-def locate_entity(type, name, limit=5)
-  ids = []
-  name.downcase!
-
-  Kernel.const_get("#{type.capitalize}Definition").definitions.each do |definition|
-    break if ids.length == limit
-    ids << definition.id.to_i if definition.name.to_s.downcase == name
-  end
-
-  return ids
-end
-
 
 # An action that spawns an npc temporarily, before executing an action.
 class TemporaryNpcAction < Action

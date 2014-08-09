@@ -23,7 +23,7 @@ on :command, :lookup, RIGHTS_ADMIN do |player, command|
     next
   end
   
-  ids = locate_entity(type, name, limit).join(', ')
+  ids = find_entities(type, name, limit).join(', ')
   
   message = ids.empty? ? "Could not find an #{type} called #{name}." : "Possible ids are: #{ids}." 
   player.send_message(message)

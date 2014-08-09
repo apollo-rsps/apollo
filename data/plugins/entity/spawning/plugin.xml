@@ -10,5 +10,7 @@
   <scripts>
     <script>npc-spawn.rb</script>
   </scripts>
-  <dependencies />
+  <dependencies>
+    <dependency>util</dependency>
+  </dependencies>
 </plugin>
