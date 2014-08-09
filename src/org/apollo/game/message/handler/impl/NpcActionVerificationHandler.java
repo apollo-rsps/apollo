@@ -4,6 +4,7 @@ import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.NpcActionMessage;
 import org.apollo.game.model.World;
+import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.util.MobRepository;
@@ -16,9 +17,13 @@ import org.apollo.util.MobRepository;
  */
 public final class NpcActionVerificationHandler extends MessageHandler<NpcActionMessage> {
 
+	/**
+	 * The world's npc repository.
+	 */
+	private final MobRepository<Npc> repository = World.getWorld().getNpcRepository();
+
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, NpcActionMessage message) {
-		MobRepository<Npc> repository = World.getWorld().getNpcRepository();
 		int index = message.getIndex();
 
 		if (index < 0 || index >= repository.capacity()) {
@@ -28,12 +33,14 @@ public final class NpcActionVerificationHandler extends MessageHandler<NpcAction
 
 		Npc npc = repository.get(index);
 
-		if (npc == null || !player.getPosition().isWithinDistance(npc.getPosition(), 15)) {
+		if (npc == null || !player.getPosition().isWithinDistance(npc.getPosition(), player.getViewingDistance() + 1)) {
+			// +1 in case it was decremented after the player clicked the action.
 			ctx.breakHandlerChain();
 			return;
 		}
 
-		if (message.getOption() >= npc.getDefinition().getInteractions().length) {
+		NpcDefinition definition = npc.getDefinition();
+		if (message.getOption() >= definition.getInteractions().length) {
 			ctx.breakHandlerChain();
 			return;
 		}

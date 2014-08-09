@@ -8,6 +8,7 @@ import org.apollo.game.message.impl.ObjectActionMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity.EntityType;
 import org.apollo.game.model.entity.GameObject;
@@ -20,6 +21,11 @@ import org.apollo.game.model.entity.Player;
  */
 public final class ObjectActionVerificationHandler extends MessageHandler<ObjectActionMessage> {
 
+	/**
+	 * The world's sector repository.
+	 */
+	private final SectorRepository repository = World.getWorld().getSectorRepository();
+
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, ObjectActionMessage message) {
 		int id = message.getId();
@@ -29,7 +35,7 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 		}
 
 		Position position = message.getPosition();
-		Sector sector = World.getWorld().getSectorRepository().fromPosition(position);
+		Sector sector = repository.fromPosition(position);
 		List<GameObject> objects = sector.getEntities(position, EntityType.GAME_OBJECT);
 
 		if (!containsObject(id, objects)) {
@@ -42,8 +48,8 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 			return;
 		}
 
-		// TODO is this right?
-		if (message.getOption() >= ObjectDefinition.lookup(id).getMenuActions().length) {
+		ObjectDefinition definition = ObjectDefinition.lookup(id);
+		if (message.getOption() >= definition.getMenuActions().length) {
 			ctx.breakHandlerChain();
 			return;
 		}
