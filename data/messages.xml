@@ -1,15 +1,9 @@
 <messages>
   <message>
-    <type>org.apollo.game.message.impl.PlayerDesignMessage</type>
+    <type>org.apollo.game.message.impl.ButtonMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.PlayerDesignVerificationHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.PlayerDesignMessageHandler</handler>
-    </chain>
-  </message>
-  <message>
-    <type>org.apollo.game.message.impl.WalkMessage</type>
-    <chain>
-      <handler>org.apollo.game.message.handler.impl.WalkMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.DialogueButtonHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.BankButtonMessageHandler</handler>
     </chain>
   </message>
   <message>
@@ -20,16 +14,9 @@
     </chain>
   </message>
   <message>
-    <type>org.apollo.game.message.impl.ButtonMessage</type>
+    <type>org.apollo.game.message.impl.ClosedInterfaceMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.DialogueButtonHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.BankButtonMessageHandler</handler>
-    </chain>
-  </message>
-  <message>
-    <type>org.apollo.game.message.impl.DialogueContinueMessage</type>
-    <chain>
-      <handler>org.apollo.game.message.handler.impl.DialogueContinueMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.ClosedInterfaceMessageHandler</handler>
     </chain>
   </message>
   <message>
@@ -39,16 +26,15 @@
     </chain>
   </message>
   <message>
-    <type>org.apollo.game.message.impl.SwitchItemMessage</type>
+    <type>org.apollo.game.message.impl.DialogueContinueMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.SwitchItemMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.DialogueContinueMessageHandler</handler>
     </chain>
   </message>
   <message>
-    <type>org.apollo.game.message.impl.ItemOptionMessage</type>
+    <type>org.apollo.game.message.impl.EnteredAmountMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ItemVerificationHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.EquipItemHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.EnteredAmountMessageHandler</handler>
     </chain>
   </message>
   <message>
@@ -60,28 +46,23 @@
     </chain>
   </message>
   <message>
+    <type>org.apollo.game.message.impl.ItemOnItemMessage</type>
+    <chain>
+      <handler>org.apollo.game.message.handler.impl.ItemVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.ItemOnItemVerificationHandler</handler>
+    </chain>
+  </message>
+  <message>
     <type>org.apollo.game.message.impl.ItemOnObjectMessage</type>
     <chain>
       <handler>org.apollo.game.message.handler.impl.ItemOnObjectVerificationHandler</handler>
     </chain>
   </message>
   <message>
-    <type>org.apollo.game.message.impl.ClosedInterfaceMessage</type>
-    <chain>
-      <handler>org.apollo.game.message.handler.impl.ClosedInterfaceMessageHandler</handler>
-    </chain>
-  </message>
-  <message>
-    <type>org.apollo.game.message.impl.EnteredAmountMessage</type>
-    <chain>
-      <handler>org.apollo.game.message.handler.impl.EnteredAmountMessageHandler</handler>
-    </chain>
-  </message>
-  <message>
-    <type>org.apollo.game.message.impl.ItemOnItemMessage</type>
+    <type>org.apollo.game.message.impl.ItemOptionMessage</type>
     <chain>
       <handler>org.apollo.game.message.handler.impl.ItemVerificationHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.ItemOnItemVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.EquipItemHandler</handler>
     </chain>
   </message>
   <message>
@@ -97,15 +78,34 @@
     </chain>
   </message>
   <message>
+    <type>org.apollo.game.message.impl.ObjectActionMessage</type>
+    <chain>
+      <handler>org.apollo.game.message.handler.impl.ObjectActionVerificationHandler</handler>
+    </chain>
+  </message>
+  <message>
     <type>org.apollo.game.message.impl.PlayerActionMessage</type>
     <chain>
       <handler>org.apollo.game.message.handler.impl.PlayerActionVerificationHandler</handler>
     </chain>
   </message>
   <message>
-    <type>org.apollo.game.message.impl.ObjectActionMessage</type>
+    <type>org.apollo.game.message.impl.PlayerDesignMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ObjectActionVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.PlayerDesignVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.impl.PlayerDesignMessageHandler</handler>
+    </chain>
+  </message>
+  <message>
+    <type>org.apollo.game.message.impl.SwitchItemMessage</type>
+    <chain>
+      <handler>org.apollo.game.message.handler.impl.SwitchItemMessageHandler</handler>
+    </chain>
+  </message>
+  <message>
+    <type>org.apollo.game.message.impl.WalkMessage</type>
+    <chain>
+      <handler>org.apollo.game.message.handler.impl.WalkMessageHandler</handler>
     </chain>
   </message>
 </messages>
