@@ -97,6 +97,12 @@
     </chain>
   </message>
   <message>
+    <type>org.apollo.game.message.impl.PlayerActionMessage</type>
+    <chain>
+      <handler>org.apollo.game.message.handler.impl.PlayerActionVerificationHandler</handler>
+    </chain>
+  </message>
+  <message>
     <type>org.apollo.game.message.impl.ObjectActionMessage</type>
     <chain>
       <handler>org.apollo.game.message.handler.impl.ObjectActionVerificationHandler</handler>
