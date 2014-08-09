@@ -1,5 +1,7 @@
 package org.apollo.game.model;
 
+import com.google.common.base.Objects;
+
 /**
  * Represents a position in the world.
  * 
@@ -217,7 +219,8 @@ public final class Position {
 
 	@Override
 	public String toString() {
-		return Position.class.getName() + " [x=" + x + ", y=" + y + ", height=" + height + "]";
+		return Objects.toStringHelper(this).add("x", x).add("y", y).add("height", height)
+				.add("sector x", getTopLeftSectorX()).add("sector y", getTopLeftSectorY()).toString();
 	}
 
 }
