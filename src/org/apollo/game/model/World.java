@@ -188,7 +188,7 @@ public final class World {
 	 * @return The player.
 	 */
 	public Player getPlayer(String username) {
-		return players.get(NameUtil.encodeBase37(username.toLowerCase()));
+		return players.get(NameUtil.encodeBase37(username));
 	}
 
 	/**
@@ -276,23 +276,19 @@ public final class World {
 	 * @return {@code true} if the player is online, otherwise {@code false}.
 	 */
 	public boolean isPlayerOnline(String username) {
-		return players.get(NameUtil.encodeBase37(username.toLowerCase())) != null;
+		return players.get(NameUtil.encodeBase37(username)) != null;
 	}
 
 	/**
 	 * Adds entities to sectors in the {@link SectorRepository}.
 	 * 
 	 * @param entities The entities.
-	 * @return {@code true} if all entities were added successfully, otherwise {@code false}.
 	 */
-	private boolean placeEntities(Entity... entities) {
-		boolean success = true;
-
+	private void placeEntities(Entity... entities) {
 		for (Entity entity : entities) {
 			Sector sector = sectorRepository.fromPosition(entity.getPosition());
-			success &= sector.addEntity(entity);
+			sector.addEntity(entity);
 		}
-		return success;
 	}
 
 	/**
@@ -312,7 +308,7 @@ public final class World {
 		boolean success = npcRepository.add(npc);
 
 		if (success) {
-			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
+			Sector sector = sectorRepository.fromPosition(npc.getPosition());
 			sector.addEntity(npc);
 		} else {
 			logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
@@ -333,14 +329,10 @@ public final class World {
 
 		boolean success = playerRepository.add(player);
 		if (success) {
-			if (players.put(NameUtil.encodeBase37(player.getUsername().toLowerCase()), player) != null) {
-				logger.info("Error adding the player to the username map - someone with that name already exists.");
-				return RegistrationStatus.ALREADY_ONLINE;
-			}
-			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
-
 			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
 			sector.addEntity(player);
+
+			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 			return RegistrationStatus.OK;
 		}
 
@@ -364,8 +356,11 @@ public final class World {
 	 */
 	public void unregister(final Npc npc) {
 		if (npcRepository.remove(npc)) {
-			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(npc.getPosition()));
-			sector.removeEntity(npc);
+			Sector sector = sectorRepository.fromPosition(npc.getPosition());
+
+			if (!sector.removeEntity(npc)) {
+				logger.warning("Could not remove npc from their sector.");
+			}
 		} else {
 			logger.warning("Could not find npc " + npc + " to unregister!");
 		}
@@ -377,12 +372,15 @@ public final class World {
 	 * @param player The player.
 	 */
 	public void unregister(final Player player) {
-		if (playerRepository.remove(player)
-				& players.remove(NameUtil.encodeBase37(player.getUsername().toLowerCase())) == player) {
+		if (playerRepository.remove(player)) {
+			players.remove(NameUtil.encodeBase37(player.getUsername()));
 			logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
 
-			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
-			sector.removeEntity(player);
+			Sector sector = sectorRepository.fromPosition(player.getPosition());
+			if (!sector.removeEntity(player)) {
+				logger.warning("Could not remove player from their sector.");
+			}
+
 			logoutDispatcher.dispatch(player);
 		} else {
 			logger.warning("Could not find player " + player + " to unregister!");
