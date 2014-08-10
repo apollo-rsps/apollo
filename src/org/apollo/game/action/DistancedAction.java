@@ -54,12 +54,11 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 	}
 
 	@Override
-	public void execute() {
-		if (reached) {
-			// some actions (e.g. agility) will cause the player to move away again
-			// so we don't check once the player got close enough once
-			executeAction(); // TODO checking the walking queue size is a really cheap fix, and relies on the client not
-								// being edited... this class needs to be completely re-written.
+	public final void execute() {
+		if (reached) { // Don't check again in case the player has moved away since it was reached
+			executeAction();
+			// TODO checking the walking queue size is a really cheap fix, and relies on the client not
+			// being edited... this class needs to be completely re-written.
 		} else if (mob.getPosition().getDistance(position) <= distance && mob.getWalkingQueue().size() == 0) {
 			reached = true;
 			setDelay(delay);

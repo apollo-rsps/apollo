@@ -41,7 +41,7 @@ public abstract class Action<T extends Mob> extends ScheduledTask {
 	 * 
 	 * @return The mob.
 	 */
-	public T getMob() {
+	public final T getMob() {
 		return mob;
 	}
 
