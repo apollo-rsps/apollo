@@ -13,14 +13,14 @@ import org.apollo.game.model.skill.SkillListener;
 public final class SkillSet {
 
 	/**
-	 * The minimum amounts of experience required for the levels.
-	 */
-	private static final int[] EXPERIENCE_FOR_LEVEL = new int[100];
-
-	/**
 	 * The maximum allowed experience.
 	 */
 	public static final double MAXIMUM_EXP = 200_000_000;
+
+	/**
+	 * The minimum amounts of experience required for the levels.
+	 */
+	private static final int[] EXPERIENCE_FOR_LEVEL = new int[100];
 
 	/**
 	 * The number of skills.
@@ -152,18 +152,6 @@ public final class SkillSet {
 	}
 
 	/**
-	 * Checks the bounds of the id.
-	 * 
-	 * @param id The id.
-	 * @throws IndexOutOfBoundsException If the id is out of bounds.
-	 */
-	private void checkBounds(int id) {
-		if (id < 0 || id >= skills.length) {
-			throw new IndexOutOfBoundsException("Skill id is out of bounds.");
-		}
-	}
-
-	/**
 	 * Forces this skill set to refresh.
 	 */
 	public void forceRefresh() {
@@ -177,6 +165,36 @@ public final class SkillSet {
 	 */
 	public int getCombatLevel() {
 		return combatLevel;
+	}
+
+	/**
+	 * Gets the current level of the specified skill.
+	 * 
+	 * @param skill The skill.
+	 * @return The current level.
+	 */
+	public int getCurrentLevel(int skill) {
+		return getSkill(skill).getCurrentLevel();
+	}
+
+	/**
+	 * Gets the experience of the specified skill.
+	 * 
+	 * @param skill The skill.
+	 * @return The experience.
+	 */
+	public double getExperience(int skill) {
+		return getSkill(skill).getExperience();
+	}
+
+	/**
+	 * Gets the maximum level of the specified skill.
+	 * 
+	 * @param skill The skill.
+	 * @return The maximum level.
+	 */
+	public int getMaximumLevel(int skill) {
+		return getSkill(skill).getMaximumLevel();
 	}
 
 	/**
@@ -204,15 +222,6 @@ public final class SkillSet {
 	}
 
 	/**
-	 * Initialises the skill set.
-	 */
-	private void init() {
-		for (int id = 0; id < skills.length; id++) {
-			skills[id] = (id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1));
-		}
-	}
-
-	/**
 	 * Normalizes the skills in this set.
 	 */
 	public void normalize() {
@@ -225,6 +234,111 @@ public final class SkillSet {
 
 			current += current < max ? 1 : -1;
 			setSkill(id, new Skill(skills[id].getExperience(), current, max));
+		}
+	}
+
+	/**
+	 * Removes all the {@link SkillListener}s.
+	 */
+	public void removeAllListeners() {
+		listeners.clear();
+	}
+
+	/**
+	 * Removes a {@link SkillListener}.
+	 * 
+	 * @param listener The listener to remove.
+	 */
+	public boolean removeListener(SkillListener listener) {
+		return listeners.remove(listener);
+	}
+
+	/**
+	 * Sets the current level of the specified skill.
+	 * 
+	 * @param skill The skill.
+	 * @param level The level.
+	 */
+	public void setCurrentLevel(int skill, int level) {
+		Skill old = getSkill(skill);
+		setSkill(skill, Skill.updateCurrentLevel(level, old));
+	}
+
+	/**
+	 * Sets the experience level of the specified skill.
+	 * 
+	 * @param skill The skill.
+	 * @param experience The experience.
+	 */
+	public void setExperience(int skill, double experience) {
+		Skill old = getSkill(skill);
+		setSkill(skill, Skill.updateExperience(experience, old));
+	}
+
+	/**
+	 * Sets the maximum level of the specified skill.
+	 * 
+	 * @param skill The skill.
+	 * @param level The level.
+	 */
+	public void setMaximumLevel(int skill, int level) {
+		Skill old = getSkill(skill);
+		setSkill(skill, Skill.updateMaximumLevel(level, old));
+	}
+
+	/**
+	 * Sets a {@link Skill}.
+	 * 
+	 * @param id The id.
+	 * @param skill The skill.
+	 */
+	public void setSkill(int id, Skill skill) {
+		checkBounds(id);
+		skills[id] = skill;
+		notifySkillUpdated(id);
+	}
+
+	/**
+	 * Gets the number of {@link Skill}s in this set.
+	 * 
+	 * @return The number of skills.
+	 */
+	public int size() {
+		return skills.length;
+	}
+
+	/**
+	 * Starts the firing of events.
+	 */
+	public void startFiringEvents() {
+		firingEvents = true;
+	}
+
+	/**
+	 * Stops events from being fired.
+	 */
+	public void stopFiringEvents() {
+		firingEvents = false;
+	}
+
+	/**
+	 * Checks the bounds of the id.
+	 * 
+	 * @param id The id.
+	 * @throws IndexOutOfBoundsException If the id is out of bounds.
+	 */
+	private void checkBounds(int id) {
+		if (id < 0 || id >= skills.length) {
+			throw new IndexOutOfBoundsException("Skill id is out of bounds.");
+		}
+	}
+
+	/**
+	 * Initialises the skill set.
+	 */
+	private void init() {
+		for (int id = 0; id < skills.length; id++) {
+			skills[id] = (id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1));
 		}
 	}
 
@@ -265,57 +379,6 @@ public final class SkillSet {
 				listener.skillUpdated(this, id, skills[id]);
 			}
 		}
-	}
-
-	/**
-	 * Removes all the {@link SkillListener}s.
-	 */
-	public void removeAllListeners() {
-		listeners.clear();
-	}
-
-	/**
-	 * Removes a {@link SkillListener}.
-	 * 
-	 * @param listener The listener to remove.
-	 */
-	public boolean removeListener(SkillListener listener) {
-		return listeners.remove(listener);
-	}
-
-	/**
-	 * Sets a {@link Skill}.
-	 * 
-	 * @param id The id.
-	 * @param skill The skill.
-	 */
-	public void setSkill(int id, Skill skill) {
-		checkBounds(id);
-		skills[id] = skill;
-		notifySkillUpdated(id);
-	}
-
-	/**
-	 * Gets the number of {@link Skill}s in this set.
-	 * 
-	 * @return The number of skills.
-	 */
-	public int size() {
-		return skills.length;
-	}
-
-	/**
-	 * Starts the firing of events.
-	 */
-	public void startFiringEvents() {
-		firingEvents = true;
-	}
-
-	/**
-	 * Stops events from being fired.
-	 */
-	public void stopFiringEvents() {
-		firingEvents = false;
 	}
 
 }

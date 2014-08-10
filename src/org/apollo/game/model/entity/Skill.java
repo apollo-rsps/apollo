@@ -88,13 +88,6 @@ public final class Skill {
 	public static final int RUNECRAFT = 20;
 
 	/**
-	 * The skill names.
-	 */
-	private static final String SKILL_NAMES[] = { "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer",
-			"Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining",
-			"Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecraft" };
-
-	/**
 	 * The slayer id.
 	 */
 	public static final int SLAYER = 18;
@@ -120,6 +113,13 @@ public final class Skill {
 	public static final int WOODCUTTING = 8;
 
 	/**
+	 * The skill names.
+	 */
+	private static final String[] SKILL_NAMES = { "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer",
+			"Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining",
+			"Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecraft" };
+
+	/**
 	 * Gets the name of a skill.
 	 * 
 	 * @param id The skill's id.
@@ -137,6 +137,43 @@ public final class Skill {
 	 */
 	public static boolean isCombatSkill(int skill) {
 		return skill >= ATTACK && skill <= MAGIC;
+	}
+
+	/**
+	 * Creates a skill from an existing skill, using the existing skill's experience and maximum level values, but the
+	 * specified current level.
+	 * 
+	 * @param currentLevel The current level.
+	 * @param skill The existing skill.
+	 * 
+	 * @return The new skill with the updated current level.
+	 */
+	public static Skill updateCurrentLevel(int currentLevel, Skill skill) {
+		return new Skill(skill.experience, currentLevel, skill.maximumLevel);
+	}
+
+	/**
+	 * Creates a skill from an existing skill, using the existing skill's current and maximum level values, but the
+	 * specified experience.
+	 * 
+	 * @param experience The experience.
+	 * @param skill The existing skill.
+	 * @return The new skill with the updated experience.
+	 */
+	public static Skill updateExperience(double experience, Skill skill) {
+		return new Skill(experience, skill.currentLevel, skill.maximumLevel);
+	}
+
+	/**
+	 * Creates a skill from an existing skill, using the existing skill's experience and current level values, but the
+	 * specified maximum level.
+	 * 
+	 * @param maximumLevel experience The maximum level.
+	 * @param skill The existing skill.
+	 * @return The new skill with the updated maximum level.
+	 */
+	public static Skill updateMaximumLevel(int maximumLevel, Skill skill) {
+		return new Skill(skill.experience, skill.currentLevel, maximumLevel);
 	}
 
 	/**
