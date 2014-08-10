@@ -2,8 +2,8 @@ package org.apollo.tools;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Paths;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.ItemDefinitionDecoder;
@@ -1172,7 +1172,7 @@ public final class EquipmentUpdater {
 
 		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-"
 				+ release + ".dat")));
-				IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true)) {
+				IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
 			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
 			ItemDefinition[] definitions = decoder.decode();
 			ItemDefinition.init(definitions);

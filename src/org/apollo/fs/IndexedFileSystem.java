@@ -1,11 +1,12 @@
 package org.apollo.fs;
 
 import java.io.Closeable;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.CRC32;
 
 /**
@@ -43,7 +44,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * @param readOnly Indicates whether the file system will be read only or not.
 	 * @throws FileNotFoundException If the data files could not be found.
 	 */
-	public IndexedFileSystem(File base, boolean readOnly) throws FileNotFoundException {
+	public IndexedFileSystem(Path base, boolean readOnly) throws FileNotFoundException {
 		this.readOnly = readOnly;
 		detectLayout(base);
 	}
@@ -71,25 +72,22 @@ public final class IndexedFileSystem implements Closeable {
 	 * @param base The base directory.
 	 * @throws FileNotFoundException If the data files could not be found.
 	 */
-	private void detectLayout(File base) throws FileNotFoundException {
+	private void detectLayout(Path base) throws FileNotFoundException {
 		int indexCount = 0;
 		for (int index = 0; index < indices.length; index++) {
-			File f = new File(base.getAbsolutePath() + "/main_file_cache.idx" + index);
-			if (f.exists() && !f.isDirectory()) {
+			Path idx = base.resolve("main_file_cache.idx" + index);
+			if (Files.exists(idx) && !Files.isDirectory(idx)) {
 				indexCount++;
-				indices[index] = new RandomAccessFile(f, readOnly ? "r" : "rw");
+				indices[index] = new RandomAccessFile(idx.toFile(), readOnly ? "r" : "rw");
 			}
 		}
 		if (indexCount <= 0) {
 			throw new FileNotFoundException("No index file(s) present.");
 		}
 
-		File oldEngineData = new File(base.getAbsolutePath() + "/main_file_cache.dat");
-		File newEngineData = new File(base.getAbsolutePath() + "/main_file_cache.dat2");
-		if (oldEngineData.exists() && !oldEngineData.isDirectory()) {
-			data = new RandomAccessFile(oldEngineData, readOnly ? "r" : "rw");
-		} else if (newEngineData.exists() && !oldEngineData.isDirectory()) {
-			data = new RandomAccessFile(newEngineData, readOnly ? "r" : "rw");
+		Path resources = base.resolve("main_file_cache.dat");
+		if (Files.exists(resources) && !Files.isDirectory(resources)) {
+			data = new RandomAccessFile(resources.toFile(), readOnly ? "r" : "rw");
 		} else {
 			throw new FileNotFoundException("No data file present.");
 		}
