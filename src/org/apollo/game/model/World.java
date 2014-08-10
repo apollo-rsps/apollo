@@ -322,12 +322,14 @@ public final class World {
 	 * @return A {@link RegistrationStatus}.
 	 */
 	public RegistrationStatus register(final Player player) {
-		if (isPlayerOnline(player.getUsername())) {
+		String username = player.getUsername();
+		if (isPlayerOnline(username)) {
 			return RegistrationStatus.ALREADY_ONLINE;
 		}
 
 		boolean success = playerRepository.add(player);
 		if (success) {
+			players.put(NameUtil.encodeBase37(username), player);
 			Sector sector = sectorRepository.fromPosition(player.getPosition());
 			sector.addEntity(player);
 
