@@ -7,9 +7,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -169,7 +169,7 @@ public final class Server {
 		serviceManager.startAll();
 
 		int releaseNo = context.getRelease().getReleaseNumber();
-		IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + releaseNo), true);
+		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", Integer.toString(releaseNo)), true);
 		World.getWorld().init(releaseNo, fs, manager);
 	}
 

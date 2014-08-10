@@ -1,6 +1,7 @@
 package org.apollo.update;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -65,7 +66,7 @@ public final class UpdateService extends Service {
 	public void start() {
 		int release = getContext().getRelease().getReleaseNumber();
 		try {
-			File base = new File("./data/fs/" + release + "/");
+			Path base = Paths.get("data/fs/", Integer.toString(release));
 			for (int i = 0; i < THREADS_PER_REQUEST_TYPE; i++) {
 				workers.add(new JagGrabRequestWorker(dispatcher, new IndexedFileSystem(base, true)));
 				workers.add(new OnDemandRequestWorker(dispatcher, new IndexedFileSystem(base, true)));

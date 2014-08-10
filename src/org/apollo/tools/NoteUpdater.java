@@ -2,8 +2,8 @@ package org.apollo.tools;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public final class NoteUpdater {
 
 		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/note-"
 				+ release + ".dat")));
-				IndexedFileSystem fs = new IndexedFileSystem(new File("data/fs/" + release), true)) {
+				IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
 			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
 			ItemDefinition[] defs = decoder.decode();
 			ItemDefinition.init(defs);
