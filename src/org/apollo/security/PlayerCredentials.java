@@ -104,4 +104,21 @@ public final class PlayerCredentials {
 		return usernameHash;
 	}
 
+	@Override
+	public int hashCode() {
+		return (int) encodedUsername;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+
+		PlayerCredentials other = (PlayerCredentials) obj;
+		return encodedUsername == other.encodedUsername;
+	}
+
 }
