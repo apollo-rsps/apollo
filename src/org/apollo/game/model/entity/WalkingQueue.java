@@ -228,10 +228,9 @@ public final class WalkingQueue {
 					position = next.position;
 				}
 			}
+			mob.setPosition(position);
 		}
-
 		mob.setDirections(first, second);
-		mob.setPosition(position);
 	}
 
 	/**

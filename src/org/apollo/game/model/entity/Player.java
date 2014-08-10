@@ -105,11 +105,6 @@ public final class Player extends Mob {
 	private List<String> friends = new ArrayList<>();
 
 	/**
-	 * Whether or not the player is skulled.
-	 */
-	private boolean isSkulled = false;
-
-	/**
 	 * The list of usernames of players this player has ignored.
 	 */
 	private List<String> ignores = new ArrayList<>();
@@ -118,6 +113,11 @@ public final class Player extends Mob {
 	 * This player's interface set.
 	 */
 	private final transient InterfaceSet interfaceSet = new InterfaceSet(this);
+
+	/**
+	 * Whether or not the player is skulled.
+	 */
+	private boolean isSkulled = false;
 
 	/**
 	 * The centre of the last region the client has loaded.
@@ -354,15 +354,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Indicates whether or not the player is skulled
-	 * 
-	 * @return {@code true} if the player is skulled, otherwise {@code false}.
-	 */
-	public boolean isSkulled() {
-		return isSkulled;
-	}
-
-	/**
 	 * Gets the {@link List} of usernames of ignored players.
 	 * 
 	 * @return The list.
@@ -517,45 +508,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Initialises this player.
-	 */
-	private void init() {
-		initInventories();
-		initSkills();
-	}
-
-	/**
-	 * Initialises the player's inventories.
-	 */
-	private void initInventories() {
-		InventoryListener fullInventoryListener = new FullInventoryListener(this,
-				FullInventoryListener.FULL_INVENTORY_MESSAGE);
-		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
-		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
-
-		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.INVENTORY_ID);
-		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
-		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.EQUIPMENT_ID);
-
-		inventory.addListener(syncInventoryListener);
-		inventory.addListener(fullInventoryListener);
-		bank.addListener(syncBankListener);
-		bank.addListener(fullBankListener);
-		equipment.addListener(syncEquipmentListener);
-		equipment.addListener(appearanceListener);
-	}
-
-	/**
-	 * Initialises the player's skills.
-	 */
-	private void initSkills() {
-		skillSet.addListener(new SynchronizationSkillListener(this));
-		skillSet.addListener(new LevelUpSkillListener(this));
-	}
-
-	/**
 	 * Checks if there are excessive npcs.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
@@ -598,6 +550,15 @@ public final class Player extends Mob {
 	 */
 	public boolean isRunning() {
 		return running;
+	}
+
+	/**
+	 * Indicates whether or not the player is skulled
+	 * 
+	 * @return {@code true} if the player is skulled, otherwise {@code false}.
+	 */
+	public boolean isSkulled() {
+		return isSkulled;
 	}
 
 	/**
@@ -690,29 +651,6 @@ public final class Player extends Mob {
 		} else {
 			queuedMessages.add(message);
 		}
-	}
-
-	/**
-	 * Sends the initial messages.
-	 */
-	private void sendInitialMessages() {
-		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
-		sendMessage("Welcome to RuneScape.");
-		if (!newPlayer) {
-			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
-		}
-
-		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
-		for (int tab = 0; tab < tabs.length; tab++) {
-			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
-		}
-
-		inventory.forceRefresh();
-		equipment.forceRefresh();
-		bank.forceRefresh();
-		skillSet.forceRefresh();
-
-		World.getWorld().getLoginDispatcher().dispatch(this);
 	}
 
 	/**
@@ -816,15 +754,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets whether or not the player is skulled. TODO make this an attribute
-	 * 
-	 * @param isSkulled Whether or not the player is skulled.
-	 */
-	public void setSkulled(boolean isSkulled) {
-		this.isSkulled = isSkulled;
-	}
-
-	/**
 	 * Sets the {@link List} of this player's ignored players.
 	 * 
 	 * @param ignores The ignored player list.
@@ -921,6 +850,15 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sets whether or not the player is skulled. TODO make this an attribute
+	 * 
+	 * @param isSkulled Whether or not the player is skulled.
+	 */
+	public void setSkulled(boolean isSkulled) {
+		this.isSkulled = isSkulled;
+	}
+
+	/**
 	 * Sets the trade {@link PrivacyState}.
 	 * 
 	 * @param tradePrivacy The privacy state.
@@ -973,6 +911,68 @@ public final class Player extends Mob {
 	public String toString() {
 		return Player.class.getName() + " [username=" + getUsername() + ", privilege=" + privilegeLevel
 				+ ", clientVersion=" + clientVersion + "]";
+	}
+
+	/**
+	 * Initialises this player.
+	 */
+	private void init() {
+		initInventories();
+		initSkills();
+	}
+
+	/**
+	 * Initialises the player's inventories.
+	 */
+	private void initInventories() {
+		InventoryListener fullInventoryListener = new FullInventoryListener(this,
+				FullInventoryListener.FULL_INVENTORY_MESSAGE);
+		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
+		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
+
+		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
+				SynchronizationInventoryListener.INVENTORY_ID);
+		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
+		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
+				SynchronizationInventoryListener.EQUIPMENT_ID);
+
+		inventory.addListener(syncInventoryListener);
+		inventory.addListener(fullInventoryListener);
+		bank.addListener(syncBankListener);
+		bank.addListener(fullBankListener);
+		equipment.addListener(syncEquipmentListener);
+		equipment.addListener(appearanceListener);
+	}
+
+	/**
+	 * Initialises the player's skills.
+	 */
+	private void initSkills() {
+		skillSet.addListener(new SynchronizationSkillListener(this));
+		skillSet.addListener(new LevelUpSkillListener(this));
+	}
+
+	/**
+	 * Sends the initial messages.
+	 */
+	private void sendInitialMessages() {
+		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
+		sendMessage("Welcome to RuneScape.");
+		if (!newPlayer) {
+			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
+		}
+
+		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
+		for (int tab = 0; tab < tabs.length; tab++) {
+			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
+		}
+
+		inventory.forceRefresh();
+		equipment.forceRefresh();
+		bank.forceRefresh();
+		skillSet.forceRefresh();
+
+		World.getWorld().getLoginDispatcher().dispatch(this);
 	}
 
 }

@@ -18,7 +18,6 @@ import org.apollo.game.command.CommandDispatcher;
 import org.apollo.game.login.LoginDispatcher;
 import org.apollo.game.login.LogoutDispatcher;
 import org.apollo.game.model.area.Sector;
-import org.apollo.game.model.area.SectorCoordinates;
 import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.def.EquipmentDefinition;
 import org.apollo.game.model.def.ItemDefinition;
@@ -329,7 +328,7 @@ public final class World {
 
 		boolean success = playerRepository.add(player);
 		if (success) {
-			Sector sector = sectorRepository.get(SectorCoordinates.fromPosition(player.getPosition()));
+			Sector sector = sectorRepository.fromPosition(player.getPosition());
 			sector.addEntity(player);
 
 			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
