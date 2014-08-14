@@ -15,7 +15,7 @@ public final class CommandDispatcher {
 	/**
 	 * A map of command strings to command listeners.
 	 */
-	private final Map<String, CommandListener> listeners = new HashMap<String, CommandListener>();
+	private final Map<String, CommandListener> listeners = new HashMap<>();
 
 	/**
 	 * Creates the command dispatcher and registers a listener for the credits command.

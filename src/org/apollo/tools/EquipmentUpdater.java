@@ -941,9 +941,8 @@ public final class EquipmentUpdater {
 		}
 		if (name.equals("Mithril arrow")) {
 			return 1;
-		} else {
-			return 1;
 		}
+		return 1;
 	}
 
 	/**

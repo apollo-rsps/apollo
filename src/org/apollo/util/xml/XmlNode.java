@@ -20,7 +20,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 	/**
 	 * The attribute map.
 	 */
-	private final Map<String, String> attributes = new HashMap<String, String>();
+	private final Map<String, String> attributes = new HashMap<>();
 
 	/**
 	 * The list of child nodes.

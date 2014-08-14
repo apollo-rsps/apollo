@@ -104,7 +104,7 @@ public final class TextUtil {
 		for (char c : str.toLowerCase().toCharArray()) {
 			for (char validChar : FREQUENCY_ORDERED_CHARS) {
 				if (c == validChar) {
-					builder.append((char) c);
+					builder.append(c);
 					break;
 				}
 			}

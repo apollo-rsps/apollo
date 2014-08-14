@@ -82,7 +82,7 @@ public final class MessageHandlerChainParser {
 			}
 
 			Class<? extends Message> messageClass = (Class<? extends Message>) Class.forName(messageClassName);
-			List<MessageHandler<?>> handlers = new ArrayList<MessageHandler<?>>();
+			List<MessageHandler<?>> handlers = new ArrayList<>();
 
 			for (XmlNode handlerNode : chainNode) {
 				if (!handlerNode.getName().equals("handler")) {

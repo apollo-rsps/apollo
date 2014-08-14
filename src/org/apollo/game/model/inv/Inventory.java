@@ -406,11 +406,10 @@ public final class Inventory implements Cloneable {
 					if (amount >= item.getAmount()) {
 						set(slot, null);
 						return item.getAmount();
-					} else {
-						int newAmount = item.getAmount() - amount;
-						set(slot, new Item(item.getId(), newAmount));
-						return amount;
 					}
+					int newAmount = item.getAmount() - amount;
+					set(slot, new Item(item.getId(), newAmount));
+					return amount;
 				}
 			}
 			return 0;
