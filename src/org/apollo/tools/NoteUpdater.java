@@ -38,7 +38,7 @@ public final class NoteUpdater {
 			ItemDefinition.init(defs);
 
 			os.writeShort(defs.length);
-			Map<Integer, Integer> itemToNote = new HashMap<Integer, Integer>();
+			Map<Integer, Integer> itemToNote = new HashMap<>();
 
 			for (int id = 0; id < defs.length; id++) {
 				ItemDefinition def = ItemDefinition.lookup(id);

@@ -40,7 +40,7 @@ public final class UpdateService extends Service {
 	/**
 	 * A list of request workers.
 	 */
-	private final List<RequestWorker<?, ?>> workers = new ArrayList<RequestWorker<?, ?>>();
+	private final List<RequestWorker<?, ?>> workers = new ArrayList<>();
 
 	/**
 	 * Creates the update service.

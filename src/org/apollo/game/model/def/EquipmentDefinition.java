@@ -16,7 +16,7 @@ public final class EquipmentDefinition {
 	/**
 	 * The equipment definitions.
 	 */
-	private static final Map<Integer, EquipmentDefinition> definitions = new HashMap<Integer, EquipmentDefinition>();
+	private static final Map<Integer, EquipmentDefinition> definitions = new HashMap<>();
 
 	/**
 	 * Initialises the equipment definitions.

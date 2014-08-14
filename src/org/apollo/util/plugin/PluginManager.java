@@ -51,7 +51,7 @@ public final class PluginManager {
 	 * @return The plugin map.
 	 */
 	private Map<String, PluginMetaData> createMap(Collection<PluginMetaData> plugins) {
-		Map<String, PluginMetaData> map = new HashMap<String, PluginMetaData>();
+		Map<String, PluginMetaData> map = new HashMap<>();
 		for (PluginMetaData plugin : plugins) {
 			map.put(plugin.getId(), plugin);
 		}

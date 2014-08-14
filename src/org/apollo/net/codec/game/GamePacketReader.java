@@ -312,9 +312,8 @@ public final class GamePacketReader {
 		int peek = buffer.getByte(buffer.readerIndex());
 		if (peek < 128) {
 			return buffer.readByte() - 64;
-		} else {
-			return buffer.readShort() - 49152;
 		}
+		return buffer.readShort() - 49152;
 	}
 
 	/**
@@ -394,9 +393,8 @@ public final class GamePacketReader {
 		int peek = buffer.getByte(buffer.readerIndex());
 		if (peek < 128) {
 			return buffer.readByte();
-		} else {
-			return buffer.readShort() - 32768;
 		}
+		return buffer.readShort() - 32768;
 	}
 
 	/**

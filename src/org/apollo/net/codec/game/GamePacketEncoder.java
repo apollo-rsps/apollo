@@ -33,8 +33,7 @@ public final class GamePacketEncoder extends MessageToMessageEncoder<GamePacket>
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, GamePacket msg, List<Object> out) throws Exception {
-		GamePacket packet = (GamePacket) msg;
+	protected void encode(ChannelHandlerContext ctx, GamePacket packet, List<Object> out) throws Exception {
 		PacketType type = packet.getType();
 		int headerLength = 1;
 		int payloadLength = packet.getLength();

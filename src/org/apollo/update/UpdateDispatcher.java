@@ -25,17 +25,17 @@ public final class UpdateDispatcher {
 	/**
 	 * A queue for pending HTTP requests.
 	 */
-	private final BlockingQueue<ChannelRequest<HttpRequest>> httpQueue = new LinkedBlockingQueue<ChannelRequest<HttpRequest>>();
+	private final BlockingQueue<ChannelRequest<HttpRequest>> httpQueue = new LinkedBlockingQueue<>();
 
 	/**
 	 * A queue for pending JAGGRAB requests.
 	 */
-	private final BlockingQueue<ChannelRequest<JagGrabRequest>> jagGrabQueue = new LinkedBlockingQueue<ChannelRequest<JagGrabRequest>>();
+	private final BlockingQueue<ChannelRequest<JagGrabRequest>> jagGrabQueue = new LinkedBlockingQueue<>();
 
 	/**
 	 * A queue for pending 'on-demand' requests.
 	 */
-	private final BlockingQueue<ChannelRequest<OnDemandRequest>> onDemandQueue = new PriorityBlockingQueue<ChannelRequest<OnDemandRequest>>();
+	private final BlockingQueue<ChannelRequest<OnDemandRequest>> onDemandQueue = new PriorityBlockingQueue<>();
 
 	/**
 	 * Dispatches a HTTP request.
