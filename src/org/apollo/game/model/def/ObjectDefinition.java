@@ -132,7 +132,7 @@ public final class ObjectDefinition {
 	 * @return The height.
 	 */
 	public int getHeight() {
-		return width;
+		return height;
 	}
 
 	/**
@@ -168,7 +168,7 @@ public final class ObjectDefinition {
 	 * @return The width.
 	 */
 	public int getWidth() {
-		return height;
+		return width;
 	}
 
 	/**
