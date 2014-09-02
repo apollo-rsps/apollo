@@ -45,6 +45,8 @@ import org.apollo.util.Point;
  * 
  * @author Graham
  * @author Major
+ * @author Lmctruck30
+ *
  */
 public final class Player extends Mob {
 
@@ -956,22 +958,27 @@ public final class Player extends Mob {
 	 * Sends the initial messages.
 	 */
 	private void sendInitialMessages() {
+		//Send the player index and members flag
 		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
+		//Send the welcome message
 		sendMessage("Welcome to RuneScape.");
+		//Send the interface for character design
 		if (!newPlayer) {
 			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
 		}
-
+		//Send the brightness config to the client on startup
+		send(new ConfigMessage(InterfaceConstants.CONFIG_BRIGHTNESS, screenBrightness.toInteger()));
+		//Send the parentId's for the tabs
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
 		for (int tab = 0; tab < tabs.length; tab++) {
 			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
 		}
-
+		//Refresh the player's inventory, equipment, bank and skills
 		inventory.forceRefresh();
 		equipment.forceRefresh();
 		bank.forceRefresh();
 		skillSet.forceRefresh();
-
+		//Execute the login listeners
 		World.getWorld().getLoginDispatcher().dispatch(this);
 	}
 
