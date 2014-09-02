@@ -1,4 +1,3 @@
-java_import 'org.apollo.game.message.impl.IgnoreListMessage'
 
 on :message, :add_ignore do |ctx, player, message|
   username = message.username
