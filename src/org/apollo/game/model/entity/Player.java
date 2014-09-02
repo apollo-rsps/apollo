@@ -56,6 +56,11 @@ public final class Player extends Mob {
 	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
 
 	/**
+	 * The player's cached appearance.
+	 */
+	private SynchronizationBlock appearanceBlockCached = null;
+	
+	/**
 	 * This player's bank.
 	 */
 	private final Inventory bank = new Inventory(InventoryConstants.BANK_CAPACITY, StackMode.STACK_ALWAYS);
@@ -867,6 +872,24 @@ public final class Player extends Mob {
 	 */
 	public void setTradePrivacy(PrivacyState tradePrivacy) {
 		this.tradePrivacy = tradePrivacy;
+	}
+	
+	/**
+	 * Gets the Cache Appearance
+	 * @return cached Appearance
+	 */
+	public SynchronizationBlock getCacheAppearance() {
+		return appearanceBlockCached;
+	}
+
+	/**
+	 * Set the players appearance to be cached
+	 * @param appearance The current players appearance
+	 * @return appearance that is set cached
+	 */
+	public SynchronizationBlock setCachedAppearance(SynchronizationBlock appearance) {
+		this.appearanceBlockCached = appearance;
+		return appearance;
 	}
 
 	/**
