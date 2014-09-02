@@ -226,6 +226,11 @@ public final class SkillSet {
 	 */
 	public void normalize() {
 		for (int id = 0; id < skills.length; id++) {
+		
+			if(Skill.PRAYER == id) {
+				continue;
+			}
+			
 			int current = skills[id].getCurrentLevel(), max = skills[id].getMaximumLevel();
 
 			if (current == max) {

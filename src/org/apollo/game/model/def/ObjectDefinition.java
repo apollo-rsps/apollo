@@ -1,11 +1,13 @@
 package org.apollo.game.model.def;
 
-import org.apollo.game.model.entity.GameObject;
+import org.apollo.game.model.object.GameObject;
 
 /**
  * Represents a type of {@link GameObject}.
  * 
  * @author Major
+ * @author Lmctruck30
+ * 
  */
 public final class ObjectDefinition {
 
@@ -71,7 +73,7 @@ public final class ObjectDefinition {
 	/**
 	 * This object's height.
 	 */
-	private int height;
+	private int height = 1;
 
 	/**
 	 * The object's id.
@@ -81,12 +83,12 @@ public final class ObjectDefinition {
 	/**
 	 * Denotes whether this object is impenetrable or not.
 	 */
-	private boolean impenetrable;
+	private boolean impenetrable = true;
 
 	/**
 	 * Denotes whether this object has actions associated with it or not.
 	 */
-	private boolean interactive;
+	private boolean interactive = false;
 
 	/**
 	 * The object's menu actions.
@@ -101,12 +103,12 @@ public final class ObjectDefinition {
 	/**
 	 * Denotes whether the object can be walked over or not.
 	 */
-	private boolean solid;
+	private boolean solid = true;
 
 	/**
 	 * This object's width.
 	 */
-	private int width;
+	private int width = 1;
 
 	/**
 	 * Creates a new object definition.

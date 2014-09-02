@@ -28,6 +28,8 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
  * 
  * @author Graham
  * @author Major
+ * @author Lmctruck30
+ *
  */
 public abstract class Mob extends Entity {
 
@@ -395,18 +397,21 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public final void setPosition(Position position) {
-		SectorRepository repository = World.getWorld().getSectorRepository();
-		Sector newSector = repository.fromPosition(position);
-
+		//Check to see Mob is in a new sector
 		if (SectorCoordinates.fromPosition(this.position) != SectorCoordinates.fromPosition(position)) {
+			//World Sector Repository
+			SectorRepository repository = World.getWorld().getSectorRepository();
+			//New sector for the Mob
+			Sector newSector = repository.fromPosition(position);
+			//Old sector for the mob
 			Sector oldSector = repository.fromPosition(this.position);
+			//Remove Mob from the old sector
 			oldSector.removeEntity(this);
-		} else {
-			newSector.removeEntity(this);
+			//Add Mob to the new sector
+			newSector.addEntity(this);
 		}
-
+		//Change the Mob's position
 		this.position = position;
-		newSector.addEntity(this);
 	}
 
 	/**
@@ -475,9 +480,26 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public void teleport(Position position) {
+		//Check to see Mob is in a new sector
+		if (SectorCoordinates.fromPosition(this.position) != SectorCoordinates.fromPosition(position)) {
+			//World Sector Repository
+			SectorRepository repository = World.getWorld().getSectorRepository();
+			//New sector for the Mob
+			Sector newSector = repository.fromPosition(position);
+			//Old sector for the mob
+			Sector oldSector = repository.fromPosition(this.position);
+			//Remove Mob from the old sector
+			oldSector.removeEntity(this);
+			//Add Mob to the new sector
+			newSector.addEntity(this);
+		}
+		//New position
 		this.position = position;
+		//Teleporting flag set to true
 		teleporting = true;
+		//Clear the walking queue
 		walkingQueue.clear();
+		//Stop all the Mobs actions
 		stopAction();
 	}
 
