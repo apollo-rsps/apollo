@@ -5,6 +5,8 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +23,8 @@ import org.apollo.net.session.UpdateSession;
  * An implementation of {@link ChannelInboundHandlerAdapter} which handles incoming upstream events from Netty.
  * 
  * @author Graham
+ * @author Lmctruck30
+ * 
  */
 @Sharable
 public final class ApolloHandler extends ChannelInboundHandlerAdapter {
@@ -85,5 +89,15 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 			ctx.attr(NetworkConstants.SESSION_KEY).get().messageReceived(msg);
 		}
 	}
+	
+	@Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent e = (IdleStateEvent) evt;
+            if (e.state() == IdleState.READER_IDLE) {
+                ctx.close();
+            }
+        }
+    }
 
 }
