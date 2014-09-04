@@ -24,7 +24,6 @@ import org.apollo.net.session.UpdateSession;
  * 
  * @author Graham
  * @author Lmctruck30
- * 
  */
 @Sharable
 public final class ApolloHandler extends ChannelInboundHandlerAdapter {
