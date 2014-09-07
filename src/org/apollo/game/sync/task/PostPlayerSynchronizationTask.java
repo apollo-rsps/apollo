@@ -28,6 +28,7 @@ public final class PostPlayerSynchronizationTask extends SynchronizationTask {
 		player.setTeleporting(false);
 		player.setRegionChanged(false);
 		player.resetBlockSet();
+		player.setCachedAppearance(null);
 		if (!player.isExcessivePlayersSet()) {
 			player.incrementViewingDistance();
 		} else {
