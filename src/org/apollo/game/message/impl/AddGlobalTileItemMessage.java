@@ -3,6 +3,11 @@ package org.apollo.game.message.impl;
 import org.apollo.game.message.Message;
 import org.apollo.game.model.Item;
 
+/**
+ * A {@link Message} sent to the client to display an item on a tile for every player.
+ * 
+ * @author Major
+ */
 public final class AddGlobalTileItemMessage extends Message {
 
 	/**

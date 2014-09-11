@@ -15,7 +15,7 @@ import org.apollo.net.release.Release;
 import org.apollo.util.StatefulFrameDecoder;
 
 /**
- * A {@link StatefulFrameDecoder} which decodes game packets.
+ * A {@link StatefulFrameDecoder} that decodes {@link GamePacket}s.
  * 
  * @author Graham
  */
@@ -59,17 +59,16 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, GameDecoderState state)
-			throws IOException {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, GameDecoderState state) throws IOException {
 		switch (state) {
 		case GAME_OPCODE:
-			decodeOpcode(ctx, in, out);
+			decodeOpcode(in, out);
 			break;
 		case GAME_LENGTH:
-			decodeLength(ctx, in, out);
+			decodeLength(in);
 			break;
 		case GAME_PAYLOAD:
-			decodePayload(ctx, in, out);
+			decodePayload(in, out);
 			break;
 		default:
 			throw new IllegalStateException("Invalid game decoder state.");
@@ -77,34 +76,27 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	/**
-	 * Decodes in the length state.
+	 * Decodes the length state.
 	 * 
-	 * @param ctx The channel handler context.
-	 * @param channel The channel.
 	 * @param buffer The buffer.
-	 * @return The frame, or {@code null}.
-	 * @throws Exception If an error occurs.
 	 */
-	private Object decodeLength(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+	private void decodeLength(ByteBuf buffer) {
 		if (buffer.isReadable()) {
 			length = buffer.readUnsignedByte();
 			if (length != 0) {
 				setState(GameDecoderState.GAME_PAYLOAD);
 			}
 		}
-		return null;
 	}
 
 	/**
-	 * Decodes in the opcode state.
+	 * Decodes the opcode state.
 	 * 
-	 * @param ctx The channel handler context.
-	 * @param channel The channel.
 	 * @param buffer The buffer.
-	 * @return The frame, or {@code null}.
+	 * @param out The {@link List} of objects to be passed along the pipeline.
 	 * @throws IOException If a received opcode or packet type is illegal.
 	 */
-	private void decodeOpcode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws IOException {
+	private void decodeOpcode(ByteBuf buffer, List<Object> out) throws IOException {
 		if (buffer.isReadable()) {
 			int encryptedOpcode = buffer.readUnsignedByte();
 			opcode = encryptedOpcode - random.nextInt() & 0xFF;
@@ -135,15 +127,12 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	/**
-	 * Decodes in the payload state.
+	 * Decodes the payload state.
 	 * 
-	 * @param ctx The channel handler context.
-	 * @param channel The channel.
 	 * @param buffer The buffer.
-	 * @return The frame, or {@code null}.
-	 * @throws Exception If an error occurs.
+	 * @param out The {@link List} of objects to be passed along the pipeline.
 	 */
-	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+	private void decodePayload(ByteBuf buffer, List<Object> out) {
 		if (buffer.readableBytes() >= length) {
 			ByteBuf payload = buffer.readBytes(length);
 			setState(GameDecoderState.GAME_OPCODE);

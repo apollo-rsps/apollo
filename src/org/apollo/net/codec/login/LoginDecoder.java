@@ -58,8 +58,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, LoginDecoderState state)
-			throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, LoginDecoderState state) throws Exception {
 		switch (state) {
 		case LOGIN_HANDSHAKE:
 			decodeHandshake(ctx, in, out);
@@ -79,10 +78,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * Decodes in the handshake state.
 	 * 
 	 * @param ctx The channel handler context.
-	 * @param channel The channel.
 	 * @param buffer The buffer.
-	 * @return The frame, or {@code null}.
-	 * @throws Exception If an error occurs.
+	 * @param out The {@link List} of objects to pass forward through the pipeline.
 	 */
 	private void decodeHandshake(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
 		if (buffer.isReadable()) {
@@ -103,9 +100,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * Decodes in the header state.
 	 * 
 	 * @param ctx The channel handler context.
-	 * @param channel The channel.
 	 * @param buffer The buffer.
-	 * @return The frame, or {@code null}.
+	 * @param out The {@link List} of objects to pass forward through the pipeline.
 	 * @throws IOException If the login type sent by the client is invalid.
 	 */
 	private void decodeHeader(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws IOException {
@@ -127,9 +123,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * Decodes in the payload state.
 	 * 
 	 * @param ctx The channel handler context.
-	 * @param channel The channel.
 	 * @param buffer The buffer.
-	 * @return The frame, or {@code null}.
+	 * @param out The {@link List} of objects to pass forward through the pipeline.
 	 * @throws Exception If an error occurs.
 	 */
 	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
@@ -201,8 +196,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid);
 			IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
-			LoginRequest request = new LoginRequest(credentials, randomPair, reconnecting, lowMemory, releaseNumber,
-					archiveCrcs, clientVersion);
+			LoginRequest request = new LoginRequest(credentials, randomPair, reconnecting, lowMemory, releaseNumber, archiveCrcs,
+					clientVersion);
 
 			out.add(request);
 			if (buffer.isReadable()) {

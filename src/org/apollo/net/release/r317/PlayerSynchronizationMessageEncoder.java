@@ -333,7 +333,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	/**
 	 * Puts a force movement block in the specified builder.
 	 * 
-	 * @param forceMovementBlock The block.
+	 * @param block The block.
 	 * @param builder The builder.
 	 */
 	private void putForceMovementBlock(ForceMovementBlock block, GamePacketBuilder builder) {
@@ -388,8 +388,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param message The message.
 	 * @param builder The builder.
 	 */
-	private void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationMessage message,
-			GamePacketBuilder builder) {
+	private void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationMessage message, GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		if (seg.getType() == SegmentType.TELEPORT) {
 			Position position = ((TeleportSegment) seg).getDestination();

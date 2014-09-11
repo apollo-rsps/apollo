@@ -42,7 +42,6 @@ public abstract class Session {
 	 * Processes a message received from the channel.
 	 * 
 	 * @param message The message.
-	 * @throws Exception If an error occurs.
 	 */
 	public abstract void messageReceived(Object message);
 

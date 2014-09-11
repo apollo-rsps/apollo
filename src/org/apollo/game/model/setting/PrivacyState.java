@@ -40,6 +40,7 @@ public enum PrivacyState {
 	 * Gets the privacy state for the specified numerical value.
 	 * 
 	 * @param value The numerical value.
+	 * @param chat Whether or not the value is for public chat.
 	 * @return The privacy state.
 	 * @throws IllegalArgumentException If the specified value is out of bounds.
 	 */
@@ -77,6 +78,7 @@ public enum PrivacyState {
 	/**
 	 * Converts this privacy state to an integer.
 	 * 
+	 * @param chat Whether or not the value is for public chat.
 	 * @return The numerical value used by the client.
 	 */
 	public int toInteger(boolean chat) {

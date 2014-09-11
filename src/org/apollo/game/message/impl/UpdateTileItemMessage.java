@@ -28,7 +28,7 @@ public final class UpdateTileItemMessage extends Message {
 	/**
 	 * Creates a new message that updates the previous amount of the item.
 	 * 
-	 * @param id The item to be placed.
+	 * @param item The item to be placed.
 	 * @param previousAmount The previous amount of the item.
 	 */
 	public UpdateTileItemMessage(Item item, int previousAmount) {
@@ -38,7 +38,7 @@ public final class UpdateTileItemMessage extends Message {
 	/**
 	 * Creates a new set tile item message.
 	 * 
-	 * @param id The item to be placed.
+	 * @param item The item to be placed.
 	 * @param previousAmount The previous amount of the item.
 	 * @param positionOffset The offset from the client's base position.
 	 */

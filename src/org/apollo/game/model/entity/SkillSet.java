@@ -125,14 +125,12 @@ public final class SkillSet {
 	 * 
 	 * @param listener The listener.
 	 */
-	public boolean addListener(SkillListener listener) {
-		return listeners.add(listener);
+	public void addListener(SkillListener listener) {
+		listeners.add(listener);
 	}
 
 	/**
 	 * Calculates the combat level for this skill set.
-	 * 
-	 * @return The combat level.
 	 */
 	public void calculateCombatLevel() {
 		int attack = skills[Skill.ATTACK].getMaximumLevel();
@@ -249,8 +247,8 @@ public final class SkillSet {
 	 * 
 	 * @param listener The listener to remove.
 	 */
-	public boolean removeListener(SkillListener listener) {
-		return listeners.remove(listener);
+	public void removeListener(SkillListener listener) {
+		listeners.remove(listener);
 	}
 
 	/**

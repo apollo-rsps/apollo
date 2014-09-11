@@ -54,9 +54,10 @@ public final class LoginRequest {
 	 * @param reconnecting The reconnecting flag.
 	 * @param releaseNumber The release number.
 	 * @param archiveCrcs The archive CRCs.
+	 * @param clientVersion The client version.
 	 */
-	public LoginRequest(PlayerCredentials credentials, IsaacRandomPair randomPair, boolean lowMemory,
-			boolean reconnecting, int releaseNumber, int[] archiveCrcs, int clientVersion) {
+	public LoginRequest(PlayerCredentials credentials, IsaacRandomPair randomPair, boolean lowMemory, boolean reconnecting,
+			int releaseNumber, int[] archiveCrcs, int clientVersion) {
 		this.credentials = credentials;
 		this.randomPair = randomPair;
 		this.lowMemory = lowMemory;

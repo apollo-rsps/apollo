@@ -1,7 +1,7 @@
 package org.apollo.game.message.impl;
 
 /**
- * A {@link Message} sent by the client when a player casts a spell on an inventory item.
+ * A {@link InventoryItemMessage} sent by the client when a player casts a spell on an inventory item.
  * 
  * @author Chris Fletcher
  */
