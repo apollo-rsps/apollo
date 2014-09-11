@@ -60,5 +60,5 @@ on :command, :objectinfo, RIGHTS_ADMIN do |player, command|
   id = args[0].to_i
   definition = ObjectDefinition.lookup(id)
   player.send_message("Object #{id} is called #{definition.name} and its description is \"#{definition.description}\".")
-  player.send_message("Its width is #{definition.width} and its height is #{definition.height}.")
+  player.send_message("Its width is #{definition.width} and its length is #{definition.length}.")
 end

@@ -87,7 +87,7 @@ public final class ObjectDefinitionDecoder {
 			} else if (opcode == 14) {
 				definition.setWidth(data.get() & 0xFF);
 			} else if (opcode == 15) {
-				definition.setHeight(data.get() & 0xFF);
+				definition.setLength(data.get() & 0xFF);
 			} else if (opcode == 17) {
 				definition.setSolid(false);
 			} else if (opcode == 18) {

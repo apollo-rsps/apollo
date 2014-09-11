@@ -57,8 +57,7 @@ public final class ObjectDefinition {
 	 */
 	public static ObjectDefinition lookup(int id) {
 		if (id < 0 || id > definitions.length) {
-			throw new IndexOutOfBoundsException(ObjectDefinition.class.getName() + " lookup index " + id
-					+ " out of bounds.");
+			throw new IndexOutOfBoundsException(ObjectDefinition.class.getName() + " lookup index " + id + " out of bounds.");
 		}
 		return definitions[id];
 	}
@@ -69,9 +68,9 @@ public final class ObjectDefinition {
 	private String description;
 
 	/**
-	 * This object's height.
+	 * This object's length.
 	 */
-	private int height;
+	private int length;
 
 	/**
 	 * The object's id.
@@ -127,12 +126,12 @@ public final class ObjectDefinition {
 	}
 
 	/**
-	 * Gets the height of this object.
+	 * Gets the length of this object.
 	 * 
-	 * @return The height.
+	 * @return The length.
 	 */
-	public int getHeight() {
-		return height;
+	public int getLength() {
+		return length;
 	}
 
 	/**
@@ -208,12 +207,12 @@ public final class ObjectDefinition {
 	}
 
 	/**
-	 * Sets the height of this object.
+	 * Sets the length of this object.
 	 * 
-	 * @param height The height.
+	 * @param length The length.
 	 */
-	public void setHeight(int height) {
-		this.height = height;
+	public void setLength(int length) {
+		this.length = length;
 	}
 
 	/**
