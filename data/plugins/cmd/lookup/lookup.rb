@@ -55,9 +55,10 @@ end
 # Sends the user a message with information about the object with the specified id.
 on :command, :objectinfo, RIGHTS_ADMIN do |player, command|
   args = command.arguments
-  next unless valid_arg_length(args, 1, player, 'Invalid syntax - ::objectinfo [npc id]')
+  next unless valid_arg_length(args, 1, player, 'Invalid syntax - ::objectinfo [object id]')
 
   id = args[0].to_i
   definition = ObjectDefinition.lookup(id)
   player.send_message("Object #{id} is called #{definition.name} and its description is \"#{definition.description}\".")
+  player.send_message("Its width is #{definition.width} and its height is #{definition.height}.")
 end
