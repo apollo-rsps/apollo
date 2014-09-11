@@ -68,11 +68,6 @@ public final class ObjectDefinition {
 	private String description;
 
 	/**
-	 * This object's length.
-	 */
-	private int length;
-
-	/**
 	 * The object's id.
 	 */
 	private final int id;
@@ -80,12 +75,17 @@ public final class ObjectDefinition {
 	/**
 	 * Denotes whether this object is impenetrable or not.
 	 */
-	private boolean impenetrable;
+	private boolean impenetrable = true;
 
 	/**
 	 * Denotes whether this object has actions associated with it or not.
 	 */
 	private boolean interactive;
+
+	/**
+	 * This object's length.
+	 */
+	private int length = 1;
 
 	/**
 	 * The object's menu actions.
@@ -100,12 +100,12 @@ public final class ObjectDefinition {
 	/**
 	 * Denotes whether the object can be walked over or not.
 	 */
-	private boolean solid;
+	private boolean solid = true;
 
 	/**
 	 * This object's width.
 	 */
-	private int width;
+	private int width = 1;
 
 	/**
 	 * Creates a new object definition.
@@ -126,21 +126,21 @@ public final class ObjectDefinition {
 	}
 
 	/**
-	 * Gets the length of this object.
-	 * 
-	 * @return The length.
-	 */
-	public int getLength() {
-		return length;
-	}
-
-	/**
 	 * Gets the id of this object.
 	 * 
 	 * @return The id.
 	 */
 	public int getId() {
 		return id;
+	}
+
+	/**
+	 * Gets the length of this object.
+	 * 
+	 * @return The length.
+	 */
+	public int getLength() {
+		return length;
 	}
 
 	/**
@@ -207,15 +207,6 @@ public final class ObjectDefinition {
 	}
 
 	/**
-	 * Sets the length of this object.
-	 * 
-	 * @param length The length.
-	 */
-	public void setLength(int length) {
-		this.length = length;
-	}
-
-	/**
 	 * Sets the impenetrability of this object.
 	 * 
 	 * @param impenetrable The impenetrability.
@@ -231,6 +222,15 @@ public final class ObjectDefinition {
 	 */
 	public void setInteractive(boolean interactive) {
 		this.interactive = interactive;
+	}
+
+	/**
+	 * Sets the length of this object.
+	 * 
+	 * @param length The length.
+	 */
+	public void setLength(int length) {
+		this.length = length;
 	}
 
 	/**
