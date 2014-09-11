@@ -10,7 +10,7 @@ import org.apollo.game.model.entity.Npc;
 public final class NpcDefinition {
 
 	/**
-	 * The NPC definitions.
+	 * The npc definitions.
 	 */
 	private static NpcDefinition[] definitions;
 
@@ -49,7 +49,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the NPC definition for the specified id.
+	 * Gets the npc definition for the specified id.
 	 * 
 	 * @param id The id.
 	 * @return The definition.
@@ -63,17 +63,17 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * The combat level of the NPC.
+	 * The combat level of the npc.
 	 */
 	private int combatLevel = -1;
 
 	/**
-	 * The description of the NPC.
+	 * The description of the npc.
 	 */
 	private String description;
 
 	/**
-	 * The NPC id.
+	 * The npc id.
 	 */
 	private final int id;
 
@@ -83,12 +83,12 @@ public final class NpcDefinition {
 	private String[] interactions = new String[5];
 
 	/**
-	 * The name of the NPC.
+	 * The name of the npc.
 	 */
 	private String name;
 
 	/**
-	 * The NPC's size, in tiles.
+	 * The npc's size, in tiles.
 	 */
 	private int size = 1;
 
@@ -98,16 +98,16 @@ public final class NpcDefinition {
 	private int standAnim = -1, walkAnim = -1, walkBackAnim = -1, walkLeftAnim = -1, walkRightAnim = -1;
 
 	/**
-	 * Creates a new NPC definition.
+	 * Creates a new npc definition.
 	 * 
-	 * @param id The NPC id.
+	 * @param id The npc id.
 	 */
 	public NpcDefinition(int id) {
 		this.id = id;
 	}
 
 	/**
-	 * Gets the NPC's combat level.
+	 * Gets the npc's combat level.
 	 * 
 	 * @return The combat level, or -1 if it doesn't have one.
 	 */
@@ -116,7 +116,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the description of the NPC.
+	 * Gets the description of the npc.
 	 * 
 	 * @return The description.
 	 */
@@ -125,9 +125,9 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the NPC id.
+	 * Gets the npc id.
 	 * 
-	 * @return The NPC id.
+	 * @return The npc id.
 	 */
 	public int getId() {
 		return id;
@@ -157,16 +157,16 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the name of the NPC.
+	 * Gets the name of the npc.
 	 * 
-	 * @return The name of the NPC.
+	 * @return The name of the npc.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Gets the NPC's size, in tiles.
+	 * Gets the npc's size, in tiles.
 	 * 
 	 * @return The size.
 	 */
@@ -175,7 +175,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the id of the NPC's standing animation.
+	 * Gets the id of the npc's standing animation.
 	 * 
 	 * @return The stand animation id, or -1 if it doesn't have one.
 	 */
@@ -184,7 +184,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the walking animation of the NPC.
+	 * Gets the walking animation of the npc.
 	 * 
 	 * @return The walking animation.
 	 */
@@ -193,7 +193,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the walk-back animation of the NPC.
+	 * Gets the walk-back animation of the npc.
 	 * 
 	 * @return The walk-back animation.
 	 */
@@ -202,7 +202,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the walk-left animation of the NPC.
+	 * Gets the walk-left animation of the npc.
 	 * 
 	 * @return The walk-left animation.
 	 */
@@ -211,7 +211,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Gets the walk-right animation of the NPC.
+	 * Gets the walk-right animation of the npc.
 	 * 
 	 * @return The walk-right animation.
 	 */
@@ -220,7 +220,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Checks if the NPC has a combat level.
+	 * Checks if the npc has a combat level.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -243,7 +243,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Checks if the NPC has a standing animation id.
+	 * Checks if the npc has a standing animation id.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -252,7 +252,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Checks if the NPC has a walking animation.
+	 * Checks if the npc has a walking animation.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -261,7 +261,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Checks if the NPC has a walk-back animation.
+	 * Checks if the npc has a walk-back animation.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -270,7 +270,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Checks if the NPC has a walk-left animation.
+	 * Checks if the npc has a walk-left animation.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -279,7 +279,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Checks if the NPC has a walk-right animation.
+	 * Checks if the npc has a walk-right animation.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -288,7 +288,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Sets the NPC's combat level.
+	 * Sets the npc's combat level.
 	 * 
 	 * @param combatLevel The combat level.
 	 */
@@ -297,7 +297,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Sets the description of the NPC.
+	 * Sets the description of the npc.
 	 * 
 	 * @param description The description.
 	 */
@@ -320,7 +320,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Sets the name of the NPC.
+	 * Sets the name of the npc.
 	 * 
 	 * @param name The name.
 	 */
@@ -329,7 +329,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Sets the size of the NPC, in tiles.
+	 * Sets the size of the npc, in tiles.
 	 * 
 	 * @param size The size.
 	 */
@@ -338,7 +338,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Sets the id of the NPC's standing animation.
+	 * Sets the id of the npc's standing animation.
 	 * 
 	 * @param standAnim The stand animation id.
 	 */
@@ -347,7 +347,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Sets the walking animation of the NPC.
+	 * Sets the walking animation of the npc.
 	 * 
 	 * @param walkAnim The walking animation.
 	 */
@@ -356,7 +356,7 @@ public final class NpcDefinition {
 	}
 
 	/**
-	 * Sets the various walking animations of the NPC.
+	 * Sets the various walking animations of the npc.
 	 * 
 	 * @param walkAnim The walking animation.
 	 * @param walkBackAnim The walk-back animation.
