@@ -53,6 +53,7 @@ public final class PluginMetaData {
 	 * Creates the plugin meta data.
 	 * 
 	 * @param id The plugin's id.
+	 * @param base The plugin's base folder.
 	 * @param name The plugin's name.
 	 * @param description The plugin's description.
 	 * @param authors The plugin's authors.

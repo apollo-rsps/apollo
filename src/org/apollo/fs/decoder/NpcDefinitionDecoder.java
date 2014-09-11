@@ -65,6 +65,7 @@ public final class NpcDefinitionDecoder {
 	 */
 	private NpcDefinition decode(int id, ByteBuffer buffer) {
 		NpcDefinition definition = new NpcDefinition(id);
+
 		while (true) {
 			int opcode = buffer.get() & 0xFF;
 
@@ -87,8 +88,7 @@ public final class NpcDefinitionDecoder {
 			} else if (opcode == 14) {
 				definition.setWalkAnimation(buffer.getShort());
 			} else if (opcode == 17) {
-				definition
-						.setWalkAnimations(buffer.getShort(), buffer.getShort(), buffer.getShort(), buffer.getShort());
+				definition.setWalkAnimations(buffer.getShort(), buffer.getShort(), buffer.getShort(), buffer.getShort());
 			} else if (opcode >= 30 && opcode < 40) {
 				String str = BufferUtil.readString(buffer);
 				if (str.equals("hidden")) {

@@ -17,7 +17,7 @@ public final class FocusUpdateMessage extends Message {
 	/**
 	 * Creates a new focus update message.
 	 * 
-	 * @param update The data received.
+	 * @param focused The data received.
 	 */
 	public FocusUpdateMessage(boolean focused) {
 		this.focused = focused;

@@ -13,6 +13,9 @@ import java.util.List;
  */
 public final class LoginEncoder extends MessageToMessageEncoder<LoginResponse> {
 
+	/**
+	 * Creates the login encoder.
+	 */
 	public LoginEncoder() {
 		super(LoginResponse.class);
 	}
@@ -21,10 +24,12 @@ public final class LoginEncoder extends MessageToMessageEncoder<LoginResponse> {
 	protected void encode(ChannelHandlerContext ctx, LoginResponse response, List<Object> out) {
 		ByteBuf buffer = ctx.alloc().buffer(3);
 		buffer.writeByte(response.getStatus());
+
 		if (response.getStatus() == LoginConstants.STATUS_OK) {
 			buffer.writeByte(response.getRights());
 			buffer.writeByte(response.isFlagged() ? 1 : 0);
 		}
+
 		out.add(buffer);
 	}
 

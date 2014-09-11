@@ -51,14 +51,13 @@ public final class NpcDefinition {
 	/**
 	 * Gets the NPC definition for the specified id.
 	 * 
-	 * @param The id.
+	 * @param id The id.
 	 * @return The definition.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public static NpcDefinition lookup(int id) {
 		if (id < 0 || id >= definitions.length) {
-			throw new IndexOutOfBoundsException(NpcDefinition.class.getName() + " lookup index " + id
-					+ " out of bounds.");
+			throw new IndexOutOfBoundsException(NpcDefinition.class.getName() + " lookup index " + id + " out of bounds.");
 		}
 		return definitions[id];
 	}

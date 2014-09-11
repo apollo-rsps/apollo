@@ -221,8 +221,8 @@ public final class Player extends Mob {
 	 * 
 	 * @param username The username.
 	 */
-	public boolean addFriend(String username) {
-		return friends.add(username.toLowerCase());
+	public void addFriend(String username) {
+		friends.add(username.toLowerCase());
 	}
 
 	/**
@@ -230,8 +230,8 @@ public final class Player extends Mob {
 	 * 
 	 * @param username The username.
 	 */
-	public boolean addIgnore(String username) {
-		return ignores.add(username.toLowerCase());
+	public void addIgnore(String username) {
+		ignores.add(username.toLowerCase());
 	}
 
 	/**
@@ -606,6 +606,7 @@ public final class Player extends Mob {
 	 * Removes the specified username from this player's friend list.
 	 * 
 	 * @param username The username.
+	 * @return {@code true} if the player's friend list contained the specified user, {@code false} if not.
 	 */
 	public boolean removeFriend(String username) {
 		return friends.remove(username.toLowerCase());
@@ -615,6 +616,7 @@ public final class Player extends Mob {
 	 * Removes the specified username from this player's ignore list.
 	 * 
 	 * @param username The username.
+	 * @return {@code true} if the player's ignore list contained the specified user, {@code false} if not.
 	 */
 	public boolean removeIgnore(String username) {
 		return ignores.remove(username.toLowerCase());
@@ -666,6 +668,7 @@ public final class Player extends Mob {
 	 * Sends a message to the player.
 	 * 
 	 * @param message The message.
+	 * @param filterable Whether or not the message can be filtered.
 	 */
 	public void sendMessage(String message, boolean filterable) {
 		if (clientVersion > 0) {
@@ -909,8 +912,8 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return Player.class.getName() + " [username=" + getUsername() + ", privilege=" + privilegeLevel
-				+ ", clientVersion=" + clientVersion + "]";
+		return Player.class.getName() + " [username=" + getUsername() + ", privilege=" + privilegeLevel + ", clientVersion="
+				+ clientVersion + "]";
 	}
 
 	/**
@@ -925,8 +928,7 @@ public final class Player extends Mob {
 	 * Initialises the player's inventories.
 	 */
 	private void initInventories() {
-		InventoryListener fullInventoryListener = new FullInventoryListener(this,
-				FullInventoryListener.FULL_INVENTORY_MESSAGE);
+		InventoryListener fullInventoryListener = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 

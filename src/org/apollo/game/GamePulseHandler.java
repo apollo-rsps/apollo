@@ -36,6 +36,7 @@ public final class GamePulseHandler implements Runnable {
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, "Exception during pulse.", t);
 		}
+
 	}
 
 }

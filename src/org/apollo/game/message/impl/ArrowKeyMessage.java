@@ -21,6 +21,9 @@ public final class ArrowKeyMessage extends Message {
 
 	/**
 	 * Creates a new arrow key message.
+	 * 
+	 * @param roll The camera roll.
+	 * @param yaw The camera yaw.
 	 */
 	public ArrowKeyMessage(int roll, int yaw) {
 		this.roll = roll;

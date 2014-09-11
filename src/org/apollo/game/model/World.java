@@ -2,7 +2,6 @@ package org.apollo.game.model;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -232,7 +231,7 @@ public final class World {
 	 * @param release The release number.
 	 * @param fs The file system.
 	 * @param manager The plugin manager. TODO move this.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws Exception If any definitions could not be loaded or there was a failure when loading plugins.
 	 */
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
 		this.releaseNumber = release;
@@ -345,6 +344,7 @@ public final class World {
 	 * Schedules a new task.
 	 * 
 	 * @param task The {@link ScheduledTask}.
+	 * @return {@code true} if the task was added successfully.
 	 */
 	public boolean schedule(ScheduledTask task) {
 		return scheduler.schedule(task);

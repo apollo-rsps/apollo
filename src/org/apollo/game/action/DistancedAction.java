@@ -8,6 +8,7 @@ import org.apollo.game.model.entity.Mob;
  * 
  * @author Blake
  * @author Graham
+ * @param <T> The type of {@link Mob}.
  */
 public abstract class DistancedAction<T extends Mob> extends Action<T> {
 
