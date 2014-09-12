@@ -21,19 +21,20 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream
 public final class CompressionUtil {
 
 	/**
-	 * Bzip2s the specified array.
+	 * Bzip2s the specified array, removing the header.
 	 * 
-	 * @param bytes The uncompressed array.
+	 * @param uncompressed The uncompressed array.
 	 * @return The compressed array.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IOException If there is an error compressing the array.
 	 */
-	public static byte[] bzip2(byte[] bytes) throws IOException {
+	public static byte[] bzip2(byte[] uncompressed) throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		try (BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(bout, 1)) {
-			os.write(bytes);
+			os.write(uncompressed);
 			os.finish();
+
 			byte[] compressed = bout.toByteArray();
-			byte[] newCompressed = new byte[compressed.length - 4];
+			byte[] newCompressed = new byte[compressed.length - 4]; // Strip the header
 			System.arraycopy(compressed, 4, newCompressed, 0, newCompressed.length);
 			return newCompressed;
 		}
@@ -42,27 +43,27 @@ public final class CompressionUtil {
 	/**
 	 * Gzips the specified array.
 	 * 
-	 * @param bytes The uncompressed array.
+	 * @param uncompressed The uncompressed array.
 	 * @return The compressed array.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IOException If there is an error compressing the array.
 	 */
-	public static byte[] gzip(byte[] bytes) throws IOException {
+	public static byte[] gzip(byte[] uncompressed) throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		try (DeflaterOutputStream os = new GZIPOutputStream(bout)) {
-			os.write(bytes);
+			os.write(uncompressed);
 			os.finish();
 			return bout.toByteArray();
 		}
 	}
 
 	/**
-	 * Unbzip2s the compressed array and places the result into the decompressed array.
+	 * Debzip2s the compressed array and places the result into the decompressed array.
 	 * 
-	 * @param compressed The compressed array.
-	 * @param uncompressed The decompressed array.
-	 * @throws IOException If an I/O error occurs.
+	 * @param compressed The compressed array, <strong>without</strong> the header.
+	 * @param decompressed The decompressed array.
+	 * @throws IOException If there is an error decompressing the array.
 	 */
-	public static void unbzip2(byte[] compressed, byte[] uncompressed) throws IOException {
+	public static void debzip2(byte[] compressed, byte[] decompressed) throws IOException {
 		byte[] newCompressed = new byte[compressed.length + 4];
 		newCompressed[0] = 'B';
 		newCompressed[1] = 'Z';
@@ -70,33 +71,32 @@ public final class CompressionUtil {
 		newCompressed[3] = '1';
 		System.arraycopy(compressed, 0, newCompressed, 4, compressed.length);
 
-		try (DataInputStream is = new DataInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(
-				newCompressed)))) {
-			is.readFully(uncompressed);
+		try (DataInputStream is = new DataInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(newCompressed)))) {
+			is.readFully(decompressed);
 		}
 	}
 
 	/**
-	 * Ungzips the compressed array and places the results into the decompressed array.
+	 * Degzips the compressed array and places the results into the decompressed array.
 	 * 
 	 * @param compressed The compressed array.
-	 * @param uncompressed The decompressed array.
+	 * @param decompressed The decompressed array.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public static void ungzip(byte[] compressed, byte[] uncompressed) throws IOException {
+	public static void degzip(byte[] compressed, byte[] decompressed) throws IOException {
 		try (DataInputStream is = new DataInputStream(new GZIPInputStream(new ByteArrayInputStream(compressed)))) {
-			is.readFully(uncompressed);
+			is.readFully(decompressed);
 		}
 	}
 
 	/**
-	 * Ungzips the compressed buffer and places the results into the returning array.
+	 * Degzips the compressed {@link ByteBuffer} and returns the result as a byte array.
 	 * 
 	 * @param compressed The compressed buffer.
 	 * @return The decompressed array.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IOException If there is an error decompressing the buffer.
 	 */
-	public static byte[] ungzip(ByteBuffer compressed) throws IOException {
+	public static byte[] degzip(ByteBuffer compressed) throws IOException {
 		byte[] data = new byte[compressed.remaining()];
 		compressed.get(data);
 

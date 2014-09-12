@@ -19,7 +19,7 @@ public final class Archive {
 	 * 
 	 * @param buffer The buffer.
 	 * @return The archive.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IOException If there is an error decompressing the archive.
 	 */
 	public static Archive decode(ByteBuffer buffer) throws IOException {
 		int extractedSize = BufferUtil.readUnsignedTriByte(buffer);
@@ -28,41 +28,41 @@ public final class Archive {
 
 		if (size != extractedSize) {
 			byte[] compressed = new byte[size];
-			byte[] uncompressed = new byte[extractedSize];
+			byte[] decompressed = new byte[extractedSize];
 			buffer.get(compressed);
-			CompressionUtil.unbzip2(compressed, uncompressed);
-			buffer = ByteBuffer.wrap(uncompressed);
+			CompressionUtil.debzip2(compressed, decompressed);
+			buffer = ByteBuffer.wrap(decompressed);
 			extracted = true;
 		}
 
-		int entries = buffer.getShort() & 0xFFFF;
-		int[] identifiers = new int[entries];
-		int[] extractedSizes = new int[entries];
-		int[] sizes = new int[entries];
+		int entryCount = buffer.getShort() & 0xFFFF;
+		int[] identifiers = new int[entryCount];
+		int[] extractedSizes = new int[entryCount];
+		int[] sizes = new int[entryCount];
 
-		for (int i = 0; i < entries; i++) {
+		for (int i = 0; i < entryCount; i++) {
 			identifiers[i] = buffer.getInt();
 			extractedSizes[i] = BufferUtil.readUnsignedTriByte(buffer);
 			sizes[i] = BufferUtil.readUnsignedTriByte(buffer);
 		}
 
-		ArchiveEntry[] entry = new ArchiveEntry[entries];
-		for (int i = 0; i < entries; i++) {
+		ArchiveEntry[] entries = new ArchiveEntry[entryCount];
+		for (int entry = 0; entry < entryCount; entry++) {
 			ByteBuffer entryBuffer;
 			if (!extracted) {
-				byte[] compressed = new byte[sizes[i]];
-				byte[] uncompressed = new byte[extractedSizes[i]];
+				byte[] compressed = new byte[sizes[entry]];
+				byte[] decompressed = new byte[extractedSizes[entry]];
 				buffer.get(compressed);
-				CompressionUtil.unbzip2(compressed, uncompressed);
-				entryBuffer = ByteBuffer.wrap(uncompressed);
+				CompressionUtil.debzip2(compressed, decompressed);
+				entryBuffer = ByteBuffer.wrap(decompressed);
 			} else {
-				byte[] buf = new byte[extractedSizes[i]];
+				byte[] buf = new byte[extractedSizes[entry]];
 				buffer.get(buf);
 				entryBuffer = ByteBuffer.wrap(buf);
 			}
-			entry[i] = new ArchiveEntry(identifiers[i], entryBuffer);
+			entries[entry] = new ArchiveEntry(identifiers[entry], entryBuffer);
 		}
-		return new Archive(entry);
+		return new Archive(entries);
 	}
 
 	/**
@@ -80,19 +80,14 @@ public final class Archive {
 	}
 
 	/**
-	 * Gets an entry by its name.
+	 * Gets an {@link ArchiveEntry} by its name.
 	 * 
 	 * @param name The name.
 	 * @return The entry.
-	 * @throws FileNotFoundException If the file could not be found.
+	 * @throws FileNotFoundException If the entry could not be found.
 	 */
 	public ArchiveEntry getEntry(String name) throws FileNotFoundException {
-		int hash = 0;
-		name = name.toUpperCase();
-
-		for (int i = 0; i < name.length(); i++) {
-			hash = hash * 61 + name.charAt(i) - 32;
-		}
+		int hash = hash(name);
 
 		for (ArchiveEntry entry : entries) {
 			if (entry.getIdentifier() == hash) {
@@ -100,6 +95,16 @@ public final class Archive {
 			}
 		}
 		throw new FileNotFoundException("Could not find entry: " + name + ".");
+	}
+
+	/**
+	 * Hashes the specified string into an integer used to identify an {@link ArchiveEntry}.
+	 * 
+	 * @param name The name of the entry.
+	 * @return The hash.
+	 */
+	public static int hash(String name) {
+		return name.toUpperCase().chars().reduce(0, (hash, character) -> hash * 61 + character - 32);
 	}
 
 }

@@ -64,7 +64,7 @@ public final class GameObjectDecoder {
 
 		for (int i = 0; i < indices; i++) {
 			ByteBuffer compressed = fs.getFile(4, landscapes[i]);
-			ByteBuffer uncompressed = ByteBuffer.wrap(CompressionUtil.ungzip(compressed));
+			ByteBuffer uncompressed = ByteBuffer.wrap(CompressionUtil.degzip(compressed));
 
 			Collection<GameObject> areaObjects = parseArea(areas[i], uncompressed);
 			objects.addAll(areaObjects);
