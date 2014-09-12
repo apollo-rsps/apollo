@@ -22,25 +22,25 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		HIGH(0),
 
 		/**
+		 * Medium priority - used while loading the 'bare minimum' required to run the game.
+		 */
+		MEDIUM(1),
+
+		/**
 		 * Low priority - used when a file is not required urgently. The client login screen says
 		 * "loading extra files.." when low priority loading is being performed.
 		 */
-		LOW(2),
-
-		/**
-		 * Medium priority - used while loading the 'bare minimum' required to run the game.
-		 */
-		MEDIUM(1);
+		LOW(2);
 
 		/**
 		 * Converts the integer value to a priority.
 		 * 
-		 * @param v The integer value.
+		 * @param value The integer value.
 		 * @return The priority.
 		 * @throws IllegalArgumentException If the value is outside of the range 1-3 inclusive.
 		 */
-		public static Priority valueOf(int v) {
-			switch (v) {
+		public static Priority valueOf(int value) {
+			switch (value) {
 			case 0:
 				return HIGH;
 			case 1:
@@ -48,22 +48,22 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 			case 2:
 				return LOW;
 			default:
-				throw new IllegalArgumentException("Priority out of range.");
+				throw new IllegalArgumentException("Priority out of range - received " + value + ".");
 			}
 		}
 
 		/**
 		 * The integer value.
 		 */
-		private final int intValue;
+		private final int value;
 
 		/**
 		 * Creates a priority.
 		 * 
-		 * @param intValue The integer value.
+		 * @param value The integer value.
 		 */
-		private Priority(int intValue) {
-			this.intValue = intValue;
+		private Priority(int value) {
+			this.value = value;
 		}
 
 		/**
@@ -72,7 +72,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		 * @return The integer value.
 		 */
 		public int toInteger() {
-			return intValue;
+			return value;
 		}
 
 	}
@@ -99,9 +99,9 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 	}
 
 	@Override
-	public int compareTo(OnDemandRequest o) {
+	public int compareTo(OnDemandRequest other) {
 		int thisPriority = priority.toInteger();
-		int otherPriority = o.priority.toInteger();
+		int otherPriority = other.priority.toInteger();
 
 		if (thisPriority < otherPriority) {
 			return 1;
