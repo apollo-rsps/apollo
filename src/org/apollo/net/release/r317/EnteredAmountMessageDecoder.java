@@ -17,13 +17,8 @@ public final class EnteredAmountMessageDecoder extends MessageDecoder<EnteredAmo
 	@Override
 	public EnteredAmountMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		long amount = reader.getUnsigned(DataType.INT);
-		if(amount > Integer.MAX_VALUE) {
-			amount = Integer.MAX_VALUE;
-		} else if(amount < 0) {
-			amount = 0;
-		}
-		return new EnteredAmountMessage((int) amount);
+		int amount = (int) reader.getSigned(DataType.INT);
+		return new EnteredAmountMessage(amount);
 	}
 
 }
