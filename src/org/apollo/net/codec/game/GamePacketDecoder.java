@@ -14,6 +14,8 @@ import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.Release;
 import org.apollo.util.StatefulFrameDecoder;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A {@link StatefulFrameDecoder} that decodes {@link GamePacket}s.
  * 
@@ -102,9 +104,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 			opcode = encryptedOpcode - random.nextInt() & 0xFF;
 
 			PacketMetaData metaData = release.getIncomingPacketMetaData(opcode);
-			if (metaData == null) {
-				throw new IOException("Illegal opcode: " + opcode + ".");
-			}
+			Preconditions.checkNotNull(metaData, "Illegal opcode: " + opcode + ".");
 
 			type = metaData.getType();
 			switch (type) {

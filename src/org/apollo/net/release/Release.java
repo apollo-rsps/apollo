@@ -7,6 +7,8 @@ import org.apollo.game.message.Message;
 import org.apollo.net.meta.PacketMetaData;
 import org.apollo.net.meta.PacketMetaDataGroup;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A {@link Release} is a distinct client version, e.g. {@code 317}.
  * 
@@ -60,11 +62,10 @@ public abstract class Release {
 	 * 
 	 * @param opcode The opcode.
 	 * @return The message decoder.
+	 * @throws IndexOutOfBoundsException If the opcode is less than 0, or greater than 255.
 	 */
 	public final MessageDecoder<?> getMessageDecoder(int opcode) {
-		if (opcode < 0 || opcode >= decoders.length) {
-			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
-		}
+		Preconditions.checkElementIndex(opcode, decoders.length, "Opcode out of bounds.");
 		return decoders[opcode];
 	}
 
@@ -103,11 +104,10 @@ public abstract class Release {
 	 * 
 	 * @param opcode The opcode, between 0 and 255 inclusive.
 	 * @param decoder The message decoder.
+	 * @throws IndexOutOfBoundsException If the opcode is less than 0, or greater than 255.
 	 */
 	public final <M extends Message> void register(int opcode, MessageDecoder<M> decoder) {
-		if (opcode < 0 || opcode >= decoders.length) {
-			throw new IndexOutOfBoundsException("Opcode is out of bounds.");
-		}
+		Preconditions.checkElementIndex(opcode, decoders.length, "Opcode out of bounds.");
 		decoders[opcode] = decoder;
 	}
 

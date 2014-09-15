@@ -9,6 +9,8 @@ import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.ItemDefinitionDecoder;
 import org.apollo.game.model.def.ItemDefinition;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A tool for updating the equipment data.
  * 
@@ -1164,13 +1166,11 @@ public final class EquipmentUpdater {
 	 * @throws Exception If an error occurs.
 	 */
 	public static void main(String[] args) throws Exception {
-		if (args.length != 1) {
-			throw new IllegalArgumentException("Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release].");
-		}
+		Preconditions.checkArgument(args.length == 1, "Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release].");
 		String release = args[0];
 
-		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-"
-				+ release + ".dat")));
+		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release
+				+ ".dat")));
 				IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
 			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
 			ItemDefinition[] definitions = decoder.decode();

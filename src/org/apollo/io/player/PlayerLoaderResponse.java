@@ -1,7 +1,11 @@
 package org.apollo.io.player;
 
+import java.util.Optional;
+
 import org.apollo.game.model.entity.Player;
 import org.apollo.net.codec.login.LoginConstants;
+
+import com.google.common.base.Preconditions;
 
 /**
  * A response for the {@link PlayerLoader#loadPlayer(org.apollo.security.PlayerCredentials)} call.
@@ -13,7 +17,7 @@ public final class PlayerLoaderResponse {
 	/**
 	 * The player.
 	 */
-	private final Player player;
+	private final Optional<Player> player;
 
 	/**
 	 * The status code.
@@ -24,37 +28,37 @@ public final class PlayerLoaderResponse {
 	 * Creates a {@link PlayerLoaderResponse} with only a status code.
 	 * 
 	 * @param status The status code.
-	 * @throws IllegalArgumentException If the status code needs a {@link Player}.
+	 * @throws IllegalArgumentException If the status code is {@link LoginConstants#STATUS_OK} or
+	 *             {@link LoginConstants#STATUS_RECONNECTION_OK}.
 	 */
 	public PlayerLoaderResponse(int status) {
-		if (status == LoginConstants.STATUS_OK || status == LoginConstants.STATUS_RECONNECTION_OK) {
-			throw new IllegalArgumentException("Player required for this status code.");
-		}
+		Preconditions.checkArgument(status != LoginConstants.STATUS_OK && status != LoginConstants.STATUS_RECONNECTION_OK,
+				"Player required for this status code.");
 		this.status = status;
-		player = null;
+		player = Optional.empty();
 	}
 
 	/**
-	 * Creates a {@link PlayerLoaderResponse} with a status code and player.
+	 * Creates a {@link PlayerLoaderResponse} with a status code and {@link Player}.
 	 * 
 	 * @param status The status code.
 	 * @param player The player.
-	 * @throws IllegalArgumentException If the status code does not need {@link Player}.
+	 * @throws IllegalArgumentException If the status code does not need a player.
+	 * @throws NullPointerException If the specified player is null.
 	 */
 	public PlayerLoaderResponse(int status, Player player) {
-		if (status != LoginConstants.STATUS_OK && status != LoginConstants.STATUS_RECONNECTION_OK) {
-			throw new IllegalArgumentException("Player not required for this status code.");
-		}
+		Preconditions.checkArgument(status == LoginConstants.STATUS_OK || status == LoginConstants.STATUS_RECONNECTION_OK,
+				"Player not required for this status code.");
 		this.status = status;
-		this.player = player;
+		this.player = Optional.of(player);
 	}
 
 	/**
 	 * Gets the player.
 	 * 
-	 * @return The player, or {@code null} if there is no player in this response.
+	 * @return The player, wrapped in an {@link Optional}.
 	 */
-	public Player getPlayer() {
+	public Optional<Player> getPlayer() {
 		return player;
 	}
 

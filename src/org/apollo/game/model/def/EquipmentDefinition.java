@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.entity.Skill;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Represents a type of {@link Item} which may be equipped.
  * 
@@ -44,10 +46,7 @@ public final class EquipmentDefinition {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public static EquipmentDefinition lookup(int id) {
-		if (id < 0 || id >= ItemDefinition.count()) {
-			throw new IndexOutOfBoundsException(EquipmentDefinition.class.getName() + " lookup index " + id
-					+ " out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, ItemDefinition.count(), "Id out of bounds.");
 		return definitions.get(id);
 	}
 
@@ -132,9 +131,7 @@ public final class EquipmentDefinition {
 	 * @return The level.
 	 */
 	public int getLevel(int skill) {
-		if (skill < Skill.ATTACK || skill > Skill.MAGIC) {
-			throw new IllegalArgumentException("Skill id out of bounds.");
-		}
+		Preconditions.checkArgument(skill >= Skill.ATTACK && skill <= Skill.MAGIC, "Skill id out of bounds.");
 		return levels[skill];
 	}
 

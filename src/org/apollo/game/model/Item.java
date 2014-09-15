@@ -3,6 +3,7 @@ package org.apollo.game.model;
 import org.apollo.game.model.def.ItemDefinition;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 /**
  * Represents a single item.
@@ -43,9 +44,7 @@ public final class Item {
 	 * @throws IllegalArgumentException If the amount is negative.
 	 */
 	public Item(int id, int amount) {
-		if (amount < 0) {
-			throw new IllegalArgumentException("Negative amount.");
-		}
+		Preconditions.checkArgument(amount >= 0, "Amount cannot be negative.");
 		this.id = id;
 		this.amount = amount;
 		this.definition = ItemDefinition.lookup(id);

@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.CRC32;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A file system based on top of the operating system's file system. It consists of a data file and index files. Index
  * files point to blocks in the data file, which contains the actual data.
@@ -97,7 +99,8 @@ public final class IndexedFileSystem implements Closeable {
 	 * Gets the CRC table.
 	 * 
 	 * @return The CRC table.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IOException If there is an error accessing files to create the table.
+	 * @throws IllegalStateException If this file system is not read-only.
 	 */
 	public ByteBuffer getCrcTable() throws IOException {
 		if (readOnly) {
@@ -111,7 +114,6 @@ public final class IndexedFileSystem implements Closeable {
 			int hash = 1234;
 			int[] crcs = new int[archives];
 
-			// calculate the CRCs
 			CRC32 crc32 = new CRC32();
 			for (int i = 1; i < crcs.length; i++) {
 				crc32.reset();
@@ -124,8 +126,7 @@ public final class IndexedFileSystem implements Closeable {
 				crcs[i] = (int) crc32.getValue();
 			}
 
-			// hash the CRCs and place them in the buffer
-			ByteBuffer buffer = ByteBuffer.allocate(crcs.length * 4 + 4);
+			ByteBuffer buffer = ByteBuffer.allocate((crcs.length + 1) * Integer.BYTES);
 			for (int crc : crcs) {
 				hash = (hash << 1) + crc;
 				buffer.putInt(crc);
@@ -139,22 +140,21 @@ public final class IndexedFileSystem implements Closeable {
 				return crcTable.duplicate();
 			}
 		}
-		throw new IOException("Cannot get CRC table from a writable file system.");
+		throw new IllegalStateException("Cannot get CRC table from a writable file system.");
 	}
 
 	/**
 	 * Gets a file.
 	 * 
-	 * @param descriptor The {@link FileDescriptor} which points to the file.
-	 * @return A {@link ByteBuffer} which contains the contents of the file.
-	 * @throws IOException If an I/O error occurs.
+	 * @param descriptor The {@link FileDescriptor} pointing to the file.
+	 * @return A {@link ByteBuffer} containing the contents of the file.
+	 * @throws IOException If there is an error decoding the file.
 	 */
 	public ByteBuffer getFile(FileDescriptor descriptor) throws IOException {
 		Index index = getIndex(descriptor);
 		ByteBuffer buffer = ByteBuffer.allocate(index.getSize());
 
-		// calculate some initial values
-		long ptr = index.getBlock() * FileSystemConstants.BLOCK_SIZE;
+		long position = index.getBlock() * FileSystemConstants.BLOCK_SIZE;
 		int read = 0;
 		int size = index.getSize();
 		int blocks = size / FileSystemConstants.CHUNK_SIZE;
@@ -163,44 +163,37 @@ public final class IndexedFileSystem implements Closeable {
 		}
 
 		for (int i = 0; i < blocks; i++) {
-			// read header
 			byte[] header = new byte[FileSystemConstants.HEADER_SIZE];
 			synchronized (data) {
-				data.seek(ptr);
+				data.seek(position);
 				data.readFully(header);
 			}
 
-			// increment pointers
-			ptr += FileSystemConstants.HEADER_SIZE;
+			position += FileSystemConstants.HEADER_SIZE;
 
-			// parse header
 			int nextFile = (header[0] & 0xFF) << 8 | header[1] & 0xFF;
 			int curChunk = (header[2] & 0xFF) << 8 | header[3] & 0xFF;
 			int nextBlock = (header[4] & 0xFF) << 16 | (header[5] & 0xFF) << 8 | header[6] & 0xFF;
 			int nextType = header[7] & 0xFF;
 
-			// check expected chunk id is correct
 			if (i != curChunk) {
 				throw new IOException("Chunk id mismatch.");
 			}
 
-			// calculate how much we can read
 			int chunkSize = size - read;
 			if (chunkSize > FileSystemConstants.CHUNK_SIZE) {
 				chunkSize = FileSystemConstants.CHUNK_SIZE;
 			}
 
-			// read the next chunk and put it in the buffer
 			byte[] chunk = new byte[chunkSize];
 			synchronized (data) {
-				data.seek(ptr);
+				data.seek(position);
 				data.readFully(chunk);
 			}
 			buffer.put(chunk);
 
-			// increment pointers
 			read += chunkSize;
-			ptr = (long) nextBlock * (long) FileSystemConstants.BLOCK_SIZE;
+			position = (long) nextBlock * (long) FileSystemConstants.BLOCK_SIZE;
 
 			// if we still have more data to read, check the validity of the header
 			if (size > read) {
@@ -235,12 +228,12 @@ public final class IndexedFileSystem implements Closeable {
 	 * 
 	 * @param type The type.
 	 * @return The number of files.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IOException If there is an error getting the length of the specified index file.
+	 * @throws IndexOutOfBoundsException If {@code type} is less than 0, or greater than or equal to the amount of
+	 *             indices.
 	 */
 	private int getFileCount(int type) throws IOException {
-		if (type < 0 || type >= indices.length) {
-			throw new IndexOutOfBoundsException("File type out of bounds.");
-		}
+		Preconditions.checkElementIndex(type, indices.length, "File type out of bounds.");
 
 		RandomAccessFile indexFile = indices[type];
 		synchronized (indexFile) {
@@ -253,20 +246,20 @@ public final class IndexedFileSystem implements Closeable {
 	 * 
 	 * @param descriptor The {@link FileDescriptor} which points to the file.
 	 * @return The {@link Index}.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IOException If there is an error reading from the index file.
+	 * @throws IndexOutOfBoundsException If the descriptor type is less than 0, or greater than or equal to the amount
+	 *             of indices.
 	 */
 	private Index getIndex(FileDescriptor descriptor) throws IOException {
 		int index = descriptor.getType();
-		if (index < 0 || index >= indices.length) {
-			throw new IndexOutOfBoundsException("File descriptor type out of bounds.");
-		}
+		Preconditions.checkElementIndex(index, indices.length, "File descriptor type out of bounds.");
 
 		byte[] buffer = new byte[FileSystemConstants.INDEX_SIZE];
 		RandomAccessFile indexFile = indices[index];
 		synchronized (indexFile) {
-			long ptr = descriptor.getFile() * FileSystemConstants.INDEX_SIZE;
-			if (ptr >= 0 && indexFile.length() >= ptr + FileSystemConstants.INDEX_SIZE) {
-				indexFile.seek(ptr);
+			long position = descriptor.getFile() * FileSystemConstants.INDEX_SIZE;
+			if (position >= 0 && indexFile.length() >= position + FileSystemConstants.INDEX_SIZE) {
+				indexFile.seek(position);
 				indexFile.readFully(buffer);
 			} else {
 				throw new FileNotFoundException("Could not find find index.");

@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 
 import org.apollo.game.model.entity.Mob;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.
  * 
@@ -65,9 +67,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void remove() {
-			if (previousIndex == -1) {
-				throw new IllegalStateException("Cannot remove as the repository is empty.");
-			}
+			Preconditions.checkState(previousIndex != -1, "Cannot remove as the repository is empty.");
 			MobRepository.this.remove((T) mobs[previousIndex]);
 			previousIndex = -1;
 		}
@@ -183,13 +183,12 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 *
 	 * @param index The index of the mob
 	 * @return The mob instance
+	 * @throws IndexOutOfBoundsException If the specified index is less than 0, or greater than or equal to the capacity
+	 *             of this repository.
 	 */
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
-		if (index < 0 || index >= mobs.length) {
-			throw new IndexOutOfBoundsException("Mob index is out of bounds.");
-		}
-
+		Preconditions.checkElementIndex(index, mobs.length, "Mob index is out of bounds.");
 		return (T) mobs[index];
 	}
 

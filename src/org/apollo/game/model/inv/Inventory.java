@@ -6,6 +6,8 @@ import java.util.List;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.def.ItemDefinition;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Represents an inventory - a collection of {@link Item}s.
  * 
@@ -87,11 +89,9 @@ public final class Inventory implements Cloneable {
 	 * @throws NullPointerException If the mode is {@code null}.
 	 */
 	public Inventory(int capacity, StackMode mode) {
-		if (capacity < 0) {
-			throw new IllegalArgumentException("Capacity cannot be negative.");
-		} else if (mode == null) {
-			throw new NullPointerException("Stacking mode cannot be null.");
-		}
+		Preconditions.checkArgument(capacity >= 0, "Capacity cannot be negative.");
+		Preconditions.checkNotNull(mode, "Stacking mode cannot be null.");
+
 		items = new Item[this.capacity = capacity];
 		this.mode = mode;
 	}
@@ -212,9 +212,7 @@ public final class Inventory implements Cloneable {
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
 	private void checkBounds(int slot) {
-		if (slot < 0 || slot >= capacity) {
-			throw new IndexOutOfBoundsException("Slot out of bounds.");
-		}
+		Preconditions.checkElementIndex(slot, capacity, "Slot out of bounds.");
 	}
 
 	/**

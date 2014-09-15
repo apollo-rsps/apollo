@@ -13,7 +13,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * A simple XML parser which uses the internal {@link org.xml.sax} API to create a tree of {@link XmlNode} objects.
+ * A simple XML parser that uses the internal {@link org.xml.sax} API to create a tree of {@link XmlNode} objects.
  * 
  * @author Graham
  */
@@ -72,7 +72,7 @@ public final class XmlParser {
 	private final XmlHandler eventHandler;
 
 	/**
-	 * The stack of nodes, which is used when traversing the document and going through child nodes.
+	 * The stack of nodes, used when traversing the document and going through child nodes.
 	 */
 	private Stack<XmlNode> nodeStack = new Stack<>();
 
@@ -87,7 +87,7 @@ public final class XmlParser {
 	private final XMLReader xmlReader;
 
 	/**
-	 * Creates a new xml parser.
+	 * Creates the XML parser.
 	 * 
 	 * @throws SAXException If a SAX error occurs.
 	 */

@@ -1,5 +1,7 @@
 package org.apollo.game.model.setting;
 
+import com.google.common.base.Preconditions;
+
 /**
  * An enumeration representing the different privacy states for public, private and trade chat. This enumeration relies
  * on the ordering of the elements within, which should be as follows: {@code ON}, {@code HIDE}, {@code FRIENDS},
@@ -49,10 +51,7 @@ public enum PrivacyState {
 		if (!chat && value != 0) {
 			value++;
 		}
-		if (value < 0 || value >= values.length) {
-			throw new IllegalArgumentException("Invalid privacy option integer value specified: " + value + ".");
-		}
-
+		Preconditions.checkElementIndex(value, values.length, "Invalid privacy option integer value specified: " + value + ".");
 		return values[value];
 	}
 

@@ -2,6 +2,8 @@ package org.apollo.game.model.def;
 
 import org.apollo.game.model.entity.Npc;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Represents a type of {@link Npc}.
  * 
@@ -56,9 +58,7 @@ public final class NpcDefinition {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public static NpcDefinition lookup(int id) {
-		if (id < 0 || id >= definitions.length) {
-			throw new IndexOutOfBoundsException(NpcDefinition.class.getName() + " lookup index " + id + " out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, definitions.length, "Id out of bounds.");
 		return definitions[id];
 	}
 
@@ -141,9 +141,7 @@ public final class NpcDefinition {
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
 	public String getInteraction(int slot) {
-		if (slot < 0 || slot >= interactions.length) {
-			throw new IndexOutOfBoundsException("Npc interaction id is out of bounds.");
-		}
+		Preconditions.checkElementIndex(slot, interactions.length, "Npc interaction id is out of bounds.");
 		return interactions[slot];
 	}
 
@@ -236,9 +234,7 @@ public final class NpcDefinition {
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
 	public boolean hasInteraction(int slot) {
-		if (slot < 0 || slot >= interactions.length) {
-			throw new IndexOutOfBoundsException("Npc interaction id is out of bounds.");
-		}
+		Preconditions.checkElementIndex(slot, interactions.length, "Npc interaction id is out of bounds.");
 		return interactions[slot] != null;
 	}
 
@@ -313,9 +309,7 @@ public final class NpcDefinition {
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
 	public void setInteraction(int slot, String interaction) {
-		if (slot < 0 || slot >= interactions.length) {
-			throw new IndexOutOfBoundsException("Npc interaction id is out of bounds.");
-		}
+		Preconditions.checkElementIndex(slot, interactions.length, "Npc interaction id is out of bounds.");
 		interactions[slot] = interaction;
 	}
 

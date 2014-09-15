@@ -5,6 +5,8 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.Optional;
+
 import org.apollo.ServerContext;
 import org.apollo.game.GameService;
 import org.apollo.game.model.World.RegistrationStatus;
@@ -86,19 +88,21 @@ public final class LoginSession extends Session {
 		GameService gameService = serverContext.getService(GameService.class);
 		Channel channel = getChannel();
 
-		int status = response.getStatus();
-		Player player = response.getPlayer();
-		int rights = player == null ? 0 : player.getPrivilegeLevel().toInteger();
-		boolean log = false;
+		Optional<Player> responsePlayer = response.getPlayer();
+		int status = response.getStatus(), rights = 0;
+		boolean flagged = false;
 
-		if (player != null) {
+		if (responsePlayer.isPresent()) {
+			Player player = responsePlayer.get();
+			rights = player.getPrivilegeLevel().toInteger();
+
 			GameSession session = new GameSession(channel, serverContext, player);
 			player.setSession(session, false /* TODO */);
 
 			RegistrationStatus registrationStatus = gameService.registerPlayer(player);
 
 			if (registrationStatus != RegistrationStatus.OK) {
-				player = null;
+				responsePlayer = Optional.empty();
 				rights = 0;
 				if (registrationStatus == RegistrationStatus.ALREADY_ONLINE) {
 					status = LoginConstants.STATUS_ACCOUNT_ONLINE;
@@ -108,16 +112,15 @@ public final class LoginSession extends Session {
 			}
 		}
 
-		ChannelFuture future = channel.writeAndFlush(new LoginResponse(status, rights, log));
+		ChannelFuture future = channel.writeAndFlush(new LoginResponse(status, rights, flagged));
 		destroy();
 
-		if (player != null) {
+		if (responsePlayer.isPresent()) {
 			IsaacRandomPair randomPair = request.getRandomPair();
 			Release release = serverContext.getRelease();
 
 			channel.pipeline().addFirst("eventEncoder", new GameMessageEncoder(release));
-			channel.pipeline().addBefore("eventEncoder", "gameEncoder",
-					new GamePacketEncoder(randomPair.getEncodingRandom()));
+			channel.pipeline().addBefore("eventEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
 
 			channel.pipeline().addBefore("handler", "gameDecoder",
 					new GamePacketDecoder(randomPair.getDecodingRandom(), serverContext.getRelease()));
@@ -126,7 +129,7 @@ public final class LoginSession extends Session {
 			channel.pipeline().remove("loginDecoder");
 			channel.pipeline().remove("loginEncoder");
 
-			channelContext.attr(NetworkConstants.SESSION_KEY).set(player.getSession());
+			channelContext.attr(NetworkConstants.SESSION_KEY).set(responsePlayer.get().getSession());
 		} else {
 			future.addListener(ChannelFutureListener.CLOSE);
 		}

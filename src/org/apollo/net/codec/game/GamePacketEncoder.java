@@ -44,7 +44,7 @@ public final class GamePacketEncoder extends MessageToMessageEncoder<GamePacket>
 			}
 		} else if (type == PacketType.VARIABLE_SHORT) {
 			headerLength += 2;
-			if (payloadLength >= 65536) {
+			if (payloadLength >= 65_536) {
 				throw new Exception("Payload too long for variable short packet.");
 			}
 		}

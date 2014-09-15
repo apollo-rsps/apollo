@@ -1,39 +1,39 @@
 package org.apollo.net.meta;
 
+import com.google.common.base.Preconditions;
+
 /**
- * A class which contains meta data for a single type of packet.
+ * A class containing meta data for a single type of packet.
  * 
  * @author Graham
  */
 public final class PacketMetaData {
 
 	/**
-	 * Creates a {@link PacketMetaData} object for a fixed-length packet.
+	 * Creates packet meta data for a fixed-length packet.
 	 * 
 	 * @param length The length of the packet.
-	 * @return The {@link PacketMetaData} object.
-	 * @throws IllegalArgumentException If length is less than 0.
+	 * @return The packet meta data.
+	 * @throws IllegalArgumentException If {@code length} is less than 0.
 	 */
 	public static PacketMetaData createFixed(int length) {
-		if (length < 0) {
-			throw new IllegalArgumentException("Packet length cannot be less than 0.");
-		}
+		Preconditions.checkArgument(length >= 0, "Packet length cannot be less than 0.");
 		return new PacketMetaData(PacketType.FIXED, length);
 	}
 
 	/**
-	 * Creates a {@link PacketMetaData} object for a variable byte length packet.
+	 * Creates a packet meta data object for a variable byte length packet.
 	 * 
-	 * @return The {@link PacketMetaData} object.
+	 * @return The packet meta data object.
 	 */
 	public static PacketMetaData createVariableByte() {
 		return new PacketMetaData(PacketType.VARIABLE_BYTE, 0);
 	}
 
 	/**
-	 * Creates a {@link PacketMetaData} object for a variable short length packet.
+	 * Creates a packet meta data object for a variable short length packet.
 	 * 
-	 * @return The {@link PacketMetaData} object.
+	 * @return The packet meta data object.
 	 */
 	public static PacketMetaData createVariableShort() {
 		return new PacketMetaData(PacketType.VARIABLE_SHORT, 0);
@@ -50,8 +50,8 @@ public final class PacketMetaData {
 	private final PacketType type;
 
 	/**
-	 * Creates the packet meta data object. This should not be called directy. Use the {@link #createFixed(int)},
-	 * {@link #createVariableByte()} and {@link #createVariableShort()} methods instead!
+	 * Creates the packet meta data object. This should not be called directly. Use the {@link #createFixed},
+	 * {@link #createVariableByte}, and {@link #createVariableShort} methods instead!
 	 * 
 	 * @param type The type of packet.
 	 * @param length The length of the packet.
@@ -68,9 +68,7 @@ public final class PacketMetaData {
 	 * @throws IllegalStateException If the packet is not a fixed-size packet.
 	 */
 	public int getLength() {
-		if (type != PacketType.FIXED) {
-			throw new IllegalStateException("Can only get the length of a fixed length packet.");
-		}
+		Preconditions.checkState(type == PacketType.FIXED, "Can only get the length of a fixed length packet.");
 		return length;
 	}
 
