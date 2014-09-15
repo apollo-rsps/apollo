@@ -1,15 +1,17 @@
 package org.apollo.game.model.area;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apollo.game.model.Position;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+
 /**
- * A repository of {@link Sector Sectors}, backed by a {@link HashMap} of {@link SectorCoordinates} that correspond to
- * their appropriate sectors.
+ * A repository of {@link Sector}s, backed by a {@link HashMap} of {@link SectorCoordinates} that correspond to their
+ * appropriate sectors.
  * 
  * @author Major
  */
@@ -28,7 +30,7 @@ public final class SectorRepository {
 	/**
 	 * Creates a new sector repository.
 	 * 
-	 * @param permitRemoval If removal (of {@link Sector Sectors}) from this repository should be permitted.
+	 * @param permitRemoval If removal (of {@link Sector}s) from this repository should be permitted.
 	 */
 	public SectorRepository(boolean permitRemoval) {
 		this.permitRemoval = permitRemoval;
@@ -43,11 +45,9 @@ public final class SectorRepository {
 	 *             existing sector would be replaced), and removal of sectors is not permitted.
 	 */
 	public void add(Sector sector) {
-		if (sector == null) {
-			throw new IllegalArgumentException("Sector cannot be null.");
-		} else if (sectors.containsKey(sector.getCoordinates()) && !permitRemoval) {
-			throw new UnsupportedOperationException(
-					"Cannot add a sector with the same coordinates as an existing sector.");
+		Preconditions.checkNotNull(sector, "Sector cannot be null.");
+		if (sectors.containsKey(sector.getCoordinates()) && !permitRemoval) {
+			throw new UnsupportedOperationException("Cannot add a sector with the same coordinates as an existing sector.");
 		}
 		sectors.put(sector.getCoordinates(), sector);
 	}
@@ -56,10 +56,11 @@ public final class SectorRepository {
 	 * Indicates whether the supplied value (i.e. the {@link Sector}) has a mapping.
 	 * 
 	 * @param sector The sector.
-	 * @return {@code true} if the value is mapped by a key (i.e. {@link SectorCoordinates}), otherwise {@code false}.
+	 * @return {@code true} if this repository contains an entry with {@link SectorCoordinates} equal to the specified
+	 *         sector, otherwise {@code false}.
 	 */
 	public boolean contains(Sector sector) {
-		return sectors.containsValue(sector);
+		return contains(sector.getCoordinates());
 	}
 
 	/**
@@ -88,7 +89,7 @@ public final class SectorRepository {
 	 * repository then a new sector is created, submitted to the repository, and returned.
 	 * 
 	 * @param coordinates The coordinates.
-	 * @return The sector.
+	 * @return The sector. Will never be null.
 	 */
 	public Sector get(SectorCoordinates coordinates) {
 		Sector sector = sectors.get(coordinates);
@@ -100,26 +101,27 @@ public final class SectorRepository {
 	}
 
 	/**
-	 * Gets the {@link List} of {@link Sector Sectors}. This is a shallow copy (i.e. modifying the list will not change
-	 * the repository, but modifying the sectors in the list will change the sectors in this repository).
+	 * Gets a shallow copy of the {@link List} of {@link Sector}s. This will be an {@link ImmutableList}.
 	 * 
 	 * @return The list.
 	 */
 	public List<Sector> getSectors() {
-		return new ArrayList<>(sectors.values());
+		return ImmutableList.copyOf(sectors.values());
 	}
 
 	/**
-	 * Removes a {@link Sector} from the repository, if permitted.
+	 * Removes a {@link Sector} from the repository, if permitted. This method removes the entry that has a key
+	 * identical to the {@link SectorCoordinates} of the specified sector.
 	 * 
 	 * @param sector The sector to remove.
+	 * @return Whether or not the sector was removed.
 	 * @throws UnsupportedOperationException If this method is called on a repository that does not permit removal.
 	 */
-	public void remove(Sector sector) {
+	public boolean remove(Sector sector) {
 		if (!permitRemoval) {
 			throw new UnsupportedOperationException("Cannot remove sectors from this repository.");
 		}
-		sectors.remove(sector.getCoordinates());
+		return sectors.remove(sector.getCoordinates()) != null;
 	}
 
 }
