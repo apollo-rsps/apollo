@@ -34,9 +34,9 @@ public abstract class SynchronizationBlock {
 	 * @return The appearance block.
 	 */
 	public static SynchronizationBlock createAppearanceBlock(Player player) {
-		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), player.getSkillSet()
-				.getCombatLevel(), 0, player.getEquipment(), player.getPrayerIcon(), player.isSkulled(),
-				player.getDefinition() == null ? -1 : player.getDefinition().getId());
+		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), player.getSkillSet().getCombatLevel(), 0,
+				player.getEquipment(), player.getPrayerIcon(), player.isSkulled(), player.getDefinition() == null ? -1 : player
+						.getDefinition().getId());
 	}
 
 	/**
@@ -61,7 +61,7 @@ public abstract class SynchronizationBlock {
 	}
 
 	/**
-	 * Creates a {@link ForceMovement} block with the specified parameters.
+	 * Creates a {@link ForceMovementBlock} with the specified parameters.
 	 * 
 	 * @param initialPosition The initial {@link Position} of the player.
 	 * @param finalPosition The final position of the player
@@ -98,8 +98,8 @@ public abstract class SynchronizationBlock {
 	 */
 	public static SynchronizationBlock createHitUpdateBlock(int damage, int type, int currentHealth, int maximumHealth,
 			boolean secondary) {
-		return secondary ? new SecondaryHitUpdateBlock(damage, type, currentHealth, maximumHealth)
-				: new HitUpdateBlock(damage, type, currentHealth, maximumHealth);
+		return secondary ? new SecondaryHitUpdateBlock(damage, type, currentHealth, maximumHealth) : new HitUpdateBlock(damage,
+				type, currentHealth, maximumHealth);
 	}
 
 	/**

@@ -7,7 +7,7 @@ import org.apollo.net.codec.game.GamePacketBuilder;
 import org.apollo.net.release.MessageEncoder;
 
 /**
- * A {@link MessageEncoder} for the {@link SetWidgetComponentEvent}.
+ * A {@link MessageEncoder} for the {@link SetWidgetVisibilityMessage}.
  * 
  * @author Chris Fletcher
  */

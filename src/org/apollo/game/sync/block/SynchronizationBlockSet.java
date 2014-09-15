@@ -65,6 +65,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 	 * Removes a {@link SynchronizationBlock} from this set.
 	 * 
 	 * @param clazz The block's class.
+	 * @return The removed block.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends SynchronizationBlock> T remove(Class<? extends SynchronizationBlock> clazz) {

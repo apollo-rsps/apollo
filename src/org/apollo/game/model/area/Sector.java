@@ -1,7 +1,6 @@
 package org.apollo.game.model.area;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,8 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Entity.EntityType;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * An 8x8 area of the map.
  * 
@@ -19,7 +20,7 @@ import org.apollo.game.model.entity.Entity.EntityType;
 public final class Sector {
 
 	/**
-	 * The width and height of a sector, in tiles.
+	 * The width and length of a sector, in tiles.
 	 */
 	public static final int SECTOR_SIZE = 8;
 
@@ -72,7 +73,7 @@ public final class Sector {
 
 		entities.add(entity);
 		this.entities.put(position, entities);
-		notifyListeners(entity);
+		notifyListeners(entity, SectorOperation.ADD);
 	}
 
 	/**
@@ -98,7 +99,19 @@ public final class Sector {
 	}
 
 	/**
-	 * Gets a copy of the {@link List} of {@link Entity}s.
+	 * Gets an {@link ImmutableList} containing every {@link Entity} in this sector.
+	 * 
+	 * @return The list.
+	 */
+	public List<Entity> getEntities() {
+		List<Entity> combined = new ArrayList<>();
+		this.entities.values().forEach(entities -> combined.addAll(entities));
+		return ImmutableList.copyOf(combined);
+	}
+
+	/**
+	 * Gets a shallow copy of the {@link List} of {@link Entity} objects at the specified {@link Position}. The returned
+	 * type will be {@link ImmutableList}.
 	 * 
 	 * @param position The position containing the entities.
 	 * @return The list.
@@ -107,37 +120,41 @@ public final class Sector {
 		List<Entity> entities = this.entities.get(position);
 		if (entities == null) {
 			this.entities.put(position, new ArrayList<>());
-			return Collections.emptyList();
+			return ImmutableList.of();
 		}
 
-		return new ArrayList<>(entities);
+		return ImmutableList.copyOf(entities);
 	}
 
 	/**
-	 * Gets a copy of the {@link List} of {@link Entity}s with the specified {@link EntityType}.
+	 * Gets a shallow copy of the {@link List} of {@link Entity}s with the specified {@link EntityType}. The returned
+	 * list will be an {@link ImmutableList}. Type will be inferred from the call, so ensure that the entity type and
+	 * the reference correspond, or this method will fail at runtime.
 	 * 
 	 * @param position The {@link Position} containing the entities.
 	 * @param type The {@link EntityType}.
 	 * @return The list of entities.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Entity> List<T> getEntities(Position position, EntityType type) {
 		List<Entity> entities = this.entities.get(position);
 		if (entities == null) {
 			this.entities.put(position, new ArrayList<>());
-			return Collections.emptyList();
+			return ImmutableList.of();
 		}
 
-		return (List<T>) entities.stream().filter(e -> e.getEntityType() == type).collect(Collectors.toList());
+		@SuppressWarnings("unchecked")
+		List<T> filtered = (List<T>) entities.stream().filter(e -> e.getEntityType() == type).collect(Collectors.toList());
+		return ImmutableList.copyOf(filtered);
 	}
 
 	/**
-	 * Notifies the listeners registered to this sector that an update has occurred.
+	 * Notifies the {@link SectorListener}s registered to this sector that an update has occurred.
 	 * 
-	 * @param entity The entity that was updated.
+	 * @param entity The {@link Entity} that was updated.
+	 * @param operation The {@link SectorOperation} that occurred.
 	 */
-	public void notifyListeners(Entity entity) {
-		listeners.forEach(l -> l.execute(this, entity));
+	public void notifyListeners(Entity entity, SectorOperation operation) {
+		listeners.forEach(listener -> listener.execute(this, entity, operation));
 	}
 
 	/**
@@ -149,13 +166,9 @@ public final class Sector {
 	public boolean removeEntity(Entity entity) {
 		Position position = entity.getPosition();
 		List<Entity> entities = this.entities.get(position);
-		if (entities == null) {
-			this.entities.put(position, new ArrayList<>());
-			return false;
-		}
 
-		if (entities.remove(entity)) {
-			notifyListeners(entity);
+		if (entities != null && entities.remove(entity)) {
+			notifyListeners(entity, SectorOperation.REMOVE);
 			return true;
 		}
 		return false;

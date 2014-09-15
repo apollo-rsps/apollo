@@ -460,7 +460,6 @@ public final class Inventory implements Cloneable {
 	 * under no circumstances make any changes to other slots.
 	 * 
 	 * @param slot The slot.
-	 * @param id The item id.
 	 * @param amount The amount to remove.
 	 * @return The amount that was removed (0 if nothing was removed).
 	 */
@@ -488,7 +487,7 @@ public final class Inventory implements Cloneable {
 	/**
 	 * Removes the item (if any) that is in the specified slot.
 	 * 
-	 * @param slot
+	 * @param slot The slot to reset.
 	 * @return The item that was in the slot.
 	 */
 	public Item reset(int slot) {

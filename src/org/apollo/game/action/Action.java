@@ -4,13 +4,14 @@ import org.apollo.game.model.entity.Mob;
 import org.apollo.game.scheduling.ScheduledTask;
 
 /**
- * An action is a specialised {@link ScheduledTask} which is specific to a mob.
+ * An action is a specialised {@link ScheduledTask} that is specific to a {@link Mob}.
  * <p>
  * <strong>ALL</strong> actions <strong>MUST</strong> implement the {@link #equals(Object)} method. This is to check if
  * two actions are identical: if they are, then the new action does not replace the old one (so spam/accidental clicking
  * won't cancel your action, and start another from scratch).
  * 
  * @author Graham
+ * @param <T> The type of mob.
  */
 public abstract class Action<T extends Mob> extends ScheduledTask {
 

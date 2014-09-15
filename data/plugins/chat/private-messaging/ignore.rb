@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> pr/1
 on :message, :add_ignore do |ctx, player, message|
   username = message.username
   player.add_ignore(username)

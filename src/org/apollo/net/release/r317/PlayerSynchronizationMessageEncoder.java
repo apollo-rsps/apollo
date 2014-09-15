@@ -333,7 +333,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	/**
 	 * Puts a force movement block in the specified builder.
 	 * 
-	 * @param forceMovementBlock The block.
+	 * @param block The block.
 	 * @param builder The builder.
 	 */
 	private void putForceMovementBlock(ForceMovementBlock block, GamePacketBuilder builder) {
@@ -388,18 +388,17 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param message The message.
 	 * @param builder The builder.
 	 */
-	private void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationMessage message,
-			GamePacketBuilder builder) {
+	private void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationMessage message, GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		if (seg.getType() == SegmentType.TELEPORT) {
 			Position position = ((TeleportSegment) seg).getDestination();
 			builder.putBits(1, 1);
 			builder.putBits(2, 3);
 			builder.putBits(2, position.getHeight());
-			builder.putBits(1, message.hasRegionChanged() ? 0 : 1);
+			builder.putBits(1, message.hasSectorChanged() ? 0 : 1);
 			builder.putBits(1, updateRequired ? 1 : 0);
-			builder.putBits(7, position.getLocalY(message.getLastKnownRegion()));
-			builder.putBits(7, position.getLocalX(message.getLastKnownRegion()));
+			builder.putBits(7, position.getLocalY(message.getLastKnownSector()));
+			builder.putBits(7, position.getLocalX(message.getLastKnownSector()));
 		} else if (seg.getType() == SegmentType.RUN) {
 			Direction[] directions = ((MovementSegment) seg).getDirections();
 			builder.putBits(1, 1);

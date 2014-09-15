@@ -1,7 +1,6 @@
 package org.apollo.util;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
@@ -11,11 +10,10 @@ import java.util.List;
  * A stateful implementation of a {@link ByteToMessageDecoder} which may be extended and used by other classes. The
  * current state is tracked by this class and is a user-specified enumeration.
  * 
- * The state may be changed by calling the {@link StatefulFrameDecoder#setState(Enum)} method.
+ * The state may be changed by calling the {@link StatefulFrameDecoder#setState} method.
  * 
- * The current state is supplied as a parameter in the
- * {@link StatefulFrameDecoder#decode(ChannelHandlerContext, Channel, ByteBuf, Enum)} and
- * {@link StatefulFrameDecoder#decodeLast(ChannelHandlerContext, Channel, ByteBuf, Enum)} methods.
+ * The current state is supplied as a parameter in the {@link StatefulFrameDecoder#decode} and
+ * {@link StatefulFrameDecoder#decodeLast} methods.
  * 
  * This class is not thread safe: it is recommended that the state is only set in the decode methods overriden.
  * 
@@ -61,8 +59,8 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 	 * Decodes the received packets into a frame.
 	 * 
 	 * @param ctx The current context of this handler.
-	 * @param channel The channel.
-	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
+	 * @param in The cumulative buffer, which may contain zero or more bytes.
+	 * @param out The {@link List} of objects to pass forward through the pipeline.
 	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
 	 */
 	protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) throws Exception;
@@ -77,8 +75,8 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 	 * required. If you do not, remaining data will be discarded!
 	 * 
 	 * @param ctx The current context of this handler.
-	 * @param channel The channel.
-	 * @param buffer The cumulative buffer, which may contain zero or more bytes.
+	 * @param in The cumulative buffer, which may contain zero or more bytes.
+	 * @param out The {@link List} of objects to pass forward through the pipeline.
 	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
 	 */
 	protected void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) {

@@ -40,6 +40,8 @@ import org.apollo.net.session.GameSession;
 import org.apollo.security.PlayerCredentials;
 import org.apollo.util.Point;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * A {@link Player} is a {@link Mob} that a user is controlling.
  * 
@@ -127,9 +129,9 @@ public final class Player extends Mob {
 	private boolean isSkulled = false;
 
 	/**
-	 * The centre of the last region the client has loaded.
+	 * The centre of the last sector the client has loaded.
 	 */
-	private transient Position lastKnownRegion;
+	private transient Position lastKnownSector;
 
 	/**
 	 * The membership flag.
@@ -157,9 +159,9 @@ public final class Player extends Mob {
 	private final transient Deque<Message> queuedMessages = new ArrayDeque<>();
 
 	/**
-	 * A flag indicating if the region changed in the last cycle.
+	 * A flag indicating if the sector changed in the last cycle.
 	 */
-	private transient boolean regionChanged = false;
+	private transient boolean sectorChanged = false;
 
 	/**
 	 * The player's run energy.
@@ -228,8 +230,8 @@ public final class Player extends Mob {
 	 * 
 	 * @param username The username.
 	 */
-	public boolean addFriend(String username) {
-		return friends.add(username.toLowerCase());
+	public void addFriend(String username) {
+		friends.add(username.toLowerCase());
 	}
 
 	/**
@@ -237,8 +239,8 @@ public final class Player extends Mob {
 	 * 
 	 * @param username The username.
 	 */
-	public boolean addIgnore(String username) {
-		return ignores.add(username.toLowerCase());
+	public void addIgnore(String username) {
+		ignores.add(username.toLowerCase());
 	}
 
 	/**
@@ -388,12 +390,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets the last known region.
+	 * Gets the last known sector.
 	 * 
-	 * @return The last known region, or {@code null} if the player has never known a region.
+	 * @return The last known sector, or {@code null} if the player has never known a sector.
 	 */
-	public Position getLastKnownRegion() {
-		return lastKnownRegion;
+	public Position getLastKnownSector() {
+		return lastKnownSector;
 	}
 
 	/**
@@ -488,21 +490,21 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Checks if this player has ever known a region.
+	 * Checks if this player has ever known a sector.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public boolean hasLastKnownRegion() {
-		return lastKnownRegion != null;
+	public boolean hasLastKnownSector() {
+		return lastKnownSector != null;
 	}
 
 	/**
-	 * Checks if the region has changed.
+	 * Checks if the sector has changed.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public boolean hasRegionChanged() {
-		return regionChanged;
+	public boolean hasSectorChanged() {
+		return sectorChanged;
 	}
 
 	/**
@@ -613,6 +615,7 @@ public final class Player extends Mob {
 	 * Removes the specified username from this player's friend list.
 	 * 
 	 * @param username The username.
+	 * @return {@code true} if the player's friend list contained the specified user, {@code false} if not.
 	 */
 	public boolean removeFriend(String username) {
 		return friends.remove(username.toLowerCase());
@@ -622,6 +625,7 @@ public final class Player extends Mob {
 	 * Removes the specified username from this player's ignore list.
 	 * 
 	 * @param username The username.
+	 * @return {@code true} if the player's ignore list contained the specified user, {@code false} if not.
 	 */
 	public boolean removeIgnore(String username) {
 		return ignores.remove(username.toLowerCase());
@@ -673,6 +677,7 @@ public final class Player extends Mob {
 	 * Sends a message to the player.
 	 * 
 	 * @param message The message.
+	 * @param filterable Whether or not the message can be filtered.
 	 */
 	public void sendMessage(String message, boolean filterable) {
 		if (clientVersion > 0) {
@@ -770,12 +775,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the last known region.
+	 * Sets the last known sector.
 	 * 
-	 * @param lastKnownRegion The last known region.
+	 * @param lastKnownSector The last known sector.
 	 */
-	public void setLastKnownRegion(Position lastKnownRegion) {
-		this.lastKnownRegion = lastKnownRegion;
+	public void setLastKnownSector(Position lastKnownSector) {
+		this.lastKnownSector = lastKnownSector;
 	}
 
 	/**
@@ -815,12 +820,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the region changed flag.
+	 * Sets the sector changed flag.
 	 * 
-	 * @param regionChanged A flag indicating if the region has changed.
+	 * @param sectorChanged A flag indicating if the sector has changed.
 	 */
-	public void setRegionChanged(boolean regionChanged) {
-		this.regionChanged = regionChanged;
+	public void setSectorChanged(boolean sectorChanged) {
+		this.sectorChanged = sectorChanged;
 	}
 
 	/**
@@ -934,8 +939,8 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return Player.class.getName() + " [username=" + getUsername() + ", privilege=" + privilegeLevel
-				+ ", clientVersion=" + clientVersion + "]";
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
+				.add("client version", clientVersion).toString();
 	}
 
 	/**
@@ -950,8 +955,7 @@ public final class Player extends Mob {
 	 * Initialises the player's inventories.
 	 */
 	private void initInventories() {
-		InventoryListener fullInventoryListener = new FullInventoryListener(this,
-				FullInventoryListener.FULL_INVENTORY_MESSAGE);
+		InventoryListener fullInventoryListener = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 

@@ -1,9 +1,12 @@
 package org.apollo.game.model.entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apollo.game.model.skill.SkillListener;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Represents the set of the player's skills.
@@ -29,9 +32,9 @@ public final class SkillSet {
 
 	static {
 		int points = 0, output = 0;
-		for (int lvl = 1; lvl <= 99; lvl++) {
-			EXPERIENCE_FOR_LEVEL[lvl] = output;
-			points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0));
+		for (int level = 1; level <= 99; level++) {
+			EXPERIENCE_FOR_LEVEL[level] = output;
+			points += Math.floor(level + 300 * Math.pow(2, level / 7.0));
 			output = (int) Math.floor(points / 4);
 		}
 	}
@@ -43,9 +46,7 @@ public final class SkillSet {
 	 * @return The minimum experience.
 	 */
 	public static int getExperienceForLevel(int level) {
-		if (level < 1 || level > 99) {
-			throw new IllegalArgumentException("Level must be between 1 and 99, inclusive.");
-		}
+		Preconditions.checkArgument(level >= 1 && level <= 99, "Level must be between 1 and 99, inclusive.");
 		return EXPERIENCE_FOR_LEVEL[level];
 	}
 
@@ -56,12 +57,12 @@ public final class SkillSet {
 	 * @return The minimum level.
 	 */
 	public static int getLevelForExperience(double experience) {
-		if (experience < 0 || experience > MAXIMUM_EXP) {
-			throw new IllegalArgumentException("Experience must be between 0 and 200,000,000, inclusive.");
-		}
+		Preconditions.checkArgument(experience >= 0 && experience <= MAXIMUM_EXP,
+				"Experience must be between 0 and 200,000,000, inclusive.");
+
 		for (int level = 1; level <= 98; level++) {
 			if (experience < EXPERIENCE_FOR_LEVEL[level + 1]) {
-				return level;
+				return level; // TODO binary search?
 			}
 		}
 		return 99;
@@ -125,14 +126,12 @@ public final class SkillSet {
 	 * 
 	 * @param listener The listener.
 	 */
-	public boolean addListener(SkillListener listener) {
-		return listeners.add(listener);
+	public void addListener(SkillListener listener) {
+		listeners.add(listener);
 	}
 
 	/**
 	 * Calculates the combat level for this skill set.
-	 * 
-	 * @return The combat level.
 	 */
 	public void calculateCombatLevel() {
 		int attack = skills[Skill.ATTACK].getMaximumLevel();
@@ -145,10 +144,8 @@ public final class SkillSet {
 
 		double base = (defence + hitpoints + Math.floor(prayer / 2)) * 0.25;
 		double melee = (attack + strength) * 0.325;
-		double range = ranged * 0.4875;
-		double mage = magic * 0.4875;
 
-		this.combatLevel = (int) (base + Math.max(melee, Math.max(range, mage)));
+		this.combatLevel = (int) (base + Math.max(melee, Math.max(ranged, magic) * 0.4875));
 	}
 
 	/**
@@ -214,11 +211,7 @@ public final class SkillSet {
 	 * @return The total level.
 	 */
 	public int getTotalLevel() {
-		int total = 0;
-		for (Skill skill : skills) {
-			total += skill.getMaximumLevel();
-		}
-		return total;
+		return Arrays.stream(skills).map(skill -> skill.getMaximumLevel()).reduce(0, (total, level) -> total + level);
 	}
 
 	/**
@@ -233,11 +226,11 @@ public final class SkillSet {
 			
 			int current = skills[id].getCurrentLevel(), max = skills[id].getMaximumLevel();
 
-			if (current == max) {
+			if (current == max || id == Skill.PRAYER) {
 				continue;
 			}
 
-			current += current < max ? 1 : -1;
+			current += (current < max ? 1 : -1);
 			setSkill(id, new Skill(skills[id].getExperience(), current, max));
 		}
 	}
@@ -254,8 +247,8 @@ public final class SkillSet {
 	 * 
 	 * @param listener The listener to remove.
 	 */
-	public boolean removeListener(SkillListener listener) {
-		return listeners.remove(listener);
+	public void removeListener(SkillListener listener) {
+		listeners.remove(listener);
 	}
 
 	/**
@@ -333,18 +326,14 @@ public final class SkillSet {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	private void checkBounds(int id) {
-		if (id < 0 || id >= skills.length) {
-			throw new IndexOutOfBoundsException("Skill id is out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, skills.length, "Skill id is out of bounds.");
 	}
 
 	/**
 	 * Initialises the skill set.
 	 */
 	private void init() {
-		for (int id = 0; id < skills.length; id++) {
-			skills[id] = (id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1));
-		}
+		Arrays.setAll(skills, id -> id == Skill.HITPOINTS ? new Skill(1154, 10, 10) : new Skill(0, 1, 1));
 	}
 
 	/**
@@ -355,9 +344,7 @@ public final class SkillSet {
 	private void notifyLevelledUp(int id) {
 		checkBounds(id);
 		if (firingEvents) {
-			for (SkillListener listener : listeners) {
-				listener.levelledUp(this, id, skills[id]);
-			}
+			listeners.forEach(listener -> listener.levelledUp(this, id, skills[id]));
 		}
 	}
 
@@ -366,9 +353,7 @@ public final class SkillSet {
 	 */
 	private void notifySkillsUpdated() {
 		if (firingEvents) {
-			for (SkillListener listener : listeners) {
-				listener.skillsUpdated(this);
-			}
+			listeners.forEach(listener -> listener.skillsUpdated(this));
 		}
 	}
 
@@ -380,9 +365,7 @@ public final class SkillSet {
 	private void notifySkillUpdated(int id) {
 		checkBounds(id);
 		if (firingEvents) {
-			for (SkillListener listener : listeners) {
-				listener.skillUpdated(this, id, skills[id]);
-			}
+			listeners.forEach(listener -> listener.skillUpdated(this, id, skills[id]));
 		}
 	}
 

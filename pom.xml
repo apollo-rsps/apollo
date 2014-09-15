@@ -30,17 +30,17 @@
     <dependency>
       <groupId>org.jruby</groupId>
       <artifactId>jruby-complete</artifactId>
-      <version>1.7.13</version>
+      <version>1.7.15</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>17.0</version>
+      <version>18.0</version>
     </dependency>
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-all</artifactId>
-      <version>4.0.21.Final</version>
+      <version>4.0.23.Final</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

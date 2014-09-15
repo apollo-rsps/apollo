@@ -59,8 +59,7 @@ public final class ObjectDefinition {
 	 */
 	public static ObjectDefinition lookup(int id) {
 		if (id < 0 || id > definitions.length) {
-			throw new IndexOutOfBoundsException(ObjectDefinition.class.getName() + " lookup index " + id
-					+ " out of bounds.");
+			throw new IndexOutOfBoundsException(ObjectDefinition.class.getName() + " lookup index " + id + " out of bounds.");
 		}
 		return definitions[id];
 	}
@@ -71,11 +70,14 @@ public final class ObjectDefinition {
 	private String description;
 
 	/**
+<<<<<<< HEAD
 	 * This object's height.
 	 */
 	private int height = 1;
 
 	/**
+=======
+>>>>>>> pr/1
 	 * The object's id.
 	 */
 	private final int id;
@@ -89,6 +91,11 @@ public final class ObjectDefinition {
 	 * Denotes whether this object has actions associated with it or not.
 	 */
 	private boolean interactive = false;
+
+	/**
+	 * This object's length.
+	 */
+	private int length = 1;
 
 	/**
 	 * The object's menu actions.
@@ -129,21 +136,21 @@ public final class ObjectDefinition {
 	}
 
 	/**
-	 * Gets the height of this object.
-	 * 
-	 * @return The height.
-	 */
-	public int getHeight() {
-		return height;
-	}
-
-	/**
 	 * Gets the id of this object.
 	 * 
 	 * @return The id.
 	 */
 	public int getId() {
 		return id;
+	}
+
+	/**
+	 * Gets the length of this object.
+	 * 
+	 * @return The length.
+	 */
+	public int getLength() {
+		return length;
 	}
 
 	/**
@@ -210,15 +217,6 @@ public final class ObjectDefinition {
 	}
 
 	/**
-	 * Sets the height of this object.
-	 * 
-	 * @param height The height.
-	 */
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	/**
 	 * Sets the impenetrability of this object.
 	 * 
 	 * @param impenetrable The impenetrability.
@@ -234,6 +232,15 @@ public final class ObjectDefinition {
 	 */
 	public void setInteractive(boolean interactive) {
 		this.interactive = interactive;
+	}
+
+	/**
+	 * Sets the length of this object.
+	 * 
+	 * @param length The length.
+	 */
+	public void setLength(int length) {
+		this.length = length;
 	}
 
 	/**

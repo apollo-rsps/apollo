@@ -88,8 +88,7 @@ public final class ItemDefinition {
 	 */
 	public static ItemDefinition lookup(int id) {
 		if (id < 0 || id >= definitions.length) {
-			throw new IndexOutOfBoundsException(ItemDefinition.class.getName() + " lookup index " + id
-					+ " out of bounds.");
+			throw new IndexOutOfBoundsException(ItemDefinition.class.getName() + " lookup index " + id + " out of bounds.");
 		}
 		return definitions[id];
 	}
@@ -151,7 +150,7 @@ public final class ItemDefinition {
 	/**
 	 * A flag indicating if this item is stackable.
 	 */
-	private boolean stackable;
+	private boolean stackable = false;
 
 	/**
 	 * This item's team.

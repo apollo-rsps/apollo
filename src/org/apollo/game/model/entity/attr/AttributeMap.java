@@ -3,6 +3,13 @@ package org.apollo.game.model.entity.attr;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Preconditions;
+
+/**
+ * A {@link Map} wrapper used to store {@link Attribute}s and their {@link AttributeDefinition definitions}.
+ * 
+ * @author Major
+ */
 public final class AttributeMap {
 
 	/**
@@ -31,7 +38,7 @@ public final class AttributeMap {
 	}
 
 	/**
-	 * Gets the {@link AttributeDefinitions}, as a {@link Map}.
+	 * Gets the {@link AttributeDefinition}s, as a {@link Map}.
 	 * 
 	 * @return The map of attribute names to definitions.
 	 */
@@ -55,7 +62,7 @@ public final class AttributeMap {
 	}
 
 	/**
-	 * Gets a shallow copy of the map of attributes.
+	 * Gets a shallow copy of the {@link Map} of {@link Attribute}s.
 	 * 
 	 * @return The attributes.
 	 */
@@ -70,9 +77,7 @@ public final class AttributeMap {
 	 * @param attribute The attribute.
 	 */
 	public void setAttribute(String name, Attribute<?> attribute) {
-		if (getDefinition(name) == null) {
-			throw new IllegalArgumentException("Attributes must be defined before their value can be set.");
-		}
+		Preconditions.checkNotNull(getDefinition(name), "Attributes must be defined before their value can be set.");
 		attributes.put(name, attribute);
 	}
 

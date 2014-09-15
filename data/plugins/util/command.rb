@@ -15,3 +15,13 @@ class Hash
     return true
   end
 end
+
+
+class Player
+
+  # Returns whether or not the player's 
+  def has_level(skill, level)
+    return skill_set.get_skill(skill).current_level >= level
+  end
+
+end

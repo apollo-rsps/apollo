@@ -95,8 +95,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			}
 
 			Set<Entry<String, Attribute<?>>> attributes = player.getAttributes().entrySet();
-			attributes
-					.removeIf(e -> AttributeMap.getDefinition(e.getKey()).getPersistence() != AttributePersistence.SERIALIZED);
+			attributes.removeIf(e -> AttributeMap.getDefinition(e.getKey()).getPersistence() != AttributePersistence.SERIALIZED);
 			out.writeInt(attributes.size());
 
 			for (Entry<String, Attribute<?>> entry : attributes) {
@@ -108,10 +107,10 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 	}
 
 	/**
-	 * Writes an attribute map entry to the specified output stream.
+	 * Writes an {@link Attribute} to the specified output stream.
 	 * 
 	 * @param out The output stream.
-	 * @param entry The map entry.
+	 * @param attribute The attribute.
 	 * @throws IOException If an I/O error occurs.
 	 */
 	private void saveAttribute(DataOutputStream out, Attribute<?> attribute) throws IOException {

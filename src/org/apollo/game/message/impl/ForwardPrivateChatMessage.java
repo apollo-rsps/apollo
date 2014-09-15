@@ -28,7 +28,8 @@ public final class ForwardPrivateChatMessage extends Message {
 	/**
 	 * Creates a new forward private message message.
 	 * 
-	 * @param sender The player sending the message.
+	 * @param username The username of the player sending the message.
+	 * @param level The {@link PrivilegeLevel} of the player sending the message.
 	 * @param message The compressed message.
 	 */
 	public ForwardPrivateChatMessage(String username, PrivilegeLevel level, byte[] message) {

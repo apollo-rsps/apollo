@@ -169,7 +169,7 @@ public abstract class Mob extends Entity {
 	/**
 	 * Gets this mob's {@link NpcDefinition}.
 	 * 
-	 * @param definition The definition.
+	 * @return The npc definition.
 	 */
 	public final NpcDefinition getDefinition() {
 		return definition;
@@ -182,8 +182,8 @@ public abstract class Mob extends Entity {
 	 */
 	public final Direction[] getDirections() {
 		if (firstDirection != Direction.NONE) {
-			return secondDirection == Direction.NONE ? new Direction[] { firstDirection } : new Direction[] {
-					firstDirection, secondDirection };
+			return secondDirection == Direction.NONE ? new Direction[] { firstDirection } : new Direction[] { firstDirection,
+					secondDirection };
 		}
 		return Direction.EMPTY_DIRECTION_ARRAY;
 	}

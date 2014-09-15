@@ -112,7 +112,7 @@ public final class Server {
 
 		logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
 		try {
-			httpBootstrap.bind(httpAddress);
+			// httpBootstrap.bind(httpAddress);
 		} catch (Throwable t) {
 			logger.log(Level.WARNING,
 					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);

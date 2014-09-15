@@ -14,9 +14,9 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
 public final class PlayerSynchronizationMessage extends Message {
 
 	/**
-	 * The last known region.
+	 * The position in the last known sector.
 	 */
-	private final Position lastKnownRegion;
+	private final Position lastKnownSector;
 
 	/**
 	 * The number of local players.
@@ -29,9 +29,9 @@ public final class PlayerSynchronizationMessage extends Message {
 	private final Position position;
 
 	/**
-	 * A flag indicating if the region has changed.
+	 * A flag indicating if the sector has changed.
 	 */
-	private final boolean regionChanged;
+	private final boolean sectorChanged;
 
 	/**
 	 * The current player's synchronization segment.
@@ -46,30 +46,30 @@ public final class PlayerSynchronizationMessage extends Message {
 	/**
 	 * Creates the player synchronization message.
 	 * 
-	 * @param lastKnownRegion The last known region.
+	 * @param lastKnownSector The last known sector.
 	 * @param position The player's current position.
-	 * @param regionChanged A flag indicating if the region has changed.
+	 * @param sectorChanged A flag indicating if the sector has changed.
 	 * @param segment The current player's synchronization segment.
 	 * @param localPlayers The number of local players.
 	 * @param segments A list of segments.
 	 */
-	public PlayerSynchronizationMessage(Position lastKnownRegion, Position position, boolean regionChanged,
+	public PlayerSynchronizationMessage(Position lastKnownSector, Position position, boolean sectorChanged,
 			SynchronizationSegment segment, int localPlayers, List<SynchronizationSegment> segments) {
-		this.lastKnownRegion = lastKnownRegion;
+		this.lastKnownSector = lastKnownSector;
 		this.position = position;
-		this.regionChanged = regionChanged;
+		this.sectorChanged = sectorChanged;
 		this.segment = segment;
 		this.localPlayers = localPlayers;
 		this.segments = segments;
 	}
 
 	/**
-	 * Gets the last known region.
+	 * Gets the last known sector.
 	 * 
-	 * @return The last known region.
+	 * @return The last known sector.
 	 */
-	public Position getLastKnownRegion() {
-		return lastKnownRegion;
+	public Position getLastKnownSector() {
+		return lastKnownSector;
 	}
 
 	/**
@@ -109,12 +109,12 @@ public final class PlayerSynchronizationMessage extends Message {
 	}
 
 	/**
-	 * Checks if the region has changed.
+	 * Checks if the sector has changed.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public boolean hasRegionChanged() {
-		return regionChanged;
+	public boolean hasSectorChanged() {
+		return sectorChanged;
 	}
 
 }

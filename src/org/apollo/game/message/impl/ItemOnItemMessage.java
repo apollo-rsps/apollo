@@ -1,7 +1,7 @@
 package org.apollo.game.message.impl;
 
 /**
- * A {@link Message} sent by the client when a player uses one inventory item on another.
+ * A {@link InventoryItemMessage} sent by the client when a player uses one inventory item on another.
  * 
  * @author Chris Fletcher
  */
@@ -32,8 +32,7 @@ public final class ItemOnItemMessage extends InventoryItemMessage {
 	 * @param targetId The id of the target item.
 	 * @param targetSlot The slot of the target item.
 	 */
-	public ItemOnItemMessage(int usedInterface, int usedId, int usedSlot, int targetInterface, int targetId,
-			int targetSlot) {
+	public ItemOnItemMessage(int usedInterface, int usedId, int usedSlot, int targetInterface, int targetId, int targetSlot) {
 		super(0, usedInterface, usedId, usedSlot);
 		this.targetInterface = targetInterface;
 		this.targetSlot = targetSlot;

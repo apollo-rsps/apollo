@@ -19,7 +19,7 @@ public final class IgnoreListMessage extends Message {
 	/**
 	 * Creates a new ignore list message.
 	 * 
-	 * @param player The player.
+	 * @param usernames The {@link List} of usernames to send.
 	 */
 	public IgnoreListMessage(List<String> usernames) {
 		this.usernames = usernames;
