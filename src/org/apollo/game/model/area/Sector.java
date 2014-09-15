@@ -100,7 +100,19 @@ public final class Sector {
 	}
 
 	/**
-	 * Gets a shallow copy of the {@link List} of {@link Entity}s. The returned type will be {@link ImmutableList}.
+	 * Gets an {@link ImmutableList} containing every {@link Entity} in this sector.
+	 * 
+	 * @return The list.
+	 */
+	public List<Entity> getEntities() {
+		List<Entity> combined = new ArrayList<>();
+		this.entities.values().forEach(entities -> combined.addAll(entities));
+		return ImmutableList.copyOf(combined);
+	}
+
+	/**
+	 * Gets a shallow copy of the {@link List} of {@link Entity} objects at the specified {@link Position}. The returned
+	 * type will be {@link ImmutableList}.
 	 * 
 	 * @param position The position containing the entities.
 	 * @return The list.
@@ -155,7 +167,7 @@ public final class Sector {
 	public boolean removeEntity(Entity entity) {
 		Position position = entity.getPosition();
 		List<Entity> entities = this.entities.get(position);
-		
+
 		if (entities != null && entities.remove(entity)) {
 			notifyListeners(entity, SectorOperation.REMOVE);
 			return true;
