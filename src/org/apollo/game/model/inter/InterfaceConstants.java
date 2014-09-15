@@ -4,6 +4,8 @@ package org.apollo.game.model.inter;
  * Contains interface-related constants.
  * 
  * @author Major
+ * @author Lmctruck30
+ *
  */
 public class InterfaceConstants {
 
@@ -52,6 +54,11 @@ public class InterfaceConstants {
 	 * The quest title widget id.
 	 */
 	public static final int QUEST_TITLE = 8144;
+	
+	/**
+	 * The Brightness Config
+	 */
+	public static final int CONFIG_BRIGHTNESS = 166;
 
 	/**
 	 * Prevent instantiation.

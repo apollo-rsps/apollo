@@ -186,6 +186,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
+		index = index - 1;
 		if (index < 0 || index >= mobs.length) {
 			throw new IndexOutOfBoundsException("Mob index is out of bounds.");
 		}

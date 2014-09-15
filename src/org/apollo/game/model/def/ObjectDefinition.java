@@ -1,11 +1,13 @@
 package org.apollo.game.model.def;
 
-import org.apollo.game.model.entity.GameObject;
+import org.apollo.game.model.object.GameObject;
 
 /**
  * Represents a type of {@link GameObject}.
  * 
  * @author Major
+ * @author Lmctruck30
+ * 
  */
 public final class ObjectDefinition {
 
@@ -68,6 +70,14 @@ public final class ObjectDefinition {
 	private String description;
 
 	/**
+<<<<<<< HEAD
+	 * This object's height.
+	 */
+	private int height = 1;
+
+	/**
+=======
+>>>>>>> pr/1
 	 * The object's id.
 	 */
 	private final int id;
@@ -80,7 +90,7 @@ public final class ObjectDefinition {
 	/**
 	 * Denotes whether this object has actions associated with it or not.
 	 */
-	private boolean interactive;
+	private boolean interactive = false;
 
 	/**
 	 * This object's length.

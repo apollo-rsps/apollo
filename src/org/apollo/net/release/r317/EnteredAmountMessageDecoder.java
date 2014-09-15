@@ -10,13 +10,14 @@ import org.apollo.net.release.MessageDecoder;
  * A {@link MessageDecoder} for the {@link EnteredAmountMessage}.
  * 
  * @author Graham
+ * @author Lmctruck30
  */
 public final class EnteredAmountMessageDecoder extends MessageDecoder<EnteredAmountMessage> {
 
 	@Override
 	public EnteredAmountMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		int amount = (int) reader.getUnsigned(DataType.INT);
+		int amount = (int) reader.getSigned(DataType.INT);
 		return new EnteredAmountMessage(amount);
 	}
 

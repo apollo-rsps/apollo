@@ -98,9 +98,8 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 				blockSet = p.getBlockSet();
 				if (!blockSet.contains(AppearanceBlock.class)) {
-					// TODO check if client has cached appearance
 					blockSet = blockSet.clone();
-					blockSet.add(SynchronizationBlock.createAppearanceBlock(p));
+					blockSet.add(p.getCacheAppearance() == null ? p.setCachedAppearance(SynchronizationBlock.createAppearanceBlock(p)) : p.getCacheAppearance());
 				}
 
 				segments.add(new AddPlayerSegment(blockSet, p.getIndex(), p.getPosition()));

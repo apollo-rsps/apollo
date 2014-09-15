@@ -28,6 +28,8 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
  * 
  * @author Graham
  * @author Major
+ * @author Lmctruck30
+ *
  */
 public abstract class Mob extends Entity {
 
@@ -395,18 +397,14 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public final void setPosition(Position position) {
-		SectorRepository repository = World.getWorld().getSectorRepository();
-		Sector newSector = repository.fromPosition(position);
-
 		if (SectorCoordinates.fromPosition(this.position) != SectorCoordinates.fromPosition(position)) {
+			SectorRepository repository = World.getWorld().getSectorRepository();
+			Sector newSector = repository.fromPosition(position);
 			Sector oldSector = repository.fromPosition(this.position);
 			oldSector.removeEntity(this);
-		} else {
-			newSector.removeEntity(this);
+			newSector.addEntity(this);
 		}
-
 		this.position = position;
-		newSector.addEntity(this);
 	}
 
 	/**
@@ -475,6 +473,13 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public void teleport(Position position) {
+		if (SectorCoordinates.fromPosition(this.position) != SectorCoordinates.fromPosition(position)) {
+			SectorRepository repository = World.getWorld().getSectorRepository();
+			Sector newSector = repository.fromPosition(position);
+			Sector oldSector = repository.fromPosition(this.position);
+			oldSector.removeEntity(this);
+			newSector.addEntity(this);
+		}
 		this.position = position;
 		teleporting = true;
 		walkingQueue.clear();

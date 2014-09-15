@@ -47,6 +47,8 @@ import com.google.common.base.MoreObjects;
  * 
  * @author Graham
  * @author Major
+ * @author Lmctruck30
+ *
  */
 public final class Player extends Mob {
 
@@ -55,6 +57,11 @@ public final class Player extends Mob {
 	 */
 	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
 
+	/**
+	 * The player's cached appearance.
+	 */
+	private SynchronizationBlock appearanceBlockCached = null;
+	
 	/**
 	 * This player's bank.
 	 */
@@ -871,6 +878,24 @@ public final class Player extends Mob {
 	public void setTradePrivacy(PrivacyState tradePrivacy) {
 		this.tradePrivacy = tradePrivacy;
 	}
+	
+	/**
+	 * Gets the Cache Appearance
+	 * @return cached Appearance
+	 */
+	public SynchronizationBlock getCacheAppearance() {
+		return appearanceBlockCached;
+	}
+
+	/**
+	 * Set the players appearance to be cached
+	 * @param appearance The current players appearance
+	 * @return appearance that is set cached
+	 */
+	public SynchronizationBlock setCachedAppearance(SynchronizationBlock appearance) {
+		this.appearanceBlockCached = appearance;
+		return appearance;
+	}
 
 	/**
 	 * Sets whether or not the player is withdrawing notes from the bank.
@@ -965,17 +990,15 @@ public final class Player extends Mob {
 		if (!newPlayer) {
 			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
 		}
-
+		send(new ConfigMessage(InterfaceConstants.CONFIG_BRIGHTNESS, screenBrightness.toInteger()));
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
 		for (int tab = 0; tab < tabs.length; tab++) {
 			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
 		}
-
 		inventory.forceRefresh();
 		equipment.forceRefresh();
 		bank.forceRefresh();
 		skillSet.forceRefresh();
-
 		World.getWorld().getLoginDispatcher().dispatch(this);
 	}
 
