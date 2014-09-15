@@ -1,5 +1,7 @@
 package org.apollo.game.model.setting;
 
+import com.google.common.base.Preconditions;
+
 /**
  * An enumeration representing the brightness of a player's screen. This enumeration relies on the ordering of the
  * elements within, which should be as follows: {@code DARK}, {@code NORMAL}, {@code BRIGHT}, {@code VERY_BRIGHT}.
@@ -37,9 +39,7 @@ public enum ScreenBrightness {
 	 */
 	public static ScreenBrightness valueOf(int value) {
 		ScreenBrightness[] values = values();
-		if (value < 0 || value >= values.length) {
-			throw new IllegalArgumentException("Invalid screen brightness integer value specified " + value + ".");
-		}
+		Preconditions.checkElementIndex(value, values.length, "Invalid screen brightness integer value specified " + value + ".");
 		return values[value];
 	}
 

@@ -1,5 +1,7 @@
 package org.apollo.game.scheduling;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A game-related task that is scheduled to run in the future.
  * 
@@ -63,12 +65,10 @@ public abstract class ScheduledTask {
 	 * Sets the delay.
 	 * 
 	 * @param delay The delay.
-	 * @throws IllegalArgumentException If the delay is less than or equal to zero.
+	 * @throws IllegalArgumentException If the delay is less than zero.
 	 */
 	public final void setDelay(int delay) {
-		if (delay < 0) {
-			throw new IllegalArgumentException("Delay cannot be less than 0.");
-		}
+		Preconditions.checkArgument(delay >= 0, "Delay cannot be less than 0.");
 		this.delay = delay;
 	}
 

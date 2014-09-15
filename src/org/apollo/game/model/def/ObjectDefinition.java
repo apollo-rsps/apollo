@@ -2,6 +2,8 @@ package org.apollo.game.model.def;
 
 import org.apollo.game.model.entity.GameObject;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Represents a type of {@link GameObject}.
  * 
@@ -56,9 +58,7 @@ public final class ObjectDefinition {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public static ObjectDefinition lookup(int id) {
-		if (id < 0 || id > definitions.length) {
-			throw new IndexOutOfBoundsException(ObjectDefinition.class.getName() + " lookup index " + id + " out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, definitions.length, "Id out of bounds.");
 		return definitions[id];
 	}
 

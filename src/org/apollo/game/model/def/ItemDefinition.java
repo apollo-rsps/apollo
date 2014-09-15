@@ -2,6 +2,7 @@ package org.apollo.game.model.def;
 
 import org.apollo.game.model.Item;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -87,9 +88,7 @@ public final class ItemDefinition {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public static ItemDefinition lookup(int id) {
-		if (id < 0 || id >= definitions.length) {
-			throw new IndexOutOfBoundsException(ItemDefinition.class.getName() + " lookup index " + id + " out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, definitions.length, "Id out of bounds.");
 		return definitions[id];
 	}
 
@@ -188,9 +187,7 @@ public final class ItemDefinition {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public String getGroundAction(int id) {
-		if (id < 0 || id >= groundActions.length) {
-			throw new IndexOutOfBoundsException("Ground action id is out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, groundActions.length, "Ground action id is out of bounds.");
 		return groundActions[id];
 	}
 
@@ -211,9 +208,7 @@ public final class ItemDefinition {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public String getInventoryAction(int id) {
-		if (id < 0 || id >= inventoryActions.length) {
-			throw new IndexOutOfBoundsException("Inventory action id is out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, inventoryActions.length, "Inventory action id is out of bounds.");
 		return inventoryActions[id];
 	}
 
@@ -306,9 +301,7 @@ public final class ItemDefinition {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public void setGroundAction(int id, String action) {
-		if (id < 0 || id >= groundActions.length) {
-			throw new IndexOutOfBoundsException("Ground action id is out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, groundActions.length, "Ground action id is out of bounds.");
 		groundActions[id] = action;
 	}
 
@@ -320,9 +313,7 @@ public final class ItemDefinition {
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
 	public void setInventoryAction(int id, String action) {
-		if (id < 0 || id >= inventoryActions.length) {
-			throw new IndexOutOfBoundsException("Inventory action id is out of bounds.");
-		}
+		Preconditions.checkElementIndex(id, inventoryActions.length, "Inventory action id is out of bounds.");
 		inventoryActions[id] = action;
 	}
 

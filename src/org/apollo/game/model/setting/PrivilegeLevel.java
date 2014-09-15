@@ -1,5 +1,7 @@
 package org.apollo.game.model.setting;
 
+import com.google.common.base.Preconditions;
+
 /**
  * An enumeration with the different privilege levels a player can have. This enumeration relies on the ordering of the
  * elements within, which should be as follows: {@code STANDARD}, {@code MODERATOR}, {@code ADMINISTRATOR}.
@@ -32,9 +34,7 @@ public enum PrivilegeLevel {
 	 */
 	public static PrivilegeLevel valueOf(int value) {
 		PrivilegeLevel[] values = values();
-		if (value < 0 || value >= values.length) {
-			throw new IndexOutOfBoundsException("Invalid privilege level integer value supplied " + value + ".");
-		}
+		Preconditions.checkElementIndex(value, values.length, "Invalid privilege level integer value supplied " + value + ".");
 		return values[value];
 	}
 

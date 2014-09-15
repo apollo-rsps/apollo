@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 
 import org.apollo.util.BufferUtil;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A utility class for reading {@link GamePacket}s.
  * 
@@ -41,9 +43,7 @@ public final class GamePacketReader {
 	 * @throws IllegalStateException If the reader is not in bit access mode.
 	 */
 	private void checkBitAccess() {
-		if (mode != AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("For bit-based calls to work, the mode must be bit access.");
-		}
+		Preconditions.checkState(mode == AccessMode.BIT_ACCESS, "For bit-based calls to work, the mode must be bit access.");
 	}
 
 	/**
@@ -52,9 +52,7 @@ public final class GamePacketReader {
 	 * @throws IllegalStateException If the reader is not in byte access mode.
 	 */
 	private void checkByteAccess() {
-		if (mode != AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("For byte-based calls to work, the mode must be byte access.");
-		}
+		Preconditions.checkState(mode == AccessMode.BYTE_ACCESS, "For byte-based calls to work, the mode must be byte access.");
 	}
 
 	/**
@@ -142,33 +140,30 @@ public final class GamePacketReader {
 	}
 
 	/**
-	 * Gets {@code numBits} from the buffer.
+	 * Gets the specified amount of bits from the buffer.
 	 * 
-	 * @param numBits The number of bits.
+	 * @param amount The amount of bits.
 	 * @return The value.
 	 * @throws IllegalStateException If the reader is not in bit access mode.
 	 * @throws IllegalArgumentException If the number of bits is not between 1 and 31 inclusive.
 	 */
-	public int getBits(int numBits) {
-		if (numBits < 0 || numBits > 32) {
-			throw new IllegalArgumentException("Number of bits must be between 1 and 32 inclusive.");
-		}
-
+	public int getBits(int amount) {
+		Preconditions.checkArgument(amount >= 0 && amount <= 32, "Number of bits must be between 1 and 32 inclusive.");
 		checkBitAccess();
 
 		int bytePos = bitIndex >> 3;
 		int bitOffset = 8 - (bitIndex & 7);
 		int value = 0;
-		bitIndex += numBits;
+		bitIndex += amount;
 
-		for (; numBits > bitOffset; bitOffset = 8) {
-			value += (buffer.getByte(bytePos++) & DataConstants.BIT_MASK[bitOffset]) << numBits - bitOffset;
-			numBits -= bitOffset;
+		for (; amount > bitOffset; bitOffset = 8) {
+			value += (buffer.getByte(bytePos++) & DataConstants.BIT_MASK[bitOffset]) << amount - bitOffset;
+			amount -= bitOffset;
 		}
-		if (numBits == bitOffset) {
+		if (amount == bitOffset) {
 			value += buffer.getByte(bytePos) & DataConstants.BIT_MASK[bitOffset];
 		} else {
-			value += buffer.getByte(bytePos) >> bitOffset - numBits & DataConstants.BIT_MASK[numBits];
+			value += buffer.getByte(bytePos) >> bitOffset - amount & DataConstants.BIT_MASK[amount];
 		}
 		return value;
 	}
@@ -363,9 +358,7 @@ public final class GamePacketReader {
 	 */
 	public long getUnsigned(DataType type, DataOrder order, DataTransformation transformation) {
 		long longValue = get(type, order, transformation);
-		if (type == DataType.LONG) {
-			throw new IllegalArgumentException("Due to java restrictions, longs must be read as signed types.");
-		}
+		Preconditions.checkArgument(type != DataType.LONG, "Longs must be read as a signed type.");
 		return longValue & 0xFFFFFFFFFFFFFFFFL;
 	}
 
@@ -403,9 +396,7 @@ public final class GamePacketReader {
 	 * @throws IllegalStateException If the builder is already in bit access mode.
 	 */
 	public void switchToBitAccess() {
-		if (mode == AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("Already in bit access mode.");
-		}
+		Preconditions.checkState(mode != AccessMode.BIT_ACCESS, "Already in bit access mode.");
 		mode = AccessMode.BIT_ACCESS;
 		bitIndex = buffer.readerIndex() * 8;
 	}
@@ -416,9 +407,7 @@ public final class GamePacketReader {
 	 * @throws IllegalStateException If the builder is already in byte access mode.
 	 */
 	public void switchToByteAccess() {
-		if (mode == AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("Already in byte access mode.");
-		}
+		Preconditions.checkState(mode != AccessMode.BYTE_ACCESS, "Already in byte access mode.");
 		mode = AccessMode.BYTE_ACCESS;
 		buffer.readerIndex((bitIndex + 7) / 8);
 	}

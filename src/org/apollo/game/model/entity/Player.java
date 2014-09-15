@@ -41,6 +41,7 @@ import org.apollo.security.PlayerCredentials;
 import org.apollo.util.Point;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 /**
  * A {@link Player} is a {@link Mob} that a user is controlling.
@@ -687,9 +688,7 @@ public final class Player extends Mob {
 	 */
 	public void sendQuestInterface(List<String> text) {
 		int size = text.size(), lines = InterfaceConstants.QUEST_TEXT.length;
-		if (size > lines) {
-			throw new IllegalArgumentException("List contains too much text to display on this interface.");
-		}
+		Preconditions.checkArgument(size <= lines, "List contains too much text to display on this interface.");
 
 		for (int pos = 0; pos < lines; pos++) {
 			send(new SetWidgetTextMessage(InterfaceConstants.QUEST_TEXT[pos], pos < size ? text.get(pos) : ""));

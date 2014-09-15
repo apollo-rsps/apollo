@@ -3,6 +3,8 @@ package org.apollo.game.sync.seg;
 import org.apollo.game.model.Direction;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A {@link SynchronizationSegment} where a mob is moved (or doesn't move!).
  * 
@@ -24,9 +26,7 @@ public final class MovementSegment extends SynchronizationSegment {
 	 */
 	public MovementSegment(SynchronizationBlockSet blockSet, Direction[] directions) {
 		super(blockSet);
-		if (directions.length < 0 || directions.length > 2) {
-			throw new IllegalArgumentException("Directions length must be between 0 and 2 inclusive.");
-		}
+		Preconditions.checkArgument(directions.length >= 0 && directions.length < 3, "Directions length must be between 0 and 2 inclusive.");
 		this.directions = directions;
 	}
 

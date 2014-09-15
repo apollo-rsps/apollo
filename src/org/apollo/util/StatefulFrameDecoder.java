@@ -6,6 +6,8 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A stateful implementation of a {@link ByteToMessageDecoder} which may be extended and used by other classes. The
  * current state is tracked by this class and is a user-specified enumeration.
@@ -16,8 +18,6 @@ import java.util.List;
  * {@link StatefulFrameDecoder#decodeLast} methods.
  * 
  * This class is not thread safe: it is recommended that the state is only set in the decode methods overriden.
- * 
- * {@code null} states are not permitted.
  * 
  * @author Graham
  * @param <T> The state enumeration.
@@ -77,7 +77,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 	 * @param ctx The current context of this handler.
 	 * @param in The cumulative buffer, which may contain zero or more bytes.
 	 * @param out The {@link List} of objects to pass forward through the pipeline.
-	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
+	 * @param state The current state. The state may be changed by calling {@link #setState}.
 	 */
 	protected void decodeLast(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) {
 
@@ -90,9 +90,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 	 * @throws NullPointerException If the state is {@code null}.
 	 */
 	public final void setState(T state) {
-		if (state == null) {
-			throw new NullPointerException("state");
-		}
+		Preconditions.checkNotNull(state, "State cannot be null.");
 		this.state = state;
 	}
 

@@ -2,6 +2,8 @@ package org.apollo.game.model;
 
 import org.apollo.game.model.setting.Gender;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Represents the appearance of a player.
  * 
@@ -12,8 +14,8 @@ public final class Appearance {
 	/**
 	 * The default appearance.
 	 */
-	public static final Appearance DEFAULT_APPEARANCE = new Appearance(Gender.MALE, new int[] { 0, 10, 18, 26, 33, 36,
-			42 }, new int[5]);
+	public static final Appearance DEFAULT_APPEARANCE = new Appearance(Gender.MALE, new int[] { 0, 10, 18, 26, 33, 36, 42 },
+			new int[5]);
 
 	/**
 	 * The array of clothing/skin colors.
@@ -40,11 +42,10 @@ public final class Appearance {
 	public Appearance(Gender gender, int[] style, int[] colors) {
 		if (gender == null || style == null || colors == null) {
 			throw new NullPointerException("No arguments can be null.");
-		} else if (style.length != 7) {
-			throw new IllegalArgumentException("The style array must have 7 elements.");
-		} else if (colors.length != 5) {
-			throw new IllegalArgumentException("The colors array must have 5 elements.");
 		}
+		Preconditions.checkArgument(style.length == 7, "Style array must have 7 exactly elements.");
+		Preconditions.checkArgument(colors.length == 5, "Colors array must have exactly 5 elements.");
+
 		this.gender = gender;
 		this.style = style;
 		this.colors = colors;

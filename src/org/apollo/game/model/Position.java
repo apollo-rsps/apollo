@@ -1,6 +1,7 @@
 package org.apollo.game.model;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 /**
  * Represents a position in the world.
@@ -52,9 +53,7 @@ public final class Position {
 	 * @param height The height.
 	 */
 	public Position(int x, int y, int height) {
-		if (height < 0 || height >= HEIGHT_LEVELS) {
-			throw new IllegalArgumentException("Height level out of bounds.");
-		}
+		Preconditions.checkArgument(height >= 0 && height < HEIGHT_LEVELS, "Height level out of bounds.");
 		this.x = x;
 		this.y = y;
 		this.height = height;
