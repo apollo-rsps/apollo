@@ -40,6 +40,8 @@ import org.apollo.net.session.GameSession;
 import org.apollo.security.PlayerCredentials;
 import org.apollo.util.Point;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * A {@link Player} is a {@link Mob} that a user is controlling.
  * 
@@ -912,8 +914,8 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return Player.class.getName() + " [username=" + getUsername() + ", privilege=" + privilegeLevel + ", clientVersion="
-				+ clientVersion + "]";
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
+				.add("client version", clientVersion).toString();
 	}
 
 	/**
