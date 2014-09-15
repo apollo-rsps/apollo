@@ -48,8 +48,8 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 	@Override
 	public void run() {
-		Position lastKnownRegion = player.getLastKnownRegion();
-		boolean regionChanged = player.hasRegionChanged();
+		Position lastKnownSector = player.getLastKnownSector();
+		boolean sectorChanged = player.hasSectorChanged();
 
 		SynchronizationSegment segment;
 		SynchronizationBlockSet blockSet = player.getBlockSet();
@@ -58,7 +58,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 			blockSet.remove(ChatBlock.class);
 		}
 
-		if (player.isTeleporting() || player.hasRegionChanged()) {
+		if (player.isTeleporting() || player.hasSectorChanged()) {
 			segment = new TeleportSegment(blockSet, player.getPosition());
 		} else {
 			segment = new MovementSegment(blockSet, player.getDirections());
@@ -107,8 +107,8 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 			}
 		}
 
-		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownRegion, player.getPosition(),
-				regionChanged, segment, oldLocalPlayers, segments);
+		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownSector, player.getPosition(),
+				sectorChanged, segment, oldLocalPlayers, segments);
 		player.send(message);
 	}
 
