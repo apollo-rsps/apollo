@@ -2,6 +2,8 @@ package org.apollo.game.model;
 
 import org.apollo.game.model.def.ItemDefinition;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * Represents a single item.
  * 
@@ -78,7 +80,7 @@ public final class Item {
 
 	@Override
 	public String toString() {
-		return Item.class.getName() + " [id=" + id + ", amount=" + amount + "]";
+		return MoreObjects.toStringHelper(this).add("id", id).add("amount", amount).toString();
 	}
 
 }

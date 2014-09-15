@@ -3,6 +3,8 @@ package org.apollo.game.model.entity;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.def.ObjectDefinition;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * Represents an object in the game world.
  * 
@@ -12,12 +14,12 @@ import org.apollo.game.model.def.ObjectDefinition;
 public final class GameObject extends Entity {
 
 	/**
-	 * The config value that stores the object's id, type, and orientation.
+	 * The packed value that stores this object's id, type, and orientation.
 	 */
-	private final int config;
+	private final int packed;
 
 	/**
-	 * Creates a game object.
+	 * Creates the game object.
 	 * 
 	 * @param id The object's id.
 	 * @param position The position.
@@ -26,7 +28,7 @@ public final class GameObject extends Entity {
 	 */
 	public GameObject(int id, Position position, int type, int orientation) {
 		super(position);
-		this.config = (id * 256) + (type * 4) + orientation;
+		this.packed = id << 8 | type << 2 | orientation;
 	}
 
 	/**
@@ -49,7 +51,7 @@ public final class GameObject extends Entity {
 	 * @return The id.
 	 */
 	public int getId() {
-		return config / 256;
+		return packed >> 8;
 	}
 
 	/**
@@ -58,7 +60,7 @@ public final class GameObject extends Entity {
 	 * @return The orientation.
 	 */
 	public int getRotation() {
-		return config & 0x3;
+		return packed & 0x3;
 	}
 
 	/**
@@ -67,13 +69,13 @@ public final class GameObject extends Entity {
 	 * @return The type.
 	 */
 	public int getType() {
-		return (config >> 2) & 0x3F;
+		return (packed >> 2) & 0x3F;
 	}
 
 	@Override
 	public String toString() {
-		return GameObject.class.getName() + " [id=" + getId() + ", type=" + getType() + ", rotation=" + getRotation()
-				+ "]";
+		return MoreObjects.toStringHelper(this).add("id", getId()).add("type", getType()).add("rotation", getRotation())
+				.toString();
 	}
 
 }

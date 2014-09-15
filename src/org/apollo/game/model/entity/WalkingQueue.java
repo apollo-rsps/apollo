@@ -7,6 +7,8 @@ import java.util.Queue;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * A queue of {@link Direction}s which a {@link Mob} will follow.
  * 
@@ -44,7 +46,7 @@ public final class WalkingQueue {
 
 		@Override
 		public String toString() {
-			return Point.class.getName() + " [direction=" + direction + ", position=" + position + "]";
+			return MoreObjects.toStringHelper(this).add("direction", direction).add("position", position).toString();
 		}
 
 	}
