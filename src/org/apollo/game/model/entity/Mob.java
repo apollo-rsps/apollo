@@ -475,7 +475,7 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public void teleport(Position position) {
-		this.position = position;
+		setPosition(position);
 		teleporting = true;
 		walkingQueue.clear();
 		stopAction();
