@@ -24,7 +24,7 @@ import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
- * A {@link Mob} is a living entity in the world, such as a player or NPC.
+ * A {@link Mob} is a living entity in the world, such as a player or npc.
  * 
  * @author Graham
  * @author Major
@@ -37,37 +37,7 @@ public abstract class Mob extends Entity {
 	private transient Action<?> action;
 
 	/**
-	 * The position this mob is facing towards.
-	 */
-	private transient Position facingPosition = position;
-
-	/**
-	 * This mob's first movement direction.
-	 */
-	private transient Direction firstDirection = Direction.NONE;
-
-	/**
-	 * This mob's list of local npcs.
-	 */
-	private final transient List<Npc> localNpcs = new ArrayList<>();
-
-	/**
-	 * This mob's list of local players.
-	 */
-	private final transient List<Player> localPlayers = new ArrayList<>();
-
-	/**
-	 * This mob's second movement direction.
-	 */
-	private transient Direction secondDirection = Direction.NONE;
-
-	/**
-	 * Indicates whether this mob is currently teleporting or not.
-	 */
-	private transient boolean teleporting = false;
-
-	/**
-	 * The attribute map of this entity.
+	 * The attribute map of this mob.
 	 */
 	protected final AttributeMap attributes = new AttributeMap();
 
@@ -87,6 +57,16 @@ public abstract class Mob extends Entity {
 	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
 
 	/**
+	 * The position this mob is facing towards.
+	 */
+	private transient Position facingPosition = position;
+
+	/**
+	 * This mob's first movement direction.
+	 */
+	private transient Direction firstDirection = Direction.NONE;
+
+	/**
 	 * The index of this mob.
 	 */
 	protected int index = -1;
@@ -102,9 +82,29 @@ public abstract class Mob extends Entity {
 	protected final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
 
 	/**
+	 * This mob's list of local npcs.
+	 */
+	private final transient List<Npc> localNpcs = new ArrayList<>();
+
+	/**
+	 * This mob's list of local players.
+	 */
+	private final transient List<Player> localPlayers = new ArrayList<>();
+
+	/**
+	 * This mob's second movement direction.
+	 */
+	private transient Direction secondDirection = Direction.NONE;
+
+	/**
 	 * This mob's skill set.
 	 */
 	protected final SkillSet skillSet = new SkillSet();
+
+	/**
+	 * Indicates whether this mob is currently teleporting or not.
+	 */
+	private transient boolean teleporting = false;
 
 	/**
 	 * This mob's walking queue.
@@ -147,7 +147,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets a shallow copy of the attributes of this entity, as a {@link Map}.
+	 * Gets a shallow copy of the attributes of this mob, as a {@link Map}.
 	 * 
 	 * @return The map of attributes.
 	 */
@@ -285,6 +285,13 @@ public abstract class Mob extends Entity {
 	 */
 	public final WalkingQueue getWalkingQueue() {
 		return walkingQueue;
+	}
+
+	/**
+	 * Initialises this mob.
+	 */
+	private void init() {
+		World.getWorld().schedule(new SkillNormalizationTask(this));
 	}
 
 	/**
@@ -441,7 +448,9 @@ public abstract class Mob extends Entity {
 			}
 			stopAction();
 		}
-		return World.getWorld().schedule(this.action = action);
+
+		this.action = action;
+		return World.getWorld().schedule(action);
 	}
 
 	/**
@@ -487,14 +496,8 @@ public abstract class Mob extends Entity {
 	 * @param position The position to face.
 	 */
 	public final void turnTo(Position position) {
-		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(this.facingPosition = position));
-	}
-
-	/**
-	 * Initialises this mob.
-	 */
-	private void init() {
-		World.getWorld().schedule(new SkillNormalizationTask(this));
+		this.facingPosition = position;
+		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(position));
 	}
 
 }
