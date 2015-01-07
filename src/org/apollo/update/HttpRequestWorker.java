@@ -61,12 +61,10 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	 * @param description The error description.
 	 * @return The error page as a buffer.
 	 */
-	private ByteBuf createErrorPage(HttpResponseStatus status, String description) {
+	private static ByteBuf createErrorPage(HttpResponseStatus status, String description) {
 		String title = status.code() + " " + status.reasonPhrase();
+		StringBuilder builder = new StringBuilder("<!DOCTYPE html><html><head><title>");
 
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("<!DOCTYPE html><html><head><title>");
 		builder.append(title);
 		builder.append("</title></head><body><h1>");
 		builder.append(title);
@@ -85,10 +83,11 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	 * @param name The file name.
 	 * @return The MIME type.
 	 */
-	private String getMimeType(String name) {
+	private static String getMimeType(String name) {
 		if (name.endsWith("/")) {
 			name = name.concat("index.html");
 		}
+
 		if (name.endsWith(".htm") || name.endsWith(".html")) {
 			return "text/html";
 		} else if (name.endsWith(".css")) {
@@ -104,6 +103,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 		} else if (name.endsWith(".txt")) {
 			return "text/plain";
 		}
+
 		return "application/octect-stream";
 	}
 

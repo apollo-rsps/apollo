@@ -21,19 +21,9 @@ public final class Position {
 	public static final int MAX_DISTANCE = 15;
 
 	/**
-	 * The height level.
+	 * The packed integer containing the {@code height, x}, and {@code y} variables.
 	 */
-	private final int height;
-
-	/**
-	 * The x coordinate.
-	 */
-	private final int x;
-
-	/**
-	 * The y coordinate.
-	 */
-	private final int y;
+	private final int position;
 
 	/**
 	 * Creates a position at the default height.
@@ -54,23 +44,18 @@ public final class Position {
 	 */
 	public Position(int x, int y, int height) {
 		Preconditions.checkArgument(height >= 0 && height < HEIGHT_LEVELS, "Height level out of bounds.");
-		this.x = x;
-		this.y = y;
-		this.height = height;
+
+		position = height << 30 | (y & 0x7FFF) << 15 | x & 0x7FFF;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		} else if (this == obj) {
-			return true;
-		} else if (getClass() != obj.getClass()) {
-			return false;
+		if (obj instanceof Position) {
+			Position other = (Position) obj;
+			return position == other.position;
 		}
 
-		Position other = (Position) obj;
-		return x == other.x && y == other.y && height == other.height;
+		return false;
 	}
 
 	/**
@@ -79,7 +64,7 @@ public final class Position {
 	 * @return The x coordinate of the central sector.
 	 */
 	public int getCentralSectorX() {
-		return x / 8;
+		return getX() / 8;
 	}
 
 	/**
@@ -88,7 +73,7 @@ public final class Position {
 	 * @return The y coordinate of the central sector.
 	 */
 	public int getCentralSectorY() {
-		return y / 8;
+		return getY() / 8;
 	}
 
 	/**
@@ -98,8 +83,8 @@ public final class Position {
 	 * @return The distance.
 	 */
 	public int getDistance(Position other) {
-		int deltaX = x - other.x;
-		int deltaY = y - other.y;
+		int deltaX = getX() - other.getX();
+		int deltaY = getY() - other.getY();
 		return (int) Math.ceil(Math.sqrt(deltaX * deltaX + deltaY * deltaY));
 	}
 
@@ -109,7 +94,7 @@ public final class Position {
 	 * @return The height level.
 	 */
 	public int getHeight() {
-		return height;
+		return position >> 30;
 	}
 
 	/**
@@ -128,7 +113,7 @@ public final class Position {
 	 * @return The local x coordinate.
 	 */
 	public int getLocalX(Position base) {
-		return x - base.getTopLeftSectorX() * 8;
+		return getX() - base.getTopLeftSectorX() * 8;
 	}
 
 	/**
@@ -147,7 +132,7 @@ public final class Position {
 	 * @return The local y coordinate.
 	 */
 	public int getLocalY(Position base) {
-		return y - base.getTopLeftSectorY() * 8;
+		return getY() - base.getTopLeftSectorY() * 8;
 	}
 
 	/**
@@ -157,8 +142,8 @@ public final class Position {
 	 * @return The longest horizontal or vertical delta.
 	 */
 	public int getLongestDelta(Position other) {
-		int deltaX = Math.abs(x - other.x);
-		int deltaY = Math.abs(y - other.y);
+		int deltaX = Math.abs(getX() - other.getX());
+		int deltaY = Math.abs(getY() - other.getY());
 		return Math.max(deltaX, deltaY);
 	}
 
@@ -168,7 +153,7 @@ public final class Position {
 	 * @return The sector x coordinate.
 	 */
 	public int getTopLeftSectorX() {
-		return x / 8 - 6;
+		return getX() / 8 - 6;
 	}
 
 	/**
@@ -177,7 +162,7 @@ public final class Position {
 	 * @return The sector y coordinate.
 	 */
 	public int getTopLeftSectorY() {
-		return y / 8 - 6;
+		return getY() / 8 - 6;
 	}
 
 	/**
@@ -186,7 +171,7 @@ public final class Position {
 	 * @return The x coordinate.
 	 */
 	public int getX() {
-		return x;
+		return position & 0x7FFF;
 	}
 
 	/**
@@ -195,12 +180,12 @@ public final class Position {
 	 * @return The y coordinate.
 	 */
 	public int getY() {
-		return y;
+		return (position >> 15) & 0x7FFF;
 	}
 
 	@Override
 	public int hashCode() {
-		return height << 30 & 0xC0000000 | y << 15 & 0x3FFF8000 | x & 0x7FFF;
+		return position;
 	}
 
 	/**
@@ -211,14 +196,14 @@ public final class Position {
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isWithinDistance(Position other, int distance) {
-		int deltaX = Math.abs(x - other.x);
-		int deltaY = Math.abs(y - other.y);
+		int deltaX = Math.abs(getX() - other.getX());
+		int deltaY = Math.abs(getY() - other.getY());
 		return deltaX <= distance && deltaY <= distance;
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("x", x).add("y", y).add("height", height)
+		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight())
 				.add("sector x", getTopLeftSectorX()).add("sector y", getTopLeftSectorY()).toString();
 	}
 

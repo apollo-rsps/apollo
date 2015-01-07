@@ -61,7 +61,8 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 	 * @param ctx The current context of this handler.
 	 * @param in The cumulative buffer, which may contain zero or more bytes.
 	 * @param out The {@link List} of objects to pass forward through the pipeline.
-	 * @param state The current state. The state may be changed by calling {@link #setState(Enum)}.
+	 * @param state The current state. The state may be changed by calling {@link #setState}.
+	 * @throws Exception If there is an exception when decoding a frame.
 	 */
 	protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) throws Exception;
 

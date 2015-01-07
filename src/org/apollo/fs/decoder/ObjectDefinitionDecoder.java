@@ -62,7 +62,7 @@ public final class ObjectDefinitionDecoder {
 	 * @param data The {@link ByteBuffer} containing the data.
 	 * @return The object definition.
 	 */
-	public ObjectDefinition decode(int id, ByteBuffer data) {
+	public static ObjectDefinition decode(int id, ByteBuffer data) {
 		ObjectDefinition definition = new ObjectDefinition(id);
 		while (true) {
 			int opcode = data.get() & 0xFF;
@@ -96,9 +96,7 @@ public final class ObjectDefinitionDecoder {
 				definition.setInteractive((data.get() & 0xFF) == 1);
 			} else if (opcode == 24) {
 				data.getShort();
-			} else if (opcode == 28) {
-				data.get();
-			} else if (opcode == 29) {
+			} else if (opcode == 28 || opcode == 29) {
 				data.get();
 			} else if (opcode >= 30 && opcode < 39) {
 				String[] actions = definition.getMenuActions();
@@ -116,23 +114,11 @@ public final class ObjectDefinitionDecoder {
 					data.getShort();
 					data.getShort();
 				}
-			} else if (opcode == 60) {
-				data.getShort();
-			} else if (opcode == 65) {
-				data.getShort();
-			} else if (opcode == 66) {
-				data.getShort();
-			} else if (opcode == 67) {
-				data.getShort();
-			} else if (opcode == 68) {
+			} else if (opcode == 60 || opcode >= 65 && opcode <= 68) {
 				data.getShort();
 			} else if (opcode == 69) {
 				data.get();
-			} else if (opcode == 70) {
-				data.getShort();
-			} else if (opcode == 71) {
-				data.getShort();
-			} else if (opcode == 72) {
+			} else if (opcode >= 70 && opcode <= 72) {
 				data.getShort();
 			} else if (opcode == 75) {
 				data.get();

@@ -115,9 +115,9 @@ public final class Skill {
 	/**
 	 * The skill names.
 	 */
-	private static final String[] SKILL_NAMES = { "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer",
-			"Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining",
-			"Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecraft" };
+	private static final String[] SKILL_NAMES = { "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer", "Magic",
+			"Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining", "Herblore",
+			"Agility", "Thieving", "Slayer", "Farming", "Runecraft" };
 
 	/**
 	 * Gets the name of a skill.

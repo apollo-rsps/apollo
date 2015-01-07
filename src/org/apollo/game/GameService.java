@@ -49,8 +49,8 @@ public final class GameService extends Service {
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors
-			.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
+	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory(
+			"GameService"));
 
 	/**
 	 * The {@link ClientSynchronizer}.
@@ -96,8 +96,7 @@ public final class GameService extends Service {
 	 * @throws InstantiationException If a message handler could not be instantiated.
 	 * @throws IllegalAccessException If a message handler could not be accessed.
 	 */
-	private void init() throws IOException, SAXException, ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
+	private void init() throws IOException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		try (InputStream is = new FileInputStream("data/messages.xml")) {
 			MessageHandlerChainParser chainGroupParser = new MessageHandlerChainParser(is);
 			chainGroup = chainGroupParser.parse();
@@ -165,8 +164,8 @@ public final class GameService extends Service {
 	 */
 	@Override
 	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY,
-				GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
+		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
+				TimeUnit.MILLISECONDS);
 	}
 
 	/**

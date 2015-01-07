@@ -22,9 +22,8 @@ public final class EquipmentConstants {
 	/**
 	 * Bodies.
 	 */
-	public static final String[] BODY = { "platebody", "chainbody", "robetop", "leathertop", "platemail", "top",
-			"brassard", "Robe top", "body", "platebody (t)", "platebody (g)", "body(g)", "body_(g)", "chestplate",
-			"torso", "shirt" };
+	public static final String[] BODY = { "platebody", "chainbody", "robetop", "leathertop", "platemail", "top", "brassard",
+			"Robe top", "body", "platebody (t)", "platebody (g)", "body(g)", "body_(g)", "chestplate", "torso", "shirt" };
 
 	/**
 	 * Boots.
@@ -39,8 +38,8 @@ public final class EquipmentConstants {
 	/**
 	 * Full bodies.
 	 */
-	public static final String[] FULL_BODIES = { "top", "shirt", "platebody", "Ahrims robetop", "Karils leathertop",
-			"brassard", "Robe top", "robetop", "platebody (t)", "platebody (g)", "chestplate", "torso" };
+	public static final String[] FULL_BODIES = { "top", "shirt", "platebody", "Ahrims robetop", "Karils leathertop", "brassard",
+			"Robe top", "robetop", "platebody (t)", "platebody (g)", "chestplate", "torso" };
 
 	/**
 	 * Full hats.
@@ -51,8 +50,8 @@ public final class EquipmentConstants {
 	/**
 	 * Full masks.
 	 */
-	public static final String[] FULL_MASKS = { "full helm", "mask", "Veracs helm", "Guthans helm", "Torags helm",
-			"Karils coif", "full helm (t)", "full helm (g)", "mask" };
+	public static final String[] FULL_MASKS = { "full helm", "mask", "Veracs helm", "Guthans helm", "Torags helm", "Karils coif",
+			"full helm (t)", "full helm (g)", "mask" };
 
 	/**
 	 * Gloves.
@@ -62,9 +61,8 @@ public final class EquipmentConstants {
 	/**
 	 * Hats.
 	 */
-	public static final String[] HATS = { "tiara", "helm", "hood", "coif", "Coif", "hat", "partyhat", "Hat",
-			"full helm (t)", "full helm (g)", "hat (t)", "hat (g)", "cav", "boater", "helmet", "mask",
-			"Helm of neitiznot" };
+	public static final String[] HATS = { "tiara", "helm", "hood", "coif", "Coif", "hat", "partyhat", "Hat", "full helm (t)",
+			"full helm (g)", "hat (t)", "hat (g)", "cav", "boater", "helmet", "mask", "Helm of neitiznot" };
 
 	/**
 	 * Legs.
@@ -89,9 +87,9 @@ public final class EquipmentConstants {
 	 */
 	public static final String[] WEAPONS = { "scimitar", "longsword", "sword", "longbow", "shortbow", "dagger", "mace",
 			"halberd", "spear", "Abyssal whip", "axe", "flail", "crossbow", "Torags hammers", "dagger(p)", "dagger(+)",
-			"dagger(s)", "spear(p)", "spear(+)", "spear(s)", "spear(kp)", "maul", "dart", "dart(p)", "javelin",
-			"javelin(p)", "knife", "knife(p)", "Longbow", "Shortbow", "Crossbow", "Toktz-xil", "Toktz-mej",
-			"Tzhaar-ket", "staff", "Staff", "godsword", "c'bow", "Crystal bow", "Dark bow", "Magic butterfly net" };
+			"dagger(s)", "spear(p)", "spear(+)", "spear(s)", "spear(kp)", "maul", "dart", "dart(p)", "javelin", "javelin(p)",
+			"knife", "knife(p)", "Longbow", "Shortbow", "Crossbow", "Toktz-xil", "Toktz-mej", "Tzhaar-ket", "staff", "Staff",
+			"godsword", "c'bow", "Crystal bow", "Dark bow", "Magic butterfly net" };
 
 	/**
 	 * Default private constructor to prevent instantiation.

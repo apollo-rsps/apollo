@@ -16,8 +16,8 @@ public final class VirtualResourceProvider extends ResourceProvider {
 	/**
 	 * An array of valid prefixes.
 	 */
-	private static final String[] VALID_PREFIXES = { "crc", "title", "config", "interface", "media", "versionlist",
-			"textures", "wordenc", "sounds" };
+	private static final String[] VALID_PREFIXES = { "crc", "title", "config", "interface", "media", "versionlist", "textures",
+			"wordenc", "sounds" };
 
 	/**
 	 * The file system.

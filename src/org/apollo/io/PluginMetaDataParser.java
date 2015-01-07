@@ -3,6 +3,7 @@ package org.apollo.io;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import org.apollo.util.plugin.PluginMetaData;
 import org.apollo.util.xml.XmlNode;
@@ -50,12 +51,8 @@ public final class PluginMetaDataParser {
 	 * @return The node object.
 	 * @throws IOException If the element does not exist.
 	 */
-	private XmlNode getElement(XmlNode node, String name) throws IOException {
-		XmlNode child = node.getChild(name);
-		if (child == null) {
-			throw new IOException("No " + name + " element found.");
-		}
-		return child;
+	private static XmlNode getElement(XmlNode node, String name) throws IOException {
+		return Objects.requireNonNull(node.getChild(name), "No " + name + " element found.");
 	}
 
 	/**

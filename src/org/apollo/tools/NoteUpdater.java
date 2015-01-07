@@ -30,8 +30,8 @@ public final class NoteUpdater {
 		Preconditions.checkArgument(args.length == 1, "Usage:\njava -cp ... org.apollo.tools.NoteUpdater [release].");
 		String release = args[0];
 
-		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/note-"
-				+ release + ".dat")));
+		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/note-" + release
+				+ ".dat")));
 				IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
 			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
 			ItemDefinition[] defs = decoder.decode();

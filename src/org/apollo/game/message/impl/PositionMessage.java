@@ -4,7 +4,8 @@ import org.apollo.game.message.Message;
 import org.apollo.game.model.Position;
 
 /**
- * A {@link Message} sent to the client to focus on a specific {@link Position} (on which an action should be performed).
+ * A {@link Message} sent to the client to focus on a specific {@link Position} (on which an action should be
+ * performed).
  * 
  * @author Chris Fletcher
  */

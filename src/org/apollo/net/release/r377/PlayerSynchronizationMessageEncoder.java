@@ -86,7 +86,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param message The message.
 	 * @param builder The builder.
 	 */
-	private void putAddPlayerUpdate(AddPlayerSegment seg, PlayerSynchronizationMessage message, GamePacketBuilder builder) {
+	private static void putAddPlayerUpdate(AddPlayerSegment seg, PlayerSynchronizationMessage message, GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		Position player = message.getPosition();
 		Position other = seg.getPosition();
@@ -103,7 +103,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putAnimationBlock(AnimationBlock block, GamePacketBuilder builder) {
+	private static void putAnimationBlock(AnimationBlock block, GamePacketBuilder builder) {
 		Animation animation = block.getAnimation();
 		builder.put(DataType.SHORT, animation.getId());
 		builder.put(DataType.BYTE, DataTransformation.ADD, animation.getDelay());
@@ -115,7 +115,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putAppearanceBlock(AppearanceBlock block, GamePacketBuilder builder) {
+	private static void putAppearanceBlock(AppearanceBlock block, GamePacketBuilder builder) {
 		Appearance appearance = block.getAppearance();
 		GamePacketBuilder playerProperties = new GamePacketBuilder();
 
@@ -230,7 +230,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param segment The segment.
 	 * @param builder The block builder.
 	 */
-	private void putBlocks(SynchronizationSegment segment, GamePacketBuilder builder) {
+	private static void putBlocks(SynchronizationSegment segment, GamePacketBuilder builder) {
 		SynchronizationBlockSet blockSet = segment.getBlockSet();
 		if (blockSet.size() > 0) {
 			int mask = 0;
@@ -312,7 +312,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putChatBlock(ChatBlock block, GamePacketBuilder builder) {
+	private static void putChatBlock(ChatBlock block, GamePacketBuilder builder) {
 		byte[] bytes = block.getCompressedMessage();
 		builder.put(DataType.SHORT, DataOrder.LITTLE, block.getTextEffects() << 8 | block.getTextColor());
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getPrivilegeLevel().toInteger());
@@ -326,7 +326,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putForceChatBlock(ForceChatBlock block, GamePacketBuilder builder) {
+	private static void putForceChatBlock(ForceChatBlock block, GamePacketBuilder builder) {
 		builder.putString(block.getMessage());
 	}
 
@@ -336,7 +336,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putForceMovementBlock(ForceMovementBlock block, GamePacketBuilder builder) {
+	private static void putForceMovementBlock(ForceMovementBlock block, GamePacketBuilder builder) {
 		builder.put(DataType.BYTE, DataTransformation.ADD, block.getInitialX());
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getInitialY());
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, block.getFinalX());
@@ -352,11 +352,10 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putGraphicBlock(GraphicBlock block, GamePacketBuilder builder) {
+	private static void putGraphicBlock(GraphicBlock block, GamePacketBuilder builder) {
 		Graphic graphic = block.getGraphic();
 		builder.put(DataType.SHORT, DataTransformation.ADD, graphic.getId());
-		builder.put(DataType.INT, DataOrder.MIDDLE, graphic.getHeight() << 16 & 0xFFFF0000 | graphic.getDelay()
-				& 0x0000FFFF);
+		builder.put(DataType.INT, DataOrder.MIDDLE, graphic.getHeight() << 16 & 0xFFFF0000 | graphic.getDelay() & 0x0000FFFF);
 	}
 
 	/**
@@ -365,7 +364,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putHitUpdateBlock(HitUpdateBlock block, GamePacketBuilder builder) {
+	private static void putHitUpdateBlock(HitUpdateBlock block, GamePacketBuilder builder) {
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, block.getDamage());
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getType());
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, block.getCurrentHealth());
@@ -378,7 +377,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putInteractingMobBlock(InteractingMobBlock block, GamePacketBuilder builder) {
+	private static void putInteractingMobBlock(InteractingMobBlock block, GamePacketBuilder builder) {
 		builder.put(DataType.SHORT, DataTransformation.ADD, block.getInteractingMobIndex());
 	}
 
@@ -389,7 +388,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param message The message.
 	 * @param builder The builder.
 	 */
-	private void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationMessage message,
+	private static void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationMessage message,
 			GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		if (seg.getType() == SegmentType.TELEPORT) {
@@ -429,7 +428,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * 
 	 * @param builder The builder.
 	 */
-	private void putRemovePlayerUpdate(GamePacketBuilder builder) {
+	private static void putRemovePlayerUpdate(GamePacketBuilder builder) {
 		builder.putBits(1, 1);
 		builder.putBits(2, 3);
 	}
@@ -440,7 +439,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putSecondHitUpdateBlock(SecondaryHitUpdateBlock block, GamePacketBuilder builder) {
+	private static void putSecondHitUpdateBlock(SecondaryHitUpdateBlock block, GamePacketBuilder builder) {
 		builder.put(DataType.BYTE, DataTransformation.ADD, block.getDamage());
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, block.getType());
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getCurrentHealth());
@@ -453,7 +452,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
-	private void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
+	private static void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
 		Position position = block.getPosition();
 		builder.put(DataType.SHORT, position.getX() * 2 + 1);
 		builder.put(DataType.SHORT, position.getY() * 2 + 1);

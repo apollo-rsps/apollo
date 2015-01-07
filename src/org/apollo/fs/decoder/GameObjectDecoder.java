@@ -80,7 +80,7 @@ public final class GameObjectDecoder {
 	 * @param buffer The buffer which holds the area's data.
 	 * @return A collection of all parsed objects.
 	 */
-	private Collection<GameObject> parseArea(int area, ByteBuffer buffer) {
+	private static Collection<GameObject> parseArea(int area, ByteBuffer buffer) {
 		List<GameObject> objects = new ArrayList<>();
 
 		int x = (area >> 8 & 0xFF) * 64;

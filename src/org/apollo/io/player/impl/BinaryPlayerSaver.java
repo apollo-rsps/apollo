@@ -113,7 +113,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 	 * @param attribute The attribute.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private void saveAttribute(DataOutputStream out, Attribute<?> attribute) throws IOException {
+	private static void saveAttribute(DataOutputStream out, Attribute<?> attribute) throws IOException {
 		AttributeType type = attribute.getType();
 
 		out.writeByte(type.getValue());
@@ -143,7 +143,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 	 * @param inventory The inventory.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private void writeInventory(DataOutputStream out, Inventory inventory) throws IOException {
+	private static void writeInventory(DataOutputStream out, Inventory inventory) throws IOException {
 		int capacity = inventory.capacity();
 		out.writeShort(capacity);
 

@@ -57,8 +57,8 @@ public final class SkillSet {
 	 * @return The minimum level.
 	 */
 	public static int getLevelForExperience(double experience) {
-		Preconditions.checkArgument(experience >= 0 && experience <= MAXIMUM_EXP,
-				"Experience must be between 0 and 200,000,000, inclusive.");
+		Preconditions.checkArgument(experience >= 0 && experience <= MAXIMUM_EXP, "Experience must be between 0 and "
+				+ MAXIMUM_EXP + ", inclusive.");
 
 		for (int level = 1; level <= 98; level++) {
 			if (experience < EXPERIENCE_FOR_LEVEL[level + 1]) {
@@ -69,17 +69,17 @@ public final class SkillSet {
 	}
 
 	/**
-	 * The combat level for this skill set.
+	 * The combat level of this skill set.
 	 */
-	private int combatLevel = 3;
+	private int combat = 3;
 
 	/**
-	 * A flag indicating if events are being fired.
+	 * Whether or not events are being fired.
 	 */
 	private boolean firingEvents = true;
 
 	/**
-	 * A list of skill listeners.
+	 * The list of skill listeners.
 	 */
 	private final List<SkillListener> listeners = new ArrayList<>();
 
@@ -105,16 +105,15 @@ public final class SkillSet {
 		checkBounds(id);
 		Skill old = skills[id];
 
-		double newExperience = old.getExperience() + experience;
-		newExperience = newExperience > MAXIMUM_EXP ? MAXIMUM_EXP : newExperience;
+		double newExperience = Math.min(old.getExperience() + experience, MAXIMUM_EXP);
 
-		int newCurrentLevel = old.getCurrentLevel();
-		int newMaximumLevel = getLevelForExperience(newExperience);
+		int current = old.getCurrentLevel();
+		int maximum = getLevelForExperience(newExperience);
 
-		int delta = newMaximumLevel - old.getMaximumLevel();
-		newCurrentLevel += delta > 0 ? delta : 0;
+		int delta = maximum - old.getMaximumLevel();
+		current += delta;
 
-		setSkill(id, new Skill(newExperience, newCurrentLevel, newMaximumLevel));
+		setSkill(id, new Skill(newExperience, current, maximum));
 
 		if (delta > 0) {
 			notifyLevelledUp(id); // here so it notifies using the updated skill
@@ -145,7 +144,7 @@ public final class SkillSet {
 		double base = (defence + hitpoints + Math.floor(prayer / 2)) * 0.25;
 		double melee = (attack + strength) * 0.325;
 
-		this.combatLevel = (int) (base + Math.max(melee, Math.max(ranged, magic) * 0.4875));
+		this.combat = (int) (base + Math.max(melee, Math.max(ranged, magic) * 0.4875));
 	}
 
 	/**
@@ -161,7 +160,7 @@ public final class SkillSet {
 	 * @return The combat level.
 	 */
 	public int getCombatLevel() {
-		return combatLevel;
+		return combat;
 	}
 
 	/**

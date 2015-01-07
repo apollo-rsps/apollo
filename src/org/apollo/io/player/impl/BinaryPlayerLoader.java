@@ -157,7 +157,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 	 * @return The {@link Map} of attribute names to attributes.
 	 * @throws IOException If there is an error reading from the stream.
 	 */
-	private Map<String, Attribute<?>> readAttributes(DataInputStream in) throws IOException {
+	private static Map<String, Attribute<?>> readAttributes(DataInputStream in) throws IOException {
 		int count = in.readInt();
 		Map<String, Attribute<?>> attributes = new HashMap<>(count);
 		Attribute<?> attribute;
@@ -195,7 +195,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 	 * @param inventory The inventory.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private void readInventory(DataInputStream in, Inventory inventory) throws IOException {
+	private static void readInventory(DataInputStream in, Inventory inventory) throws IOException {
 		int capacity = in.readUnsignedShort();
 
 		inventory.stopFiringEvents();
