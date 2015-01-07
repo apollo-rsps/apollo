@@ -15,5 +15,7 @@
     <script>talisman.rb</script>
     <script>tiara.rb</script>
   </scripts>
-  <dependencies />
+  <dependencies>
+    <dependency>util</dependency>
+  </dependencies>
 </plugin>
