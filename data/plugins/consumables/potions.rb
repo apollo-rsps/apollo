@@ -15,12 +15,12 @@ class Potion < Consumable
   def consume(player)
     index = @doses.find_index(id) + 1
 
-    unless index == @doses.length
+    unless index == @doses.length # Consumable removes the previous potion for us, so we don't do it here.
       player.inventory.add(@doses[index])
       player.send_message("You drink some of your #{name} potion.", true)      
       player.send_message("You have #{ @doses.length - index } dose#{ "s" unless index == 3 } of potion left.", true)
     else
-      player.send_message('You drink the last of your potion.')
+      player.send_message('You drink the last of your potion.', true)
       player.inventory.add(EMPTY_VIAL_ID)
     end
 
@@ -44,7 +44,8 @@ class BoostingPotion < Potion
 
   def drink(player)
     @skill_ids.each do |id|
-      skill = player.skill_set.skill(id); max = skill.maximum_level
+      skill = player.skill_set.skill(id)
+      max = skill.maximum_level
       level = [ skill.current_level, max ].min
 
       new_current = @boost.call(max, level).floor
@@ -58,15 +59,13 @@ end
 def get_parameters(hash, keys)
   raise "Hash must contain the following keys: #{ keys.join(", ") }." unless hash.has_keys?(*keys)
 
-  parameters = []
-  keys.each { |key| parameters << hash[key] }
-  
-  return parameters
+  return keys.map {|key| hash[key] }
 end
 
 # Appends a potion to the list of consumables.
 def append_potion(hash)
-  class_name = 'Potion'; keys = [ :name, :doses ]
+  class_name = 'Potion'
+  keys = [ :name, :doses ]
 
   unless (hash.size == 2)
     keys << :skills << :boost
@@ -75,9 +74,7 @@ def append_potion(hash)
 
   parameters = get_parameters(hash, keys)
 
-  hash[:doses].each do |dose_id|
-    append_consumable(Object.const_get(class_name).new(dose_id, *parameters))
-  end
+  hash[:doses].each { |dose| append_consumable(Object.const_get(class_name).new(dose, *parameters)) }
 end
 
 
@@ -87,25 +84,25 @@ basic_combat_boost = lambda { |max, level| level * 1.08 + 1 }
 super_combat_boost = lambda { |max, level| level * 1.12 + 2 }
 non_combat_boost   = lambda { |max, level| level + 3        }
 
-all_skills = (ATTACK_SKILL_ID..RUNECRAFT_SKILL_ID).to_a
-combat_skills = [ ATTACK_SKILL_ID, STRENGTH_SKILL_ID, DEFENCE_SKILL_ID, MAGIC_SKILL_ID, RANGED_SKILL_ID ]
+all_skills = (Skill::ATTACK..Skill::RUNECRAFT).to_a
+combat_skills = [ Skill::ATTACK, Skill::STRENGTH, Skill::DEFENCE, Skill::MAGIC, Skill::RANGED ]
 
 
 # Boosting potions:
 # Note that the order of the elements must be: :name, :doses, :skills, :boost.
-append_potion :name => :attack,   :doses => [ 2428, 121,  123,  125  ], :skills => ATTACK_SKILL_ID,   :boost => basic_combat_boost
-append_potion :name => :strength, :doses => [ 113,  115,  117,  119  ], :skills => STRENGTH_SKILL_ID, :boost => basic_combat_boost
-append_potion :name => :defence,  :doses => [ 2432, 133,  135,  137  ], :skills => DEFENCE_SKILL_ID,  :boost => basic_combat_boost
+append_potion :name => :attack,   :doses => [ 2428, 121,  123,  125  ], :skills => Skill::ATTACK,   :boost => basic_combat_boost
+append_potion :name => :strength, :doses => [ 113,  115,  117,  119  ], :skills => Skill::STRENGTH, :boost => basic_combat_boost
+append_potion :name => :defence,  :doses => [ 2432, 133,  135,  137  ], :skills => Skill::DEFENCE,  :boost => basic_combat_boost
 
-append_potion :name => :agility, :doses => [ 3032, 3034, 3036, 3038 ], :skills => AGILITY_SKILL_ID,  :boost => non_combat_boost
-append_potion :name => :fishing, :doses => [ 2438, 151,  153,  155  ], :skills => FISHING_SKILL_ID,  :boost => non_combat_boost
-append_potion :name => :prayer,  :doses => [ 2434, 139,  141,  143  ], :skills => PRAYER_SKILL_ID,   :boost => lambda { |max, level| level / 4 + 7 }
+append_potion :name => :agility, :doses => [ 3032, 3034, 3036, 3038 ], :skills => Skill::AGILITY, :boost => non_combat_boost
+append_potion :name => :fishing, :doses => [ 2438, 151,  153,  155  ], :skills => Skill::FISHING, :boost => non_combat_boost
+append_potion :name => :prayer,  :doses => [ 2434, 139,  141,  143  ], :skills => Skill::PRAYER,  :boost => lambda { |max, level| level / 4 + 7 }
 
 append_potion :name => :restore,       :doses => [ 2430, 127,  129,  131  ], :skills => combat_skills, :boost => lambda { |max, level| [ level * 1.3 + 10, max ].min }
 append_potion :name => :super_restore, :doses => [ 3024, 3026, 3028, 3030 ], :skills => all_skills,    :boost => lambda { |max, level| [ level * 1.25 + 8, max ].min }
 
-append_potion :name => :super_attack,   :doses => [ 2436, 145,  147,  149  ], :skills => ATTACK_SKILL_ID,   :boost => super_combat_boost
-append_potion :name => :super_strength, :doses => [ 2440, 115,  117,  119  ], :skills => STRENGTH_SKILL_ID, :boost => super_combat_boost
-append_potion :name => :super_defence,  :doses => [ 2442, 133,  135,  137  ], :skills => DEFENCE_SKILL_ID,  :boost => super_combat_boost
-append_potion :name => :ranging,        :doses => [ 2444, 169,  171,  173  ], :skills => RANGED_SKILL_ID,   :boost => super_combat_boost
-append_potion :name => :magic,          :doses => [ 3040, 3042, 3044, 3046 ], :skills => MAGIC_SKILL_ID,    :boost => super_combat_boost
+append_potion :name => :super_attack,   :doses => [ 2436, 145,  147,  149  ], :skills => Skill::ATTACK,   :boost => super_combat_boost
+append_potion :name => :super_strength, :doses => [ 2440, 115,  117,  119  ], :skills => Skill::STRENGTH, :boost => super_combat_boost
+append_potion :name => :super_defence,  :doses => [ 2442, 133,  135,  137  ], :skills => Skill::DEFENCE,  :boost => super_combat_boost
+append_potion :name => :ranging,        :doses => [ 2444, 169,  171,  173  ], :skills => Skill::RANGED,   :boost => super_combat_boost
+append_potion :name => :magic,          :doses => [ 3040, 3042, 3044, 3046 ], :skills => Skill::MAGIC,    :boost => super_combat_boost
