@@ -76,8 +76,7 @@ public final class BankUtils {
 
 		InterfaceListener interListener = new BankInterfaceListener(player, invListener, bankListener);
 
-		player.getInterfaceSet().openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID,
-				BankConstants.SIDEBAR_ID);
+		player.getInterfaceSet().openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID, BankConstants.SIDEBAR_ID);
 	}
 
 	/**

@@ -61,8 +61,7 @@ public final class LoginService extends Service {
 	 * @throws IllegalAccessException If the player loader/saver implementation could not be accessed.
 	 * @throws InstantiationException If the player loader/saver implementation could not be instantiated.
 	 */
-	private void init() throws SAXException, IOException, ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
+	private void init() throws SAXException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		XmlParser parser = new XmlParser();
 		XmlNode rootNode;
 

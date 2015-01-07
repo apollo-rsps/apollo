@@ -56,8 +56,7 @@ public final class PlayerLoaderWorker implements Runnable {
 			session.handlePlayerLoaderResponse(request, response);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Unable to load player's game.", e);
-			session.handlePlayerLoaderResponse(request, new PlayerLoaderResponse(
-					LoginConstants.STATUS_COULD_NOT_COMPLETE));
+			session.handlePlayerLoaderResponse(request, new PlayerLoaderResponse(LoginConstants.STATUS_COULD_NOT_COMPLETE));
 		}
 	}
 

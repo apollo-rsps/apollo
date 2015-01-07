@@ -4,9 +4,9 @@ import org.apollo.game.message.Message;
 import org.apollo.game.model.Position;
 
 /**
- * A {@link Message} sent by the client that represents some sort of action on an object. Note that the actual message sent
- * by the client is one of the five object action messages, but this is the message that should be intercepted (and the
- * option verified).
+ * A {@link Message} sent by the client that represents some sort of action on an object. Note that the actual message
+ * sent by the client is one of the five object action messages, but this is the message that should be intercepted (and
+ * the option verified).
  * 
  * @author Graham
  */

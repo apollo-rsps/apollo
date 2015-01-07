@@ -2,6 +2,7 @@ package org.apollo.fs.decoder;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
@@ -63,7 +64,7 @@ public final class NpcDefinitionDecoder {
 	 * @param buffer The buffer.
 	 * @return The {@link NpcDefinition}.
 	 */
-	private NpcDefinition decode(int id, ByteBuffer buffer) {
+	private static NpcDefinition decode(int id, ByteBuffer buffer) {
 		NpcDefinition definition = new NpcDefinition(id);
 
 		while (true) {
@@ -109,50 +110,40 @@ public final class NpcDefinitionDecoder {
 				for (int i = 0; i < length; i++) {
 					additionalModels[i] = buffer.getShort();
 				}
-			} else if (opcode == 90) {
-				buffer.getShort(); // Dummy
-			} else if (opcode == 91) {
-				buffer.getShort(); // Dummy
-			} else if (opcode == 92) {
+			} else if (opcode >= 90 && opcode <= 92) {
 				buffer.getShort(); // Dummy
 			} else if (opcode == 95) {
 				definition.setCombatLevel(buffer.getShort());
-			} else if (opcode == 97) {
+			} else if (opcode == 97 || opcode == 98) {
 				buffer.getShort();
-			} else if (opcode == 98) {
-				buffer.getShort();
-			} else if (opcode == 100) {
+			} else if (opcode == 100 || opcode == 101) {
 				buffer.get();
-			} else if (opcode == 101) {
-				buffer.get();
-			} else if (opcode == 102) {
-				buffer.getShort();
-			} else if (opcode == 103) {
+			} else if (opcode == 102 || opcode == 103) {
 				buffer.getShort();
 			} else if (opcode == 106) {
-				int morphVariableBitsIndex = buffer.getShort();
-				if (morphVariableBitsIndex == 65535) {
-					morphVariableBitsIndex = -1;
-				}
-				int morphismCount = buffer.getShort();
-				if (morphismCount == 65535) {
-					morphismCount = -1;
-				}
+				@SuppressWarnings("unused")
+				int morphVariableBitsIndex = wrapMorphism(buffer.getShort());
+				@SuppressWarnings("unused")
+				int morphismCount = wrapMorphism(buffer.getShort());
 
 				int count = buffer.get() & 0xFF;
 				int[] morphisms = new int[count + 1];
-				for (int i = 0; i <= count; i++) {
-					int morphism = buffer.getShort();
-					if (morphism == 65535) {
-						morphism = -1;
-					}
-					morphisms[i] = morphism;
-				}
+				Arrays.setAll(morphisms, index -> wrapMorphism(buffer.getShort()));
 			} else if (opcode == 107) {
 				@SuppressWarnings("unused")
 				boolean clickable = false;
 			}
 		}
+	}
+
+	/**
+	 * Wraps a morphism value around, returning -1 if the specified value is 65,535. TODO name
+	 * 
+	 * @param value The value.
+	 * @return -1 if {@code value} is 65,535, otherwise {@code value}.
+	 */
+	private static int wrapMorphism(int value) {
+		return value == 65_535 ? -1 : value;
 	}
 
 }

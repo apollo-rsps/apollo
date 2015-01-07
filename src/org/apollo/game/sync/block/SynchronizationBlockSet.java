@@ -13,7 +13,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 	/**
 	 * A {@link Map} of {@link SynchronizationBlock}s.
 	 */
-	private final Map<Class<? extends SynchronizationBlock>, SynchronizationBlock> blocks = new HashMap<>();
+	private final Map<Class<? extends SynchronizationBlock>, SynchronizationBlock> blocks = new HashMap<>(8);
 
 	/**
 	 * Adds a {@link SynchronizationBlock}.

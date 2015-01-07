@@ -15,7 +15,7 @@ public final class AttributeMap {
 	/**
 	 * The map of attribute names to definitions.
 	 */
-	private static Map<String, AttributeDefinition<?>> definitions = new HashMap<>(50);
+	private static Map<String, AttributeDefinition<?>> definitions = new HashMap<>(1);
 
 	/**
 	 * Registers an {@link AttributeDefinition}.

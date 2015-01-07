@@ -61,8 +61,7 @@ public final class ServiceManager {
 	 * @throws ClassNotFoundException If the service could not be found.
 	 */
 	@SuppressWarnings("unchecked")
-	private void init() throws SAXException, IOException, InstantiationException, IllegalAccessException,
-			ClassNotFoundException {
+	private void init() throws SAXException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		logger.fine("Registering services...");
 
 		XmlParser parser = new XmlParser();

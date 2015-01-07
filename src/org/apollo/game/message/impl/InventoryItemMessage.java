@@ -3,8 +3,8 @@ package org.apollo.game.message.impl;
 import org.apollo.game.message.Message;
 
 /**
- * A {@link Message} that represents some sort of action on an item in an inventory. Note that this is the parent of both
- * item option and item action message, and so cannot be used to determine when one of those messages is fired.
+ * A {@link Message} that represents some sort of action on an item in an inventory. Note that this is the parent of
+ * both item option and item action message, and so cannot be used to determine when one of those messages is fired.
  * 
  * @author Chris Fletcher
  */

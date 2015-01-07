@@ -43,8 +43,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 				String skillName = Skill.getName(id);
 				String article = LanguageUtil.getIndefiniteArticle(skillName);
 
-				player.sendMessage("You need " + article + " " + skillName + " level of " + requirement
-						+ " to equip this item.");
+				player.sendMessage("You need " + article + " " + skillName + " level of " + requirement + " to equip this item.");
 				ctx.breakHandlerChain();
 				return;
 			}
@@ -56,8 +55,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 		int equipmentSlot = definition.getSlot();
 		Item currentlyEquipped = equipment.get(equipmentSlot);
 
-		if (equipping.getDefinition().isStackable()
-				&& (currentlyEquipped == null || currentlyEquipped.getId() == equippingId)) {
+		if (equipping.getDefinition().isStackable() && (currentlyEquipped == null || currentlyEquipped.getId() == equippingId)) {
 			equipment.set(definition.getSlot(), equipping);
 			inventory.reset(inventorySlot);
 			return;

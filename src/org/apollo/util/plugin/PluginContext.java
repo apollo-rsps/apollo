@@ -20,6 +20,34 @@ import org.apollo.game.model.World;
 public final class PluginContext {
 
 	/**
+	 * Adds a {@link CommandListener}.
+	 * 
+	 * @param name The name of the listener.
+	 * @param listener The listener.
+	 */
+	public static void addCommandListener(String name, CommandListener listener) {
+		World.getWorld().getCommandDispatcher().register(name, listener);
+	}
+
+	/**
+	 * Adds a {@link LoginListener}.
+	 * 
+	 * @param listener The listener.
+	 */
+	public static void addLoginListener(LoginListener listener) {
+		World.getWorld().getLoginDispatcher().register(listener);
+	}
+
+	/**
+	 * Adds a {@link LogoutListener}.
+	 * 
+	 * @param listener The listener.
+	 */
+	public static void addLogoutListener(LogoutListener listener) {
+		World.getWorld().getLogoutDispatcher().register(listener);
+	}
+
+	/**
 	 * The server context.
 	 */
 	private final ServerContext context;
@@ -31,16 +59,6 @@ public final class PluginContext {
 	 */
 	public PluginContext(ServerContext context) {
 		this.context = context;
-	}
-
-	/**
-	 * Adds a {@link CommandListener}.
-	 * 
-	 * @param name The name of the listener.
-	 * @param listener The listener.
-	 */
-	public void addCommandListener(String name, CommandListener listener) {
-		World.getWorld().getCommandDispatcher().register(name, listener);
 	}
 
 	/**
@@ -59,24 +77,6 @@ public final class PluginContext {
 		} else {
 			chain.addLast(handler);
 		}
-	}
-
-	/**
-	 * Adds a {@link LoginListener}.
-	 * 
-	 * @param listener The listener.
-	 */
-	public void addLoginListener(LoginListener listener) {
-		World.getWorld().getLoginDispatcher().register(listener);
-	}
-
-	/**
-	 * Adds a {@link LogoutListener}.
-	 * 
-	 * @param listener The listener.
-	 */
-	public void addLogoutListener(LogoutListener listener) {
-		World.getWorld().getLogoutDispatcher().register(listener);
 	}
 
 }

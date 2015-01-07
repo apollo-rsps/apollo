@@ -53,8 +53,8 @@ public final class MessageHandlerChainParser {
 	 * @return A {@link MessageHandlerChainGroup}.
 	 */
 	@SuppressWarnings("unchecked")
-	public MessageHandlerChainGroup parse() throws IOException, SAXException, ClassNotFoundException,
-			InstantiationException, IllegalAccessException {
+	public MessageHandlerChainGroup parse() throws IOException, SAXException, ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
 		XmlNode messages = parser.parse(is);
 		if (!messages.getName().equals("messages")) {
 			throw new IOException("Root node name is not 'messages'.");

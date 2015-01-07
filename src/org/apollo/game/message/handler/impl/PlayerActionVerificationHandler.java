@@ -29,8 +29,7 @@ public final class PlayerActionVerificationHandler extends MessageHandler<Player
 		}
 
 		Player other = repository.get(index);
-		if (other == null
-				|| !player.getPosition().isWithinDistance(other.getPosition(), player.getViewingDistance() + 1)) {
+		if (other == null || !player.getPosition().isWithinDistance(other.getPosition(), player.getViewingDistance() + 1)) {
 			// +1 in case it was decremented after the player clicked the action.
 			ctx.breakHandlerChain();
 			return;

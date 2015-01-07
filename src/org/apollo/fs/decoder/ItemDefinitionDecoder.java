@@ -63,7 +63,7 @@ public final class ItemDefinitionDecoder {
 	 * @param buffer The buffer.
 	 * @return The {@link ItemDefinition}.
 	 */
-	private ItemDefinition decode(int id, ByteBuffer buffer) {
+	private static ItemDefinition decode(int id, ByteBuffer buffer) {
 		ItemDefinition definition = new ItemDefinition(id);
 		while (true) {
 			int opcode = buffer.get() & 0xFF;
@@ -76,17 +76,7 @@ public final class ItemDefinitionDecoder {
 				definition.setName(BufferUtil.readString(buffer));
 			} else if (opcode == 3) {
 				definition.setDescription(BufferUtil.readString(buffer));
-			} else if (opcode == 4) {
-				buffer.getShort();
-			} else if (opcode == 5) {
-				buffer.getShort();
-			} else if (opcode == 6) {
-				buffer.getShort();
-			} else if (opcode == 7) {
-				buffer.getShort();
-			} else if (opcode == 8) {
-				buffer.getShort();
-			} else if (opcode == 10) {
+			} else if (opcode >= 4 && opcode <= 8 || opcode == 10) {
 				buffer.getShort();
 			} else if (opcode == 11) {
 				definition.setStackable(true);
@@ -118,19 +108,7 @@ public final class ItemDefinitionDecoder {
 					buffer.getShort();
 					buffer.getShort();
 				}
-			} else if (opcode == 78) {
-				buffer.getShort();
-			} else if (opcode == 79) {
-				buffer.getShort();
-			} else if (opcode == 90) {
-				buffer.getShort();
-			} else if (opcode == 91) {
-				buffer.getShort();
-			} else if (opcode == 92) {
-				buffer.getShort();
-			} else if (opcode == 93) {
-				buffer.getShort();
-			} else if (opcode == 95) {
+			} else if (opcode == 78 || opcode == 79 || opcode >= 90 || opcode <= 93 || opcode == 95) {
 				buffer.getShort();
 			} else if (opcode == 97) {
 				definition.setNoteInfoId(buffer.getShort() & 0xFFFF);
@@ -139,15 +117,9 @@ public final class ItemDefinitionDecoder {
 			} else if (opcode >= 100 && opcode < 110) {
 				buffer.getShort();
 				buffer.getShort();
-			} else if (opcode == 110) {
+			} else if (opcode >= 110 && opcode <= 112) {
 				buffer.getShort();
-			} else if (opcode == 111) {
-				buffer.getShort();
-			} else if (opcode == 112) {
-				buffer.getShort();
-			} else if (opcode == 113) {
-				buffer.get();
-			} else if (opcode == 114) {
+			} else if (opcode == 113 || opcode == 114) {
 				buffer.get();
 			} else if (opcode == 115) {
 				definition.setTeam(buffer.get() & 0xFF);

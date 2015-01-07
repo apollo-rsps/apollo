@@ -7,12 +7,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apollo.io.PluginMetaDataParser;
 import org.xml.sax.SAXException;
@@ -50,11 +51,8 @@ public final class PluginManager {
 	 * @param plugins The plugin collection.
 	 * @return The plugin map.
 	 */
-	private Map<String, PluginMetaData> createMap(Collection<PluginMetaData> plugins) {
-		Map<String, PluginMetaData> map = new HashMap<>();
-		for (PluginMetaData plugin : plugins) {
-			map.put(plugin.getId(), plugin);
-		}
+	private static Map<String, PluginMetaData> createMap(Collection<PluginMetaData> plugins) {
+		Map<String, PluginMetaData> map = plugins.stream().collect(Collectors.toMap(PluginMetaData::getId, Function.identity()));
 		return Collections.unmodifiableMap(map);
 	}
 

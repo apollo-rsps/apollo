@@ -112,10 +112,9 @@ public final class Server {
 
 		logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
 		try {
-			// httpBootstrap.bind(httpAddress);
+			httpBootstrap.bind(httpAddress);
 		} catch (Throwable t) {
-			logger.log(Level.WARNING,
-					"Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
+			logger.log(Level.WARNING, "Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
 		}
 
 		logger.fine("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
@@ -132,8 +131,7 @@ public final class Server {
 	 * @throws IllegalAccessException If the release class could not be accessed.
 	 * @throws InstantiationException If the release class could not be instantiated.
 	 */
-	public void init(String releaseClassName) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
+	public void init(String releaseClassName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		Class<?> clazz = Class.forName(releaseClassName);
 		Release release = (Release) clazz.newInstance();
 

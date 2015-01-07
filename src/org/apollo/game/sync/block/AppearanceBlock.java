@@ -61,8 +61,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 * @param headIcon The head icon id of the player.
 	 * @param isSkulled Whether or not the player is skulled.
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon,
-			boolean isSkulled) {
+	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled) {
 		this(name, appearance, combat, skill, equipment, headIcon, isSkulled, -1);
 	}
 
@@ -84,7 +83,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 		this.appearance = appearance;
 		this.combat = combat;
 		this.skill = skill;
-		this.equipment = equipment.clone();
+		this.equipment = equipment.duplicate();
 		this.headIcon = headIcon;
 		this.isSkulled = isSkulled;
 		this.npcId = npcId;

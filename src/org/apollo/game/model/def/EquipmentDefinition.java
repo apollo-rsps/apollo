@@ -21,6 +21,15 @@ public final class EquipmentDefinition {
 	private static final Map<Integer, EquipmentDefinition> definitions = new HashMap<>();
 
 	/**
+	 * Gets the total number of equipment definitions.
+	 * 
+	 * @return The count.
+	 */
+	public static int count() {
+		return definitions.size();
+	}
+
+	/**
 	 * Initialises the equipment definitions.
 	 * 
 	 * @param definitions The definitions.
@@ -77,15 +86,6 @@ public final class EquipmentDefinition {
 	 */
 	public EquipmentDefinition(int id) {
 		this.id = id;
-	}
-
-	/**
-	 * Gets the total number of equipment definitions.
-	 * 
-	 * @return The count.
-	 */
-	public int count() {
-		return definitions.size();
 	}
 
 	/**
