@@ -19,6 +19,8 @@ import org.apollo.game.model.World;
  */
 public final class PluginContext {
 
+	// TODO move listeners to world?
+
 	/**
 	 * Adds a {@link CommandListener}.
 	 * 
