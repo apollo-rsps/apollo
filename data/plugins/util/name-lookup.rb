@@ -19,17 +19,13 @@ end
 def lookup_entity(type, symbol)
   symbol = symbol.to_s
   cached = NAME_CACHE[type + symbol]
-  return cached unless cached == nil
+  return cached unless cached.nil?
 
   name = symbol.to_s.gsub('_', ' ')
-  if name.include?(' ')
-    id = name[name.rindex(' ') + 1, name.length - 1].to_i
-  end
-  id = find_entities(type, name, 1).first if id == nil || id == 0
+  id = name[name.rindex(' ') + 1, name.length - 1].to_i if name.include?(' ')
+  id = find_entities(type, name, 1).first if (id .nil? || id.zero?)
   
-  if id == nil
-    raise "The #{type} called #{name} could not be identified."
-  end
+  raise "The #{type} called #{name} could not be identified." if id.nil?
 
   NAME_CACHE[type + symbol] = id
   return id
@@ -37,15 +33,16 @@ end
 
 # Finds entities with the specified type (e.g. npc) and name, returning possible ids as an array.
 def find_entities(type, name, limit=5)
-  ids = []; name.downcase!
+  ids = [];
+  name.downcase!
 
   Kernel.const_get("#{type.capitalize}Definition").definitions.each do |definition|
-    break if ids.length == limit
-    ids << definition.id.to_i if definition.name.to_s.downcase == name
+    break if (ids.length == limit)
+    ids << definition.id.to_i if (definition.name.to_s.downcase == name)
   end
 
   return ids
 end
 
 private
-NAME_CACHE = {}
+NAME_CACHE = {} # Primitive, caching all may not be desirable.

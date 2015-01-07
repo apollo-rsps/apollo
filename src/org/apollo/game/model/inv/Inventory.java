@@ -416,6 +416,24 @@ public final class Inventory {
 	}
 
 	/**
+	 * Removes one item with each of the specified ids.
+	 * <p>
+	 * This method will attempt to remove one of each item, and will continue even if a previous item could not be
+	 * removed.
+	 * 
+	 * @param ids The ids of the item to remove.
+	 * @return {@code true} if one of each item could be removed, otherwise {@code false}.
+	 */
+	public boolean remove(int... ids) {
+		boolean successful = true;
+		for (int id : ids) {
+			successful &= remove(id);
+		}
+
+		return successful;
+	}
+
+	/**
 	 * Removes {@code amount} of the item with the specified {@code id}. If the item is stackable, it will remove it
 	 * from the stack. If not, it'll remove {@code amount} items.
 	 * 
@@ -505,7 +523,7 @@ public final class Inventory {
 				int removed = Math.min(amount, itemAmount);
 				int remainder = itemAmount - removed;
 
-				set(slot, remainder > 0 ? new Item(item.getId(), remainder) : null);
+				set(slot, (remainder > 0) ? new Item(item.getId(), remainder) : null);
 				return removed;
 			}
 		}
