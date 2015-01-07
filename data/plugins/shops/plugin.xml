@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<plugin>
+  <id>shops</id>
+  <version>1.5</version>
+  <name>Shops</name>
+  <description>Adds support for shops.</description>
+  <authors>
+    <author>Linux</author>
+    <author>Stuart</author>
+  </authors>
+  <scripts>
+    <script>currency.rb</script>
+    <script>shop.rb</script>
+    <script>shop-utils.rb</script>
+    <script>shopping.rb</script>
+  </scripts>
+  <dependencies>
+    <dependency>attributes</dependency>
+  </dependencies>
+</plugin>
