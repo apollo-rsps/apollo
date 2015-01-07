@@ -1,6 +1,7 @@
 package org.apollo.game.model.inv;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apollo.game.model.Item;
@@ -13,14 +14,14 @@ import com.google.common.base.Preconditions;
  * 
  * @author Graham
  */
-public final class Inventory implements Cloneable {
+public final class Inventory {
 
 	/**
 	 * An enumeration containing the different 'stacking modes' of an {@link Inventory}.
 	 * 
 	 * @author Graham
 	 */
-	public enum StackMode {
+	public static enum StackMode {
 
 		/**
 		 * When in {@link #STACK_ALWAYS} mode, an {@link Inventory} will stack every single item, regardless of the
@@ -92,8 +93,9 @@ public final class Inventory implements Cloneable {
 		Preconditions.checkArgument(capacity >= 0, "Capacity cannot be negative.");
 		Preconditions.checkNotNull(mode, "Stacking mode cannot be null.");
 
-		items = new Item[this.capacity = capacity];
+		this.capacity = capacity;
 		this.mode = mode;
+		items = new Item[capacity];
 	}
 
 	/**
@@ -115,7 +117,7 @@ public final class Inventory implements Cloneable {
 	 */
 	public int add(int id, int amount) {
 		Item item = add(new Item(id, amount));
-		return item != null ? item.getAmount() : 0;
+		return (item != null) ? item.getAmount() : 0;
 	}
 
 	/**
@@ -130,12 +132,15 @@ public final class Inventory implements Cloneable {
 	public Item add(Item item) {
 		int id = item.getId();
 		boolean stackable = isStackable(item.getDefinition());
+
 		if (stackable) {
 			for (int slot = 0; slot < capacity; slot++) {
 				Item other = items[slot];
+
 				if (other != null && other.getId() == id) {
 					long total = item.getAmount() + other.getAmount();
 					int amount, remaining;
+
 					if (total > Integer.MAX_VALUE) {
 						amount = (int) (total - Integer.MAX_VALUE);
 						remaining = (int) (total - amount);
@@ -144,10 +149,12 @@ public final class Inventory implements Cloneable {
 						amount = (int) total;
 						remaining = 0;
 					}
+
 					set(slot, new Item(id, amount));
 					return remaining > 0 ? new Item(id, remaining) : null;
 				}
 			}
+
 			for (int slot = 0; slot < capacity; slot++) {
 				Item other = items[slot];
 				if (other == null) {
@@ -155,6 +162,7 @@ public final class Inventory implements Cloneable {
 					return null;
 				}
 			}
+
 			notifyCapacityExceeded();
 			return item;
 		}
@@ -168,6 +176,7 @@ public final class Inventory implements Cloneable {
 				if (items[slot] == null) {
 					remaining--;
 					set(slot, single); // share the instances
+
 					if (remaining <= 0) {
 						break;
 					}
@@ -206,13 +215,15 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Checks the bounds of the specified slot.
+	 * Checks the bounds of the specified slots.
 	 * 
-	 * @param slot The slot.
+	 * @param slots The slots.
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
-	private void checkBounds(int slot) {
-		Preconditions.checkElementIndex(slot, capacity, "Slot out of bounds.");
+	private void checkBounds(int... slots) {
+		for (int slot : slots) {
+			Preconditions.checkElementIndex(slot, capacity, "Slot " + slot + " out of bounds.");
+		}
 	}
 
 	/**
@@ -225,11 +236,11 @@ public final class Inventory implements Cloneable {
 	}
 
 	/**
-	 * Creates a copy of this inventory. Listeners are not copied, they must be added again yourself! This is so cloned
-	 * copies don't send updates to their counterparts.
+	 * Creates a copy of this inventory. Listeners are not copied.
+	 * 
+	 * @return The duplicated inventory.
 	 */
-	@Override
-	public Inventory clone() {
+	public Inventory duplicate() {
 		Inventory copy = new Inventory(capacity, mode);
 		System.arraycopy(items, 0, copy.items, 0, capacity);
 		copy.size = size;
@@ -244,6 +255,26 @@ public final class Inventory implements Cloneable {
 	 */
 	public boolean contains(int id) {
 		return slotOf(id) != -1;
+	}
+
+	/**
+	 * Returns whether or not this inventory contains any items with one of the specified ids.
+	 * 
+	 * @param ids The ids.
+	 * @return {@code true} if the inventory does contain at least one of the items, otherwise {@code false}.
+	 */
+	public boolean containsAny(int... ids) {
+		return Arrays.stream(ids).anyMatch(id -> slotOf(id) != -1);
+	}
+
+	/**
+	 * Returns whether or not this inventory contains an item for each of the specified ids.
+	 * 
+	 * @param ids The ids.
+	 * @return {@code true} if items in this inventory every id is
+	 */
+	public boolean containsAll(int... ids) {
+		return Arrays.stream(ids).allMatch(id -> slotOf(id) != -1);
 	}
 
 	/**
@@ -298,20 +329,19 @@ public final class Inventory implements Cloneable {
 	public int getAmount(int id) {
 		if (isStackable(ItemDefinition.lookup(id))) {
 			int slot = slotOf(id);
-			if (slot != -1) {
-				return items[slot].getAmount();
-			}
-			return 0;
+			return slot == -1 ? 0 : items[slot].getAmount();
 		}
 
-		int amount = 0, usedSlots = 0;
-		for (int i = 0; i < capacity && usedSlots <= size; i++) {
-			Item item = items[i];
+		int amount = 0, used = 0;
+		for (int index = 0; index < capacity && used <= size; index++) {
+			Item item = items[index];
+
 			if (item != null) {
 				if (item.getId() == id) {
 					amount++;
 				}
-				usedSlots++;
+
+				used++;
 			}
 		}
 		return amount;
@@ -338,6 +368,7 @@ public final class Inventory implements Cloneable {
 		} else if (mode == StackMode.STACK_STACKABLE_ITEMS) {
 			return definition.isStackable();
 		}
+
 		return false;
 	}
 
@@ -370,9 +401,7 @@ public final class Inventory implements Cloneable {
 	 */
 	private void notifyItemUpdated(int slot) {
 		if (firingEvents) {
-			for (InventoryListener listener : listeners) {
-				listener.itemUpdated(this, slot, items[slot]);
-			}
+			listeners.forEach(listener -> listener.itemUpdated(this, slot, items[slot]));
 		}
 	}
 
@@ -397,32 +426,39 @@ public final class Inventory implements Cloneable {
 	public int remove(int id, int amount) {
 		ItemDefinition definition = ItemDefinition.lookup(id);
 		boolean stackable = isStackable(definition);
+
 		if (stackable) {
 			for (int slot = 0; slot < capacity; slot++) {
 				Item item = items[slot];
+
 				if (item != null && item.getId() == id) {
 					if (amount >= item.getAmount()) {
 						set(slot, null);
 						return item.getAmount();
 					}
-					int newAmount = item.getAmount() - amount;
-					set(slot, new Item(item.getId(), newAmount));
+
+					set(slot, new Item(item.getId(), item.getAmount() - amount));
 					return amount;
 				}
 			}
+
 			return 0;
 		}
+
 		int removed = 0;
 		for (int slot = 0; slot < capacity; slot++) {
 			Item item = items[slot];
+
 			if (item != null && item.getId() == id) {
 				set(slot, null);
 				removed++;
 			}
+
 			if (removed >= amount) {
 				break;
 			}
 		}
+
 		return removed;
 	}
 
@@ -462,23 +498,18 @@ public final class Inventory implements Cloneable {
 	 * @return The amount that was removed (0 if nothing was removed).
 	 */
 	public int removeSlot(int slot, int amount) {
-		if (amount == 0) {
-			return 0;
-		}
+		if (amount != 0) {
+			Item item = items[slot];
+			if (item != null) {
+				int itemAmount = item.getAmount();
+				int removed = Math.min(amount, itemAmount);
+				int remainder = itemAmount - removed;
 
-		Item item = items[slot];
-		if (item != null) {
-			int itemAmount = item.getAmount();
-			int removed = itemAmount;
-			if (removed > amount) {
-				removed = amount;
+				set(slot, remainder > 0 ? new Item(item.getId(), remainder) : null);
+				return removed;
 			}
-
-			int remainder = itemAmount - removed;
-			set(slot, remainder > 0 ? new Item(item.getId(), remainder) : null);
-
-			return removed;
 		}
+
 		return 0;
 	}
 
@@ -495,6 +526,7 @@ public final class Inventory implements Cloneable {
 		if (old != null) {
 			size--;
 		}
+
 		items[slot] = null;
 		notifyItemUpdated(slot);
 		return old;
@@ -517,6 +549,7 @@ public final class Inventory implements Cloneable {
 		if (old == null) {
 			size++;
 		}
+
 		items[slot] = item;
 		notifyItemUpdated(slot);
 		return old;
@@ -528,9 +561,9 @@ public final class Inventory implements Cloneable {
 	public void shift() {
 		Item[] old = items;
 		items = new Item[capacity];
-		for (int slot = 0, pos = 0; slot < items.length; slot++) {
+		for (int slot = 0, position = 0; slot < items.length; slot++) {
 			if (old[slot] != null) {
-				items[pos++] = old[slot];
+				items[position++] = old[slot];
 			}
 		}
 
@@ -555,14 +588,16 @@ public final class Inventory implements Cloneable {
 	 * @return The first slot containing the specified item, or {@code -1} if none of the slots matched the conditions.
 	 */
 	public int slotOf(int id) {
-		int usedSlots = 0;
-		for (int slot = 0; slot < capacity && usedSlots <= size; slot++) {
+		int used = 0;
+		for (int slot = 0; slot < capacity && used <= size; slot++) {
 			Item item = items[slot];
+
 			if (item != null) {
 				if (item.getId() == id) {
 					return slot;
 				}
-				usedSlots++;
+
+				used++;
 			}
 		}
 		return -1;
@@ -590,8 +625,7 @@ public final class Inventory implements Cloneable {
 	 * @param newSlot The new slot.
 	 */
 	public void swap(boolean insert, int oldSlot, int newSlot) {
-		checkBounds(oldSlot);
-		checkBounds(newSlot);
+		checkBounds(oldSlot, newSlot);
 
 		if (insert) {
 			if (newSlot > oldSlot) {
