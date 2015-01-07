@@ -21,24 +21,24 @@ SHOPS = {}
 
 # represents a single shop.
 class Shop
-	attr_reader :id, :name, :stock, :inventory
-	attr_accessor :currency, :type, :npc_action
+  attr_reader :id, :name, :stock, :inventory
+  attr_accessor :currency, :type, :npc_action
 
-	def initialize(id, name, stock)
-		@id = id
-		@name = name
-		@stock = stock
-		@inventory = Inventory.new(@@SHOP_CAPACITY, Inventory::StackMode::STACK_ALWAYS)
-		stock.each { |item|
-			@inventory.add(item.id, item.amount)
-		}
-		@currency = @@DEFAULT_CURRENCY
-		@type = :normal
-		@npc_action = 2
-	end
+  def initialize(id, name, stock)
+    @id = id
+    @name = name
+    @stock = stock
+    @inventory = Inventory.new(@@SHOP_CAPACITY, Inventory::StackMode::STACK_ALWAYS)
+    stock.each { |item|
+      @inventory.add(item.id, item.amount)
+    }
+    @currency = @@DEFAULT_CURRENCY
+    @type = :normal
+    @npc_action = 2
+  end
 
-	# handles buying an item from a shop.
-	def buy(player, slot, id, amount)
+  # handles buying an item from a shop.
+  def buy(player, slot, id, amount)
 		item  = inventory.get(slot)
 		total_currency = currency.total(player)
 		value = currency.buy_value(item.id)
@@ -65,7 +65,7 @@ class Shop
 				player.inventory.add(item.id, amount)
 				unless(type == :supplier)
 					if(item.amount == amount and stock[slot] != nil)
-	                    inventory.set(slot, Item.new(item.id, 0))
+	          inventory.set(slot, Item.new(item.id, 0))
 					else
 						inventory.remove(item.id, amount)
 					end
@@ -111,17 +111,17 @@ class ShopInterfaceListener
 	include InterfaceListener
 
 	def initialize(player, inventory_listener, shop_listener)
-    	@player = player
-    	@inventory_listener = inventory_listener
-    	@shop_listener = shop_listener
-  	end
+    @player = player
+    @inventory_listener = inventory_listener
+    @shop_listener = shop_listener
+  end
 
-  	def interface_closed
-    	@player.inventory.remove_listener(@inventory_listener)
-    	SHOPS[@player.open_shop].inventory.remove_listener(@shop_listener)
-    	@player.open_shop = -1
-    	@player.reset_interacting_mob()
-  	end
+  def interface_closed
+    @player.inventory.remove_listener(@inventory_listener)
+    SHOPS[@player.open_shop].inventory.remove_listener(@shop_listener)
+    @player.open_shop = -1
+    @player.reset_interacting_mob()
+  end
 end
 
 

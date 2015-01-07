@@ -8,7 +8,7 @@ java_import 'org.apollo.game.message.impl.SetWidgetTextMessage'
 
 # creates a shop (thanks stuart)
 def create_shop(hash)
-	raise 'Shop id, name, and stock must be specified to create a shop.' unless hash.has_key?(:id) && hash.has_key?(:name) && hash.has_key?(:stock)
+  raise 'Shop id, name, and stock must be specified to create a shop.' unless hash.has_key?(:id) && hash.has_key?(:name) && hash.has_key?(:stock)
 	id = hash.delete(:id)
 	shop = Shop.new id, hash.delete(:name), hash.delete(:stock).collect { |data| Item.new(*data) }
 	hash.each do |key, value|

@@ -24,6 +24,7 @@ class ShopAction < DistancedAction
   end
 end
 
+# handles the npc action message.
 on :message, :npc_action do |ctx, player, message|
   npc = $world.npc_repository.get(message.index)
   if SHOPS.has_key?(npc.id)
@@ -34,6 +35,7 @@ on :message, :npc_action do |ctx, player, message|
   end
 end
 
+# converts the message option to an amount.
 def optionToAmount(option)
   case option
     when 1 then 0
@@ -43,6 +45,7 @@ def optionToAmount(option)
   end
 end
 
+# handles the item action message.
 on :message, :item_action do |ctx, player, message|
   amount = optionToAmount(message.option)
   shop = SHOPS[player.open_shop]
@@ -61,6 +64,7 @@ on :message, :item_action do |ctx, player, message|
   end
 end
 
+# handles when a player logs out.
 on :logout do |player|
   player.interface_set.close if player.open_shop > -1
 end
