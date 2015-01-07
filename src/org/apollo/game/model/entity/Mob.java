@@ -252,7 +252,7 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Gets this mob' local player {@link List}.
+	 * Gets this mob's local player {@link List}.
 	 * 
 	 * @return The list.
 	 */
