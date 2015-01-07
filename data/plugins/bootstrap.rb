@@ -22,6 +22,7 @@ java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
 java_import 'org.apollo.game.model.setting.PrivilegeLevel'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
+java_import 'org.apollo.util.plugin.PluginContext'
 
 # Alias the privilege levels.
 RIGHTS_ADMIN    = PrivilegeLevel::ADMINISTRATOR
@@ -196,17 +197,17 @@ def on_command(args, proc)
   raise 'Command message must have one or two arguments.' unless (1..2).include?(args.length)
 
   rights = args.length == 2 ? args[1] : RIGHTS_STANDARD
-  $ctx.add_command_listener(args[0].to_s, ProcCommandListener.new(rights, proc))
+  PluginContext::add_command_listener(args[0].to_s, ProcCommandListener.new(rights, proc))
 end
 
 # Defines an action to be taken upon login.
 def on_login(proc)
-  $ctx.add_login_listener(ProcLoginListener.new(proc))
+  PluginContext::add_login_listener(ProcLoginListener.new(proc))
 end
 
 # Defines an action to be taken upon logout.
 def on_logout(proc)
-  $ctx.add_logout_listener(ProcLogoutListener.new(proc))
+  PluginContext::add_logout_listener(ProcLogoutListener.new(proc))
 end
 
 # Ids of in-game skills.

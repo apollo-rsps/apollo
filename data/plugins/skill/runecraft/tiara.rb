@@ -18,7 +18,7 @@ class Tiara
 
   def initialize(tiara_id, altar, talisman, bitshift, experience)
       @tiara_id = tiara_id
-      @name = ItemDefinition.lookup(tiara_id).name.downcase
+      @name = ItemDefinition.lookup(tiara_id).name.to_s.downcase
       @altar = altar
       @talisman = talisman
       @bitshift = bitshift

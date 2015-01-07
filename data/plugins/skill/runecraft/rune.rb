@@ -11,7 +11,7 @@ class Rune
   
   def initialize(id, level, experience, multiplier)
     @id = id
-    @name = ItemDefinition.lookup(id).name.downcase
+    @name = ItemDefinition.lookup(id).name.to_s.downcase
     @level = level
     @experience = experience
     @multiplier = multiplier
