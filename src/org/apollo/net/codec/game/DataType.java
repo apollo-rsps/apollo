@@ -13,16 +13,6 @@ public enum DataType {
 	BYTE(1),
 
 	/**
-	 * An integer.
-	 */
-	INT(4),
-
-	/**
-	 * A long.
-	 */
-	LONG(8),
-
-	/**
 	 * A short.
 	 */
 	SHORT(2),
@@ -30,7 +20,17 @@ public enum DataType {
 	/**
 	 * A 'tri byte' - a group of three bytes.
 	 */
-	TRI_BYTE(3);
+	TRI_BYTE(3),
+
+	/**
+	 * An integer.
+	 */
+	INT(4),
+
+	/**
+	 * A long.
+	 */
+	LONG(8);
 
 	/**
 	 * The number of bytes this type occupies.
