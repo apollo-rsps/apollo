@@ -162,21 +162,16 @@ public final class Sector {
 	 * @throws IllegalArgumentException If the entity does not belong in this sector, or if it was never added.
 	 */
 	public void removeEntity(Entity entity) {
-		try {
-			Position position = entity.getPosition();
-			checkPosition(position);
+		Position position = entity.getPosition();
+		checkPosition(position);
 
-			Set<Entity> local = entities.get(position);
+		Set<Entity> local = entities.get(position);
 
-			if (local == null || !local.remove(entity)) {
-				throw new IllegalArgumentException("Entity belongs in this sector but does not exist.");
-			}
-
-			notifyListeners(entity, SectorOperation.REMOVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
+		if (local == null || !local.remove(entity)) {
+			throw new IllegalArgumentException("Entity belongs in this sector but does not exist.");
 		}
+
+		notifyListeners(entity, SectorOperation.REMOVE);
 	}
 
 }
