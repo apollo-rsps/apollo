@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<plugin>
+  <id>trading</id>
+  <version>1</version>
+  <name>Trading</name>
+  <description>Adds support for trading.</description>
+  <authors>
+    <author>Linux</author>
+  </authors>
+  <scripts>
+    <script>trade.rb</script>
+    <script>trading.rb</script>
+  </scripts>
+  <dependencies>
+    <dependency>attributes</dependency>
+  </dependencies>
+</plugin>
