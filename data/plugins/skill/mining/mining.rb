@@ -3,6 +3,7 @@ require 'java'
 java_import 'org.apollo.game.action.DistancedAction'
 java_import 'org.apollo.game.model.def.ItemDefinition'
 java_import 'org.apollo.game.model.entity.EquipmentConstants'
+java_import 'org.apollo.game.model.entity.Skill'
 
 PROSPECT_PULSES = 3
 ORE_SIZE = 1
@@ -20,14 +21,8 @@ class MiningAction < DistancedAction
   end
 
   def find_pickaxe
-    PICKAXE_IDS.each do |id|
-      weapon = mob.equipment.get(EquipmentConstants::WEAPON)
-      if (weapon != nil && weapon.id == id)
-        return PICKAXES[id]
-      end
-
-      return PICKAXES[id] if mob.inventory.contains(id)
-    end
+    weapon = mob.equipment.get(EquipmentConstants::WEAPON)
+    PICKAXE_IDS.each { |id| return PICKAXES[id] if (!weapon.nil? && weapon.id == id) || mob.inventory.contains(id) }
 
     return nil
   end
@@ -43,12 +38,12 @@ class MiningAction < DistancedAction
 
   def executeAction
     skills = mob.skill_set
-    level = skills.get_skill(MINING_SKILL_ID).current_level
+    level = skills.get_skill(Skill::MINING).current_level
     pickaxe = find_pickaxe
     mob.turn_to(@position)
 
     # verify the mob can mine with their pickaxe
-    unless (pickaxe != nil and level >= pickaxe.level)
+    unless (!pickaxe.nil? and level >= pickaxe.level)
       mob.send_message('You do not have a pickaxe for which you have the level to use.')
       stop
       return
@@ -74,7 +69,7 @@ class MiningAction < DistancedAction
           name = ore_def.name.sub(/ ore$/, '').downcase
 
           mob.send_message("You manage to mine some #{name}.", true)
-          skills.add_experience(MINING_SKILL_ID, ore.exp)
+          skills.add_experience(Skill::MINING, ore.exp)
           # TODO: expire the rock
         end
 
@@ -136,20 +131,23 @@ class ProspectingAction < DistancedAction
   def equals(other)
     return (get_class == other.get_class and @position == other.position and @ore == other.ore)
   end
+
 end
 
 on :message, :first_object_action do |ctx, mob, message|
   ore = ORES[message.id]
-  if ore != nil
+
+  unless ore.nil?
     mob.start_action(MiningAction.new(mob, message.position, ore))
   end
 end
 
 on :message, :second_object_action do |ctx, mob, message|
   ore = ORES[message.id]
-  if ore != nil
+
+  if !ore.nil?
     mob.start_action(ProspectingAction.new(mob, message.position, ore))
-  elsif EXPIRED_ORES[message.id] != nil
+  elsif !EXPIRED_ORES[message.id].nil?
     mob.start_action(ExpiredProspectingAction.new(mob, message.position))
   end
 end
