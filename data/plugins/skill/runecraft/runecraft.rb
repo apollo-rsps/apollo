@@ -3,6 +3,7 @@ require 'java'
 java_import 'org.apollo.game.action.DistancedAction'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Graphic'
+java_import 'org.apollo.game.model.entity.Skill'
 
 RUNECRAFTING_ANIMATION = Animation.new(791)
 RUNECRAFTING_GRAPHIC = Graphic.new(186, 0, 100)
@@ -22,7 +23,7 @@ class RunecraftingAction < DistancedAction
   end
 
   def executeAction
-    runecrafting_level = @player.skill_set.get_skill(RUNECRAFT_SKILL_ID).current_level
+    runecrafting_level = @player.skill_set.get_skill(Skill::RUNECRAFT).current_level
 
     if (runecrafting_level < @rune.level)
       @player.send_message("You need a runecrafting level of #{@rune.level} to craft this rune.")
@@ -41,7 +42,7 @@ class RunecraftingAction < DistancedAction
       @player.inventory.add(@rune.id, added)
 
       @player.send_message("Your craft the rune essence into #{added > 1 ? 'some ' + @rune.name + 's' : 'an ' + @rune.name}.", true)
-      @player.skill_set.add_experience(RUNECRAFT_SKILL_ID, removed * @rune.experience)
+      @player.skill_set.add_experience(Skill::RUNECRAFT, removed * @rune.experience)
       stop
     end
   end
