@@ -53,7 +53,6 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 			Position position = player.getPosition();
 			player.setLastKnownSector(position);
-
 			player.send(new SectorChangeMessage(position));
 		}
 	}

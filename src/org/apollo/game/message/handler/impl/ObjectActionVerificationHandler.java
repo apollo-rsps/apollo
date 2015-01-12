@@ -1,6 +1,7 @@
 package org.apollo.game.message.handler.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
@@ -36,14 +37,9 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 
 		Position position = message.getPosition();
 		Sector sector = repository.fromPosition(position);
-		List<GameObject> objects = sector.getEntities(position, EntityType.GAME_OBJECT);
+		Set<GameObject> objects = sector.getEntities(position, EntityType.GAME_OBJECT);
 
-		if (!containsObject(id, objects)) {
-			ctx.breakHandlerChain();
-			return;
-		}
-
-		if (!player.getPosition().isWithinDistance(position, 15)) {
+		if (!player.getPosition().isWithinDistance(position, 15) || !containsObject(id, objects)) {
 			ctx.breakHandlerChain();
 			return;
 		}
@@ -62,8 +58,8 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 	 * @param objects The list of objects.
 	 * @return {@code true} if the list does contain the object with the specified id, otherwise {@code false}.
 	 */
-	private static boolean containsObject(int id, List<GameObject> objects) {
-		return objects.stream().filter(object -> object.getId() == id).findAny().isPresent();
+	private static boolean containsObject(int id, Set<GameObject> objects) {
+		return objects.stream().anyMatch(object -> object.getId() == id);
 	}
 
 }

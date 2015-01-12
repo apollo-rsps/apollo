@@ -106,19 +106,17 @@ public final class PlayerCredentials {
 
 	@Override
 	public int hashCode() {
-		return (int) encodedUsername;
+		return Long.hashCode(encodedUsername);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		} else if (obj == null || getClass() != obj.getClass()) {
-			return false;
+		if (obj instanceof PlayerCredentials) {
+			PlayerCredentials other = (PlayerCredentials) obj;
+			return encodedUsername == other.encodedUsername;
 		}
 
-		PlayerCredentials other = (PlayerCredentials) obj;
-		return encodedUsername == other.encodedUsername;
+		return false;
 	}
 
 }

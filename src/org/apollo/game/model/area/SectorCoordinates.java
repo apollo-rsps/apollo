@@ -2,11 +2,14 @@ package org.apollo.game.model.area;
 
 import org.apollo.game.model.Position;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * An immutable class representing the coordinates of a sector, where the coordinates ({@code x, y}) are the top-left of
  * the sector.
  * 
  * @author Graham
+ * @author Major
  */
 public final class SectorCoordinates {
 
@@ -43,12 +46,12 @@ public final class SectorCoordinates {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
+		if (obj instanceof SectorCoordinates) {
+			SectorCoordinates other = (SectorCoordinates) obj;
+			return x == other.x && y == other.y;
 		}
 
-		final SectorCoordinates other = (SectorCoordinates) obj;
-		return x == other.x && y == other.y;
+		return false;
 	}
 
 	/**
@@ -72,6 +75,11 @@ public final class SectorCoordinates {
 	@Override
 	public int hashCode() {
 		return x << 16 | y;
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("x", x).add("y", y).toString();
 	}
 
 }

@@ -378,7 +378,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param builder The builder.
 	 */
 	private static void putInteractingMobBlock(InteractingMobBlock block, GamePacketBuilder builder) {
-		builder.put(DataType.SHORT, DataTransformation.ADD, block.getInteractingMobIndex());
+		builder.put(DataType.SHORT, DataTransformation.ADD, block.getIndex());
 	}
 
 	/**

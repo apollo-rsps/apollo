@@ -1,6 +1,11 @@
 package org.apollo.game.model.entity;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
+import org.apollo.game.model.area.Sector;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.sync.block.SynchronizationBlock;
 
@@ -15,11 +20,6 @@ import com.google.common.base.Preconditions;
 public final class Npc extends Mob {
 
 	/**
-	 * This npc's id.
-	 */
-	private int id;
-
-	/**
 	 * The positions representing the bounds (i.e. walking limits) of this npc.
 	 */
 	private Position[] boundary;
@@ -31,19 +31,29 @@ public final class Npc extends Mob {
 	 * @param position The position.
 	 */
 	public Npc(int id, Position position) {
-		this(NpcDefinition.lookup(id), position);
+		this(position, NpcDefinition.lookup(id));
 	}
 
 	/**
 	 * Creates a new npc with the specified {@link NpcDefinition} and {@link Position}.
 	 * 
-	 * @param definition The definition.
 	 * @param position The position.
+	 * @param definition The definition.
 	 */
-	public Npc(NpcDefinition definition, Position position) {
-		super(position);
-		this.definition = definition;
-		this.id = definition.getId();
+	public Npc(Position position, NpcDefinition definition) {
+		super(position, definition);
+
+		init();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Npc) {
+			Npc other = (Npc) obj;
+			return position.equals(other.position) && Arrays.equals(boundary, other.boundary) && getId() == other.getId();
+		}
+
+		return false;
 	}
 
 	/**
@@ -52,7 +62,7 @@ public final class Npc extends Mob {
 	 * @return The boundary.
 	 */
 	public Position[] getBoundary() {
-		return boundary;
+		return boundary.clone();
 	}
 
 	@Override
@@ -66,7 +76,14 @@ public final class Npc extends Mob {
 	 * @return The id.
 	 */
 	public int getId() {
-		return id;
+		return definition.get().getId();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = prime * position.hashCode() + Arrays.hashCode(boundary);
+		return prime * result + getId();
 	}
 
 	/**
@@ -85,12 +102,12 @@ public final class Npc extends Mob {
 	 */
 	public void setBoundary(Position[] boundary) {
 		Preconditions.checkArgument(boundary.length == 4, "Boundary count must be 4.");
-		this.boundary = boundary;
+		this.boundary = boundary.clone();
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("id", definition.getId()).add("name", definition.getName()).toString();
+		return MoreObjects.toStringHelper(this).add("id", getId()).add("name", definition.get().getName()).toString();
 	}
 
 	/**
@@ -99,9 +116,20 @@ public final class Npc extends Mob {
 	 * @param id The id.
 	 */
 	public void transform(int id) {
-		Preconditions.checkArgument(id >= 0 && id < NpcDefinition.count(), "Id to transform to is out of bounds.");
-		definition = NpcDefinition.lookup(this.id = id);
+		Preconditions.checkElementIndex(id, NpcDefinition.count(), "Id to transform to is out of bounds.");
+
+		definition = Optional.of(NpcDefinition.lookup(id));
 		blockSet.add(SynchronizationBlock.createTransformBlock(id));
+	}
+
+	/**
+	 * Initialises this npc.
+	 */
+	private void init() {
+		// This has to be here instead of in Mob#init because of ordering issues - the player cannot be added to the
+		// sector until their credentials have been set, which is only done after the super constructors are called.
+		Sector sector = World.getWorld().getSectorRepository().get(position.getSectorCoordinates());
+		sector.addEntity(this);
 	}
 
 }

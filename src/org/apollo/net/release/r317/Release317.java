@@ -19,8 +19,8 @@ import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.message.impl.PositionMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
-import org.apollo.game.message.impl.SectorChangeMessage;
 import org.apollo.game.message.impl.RemoveTileItemMessage;
+import org.apollo.game.message.impl.SectorChangeMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.SendObjectMessage;
 import org.apollo.game.message.impl.ServerChatMessage;
@@ -128,7 +128,7 @@ public final class Release317 extends Release {
 		register(237, new MagicOnItemMessageDecoder());
 
 		register(3, new FocusUpdateMessageDecoder());
-		register(241, new MouseClickMessageDecoder());
+		register(45, new MouseClickMessageDecoder());
 		register(86, new ArrowKeyMessageDecoder());
 		register(95, new PrivacyOptionMessageDecoder());
 

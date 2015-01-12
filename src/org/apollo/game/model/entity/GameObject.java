@@ -31,6 +31,16 @@ public final class GameObject extends Entity {
 		this.packed = id << 8 | type << 2 | orientation;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof GameObject) {
+			GameObject other = (GameObject) obj;
+			return position.equals(other.position) && packed == other.packed;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Gets the definition of this object.
 	 * 
@@ -70,6 +80,11 @@ public final class GameObject extends Entity {
 	 */
 	public int getType() {
 		return (packed >> 2) & 0x3F;
+	}
+
+	@Override
+	public int hashCode() {
+		return packed;
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import org.apollo.game.message.impl.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.area.Sector;
 import org.apollo.game.model.inter.InterfaceConstants;
 import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inter.InterfaceSet;
@@ -81,6 +82,21 @@ public final class Player extends Mob {
 	 * This player's credentials.
 	 */
 	private PlayerCredentials credentials;
+
+	@Override
+	public int hashCode() {
+		return credentials.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Player) {
+			Player other = (Player) obj;
+			return credentials.equals(other.credentials);
+		}
+
+		return false;
+	}
 
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
@@ -206,6 +222,7 @@ public final class Player extends Mob {
 	public Player(PlayerCredentials credentials, Position position) {
 		super(position);
 		this.credentials = credentials;
+
 		init();
 	}
 
@@ -923,6 +940,11 @@ public final class Player extends Mob {
 	private void init() {
 		initInventories();
 		initSkills();
+
+		// This has to be here instead of in Mob#init because of ordering issues - the player cannot be added to the
+		// sector until their credentials have been set, which is only done after the super constructors are called.
+		Sector sector = World.getWorld().getSectorRepository().get(position.getSectorCoordinates());
+		sector.addEntity(this);
 	}
 
 	/**

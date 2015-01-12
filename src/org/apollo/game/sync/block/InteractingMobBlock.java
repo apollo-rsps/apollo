@@ -8,17 +8,22 @@ package org.apollo.game.sync.block;
 public final class InteractingMobBlock extends SynchronizationBlock {
 
 	/**
+	 * The index used to reset the interacting mob.
+	 */
+	public static final int RESET_INDEX = 65_535;
+
+	/**
 	 * The index of the mob.
 	 */
-	private final int mobIndex;
+	private final int index;
 
 	/**
 	 * Creates the interacting mob block.
 	 * 
-	 * @param mobIndex The index of the current interacting mob.
+	 * @param index The index of the current interacting mob.
 	 */
-	InteractingMobBlock(int mobIndex) {
-		this.mobIndex = mobIndex;
+	InteractingMobBlock(int index) {
+		this.index = index;
 	}
 
 	/**
@@ -26,8 +31,8 @@ public final class InteractingMobBlock extends SynchronizationBlock {
 	 * 
 	 * @return The index.
 	 */
-	public int getInteractingMobIndex() {
-		return mobIndex;
+	public int getIndex() {
+		return index;
 	}
 
 }

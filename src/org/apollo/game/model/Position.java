@@ -1,5 +1,8 @@
 package org.apollo.game.model;
 
+import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.area.SectorCoordinates;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -23,7 +26,7 @@ public final class Position {
 	/**
 	 * The packed integer containing the {@code height, x}, and {@code y} variables.
 	 */
-	private final int position;
+	private final int packed;
 
 	/**
 	 * Creates a position at the default height.
@@ -45,14 +48,14 @@ public final class Position {
 	public Position(int x, int y, int height) {
 		Preconditions.checkArgument(height >= 0 && height < HEIGHT_LEVELS, "Height level out of bounds.");
 
-		position = height << 30 | (y & 0x7FFF) << 15 | x & 0x7FFF;
+		packed = height << 30 | (y & 0x7FFF) << 15 | x & 0x7FFF;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Position) {
 			Position other = (Position) obj;
-			return position == other.position;
+			return packed == other.packed;
 		}
 
 		return false;
@@ -94,7 +97,7 @@ public final class Position {
 	 * @return The height level.
 	 */
 	public int getHeight() {
-		return position >> 30;
+		return packed >> 30;
 	}
 
 	/**
@@ -148,6 +151,15 @@ public final class Position {
 	}
 
 	/**
+	 * Returns the {@link SectorCoordinates} of the {@link Sector} this position is inside.
+	 * 
+	 * @return The sector coordinates.
+	 */
+	public SectorCoordinates getSectorCoordinates() {
+		return SectorCoordinates.fromPosition(this);
+	}
+
+	/**
 	 * Gets the x coordinate of the sector this position is in.
 	 * 
 	 * @return The sector x coordinate.
@@ -171,7 +183,7 @@ public final class Position {
 	 * @return The x coordinate.
 	 */
 	public int getX() {
-		return position & 0x7FFF;
+		return packed & 0x7FFF;
 	}
 
 	/**
@@ -180,12 +192,23 @@ public final class Position {
 	 * @return The y coordinate.
 	 */
 	public int getY() {
-		return (position >> 15) & 0x7FFF;
+		return (packed >> 15) & 0x7FFF;
 	}
 
 	@Override
 	public int hashCode() {
-		return position;
+		return packed;
+	}
+
+	/**
+	 * Returns whether or not this position is inside the specified {@link Sector}.
+	 * 
+	 * @param sector The sector.
+	 * @return {@code true} if this position is inside the specified sector, otherwise {@code false}.
+	 */
+	public boolean inside(Sector sector) {
+		SectorCoordinates coordinates = sector.getCoordinates();
+		return coordinates.equals(getSectorCoordinates());
 	}
 
 	/**
@@ -204,7 +227,7 @@ public final class Position {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight())
-				.add("sector x", getTopLeftSectorX()).add("sector y", getTopLeftSectorY()).toString();
+				.add("sector", getSectorCoordinates()).toString();
 	}
 
 }

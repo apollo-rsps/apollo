@@ -16,23 +16,24 @@ public final class MouseClickMessageDecoder extends MessageDecoder<MouseClickMes
 	@Override
 	public MouseClickMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		int read, clickCount, x, y;
+		int read, clicks, x, y;
 
 		if (reader.getLength() == 2) {
 			read = (int) reader.getUnsigned(DataType.SHORT);
-			clickCount = (read >> 12);
+			clicks = (read >> 12);
 			x = (read >> 6) & 0x3f;
 			y = read & 0x3f;
-			return new MouseClickMessage(clickCount, x, y, true);
+			return new MouseClickMessage(clicks, x, y, true);
 		} else if (reader.getLength() == 3) {
 			read = (int) reader.getUnsigned(DataType.TRI_BYTE) & ~0x800000;
 		} else {
 			read = (int) reader.getUnsigned(DataType.INT) & ~0xc0000000;
 		}
-		clickCount = (read >> 19);
+		
+		clicks = (read >> 19);
 		x = (read & 0x7f) % 765;
 		y = (read & 0x7f) / 765;
-		return new MouseClickMessage(clickCount, x, y, false);
+		return new MouseClickMessage(clicks, x, y, false);
 	}
 
 }

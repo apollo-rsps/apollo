@@ -38,9 +38,12 @@ public final class PhasedSynchronizationTask extends SynchronizationTask {
 	public void run() {
 		try {
 			task.run();
+		} catch (Exception e) { // TODO better solution...
+			e.printStackTrace();
+			// The executor suppresses any exceptions thrown as part of the task, so we catch and print here as
+			// rethrowing them does nothing.
 		} finally {
 			phaser.arriveAndDeregister();
 		}
 	}
-
 }
