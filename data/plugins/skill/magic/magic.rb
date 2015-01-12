@@ -45,7 +45,7 @@ class SpellAction < Action
   
   def check_skill
     required = @spell.level
-    if required > mob.skill_set.skill(MAGIC_SKILL_ID).maximum_level
+    if required > mob.skill_set.skill(Skill::MAGIC).maximum_level
       mob.send_message("You need a Magic level of at least #{required} to cast this spell.")
       return false
     end
@@ -63,9 +63,7 @@ class SpellAction < Action
       end
     end
     
-    elements.each do |element, amount|
-      element.check_remove(mob, amount, true)
-    end
+    elements.each { |element, amount| element.check_remove(mob, amount, true) }
     
     return true
   end
@@ -124,7 +122,7 @@ on :message, :magic_on_item do |ctx, player, message|
   spell = message.spell_id
   
   alch = ALCHEMY_SPELLS[spell]
-  if alch != nil
+  unless alch.nil?
     slot = message.slot
     item = player.inventory.get(slot)
     player.start_action(AlchemyAction.new(player, alch, slot, item))
@@ -133,7 +131,7 @@ on :message, :magic_on_item do |ctx, player, message|
   end
   
   ench = ENCHANT_SPELLS[message.id]
-  if ench != nil and ench.button == spell
+  if !ench.nil? and ench.button == spell
     slot = message.slot
     item = player.inventory.get(slot)
     player.start_action(EnchantAction.new(player, ench, slot, item, ENCHANT_ITEMS[item.id]))
@@ -146,16 +144,17 @@ on :message, :button do |ctx, player, message|
   button = message.widget_id
 
   tele = TELEPORT_SPELLS[button]
-  if tele != nil
+  unless tele.nil?
     player.start_action(TeleportingAction.new(player, tele))
     ctx.break_handler_chain
     return
   end
   
   conv = CONVERT_SPELLS[button]
-  if conv != nil
+  unless conv.nil?
     slots = bone_slots player
-    if slots.length == 0 then player.send_message("You cant convert these bones!") else player.start_action(ConvertingAction.new(player, conv, slots)) end
+
+    if slots.length == 0 then player.send_message("You can't convert these bones!") else player.start_action(ConvertingAction.new(player, conv, slots)) end
     ctx.break_handler_chain
   end
 end
