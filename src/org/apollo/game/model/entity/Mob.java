@@ -3,6 +3,7 @@ package org.apollo.game.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apollo.game.action.Action;
 import org.apollo.game.model.Animation;
@@ -11,7 +12,6 @@ import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
-import org.apollo.game.model.area.SectorCoordinates;
 import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.entity.attr.Attribute;
@@ -20,6 +20,7 @@ import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.Inventory.StackMode;
 import org.apollo.game.model.inv.InventoryConstants;
 import org.apollo.game.scheduling.impl.SkillNormalizationTask;
+import org.apollo.game.sync.block.InteractingMobBlock;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 
@@ -30,11 +31,6 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
  * @author Major
  */
 public abstract class Mob extends Entity {
-
-	/**
-	 * This mob's current action.
-	 */
-	private transient Action<?> action;
 
 	/**
 	 * The attribute map of this mob.
@@ -49,22 +45,12 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's npc definition. A player only uses this if they are appearing as an npc.
 	 */
-	protected NpcDefinition definition;
+	protected Optional<NpcDefinition> definition;
 
 	/**
 	 * This mob's equipment.
 	 */
 	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
-
-	/**
-	 * The position this mob is facing towards.
-	 */
-	private transient Position facingPosition = position;
-
-	/**
-	 * This mob's first movement direction.
-	 */
-	private transient Direction firstDirection = Direction.NONE;
 
 	/**
 	 * The index of this mob.
@@ -82,6 +68,31 @@ public abstract class Mob extends Entity {
 	protected final Inventory inventory = new Inventory(InventoryConstants.INVENTORY_CAPACITY);
 
 	/**
+	 * This mob's skill set.
+	 */
+	protected final SkillSet skillSet = new SkillSet();
+
+	/**
+	 * This mob's walking queue.
+	 */
+	protected final transient WalkingQueue walkingQueue = new WalkingQueue(this);
+
+	/**
+	 * This mob's current action.
+	 */
+	private transient Action<?> action;
+
+	/**
+	 * The position this mob is facing towards.
+	 */
+	private transient Position facingPosition = position;
+
+	/**
+	 * This mob's first movement direction.
+	 */
+	private transient Direction firstDirection = Direction.NONE;
+
+	/**
 	 * This mob's list of local npcs.
 	 */
 	private final transient List<Npc> localNpcs = new ArrayList<>();
@@ -97,27 +108,29 @@ public abstract class Mob extends Entity {
 	private transient Direction secondDirection = Direction.NONE;
 
 	/**
-	 * This mob's skill set.
-	 */
-	protected final SkillSet skillSet = new SkillSet();
-
-	/**
 	 * Indicates whether this mob is currently teleporting or not.
 	 */
 	private transient boolean teleporting = false;
 
 	/**
-	 * This mob's walking queue.
-	 */
-	protected final transient WalkingQueue walkingQueue = new WalkingQueue(this);
-
-	/**
-	 * Creates a new mob with the specified initial {@link Position}.
-	 * 
-	 * @param position The initial position.
+	 * Creates the mob with the specified initial {@link Position}.
+	 *
+	 * @param position The position.
 	 */
 	public Mob(Position position) {
+		this(position, null);
+	}
+
+	/**
+	 * Creates the mob.
+	 * 
+	 * @param position The initial position.
+	 * @param definition The {@link NpcDefinition}.
+	 */
+	public Mob(Position position, NpcDefinition definition) {
 		super(position);
+		this.definition = Optional.ofNullable(definition);
+
 		init();
 	}
 
@@ -170,7 +183,7 @@ public abstract class Mob extends Entity {
 	 * @return The npc definition.
 	 */
 	public final NpcDefinition getDefinition() {
-		return definition;
+		return definition.get();
 	}
 
 	/**
@@ -183,6 +196,7 @@ public abstract class Mob extends Entity {
 			return secondDirection == Direction.NONE ? new Direction[] { firstDirection } : new Direction[] { firstDirection,
 					secondDirection };
 		}
+
 		return Direction.EMPTY_DIRECTION_ARRAY;
 	}
 
@@ -288,10 +302,12 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Initialises this mob.
+	 * Returns whether or not this mob has an {@link NpcDefinition}.
+	 * 
+	 * @return {@code true} if this mob has an npc definition, {@code false} if not.
 	 */
-	private void init() {
-		World.getWorld().schedule(new SkillNormalizationTask(this));
+	public final boolean hasNpcDefinition() {
+		return definition.isPresent();
 	}
 
 	/**
@@ -342,7 +358,7 @@ public abstract class Mob extends Entity {
 	 */
 	public final void resetInteractingMob() {
 		interactingMob = null;
-		blockSet.add(SynchronizationBlock.createInteractingMobBlock(65535));
+		blockSet.add(SynchronizationBlock.createInteractingMobBlock(InteractingMobBlock.RESET_INDEX));
 	}
 
 	/**
@@ -358,10 +374,11 @@ public abstract class Mob extends Entity {
 	/**
 	 * Sets this mob's {@link NpcDefinition}.
 	 * 
-	 * @param definition The definition.
+	 * @param definition The definition. Must not be {@code null}.
+	 * @throws NullPointerException If the specified definition is {@code null}.
 	 */
 	public final void setDefinition(NpcDefinition definition) {
-		this.definition = definition;
+		this.definition = Optional.of(definition);
 	}
 
 	/**
@@ -403,17 +420,14 @@ public abstract class Mob extends Entity {
 	 */
 	public final void setPosition(Position position) {
 		SectorRepository repository = World.getWorld().getSectorRepository();
-		Sector newSector = repository.fromPosition(position);
+		Sector current = repository.fromPosition(this.position);
 
-		if (SectorCoordinates.fromPosition(this.position) != SectorCoordinates.fromPosition(position)) {
-			Sector oldSector = repository.fromPosition(this.position);
-			oldSector.removeEntity(this);
-		} else {
-			newSector.removeEntity(this);
-		}
+		Sector next = position.inside(current) ? current : repository.fromPosition(position);
 
-		this.position = position;
-		newSector.addEntity(this);
+		current.removeEntity(this);
+		this.position = position; // addEntity relies on the position being updated, so do that first.
+
+		next.addEntity(this);
 	}
 
 	/**
@@ -446,6 +460,7 @@ public abstract class Mob extends Entity {
 			if (this.action.equals(action)) {
 				return false;
 			}
+
 			stopAction();
 		}
 
@@ -498,6 +513,13 @@ public abstract class Mob extends Entity {
 	public final void turnTo(Position position) {
 		this.facingPosition = position;
 		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(position));
+	}
+
+	/**
+	 * Initialises this mob.
+	 */
+	private void init() {
+		World.getWorld().schedule(new SkillNormalizationTask(this));
 	}
 
 }

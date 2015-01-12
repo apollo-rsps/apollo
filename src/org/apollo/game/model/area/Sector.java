@@ -2,15 +2,19 @@ package org.apollo.game.model.area;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Entity.EntityType;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * An 8x8 area of the map.
@@ -18,6 +22,11 @@ import com.google.common.collect.ImmutableList;
  * @author Major
  */
 public final class Sector {
+
+	/**
+	 * The default size of newly-created sets, to reduce memory usage.
+	 */
+	private static final int DEFAULT_SET_SIZE = 2;
 
 	/**
 	 * The width and length of a sector, in tiles.
@@ -32,7 +41,7 @@ public final class Sector {
 	/**
 	 * A map of positions to entities in that position.
 	 */
-	private final Map<Position, List<Entity>> entities = new HashMap<>();
+	private final Map<Position, Set<Entity>> entities = new HashMap<>();
 
 	/**
 	 * A list of listeners registered to this sector.
@@ -66,27 +75,37 @@ public final class Sector {
 	 */
 	public void addEntity(Entity entity) {
 		Position position = entity.getPosition();
-		List<Entity> entities = this.entities.get(position);
-		if (entities == null) {
-			entities = new ArrayList<>();
-		}
+		checkPosition(position);
+		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
 
-		entities.add(entity);
-		this.entities.put(position, entities);
+		local.add(entity);
 		notifyListeners(entity, SectorOperation.ADD);
 	}
 
 	/**
+	 * Checks that the specified {@link Position} is included in this sector.
+	 * 
+	 * @param position The position.
+	 * @throws IllegalArgumentException If the specified position is not included in this sector.
+	 */
+	private void checkPosition(Position position) {
+		Preconditions.checkArgument(coordinates.equals(SectorCoordinates.fromPosition(position)),
+				"Position is not included in this sector.");
+	}
+
+	/**
 	 * Checks if this sector contains the specified entity.
+	 * <p>
+	 * This method operates in constant time.
 	 * 
 	 * @param entity The entity.
 	 * @return {@code true} if this sector contains the entity, otherwise {@code false}.
 	 */
 	public boolean contains(Entity entity) {
 		Position position = entity.getPosition();
-		List<Entity> entities = this.entities.get(position);
+		Set<Entity> local = entities.get(position);
 
-		return entities != null && entities.contains(entity);
+		return local != null && local.contains(entity);
 	}
 
 	/**
@@ -99,17 +118,6 @@ public final class Sector {
 	}
 
 	/**
-	 * Gets an {@link ImmutableList} containing every {@link Entity} in this sector.
-	 * 
-	 * @return The list.
-	 */
-	public List<Entity> getEntities() {
-		List<Entity> combined = new ArrayList<>();
-		this.entities.values().forEach(entities -> combined.addAll(entities));
-		return ImmutableList.copyOf(combined);
-	}
-
-	/**
 	 * Gets a shallow copy of the {@link List} of {@link Entity} objects at the specified {@link Position}. The returned
 	 * type will be {@link ImmutableList}.
 	 * 
@@ -117,13 +125,7 @@ public final class Sector {
 	 * @return The list.
 	 */
 	public List<Entity> getEntities(Position position) {
-		List<Entity> entities = this.entities.get(position);
-		if (entities == null) {
-			this.entities.put(position, new ArrayList<>());
-			return ImmutableList.of();
-		}
-
-		return ImmutableList.copyOf(entities);
+		return ImmutableList.copyOf(entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE)));
 	}
 
 	/**
@@ -135,16 +137,12 @@ public final class Sector {
 	 * @param type The {@link EntityType}.
 	 * @return The list of entities.
 	 */
-	public <T extends Entity> List<T> getEntities(Position position, EntityType type) {
-		List<Entity> entities = this.entities.get(position);
-		if (entities == null) {
-			this.entities.put(position, new ArrayList<>());
-			return ImmutableList.of();
-		}
+	public <T extends Entity> Set<T> getEntities(Position position, EntityType type) {
+		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
 
 		@SuppressWarnings("unchecked")
-		List<T> filtered = (List<T>) entities.stream().filter(e -> e.getEntityType() == type).collect(Collectors.toList());
-		return ImmutableList.copyOf(filtered);
+		Set<T> filtered = (Set<T>) local.stream().filter(entity -> entity.getEntityType() == type).collect(Collectors.toSet());
+		return ImmutableSet.copyOf(filtered);
 	}
 
 	/**
@@ -161,17 +159,24 @@ public final class Sector {
 	 * Removes a {@link Entity} from this sector.
 	 * 
 	 * @param entity The entity.
-	 * @return {@code true} if the entity was removed, otherwise {@code false}.
+	 * @throws IllegalArgumentException If the entity does not belong in this sector, or if it was never added.
 	 */
-	public boolean removeEntity(Entity entity) {
-		Position position = entity.getPosition();
-		List<Entity> entities = this.entities.get(position);
+	public void removeEntity(Entity entity) {
+		try {
+			Position position = entity.getPosition();
+			checkPosition(position);
 
-		if (entities != null && entities.remove(entity)) {
+			Set<Entity> local = entities.get(position);
+
+			if (local == null || !local.remove(entity)) {
+				throw new IllegalArgumentException("Entity belongs in this sector but does not exist.");
+			}
+
 			notifyListeners(entity, SectorOperation.REMOVE);
-			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
-		return false;
 	}
 
 }

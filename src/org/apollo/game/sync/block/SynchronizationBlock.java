@@ -34,9 +34,11 @@ public abstract class SynchronizationBlock {
 	 * @return The appearance block.
 	 */
 	public static SynchronizationBlock createAppearanceBlock(Player player) {
-		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), player.getSkillSet().getCombatLevel(), 0,
-				player.getEquipment(), player.getPrayerIcon(), player.isSkulled(), player.getDefinition() == null ? -1 : player
-						.getDefinition().getId());
+		int combat = player.getSkillSet().getCombatLevel();
+		int id = player.hasNpcDefinition() ? player.getDefinition().getId() : -1;
+
+		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), combat, 0, player.getEquipment(),
+				player.getPrayerIcon(), player.isSkulled(), id);
 	}
 
 	/**

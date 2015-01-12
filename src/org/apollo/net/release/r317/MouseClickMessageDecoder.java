@@ -19,19 +19,21 @@ public final class MouseClickMessageDecoder extends MessageDecoder<MouseClickMes
 		int read;
 		if (reader.getLength() == 2) {
 			read = (int) reader.getUnsigned(DataType.SHORT);
-			int clickCount = (read >> 12);
+			int clicks = (read >> 12);
 			int dX = (read >> 6) & 0x3f;
 			int dY = read & 0x3f;
-			return new MouseClickMessage(clickCount, dX, dY, true);
+			return new MouseClickMessage(clicks, dX, dY, true);
 		} else if (reader.getLength() == 3) {
 			read = (int) reader.getUnsigned(DataType.TRI_BYTE) & ~0x800000;
 		} else {
 			read = (int) reader.getUnsigned(DataType.INT) & ~0xc0000000;
 		}
-		int clickCount = (read >> 19);
+
+		int clicks = (read >> 19);
 		int x = (read & 0x7f) % 765;
 		int y = (read & 0x7f) / 765;
-		return new MouseClickMessage(clickCount, x, y, false);
+
+		return new MouseClickMessage(clicks, x, y, false);
 	}
 
 }

@@ -217,7 +217,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 	 * @param builder The builder.
 	 */
 	private static void putInteractingMobBlock(InteractingMobBlock block, GamePacketBuilder builder) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, block.getInteractingMobIndex());
+		builder.put(DataType.SHORT, DataOrder.LITTLE, block.getIndex());
 	}
 
 	/**

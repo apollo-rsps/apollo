@@ -3,6 +3,7 @@ package org.apollo.game.model;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -133,7 +134,7 @@ public final class World {
 	/**
 	 * This world's {@link SectorRepository}.
 	 */
-	private final SectorRepository sectorRepository = new SectorRepository(false);
+	private final SectorRepository sectors = SectorRepository.immutable();
 
 	/**
 	 * Creates the world.
@@ -222,7 +223,7 @@ public final class World {
 	 * @return The sector repository.
 	 */
 	public SectorRepository getSectorRepository() {
-		return sectorRepository;
+		return sectors;
 	}
 
 	/**
@@ -236,10 +237,10 @@ public final class World {
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
 		this.releaseNumber = release;
 
-		ItemDefinitionDecoder itemDefDecoder = new ItemDefinitionDecoder(fs);
-		ItemDefinition[] itemDefs = itemDefDecoder.decode();
-		ItemDefinition.init(itemDefs);
-		logger.fine("Loaded " + itemDefs.length + " item definitions.");
+		ItemDefinitionDecoder itemDecoder = new ItemDefinitionDecoder(fs);
+		ItemDefinition[] items = itemDecoder.decode();
+		ItemDefinition.init(items);
+		logger.fine("Loaded " + items.length + " item definitions.");
 
 		try (InputStream is = new BufferedInputStream(new FileInputStream("data/equipment-" + release + ".dat"))) {
 			EquipmentDefinitionParser parser = new EquipmentDefinitionParser(is);
@@ -249,14 +250,14 @@ public final class World {
 		}
 
 		NpcDefinitionDecoder npcDecoder = new NpcDefinitionDecoder(fs);
-		NpcDefinition[] npcDefs = npcDecoder.decode();
-		NpcDefinition.init(npcDefs);
-		logger.fine("Loaded " + npcDefs.length + " npc definitions.");
+		NpcDefinition[] npcs = npcDecoder.decode();
+		NpcDefinition.init(npcs);
+		logger.fine("Loaded " + npcs.length + " npc definitions.");
 
 		ObjectDefinitionDecoder objectDecoder = new ObjectDefinitionDecoder(fs);
-		ObjectDefinition[] objDefs = objectDecoder.decode();
-		ObjectDefinition.init(objDefs);
-		logger.fine("Loaded " + objDefs.length + " object definitions.");
+		ObjectDefinition[] objectDefs = objectDecoder.decode();
+		ObjectDefinition.init(objectDefs);
+		logger.fine("Loaded " + objectDefs.length + " object definitions.");
 
 		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs);
 		GameObject[] objects = staticDecoder.decode();
@@ -283,10 +284,7 @@ public final class World {
 	 * @param entities The entities.
 	 */
 	private void placeEntities(Entity... entities) {
-		for (Entity entity : entities) {
-			Sector sector = sectorRepository.fromPosition(entity.getPosition());
-			sector.addEntity(entity);
-		}
+		Arrays.stream(entities).forEach(entity -> sectors.fromPosition(entity.getPosition()).addEntity(entity));
 	}
 
 	/**
@@ -306,7 +304,7 @@ public final class World {
 		boolean success = npcRepository.add(npc);
 
 		if (success) {
-			Sector sector = sectorRepository.fromPosition(npc.getPosition());
+			Sector sector = sectors.fromPosition(npc.getPosition());
 			sector.addEntity(npc);
 		} else {
 			logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
@@ -329,7 +327,7 @@ public final class World {
 		boolean success = playerRepository.add(player);
 		if (success) {
 			players.put(NameUtil.encodeBase37(username), player);
-			Sector sector = sectorRepository.fromPosition(player.getPosition());
+			Sector sector = sectors.fromPosition(player.getPosition());
 			sector.addEntity(player);
 
 			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
@@ -357,11 +355,9 @@ public final class World {
 	 */
 	public void unregister(final Npc npc) {
 		if (npcRepository.remove(npc)) {
-			Sector sector = sectorRepository.fromPosition(npc.getPosition());
+			Sector sector = sectors.fromPosition(npc.getPosition());
 
-			if (!sector.removeEntity(npc)) {
-				logger.warning("Could not remove npc from their sector.");
-			}
+			sector.removeEntity(npc);
 		} else {
 			logger.warning("Could not find npc " + npc + " to unregister!");
 		}
@@ -377,10 +373,8 @@ public final class World {
 			players.remove(NameUtil.encodeBase37(player.getUsername()));
 			logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
 
-			Sector sector = sectorRepository.fromPosition(player.getPosition());
-			if (!sector.removeEntity(player)) {
-				logger.warning("Could not remove player from their sector.");
-			}
+			Sector sector = sectors.fromPosition(player.getPosition());
+			sector.removeEntity(player);
 
 			logoutDispatcher.dispatch(player);
 		} else {

@@ -18,6 +18,27 @@ import com.google.common.collect.ImmutableList;
 public final class SectorRepository {
 
 	/**
+	 * Returns an immutable sector repository, where {@link Sector}s cannot be added or removed.
+	 * <p>
+	 * Note that, internally, sectors are added lazily (i.e. only when necessary). As such, repositories are (again,
+	 * internally) not actually immutable, so do not rely on such behaviour.
+	 * 
+	 * @return The sector repository.
+	 */
+	public static SectorRepository immutable() {
+		return new SectorRepository(false);
+	}
+
+	/**
+	 * Returns a mutable sector repository, where {@link Sector}s may be removed.
+	 * 
+	 * @return The sector repository.
+	 */
+	public static SectorRepository mutable() {
+		return new SectorRepository(true);
+	}
+
+	/**
 	 * Whether or not sectors can be removed from this repository.
 	 */
 	private final boolean permitRemoval;
@@ -32,7 +53,7 @@ public final class SectorRepository {
 	 * 
 	 * @param permitRemoval If removal (of {@link Sector}s) from this repository should be permitted.
 	 */
-	public SectorRepository(boolean permitRemoval) {
+	private SectorRepository(boolean permitRemoval) {
 		this.permitRemoval = permitRemoval;
 	}
 
@@ -44,11 +65,12 @@ public final class SectorRepository {
 	 * @throws UnsupportedOperationException If the coordinates of the provided sector are already mapped (and hence the
 	 *             existing sector would be replaced), and removal of sectors is not permitted.
 	 */
-	public void add(Sector sector) {
+	private void add(Sector sector) {
 		Preconditions.checkNotNull(sector, "Sector cannot be null.");
 		if (sectors.containsKey(sector.getCoordinates()) && !permitRemoval) {
 			throw new UnsupportedOperationException("Cannot add a sector with the same coordinates as an existing sector.");
 		}
+
 		sectors.put(sector.getCoordinates(), sector);
 	}
 
@@ -97,6 +119,7 @@ public final class SectorRepository {
 			sector = new Sector(coordinates);
 			add(sector);
 		}
+
 		return sector;
 	}
 
@@ -121,6 +144,7 @@ public final class SectorRepository {
 		if (!permitRemoval) {
 			throw new UnsupportedOperationException("Cannot remove sectors from this repository.");
 		}
+
 		return sectors.remove(sector.getCoordinates()) != null;
 	}
 
