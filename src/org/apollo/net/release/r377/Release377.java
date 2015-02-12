@@ -153,7 +153,7 @@ public final class Release377 extends Release {
 		register(217, new AddIgnoreMessageDecoder());
 		register(141, new RemoveFriendMessageDecoder());
 		register(160, new RemoveIgnoreMessageDecoder());
-		register(227, new PrivateMessageMessageDecoder());
+		register(227, new PrivateChatMessageDecoder());
 
 		// register encoders
 		register(IdAssignmentMessage.class, new IdAssignmentMessageEncoder());
