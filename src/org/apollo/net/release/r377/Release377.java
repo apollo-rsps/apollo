@@ -128,7 +128,7 @@ public final class Release377 extends Release {
 		register(36, new MagicOnItemMessageDecoder());
 
 		register(187, new FocusUpdateMessageDecoder());
-		register(19, new MouseClickMessageDecoder());
+		register(19, new FlaggedMouseEventMessageDecoder());
 		register(140, new ArrowKeyMessageDecoder());
 		register(176, new PrivacyOptionMessageDecoder());
 
