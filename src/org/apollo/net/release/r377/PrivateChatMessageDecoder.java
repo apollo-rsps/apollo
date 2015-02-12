@@ -13,7 +13,7 @@ import org.apollo.util.TextUtil;
  * 
  * @author Major
  */
-public final class PrivateMessageMessageDecoder extends MessageDecoder<PrivateMessageMessage> {
+public final class PrivateChatMessageDecoder extends MessageDecoder<PrivateMessageMessage> {
 
 	@Override
 	public PrivateMessageMessage decode(GamePacket packet) {
