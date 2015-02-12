@@ -1,20 +1,20 @@
 package org.apollo.net.release.r317;
 
-import org.apollo.game.message.impl.MouseClickMessage;
+import org.apollo.game.message.impl.FlaggedMouseEventMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;
 
 /**
- * A {@link MessageDecoder} for the {@link MouseClickMessage}.
+ * A {@link MessageDecoder} for the {@link org.apollo.game.message.impl.FlaggedMouseEventMessage}.
  * 
  * @author Major
  */
-public final class MouseClickMessageDecoder extends MessageDecoder<MouseClickMessage> {
+public final class FlaggedMouseEventMessageDecoder extends MessageDecoder<FlaggedMouseEventMessage> {
 
 	@Override
-	public MouseClickMessage decode(GamePacket packet) {
+	public FlaggedMouseEventMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 		int read;
 		if (reader.getLength() == 2) {
@@ -22,7 +22,7 @@ public final class MouseClickMessageDecoder extends MessageDecoder<MouseClickMes
 			int clicks = (read >> 12);
 			int dX = (read >> 6) & 0x3f;
 			int dY = read & 0x3f;
-			return new MouseClickMessage(clicks, dX, dY, true);
+			return new FlaggedMouseEventMessage(clicks, dX, dY, true);
 		} else if (reader.getLength() == 3) {
 			read = (int) reader.getUnsigned(DataType.TRI_BYTE) & ~0x800000;
 		} else {
@@ -33,7 +33,7 @@ public final class MouseClickMessageDecoder extends MessageDecoder<MouseClickMes
 		int x = (read & 0x7f) % 765;
 		int y = (read & 0x7f) / 765;
 
-		return new MouseClickMessage(clicks, x, y, false);
+		return new FlaggedMouseEventMessage(clicks, x, y, false);
 	}
 
 }
