@@ -128,7 +128,8 @@ public final class Release377 extends Release {
 		register(36, new MagicOnItemMessageDecoder());
 
 		register(187, new FocusUpdateMessageDecoder());
-		register(19, new MouseClickMessageDecoder());
+        register(19, new MouseClickedMessageDecoder());
+		register(171, new FlaggedMouseEventMessageDecoder());
 		register(140, new ArrowKeyMessageDecoder());
 		register(176, new PrivacyOptionMessageDecoder());
 
@@ -152,7 +153,7 @@ public final class Release377 extends Release {
 		register(217, new AddIgnoreMessageDecoder());
 		register(141, new RemoveFriendMessageDecoder());
 		register(160, new RemoveIgnoreMessageDecoder());
-		register(227, new PrivateMessageMessageDecoder());
+		register(227, new PrivateChatMessageDecoder());
 
 		// register encoders
 		register(IdAssignmentMessage.class, new IdAssignmentMessageEncoder());

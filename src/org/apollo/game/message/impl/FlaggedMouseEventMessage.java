@@ -7,7 +7,7 @@ import org.apollo.game.message.Message;
  * 
  * @author Major
  */
-public final class MouseClickMessage extends Message {
+public final class FlaggedMouseEventMessage extends Message {
 
 	/**
 	 * The number of clicks on this point (i.e. the point ({@link #x}, {@link #y})).
@@ -38,7 +38,7 @@ public final class MouseClickMessage extends Message {
 	 * @param y The y coordinate of the mouse click.
 	 * @param delta If the coordinates represent a change in x/y, rather than the values themselves.
 	 */
-	public MouseClickMessage(int clickCount, int x, int y, boolean delta) {
+	public FlaggedMouseEventMessage(int clickCount, int x, int y, boolean delta) {
 		this.clickCount = clickCount;
 		this.x = x;
 		this.y = y;
