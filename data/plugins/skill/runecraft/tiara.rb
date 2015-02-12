@@ -53,15 +53,14 @@ end
 # Sets the correct config upon login, if the player is wearing a tiara.
 on :login do |player|
   hat = player.equipment.get(EquipmentConstants::HAT)
-  return if hat.nil?
+  next if hat.nil?
 
   tiara = TIARAS_BY_ID[hat]
   unless tiara.nil?
     tiara.send_config
-    return
+  else
+    send_empty_config(player)
   end
-
-  send_empty_config(player)
 end
 
 # Intercepts the SecondObjectAction message to support left-click access to the altar when wielding the correct tiara.
