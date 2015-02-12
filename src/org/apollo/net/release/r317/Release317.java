@@ -129,6 +129,7 @@ public final class Release317 extends Release {
 
 		register(3, new FocusUpdateMessageDecoder());
 		register(45, new FlaggedMouseEventMessageDecoder());
+        register(241, new MouseClickedMessageDecoder());
 		register(86, new ArrowKeyMessageDecoder());
 		register(95, new PrivacyOptionMessageDecoder());
 
