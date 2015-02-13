@@ -1,4 +1,4 @@
-package org.apollo.net.release.r377;
+package org.apollo.net.release.r317;
 
 import org.apollo.game.message.impl.PrivateChatMessage;
 import org.apollo.net.codec.game.DataType;

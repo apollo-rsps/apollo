@@ -120,7 +120,7 @@ public final class TextUtil {
 	 * @param len The length.
 	 * @return The uncompressed {@link String}.
 	 */
-	public static String uncompress(byte[] in, int len) {
+	public static String decompress(byte[] in, int len) {
 		byte[] out = new byte[4096];
 		int outPos = 0;
 		int carry = -1;

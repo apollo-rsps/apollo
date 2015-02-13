@@ -27,7 +27,7 @@ public final class ChatMessageDecoder extends MessageDecoder<ChatMessage> {
 		byte[] originalCompressed = new byte[length];
 		reader.getBytes(originalCompressed);
 
-		String uncompressed = TextUtil.uncompress(originalCompressed, length);
+		String uncompressed = TextUtil.decompress(originalCompressed, length);
 		uncompressed = TextUtil.filterInvalidCharacters(uncompressed);
 		uncompressed = TextUtil.capitalize(uncompressed);
 
