@@ -14,7 +14,7 @@ public final class SecondNpcActionMessageDecoder extends MessageDecoder<SecondNp
 	@Override
 	public SecondNpcActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+		int index = (int) reader.getSigned(DataType.SHORT, DataTransformation.ADD);
 		return new SecondNpcActionMessage(index);
 	}
 

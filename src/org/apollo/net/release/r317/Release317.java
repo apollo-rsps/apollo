@@ -143,9 +143,12 @@ public final class Release317 extends Release {
 		register(121, spamMessageDecoder);
 
 		register(155, new FirstNpcActionMessageDecoder());
-		register(17, new SecondNpcActionMessageDecoder());
-		register(21, new ThirdNpcActionMessageDecoder());
-		register(236, new TakeTileItemMessageDecoder());
+		register(72, new SecondNpcActionMessageDecoder());
+        register(17, new ThirdNpcActionMessageDecoder());
+		register(21, new FourthNpcActionMessageDecoder());
+        register(18, new FifthNpcActionMessageDecoder());
+
+        register(236, new TakeTileItemMessageDecoder());
 		register(192, new ItemOnObjectMessageDecoder());
 
 		register(128, new FirstPlayerActionMessageDecoder());
