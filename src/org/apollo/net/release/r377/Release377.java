@@ -137,9 +137,12 @@ public final class Release377 extends Release {
 		register(40, spamMessageDecoder);
 		register(244, spamMessageDecoder);
 
-		register(67, new FirstNpcActionMessageDecoder());
-		register(112, new SecondNpcActionMessageDecoder());
+		register(112, new FirstNpcActionMessageDecoder());
+		register(67, new SecondNpcActionMessageDecoder());
 		register(13, new ThirdNpcActionMessageDecoder());
+        register(42, new FourthNpcActionMessageDecoder());
+        register(8, new FifthNpcActionMessageDecoder());
+
 		register(71, new TakeTileItemMessageDecoder());
 		register(152, new ItemOnObjectMessageDecoder());
 

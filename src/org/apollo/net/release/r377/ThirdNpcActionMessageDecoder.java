@@ -17,9 +17,9 @@ public final class ThirdNpcActionMessageDecoder extends MessageDecoder<ThirdNpcA
 
 	@Override
 	public ThirdNpcActionMessage decode(GamePacket packet) {
-		GamePacketReader reader = new GamePacketReader(packet);
-		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-		return new ThirdNpcActionMessage(index);
+        GamePacketReader reader = new GamePacketReader(packet);
+        int index = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+        return new ThirdNpcActionMessage(index);
 	}
 
 }
