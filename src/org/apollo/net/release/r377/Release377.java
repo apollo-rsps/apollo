@@ -126,6 +126,8 @@ public final class Release377 extends Release {
 
 		register(1, new ItemOnItemMessageDecoder());
 		register(36, new MagicOnItemMessageDecoder());
+        register(31, new MagicOnPlayerMessageDecoder());
+        register(104, new MagicOnNpcMessageDecoder());
 
 		register(187, new FocusUpdateMessageDecoder());
         register(19, new MouseClickedMessageDecoder());
