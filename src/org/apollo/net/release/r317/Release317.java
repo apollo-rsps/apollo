@@ -9,6 +9,7 @@ import org.apollo.game.message.impl.DisplayTabInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.ForwardPrivateChatMessage;
 import org.apollo.game.message.impl.FriendServerStatusMessage;
+import org.apollo.game.message.impl.HintIconMessage;
 import org.apollo.game.message.impl.IdAssignmentMessage;
 import org.apollo.game.message.impl.IgnoreListMessage;
 import org.apollo.game.message.impl.LogoutMessage;
@@ -145,6 +146,7 @@ public final class Release317 extends Release {
 		register(155, new FirstNpcActionMessageDecoder());
 		register(17, new SecondNpcActionMessageDecoder());
 		register(21, new ThirdNpcActionMessageDecoder());
+		
 		register(236, new TakeTileItemMessageDecoder());
 		register(192, new ItemOnObjectMessageDecoder());
 
@@ -201,6 +203,7 @@ public final class Release317 extends Release {
 		register(FriendServerStatusMessage.class, new FriendServerStatusMessageEncoder());
 		register(IgnoreListMessage.class, new IgnoreListMessageEncoder());
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
+		register(HintIconMessage.class, new HintIconMessageEncoder());
 	}
 
 }
