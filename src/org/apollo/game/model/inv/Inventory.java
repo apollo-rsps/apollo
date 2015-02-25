@@ -3,6 +3,7 @@ package org.apollo.game.model.inv;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.apollo.game.model.Item;
 import org.apollo.game.model.def.ItemDefinition;
@@ -116,84 +117,92 @@ public final class Inventory {
 	 * @return The amount that remains.
 	 */
 	public int add(int id, int amount) {
-		Item item = add(new Item(id, amount));
-		return (item != null) ? item.getAmount() : 0;
+		Optional<Item> optionalItem = add(new Item(id, amount));
+		return optionalItem.map(item -> optionalItem.isPresent() ? item.getAmount() : 0).get();
 	}
 
 	/**
-	 * Adds an item to this inventory. This will attempt to add as much of the item that is possible. If the item
-	 * remains, it will be returned (in the case of stackable items, any quantity that remains in the stack is
-	 * returned). If nothing remains, the method will return {@code null}. If something remains, the listener will also
-	 * be notified which could be used, for example, to send a message to the player.
-	 * 
+	 * Attempts to add as much of the specified {@code item} to this inventory
+	 * as possible. If any of the item remains, an {@link Item item with the
+	 * remainder} will be returned (in the case of stack-able items, any
+	 * quantity that remains in the stack is returned). If nothing remains, the
+	 * method will return {@link Optional#empty an empty Optional}.
+	 *
+	 * <p>
+	 * If anything remains at all, the listener will be notified which could be
+	 * used for notifying a player that their inventory is full, for example.
+	 *
 	 * @param item The item to add to this inventory.
-	 * @return The item that remains if there is not enough room in the inventory. If nothing remains, {@code null}.
+	 * @return The item that may remain, if nothing remains,
+	 *         {@link Optional#empty an empty Optional} is returned.
 	 */
-	public Item add(Item item) {
+	public Optional<Item> add(Item item) {
 		int id = item.getId();
 		boolean stackable = isStackable(item.getDefinition());
 
 		if (stackable) {
-			for (int slot = 0; slot < capacity; slot++) {
+			int slot = slotOf(id);
+
+			if (slot != -1) {
 				Item other = items[slot];
 
-				if (other != null && other.getId() == id) {
-					long total = item.getAmount() + other.getAmount();
-					int amount, remaining;
+				long total = (long) item.getAmount() + other.getAmount();
+				int amount, remaining;
 
-					if (total > Integer.MAX_VALUE) {
-						amount = (int) (total - Integer.MAX_VALUE);
-						remaining = (int) (total - amount);
-						notifyCapacityExceeded();
-					} else {
-						amount = (int) total;
-						remaining = 0;
-					}
-
-					set(slot, new Item(id, amount));
-					return remaining > 0 ? new Item(id, remaining) : null;
+				if (total > Integer.MAX_VALUE) {
+					amount = (int) (total - Integer.MAX_VALUE);
+					remaining = (int) (total - amount);
+					notifyCapacityExceeded();
+				} else {
+					amount = (int) total;
+					remaining = 0;
 				}
+
+				set(slot, new Item(id, amount));
+				return remaining > 0 ? Optional.of(new Item(id, remaining)) : Optional.empty();
 			}
 
-			for (int slot = 0; slot < capacity; slot++) {
-				Item other = items[slot];
-				if (other == null) {
+			for (slot = 0; slot < capacity; slot++) {
+				if (items[slot] == null) {
 					set(slot, item);
-					return null;
+					return Optional.empty();
 				}
 			}
 
 			notifyCapacityExceeded();
-			return item;
+			return Optional.of(item);
 		}
 
 		int remaining = item.getAmount();
 
+		if (remaining == 0) {
+			return Optional.empty();
+		}
+
 		stopFiringEvents();
 		try {
 			Item single = new Item(item.getId(), 1);
+
 			for (int slot = 0; slot < capacity; slot++) {
 				if (items[slot] == null) {
-					remaining--;
 					set(slot, single); // share the instances
 
-					if (remaining <= 0) {
-						break;
+					if (--remaining <= 0) {
+						return Optional.empty();
 					}
 				}
 			}
 		} finally {
 			startFiringEvents();
+
+			if (remaining != item.getAmount()) {
+				notifyItemsUpdated();
+			}
 		}
 
-		if (remaining != item.getAmount()) {
-			notifyItemsUpdated();
-		}
-		if (remaining > 0) {
-			notifyCapacityExceeded();
-		}
+		notifyCapacityExceeded();
 
-		return new Item(item.getId(), remaining);
+		return Optional.of(new Item(item.getId(), remaining));
 	}
 
 	/**
@@ -442,19 +451,19 @@ public final class Inventory {
 	 * @return The amount that was removed.
 	 */
 	public int remove(int id, int amount) {
-		ItemDefinition definition = ItemDefinition.lookup(id);
-		boolean stackable = isStackable(definition);
+		ItemDefinition def = ItemDefinition.lookup(id);
+		boolean stackable = isStackable(def);
 
 		if (stackable) {
-			for (int slot = 0; slot < capacity; slot++) {
+			int slot = slotOf(id);
+
+			if (slot != -1) {
 				Item item = items[slot];
 
-				if (item != null && item.getId() == id) {
-					if (amount >= item.getAmount()) {
-						set(slot, null);
-						return item.getAmount();
-					}
-
+				if (amount >= item.getAmount()) {
+					set(slot, null);
+					return item.getAmount();
+				} else {
 					set(slot, new Item(item.getId(), item.getAmount() - amount));
 					return amount;
 				}
@@ -464,16 +473,26 @@ public final class Inventory {
 		}
 
 		int removed = 0;
-		for (int slot = 0; slot < capacity; slot++) {
-			Item item = items[slot];
 
-			if (item != null && item.getId() == id) {
-				set(slot, null);
-				removed++;
+		stopFiringEvents();
+
+		try {
+			for (int slot = 0; slot < capacity; slot++) {
+				Item item = items[slot];
+				if (item != null && item.getId() == id) {
+					set(slot, null);
+
+					if (++removed >= amount) {
+						break;
+					}
+				}
 			}
 
-			if (removed >= amount) {
-				break;
+		} finally {
+			startFiringEvents();
+
+			if (removed > 0) {
+				notifyItemsUpdated();
 			}
 		}
 
