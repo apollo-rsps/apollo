@@ -13,19 +13,19 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * An {@link Npc} is a {@link Mob} that is not being controlled by a player.
+ * A {@link Mob} that is not controlled by a player.
  * 
  * @author Major
  */
 public final class Npc extends Mob {
 
 	/**
-	 * The positions representing the bounds (i.e. walking limits) of this npc.
+	 * The positions representing the bounds (i.e. walking limits) of this Npc.
 	 */
 	private Position[] boundary;
 
 	/**
-	 * Creates a new npc with the specified id and {@link Position}.
+	 * Creates a new Npc with the specified id and {@link Position}.
 	 * 
 	 * @param id The id.
 	 * @param position The position.
@@ -35,7 +35,7 @@ public final class Npc extends Mob {
 	}
 
 	/**
-	 * Creates a new npc with the specified {@link NpcDefinition} and {@link Position}.
+	 * Creates a new Npc with the specified {@link NpcDefinition} and {@link Position}.
 	 * 
 	 * @param position The position.
 	 * @param definition The definition.
@@ -57,7 +57,7 @@ public final class Npc extends Mob {
 	}
 
 	/**
-	 * Gets the boundary of this npc.
+	 * Gets the boundary of this Npc.
 	 * 
 	 * @return The boundary.
 	 */
@@ -71,7 +71,7 @@ public final class Npc extends Mob {
 	}
 
 	/**
-	 * Gets the id of this npc.
+	 * Gets the id of this Npc.
 	 * 
 	 * @return The id.
 	 */
@@ -87,16 +87,16 @@ public final class Npc extends Mob {
 	}
 
 	/**
-	 * Indicates whether or not this npc is bound to a specific set of coordinates.
+	 * Indicates whether or not this Npc is bound to a specific set of coordinates.
 	 * 
-	 * @return {@code true} if the npc is bound, otherwise {@code false}.
+	 * @return {@code true} if the Npc is bound, otherwise {@code false}.
 	 */
 	public boolean isBound() {
 		return boundary == null;
 	}
 
 	/**
-	 * Sets the boundary of this npc.
+	 * Sets the boundary of this Npc.
 	 * 
 	 * @param boundary The boundary.
 	 */
@@ -111,7 +111,7 @@ public final class Npc extends Mob {
 	}
 
 	/**
-	 * Transforms this npc into the npc with the specified id.
+	 * Transforms this Npc into the Npc with the specified id.
 	 * 
 	 * @param id The id.
 	 */
@@ -123,10 +123,10 @@ public final class Npc extends Mob {
 	}
 
 	/**
-	 * Initialises this npc.
+	 * Initialises this Npc.
 	 */
 	private void init() {
-		// This has to be here instead of in Mob#init because of ordering issues - the player cannot be added to the
+		// This has to be here instead of in Mob#init because of ordering issues - the Npc cannot be added to the
 		// sector until their credentials have been set, which is only done after the super constructors are called.
 		Sector sector = World.getWorld().getSectorRepository().get(position.getSectorCoordinates());
 		sector.addEntity(this);

@@ -419,15 +419,20 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public final void setPosition(Position position) {
+		Position old = this.position;
 		SectorRepository repository = World.getWorld().getSectorRepository();
-		Sector current = repository.fromPosition(this.position);
+		Sector current = repository.fromPosition(old);
 
-		Sector next = position.inside(current) ? current : repository.fromPosition(position);
+		if (position.inside(current)) {
+			this.position = position;
+			current.moveEntity(old, this);
+		} else {
+			Sector next = repository.fromPosition(position);
+			current.removeEntity(this);
+			this.position = position; // addEntity relies on the position being updated, so do that first.
 
-		current.removeEntity(this);
-		this.position = position; // addEntity relies on the position being updated, so do that first.
-
-		next.addEntity(this);
+			next.addEntity(this);
+		}
 	}
 
 	/**

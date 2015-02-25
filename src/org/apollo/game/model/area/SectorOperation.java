@@ -13,6 +13,11 @@ public enum SectorOperation {
 	ADD,
 
 	/**
+	 * The move operation, when an entity has moved positions, but is still in the same sector.
+	 */
+	MOVE,
+
+	/**
 	 * The remove operation, when an entity has been removed from a sector.
 	 */
 	REMOVE;

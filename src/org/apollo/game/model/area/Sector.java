@@ -13,7 +13,6 @@ import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Entity.EntityType;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -24,14 +23,14 @@ import com.google.common.collect.ImmutableSet;
 public final class Sector {
 
 	/**
-	 * The default size of newly-created sets, to reduce memory usage.
-	 */
-	private static final int DEFAULT_SET_SIZE = 2;
-
-	/**
 	 * The width and length of a sector, in tiles.
 	 */
 	public static final int SECTOR_SIZE = 8;
+
+	/**
+	 * The default size of newly-created sets, to reduce memory usage.
+	 */
+	private static final int DEFAULT_SET_SIZE = 2;
 
 	/**
 	 * The sector coordinates of this sector.
@@ -72,6 +71,7 @@ public final class Sector {
 	 * register it to this sector.
 	 * 
 	 * @param entity The entity.
+	 * @throws IllegalArgumentException If the entity does not belong in this sector.
 	 */
 	public void addEntity(Entity entity) {
 		Position position = entity.getPosition();
@@ -80,17 +80,6 @@ public final class Sector {
 
 		local.add(entity);
 		notifyListeners(entity, SectorOperation.ADD);
-	}
-
-	/**
-	 * Checks that the specified {@link Position} is included in this sector.
-	 * 
-	 * @param position The position.
-	 * @throws IllegalArgumentException If the specified position is not included in this sector.
-	 */
-	private void checkPosition(Position position) {
-		Preconditions.checkArgument(coordinates.equals(SectorCoordinates.fromPosition(position)),
-				"Position is not included in this sector.");
 	}
 
 	/**
@@ -118,24 +107,24 @@ public final class Sector {
 	}
 
 	/**
-	 * Gets a shallow copy of the {@link List} of {@link Entity} objects at the specified {@link Position}. The returned
-	 * type will be {@link ImmutableList}.
+	 * Gets a shallow copy of the {@link Set} of {@link Entity} objects at the specified {@link Position}. The returned
+	 * type will be immutable.
 	 * 
 	 * @param position The position containing the entities.
 	 * @return The list.
 	 */
-	public List<Entity> getEntities(Position position) {
-		return ImmutableList.copyOf(entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE)));
+	public Set<Entity> getEntities(Position position) {
+		return ImmutableSet.copyOf(entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE)));
 	}
 
 	/**
-	 * Gets a shallow copy of the {@link List} of {@link Entity}s with the specified {@link EntityType}. The returned
-	 * list will be an {@link ImmutableList}. Type will be inferred from the call, so ensure that the entity type and
-	 * the reference correspond, or this method will fail at runtime.
+	 * Gets a shallow copy of the {@link Set} of {@link Entity}s with the specified {@link EntityType}. The returned
+	 * type will be immutable. Type will be inferred from the call, so ensure that the entity type and the reference
+	 * correspond, or this method will fail at runtime.
 	 * 
 	 * @param position The {@link Position} containing the entities.
 	 * @param type The {@link EntityType}.
-	 * @return The list of entities.
+	 * @return The set of entities.
 	 */
 	public <T extends Entity> Set<T> getEntities(Position position, EntityType type) {
 		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
@@ -143,6 +132,34 @@ public final class Sector {
 		@SuppressWarnings("unchecked")
 		Set<T> filtered = (Set<T>) local.stream().filter(entity -> entity.getEntityType() == type).collect(Collectors.toSet());
 		return ImmutableSet.copyOf(filtered);
+	}
+
+	/**
+	 * Moves the {@link Entity} that was in the specified {@code old} {@link Position}, to the current position of the
+	 * entity.
+	 * <p>
+	 * Both the {@code old} and current positions of the entity must belong to this sector.
+	 * 
+	 * @param old The old position of the entity.
+	 * @param entity The entity to move.
+	 * @throws IllegalArgumentException If either of the positions do not belong to this sector.
+	 */
+	public void moveEntity(Position old, Entity entity) {
+		Position position = entity.getPosition();
+		checkPosition(old);
+		checkPosition(position);
+
+		Set<Entity> local = entities.get(old);
+
+		if (local == null || !local.remove(entity)) {
+			throw new IllegalArgumentException("Entity belongs in this sector but does not exist.");
+		}
+
+		local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
+
+		local.add(entity);
+		notifyListeners(entity, SectorOperation.MOVE);
+
 	}
 
 	/**
@@ -172,6 +189,17 @@ public final class Sector {
 		}
 
 		notifyListeners(entity, SectorOperation.REMOVE);
+	}
+
+	/**
+	 * Checks that the specified {@link Position} is included in this sector.
+	 * 
+	 * @param position The position.
+	 * @throws IllegalArgumentException If the specified position is not included in this sector.
+	 */
+	private void checkPosition(Position position) {
+		Preconditions.checkArgument(coordinates.equals(SectorCoordinates.fromPosition(position)),
+				"Position is not included in this sector.");
 	}
 
 }
