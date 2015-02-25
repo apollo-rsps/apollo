@@ -28,8 +28,6 @@ public final class HintIconMessageEncoder extends MessageEncoder<HintIconMessage
 				throw new IllegalStateException("Unsupported hint icon type " + type + ".");
 		}
 
-		System.out.println("type=" + type + ", index=" + message.getIndex().get());
-
 		return builder.toGamePacket();
 	}
 
