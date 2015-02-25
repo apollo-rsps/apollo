@@ -117,8 +117,8 @@ public final class Inventory {
 	 * @return The amount that remains.
 	 */
 	public int add(int id, int amount) {
-		Optional<Item> optionalItem = add(new Item(id, amount));
-		return optionalItem.map(item -> optionalItem.isPresent() ? item.getAmount() : 0).get();
+		Optional<Item> item = add(new Item(id, amount));
+		return item.isPresent() ? item.get().getAmount() : 0;
 	}
 
 	/**
