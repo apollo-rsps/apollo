@@ -49,7 +49,7 @@ end
 # Defines the pvp area action.
 area_action :pvp do
   on_entry { |player| player.in_pvp = true }
-  on_exit  { |player| player.in_pvp = true }
+  on_exit  { |player| player.in_pvp = false }
 end
 
 # Defines the wilderness area action.
