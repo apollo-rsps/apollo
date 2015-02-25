@@ -69,13 +69,13 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		List<SynchronizationSegment> segments = new ArrayList<>();
 
 		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext();) {
-			Player p = it.next();
-			if (!p.isActive() || p.isTeleporting()
-					|| p.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
+			Player other = it.next();
+			if (!other.isActive() || other.isTeleporting()
+					|| other.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
 				it.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
-				segments.add(new MovementSegment(p.getBlockSet(), p.getDirections()));
+				segments.add(new MovementSegment(other.getBlockSet(), other.getDirections()));
 			}
 		}
 
@@ -83,7 +83,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 		MobRepository<Player> repository = World.getWorld().getPlayerRepository();
 		for (Iterator<Player> it = repository.iterator(); it.hasNext();) {
-			Player p = it.next();
+			Player other = it.next();
 			if (localPlayers.size() >= 255) {
 				player.flagExcessivePlayers();
 				break;
@@ -91,19 +91,19 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 				break;
 			}
 
-			if (p != player && p.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
-					&& !localPlayers.contains(p)) {
-				localPlayers.add(p);
+			if (other != player && other.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
+					&& !localPlayers.contains(other)) {
+				localPlayers.add(other);
 				added++;
 
-				blockSet = p.getBlockSet();
+				blockSet = other.getBlockSet();
 				if (!blockSet.contains(AppearanceBlock.class)) {
 					// TODO check if client has cached appearance
 					blockSet = blockSet.clone();
-					blockSet.add(SynchronizationBlock.createAppearanceBlock(p));
+					blockSet.add(SynchronizationBlock.createAppearanceBlock(other));
 				}
 
-				segments.add(new AddPlayerSegment(blockSet, p.getIndex(), p.getPosition()));
+				segments.add(new AddPlayerSegment(blockSet, other.getIndex(), other.getPosition()));
 			}
 		}
 
