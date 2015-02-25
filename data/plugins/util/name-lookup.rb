@@ -24,7 +24,7 @@ def lookup_entity(type, name)
   return cached unless cached.nil?
 
   id = name[name.rindex(' ') + 1, name.length - 1].to_i if name.include?(' ')
-  id = find_entities(type, name, 1).first if (id .nil? || id.zero?)
+  id = find_entities(type, name, 1).first if (id.nil? || id.zero?)
   
   raise "The #{type} called #{name} could not be identified." if id.nil?
 
