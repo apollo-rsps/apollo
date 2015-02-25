@@ -23,6 +23,7 @@ public final class HintIconMessageEncoder extends MessageEncoder<HintIconMessage
 			case HintIconMessage.NPC_TYPE:
 			case HintIconMessage.PLAYER_TYPE:
 				builder.put(DataType.SHORT, message.getIndex().get());
+				builder.put(DataType.TRI_BYTE, 0); // Dummy bytes
 				break;
 			default:
 				throw new IllegalStateException("Unsupported hint icon type " + type + ".");
