@@ -127,10 +127,11 @@ public final class Release317 extends Release {
 
 		register(53, new ItemOnItemMessageDecoder());
 		register(237, new MagicOnItemMessageDecoder());
+		register(249, new MagicOnPlayerMessageDecoder());
 
 		register(3, new FocusUpdateMessageDecoder());
 		register(45, new FlaggedMouseEventMessageDecoder());
-        register(241, new MouseClickedMessageDecoder());
+		register(241, new MouseClickedMessageDecoder());
 		register(86, new ArrowKeyMessageDecoder());
 		register(95, new PrivacyOptionMessageDecoder());
 
@@ -144,9 +145,11 @@ public final class Release317 extends Release {
 		register(121, spamMessageDecoder);
 
 		register(155, new FirstNpcActionMessageDecoder());
-		register(17, new SecondNpcActionMessageDecoder());
-		register(21, new ThirdNpcActionMessageDecoder());
-		
+		register(72, new SecondNpcActionMessageDecoder());
+		register(17, new ThirdNpcActionMessageDecoder());
+		register(21, new FourthNpcActionMessageDecoder());
+		register(18, new FifthNpcActionMessageDecoder());
+
 		register(236, new TakeTileItemMessageDecoder());
 		register(192, new ItemOnObjectMessageDecoder());
 
@@ -205,5 +208,4 @@ public final class Release317 extends Release {
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
 		register(HintIconMessage.class, new HintIconMessageEncoder());
 	}
-
 }

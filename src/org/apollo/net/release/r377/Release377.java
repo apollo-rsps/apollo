@@ -128,6 +128,8 @@ public final class Release377 extends Release {
 
 		register(1, new ItemOnItemMessageDecoder());
 		register(36, new MagicOnItemMessageDecoder());
+        register(31, new MagicOnPlayerMessageDecoder());
+        register(104, new MagicOnNpcMessageDecoder());
 
 		register(187, new FocusUpdateMessageDecoder());
 		register(19, new MouseClickedMessageDecoder());
@@ -139,9 +141,12 @@ public final class Release377 extends Release {
 		register(40, spamMessageDecoder);
 		register(244, spamMessageDecoder);
 
-		register(67, new FirstNpcActionMessageDecoder());
-		register(112, new SecondNpcActionMessageDecoder());
+		register(112, new FirstNpcActionMessageDecoder());
+		register(67, new SecondNpcActionMessageDecoder());
 		register(13, new ThirdNpcActionMessageDecoder());
+        register(42, new FourthNpcActionMessageDecoder());
+        register(8, new FifthNpcActionMessageDecoder());
+
 		register(71, new TakeTileItemMessageDecoder());
 		register(152, new ItemOnObjectMessageDecoder());
 
