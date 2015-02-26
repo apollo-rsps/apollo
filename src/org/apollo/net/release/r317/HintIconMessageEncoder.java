@@ -16,13 +16,13 @@ public final class HintIconMessageEncoder extends MessageEncoder<HintIconMessage
 	@Override
 	public GamePacket encode(HintIconMessage message) {
 		GamePacketBuilder builder = new GamePacketBuilder(254);
-		int type = message.getType();
-		builder.put(DataType.BYTE, type);
+		HintIconMessage.Type type = message.getType();
+		builder.put(DataType.BYTE, type.getValue());
 
 		switch (type) {
-			case HintIconMessage.NPC_TYPE:
-			case HintIconMessage.PLAYER_TYPE:
-				builder.put(DataType.SHORT, message.getIndex().get());
+			case NPC:
+			case PLAYER:
+				builder.put(DataType.SHORT, message.getIndex());
 				builder.put(DataType.TRI_BYTE, 0); // Dummy bytes
 				break;
 			default:

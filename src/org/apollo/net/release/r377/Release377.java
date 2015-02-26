@@ -41,7 +41,6 @@ import org.apollo.game.message.impl.UpdateTileItemMessage;
 import org.apollo.game.message.impl.UpdateWeightMessage;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
-import org.apollo.net.release.r317.HintIconMessageEncoder;
 
 /**
  * A {@link Release} implementation for the 377 protocol.
@@ -128,8 +127,8 @@ public final class Release377 extends Release {
 
 		register(1, new ItemOnItemMessageDecoder());
 		register(36, new MagicOnItemMessageDecoder());
-        register(31, new MagicOnPlayerMessageDecoder());
-        register(104, new MagicOnNpcMessageDecoder());
+		register(31, new MagicOnPlayerMessageDecoder());
+		register(104, new MagicOnNpcMessageDecoder());
 
 		register(187, new FocusUpdateMessageDecoder());
 		register(19, new MouseClickedMessageDecoder());
@@ -144,8 +143,8 @@ public final class Release377 extends Release {
 		register(112, new FirstNpcActionMessageDecoder());
 		register(67, new SecondNpcActionMessageDecoder());
 		register(13, new ThirdNpcActionMessageDecoder());
-        register(42, new FourthNpcActionMessageDecoder());
-        register(8, new FifthNpcActionMessageDecoder());
+		register(42, new FourthNpcActionMessageDecoder());
+		register(8, new FifthNpcActionMessageDecoder());
 
 		register(71, new TakeTileItemMessageDecoder());
 		register(152, new ItemOnObjectMessageDecoder());
