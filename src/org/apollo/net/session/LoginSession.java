@@ -85,37 +85,33 @@ public final class LoginSession extends Session {
 	 * @param response The response.
 	 */
 	public void handlePlayerLoaderResponse(LoginRequest request, PlayerLoaderResponse response) {
-		GameService gameService = serverContext.getService(GameService.class);
+		GameService service = serverContext.getService(GameService.class);
 		Channel channel = getChannel();
 
-		Optional<Player> responsePlayer = response.getPlayer();
+		Optional<Player> optional = response.getPlayer();
 		int status = response.getStatus(), rights = 0;
 		boolean flagged = false;
 
-		if (responsePlayer.isPresent()) {
-			Player player = responsePlayer.get();
+		if (optional.isPresent()) {
+			Player player = optional.get();
 			rights = player.getPrivilegeLevel().toInteger();
 
 			GameSession session = new GameSession(channel, serverContext, player);
-			player.setSession(session, false /* TODO */);
+			RegistrationStatus registration = service.registerPlayer(player, session, request.isReconnecting());
 
-			RegistrationStatus registrationStatus = gameService.registerPlayer(player);
-
-			if (registrationStatus != RegistrationStatus.OK) {
-				responsePlayer = Optional.empty();
+			if (registration != RegistrationStatus.OK) {
+				optional = Optional.empty();
 				rights = 0;
-				if (registrationStatus == RegistrationStatus.ALREADY_ONLINE) {
-					status = LoginConstants.STATUS_ACCOUNT_ONLINE;
-				} else {
-					status = LoginConstants.STATUS_SERVER_FULL;
-				}
+
+				status = (registration == RegistrationStatus.ALREADY_ONLINE) ? LoginConstants.STATUS_ACCOUNT_ONLINE
+						: LoginConstants.STATUS_SERVER_FULL;
 			}
 		}
 
 		ChannelFuture future = channel.writeAndFlush(new LoginResponse(status, rights, flagged));
 		destroy();
 
-		if (responsePlayer.isPresent()) {
+		if (optional.isPresent()) {
 			IsaacRandomPair randomPair = request.getRandomPair();
 			Release release = serverContext.getRelease();
 
@@ -129,7 +125,7 @@ public final class LoginSession extends Session {
 			channel.pipeline().remove("loginDecoder");
 			channel.pipeline().remove("loginEncoder");
 
-			channelContext.attr(NetworkConstants.SESSION_KEY).set(responsePlayer.get().getSession());
+			channelContext.attr(NetworkConstants.SESSION_KEY).set(optional.get().getSession());
 		} else {
 			future.addListener(ChannelFutureListener.CLOSE);
 		}
