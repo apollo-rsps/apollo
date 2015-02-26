@@ -148,14 +148,21 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Registers a player (may block!).
+	 * Registers a {@link Player} (may block!).
 	 * 
-	 * @param player The player.
+	 * @param player The Player.
+	 * @param session The {@link GameSession} of the Player.
+	 * @param reconnecting The reconnecting flag.
 	 * @return A {@link RegistrationStatus}.
 	 */
-	public RegistrationStatus registerPlayer(Player player) {
+	public RegistrationStatus registerPlayer(Player player, GameSession session, boolean reconnecting) {
 		synchronized (this) {
-			return World.getWorld().register(player);
+			RegistrationStatus status = World.getWorld().register(player);
+			if (status == RegistrationStatus.OK) {
+				player.setSession(session, reconnecting);
+			}
+
+			return status;
 		}
 	}
 
