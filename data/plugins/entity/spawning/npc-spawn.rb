@@ -28,6 +28,7 @@ def spawn_npc(hash)
   raise 'A name (or id), x coordinate, and y coordinate must be specified to spawn an npc.' unless (hash.has_key?(:name) || hash.has_key?(:id)) && hash.has_keys?(:x, :y)
   npc = get_npc(hash)
   spawn(npc, hash)
+  npc
 end
 
 # Spawns the specified npc and applies the properties in the hash.

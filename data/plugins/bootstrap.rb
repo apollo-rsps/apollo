@@ -39,6 +39,7 @@ end
 
 # A CommandListener that executes a Proc object with two arguments: the player and the command.
 class ProcCommandListener < CommandListener
+
   def initialize(rights, block)
     super(rights)
     @block = block
@@ -47,6 +48,7 @@ class ProcCommandListener < CommandListener
   def execute(player, command)
     @block.call(player, command)
   end
+  
 end
 
 # A LoginListener that executes a Proc object with the player argument.
@@ -75,11 +77,13 @@ class ProcLogoutListener
   def execute(player)
     @block.call(player)
   end
+
 end
 
 # An MessageHandler which executes a Proc object with three arguments: the chain
 # context, the player and the message.
 class ProcMessageHandler < MessageHandler
+
   def initialize(block, option)
     super() # required (with brackets!), see http://jira.codehaus.org/browse/JRUBY-679
     @block = block
@@ -87,14 +91,14 @@ class ProcMessageHandler < MessageHandler
   end
 
   def handle(ctx, player, message)
-    if (@option == 0 || @option == message.option)
-      @block.call(ctx, player, message)
-    end
+    @block.call(ctx, player, message) if (@option == 0 || @option == message.option)
   end
+
 end
 
 # A ScheduledTask which executes a Proc object with one argument (itself).
 class ProcScheduledTask < ScheduledTask
+
   def initialize(delay, immediate, block)
     super(delay, immediate)
     @block = block
@@ -103,6 +107,7 @@ class ProcScheduledTask < ScheduledTask
   def execute
     @block.call(self)
   end
+
 end
 
 # Schedules a ScheduledTask. Can be used in two ways: passing an existing
