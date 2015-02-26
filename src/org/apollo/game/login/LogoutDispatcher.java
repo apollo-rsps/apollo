@@ -15,7 +15,7 @@ public final class LogoutDispatcher {
 	/**
 	 * A {@link List} of logout listeners.
 	 */
-	private List<LogoutListener> listeners = new ArrayList<>();
+	private final List<LogoutListener> listeners = new ArrayList<>();
 
 	/**
 	 * Dispatches a player to the appropriate logout listener.
@@ -23,9 +23,7 @@ public final class LogoutDispatcher {
 	 * @param player The player.
 	 */
 	public void dispatch(Player player) {
-		for (LogoutListener listen : listeners) {
-			listen.execute(player);
-		}
+		listeners.forEach(listener -> listener.execute(player));
 	}
 
 	/**

@@ -355,6 +355,11 @@ public final class Player extends Mob {
 		return EntityType.PLAYER;
 	}
 
+	@Override
+	public int getInteractionIndex() {
+		return getIndex() | 0x8000;
+	}
+
 	/**
 	 * Gets this player's friend chat {@link PrivacyState}.
 	 * 
