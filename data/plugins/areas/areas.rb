@@ -42,5 +42,5 @@ def area(hash)
 end
 
 # Coordinates refer to the bottom-left position (min_x, min_y) and the top-right position (max_x, max_y), followed by the height (optional).
-area :name => :wilderness, :coordinates => [ 2944, 3520, 3391, 3967, 0 ], :actions => [ :pvp, :multicombat, :wilderness ]
+area :name => :wilderness, :coordinates => [ 2944, 3520, 3392, 6400, 0 ], :actions => [ :pvp, :multicombat, :wilderness ]
 area :name => :duel_arena, :coordinates => [ 3327, 3200, 3392, 3286    ], :actions => :pvp

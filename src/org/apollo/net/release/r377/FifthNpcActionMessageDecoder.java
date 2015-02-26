@@ -8,7 +8,7 @@ import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;
 
 /**
- * A {@link org.apollo.net.release.MessageDecoder} for the {@link org.apollo.game.message.impl.FifthNpcActionMessage}.
+ * A {@link MessageDecoder} for the {@link FifthNpcActionMessage}.
  *
  * @author Stuart
  */
@@ -17,7 +17,7 @@ public final class FifthNpcActionMessageDecoder extends MessageDecoder<FifthNpcA
 	@Override
 	public FifthNpcActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		int index = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE);
+		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
 		return new FifthNpcActionMessage(index);
 	}
 

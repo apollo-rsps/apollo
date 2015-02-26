@@ -1,16 +1,17 @@
 package org.apollo.game.message.impl;
 
 /**
- * The third {@link NpcActionMessage}.
- *
+ * The fifth {@link NpcActionMessage}.
+ * 
+ * @author Major
  * @author Stuart
  */
 public final class FifthNpcActionMessage extends NpcActionMessage {
 
 	/**
-	 * Creates a new third npc action message.
+	 * Creates the FifthNpcActionMessage.
 	 *
-	 * @param index The index of the npc.
+	 * @param index The index of the Npc.
 	 */
 	public FifthNpcActionMessage(int index) {
 		super(5, index);

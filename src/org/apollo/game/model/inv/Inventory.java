@@ -122,19 +122,17 @@ public final class Inventory {
 	}
 
 	/**
-	 * Attempts to add as much of the specified {@code item} to this inventory
-	 * as possible. If any of the item remains, an {@link Item item with the
-	 * remainder} will be returned (in the case of stack-able items, any
-	 * quantity that remains in the stack is returned). If nothing remains, the
-	 * method will return {@link Optional#empty an empty Optional}.
+	 * Attempts to add as much of the specified {@code item} to this inventory as possible. If any of the item remains,
+	 * an {@link Item item with the remainder} will be returned (in the case of stack-able items, any quantity that
+	 * remains in the stack is returned). If nothing remains, the method will return {@link Optional#empty an empty
+	 * Optional}.
 	 *
 	 * <p>
-	 * If anything remains at all, the listener will be notified which could be
-	 * used for notifying a player that their inventory is full, for example.
+	 * If anything remains at all, the listener will be notified which could be used for notifying a player that their
+	 * inventory is full, for example.
 	 *
 	 * @param item The item to add to this inventory.
-	 * @return The item that may remain, if nothing remains,
-	 *         {@link Optional#empty an empty Optional} is returned.
+	 * @return The item that may remain, if nothing remains, {@link Optional#empty an empty Optional} is returned.
 	 */
 	public Optional<Item> add(Item item) {
 		int id = item.getId();
@@ -463,10 +461,10 @@ public final class Inventory {
 				if (amount >= item.getAmount()) {
 					set(slot, null);
 					return item.getAmount();
-				} else {
-					set(slot, new Item(item.getId(), item.getAmount() - amount));
-					return amount;
 				}
+
+				set(slot, new Item(item.getId(), item.getAmount() - amount));
+				return amount;
 			}
 
 			return 0;

@@ -2,6 +2,7 @@ package org.apollo.game.model.inter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
@@ -34,12 +35,12 @@ public final class InterfaceSet {
 	/**
 	 * The current enter amount listener.
 	 */
-	private EnterAmountListener amountListener;
+	private Optional<EnterAmountListener> amountListener = Optional.empty();
 
 	/**
 	 * The current chat box dialogue listener.
 	 */
-	private DialogueListener dialogueListener;
+	private Optional<DialogueListener> dialogueListener = Optional.empty();
 
 	/**
 	 * A map of open interfaces.
@@ -49,12 +50,12 @@ public final class InterfaceSet {
 	/**
 	 * The current listener.
 	 */
-	private InterfaceListener listener;
+	private Optional<InterfaceListener> listener = Optional.empty();
 
 	/**
 	 * The player whose interfaces are being managed.
 	 */
-	private final Player player; // TODO: maybe switch to a listener system like the inventory?
+	private final Player player;
 
 	/**
 	 * Creates an interface set.
@@ -72,8 +73,8 @@ public final class InterfaceSet {
 	 * @return {@code true} if the message handler chain should be broken.
 	 */
 	public boolean buttonClicked(int button) {
-		if (dialogueListener != null) {
-			return dialogueListener.buttonClicked(button);
+		if (dialogueListener.isPresent()) {
+			return dialogueListener.get().buttonClicked(button);
 		}
 		return false;
 	}
@@ -84,21 +85,6 @@ public final class InterfaceSet {
 	public void close() {
 		closeAndNotify();
 		player.send(new CloseInterfaceMessage());
-	}
-
-	/**
-	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any
-	 * messages.
-	 */
-	private void closeAndNotify() {
-		amountListener = null;
-		dialogueListener = null;
-
-		interfaces.clear();
-		if (listener != null) {
-			listener.interfaceClosed();
-			listener = null;
-		}
 	}
 
 	/**
@@ -125,8 +111,8 @@ public final class InterfaceSet {
 	 * Called when the player has clicked the "Click here to continue" button on a dialogue.
 	 */
 	public void continueRequested() {
-		if (dialogueListener != null) {
-			dialogueListener.continued();
+		if (dialogueListener.isPresent()) {
+			dialogueListener.get().continued();
 		}
 	}
 
@@ -136,9 +122,9 @@ public final class InterfaceSet {
 	 * @param amount The amount.
 	 */
 	public void enteredAmount(int amount) {
-		if (amountListener != null) {
-			amountListener.amountEntered(amount);
-			amountListener = null;
+		if (amountListener.isPresent()) {
+			amountListener.get().amountEntered(amount);
+			amountListener = Optional.empty();
 		}
 	}
 
@@ -158,8 +144,8 @@ public final class InterfaceSet {
 	public void openDialogue(DialogueListener listener, int dialogueId) {
 		closeAndNotify();
 
-		this.dialogueListener = listener;
-		this.listener = listener;
+		this.dialogueListener = Optional.ofNullable(listener);
+		this.listener = Optional.ofNullable(listener);
 
 		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
 		player.send(new OpenDialogueInterfaceMessage(dialogueId));
@@ -180,7 +166,7 @@ public final class InterfaceSet {
 	 * @param listener The enter amount listener.
 	 */
 	public void openEnterAmountDialogue(EnterAmountListener listener) {
-		amountListener = listener;
+		amountListener = Optional.of(listener);
 		player.send(new EnterAmountMessage());
 	}
 
@@ -201,7 +187,7 @@ public final class InterfaceSet {
 	 */
 	public void openWindow(InterfaceListener listener, int windowId) {
 		closeAndNotify();
-		this.listener = listener;
+		this.listener = Optional.ofNullable(listener);
 
 		interfaces.put(InterfaceType.WINDOW, windowId);
 		player.send(new OpenInterfaceMessage(windowId));
@@ -226,7 +212,7 @@ public final class InterfaceSet {
 	 */
 	public void openWindowWithSidebar(InterfaceListener listener, int windowId, int sidebarId) {
 		closeAndNotify();
-		this.listener = listener;
+		this.listener = Optional.ofNullable(listener);
 
 		interfaces.put(InterfaceType.WINDOW, windowId);
 		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
@@ -241,6 +227,21 @@ public final class InterfaceSet {
 	 */
 	public int size() {
 		return interfaces.size();
+	}
+
+	/**
+	 * An internal method for closing the interface, notifying the listener if appropriate, but not sending any
+	 * messages.
+	 */
+	private void closeAndNotify() {
+		amountListener = Optional.empty();
+		dialogueListener = Optional.empty();
+
+		interfaces.clear();
+		if (listener.isPresent()) {
+			listener.get().interfaceClosed();
+			listener = Optional.empty();
+		}
 	}
 
 }

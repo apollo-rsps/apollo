@@ -9,6 +9,7 @@ import org.apollo.game.message.impl.DisplayTabInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.ForwardPrivateChatMessage;
 import org.apollo.game.message.impl.FriendServerStatusMessage;
+import org.apollo.game.message.impl.HintIconMessage;
 import org.apollo.game.message.impl.IdAssignmentMessage;
 import org.apollo.game.message.impl.IgnoreListMessage;
 import org.apollo.game.message.impl.LogoutMessage;
@@ -19,8 +20,8 @@ import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.message.impl.PositionMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
-import org.apollo.game.message.impl.SectorChangeMessage;
 import org.apollo.game.message.impl.RemoveTileItemMessage;
+import org.apollo.game.message.impl.SectorChangeMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.SendObjectMessage;
 import org.apollo.game.message.impl.ServerChatMessage;
@@ -40,6 +41,7 @@ import org.apollo.game.message.impl.UpdateTileItemMessage;
 import org.apollo.game.message.impl.UpdateWeightMessage;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
+import org.apollo.net.release.r317.HintIconMessageEncoder;
 
 /**
  * A {@link Release} implementation for the 377 protocol.
@@ -130,7 +132,7 @@ public final class Release377 extends Release {
         register(104, new MagicOnNpcMessageDecoder());
 
 		register(187, new FocusUpdateMessageDecoder());
-        register(19, new MouseClickedMessageDecoder());
+		register(19, new MouseClickedMessageDecoder());
 		register(171, new FlaggedMouseEventMessageDecoder());
 		register(140, new ArrowKeyMessageDecoder());
 		register(176, new PrivacyOptionMessageDecoder());
@@ -201,6 +203,7 @@ public final class Release377 extends Release {
 		register(FriendServerStatusMessage.class, new FriendServerStatusMessageEncoder());
 		register(IgnoreListMessage.class, new IgnoreListMessageEncoder());
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
+		register(HintIconMessage.class, new HintIconMessageEncoder());
 	}
 
 }

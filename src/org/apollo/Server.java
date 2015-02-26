@@ -167,7 +167,7 @@ public final class Server {
 		serviceManager.startAll();
 
 		int releaseNo = context.getRelease().getReleaseNumber();
-		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", Integer.toString(releaseNo)), true);
+		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(releaseNo)), true);
 		World.getWorld().init(releaseNo, fs, manager);
 	}
 
