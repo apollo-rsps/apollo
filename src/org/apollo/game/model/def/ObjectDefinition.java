@@ -83,6 +83,11 @@ public final class ObjectDefinition {
 	private boolean interactive;
 
 	/**
+	 * Denotes whether or not this object obstructs the ground.
+	 */
+	private boolean obstructive;
+
+	/**
 	 * This object's length.
 	 */
 	private int length = 1;
@@ -173,7 +178,8 @@ public final class ObjectDefinition {
 	/**
 	 * Indicates the impenetrability of this object.
 	 * 
-	 * @return {@code true} if this object is impenetrable, otherwise {@code false}.
+	 * @return {@code true} if this object is impenetrable, otherwise
+	 *         {@code false}.
 	 */
 	public boolean isImpenetrable() {
 		return impenetrable;
@@ -182,10 +188,21 @@ public final class ObjectDefinition {
 	/**
 	 * Indicates the interactivity of this object.
 	 * 
-	 * @return {@code true} if the object is interactive, otherwise {@code false}.
+	 * @return {@code true} if the object is interactive, otherwise
+	 *         {@code false}.
 	 */
 	public boolean isInteractive() {
 		return interactive;
+	}
+
+	/**
+	 * Indicates whether or not this object obstructs the ground.
+	 * 
+	 * @return {@code true} if the object obstructs the ground otherwise
+	 *         {@code false}.
+	 */
+	public boolean isObstructive() {
+		return obstructive;
 	}
 
 	/**
@@ -267,6 +284,15 @@ public final class ObjectDefinition {
 	 */
 	public void setWidth(int width) {
 		this.width = width;
+	}
+
+	/**
+	 * Sets whether or not this object is obstructive to the ground.
+	 * 
+	 * @param obstructive Whether or not this object obstructs the ground.
+	 */
+	public void setObstructive(boolean obstructive) {
+		this.obstructive = obstructive;
 	}
 
 }
