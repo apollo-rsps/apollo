@@ -8,9 +8,11 @@ import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
 import org.apollo.game.message.impl.OpenInterfaceMessage;
-import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
+import org.apollo.game.message.impl.OpenInterfaceOverlayMessage;
+import org.apollo.game.message.impl.OpenOverlayMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.dialogue.DialogueListener;
+import org.apollo.game.model.inv.InventoryListener;
 
 /**
  * Represents the set of interfaces the player has open.
@@ -217,7 +219,33 @@ public final class InterfaceSet {
 		interfaces.put(InterfaceType.WINDOW, windowId);
 		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
 
-		player.send(new OpenInterfaceSidebarMessage(windowId, sidebarId));
+		player.send(new OpenInterfaceOverlayMessage(windowId, sidebarId));
+	}
+
+	/**
+	 * Opens an overlay interface.
+	 * 
+	 * @param overlay The overlay id.
+	 */
+	public void openOverlay(int overlay) {
+		closeAndNotify();
+		interfaces.put(InterfaceType.OVERLAY, overlay);
+
+		player.send(new OpenOverlayMessage(overlay));
+	}
+
+	/**
+	 * Opens an overlay interface with the specified {@link InventoryListener}.
+	 * 
+	 * @param listener The listener.
+	 * @param overlay The overlay id.
+	 */
+	public void openOverlay(InterfaceListener listener, int overlay) {
+		closeAndNotify();
+		this.listener = Optional.ofNullable(listener);
+		interfaces.put(InterfaceType.OVERLAY, overlay);
+
+		player.send(new OpenOverlayMessage(overlay));
 	}
 
 	/**

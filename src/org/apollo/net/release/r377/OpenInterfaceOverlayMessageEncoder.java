@@ -1,6 +1,6 @@
 package org.apollo.net.release.r377;
 
-import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
+import org.apollo.game.message.impl.OpenInterfaceOverlayMessage;
 import org.apollo.net.codec.game.DataOrder;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
@@ -9,17 +9,17 @@ import org.apollo.net.codec.game.GamePacketBuilder;
 import org.apollo.net.release.MessageEncoder;
 
 /**
- * A {@link MessageEncoder} for the {@link OpenInterfaceSidebarMessage}.
+ * A {@link MessageEncoder} for the {@link OpenInterfaceOverlayMessage}.
  * 
  * @author Graham
  */
-public final class OpenInterfaceSidebarMessageEncoder extends MessageEncoder<OpenInterfaceSidebarMessage> {
+public final class OpenInterfaceOverlayMessageEncoder extends MessageEncoder<OpenInterfaceOverlayMessage> {
 
 	@Override
-	public GamePacket encode(OpenInterfaceSidebarMessage message) {
+	public GamePacket encode(OpenInterfaceOverlayMessage message) {
 		GamePacketBuilder builder = new GamePacketBuilder(128);
 		builder.put(DataType.SHORT, DataTransformation.ADD, message.getInterfaceId());
-		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, message.getSidebarId());
+		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, message.getOverlayId());
 		return builder.toGamePacket();
 	}
 
