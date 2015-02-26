@@ -2,7 +2,10 @@ require 'java'
 
 java_import 'org.apollo.game.model.entity.Skill'
 
+private
+
 DRINK_POTION_SOUND = 334
+EMPTY_VIAL_ID = 229
 
 # A drinkable potion.
 class Potion < Consumable

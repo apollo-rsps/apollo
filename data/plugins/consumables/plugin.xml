@@ -6,13 +6,11 @@
   <description>Adds support for consumables (e.g. potions, food).</description>
   <authors>
     <author>Major</author>
+    <author>Ryley Kimmel</author>
   </authors>
   <scripts>
     <script>consumable.rb</script>
     <script>food.rb</script>
     <script>potions.rb</script>
   </scripts>
-  <dependencies>
-    <dependency>skill-herblore</dependency>
-  </dependencies>
 </plugin>
