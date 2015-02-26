@@ -11,12 +11,12 @@ import com.google.common.base.Preconditions;
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.
  * 
  * @author Graham
- * @param <T> The type of mob.
+ * @param <T> The type of Mob.
  */
 public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 	/**
-	 * The {@link Iterator} implementation for the {@link MobRepository} class.
+	 * The {@link Iterator} implementation for the MobRepository.
 	 * 
 	 * @author Graham
 	 */
@@ -75,7 +75,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	}
 
 	/**
-	 * The array of mobs in this repository.
+	 * The array of Mobs in this repository.
 	 */
 	private final Mob[] mobs;
 
@@ -90,19 +90,19 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	private int size = 0;
 
 	/**
-	 * Creates a new mob repository with the specified capacity.
+	 * Creates a new Mob repository with the specified capacity.
 	 * 
-	 * @param capacity The maximum number of mobs that can be present in the repository.
+	 * @param capacity The maximum number of Mobs that can be present in the repository.
 	 */
 	public MobRepository(int capacity) {
 		this.mobs = new Mob[capacity];
 	}
 
 	/**
-	 * Adds a mob to the repository.
+	 * Adds a Mob to the repository.
 	 * 
-	 * @param mob The mob to add.
-	 * @return {@code true} if the mob was added, {@code false} if the size has reached the capacity of this repository.
+	 * @param mob The Mob to add.
+	 * @return {@code true} if the Mob was added, {@code false} if the size has reached the capacity of this repository.
 	 */
 	public boolean add(T mob) {
 		if (size == mobs.length) {
@@ -151,17 +151,29 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		return mobs.length;
 	}
 
+	/**
+	 * Gets the Mob at the given index.
+	 *
+	 * @param index The index of the Mob.
+	 * @return The Mob instance.
+	 * @throws IndexOutOfBoundsException If the specified index is not [0, capacity).
+	 */
+	@SuppressWarnings("unchecked")
+	public T get(int index) {
+		Preconditions.checkElementIndex(index, mobs.length, "Mob index is out of bounds.");
+		return (T) mobs[index];
+	}
+
 	@Override
 	public Iterator<T> iterator() {
 		return new MobRepositoryIterator();
 	}
 
 	/**
-	 * Removes a mob from the repository.
+	 * Removes a Mob from the repository.
 	 * 
-	 * @param mob The mob to remove.
-	 * @return {@code true} if the mob was removed, {@code false} if it was not (e.g. if it was never added or has been
-	 *         removed already).
+	 * @param mob The Mob to remove.
+	 * @return {@code true} if the Mob was removed, {@code false} if not.
 	 */
 	public boolean remove(T mob) {
 		int index = mob.getIndex() - 1;
@@ -179,23 +191,9 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	}
 
 	/**
-	 * Gets the mob at the given index
-	 *
-	 * @param index The index of the mob
-	 * @return The mob instance
-	 * @throws IndexOutOfBoundsException If the specified index is less than 0, or greater than or equal to the capacity
-	 *             of this repository.
-	 */
-	@SuppressWarnings("unchecked")
-	public T get(int index) {
-		Preconditions.checkElementIndex(index, mobs.length, "Mob index is out of bounds.");
-		return (T) mobs[index];
-	}
-
-	/**
 	 * Gets the size of this repository.
 	 * 
-	 * @return The number of mobs in this repository.
+	 * @return The number of Mobs in this repository.
 	 */
 	public int size() {
 		return size;
