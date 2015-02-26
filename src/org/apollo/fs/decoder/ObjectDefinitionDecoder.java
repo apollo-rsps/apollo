@@ -120,6 +120,8 @@ public final class ObjectDefinitionDecoder {
 				data.get();
 			} else if (opcode >= 70 && opcode <= 72) {
 				data.getShort();
+			} else if (opcode == 73) {
+				definition.setObstructive(true);
 			} else if (opcode == 75) {
 				data.get();
 			} else {
