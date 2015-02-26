@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.apollo.game.model.Position;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * A node representing a weighted {@link Position}.
  * 
@@ -100,7 +102,7 @@ final class Node {
 
 	@Override
 	public int hashCode() {
-		return position.getX() * 31 + position.getY();
+		return position.hashCode();
 	}
 
 	/**
@@ -141,8 +143,7 @@ final class Node {
 
 	@Override
 	public String toString() {
-		return Node.class.getSimpleName() + " [x=" + position.getX() + ", y=" + position.getY() + ", open=" + open + ", cost="
-				+ cost + "]";
+		return MoreObjects.toStringHelper(this).add("position", position).add("open", open).add("cost", cost).toString();
 	}
 
 }

@@ -8,7 +8,7 @@ import org.apollo.game.model.Position;
 
 /**
  * A very simple pathfinding algorithm that simply walks in the direction of the target until it either reaches it or is
- * blocked. TODO diagonal movement support.
+ * blocked.
  *
  * @author Major
  */
