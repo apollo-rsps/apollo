@@ -71,7 +71,7 @@ final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 
 					Position adjacent = new Position(nextX, nextY);
 					if (traversable(adjacent)) {
-						Node node = createIfAbsent(adjacent, nodes);
+						Node node = nodes.computeIfAbsent(adjacent, Node::new);
 						compare(active, node, open, sorted, heuristic);
 					}
 				}
@@ -116,24 +116,6 @@ final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 			open.add(other);
 			sorted.add(other);
 		}
-	}
-
-	/**
-	 * Creates a {@link Node} and inserts it into the specified {@link Map} if one does not already exist, then returns
-	 * that node.
-	 *
-	 * @param position The {@link Position}.
-	 * @param nodes The map of positions to nodes.
-	 * @return The node.
-	 */
-	private Node createIfAbsent(Position position, Map<Position, Node> nodes) {
-		Node existing = nodes.get(position);
-		if (existing == null) {
-			existing = new Node(position);
-			nodes.put(position, existing);
-		}
-
-		return existing;
 	}
 
 	/**
