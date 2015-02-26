@@ -402,6 +402,15 @@ public abstract class Mob extends Entity {
 			this.index = index;
 		}
 	}
+	
+	/**
+	 * Returns this mobs interacting index.
+	 * 
+	 * @return The interaction index of this mob.
+	 */
+	public int getInteractionIndex() {
+		return index;
+	}
 
 	/**
 	 * Updates this mob's interacting mob.
@@ -410,7 +419,7 @@ public abstract class Mob extends Entity {
 	 */
 	public final void setInteractingMob(Mob mob) {
 		interactingMob = mob;
-		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.index));
+		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.getInteractionIndex()));
 	}
 
 	/**
