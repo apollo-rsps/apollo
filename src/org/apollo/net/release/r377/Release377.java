@@ -7,6 +7,7 @@ import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.game.message.impl.DisplayCrossbonesMessage;
 import org.apollo.game.message.impl.DisplayTabInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
+import org.apollo.game.message.impl.FlashTabInterfaceMessage;
 import org.apollo.game.message.impl.ForwardPrivateChatMessage;
 import org.apollo.game.message.impl.FriendServerStatusMessage;
 import org.apollo.game.message.impl.HintIconMessage;
@@ -41,6 +42,7 @@ import org.apollo.game.message.impl.UpdateTileItemMessage;
 import org.apollo.game.message.impl.UpdateWeightMessage;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
+import org.apollo.net.release.r317.FlashTabInterfaceMessageEncoder;
 
 /**
  * A {@link Release} implementation for the 377 protocol.
@@ -203,6 +205,7 @@ public final class Release377 extends Release {
 		register(IgnoreListMessage.class, new IgnoreListMessageEncoder());
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
 		register(HintIconMessage.class, new HintIconMessageEncoder());
+		register(FlashTabInterfaceMessage.class, new FlashTabInterfaceMessageEncoder());
 	}
 
 }

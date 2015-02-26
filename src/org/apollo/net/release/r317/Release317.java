@@ -7,6 +7,7 @@ import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.game.message.impl.DisplayCrossbonesMessage;
 import org.apollo.game.message.impl.DisplayTabInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
+import org.apollo.game.message.impl.FlashTabInterfaceMessage;
 import org.apollo.game.message.impl.ForwardPrivateChatMessage;
 import org.apollo.game.message.impl.FriendServerStatusMessage;
 import org.apollo.game.message.impl.HintIconMessage;
@@ -207,5 +208,6 @@ public final class Release317 extends Release {
 		register(IgnoreListMessage.class, new IgnoreListMessageEncoder());
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
 		register(HintIconMessage.class, new HintIconMessageEncoder());
+		register(FlashTabInterfaceMessage.class, new FlashTabInterfaceMessageEncoder());
 	}
 }
