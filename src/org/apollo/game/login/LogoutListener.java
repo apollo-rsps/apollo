@@ -15,6 +15,6 @@ public interface LogoutListener {
 	 * 
 	 * @param player The player.
 	 */
-	public abstract void execute(Player player);
+	public void execute(Player player);
 
 }
