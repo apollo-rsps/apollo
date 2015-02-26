@@ -13,4 +13,5 @@
     <script>food.rb</script>
     <script>potions.rb</script>
   </scripts>
+  <dependencies />
 </plugin>
