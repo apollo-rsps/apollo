@@ -7,6 +7,8 @@ java_import 'org.apollo.game.model.def.ItemDefinition'
 java_import 'org.apollo.game.model.inter.EnterAmountListener'
 java_import 'org.apollo.game.model.inter.dialogue.DialogueAdapter'
 
+private
+
 WATER_VIAL_ID = 227
 EMPTY_VIAL_ID = 229
 
