@@ -39,10 +39,10 @@ public final class JagGrabRequestWorker extends RequestWorker<JagGrabRequest, Re
 
 	@Override
 	protected void service(ResourceProvider provider, Channel channel, JagGrabRequest request) throws IOException {
-		Optional<ByteBuffer> buf = provider.get(request.getFilePath());
+		Optional<ByteBuffer> buffer = provider.get(request.getFilePath());
 
-		if (buf.isPresent()) {
-			ByteBuf wrapped = Unpooled.wrappedBuffer(buf.get());
+		if (buffer.isPresent()) {
+			ByteBuf wrapped = Unpooled.wrappedBuffer(buffer.get());
 			channel.writeAndFlush(new JagGrabResponse(wrapped)).addListener(ChannelFutureListener.CLOSE);
 		} else {
 			channel.close();

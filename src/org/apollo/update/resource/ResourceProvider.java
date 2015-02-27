@@ -21,7 +21,7 @@ public interface ResourceProvider {
 	public boolean accept(String path) throws IOException;
 
 	/**
-	 * Returns a resource as a {@link ByteBuffer} if it exists.
+	 * The resource data, as a {@link ByteBuffer}, wrapped in an {@link Optional}.
 	 * 
 	 * @param path The path to the resource.
 	 * @return A {@code ByteBuffer} representation of a resource if it exists otherwise {@link Optional#empty()} is
