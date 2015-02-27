@@ -68,9 +68,8 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object message) {
 		try {
-			Attribute<Session> attr = ctx.attr(NetworkConstants.SESSION_KEY);
-
-			Session session = attr.get();
+			Attribute<Session> attribute = ctx.attr(NetworkConstants.SESSION_KEY);
+			Session session = attribute.get();
 
 			if (message instanceof HttpRequest || message instanceof JagGrabRequest) {
 				session = new UpdateSession(ctx.channel(), serverContext);
@@ -87,11 +86,11 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 
 				switch (handshakeMessage.getServiceId()) {
 				case HandshakeConstants.SERVICE_GAME:
-					attr.set(new LoginSession(ctx, serverContext));
+					attribute.set(new LoginSession(ctx, serverContext));
 					break;
 
 				case HandshakeConstants.SERVICE_UPDATE:
-					attr.set(new UpdateSession(ctx.channel(), serverContext));
+					attribute.set(new UpdateSession(ctx.channel(), serverContext));
 					break;
 				}
 			}
