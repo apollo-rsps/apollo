@@ -21,11 +21,11 @@ class Entity
       
       name = name[0...-1].strip # Drop the equals
       set_attribute(name, to_attribute(args[0]))
-    elsif AttributeMap::get_definition(name) == nil
+    elsif AttributeMap::get_definition(name).nil?
       super(symbol, *args)
     else
       attribute = get_attribute(name); definition = AttributeMap::get_definition(name)
-      value = attribute == nil ? definition.default : attribute.value
+      value = attribute.nil? ? definition.default : attribute.value
       
       return definition.type == AttributeType::SYMBOL ? value.to_sym : value
     end
@@ -64,7 +64,7 @@ end
 
 # Gets the Persistence type of the specified value.
 def get_persistence(persistence)
-  raise "Undefined persistence type #{persistence}." unless persistence == :serialized || persistence == :transient
+  raise "Undefined persistence type #{persistence}." unless persistence == :persistent || persistence == :transient
 
-  return persistence == :serialized ? AttributePersistence::SERIALIZED : AttributePersistence::TRANSIENT
+  return persistence == :persistent ? AttributePersistence::SERIALIZED : AttributePersistence::TRANSIENT
 end
