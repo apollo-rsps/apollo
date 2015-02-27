@@ -42,7 +42,8 @@ on :message, :remove_friend do |ctx, player, message|
 end
 
 # Update the friend server status and send the friend/ignore lists of the player logging in.
-on :login do |player|
+on :login do |event, context|
+  player = event.player
   player.send(FriendServerStatusMessage.new(ServerStatus::CONNECTING))
   player.send(IgnoreListMessage.new(player.ignored_usernames)) if player.ignored_usernames.size > 0
 
@@ -62,8 +63,8 @@ on :login do |player|
 end
 
 # Notifies the player's friends that the player has logged out.
-on :logout do |player|
-  update_friends(player, 0)
+on :logout do |event, context|
+  update_friends(event.player, 0)
 end
 
 

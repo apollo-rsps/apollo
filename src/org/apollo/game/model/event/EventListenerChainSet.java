@@ -1,4 +1,4 @@
-package org.apollo.game.model.entity.event;
+package org.apollo.game.model.event;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +23,8 @@ public final class EventListenerChainSet {
 	 */
 	public <E extends Event> boolean notify(E event) {
 		@SuppressWarnings("unchecked")
-		EventListenerChain<E> chain = (EventListenerChain<E>) chains.get(event);
-		return chain.notify(event);
+		EventListenerChain<E> chain = (EventListenerChain<E>) chains.get(event.getClass());
+		return (chain == null) ? true : chain.notify(event);
 	}
 
 	/**

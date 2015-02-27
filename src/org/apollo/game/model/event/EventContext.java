@@ -1,4 +1,4 @@
-package org.apollo.game.model.entity.event;
+package org.apollo.game.model.event;
 
 /**
  * The context of an {@link Event}.
@@ -15,7 +15,7 @@ final class EventContext {
 	/**
 	 * Terminates the Event chain.
 	 */
-	public void terminate() {
+	public void terminateEvent() {
 		terminated = true;
 	}
 

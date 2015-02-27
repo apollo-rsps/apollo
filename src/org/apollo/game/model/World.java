@@ -15,8 +15,6 @@ import org.apollo.fs.decoder.ItemDefinitionDecoder;
 import org.apollo.fs.decoder.NpcDefinitionDecoder;
 import org.apollo.fs.decoder.ObjectDefinitionDecoder;
 import org.apollo.game.command.CommandDispatcher;
-import org.apollo.game.login.LoginDispatcher;
-import org.apollo.game.login.LogoutDispatcher;
 import org.apollo.game.model.area.Sector;
 import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.def.EquipmentDefinition;
@@ -27,9 +25,9 @@ import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.GameObject;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.entity.event.Event;
-import org.apollo.game.model.entity.event.EventListener;
-import org.apollo.game.model.entity.event.EventListenerChainSet;
+import org.apollo.game.model.event.Event;
+import org.apollo.game.model.event.EventListener;
+import org.apollo.game.model.event.EventListenerChainSet;
 import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
 import org.apollo.io.EquipmentDefinitionParser;
@@ -100,16 +98,6 @@ public final class World {
 	private final EventListenerChainSet events = new EventListenerChainSet();
 
 	/**
-	 * The login dispatcher.
-	 */
-	private final LoginDispatcher loginDispatcher = new LoginDispatcher();
-
-	/**
-	 * The logout dispatcher.
-	 */
-	private final LogoutDispatcher logoutDispatcher = new LogoutDispatcher();
-
-	/**
 	 * The {@link MobRepository} of {@link Npc}s.
 	 */
 	private final MobRepository<Npc> npcRepository = new MobRepository<>(WorldConstants.MAXIMUM_NPCS);
@@ -158,24 +146,6 @@ public final class World {
 	 */
 	public CommandDispatcher getCommandDispatcher() {
 		return commandDispatcher;
-	}
-
-	/**
-	 * Gets the {@link LoginDispatcher}.
-	 * 
-	 * @return The dispatcher.
-	 */
-	public LoginDispatcher getLoginDispatcher() {
-		return loginDispatcher;
-	}
-
-	/**
-	 * Gets the {@link LogoutDispatcher}.
-	 * 
-	 * @return The dispatcher.
-	 */
-	public LogoutDispatcher getLogoutDispatcher() {
-		return logoutDispatcher;
 	}
 
 	/**
@@ -394,8 +364,6 @@ public final class World {
 
 			Sector sector = sectors.fromPosition(player.getPosition());
 			sector.removeEntity(player);
-
-			logoutDispatcher.dispatch(player);
 		} else {
 			logger.warning("Could not find player " + player + " to unregister!");
 		}

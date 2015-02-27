@@ -11,7 +11,9 @@ import org.apollo.game.message.impl.OpenInterfaceMessage;
 import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.OpenOverlayMessage;
 import org.apollo.game.message.impl.OpenSidebarMessage;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.event.impl.CloseInterfacesEvent;
 import org.apollo.game.model.inter.dialogue.DialogueListener;
 import org.apollo.game.model.inv.InventoryListener;
 
@@ -86,8 +88,11 @@ public final class InterfaceSet {
 	 * Closes the current open interface(s).
 	 */
 	public void close() {
-		closeAndNotify();
-		player.send(new CloseInterfaceMessage());
+		CloseInterfacesEvent event = new CloseInterfacesEvent(player);
+		if (World.getWorld().submit(event)) {
+			closeAndNotify();
+			player.send(new CloseInterfaceMessage());
+		}
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package org.apollo.game.model.entity.event;
+package org.apollo.game.model.event;
 
 import java.util.ArrayList;
 import java.util.List;

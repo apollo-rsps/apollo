@@ -16,10 +16,9 @@ require 'java'
 
 java_import 'org.apollo.game.command.CommandListener'
 java_import 'org.apollo.game.message.handler.MessageHandler'
-java_import 'org.apollo.game.login.LoginListener'
-java_import 'org.apollo.game.login.LogoutListener'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
+java_import 'org.apollo.game.model.event.EventListener'
 java_import 'org.apollo.game.model.setting.PrivilegeLevel'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
 java_import 'org.apollo.util.plugin.PluginContext'
@@ -32,50 +31,43 @@ RIGHTS_STANDARD = PrivilegeLevel::STANDARD
 # Extends the (Ruby) String class with a method to convert a lower case,
 # underscore delimited string to camel-case.
 class String
-  def camelize
+
+  # Converts a ruby snake_case string to camel-case.
+  def camelize()
     gsub(/(?:^|_)(.)/) { $1.upcase }
   end
+
 end
 
 # A CommandListener that executes a Proc object with two arguments: the player and the command.
 class ProcCommandListener < CommandListener
 
+  # Creates the ProcCommandListener.
   def initialize(rights, block)
     super(rights)
     @block = block
   end
 
+  # Executes the block listening for the command.
   def execute(player, command)
     @block.call(player, command)
   end
   
 end
 
-# A LoginListener that executes a Proc object with the player argument.
-class ProcLoginListener 
-  java_implements LoginListener
-
-  def initialize(block)
-    super()
-    @block = block
-  end
-
-  def execute(player)
-    @block.call(player)
-  end
-end
-
 # A LogoutListener that executes a Proc object with the player argument.
-class ProcLogoutListener 
-  java_implements LogoutListener
+class ProcEventListener
+  java_implements EventListener
 
+  # Creates the ProcEventListener.
   def initialize(block)
     super()
     @block = block
   end
 
-  def execute(player)
-    @block.call(player)
+  # Executes the block handling the Event.
+  def handle(event, context)
+    @block.call(event, context)
   end
 
 end
@@ -84,12 +76,14 @@ end
 # context, the player and the message.
 class ProcMessageHandler < MessageHandler
 
+  # Creates the ProcMessageListener.
   def initialize(block, option)
-    super() # required (with brackets!), see http://jira.codehaus.org/browse/JRUBY-679
+    super()
     @block = block
     @option = option
   end
 
+  # Handles the message.
   def handle(ctx, player, message)
     @block.call(ctx, player, message) if (@option == 0 || @option == message.option)
   end
@@ -99,11 +93,13 @@ end
 # A ScheduledTask which executes a Proc object with one argument (itself).
 class ProcScheduledTask < ScheduledTask
 
+  # Creates the ProcScheduledTask.
   def initialize(delay, immediate, block)
     super(delay, immediate)
     @block = block
   end
 
+  # Executes the block.
   def execute
     @block.call(self)
   end
@@ -138,8 +134,7 @@ end
 #   * :command
 #   * :message
 #   * :button
-#   * :login
-#   * :logout
+#   * Any valid Event, as a symbol in ruby snake_case form.
 #
 # A command takes one or two arguments (the command name and optionally the
 # minimum rights level to use it). The minimum rights level defaults to
@@ -155,9 +150,10 @@ def on(type, *args, &block)
     when :command then on_command(args, block)
     when :message then on_message(args, block)
     when :button  then on_button(args, block)
-    when :login   then on_login(block)
-    when :logout  then on_logout(block)
-    else raise 'Unknown message type.'
+    else
+        class_name = type.to_s.camelize.concat('Event')
+        type = Java::JavaClass.for_name("org.apollo.game.model.event.impl.#{class_name}")
+        $world.listen_for(type, ProcEventListener.new(block))
   end
 end
 
@@ -189,10 +185,9 @@ def on_message(args, proc)
     end
   end
 
-  if message.is_a?(Symbol)
-    class_name = message.to_s.camelize.concat('Message')
-    message = Java::JavaClass.for_name("org.apollo.game.message.impl.#{class_name}")
-  end
+  
+  class_name = message.to_s.camelize.concat('Message')
+  message = Java::JavaClass.for_name("org.apollo.game.message.impl.#{class_name}")
 
   $ctx.add_last_message_handler(message, ProcMessageHandler.new(proc, option))
 end

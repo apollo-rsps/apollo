@@ -51,15 +51,13 @@ def append_tiara(hash)
 end
 
 # Sets the correct config upon login, if the player is wearing a tiara.
-on :login do |player|
+on :login do |event, context|
+  player = event.player
   hat = player.equipment.get(EquipmentConstants::HAT)
-  next if hat.nil?
-
-  tiara = TIARAS_BY_ID[hat]
-  unless tiara.nil?
-    tiara.send_config
-  else
-    send_empty_config(player)
+  
+  unless hat.nil?
+    tiara = TIARAS_BY_ID[hat]
+    if tiara.nil? then send_empty_config(player) else tiara.send_config end
   end
 end
 
@@ -67,7 +65,7 @@ end
 on :message, :second_object_action do |ctx, player, message|
   object_id = message.id
   tiara = TIARAS_BY_ALTAR[object_id]
-  return if tiara.nil?
+  next if tiara.nil?
 
   hat = player.equipment.get(EquipmentConstants::HAT)
 

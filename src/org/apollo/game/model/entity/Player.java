@@ -19,6 +19,7 @@ import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.event.impl.LoginEvent;
 import org.apollo.game.model.inter.InterfaceConstants;
 import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inter.InterfaceSet;
@@ -701,7 +702,7 @@ public final class Player extends Mob {
 		bank.forceRefresh();
 		skillSet.forceRefresh();
 
-		World.getWorld().getLoginDispatcher().dispatch(this);
+		World.getWorld().submit(new LoginEvent(this));
 	}
 
 	/**

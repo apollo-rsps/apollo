@@ -3,23 +3,23 @@ package org.apollo.util.plugin;
 import org.apollo.ServerContext;
 import org.apollo.game.GameService;
 import org.apollo.game.command.CommandListener;
-import org.apollo.game.login.LoginListener;
-import org.apollo.game.login.LogoutListener;
 import org.apollo.game.message.Message;
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerChain;
 import org.apollo.game.message.handler.MessageHandlerChainGroup;
 import org.apollo.game.model.World;
+import org.apollo.game.model.event.EventListener;
+import org.apollo.game.model.event.impl.LoginEvent;
+import org.apollo.game.model.event.impl.LogoutEvent;
 
 /**
  * The {@link PluginContext} contains methods a plugin can use to interface with the server, for example, by adding
  * {@link MessageHandler}s to {@link MessageHandlerChain}s.
  * 
  * @author Graham
+ * @author Major
  */
 public final class PluginContext {
-
-	// TODO move listeners to world?
 
 	/**
 	 * Adds a {@link CommandListener}.
@@ -32,21 +32,21 @@ public final class PluginContext {
 	}
 
 	/**
-	 * Adds a {@link LoginListener}.
+	 * Adds an {@link EventListener} for a {@link LoginEvent}.
 	 * 
 	 * @param listener The listener.
 	 */
-	public static void addLoginListener(LoginListener listener) {
-		World.getWorld().getLoginDispatcher().register(listener);
+	public static void addLoginListener(EventListener<LoginEvent> listener) {
+		World.getWorld().listenFor(LoginEvent.class, listener);
 	}
 
 	/**
-	 * Adds a {@link LogoutListener}.
+	 * Adds an {@link EventListener} for a {@link LogoutEvent}.
 	 * 
 	 * @param listener The listener.
 	 */
-	public static void addLogoutListener(LogoutListener listener) {
-		World.getWorld().getLogoutDispatcher().register(listener);
+	public static void addLogoutListener(EventListener<LogoutEvent> listener) {
+		World.getWorld().listenFor(LogoutEvent.class, listener);
 	}
 
 	/**

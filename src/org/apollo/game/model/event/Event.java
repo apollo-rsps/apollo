@@ -1,4 +1,4 @@
-package org.apollo.game.model.entity.event;
+package org.apollo.game.model.event;
 
 /**
  * A type of event that may occur in the game world.
