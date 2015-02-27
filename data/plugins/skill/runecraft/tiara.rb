@@ -44,14 +44,14 @@ end
 
 # Appends a tiara to the list.
 def append_tiara(hash)
-  raise 'Hash must contain a tiara id, altar id, talisman id, a bitshift number, and experience.' unless hash.has_key?(:tiara_id) && hash.has_key?(:altar) && hash.has_key?(:talisman) && hash.has_key?(:bitshift) && hash.has_key?(:experience)
+  raise 'Hash must contain a tiara id, altar id, talisman id, a bitshift number, and experience.' unless hash.has_keys?(:altar, :bitshift, :experience, :talisman, :tiara_id)
   tiara_id = hash[:tiara_id]; altar = hash[:altar]; talisman = hash[:talisman]; bitshift = hash[:bitshift]; experience = hash[:experience]
 
   TIARAS_BY_TALISMAN[talisman] = TIARAS_BY_ID[tiara_id] = TIARAS_BY_ALTAR[altar] = Tiara.new(tiara_id, altar, talisman, bitshift, experience)
 end
 
 # Sets the correct config upon login, if the player is wearing a tiara.
-on :login do |event, context|
+on :login do |event, player|
   player = event.player
   hat = player.equipment.get(EquipmentConstants::HAT)
   

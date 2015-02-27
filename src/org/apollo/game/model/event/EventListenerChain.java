@@ -48,16 +48,15 @@ final class EventListenerChain<E extends Event> {
 	 * @return {@code true} if the Event should continue on with its outcome, {@code false} if not.
 	 */
 	public boolean notify(E event) {
-		EventContext context = new EventContext();
 		for (EventListener<E> listener : listeners) {
-			listener.handle(event, context);
+			listener.handle(event);
 
-			if (context.terminated()) {
+			if (event.terminated()) {
 				return false;
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	@Override

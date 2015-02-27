@@ -19,6 +19,7 @@ java_import 'org.apollo.game.message.handler.MessageHandler'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
 java_import 'org.apollo.game.model.event.EventListener'
+java_import 'org.apollo.game.model.event.PlayerEvent'
 java_import 'org.apollo.game.model.setting.PrivilegeLevel'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
 java_import 'org.apollo.util.plugin.PluginContext'
@@ -66,8 +67,10 @@ class ProcEventListener
   end
 
   # Executes the block handling the Event.
-  def handle(event, context)
-    @block.call(event, context)
+  def handle(event)
+    args = [ event ]
+    args << event.player if event.kind_of?(PlayerEvent)
+    @block.call(*args)
   end
 
 end

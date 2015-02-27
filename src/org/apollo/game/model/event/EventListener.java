@@ -14,8 +14,7 @@ public interface EventListener<E> {
 	 * Handles the {@link Event} that occurred.
 	 * 
 	 * @param event The Event.
-	 * @param context The {@link EventContext}.
 	 */
-	public void handle(E event, EventContext context);
+	public void handle(E event);
 
 }

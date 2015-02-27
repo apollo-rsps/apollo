@@ -20,6 +20,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
 import org.apollo.game.model.event.impl.LoginEvent;
+import org.apollo.game.model.event.impl.LogoutEvent;
 import org.apollo.game.model.inter.InterfaceConstants;
 import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inter.InterfaceSet;
@@ -600,7 +601,9 @@ public final class Player extends Mob {
 	 * Logs the player out, if possible.
 	 */
 	public void logout() {
-		send(new LogoutMessage());
+		if (World.getWorld().submit(new LogoutEvent(this))) {
+			send(new LogoutMessage());
+		}
 	}
 
 	/**
