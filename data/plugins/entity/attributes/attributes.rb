@@ -19,7 +19,6 @@ class Entity
     if name[-1] == "="
       raise "Expected argument count of 1, received #{args.length}" unless args.length == 1
       
-      puts name
       name = name[0...-1].strip # Drop the equals
       set_attribute(name, to_attribute(args[0]))
     elsif AttributeMap::get_definition(name) == nil
