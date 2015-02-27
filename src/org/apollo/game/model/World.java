@@ -361,9 +361,10 @@ public final class World {
 	 * Submits the specified {@link Event}, passing it to the listeners..
 	 * 
 	 * @param event The Event.
+	 * @return {@code true} if the Event should proceed, {@code false} if not.
 	 */
-	public void submit(Event event) {
-		events.notify(event);
+	public boolean submit(Event event) {
+		return events.notify(event);
 	}
 
 	/**
