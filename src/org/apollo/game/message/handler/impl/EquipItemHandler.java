@@ -17,7 +17,7 @@ import org.apollo.util.LanguageUtil;
  * 
  * @author Major
  * @author Graham
- * @author Ryley Kimmel <ryley.kimmel@live.com>
+ * @author Ryley
  */
 public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 
