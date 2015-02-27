@@ -83,21 +83,6 @@ public final class Player extends Mob {
 	 */
 	private PlayerCredentials credentials;
 
-	@Override
-	public int hashCode() {
-		return credentials.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Player) {
-			Player other = (Player) obj;
-			return credentials.equals(other.credentials);
-		}
-
-		return false;
-	}
-
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
 	 */
@@ -169,11 +154,6 @@ public final class Player extends Mob {
 	private final transient Deque<Message> queuedMessages = new ArrayDeque<>();
 
 	/**
-	 * A flag indicating if the sector changed in the last cycle.
-	 */
-	private transient boolean sectorChanged = false;
-
-	/**
 	 * The player's run energy.
 	 */
 	private int runEnergy = 100;
@@ -187,6 +167,11 @@ public final class Player extends Mob {
 	 * The brightness of this player's screen.
 	 */
 	private ScreenBrightness screenBrightness = ScreenBrightness.NORMAL;
+
+	/**
+	 * A flag indicating if the sector changed in the last cycle.
+	 */
+	private transient boolean sectorChanged = false;
 
 	/**
 	 * The {@link GameSession} currently attached to this {@link Player}.
@@ -261,6 +246,16 @@ public final class Player extends Mob {
 		if (viewingDistance > 1) {
 			viewingDistance--;
 		}
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Player) {
+			Player other = (Player) obj;
+			return credentials.equals(other.credentials);
+		}
+
+		return false;
 	}
 
 	/**
@@ -355,11 +350,6 @@ public final class Player extends Mob {
 		return EntityType.PLAYER;
 	}
 
-	@Override
-	public int getInteractionIndex() {
-		return getIndex() | 0x8000;
-	}
-
 	/**
 	 * Gets this player's friend chat {@link PrivacyState}.
 	 * 
@@ -385,6 +375,11 @@ public final class Player extends Mob {
 	 */
 	public List<String> getIgnoredUsernames() {
 		return ignores;
+	}
+
+	@Override
+	public int getInteractionIndex() {
+		return getIndex() | 0x8000;
 	}
 
 	/**
@@ -493,6 +488,11 @@ public final class Player extends Mob {
 	 */
 	public int getWorldId() {
 		return worldId;
+	}
+
+	@Override
+	public int hashCode() {
+		return credentials.hashCode();
 	}
 
 	/**
@@ -681,6 +681,30 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sends the initial messages.
+	 */
+	public void sendInitialMessages() {
+		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
+		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
+		sendMessage("Welcome to RuneScape.");
+		if (newPlayer) {
+			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
+		}
+
+		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
+		for (int tab = 0; tab < tabs.length; tab++) {
+			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
+		}
+
+		inventory.forceRefresh();
+		equipment.forceRefresh();
+		bank.forceRefresh();
+		skillSet.forceRefresh();
+
+		World.getWorld().getLoginDispatcher().dispatch(this);
+	}
+
+	/**
 	 * Sends a message to the player.
 	 * 
 	 * @param message The message.
@@ -834,15 +858,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the sector changed flag.
-	 * 
-	 * @param sectorChanged A flag indicating if the sector has changed.
-	 */
-	public void setSectorChanged(boolean sectorChanged) {
-		this.sectorChanged = sectorChanged;
-	}
-
-	/**
 	 * Sets the player's run energy. TODO make this an attribute?
 	 * 
 	 * @param runEnergy The energy.
@@ -862,17 +877,21 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sets the sector changed flag.
+	 * 
+	 * @param sectorChanged A flag indicating if the sector has changed.
+	 */
+	public void setSectorChanged(boolean sectorChanged) {
+		this.sectorChanged = sectorChanged;
+	}
+
+	/**
 	 * Sets the player's {@link GameSession}.
 	 * 
 	 * @param session The player's {@link GameSession}.
-	 * @param reconnecting The reconnecting flag.
 	 */
-	public void setSession(GameSession session, boolean reconnecting) {
+	public void setSession(GameSession session) {
 		this.session = session;
-		if (!reconnecting) {
-			sendInitialMessages();
-		}
-		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 	}
 
 	/**
@@ -980,29 +999,6 @@ public final class Player extends Mob {
 	private void initSkills() {
 		skillSet.addListener(new SynchronizationSkillListener(this));
 		skillSet.addListener(new LevelUpSkillListener(this));
-	}
-
-	/**
-	 * Sends the initial messages.
-	 */
-	private void sendInitialMessages() {
-		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
-		sendMessage("Welcome to RuneScape.");
-		if (!newPlayer) {
-			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
-		}
-
-		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
-		for (int tab = 0; tab < tabs.length; tab++) {
-			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
-		}
-
-		inventory.forceRefresh();
-		equipment.forceRefresh();
-		bank.forceRefresh();
-		skillSet.forceRefresh();
-
-		World.getWorld().getLoginDispatcher().dispatch(this);
 	}
 
 }

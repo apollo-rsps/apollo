@@ -97,7 +97,7 @@ public final class LoginSession extends Session {
 			rights = player.getPrivilegeLevel().toInteger();
 
 			GameSession session = new GameSession(channel, serverContext, player);
-			RegistrationStatus registration = service.registerPlayer(player, session, request.isReconnecting());
+			RegistrationStatus registration = service.registerPlayer(player, session);
 
 			if (registration != RegistrationStatus.OK) {
 				optional = Optional.empty();
@@ -109,6 +109,7 @@ public final class LoginSession extends Session {
 		}
 
 		ChannelFuture future = channel.writeAndFlush(new LoginResponse(status, rights, flagged));
+
 		destroy();
 
 		if (optional.isPresent()) {
@@ -128,6 +129,10 @@ public final class LoginSession extends Session {
 			channelContext.attr(NetworkConstants.SESSION_KEY).set(optional.get().getSession());
 		} else {
 			future.addListener(ChannelFutureListener.CLOSE);
+		}
+
+		if (optional.isPresent()) {
+			optional.get().sendInitialMessages();
 		}
 	}
 
