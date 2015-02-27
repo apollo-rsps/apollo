@@ -15,6 +15,8 @@ CONVERSATIONS = {}
 def conversation(name, &block)
   conversation = Conversation.new(name)
   conversation.instance_eval(&block)
+
+  raise "Conversation named #{name} already exists." if CONVERSATIONS.has_key?(name)
   CONVERSATIONS[name] = conversation
 end
 
@@ -35,6 +37,8 @@ class Conversation
     dialogue = Dialogue.new(name, self)
     dialogue.instance_eval(&block)
     dialogue.wrap
+
+    raise "Conversations #{@name} already has a dialogue named #{name}." if @dialogues.has_key?(name)
     @dialogues[name] = dialogue
 
     if ((@dialogues.empty? || dialogue.has_precondition) && dialogue.type == :npc_speech)
