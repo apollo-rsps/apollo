@@ -7,26 +7,62 @@ java_import 'org.apollo.game.message.impl.SetWidgetNpcModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetPlayerModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetTextMessage'
 
-# Defines a dialogue, with the specified name and block.
-def dialogue(name, &block)
-  raise 'Dialogues must have a name and block.' if (name.nil? || block.nil?)
+# The map of conversation names to Conversations.
+CONVERSATIONS = {}
 
-  dialogue = Dialogue.new(name)
-  dialogue.instance_eval(&block)
-  dialogue.wrap
-  DIALOGUES[name] = dialogue
+
+# Declares a conversation.
+def conversation(name, &block)
+  conversation = Conversation.new(name)
+  conversation.instance_eval(&block)
+  CONVERSATIONS[name] = conversation
 end
 
-# Defines an opening (i.e. conversation starter) dialogue, which hooks into the chain.
-# Allows for a lambda prerequisite to be passed, which takes one argument the player; if the prerequisite evaluates to false, the dialogue will not be opened.
-def opening_dialogue(name, prerequisite=nil, &block)
-  dialogue = dialogue(name, &block)
-  npc = dialogue.npc
-  raise 'Npc cannot be null when opening a dialogue.' if npc.nil?
+# A conversation held between two entities.
+class Conversation
 
-  on :message, :first_npc_action, npc do |ctx, player, event|
-    player.open_dialogue(name) if (prerequisite.nil? || prerequisite.call(player))
+  # Creates the Conversation.
+  def initialize(name)
+    @dialogues = {}
+    @starters = []
+    @name = name
   end
+
+  # Defines a dialogue, with the specified name and block.
+  def dialogue(name, &block)
+    raise 'Dialogues must have a name and block.' if (name.nil? || block.nil?)
+
+    dialogue = Dialogue.new(name, self)
+    dialogue.instance_eval(&block)
+    dialogue.wrap
+    @dialogues[name] = dialogue
+
+    if ((@dialogues.empty? || dialogue.has_precondition) && dialogue.type == :npc_speech)
+      npc = dialogue.npc
+      raise 'Npc cannot be null when opening a dialogue.' if npc.nil?
+      @starters << dialogue
+
+      on :message, :first_npc_action do |ctx, player, event|
+        id = $world.npc_repository.get(event.index).id
+        if npc == id
+          @starters.each do |start|
+            if dialogue.precondition(player)
+      	      send_dialogue(player, dialogue)
+      	      ctx.break_handler_chain()
+      	      break
+      	    end
+      	  end
+        end
+      end
+    end
+  end
+
+  # Gets part of a conversation (i.e. a dialogue).
+  def part(name)
+  	raise "Conversation #{@name} does not contain a dialogue called #{name}." unless @dialogues.has_key?(name)
+  	@dialogues[name]
+  end
+
 end
 
 # Declares an emote, with the specified name and id.
@@ -35,11 +71,25 @@ def declare_emote(name, id)
 end
 
 
+# Sends the specified dialogue.
+def send_dialogue(player, dialogue)
+  type = dialogue.type
+  action = dialogue.action
+  action.call(player) unless action.nil?
+
+  case type
+    when :message_with_item then send_item_dialogue(player, dialogue)
+    when :message_with_model then send_model_dialogue(player, dialogue)
+    when :npc_speech then send_npc_dialogue(player, dialogue)
+    when :options then send_options_dialogue(player, dialogue)
+    when :player_speech then send_player_dialogue(player, dialogue)
+    when :text then send_text_dialogue(player, dialogue)
+    when :statement then send_statement_dialogue(player, dialogue)
+    else raise "Unrecognised dialogue type #{type}."
+  end
+end
 
 private
-
-# The hash of dialogue names to dialogues.
-DIALOGUES = {}
 
 # The hash of emote names to ids.
 EMOTES = {}
@@ -50,21 +100,31 @@ MAXIMUM_LINE_COUNT = 4
 # The maximum amount of options that can be displayed on a dialogue.
 MAXIMUM_OPTION_COUNT = 5
 
-# The maximum width of a line, in characters.
-MAXIMUM_LINE_WIDTH = 55
+# The maximum width of a line, in pixels, for a dialogue with media.
+MAXIMUM_MEDIA_LINE_WIDTH = 350
+
+# The maximum width of a line, in pixels, for a dialogue with no media.
+MAXIMUM_LINE_WIDTH = 430
 
 # The possible types of a dialogue.
-DIALOGUE_TYPES = [ :message_with_item, :message_with_model, :npc_speech, :options, :player_speech, :text ]
+DIALOGUE_TYPES = [ :message_with_item, :message_with_model, :npc_speech, :options, :player_speech, :statement, :text ]
 
 # A type of dialogue.
 class Dialogue
   attr_reader :emote, :name, :media, :options, :text, :title, :type
 
   # Initializes the Dialogue.
-  def initialize(name)
+  def initialize(name, conversation)
     @name = name.to_s
+    @conversation = conversation
     @text = []
     @options = []
+  end
+
+  # An action that is executed when the dialogue is displayed.
+  def action(&block)
+  	@action = block unless block.nil?
+  	@action
   end
 
   # Closes the dialogue interface when the player clicks the 'Click here to continue...' text.
@@ -77,14 +137,34 @@ class Dialogue
     raise 'Cannot add a continue event on a dialogue with options.' unless @options.size.zero?
     raise 'Must declare either a type or a block for a continue event.' if (type.nil? && block.nil?)
 
-    @options << (block.nil? ? get_next_dialogue(type) : block)
+    action = get_next_dialogue(type) unless type.nil?
+    @options << ->(player) { action.call(player) unless type.nil?; block.call(player) unless block.nil? }
+  end
+
+  # Copies the value of every variable from the specified Dialogue, optionally updating the text array.
+  def copy_from(dialogue, text=nil)
+    @emote = dialogue.emote
+    @item = dialogue.item
+    @model = dialogue.model
+    @npc = dialogue.npc
+    @options = dialogue.options
+    @text = if text.nil? then dialogue.text.dup else text.dup end
+    @type = dialogue.type
   end
 
   # Sets the emote performed by the dialogue head.
   def emote(emote=nil)
-    raise 'Can only perform an emote on :player_speech or :npc_speech dialogues.' unless [ :npc_speech, :player_speech ].include?(@type)
-    @emote = EMOTES[emote] if emote.kind_of?(Symbol)
+  	unless emote.nil?
+      raise 'Can only perform an emote on :player_speech or :npc_speech dialogues.' unless [ :npc_speech, :player_speech ].include?(@type)
+      @emote = emote.kind_of?(Symbol) ? EMOTES[emote] : emote
+    end
+
     @emote
+  end
+
+  # Returns whether or not this dialogue has a precondition.
+  def has_precondition
+  	!@precondition.nil?
   end
 
   # Gets the media of this dialogue.
@@ -120,8 +200,10 @@ class Dialogue
 
   # Sets the id of the npc displayed.
   def npc(npc=nil)
-    raise 'Can only display an npc on :npc_speech dialogues.' unless @type == :npc_speech
-    @npc = lookup_npc(npc) unless npc.nil?
+  	unless npc.nil?
+      raise 'Can only display an npc on :npc_speech dialogues.' unless @type == :npc_speech
+      @npc = lookup_npc(npc)
+    end
     @npc
   end
 
@@ -136,15 +218,18 @@ class Dialogue
 
   # Gets the array of options.
   def options
-  	@options.dup
+      @options.dup
+  end
+
+  # Sets the precondition of this dialogue.
+  def precondition(player=nil, &block)
+      @precondition = block unless block.nil?
+      @precondition.call(player) unless player.nil?
   end
 
   # Appends a message to the text list.
   def text(*message)
-    unless message.nil?
-      @text.concat(message)
-    end
-
+    @text.concat(message) unless message.nil?
     @text
   end
 
@@ -166,44 +251,41 @@ class Dialogue
 
   # Wraps text in this Dialogue, inserting extra Dialogues in the chain if necessary.
   def wrap
-    lines = []
     next if @type == :options
+    lines = []
+    maximum_width = [ :text, :statement ].include?(@type) ? MAXIMUM_LINE_WIDTH : MAXIMUM_MEDIA_LINE_WIDTH
+    maximum_lines = MAXIMUM_LINE_COUNT
 
-    text = @text[0]
-    segments = []# text.chars.each_slice(MAXIMUM_LINE_WIDTH).map(&:join) # Split text into array of strings with length <= 60.
-    previous = 0; index = MAXIMUM_LINE_WIDTH
+    text = @text.first
+    segments = []
+    index = 0; width = 0; space = 0
 
     while index < text.length
-      index -= 1 until text[index] == ' '
-      segments << text[previous..index]
-      previous = index
-      index += MAXIMUM_LINE_WIDTH
-    end
-    segments << text[previous..text.length]
+      char = text[index]
+      space = index if char == ' '
+      width += get_width(char)
+      index += 1
 
-    if (segments.size <= MAXIMUM_LINE_COUNT)
+      if (width >= maximum_width)
+        segments << text[0..space]
+        text = text[(space + 1)..-1]
+        width = index = space = 0
+      end
+    end
+
+    segments << text
+
+    if (segments.size <= maximum_lines)
       lines.concat(segments)
-      @text = @text.drop(1)
+      @text = @text[1..-1]
       insert_copy(@text) if @text.size > 0
     else
-      remaining = MAXIMUM_LINE_COUNT - segments.size
-      lines.concat(segments.first(remaining))
-      insert_copy(segments.drop(remaining).join().concat(@text.drop(1)))
+      lines.concat(segments.first(maximum_lines))
+      segments = [ segments.drop(maximum_lines).join() ]
+      insert_copy(segments << @text[1..-1].join())
     end
 
     @text = lines
-  end
-
-
-  # Copies the value of every variable from the specified Dialogue, optionally updating the text array.
-  def copy_from(dialogue, text=nil)
-    @emote = dialogue.emote
-    @item = dialogue.item
-    @model = dialogue.model
-    @npc = dialogue.npc
-    @options = dialogue.options
-    @text = if text.nil? then dialogue.text.dup else text.dup end
-    @type = dialogue.type
   end
 
   private
@@ -217,11 +299,10 @@ class Dialogue
     index ||= -1
     name = "#{name[0..index]}-auto-inserted-#{id}"
 
-    dialogue = Dialogue.new(name)
+    dialogue = Dialogue.new(name, @conversation)
     dialogue.copy_from(self, text.dup)
     dialogue.wrap()
 
-    DIALOGUES[name] = dialogue
     @options[0] = ->(player) { send_dialogue(player, dialogue) }
   end
 
@@ -229,10 +310,9 @@ class Dialogue
   def get_next_dialogue(hash)
     hash.keys.each do |key|
       case key
-        when :close
-          return ->(player) { player.send(CloseInterfaceMessage.new) }
-        when :dialogue
-          return ->(player) { send_dialogue(player, lookup_dialogue(hash[key])) }
+        when :disabled then return ->(player) { }
+        when :close then return ->(player) { player.send(CloseInterfaceMessage.new) }
+        when :dialogue then return ->(player) { send_dialogue(player, @conversation.part(hash[key])) }
         else raise "Unrecognised dialogue continue type #{key}."
       end
     end
@@ -240,41 +320,11 @@ class Dialogue
 
 end
 
-# The existing Player class.
-class Player
+# The dialogue interface ids for dialogues that only display text, but with no 'Click here to continue...' message.
+STATEMENT_DIALOGUE_IDS = [ 12788, 12790, 12793, 12797, 6179 ] # TODO
 
-  # Opens the dialogue with the specified name.
-  def open_dialogue(name)
-    dialogue = lookup_dialogue(name)
-    send_dialogue(self, dialogue)
-  end
-
-end
-
-
-
-# Gets a Dialogue using the name it was registered with.
-def lookup_dialogue(name)
-  dialogue = DIALOGUES[name]
-  raise "No dialogue named #{name.to_s}." if dialogue.nil?
-
-  dialogue
-end
-
-# Sends the specified dialogue.
-def send_dialogue(player, dialogue)
-  type = dialogue.type
-
-  case type
-    when :message_with_item then send_item_dialogue(player, dialogue)
-    when :message_with_model then send_model_dialogue(player, dialogue)
-    when :npc_speech then send_npc_dialogue(player, dialogue)
-    when :options then send_options_dialogue(player, dialogue)
-    when :player_speech then send_player_dialogue(player, dialogue)
-    when :text then send_text_dialogue(player, dialogue)
-    else raise "Unrecognised dialogue type #{type}."
-  end
-end
+# The dialogue interface ids for dialogues that display an item and text, ordered by line count.
+ITEM_DIALOGUE_IDS = [ 306, 310, 315, 321 ]
 
 # The dialogue interface ids for dialogues that only display text, ordered by line count.
 TEXT_DIALOGUE_IDS = [ 356, 359, 363, 368, 374 ]
@@ -288,6 +338,21 @@ NPC_DIALOGUE_IDS = [ 4882, 4887, 4893, 4900 ]
 # The dialogue interface ids for option dialogues, ordered by (option_count - 1)
 OPTIONS_DIALOGUE_IDS = [ 2459, 2469, 2480, 2492 ]
 
+
+
+## TODO separate this into different Dialogue types ##
+
+
+# Sends a dialogue displaying only text, with no 'Click here to continue...' button.
+def send_statement_dialogue(player, dialogue)
+  text = dialogue.text
+  dialogue_id = STATEMENT_DIALOGUE_IDS[text.size]
+
+  set_text(player, dialogue_id + 1, dialogue.title)
+  text.each_with_index { |line, index| set_text(player, dialogue_id + 2 + index, line) }
+  player.interface_set.open_dialogue_overlay(dialogue_id)
+end
+
 # Sends a dialogue displaying only text.
 def send_text_dialogue(player, dialogue)
   title = dialogue.title
@@ -296,7 +361,7 @@ end
 
 # Sends a dialogue displaying the player's head.
 def send_player_dialogue(player, dialogue)
-  send_generic_dialogue(player, dialogue, PLAYERS_DIALOGUE_IDS, ->(id) { SetWidgetPlayerModelMessage.new(id + 1) })
+  send_generic_dialogue(player, dialogue, player.username, PLAYER_DIALOGUE_IDS, ->(id) { SetWidgetPlayerModelMessage.new(id + 1) })
 end
 
 # Sends a dialogue displaying the head of an npc.
@@ -308,7 +373,6 @@ def send_npc_dialogue(player, dialogue)
   send_generic_dialogue(player, dialogue, name, NPC_DIALOGUE_IDS, ->(id) { SetWidgetNpcModelMessage.new(id + 1, npc)})
 end
 
-
 # Sends a dialogue displaying an event.
 def send_generic_dialogue(player, dialogue, title, ids, event=nil)
   text = dialogue.text
@@ -317,8 +381,8 @@ def send_generic_dialogue(player, dialogue, title, ids, event=nil)
 
   set_text(player, dialogue_title_id(dialogue_id), title)
 
-  text.each_index { |index| set_text(player, dialogue_text_id(dialogue_id, index), text[index]) }
-  player.interface_set.open_dialogue(ContinueDialogueAdapter.new(player, dialogue.options[0]), dialogue_id) # TODO listener!!!
+  text.each_with_index { |line, index| set_text(player, dialogue_text_id(dialogue_id, index), line) }
+  player.interface_set.open_dialogue(ContinueDialogueAdapter.new(player, dialogue.options[0]), dialogue_id)
 end
 
 
@@ -334,8 +398,8 @@ def send_options_dialogue(player, dialogue)
   question = dialogue.title
   set_text(player, dialogue_question_id(dialogue_id), question)
 
-  text.each_index { |index| set_text(player, dialogue_option_id(dialogue_id, index), text[index]) }
-  player.interface_set.open_dialogue(OptionDialogueAdapter.new(player, options), dialogue_id) # TODO listener!!!
+  text.each_with_index { |line, index| set_text(player, dialogue_option_id(dialogue_id, index), line) }
+  player.interface_set.open_dialogue(OptionDialogueAdapter.new(player, options), dialogue_id)
 end
 
 
@@ -344,7 +408,7 @@ class ContinueDialogueAdapter < DialogueAdapter
 
   # Creates the ContinueDialogueAdadpter.
   def initialize(player, continue)
-  	super()
+    super()
     @player = player
     @continue = continue
   end
@@ -362,7 +426,7 @@ class OptionDialogueAdapter < DialogueAdapter
 
   # Creates the OptionDialogueAdadpter.
   def initialize(player, options)
-  	super()
+    super()
     @player = player
     @options = options.dup
   end
@@ -421,6 +485,7 @@ GLYPH_SPACING = [ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
                   8, 8, 8, 8, 8, 8, 8, 8, 8, 13, 6, 8, 8, 8, 8, 4, 4, 5, 4, 8,
                   8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ]
 
+# Gets the width of a single character.
 def get_width(char)
-  
+  return GLYPH_SPACING[char.ord]
 end
