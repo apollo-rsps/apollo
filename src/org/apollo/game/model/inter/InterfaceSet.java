@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
+import org.apollo.game.message.impl.OpenDialogueOverlayMessage;
 import org.apollo.game.message.impl.OpenInterfaceMessage;
 import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.OpenOverlayMessage;
@@ -144,10 +145,10 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * Opens a chat box dialogue.
+	 * Opens a dialogue interface.
 	 * 
-	 * @param listener The listener for the dialogue.
-	 * @param dialogueId The dialogue's id.
+	 * @param listener The {@link DialogueListener}.
+	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogue(DialogueListener listener, int dialogueId) {
 		closeAndNotify();
@@ -160,12 +161,37 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * Opens a chat box dialogue.
+	 * Opens a dialogue.
 	 * 
-	 * @param dialogueId The dialogue's id.
+	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogue(int dialogueId) {
 		openDialogue(null, dialogueId);
+	}
+
+	/**
+	 * Opens a dialogue overlay interface.
+	 * 
+	 * @param listener The {@link DialogueListener}.
+	 * @param dialogueId The dialogue id.
+	 */
+	public void openDialogueOverlay(DialogueListener listener, int dialogueId) {
+		closeAndNotify();
+
+		this.dialogueListener = Optional.ofNullable(listener);
+		this.listener = Optional.ofNullable(listener);
+
+		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
+		player.send(new OpenDialogueOverlayMessage(dialogueId));
+	}
+
+	/**
+	 * Opens a dialogue overlay.
+	 * 
+	 * @param dialogueId The dialogue id.
+	 */
+	public void openDialogueOverlay(int dialogueId) {
+		openDialogueOverlay(null, dialogueId);
 	}
 
 	/**

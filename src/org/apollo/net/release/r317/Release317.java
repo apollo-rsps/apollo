@@ -16,6 +16,7 @@ import org.apollo.game.message.impl.IgnoreListMessage;
 import org.apollo.game.message.impl.LogoutMessage;
 import org.apollo.game.message.impl.NpcSynchronizationMessage;
 import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
+import org.apollo.game.message.impl.OpenDialogueOverlayMessage;
 import org.apollo.game.message.impl.OpenInterfaceMessage;
 import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.OpenOverlayMessage;
@@ -214,5 +215,7 @@ public final class Release317 extends Release {
 		register(FlashTabInterfaceMessage.class, new FlashTabInterfaceMessageEncoder());
 		register(OpenSidebarMessage.class, new OpenSidebarMessageEncoder());
 		register(OpenOverlayMessage.class, new OpenOverlayMessageEncoder());
+		register(OpenDialogueOverlayMessage.class, new OpenDialogueOverlayMessageEncoder());
 	}
+
 }
