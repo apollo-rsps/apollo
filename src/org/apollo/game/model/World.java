@@ -27,6 +27,9 @@ import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.GameObject;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.event.Event;
+import org.apollo.game.model.entity.event.EventListener;
+import org.apollo.game.model.entity.event.EventListenerChainSet;
 import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
 import org.apollo.io.EquipmentDefinitionParser;
@@ -90,6 +93,11 @@ public final class World {
 	 * The command dispatcher.
 	 */
 	private final CommandDispatcher commandDispatcher = new CommandDispatcher();
+
+	/**
+	 * The EventListenerChainSet for this World.
+	 */
+	private final EventListenerChainSet events = new EventListenerChainSet();
 
 	/**
 	 * The login dispatcher.
@@ -279,12 +287,13 @@ public final class World {
 	}
 
 	/**
-	 * Adds entities to sectors in the {@link SectorRepository}.
+	 * Adds an {@link EventListener}, listening for an {@link Event} of the specified type.
 	 * 
-	 * @param entities The entities.
+	 * @param type The type of the Event.
+	 * @param listener The EventListener.
 	 */
-	private void placeEntities(Entity... entities) {
-		Arrays.stream(entities).forEach(entity -> sectors.fromPosition(entity.getPosition()).addEntity(entity));
+	public <E extends Event> void listenFor(Class<E> type, EventListener<E> listener) {
+		events.putListener(type, listener);
 	}
 
 	/**
@@ -349,6 +358,15 @@ public final class World {
 	}
 
 	/**
+	 * Submits the specified {@link Event}, passing it to the listeners..
+	 * 
+	 * @param event The Event.
+	 */
+	public void submit(Event event) {
+		events.notify(event);
+	}
+
+	/**
 	 * Unregisters the specified {@link Npc}.
 	 * 
 	 * @param npc The npc.
@@ -380,6 +398,15 @@ public final class World {
 		} else {
 			logger.warning("Could not find player " + player + " to unregister!");
 		}
+	}
+
+	/**
+	 * Adds entities to sectors in the {@link SectorRepository}.
+	 * 
+	 * @param entities The entities.
+	 */
+	private void placeEntities(Entity... entities) {
+		Arrays.stream(entities).forEach(entity -> sectors.fromPosition(entity.getPosition()).addEntity(entity));
 	}
 
 }

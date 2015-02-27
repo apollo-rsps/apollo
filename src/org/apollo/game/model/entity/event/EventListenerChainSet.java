@@ -31,10 +31,12 @@ public final class EventListenerChainSet {
 	 * Places the {@link EventListenerChain} into this set.
 	 * 
 	 * @param clazz The {@link Class} to associate the EventListenerChain with.
-	 * @param chain The EventListenerChain.
+	 * @param listener The EventListenerChain.
 	 */
-	public <E extends Event> void putListenerChain(Class<E> clazz, EventListenerChain<E> chain) {
-		chains.put(clazz, chain);
+	public <E extends Event> void putListener(Class<E> clazz, EventListener<E> listener) {
+		@SuppressWarnings("unchecked")
+		EventListenerChain<E> chain = (EventListenerChain<E>) chains.computeIfAbsent(clazz, EventListenerChain::new);
+		chain.addListener(listener);
 	}
 
 }
