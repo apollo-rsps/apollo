@@ -17,8 +17,9 @@ import org.apollo.game.message.impl.LogoutMessage;
 import org.apollo.game.message.impl.NpcSynchronizationMessage;
 import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
 import org.apollo.game.message.impl.OpenInterfaceMessage;
-import org.apollo.game.message.impl.OpenInterfaceOverlayMessage;
+import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.OpenOverlayMessage;
+import org.apollo.game.message.impl.OpenSidebarMessage;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.message.impl.PositionMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
@@ -179,7 +180,7 @@ public final class Release317 extends Release {
 		register(UpdateItemsMessage.class, new UpdateItemsMessageEncoder());
 		register(UpdateSlottedItemsMessage.class, new UpdateSlottedItemsMessageEncoder());
 		register(UpdateSkillMessage.class, new UpdateSkillMessageEncoder());
-		register(OpenInterfaceOverlayMessage.class, new OpenInterfaceOverlayMessageEncoder());
+		register(OpenInterfaceSidebarMessage.class, new OpenInterfaceSidebarMessageEncoder());
 		register(EnterAmountMessage.class, new EnterAmountMessageEncoder());
 		register(SetWidgetTextMessage.class, new SetWidgetTextMessageEncoder());
 		register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
@@ -210,6 +211,7 @@ public final class Release317 extends Release {
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
 		register(HintIconMessage.class, new HintIconMessageEncoder());
 		register(FlashTabInterfaceMessage.class, new FlashTabInterfaceMessageEncoder());
+		register(OpenSidebarMessage.class, new OpenSidebarMessageEncoder());
 		register(OpenOverlayMessage.class, new OpenOverlayMessageEncoder());
 	}
 }

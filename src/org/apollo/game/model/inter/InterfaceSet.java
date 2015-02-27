@@ -8,8 +8,9 @@ import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
 import org.apollo.game.message.impl.OpenInterfaceMessage;
-import org.apollo.game.message.impl.OpenInterfaceOverlayMessage;
+import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.OpenOverlayMessage;
+import org.apollo.game.message.impl.OpenSidebarMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.dialogue.DialogueListener;
 import org.apollo.game.model.inv.InventoryListener;
@@ -173,6 +174,42 @@ public final class InterfaceSet {
 	}
 
 	/**
+	 * Opens an overlay interface.
+	 * 
+	 * @param overlay The overlay id.
+	 */
+	public void openOverlay(int overlay) {
+		interfaces.put(InterfaceType.OVERLAY, overlay);
+		player.send(new OpenOverlayMessage(overlay));
+	}
+
+	/**
+	 * Opens an sidebar interface.
+	 * 
+	 * @param sidebar The sidebar id.
+	 */
+	public void openSidebar(int sidebar) {
+		closeAndNotify();
+		interfaces.put(InterfaceType.SIDEBAR, sidebar);
+
+		player.send(new OpenSidebarMessage(sidebar));
+	}
+
+	/**
+	 * Opens an sidebar interface with the specified {@link InventoryListener}.
+	 * 
+	 * @param listener The listener.
+	 * @param sidebar The sidebar id.
+	 */
+	public void openSidebar(InterfaceListener listener, int sidebar) {
+		closeAndNotify();
+		this.listener = Optional.ofNullable(listener);
+		interfaces.put(InterfaceType.SIDEBAR, sidebar);
+
+		player.send(new OpenSidebarMessage(sidebar));
+	}
+
+	/**
 	 * Opens a window.
 	 * 
 	 * @param windowId The window's id.
@@ -219,33 +256,7 @@ public final class InterfaceSet {
 		interfaces.put(InterfaceType.WINDOW, windowId);
 		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
 
-		player.send(new OpenInterfaceOverlayMessage(windowId, sidebarId));
-	}
-
-	/**
-	 * Opens an overlay interface.
-	 * 
-	 * @param overlay The overlay id.
-	 */
-	public void openOverlay(int overlay) {
-		closeAndNotify();
-		interfaces.put(InterfaceType.OVERLAY, overlay);
-
-		player.send(new OpenOverlayMessage(overlay));
-	}
-
-	/**
-	 * Opens an overlay interface with the specified {@link InventoryListener}.
-	 * 
-	 * @param listener The listener.
-	 * @param overlay The overlay id.
-	 */
-	public void openOverlay(InterfaceListener listener, int overlay) {
-		closeAndNotify();
-		this.listener = Optional.ofNullable(listener);
-		interfaces.put(InterfaceType.OVERLAY, overlay);
-
-		player.send(new OpenOverlayMessage(overlay));
+		player.send(new OpenInterfaceSidebarMessage(windowId, sidebarId));
 	}
 
 	/**

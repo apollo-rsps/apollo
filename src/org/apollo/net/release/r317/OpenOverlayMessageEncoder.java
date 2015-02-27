@@ -16,7 +16,7 @@ public final class OpenOverlayMessageEncoder extends MessageEncoder<OpenOverlayM
 
 	@Override
 	public GamePacket encode(OpenOverlayMessage message) {
-		GamePacketBuilder builder = new GamePacketBuilder(142);
+		GamePacketBuilder builder = new GamePacketBuilder(208);
 		builder.put(DataType.SHORT, DataOrder.LITTLE, message.getOverlayId());
 		return builder.toGamePacket();
 	}
