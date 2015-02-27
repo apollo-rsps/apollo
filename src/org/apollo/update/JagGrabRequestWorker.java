@@ -1,5 +1,6 @@
 package org.apollo.update;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -39,7 +40,13 @@ public final class JagGrabRequestWorker extends RequestWorker<JagGrabRequest, Re
 	@Override
 	protected void service(ResourceProvider provider, Channel channel, JagGrabRequest request) throws IOException {
 		Optional<ByteBuffer> buf = provider.get(request.getFilePath());
-		buf.ifPresent(buffer -> channel.writeAndFlush(new JagGrabResponse(Unpooled.wrappedBuffer(buffer))).addListener(ChannelFutureListener.CLOSE));
+
+		if (buf.isPresent()) {
+			ByteBuf wrapped = Unpooled.wrappedBuffer(buf.get());
+			channel.writeAndFlush(new JagGrabResponse(wrapped)).addListener(ChannelFutureListener.CLOSE);
+		} else {
+			channel.close();
+		}
 	}
 
 }
