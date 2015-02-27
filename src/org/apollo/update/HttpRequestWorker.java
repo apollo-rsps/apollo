@@ -54,8 +54,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	 * @param fs The file system.
 	 */
 	public HttpRequestWorker(UpdateDispatcher dispatcher, IndexedFileSystem fs) {
-		super(dispatcher, new CombinedResourceProvider(new VirtualResourceProvider(fs), new HypertextResourceProvider(
-				WWW_DIRECTORY)));
+		super(dispatcher, new CombinedResourceProvider(new VirtualResourceProvider(fs), new HypertextResourceProvider(WWW_DIRECTORY)));
 	}
 
 	/**
@@ -128,7 +127,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 			status = HttpResponseStatus.NOT_FOUND;
 			mime = "text/html";
 		}
-		
+
 		ByteBuf wrapped = buf.isPresent() ? Unpooled.wrappedBuffer(buf.get()) : createErrorPage(status, "The page you requested could not be found.");
 
 		HttpResponse response = new DefaultHttpResponse(request.getProtocolVersion(), status);

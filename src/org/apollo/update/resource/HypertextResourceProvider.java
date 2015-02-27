@@ -22,8 +22,7 @@ public final class HypertextResourceProvider implements ResourceProvider {
 	private final Path base;
 
 	/**
-	 * Creates a new hypertext resource provider with the specified base
-	 * directory.
+	 * Creates a new hypertext resource provider with the specified base directory.
 	 * 
 	 * @param base The base directory.
 	 */

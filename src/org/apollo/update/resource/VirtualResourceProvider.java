@@ -10,8 +10,8 @@ import java.util.Optional;
 import org.apollo.fs.IndexedFileSystem;
 
 /**
- * A {@link ResourceProvider} which maps virtual resources (such as
- * {@code /media}) to files in an {@link IndexedFileSystem}.
+ * A {@link ResourceProvider} which maps virtual resources (such as {@code /media}) to files in an
+ * {@link IndexedFileSystem}.
  * 
  * @author Graham
  */
