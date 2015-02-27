@@ -80,7 +80,7 @@ class ProcLogoutListener
 
 end
 
-# An MessageHandler which executes a Proc object with three arguments: the chain
+# A MessageHandler which executes a Proc object with three arguments: the chain
 # context, the player and the message.
 class ProcMessageHandler < MessageHandler
 
