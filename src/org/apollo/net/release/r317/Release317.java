@@ -127,6 +127,7 @@ public final class Release317 extends Release {
 		register(130, new ClosedInterfaceMessageDecoder());
 		register(208, new EnteredAmountMessageDecoder());
 		register(40, new DialogueContinueMessageDecoder());
+		register(120, new FlashingTabClickedMessageDecoder());
 
 		register(53, new ItemOnItemMessageDecoder());
 		register(237, new MagicOnItemMessageDecoder());

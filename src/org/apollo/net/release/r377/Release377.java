@@ -127,6 +127,7 @@ public final class Release377 extends Release {
 		register(110, new ClosedInterfaceMessageDecoder());
 		register(75, new EnteredAmountMessageDecoder());
 		register(226, new DialogueContinueMessageDecoder());
+		register(119, new FlashingTabClickedMessageDecoder());
 
 		register(1, new ItemOnItemMessageDecoder());
 		register(36, new MagicOnItemMessageDecoder());
