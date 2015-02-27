@@ -1,62 +1,68 @@
 package org.apollo.update.resource;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * A {@link ResourceProvider} which provides additional hypertext resources.
  * 
  * @author Graham
  */
-public final class HypertextResourceProvider extends ResourceProvider {
+public final class HypertextResourceProvider implements ResourceProvider {
 
 	/**
-	 * The base directory from which documents are served.
+	 * The base {@link Path} from which documents are served.
 	 */
-	private final File base;
+	private final Path base;
 
 	/**
-	 * Creates a new hypertext resource provider with the specified base directory.
+	 * Creates a new hypertext resource provider with the specified base
+	 * directory.
 	 * 
 	 * @param base The base directory.
 	 */
-	public HypertextResourceProvider(File base) {
+	public HypertextResourceProvider(Path base) {
 		this.base = base;
 	}
 
 	@Override
 	public boolean accept(String path) throws IOException {
-		File file = new File(base, path);
-		URI target = file.toURI().normalize();
-		if (target.toASCIIString().startsWith(base.toURI().normalize().toASCIIString())) {
-			if (file.isDirectory()) {
-				file = new File(file, "index.html");
-			}
-			return file.exists();
+		Path file = base.resolve(path);
+
+		URI target = file.toUri().normalize();
+		if (!target.toASCIIString().startsWith(base.toUri().normalize().toASCIIString())) {
+			return false;
 		}
-		return false;
+
+		if (Files.isDirectory(file)) {
+			file = file.resolve("index.html");
+		}
+
+		return Files.exists(file);
 	}
 
 	@Override
-	public ByteBuffer get(String path) throws IOException {
-		File file = new File(base, path);
-		if (file.isDirectory()) {
-			file = new File(file, "index.html");
-		}
-		if (!file.exists()) {
-			return null;
+	public Optional<ByteBuffer> get(String path) throws IOException {
+		Path root = base.resolve(path);
+
+		if (Files.isDirectory(root)) {
+			root = root.resolve("index.html");
 		}
 
-		ByteBuffer buffer;
-		try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
-			buffer = raf.getChannel().map(MapMode.READ_ONLY, 0, raf.length());
+		if (!Files.exists(root)) {
+			return Optional.empty();
 		}
 
-		return buffer;
+		try (FileChannel channel = FileChannel.open(root)) {
+			ByteBuffer buf = channel.map(MapMode.READ_ONLY, 0, Files.size(root));
+			return Optional.of(buf);
+		}
 	}
 
 }
