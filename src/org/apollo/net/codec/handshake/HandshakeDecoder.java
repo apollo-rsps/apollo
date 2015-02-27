@@ -26,7 +26,7 @@ public final class HandshakeDecoder extends ByteToMessageDecoder {
 	private static final Logger logger = Logger.getLogger(HandshakeDecoder.class.getName());
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
 		if (!buffer.isReadable()) {
 			return;
 		}
@@ -49,7 +49,7 @@ public final class HandshakeDecoder extends ByteToMessageDecoder {
 
 		default:
 			ByteBuf data = buffer.readBytes(buffer.readableBytes());
-			logger.info(String.format("Unecpected handshake request received: %d data: %s", id, data.toString()));
+			logger.info(String.format("Unexpected handshake request received: %d data: %s", id, data.toString()));
 			return;
 		}
 

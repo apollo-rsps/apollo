@@ -72,13 +72,13 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 
 			Session session = attr.get();
 
+			if (message instanceof HttpRequest || message instanceof JagGrabRequest) {
+				session = new UpdateSession(ctx.channel(), serverContext);
+			}
+
 			if (session != null) {
 				session.messageReceived(message);
 				return;
-			}
-
-			if (message instanceof HttpRequest || message instanceof JagGrabRequest) {
-				session = new UpdateSession(ctx.channel(), serverContext);
 			}
 
 			// TODO: Perhaps let HandshakeMessage implement Message to remove this explicit check
