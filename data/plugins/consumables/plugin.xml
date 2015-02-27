@@ -6,7 +6,7 @@
   <description>Adds support for consumables (e.g. potions, food).</description>
   <authors>
     <author>Major</author>
-    <author>Ryley Kimmel</author>
+    <author>Ryley</author>
   </authors>
   <scripts>
     <script>consumable.rb</script>

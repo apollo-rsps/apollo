@@ -1,5 +1,9 @@
 package org.apollo.game.message.handler;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
+
 import org.apollo.game.message.Message;
 import org.apollo.game.model.entity.Player;
 
@@ -7,6 +11,7 @@ import org.apollo.game.model.entity.Player;
  * A chain of message handlers.
  * 
  * @author Graham
+ * @author Ryley
  * @param <M> The type of message handled by this chain.
  */
 public final class MessageHandlerChain<M extends Message> {
@@ -14,7 +19,7 @@ public final class MessageHandlerChain<M extends Message> {
 	/**
 	 * The handlers.
 	 */
-	private MessageHandler<M>[] handlers;
+	private final Deque<MessageHandler<M>> handlers;
 
 	/**
 	 * Creates the message handler chain.
@@ -23,7 +28,7 @@ public final class MessageHandlerChain<M extends Message> {
 	 */
 	@SafeVarargs
 	public MessageHandlerChain(MessageHandler<M>... handlers) {
-		this.handlers = handlers;
+		this.handlers = new ArrayDeque<>(Arrays.asList(handlers));
 	}
 
 	/**
@@ -31,36 +36,24 @@ public final class MessageHandlerChain<M extends Message> {
 	 * 
 	 * @param handler The handler.
 	 */
-	@SuppressWarnings("unchecked")
 	public void addLast(MessageHandler<M> handler) {
-		MessageHandler<M>[] old = handlers;
-		handlers = new MessageHandler[old.length + 1];
-		System.arraycopy(old, 0, handlers, 0, old.length);
-		handlers[old.length] = handler;
+		handlers.addLast(handler);
 	}
 
 	/**
-	 * Handles the message, passing it down the chain until the chain is broken or the message reaches the end of the
-	 * chain.
+	 * Handles the message, passing it down the chain until the chain is broken
+	 * or the message reaches the end of the chain.
 	 * 
 	 * @param player The player.
 	 * @param message The message.
 	 */
 	public void handle(Player player, M message) {
-		final boolean[] running = new boolean[1];
-		running[0] = true;
-
-		MessageHandlerContext ctx = new MessageHandlerContext() {
-
-			@Override
-			public void breakHandlerChain() {
-				running[0] = false;
-			}
-		};
+		MessageHandlerContext context = new MessageHandlerContext();
 
 		for (MessageHandler<M> handler : handlers) {
-			handler.handle(ctx, player, message);
-			if (!running[0]) {
+			handler.handle(context, player, message);
+
+			if (context.isBroken()) {
 				break;
 			}
 		}
