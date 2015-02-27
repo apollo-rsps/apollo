@@ -5,6 +5,8 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.util.Attribute;
+import io.netty.util.ReferenceCountUtil;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,25 +67,36 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object message) {
-		if (ctx.attr(NetworkConstants.SESSION_KEY).get() == null) {
+		try {
+			Attribute<Session> attribute = ctx.attr(NetworkConstants.SESSION_KEY);
+			Session session = attribute.get();
+
 			if (message instanceof HttpRequest || message instanceof JagGrabRequest) {
-				new UpdateSession(ctx.channel(), serverContext).messageReceived(message);
-			} else {
+				session = new UpdateSession(ctx.channel(), serverContext);
+			}
+
+			if (session != null) {
+				session.messageReceived(message);
+				return;
+			}
+
+			// TODO: Perhaps let HandshakeMessage implement Message to remove this explicit check
+			if (message instanceof HandshakeMessage) {
 				HandshakeMessage handshakeMessage = (HandshakeMessage) message;
 
 				switch (handshakeMessage.getServiceId()) {
 				case HandshakeConstants.SERVICE_GAME:
-					ctx.attr(NetworkConstants.SESSION_KEY).set(new LoginSession(ctx, serverContext));
+					attribute.set(new LoginSession(ctx, serverContext));
 					break;
+
 				case HandshakeConstants.SERVICE_UPDATE:
-					ctx.attr(NetworkConstants.SESSION_KEY).set(new UpdateSession(ctx.channel(), serverContext));
+					attribute.set(new UpdateSession(ctx.channel(), serverContext));
 					break;
-				default:
-					throw new IllegalStateException("Invalid service id.");
 				}
 			}
-		} else {
-			ctx.attr(NetworkConstants.SESSION_KEY).get().messageReceived(message);
+
+		} finally {
+			ReferenceCountUtil.release(message);
 		}
 	}
 
