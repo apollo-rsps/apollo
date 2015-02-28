@@ -1,6 +1,8 @@
 require 'java'
 
-java_import 'org.apollo.game.model.entity.Entity'
+java_import 'org.apollo.game.model.entity.Mob'
+java_import 'org.apollo.game.model.entity.Npc'
+java_import 'org.apollo.game.model.entity.Player'
 java_import 'org.apollo.game.model.entity.attr.Attribute'
 java_import 'org.apollo.game.model.entity.attr.AttributeDefinition'
 java_import 'org.apollo.game.model.entity.attr.AttributeMap'
@@ -10,7 +12,18 @@ java_import 'org.apollo.game.model.entity.attr.BooleanAttribute'
 java_import 'org.apollo.game.model.entity.attr.NumericalAttribute'
 java_import 'org.apollo.game.model.entity.attr.StringAttribute'
 
-class Entity
+
+# Declares an attribute and adds its definition.
+def declare_attribute(name, default, persistence=:transient)
+  raise "Attribute #{name} clashes with an existing variable." if (Player.method_defined?(name) || Mob.method_defined?(name) || Npc.method_defined?(name))
+  AttributeMap::add_definition(name.to_s, AttributeDefinition.new(default, get_persistence(persistence), get_type(default)))
+end
+
+
+private
+
+# The existing Mob class.
+class Mob
   
   # Overrides method_missing
   def method_missing(symbol, *args)
@@ -27,12 +40,11 @@ class Entity
       attribute = get_attribute(name); definition = AttributeMap::get_definition(name)
       value = attribute.nil? ? definition.default : attribute.value
       
-      return definition.type == AttributeType::SYMBOL ? value.to_sym : value
+      return (definition.type == AttributeType::SYMBOL) ? value.to_sym : value
     end
   end
 
   # Gets the appropriate attribute for the specified value.
-  private
   def to_attribute(value)
     case value
       when String, Symbol then return StringAttribute.new(value.to_s, value.is_a?(Symbol))
@@ -44,13 +56,7 @@ class Entity
 
 end
 
-# Declares an attribute and adds its definition.
-def declare_attribute(name, default, persistence=:transient)
-  AttributeMap::add_definition(name.to_s, AttributeDefinition.new(default, get_persistence(persistence), get_type(default)))
-end
-
 # Gets the attribute type of the specified value.
-private
 def get_type(value)
   case value
     when String  then return AttributeType::STRING
@@ -64,7 +70,7 @@ end
 
 # Gets the Persistence type of the specified value.
 def get_persistence(persistence)
-  raise "Undefined persistence type #{persistence}." unless persistence == :persistent || persistence == :transient
+  raise "Undefined persistence type #{persistence}." unless [ :persistent, :transient ].include?(persistence)
 
-  return persistence == :persistent ? AttributePersistence::SERIALIZED : AttributePersistence::TRANSIENT
+  return (persistence == :persistent) ? AttributePersistence::SERIALIZED : AttributePersistence::TRANSIENT
 end
