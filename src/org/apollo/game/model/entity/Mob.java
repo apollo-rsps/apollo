@@ -427,7 +427,7 @@ public abstract class Mob extends Entity {
 	 * 
 	 * @param position The position.
 	 */
-	public final void setPosition(Position position) {
+	public void setPosition(Position position) {
 		Position old = this.position;
 		SectorRepository repository = World.getWorld().getSectorRepository();
 		Sector current = repository.fromPosition(old);
