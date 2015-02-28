@@ -41,14 +41,13 @@ class Conversation
     raise "Conversations #{@name} already has a dialogue named #{name}." if @dialogues.has_key?(name)
     @dialogues[name] = dialogue
 
-    if ((@dialogues.empty? || dialogue.has_precondition) && dialogue.type == :npc_speech)
+    if ((@dialogues.empty? || dialogue.has_precondition?) && dialogue.type == :npc_speech)
       npc = dialogue.npc
       raise 'Npc cannot be null when opening a dialogue.' if npc.nil?
       @starters << dialogue
 
       on :message, :first_npc_action do |ctx, player, event|
-        id = $world.npc_repository.get(event.index).id
-        if npc == id
+        if npc == $world.npc_repository.get(event.index).id
           @starters.each do |start|
             if dialogue.precondition(player)
       	      send_dialogue(player, dialogue)
@@ -87,8 +86,8 @@ def send_dialogue(player, dialogue)
     when :npc_speech then send_npc_dialogue(player, dialogue)
     when :options then send_options_dialogue(player, dialogue)
     when :player_speech then send_player_dialogue(player, dialogue)
-    when :text then send_text_dialogue(player, dialogue)
-    when :statement then send_statement_dialogue(player, dialogue)
+    when :text
+    	if dialogue.has_continue? then send_text_dialogue(player, dialogue) else send_statement_dialogue(player, dialogue) end
     else raise "Unrecognised dialogue type #{type}."
   end
 end
@@ -111,7 +110,7 @@ MAXIMUM_MEDIA_LINE_WIDTH = 350
 MAXIMUM_LINE_WIDTH = 430
 
 # The possible types of a dialogue.
-DIALOGUE_TYPES = [ :message_with_item, :message_with_model, :npc_speech, :options, :player_speech, :statement, :text ]
+DIALOGUE_TYPES = [ :message_with_item, :message_with_model, :npc_speech, :options, :player_speech, :text ]
 
 # A type of dialogue.
 class Dialogue
@@ -166,8 +165,13 @@ class Dialogue
     @emote
   end
 
+  # Returns whether or not this Dialogue has a continue option.
+  def has_continue?
+  	!@options.empty?
+  end
+
   # Returns whether or not this dialogue has a precondition.
-  def has_precondition
+  def has_precondition?
   	!@precondition.nil?
   end
 
@@ -254,10 +258,10 @@ class Dialogue
   end
 
   # Wraps text in this Dialogue, inserting extra Dialogues in the chain if necessary.
-  def wrap
+  def wrap # TODO redo this
     next if @type == :options
     lines = []
-    maximum_width = [ :text, :statement ].include?(@type) ? MAXIMUM_LINE_WIDTH : MAXIMUM_MEDIA_LINE_WIDTH
+    maximum_width = (@type == :text) ? MAXIMUM_LINE_WIDTH : MAXIMUM_MEDIA_LINE_WIDTH
     maximum_lines = MAXIMUM_LINE_COUNT
 
     text = @text.first
@@ -311,12 +315,12 @@ class Dialogue
   end
 
   # Decodes the next dialogue interface from the hash, returning a proc.
-  def get_next_dialogue(hash)
-    hash.keys.each do |key|
+  def get_next_dialogue(hash) # TODO rename
+    hash.each_pair do |key, value|
       case key
         when :disabled then return ->(player) { }
         when :close then return ->(player) { player.send(CloseInterfaceMessage.new) }
-        when :dialogue then return ->(player) { send_dialogue(player, @conversation.part(hash[key])) }
+        when :dialogue then return ->(player) { send_dialogue(player, @conversation.part(value)) }
         else raise "Unrecognised dialogue continue type #{key}."
       end
     end
