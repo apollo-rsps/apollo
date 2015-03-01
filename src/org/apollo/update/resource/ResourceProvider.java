@@ -2,13 +2,14 @@ package org.apollo.update.resource;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 /**
  * A class which provides resources.
  * 
  * @author Graham
  */
-public abstract class ResourceProvider {
+public interface ResourceProvider {
 
 	/**
 	 * Checks that this provider can fulfil a request to the specified resource.
@@ -17,15 +18,16 @@ public abstract class ResourceProvider {
 	 * @return {@code true} if the provider can fulfil a request to the resource, {@code false} otherwise.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public abstract boolean accept(String path) throws IOException;
+	public boolean accept(String path) throws IOException;
 
 	/**
-	 * Gets a resource by its path.
+	 * The resource data, as a {@link ByteBuffer}, wrapped in an {@link Optional}.
 	 * 
-	 * @param path The path.
-	 * @return The resource, or {@code null} if it doesn't exist.
-	 * @throws IOException If an I/O error occurs.
+	 * @param path The path to the resource.
+	 * @return A {@code ByteBuffer} representation of a resource if it exists otherwise {@link Optional#empty()} is
+	 *         returned.
+	 * @throws IOException If some I/O exception occurs.
 	 */
-	public abstract ByteBuffer get(String path) throws IOException;
+	public Optional<ByteBuffer> get(String path) throws IOException;
 
 }
