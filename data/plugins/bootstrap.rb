@@ -20,7 +20,7 @@ java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
 java_import 'org.apollo.game.model.event.EventListener'
 java_import 'org.apollo.game.model.event.PlayerEvent'
-java_import 'org.apollo.game.model.setting.PrivilegeLevel'
+java_import 'org.apollo.game.model.entity.setting.PrivilegeLevel'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
 java_import 'org.apollo.util.plugin.PluginContext'
 

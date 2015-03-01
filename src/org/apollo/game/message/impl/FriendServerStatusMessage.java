@@ -1,7 +1,7 @@
 package org.apollo.game.message.impl;
 
 import org.apollo.game.message.Message;
-import org.apollo.game.model.setting.ServerStatus;
+import org.apollo.game.model.entity.setting.ServerStatus;
 
 /**
  * A {@link Message} sent to the client to update the friend server status.

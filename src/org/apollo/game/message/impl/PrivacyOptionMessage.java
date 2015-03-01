@@ -1,7 +1,7 @@
 package org.apollo.game.message.impl;
 
 import org.apollo.game.message.Message;
-import org.apollo.game.model.setting.PrivacyState;
+import org.apollo.game.model.entity.setting.PrivacyState;
 
 /**
  * A {@link Message} sent both by and to the client to update the public chat, private (friend) chat, and trade chat
