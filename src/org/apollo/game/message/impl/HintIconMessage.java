@@ -13,7 +13,7 @@ import org.apollo.game.model.Position;
  */
 public final class HintIconMessage extends Message {
 
-	// TODO identify the other types and use an enum.
+	// TODO identify the other types.
 
 	/**
 	 * The type of a HintIcon.
@@ -73,6 +73,24 @@ public final class HintIconMessage extends Message {
 	 */
 	public static HintIconMessage forPlayer(int index) {
 		return new HintIconMessage(Type.PLAYER, Optional.of(index), Optional.empty());
+	}
+
+	/**
+	 * Creates a HintIconMessage that removes the current Npc hint icon.
+	 * 
+	 * @return The HintIconMessage.
+	 */
+	public static HintIconMessage resetNpc() {
+		return forNpc(-1);
+	}
+
+	/**
+	 * Creates a HintIconMessage that removes the current Player hint icon.
+	 * 
+	 * @return The HintIconMessage.
+	 */
+	public static HintIconMessage resetPlayer() {
+		return forPlayer(-1);
 	}
 
 	/**

@@ -4,8 +4,8 @@ java_import 'org.apollo.game.message.impl.FriendServerStatusMessage'
 java_import 'org.apollo.game.message.impl.IgnoreListMessage'
 java_import 'org.apollo.game.message.impl.SendFriendMessage'
 java_import 'org.apollo.game.model.World'
-java_import 'org.apollo.game.model.setting.ServerStatus'
-java_import 'org.apollo.game.model.setting.PrivacyState'
+java_import 'org.apollo.game.model.entity.setting.ServerStatus'
+java_import 'org.apollo.game.model.entity.setting.PrivacyState'
 java_import 'org.apollo.game.model.entity.Player'
 
 

@@ -5,7 +5,7 @@ import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.PlayerDesignMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.setting.Gender;
+import org.apollo.game.model.entity.setting.Gender;
 
 /**
  * A {@link MessageHandler} that verifies {@link PlayerDesignMessage}s.

@@ -16,6 +16,7 @@ import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeMap;
+import org.apollo.game.model.event.impl.MobPositionUpdateEvent;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.Inventory.StackMode;
 import org.apollo.game.model.inv.InventoryConstants;
@@ -402,7 +403,7 @@ public abstract class Mob extends Entity {
 			this.index = index;
 		}
 	}
-	
+
 	/**
 	 * Returns this mobs interacting index.
 	 * 
@@ -428,6 +429,9 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public final void setPosition(Position position) {
+		World.getWorld().submit(new MobPositionUpdateEvent(this, position));
+		// Intentionally ignore the Event result - accidentally terminating this method would break the entire server.
+
 		Position old = this.position;
 		SectorRepository repository = World.getWorld().getSectorRepository();
 		Sector current = repository.fromPosition(old);

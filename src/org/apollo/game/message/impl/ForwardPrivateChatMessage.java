@@ -1,7 +1,7 @@
 package org.apollo.game.message.impl;
 
 import org.apollo.game.message.Message;
-import org.apollo.game.model.setting.PrivilegeLevel;
+import org.apollo.game.model.entity.setting.PrivilegeLevel;
 
 /**
  * A {@link Message} sent to the client that forwards a private chat.

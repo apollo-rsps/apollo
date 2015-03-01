@@ -1,6 +1,6 @@
 require 'java'
 
-java_import 'org.apollo.game.model.setting.PrivacyState'
+java_import 'org.apollo.game.model.entity.setting.PrivacyState'
 java_import 'org.apollo.game.message.impl.SendFriendMessage'
 
 on :message, :privacy_option do |ctx, player, message|

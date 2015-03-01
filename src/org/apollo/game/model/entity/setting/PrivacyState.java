@@ -1,4 +1,4 @@
-package org.apollo.game.model.setting;
+package org.apollo.game.model.entity.setting;
 
 import com.google.common.base.Preconditions;
 

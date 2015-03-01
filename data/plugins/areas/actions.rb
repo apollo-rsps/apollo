@@ -3,7 +3,19 @@ require 'java'
 java_import 'org.apollo.game.message.impl.DisplayCrossbonesMessage'
 java_import 'org.apollo.game.model.entity.Player'
 
+
+
+# Registers an area action.
+def area_action(name, &block)
+  AREA_ACTIONS[name] = action = AreaAction.new
+  action.instance_eval(&block)
+end
+
+
 AREA_ACTIONS = {}
+
+
+private
 
 # An action that is called when a player enters or exits an area.
 class AreaAction
@@ -36,33 +48,6 @@ class AreaAction
   # Called when the player has exited an area this action is registered to.
   def exited(player)
     @on_exit.call(player) unless @on_exit.nil?
-  end
-
-end
-
-# Registers an area action.
-def area_action(name, &block)
-  AREA_ACTIONS[name] = action = AreaAction.new
-  action.instance_eval(&block)
-end
-
-# Defines the pvp area action.
-area_action :pvp do
-  on_entry { |player| player.in_pvp = true }
-  on_exit  { |player| player.in_pvp = false }
-end
-
-# Defines the wilderness area action.
-area_action :wilderness do
-
-  on_entry do |player|
-    player.send(DisplayCrossbonesMessage.new(true))
-    player.in_wilderness = true
-  end
-
-  on_exit do |player|
-    player.send(DisplayCrossbonesMessage.new(false))
-    player.in_wilderness = false
   end
 
 end

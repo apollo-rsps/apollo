@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <plugin>
   <id>skill-prayer</id>
-  <version>1</version>
+  <version>0.9</version>
   <name>Prayer</name>
   <description>Adds the Prayer skill.</description>
   <authors>
@@ -10,6 +10,9 @@
   </authors>
   <scripts>
     <script>bury.rb</script>
+    <script>prayers.rb</script>
   </scripts>
-  <dependencies />
+  <dependencies>
+    <dependency>attributes</dependency>
+  </dependencies>
 </plugin>
