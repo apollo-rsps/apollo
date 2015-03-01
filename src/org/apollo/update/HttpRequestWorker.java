@@ -9,17 +9,21 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Optional;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.update.resource.CombinedResourceProvider;
 import org.apollo.update.resource.HypertextResourceProvider;
 import org.apollo.update.resource.ResourceProvider;
 import org.apollo.update.resource.VirtualResourceProvider;
+
+import com.google.common.base.Charsets;
 
 /**
  * A worker which services HTTP requests.
@@ -31,7 +35,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	/**
 	 * The default character set.
 	 */
-	private static final Charset CHARACTER_SET = Charset.forName("ISO-8859-1");
+	private static final Charset CHARACTER_SET = Charsets.ISO_8859_1;
 
 	/**
 	 * The value of the server header.
@@ -41,7 +45,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	/**
 	 * The directory with web files.
 	 */
-	private static final File WWW_DIRECTORY = new File("./data/www/");
+	private static final Path WWW_DIRECTORY = Paths.get("data/www");
 
 	/**
 	 * Creates the HTTP request worker.
@@ -50,8 +54,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	 * @param fs The file system.
 	 */
 	public HttpRequestWorker(UpdateDispatcher dispatcher, IndexedFileSystem fs) {
-		super(dispatcher, new CombinedResourceProvider(new VirtualResourceProvider(fs), new HypertextResourceProvider(
-				WWW_DIRECTORY)));
+		super(dispatcher, new CombinedResourceProvider(new VirtualResourceProvider(fs), new HypertextResourceProvider(WWW_DIRECTORY)));
 	}
 
 	/**
@@ -115,20 +118,17 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	@Override
 	protected void service(ResourceProvider provider, Channel channel, HttpRequest request) throws IOException {
 		String path = request.getUri();
-		ByteBuffer buf = provider.get(path);
+		Optional<ByteBuffer> buf = provider.get(path);
 
-		ByteBuf wrapped;
 		HttpResponseStatus status = HttpResponseStatus.OK;
-
 		String mime = getMimeType(request.getUri());
 
-		if (buf == null) {
+		if (!buf.isPresent()) {
 			status = HttpResponseStatus.NOT_FOUND;
-			wrapped = createErrorPage(status, "The page you requested could not be found.");
 			mime = "text/html";
-		} else {
-			wrapped = Unpooled.wrappedBuffer(buf);
 		}
+
+		ByteBuf wrapped = buf.isPresent() ? Unpooled.wrappedBuffer(buf.get()) : createErrorPage(status, "The page you requested could not be found.");
 
 		HttpResponse response = new DefaultHttpResponse(request.getProtocolVersion(), status);
 
