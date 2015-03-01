@@ -131,7 +131,7 @@ public final class LoginSession extends Session {
 			future.addListener(ChannelFutureListener.CLOSE);
 		}
 
-		if (optional.isPresent()) {
+		if (optional.isPresent() && request.isReconnecting()) {
 			optional.get().sendInitialMessages();
 		}
 	}
