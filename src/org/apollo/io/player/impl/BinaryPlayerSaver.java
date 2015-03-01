@@ -39,7 +39,7 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			StreamUtil.writeString(out, player.getUsername());
 			StreamUtil.writeString(out, player.getCredentials().getPassword());
 			out.writeByte(player.getPrivilegeLevel().toInteger());
-			out.writeBoolean(player.isMembers());
+			out.writeByte(player.getMembershipStatus().getValue());
 
 			// write settings
 			out.writeByte(player.getChatPrivacy().toInteger(true));
@@ -118,21 +118,21 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 
 		out.writeByte(type.getValue());
 		switch (type) {
-		case BOOLEAN:
-			out.writeByte((Boolean) attribute.getValue() ? 1 : 0);
-			break;
-		case DOUBLE:
-			out.writeDouble((Double) attribute.getValue());
-			break;
-		case LONG:
-			out.writeLong((Long) attribute.getValue());
-			break;
-		case STRING:
-		case SYMBOL:
-			StreamUtil.writeString(out, (String) attribute.getValue());
-			break;
-		default:
-			throw new IllegalArgumentException("Undefined attribute type " + type + ".");
+			case BOOLEAN:
+				out.writeByte((Boolean) attribute.getValue() ? 1 : 0);
+				break;
+			case DOUBLE:
+				out.writeDouble((Double) attribute.getValue());
+				break;
+			case LONG:
+				out.writeLong((Long) attribute.getValue());
+				break;
+			case STRING:
+			case SYMBOL:
+				StreamUtil.writeString(out, (String) attribute.getValue());
+				break;
+			default:
+				throw new IllegalArgumentException("Undefined attribute type " + type + ".");
 		}
 	}
 

@@ -1,6 +1,7 @@
 package org.apollo.game.message.impl;
 
 import org.apollo.game.message.Message;
+import org.apollo.game.model.entity.setting.MembershipStatus;
 
 /**
  * A {@link Message} sent to the client that specifies the local id and membership status of the current player.
@@ -15,17 +16,17 @@ public final class IdAssignmentMessage extends Message {
 	private final int id;
 
 	/**
-	 * The membership flag.
+	 * The MembershipStatus.
 	 */
-	private final boolean members;
+	private final MembershipStatus members;
 
 	/**
 	 * Creates the local id message.
 	 * 
 	 * @param id The id.
-	 * @param members The membership flag.
+	 * @param members The MembershipStatus.
 	 */
-	public IdAssignmentMessage(int id, boolean members) {
+	public IdAssignmentMessage(int id, MembershipStatus members) {
 		this.id = id;
 		this.members = members;
 	}
@@ -40,12 +41,12 @@ public final class IdAssignmentMessage extends Message {
 	}
 
 	/**
-	 * Gets the membership flag.
+	 * Gets whether or not the Player is a {@link MembershipStatus#PAID paying member}.
 	 * 
-	 * @return The membership flag.
+	 * @return {@code true} if the Player is a paying member, {@code false} if not.
 	 */
 	public boolean isMembers() {
-		return members;
+		return members == MembershipStatus.PAID;
 	}
 
 }

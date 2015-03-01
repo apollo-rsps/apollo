@@ -21,6 +21,7 @@ import org.apollo.game.model.entity.attr.BooleanAttribute;
 import org.apollo.game.model.entity.attr.NumericalAttribute;
 import org.apollo.game.model.entity.attr.StringAttribute;
 import org.apollo.game.model.entity.setting.Gender;
+import org.apollo.game.model.entity.setting.MembershipStatus;
 import org.apollo.game.model.entity.setting.PrivacyState;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
 import org.apollo.game.model.entity.setting.ScreenBrightness;
@@ -69,7 +70,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			credentials.setPassword(pass);
 
 			PrivilegeLevel privilegeLevel = PrivilegeLevel.valueOf(in.readByte());
-			boolean members = in.readBoolean();
+			MembershipStatus members = MembershipStatus.valueOf(in.readByte());
 
 			// read settings
 			PrivacyState chatPrivacy = PrivacyState.valueOf(in.readByte(), true);
@@ -166,21 +167,21 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			String name = StreamUtil.readString(in);
 			AttributeType type = AttributeType.valueOf(in.read());
 			switch (type) {
-			case BOOLEAN:
-				attribute = new BooleanAttribute(in.read() == 1);
-				break;
-			case DOUBLE:
-				attribute = new NumericalAttribute(in.readDouble());
-				break;
-			case LONG:
-				attribute = new NumericalAttribute(in.readLong());
-				break;
-			case STRING:
-			case SYMBOL:
-				attribute = new StringAttribute(StreamUtil.readString(in), type == AttributeType.SYMBOL);
-				break;
-			default:
-				throw new IllegalArgumentException("Undefined attribute type: " + type + ".");
+				case BOOLEAN:
+					attribute = new BooleanAttribute(in.read() == 1);
+					break;
+				case DOUBLE:
+					attribute = new NumericalAttribute(in.readDouble());
+					break;
+				case LONG:
+					attribute = new NumericalAttribute(in.readLong());
+					break;
+				case STRING:
+				case SYMBOL:
+					attribute = new StringAttribute(StreamUtil.readString(in), type == AttributeType.SYMBOL);
+					break;
+				default:
+					throw new IllegalArgumentException("Undefined attribute type: " + type + ".");
 			}
 			attributes.put(name, attribute);
 		}

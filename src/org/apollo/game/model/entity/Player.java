@@ -19,6 +19,7 @@ import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.entity.setting.MembershipStatus;
 import org.apollo.game.model.entity.setting.PrivacyState;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
 import org.apollo.game.model.entity.setting.ScreenBrightness;
@@ -131,9 +132,9 @@ public final class Player extends Mob {
 	private transient Position lastKnownSector;
 
 	/**
-	 * The membership flag.
+	 * The MembershipStatus of this Player.
 	 */
-	private transient boolean members = false;
+	private transient MembershipStatus members = MembershipStatus.FREE;
 
 	/**
 	 * A flag indicating if the player is new.
@@ -558,6 +559,15 @@ public final class Player extends Mob {
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isMembers() {
+		return members == MembershipStatus.PAID;
+	}
+
+	/**
+	 * Gets the {@link MembershipStatus} of this Player.
+	 * 
+	 * @return The MembershipStatus.
+	 */
+	public MembershipStatus getMembershipStatus() {
 		return members;
 	}
 
@@ -830,7 +840,7 @@ public final class Player extends Mob {
 	 * 
 	 * @param members The new membership flag.
 	 */
-	public void setMembers(boolean members) {
+	public void setMembers(MembershipStatus members) {
 		this.members = members;
 	}
 
