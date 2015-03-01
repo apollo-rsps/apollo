@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.io.IOException;
 import java.util.List;
 
 import net.burtleburtle.bob.rand.IsaacRandom;
@@ -61,7 +60,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, GameDecoderState state) throws IOException {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, GameDecoderState state) {
 		switch (state) {
 		case GAME_OPCODE:
 			decodeOpcode(in, out);
@@ -96,9 +95,8 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	 * 
 	 * @param buffer The buffer.
 	 * @param out The {@link List} of objects to be passed along the pipeline.
-	 * @throws IOException If a received opcode or packet type is illegal.
 	 */
-	private void decodeOpcode(ByteBuf buffer, List<Object> out) throws IOException {
+	private void decodeOpcode(ByteBuf buffer, List<Object> out) {
 		if (buffer.isReadable()) {
 			int encryptedOpcode = buffer.readUnsignedByte();
 			opcode = encryptedOpcode - random.nextInt() & 0xFF;
@@ -121,7 +119,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 				setState(GameDecoderState.GAME_LENGTH);
 				break;
 			default:
-				throw new IOException("Illegal packet type: " + type + ".");
+				throw new IllegalStateException("Illegal packet type: " + type + ".");
 			}
 		}
 	}
