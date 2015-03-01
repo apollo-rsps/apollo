@@ -16,7 +16,7 @@ public final class OpenDialogueOverlayMessageEncoder extends MessageEncoder<Open
 
 	@Override
 	public GamePacket encode(OpenDialogueOverlayMessage message) {
-		GamePacketBuilder builder = new GamePacketBuilder(154);
+		GamePacketBuilder builder = new GamePacketBuilder(158);
 		builder.put(DataType.SHORT, DataOrder.LITTLE, message.getInterfaceId());
 		return builder.toGamePacket();
 	}
