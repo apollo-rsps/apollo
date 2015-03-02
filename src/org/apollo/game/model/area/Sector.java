@@ -147,6 +147,17 @@ public final class Sector {
 	}
 
 	/**
+	 * Gets the {@link CollisionMatrix} at the specified height level.
+	 * 
+	 * @param height The height level.
+	 * @return The CollisionMatrix.
+	 */
+	public CollisionMatrix getMatrix(int height) {
+		Preconditions.checkElementIndex(height, matrices.length, "Matrix height level must be [0, " + matrices.length + ").");
+		return matrices[height];
+	}
+
+	/**
 	 * Moves the {@link Entity} that was in the specified {@code old} {@link Position}, to the current position of the
 	 * Entity.
 	 * <p>
