@@ -3,27 +3,54 @@ package org.apollo.fs.decoder;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apollo.fs.IndexedFileSystem;
-import org.apollo.fs.archive.Archive;
+import org.apollo.fs.decoder.MapFileDecoder.MapDefinition;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
+import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.area.SectorRepository;
+import org.apollo.game.model.area.collision.CollisionMatrix;
 import org.apollo.game.model.entity.GameObject;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
 
+import com.google.common.collect.Iterables;
+
 /**
- * Decodes map object data from the {@code map_index.dat} file into {@link GameObject}s.
+ * Parses static object definitions, which include map tiles and landscapes.
  * 
- * @author Chris Fletcher
+ * @author Ryley
  */
 public final class GameObjectDecoder {
+
+	/**
+	 * A bit flag which denotes that a specified Position is blocked.
+	 */
+	private static final int FLAG_BLOCKED = 1;
+
+	/**
+	 * A bit flag which denotes that a specified Position is a bridge.
+	 */
+	private static final int FLAG_BRIDGE = 1;
+
+	/**
+	 * The sector repository.
+	 */
+	private static final SectorRepository sectors = World.getWorld().getSectorRepository();
 
 	/**
 	 * The {@link IndexedFileSystem}.
 	 */
 	private final IndexedFileSystem fs;
+
+	/**
+	 * A {@link List} of decoded game objects.
+	 */
+	private final List<GameObject> objects = new ArrayList<>();
 
 	/**
 	 * Creates the decoder.
@@ -41,80 +68,87 @@ public final class GameObjectDecoder {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public GameObject[] decode() throws IOException {
-		Archive versionList = Archive.decode(fs.getFile(0, 5));
-		ByteBuffer buffer = versionList.getEntry("map_index").getBuffer();
+		Map<Integer, MapDefinition> definitions = MapFileDecoder.parse(fs);
 
-		int indices = buffer.remaining() / 7;
-		int[] areas = new int[indices];
-		int[] landscapes = new int[indices];
+		for (Entry<Integer, MapDefinition> entry : definitions.entrySet()) {
+			MapDefinition def = entry.getValue();
 
-		for (int i = 0; i < indices; i++) {
-			areas[i] = buffer.getShort() & 0xFFFF;
+			int hash = def.getHash();
+			int x = (hash >> 8 & 0xFF) * 64;
+			int y = (hash & 0xFF) * 64;
 
-			@SuppressWarnings("unused")
-			int mapFile = buffer.getShort() & 0xFFFF;
+			ByteBuffer gameObjectData = fs.getFile(4, def.getObjectFile());
+			ByteBuffer gameObjectBuffer = ByteBuffer.wrap(CompressionUtil.degzip(gameObjectData));
+			parseGameObject(gameObjectBuffer, x, y);
 
-			landscapes[i] = buffer.getShort() & 0xFFFF;
-
-			@SuppressWarnings("unused")
-			boolean members = (buffer.get() & 0xFF) == 1;
+			ByteBuffer terrainData = fs.getFile(4, def.getTerrainFile());
+			ByteBuffer terrainBuffer = ByteBuffer.wrap(CompressionUtil.degzip(terrainData));
+			parseTerrain(terrainBuffer, x, y);
 		}
 
-		List<GameObject> objects = new ArrayList<>();
-
-		for (int i = 0; i < indices; i++) {
-			ByteBuffer compressed = fs.getFile(4, landscapes[i]);
-			ByteBuffer uncompressed = ByteBuffer.wrap(CompressionUtil.degzip(compressed));
-
-			Collection<GameObject> areaObjects = parseArea(areas[i], uncompressed);
-			objects.addAll(areaObjects);
-		}
-
-		return objects.toArray(new GameObject[objects.size()]);
+		return Iterables.toArray(objects, GameObject.class);
 	}
 
-	/**
-	 * Parses a single area from the specified buffer.
-	 * 
-	 * @param area The identifier of that area.
-	 * @param buffer The buffer which holds the area's data.
-	 * @return A collection of all parsed objects.
-	 */
-	private static Collection<GameObject> parseArea(int area, ByteBuffer buffer) {
-		List<GameObject> objects = new ArrayList<>();
+	private void parseGameObject(ByteBuffer buffer, int x, int y) {
+		for (int deltaId, id = -1; (deltaId = BufferUtil.readSmart(buffer)) != 0;) {
+			id += deltaId;
 
-		int x = (area >> 8 & 0xFF) * 64;
-		int y = (area & 0xFF) * 64;
+			for (int deltaPos, hash = 0; (deltaPos = BufferUtil.readSmart(buffer)) != 0;) {
+				hash += deltaPos - 1;
 
-		int id = -1;
-		int idOffset;
+				int localX = hash >> 6 & 0x3F;
+				int localY = hash & 0x3F;
+				int height = hash >> 12 & 0x3;
 
-		while ((idOffset = BufferUtil.readSmart(buffer)) != 0) {
-			id += idOffset;
+				int attributes = buffer.get() & 0xFF;
+				int type = attributes >> 2;
+				int orientation = attributes & 0x3;
+				Position position = new Position(x + localX, y + localY, height);
 
-			int position = 0;
-			int positionOffset;
+				gameObjectDecoded(id, orientation, type, position);
+			}
+		}
+	}
 
-			while ((positionOffset = BufferUtil.readSmart(buffer)) != 0) {
-				position += positionOffset - 1;
+	private void gameObjectDecoded(int id, int orientation, int type, Position position) {
 
-				int localX = position >> 6 & 0x3F;
-				int localY = position & 0x3F;
-				int height = position >> 12;
+	}
 
-				int info = buffer.get() & 0xFF;
-				int type = info >> 2;
-				int rotation = info & 3;
-				if (type >= 0 && type <= 3 || type >= 9 && type <= 21) {
-					Position pos = new Position(x + localX, y + localY, height);
+	private void parseTerrain(ByteBuffer buffer, int x, int y) {
+		for (int height = 0; height < 4; height++) {
+			for (int localX = 0; localX < 64; localX++) {
+				for (int localY = 0; localY < 64; localY++) {
+					Position position = new Position(x + localX, y + localY, height);
 
-					GameObject object = new GameObject(id, pos, type, rotation);
-					objects.add(object);
+					int flags = 0;
+					for (;;) {
+						int attributeId = buffer.get() & 0xFF;
+						if (attributeId == 0) {
+							terrainDecoded(flags, position);
+							break;
+						} else if (attributeId == 1) {
+							buffer.get();
+							terrainDecoded(flags, position);
+							break;
+						} else if (attributeId <= 49) {
+							buffer.get();
+						} else if (attributeId <= 81) {
+							flags = attributeId - 49;
+						}
+					}
 				}
 			}
 		}
+	}
 
-		return objects;
+	private void terrainDecoded(int flags, Position position) {
+		Sector sector = sectors.fromPosition(position);
+		
+		if ((flags & FLAG_BLOCKED) != 0) {
+		}
+		
+		if((flags & FLAG_BRIDGE) != 0) {
+		}
 	}
 
 }
