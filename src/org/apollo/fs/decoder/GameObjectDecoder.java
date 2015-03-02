@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.MapFileDecoder.MapDefinition;
@@ -14,6 +15,7 @@ import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
 import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.area.collision.CollisionMatrix;
+import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.GameObject;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
@@ -111,7 +113,40 @@ public final class GameObjectDecoder {
 	}
 
 	private void gameObjectDecoded(int id, int orientation, int type, Position position) {
+		ObjectDefinition definition = ObjectDefinition.lookup(id);
 
+		Sector sector = sectors.fromPosition(position);
+		int x = position.getLocalX(), y = position.getLocalY(), height = position.getHeight();
+
+		CollisionMatrix matrix = sector.getMatrix(height);
+
+		boolean block = false;
+
+		// Ground decoration, signs, water fountains, etc
+		if (type == 22 && definition.isInteractive()) {
+			block = true;
+		}
+
+		Predicate<Integer> walls = (value) -> value >= 0 && value < 4 || value == 9;
+		Predicate<Integer> roofs = (value) -> value >= 12 && value < 22;
+
+		// Walls and roofs that intercept may intercept a mob when moving
+		if (walls.test(type) || roofs.test(type)) {
+			block = true;
+		}
+
+		// General objects, trees, statues, etc
+		if (type == 10 && definition.isSolid()) {
+			block = true;
+		}
+
+		if (block) {
+			for (int width = 0; width < definition.getWidth(); width++) {
+				for (int length = 0; length < definition.getLength(); length++) {
+					matrix.block(x + width, y + length);
+				}
+			}
+		}
 	}
 
 	private void parseTerrain(ByteBuffer buffer, int x, int y) {
@@ -143,11 +178,14 @@ public final class GameObjectDecoder {
 
 	private void terrainDecoded(int flags, Position position) {
 		Sector sector = sectors.fromPosition(position);
-		
+		int x = position.getLocalX(), y = position.getLocalY(), height = position.getHeight();
+
 		if ((flags & FLAG_BLOCKED) != 0) {
+			sector.getMatrix(height).block(x, y);
 		}
-		
-		if((flags & FLAG_BRIDGE) != 0) {
+
+		if ((flags & FLAG_BRIDGE) != 0) {
+			// FIXME
 		}
 	}
 

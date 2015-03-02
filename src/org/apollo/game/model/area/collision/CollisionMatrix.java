@@ -208,9 +208,9 @@ public final class CollisionMatrix {
 				return any(x, y, flags[north], flags[east]);
 			case WEST:
 				return flagged(x, y, flags[east]);
+			default:
+				throw new IllegalArgumentException("Unrecognised direction " + direction + ".");
 		}
-
-		throw new IllegalArgumentException("Unrecognised direction " + direction + ".");
 	}
 
 	/**

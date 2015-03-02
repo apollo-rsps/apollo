@@ -174,9 +174,7 @@ public final class Sector {
 
 		Set<Entity> local = entities.get(old);
 
-		if (local == null || !local.remove(entity)) {
-			throw new IllegalArgumentException("Entity belongs in this sector but does not exist.");
-		}
+		Preconditions.checkArgument(local != null && local.remove(entity), "Entity belongs in this sector but does not exist.");
 
 		local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
 
@@ -207,9 +205,7 @@ public final class Sector {
 
 		Set<Entity> local = entities.get(position);
 
-		if (local == null || !local.remove(entity)) {
-			throw new IllegalArgumentException("Entity belongs in this sector but does not exist.");
-		}
+		Preconditions.checkArgument(local != null && local.remove(entity), "Entity belongs in this sector but does not exist.");
 
 		notifyListeners(entity, SectorOperation.REMOVE);
 	}
