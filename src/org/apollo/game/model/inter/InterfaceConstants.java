@@ -8,11 +8,6 @@ package org.apollo.game.model.inter;
 public class InterfaceConstants {
 
 	/**
-	 * The avatar design interface id.
-	 */
-	public static final int AVATAR_DESIGN = 3559;
-
-	/**
 	 * The default inventory tab ids.
 	 */
 	public static final int[] DEFAULT_INVENTORY_TABS = { 2423, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 904, 147,
