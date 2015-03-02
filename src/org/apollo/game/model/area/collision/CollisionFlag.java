@@ -1,5 +1,7 @@
 package org.apollo.game.model.area.collision;
 
+import org.apollo.game.model.entity.Entity.EntityType;
+
 /**
  * A type of flag in a {@link CollisionMatrix}.
  *
@@ -8,14 +10,14 @@ package org.apollo.game.model.area.collision;
 public enum CollisionFlag {
 
 	/**
-	 * The walk north flag.
-	 */
-	MOB_NORTH(0),
-
-	/**
 	 * The walk east flag.
 	 */
 	MOB_EAST(1),
+
+	/**
+	 * The walk north flag.
+	 */
+	MOB_NORTH(0),
 
 	/**
 	 * The walk south flag.
@@ -28,14 +30,14 @@ public enum CollisionFlag {
 	MOB_WEST(3),
 
 	/**
-	 * The projectile north flag.
-	 */
-	PROJECTILE_NORTH(4),
-
-	/**
 	 * The projectile east flag.
 	 */
 	PROJECTILE_EAST(5),
+
+	/**
+	 * The projectile north flag.
+	 */
+	PROJECTILE_NORTH(4),
 
 	/**
 	 * The projectile south flag.
@@ -48,7 +50,17 @@ public enum CollisionFlag {
 	PROJECTILE_WEST(7);
 
 	/**
-	 * Returns an array of CollisionFlags that indicate if a Mob can traverse over a tile.
+	 * Returns an array of CollisionFlags that indicate if the specified {@link EntityType} can be positioned on a tile.
+	 * 
+	 * @param type The EntityType.
+	 * @return The array of CollisionFlags.
+	 */
+	public static CollisionFlag[] forType(EntityType type) {
+		return (type == EntityType.PROJECTILE) ? projectiles() : mobs();
+	}
+
+	/**
+	 * Returns an array of CollisionFlags that indicate if a Mob can be positioned on a tile.
 	 * 
 	 * @return The array of CollisionFlags.
 	 */
@@ -57,7 +69,7 @@ public enum CollisionFlag {
 	}
 
 	/**
-	 * Returns an array of CollisionFlags that indicate if a Projectile can traverse over a tile.
+	 * Returns an array of CollisionFlags that indicate if a Projectile can be positioned on a tile.
 	 * 
 	 * @return The array of CollisionFlags.
 	 */
