@@ -74,6 +74,12 @@ def declare_emote(name, id)
 end
 
 
+# Sends the dialogue from the specified Conversation with the specified name.
+def get_dialogue(conversation, name)
+  CONVERSATIONS[conversation].part(name)
+end
+
+
 # Sends the specified dialogue.
 def send_dialogue(player, dialogue)
   type = dialogue.type
