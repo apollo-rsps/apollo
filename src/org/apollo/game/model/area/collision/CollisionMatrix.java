@@ -16,6 +16,16 @@ import com.google.common.base.Preconditions;
 public final class CollisionMatrix {
 
 	/**
+	 * Indicates that all types of traversal are allowed.
+	 */
+	private static final byte ALL_ALLOWED = 0b0000_0000;
+
+	/**
+	 * Indicates that no types of traversal are allowed.
+	 */
+	private static final byte ALL_BLOCKED = (byte) 0b1111_1111;
+
+	/**
 	 * Creates an array of CollisionMatrix objects, all of the specified width and length.
 	 * 
 	 * @param count The length of the array to create.
@@ -28,16 +38,6 @@ public final class CollisionMatrix {
 		Arrays.setAll(matrices, index -> new CollisionMatrix(width, length));
 		return matrices;
 	}
-
-	/**
-	 * Indicates that all types of traversal are allowed.
-	 */
-	private static final byte ALL_ALLOWED = 0b0000_0000;
-
-	/**
-	 * Indicates that no types of traversal are allowed.
-	 */
-	private static final byte ALL_BLOCKED = (byte) 0b1111_1111;
 
 	/**
 	 * The length of the matrix.
@@ -76,13 +76,7 @@ public final class CollisionMatrix {
 	 * @return {@code true} if all of the CollisionFlags are set, otherwise {@code false}.
 	 */
 	public boolean all(int x, int y, CollisionFlag... flags) {
-		for (CollisionFlag flag : flags) {
-			if ((get(x, y) & flag.asByte()) == 0) {
-				return false;
-			}
-		}
-
-		return true;
+		return Arrays.stream(flags).allMatch(flag -> (get(x, y) & flag.asByte()) != 0);
 	}
 
 	/**
@@ -95,13 +89,7 @@ public final class CollisionMatrix {
 	 * @return {@code true} if any of the CollisionFlags are set, otherwise {@code false}.
 	 */
 	public boolean any(int x, int y, CollisionFlag... flags) {
-		for (CollisionFlag flag : flags) {
-			if ((get(x, y) & flag.asByte()) != 0) {
-				return true;
-			}
-		}
-
-		return false;
+		return Arrays.stream(flags).anyMatch(flag -> (get(x, y) & flag.asByte()) != 0);
 	}
 
 	/**
