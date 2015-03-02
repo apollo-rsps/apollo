@@ -18,8 +18,7 @@ public final class ItemOnObjectVerificationHandler extends MessageHandler<ItemOn
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, ItemOnObjectMessage message) {
-		if (message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID
-				&& message.getInterfaceId() != BankConstants.SIDEBAR_INVENTORY_ID) {
+		if (message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID && message.getInterfaceId() != BankConstants.SIDEBAR_INVENTORY_ID) {
 			ctx.breakHandlerChain();
 			return;
 		}

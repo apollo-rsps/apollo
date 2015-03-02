@@ -388,8 +388,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	 * @param message The message.
 	 * @param builder The builder.
 	 */
-	private static void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationMessage message,
-			GamePacketBuilder builder) {
+	private static void putMovementUpdate(SynchronizationSegment seg, PlayerSynchronizationMessage message, GamePacketBuilder builder) {
 		boolean updateRequired = seg.getBlockSet().size() > 0;
 		if (seg.getType() == SegmentType.TELEPORT) {
 			Position pos = ((TeleportSegment) seg).getDestination();

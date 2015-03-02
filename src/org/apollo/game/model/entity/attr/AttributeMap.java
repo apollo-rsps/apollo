@@ -80,8 +80,7 @@ public final class AttributeMap {
 		AttributeDefinition<T> definition = getDefinition(name);
 		Preconditions.checkNotNull(definition, "Attributes must be defined before their value can be retreived.");
 
-		return (Attribute<T>) attributes.computeIfAbsent(name,
-				key -> createAttribute(definition.getDefault(), definition.getType()));
+		return (Attribute<T>) attributes.computeIfAbsent(name, key -> createAttribute(definition.getDefault(), definition.getType()));
 	}
 
 	/**

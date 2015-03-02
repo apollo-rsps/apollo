@@ -37,8 +37,7 @@ public abstract class SynchronizationBlock {
 		int combat = player.getSkillSet().getCombatLevel();
 		int id = player.hasNpcDefinition() ? player.getDefinition().getId() : -1;
 
-		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), combat, 0, player.getEquipment(),
-				player.getPrayerIcon(), player.isSkulled(), id);
+		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), combat, 0, player.getEquipment(), player.getPrayerIcon(), player.isSkulled(), id);
 	}
 
 	/**
@@ -72,8 +71,7 @@ public abstract class SynchronizationBlock {
 	 * @param direction The {@link Direction} the player should move.
 	 * @return The force movement block.
 	 */
-	public static SynchronizationBlock createForceMovementBlock(Position initialPosition, Position finalPosition,
-			int travelDurationX, int travelDurationY, Direction direction) {
+	public static SynchronizationBlock createForceMovementBlock(Position initialPosition, Position finalPosition, int travelDurationX, int travelDurationY, Direction direction) {
 		return new ForceMovementBlock(initialPosition, finalPosition, travelDurationX, travelDurationY, direction);
 	}
 
@@ -98,10 +96,8 @@ public abstract class SynchronizationBlock {
 	 * @param secondary If the block is a secondary hit or not.
 	 * @return The hit update block.
 	 */
-	public static SynchronizationBlock createHitUpdateBlock(int damage, int type, int currentHealth, int maximumHealth,
-			boolean secondary) {
-		return secondary ? new SecondaryHitUpdateBlock(damage, type, currentHealth, maximumHealth) : new HitUpdateBlock(damage,
-				type, currentHealth, maximumHealth);
+	public static SynchronizationBlock createHitUpdateBlock(int damage, int type, int currentHealth, int maximumHealth, boolean secondary) {
+		return secondary ? new SecondaryHitUpdateBlock(damage, type, currentHealth, maximumHealth) : new HitUpdateBlock(damage, type, currentHealth, maximumHealth);
 	}
 
 	/**

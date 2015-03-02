@@ -1169,9 +1169,7 @@ public final class EquipmentUpdater {
 		Preconditions.checkArgument(args.length == 1, "Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release].");
 		String release = args[0];
 
-		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release
-				+ ".dat")));
-				IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
+		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release + ".dat"))); IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
 			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
 			ItemDefinition[] definitions = decoder.decode();
 			ItemDefinition.init(definitions);

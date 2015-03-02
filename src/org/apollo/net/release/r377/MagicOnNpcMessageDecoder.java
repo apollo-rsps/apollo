@@ -15,14 +15,14 @@ import org.apollo.net.release.MessageDecoder;
  */
 public final class MagicOnNpcMessageDecoder extends MessageDecoder<MagicOnNpcMessage> {
 
-    @Override
-    public MagicOnNpcMessage decode(GamePacket packet) {
-        GamePacketReader reader = new GamePacketReader(packet);
+	@Override
+	public MagicOnNpcMessage decode(GamePacket packet) {
+		GamePacketReader reader = new GamePacketReader(packet);
 
-        int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-        int spell = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
+		int index = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
+		int spell = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
 
-        return new MagicOnNpcMessage(index, spell);
-    }
+		return new MagicOnNpcMessage(index, spell);
+	}
 
 }

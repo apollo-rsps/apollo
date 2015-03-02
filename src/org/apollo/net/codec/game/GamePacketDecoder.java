@@ -62,17 +62,17 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, GameDecoderState state) {
 		switch (state) {
-		case GAME_OPCODE:
-			decodeOpcode(in, out);
-			break;
-		case GAME_LENGTH:
-			decodeLength(in);
-			break;
-		case GAME_PAYLOAD:
-			decodePayload(in, out);
-			break;
-		default:
-			throw new IllegalStateException("Invalid game decoder state.");
+			case GAME_OPCODE:
+				decodeOpcode(in, out);
+				break;
+			case GAME_LENGTH:
+				decodeLength(in);
+				break;
+			case GAME_PAYLOAD:
+				decodePayload(in, out);
+				break;
+			default:
+				throw new IllegalStateException("Invalid game decoder state.");
 		}
 	}
 
@@ -106,20 +106,20 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 			type = metaData.getType();
 			switch (type) {
-			case FIXED:
-				length = metaData.getLength();
-				if (length == 0) {
-					setState(GameDecoderState.GAME_OPCODE);
-					out.add(new GamePacket(opcode, type, Unpooled.EMPTY_BUFFER));
-				} else {
-					setState(GameDecoderState.GAME_PAYLOAD);
-				}
-				break;
-			case VARIABLE_BYTE:
-				setState(GameDecoderState.GAME_LENGTH);
-				break;
-			default:
-				throw new IllegalStateException("Illegal packet type: " + type + ".");
+				case FIXED:
+					length = metaData.getLength();
+					if (length == 0) {
+						setState(GameDecoderState.GAME_OPCODE);
+						out.add(new GamePacket(opcode, type, Unpooled.EMPTY_BUFFER));
+					} else {
+						setState(GameDecoderState.GAME_PAYLOAD);
+					}
+					break;
+				case VARIABLE_BYTE:
+					setState(GameDecoderState.GAME_LENGTH);
+					break;
+				default:
+					throw new IllegalStateException("Illegal packet type: " + type + ".");
 			}
 		}
 	}

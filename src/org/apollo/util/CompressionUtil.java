@@ -100,8 +100,7 @@ public final class CompressionUtil {
 		byte[] data = new byte[compressed.remaining()];
 		compressed.get(data);
 
-		try (InputStream is = new GZIPInputStream(new ByteArrayInputStream(data));
-				ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+		try (InputStream is = new GZIPInputStream(new ByteArrayInputStream(data)); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			while (true) {
 				byte[] buf = new byte[1024];
 				int read = is.read(buf, 0, buf.length);

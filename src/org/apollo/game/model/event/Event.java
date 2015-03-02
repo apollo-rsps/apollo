@@ -6,7 +6,7 @@ package org.apollo.game.model.event;
  * @author Major
  */
 public abstract class Event {
-	
+
 	/**
 	 * Indicates whether or not the Event chain has been terminated.
 	 */
@@ -27,5 +27,5 @@ public abstract class Event {
 	public final boolean terminated() {
 		return terminated;
 	}
-	
+
 }

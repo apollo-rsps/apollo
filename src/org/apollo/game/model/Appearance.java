@@ -14,8 +14,8 @@ public final class Appearance {
 	/**
 	 * The default appearance.
 	 */
-	public static final Appearance DEFAULT_APPEARANCE = new Appearance(Gender.MALE, new int[] { 0, 10, 18, 26, 33, 36, 42 },
-			new int[5]);
+	public static final Appearance DEFAULT_APPEARANCE = new Appearance(Gender.MALE, new int[] { 0, 10, 18, 26, 33, 36,
+			42 }, new int[5]);
 
 	/**
 	 * The array of clothing/skin colors.

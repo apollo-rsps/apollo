@@ -156,8 +156,7 @@ public final class PluginManager {
 	 * @throws DependencyException If a dependency error occurs.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private void start(PluginEnvironment env, PluginMetaData plugin, Map<String, PluginMetaData> plugins,
-			Set<PluginMetaData> started) throws DependencyException, IOException {
+	private void start(PluginEnvironment env, PluginMetaData plugin, Map<String, PluginMetaData> plugins, Set<PluginMetaData> started) throws DependencyException, IOException {
 		// TODO check for cyclic dependencies! this way just won't cut it, we need an exception
 		if (started.contains(plugin)) {
 			return;

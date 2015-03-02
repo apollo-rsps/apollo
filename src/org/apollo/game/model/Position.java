@@ -226,8 +226,7 @@ public final class Position {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight())
-				.add("sector", getSectorCoordinates()).toString();
+		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight()).add("sector", getSectorCoordinates()).toString();
 	}
 
 }

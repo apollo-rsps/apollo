@@ -178,8 +178,7 @@ public final class ObjectDefinition {
 	/**
 	 * Indicates the impenetrability of this object.
 	 * 
-	 * @return {@code true} if this object is impenetrable, otherwise
-	 *         {@code false}.
+	 * @return {@code true} if this object is impenetrable, otherwise {@code false}.
 	 */
 	public boolean isImpenetrable() {
 		return impenetrable;
@@ -188,8 +187,7 @@ public final class ObjectDefinition {
 	/**
 	 * Indicates the interactivity of this object.
 	 * 
-	 * @return {@code true} if the object is interactive, otherwise
-	 *         {@code false}.
+	 * @return {@code true} if the object is interactive, otherwise {@code false}.
 	 */
 	public boolean isInteractive() {
 		return interactive;
@@ -198,8 +196,7 @@ public final class ObjectDefinition {
 	/**
 	 * Indicates whether or not this object obstructs the ground.
 	 * 
-	 * @return {@code true} if the object obstructs the ground otherwise
-	 *         {@code false}.
+	 * @return {@code true} if the object obstructs the ground otherwise {@code false}.
 	 */
 	public boolean isObstructive() {
 		return obstructive;

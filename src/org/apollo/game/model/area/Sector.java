@@ -237,8 +237,7 @@ public final class Sector {
 	 * @throws IllegalArgumentException If the specified position is not included in this sector.
 	 */
 	private void checkPosition(Position position) {
-		Preconditions.checkArgument(coordinates.equals(SectorCoordinates.fromPosition(position)),
-				"Position is not included in this sector.");
+		Preconditions.checkArgument(coordinates.equals(SectorCoordinates.fromPosition(position)), "Position is not included in this sector.");
 	}
 
 }

@@ -29,7 +29,7 @@ public final class FlaggedMouseEventMessageDecoder extends MessageDecoder<Flagge
 		} else {
 			read = (int) reader.getUnsigned(DataType.INT) & ~0xc0000000;
 		}
-		
+
 		clicks = (read >> 19);
 		x = (read & 0x7f) % 765;
 		y = (read & 0x7f) / 765;

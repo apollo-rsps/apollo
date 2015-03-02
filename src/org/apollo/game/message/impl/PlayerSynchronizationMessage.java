@@ -53,8 +53,7 @@ public final class PlayerSynchronizationMessage extends Message {
 	 * @param localPlayers The number of local players.
 	 * @param segments A list of segments.
 	 */
-	public PlayerSynchronizationMessage(Position lastKnownSector, Position position, boolean sectorChanged,
-			SynchronizationSegment segment, int localPlayers, List<SynchronizationSegment> segments) {
+	public PlayerSynchronizationMessage(Position lastKnownSector, Position position, boolean sectorChanged, SynchronizationSegment segment, int localPlayers, List<SynchronizationSegment> segments) {
 		this.lastKnownSector = lastKnownSector;
 		this.position = position;
 		this.sectorChanged = sectorChanged;

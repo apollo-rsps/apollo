@@ -22,23 +22,22 @@ public final class SwitchItemMessageHandler extends MessageHandler<SwitchItemMes
 		boolean insertPermitted = false;
 
 		switch (message.getInterfaceId()) {
-		case SynchronizationInventoryListener.INVENTORY_ID:
-		case BankConstants.SIDEBAR_INVENTORY_ID:
-			inventory = player.getInventory();
-			break;
-		case SynchronizationInventoryListener.EQUIPMENT_ID:
-			inventory = player.getEquipment();
-			break;
-		case BankConstants.BANK_INVENTORY_ID:
-			inventory = player.getBank();
-			insertPermitted = true;
-			break;
-		default:
-			return; // not a known inventory, ignore
+			case SynchronizationInventoryListener.INVENTORY_ID:
+			case BankConstants.SIDEBAR_INVENTORY_ID:
+				inventory = player.getInventory();
+				break;
+			case SynchronizationInventoryListener.EQUIPMENT_ID:
+				inventory = player.getEquipment();
+				break;
+			case BankConstants.BANK_INVENTORY_ID:
+				inventory = player.getBank();
+				insertPermitted = true;
+				break;
+			default:
+				return; // not a known inventory, ignore
 		}
 
-		if (message.getOldSlot() >= 0 && message.getNewSlot() >= 0 && message.getOldSlot() < inventory.capacity()
-				&& message.getNewSlot() < inventory.capacity()) {
+		if (message.getOldSlot() >= 0 && message.getNewSlot() >= 0 && message.getOldSlot() < inventory.capacity() && message.getNewSlot() < inventory.capacity()) {
 			// events must be fired for it to work if a sidebar inventory overlay is used
 			inventory.swap(insertPermitted && message.isInserting(), message.getOldSlot(), message.getNewSlot());
 		}
