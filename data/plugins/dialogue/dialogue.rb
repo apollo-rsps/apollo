@@ -144,17 +144,6 @@ class Dialogue
     @options << ->(player) { action.call(player) unless type.nil?; block.call(player) unless block.nil? }
   end
 
-  # Copies the value of every variable from the specified Dialogue, optionally updating the text array.
-  def copy_from(dialogue, text=nil)
-    @emote = dialogue.emote
-    @item = dialogue.item
-    @model = dialogue.model
-    @npc = dialogue.npc
-    @options = dialogue.options
-    @text = if text.nil? then dialogue.text.dup else text.dup end
-    @type = dialogue.type
-  end
-
   # Sets the emote performed by the dialogue head.
   def emote(emote=nil)
   	unless emote.nil?
@@ -186,14 +175,19 @@ class Dialogue
   end
 
   # Sets the id of the item displayed.
-  def item(item=nil, scale=nil)
+  def item(item=nil, scale=100)
     unless item.nil?
       raise 'Can only display an item on :message_with_item dialogues.' unless @type == :message_with_item
-      @item = item
+      @item = lookup_item(item)
       @item_scale = scale
     end
 
     @item
+  end
+
+  # Gets the scale of the item.
+  def item_scale
+    @item_scale
   end
 
   # Sets the id of the model displayed.
@@ -228,7 +222,7 @@ class Dialogue
   def options
       @options.dup
   end
-
+  
   # Sets the precondition of this dialogue.
   def precondition(player=nil, &block)
       @precondition = block unless block.nil?
@@ -296,6 +290,19 @@ class Dialogue
     @text = lines
   end
 
+  protected
+
+  # Copies the value of every variable from the specified Dialogue, optionally updating the text array.
+  def copy_from(dialogue, text=nil)
+    @emote = dialogue.emote
+    @item = dialogue.item
+    @model = dialogue.model
+    @npc = dialogue.npc
+    @options = dialogue.options
+    @text = if text.nil? then dialogue.text.dup else text.dup end
+    @type = dialogue.type
+  end
+
   private
 
   # Inserts a copy of this Dialogue into the chain, but with different text.
@@ -350,6 +357,17 @@ OPTIONS_DIALOGUE_IDS = [ 2459, 2469, 2480, 2492 ]
 
 ## TODO separate this into different Dialogue types ##
 
+# Sends a dialogue displaying an item model and text.
+def send_item_dialogue(player, dialogue)
+  text = dialogue.text
+  dialogue_id =  ITEM_DIALOGUE_IDS[text.size - 1]
+  player.send(SetWidgetItemModelMessage.new(dialogue_id + 1, dialogue.item, dialogue.item_scale))
+
+  indices = [ dialogue_id + 1 + 2, dialogue_id + 1 + 1, dialogue_id + 1 + 4, dialogue_id + 1 + 5 ]
+
+  text.each_with_index { |line, index| set_text(player, indices[index], line) }
+  player.interface_set.open_dialogue(ContinueDialogueAdapter.new(player, dialogue.options[0]), dialogue_id)
+end
 
 # Sends a dialogue displaying only text, with no 'Click here to continue...' button.
 def send_statement_dialogue(player, dialogue)
