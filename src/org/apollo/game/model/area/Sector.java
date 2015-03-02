@@ -52,7 +52,7 @@ public final class Sector {
 	/**
 	 * The CollisionMatrix.
 	 */
-	private final CollisionMatrix matrix = new CollisionMatrix(SECTOR_SIZE, SECTOR_SIZE);
+	private final CollisionMatrix[] matrices = CollisionMatrix.createMatrices(Position.HEIGHT_LEVELS, SECTOR_SIZE, SECTOR_SIZE);
 
 	/**
 	 * Creates a new sector.
@@ -207,13 +207,15 @@ public final class Sector {
 	 * Returns whether or not an Entity of the specified {@link EntityType type} can traverse the tile at the specified
 	 * coordinate pair.
 	 * 
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
+	 * @param position The {@link Position} of the tile.
 	 * @param entity The {@link EntityType}.
 	 * @param direction The {@link Direction} the Entity is approaching from.
 	 * @return {@code true} if the tile at the specified coordinate pair is traversable, {@code false} if not.
 	 */
-	public boolean traversable(int x, int y, EntityType entity, Direction direction) {
+	public boolean traversable(Position position, EntityType entity, Direction direction) {
+		CollisionMatrix matrix = matrices[position.getHeight()];
+		int x = position.getLocalX(), y = position.getLocalY();
+
 		return matrix.traversable(x, y, entity, direction);
 	}
 

@@ -16,6 +16,20 @@ import com.google.common.base.Preconditions;
 public final class CollisionMatrix {
 
 	/**
+	 * Creates an array of CollisionMatrix objects, all of the specified width and length.
+	 * 
+	 * @param count The length of the array to create.
+	 * @param width The width of each CollisionMatrix.
+	 * @param length The length of each CollisionMatrix.
+	 * @return The array of CollisionMatrix objects.
+	 */
+	public static CollisionMatrix[] createMatrices(int count, int width, int length) {
+		CollisionMatrix[] matrices = new CollisionMatrix[count];
+		Arrays.setAll(matrices, index -> new CollisionMatrix(width, length));
+		return matrices;
+	}
+
+	/**
 	 * Indicates that all types of traversal are allowed.
 	 */
 	private static final byte ALL_ALLOWED = 0b0000_0000;
@@ -174,7 +188,7 @@ public final class CollisionMatrix {
 	 * @return {@code true} if the tile at the specified coordinate pair is traversable, {@code false} if not.
 	 */
 	public boolean traversable(int x, int y, EntityType entity, Direction direction) {
-		CollisionFlag[] flags = (entity == EntityType.PROJECTILE) ? CollisionFlag.projectiles() : CollisionFlag.mobs();
+		CollisionFlag[] flags = CollisionFlag.forType(entity);
 		int north = 0, east = 1, south = 2, west = 3;
 
 		switch (direction) {
