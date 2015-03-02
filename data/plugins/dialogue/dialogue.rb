@@ -36,6 +36,7 @@ class OpenDialogueAction < DistancedAction
   def executeAction
     @player.set_interacting_mob(@npc)
     send_dialogue(@player, @dialogue)
+    stop
   end
 
   def equals(other)
