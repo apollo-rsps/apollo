@@ -16,8 +16,6 @@
 
 # 'Above-ground' npcs
 
-spawn_npc :name => :runescape_guide,   :x => 3093, :y => 3107
-spawn_npc :name => :survival_expert,   :x => 3104, :y => 3095, :face => :north
 spawn_npc :name => :master_chef,       :x => 3076, :y => 3085
 spawn_npc :name => :quest_guide,       :x => 3086, :y => 3122, :face => :north
 spawn_npc :name => :financial_advisor, :x => 3127, :y => 3124, :face => :west
