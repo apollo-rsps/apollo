@@ -95,7 +95,7 @@ conversation :tutorial_runescape_guide do
     text "To continue the tutorial go through that door over there, and speak to your first instructor."
 
     continue :close => true do |player|
-      if (player.tutorial_island_progress == :not_started)
+      if (player.tutorial_island_progress < :runescape_guide_finished)
         reset_hint_icon(player)
         # TODO door hint icon
         player.tutorial_island_progress = :runescape_guide_finished

@@ -116,7 +116,7 @@ class Player
       args[0] = arg.name if arg.kind_of?(QuestStage)
     end
 
-    result = super(symbol, args)
+    result = super(symbol, *args)
     string = symbol.to_s
 
     if (string.end_with?('_progress'))
