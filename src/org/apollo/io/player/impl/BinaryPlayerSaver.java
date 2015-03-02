@@ -17,7 +17,6 @@ import org.apollo.game.model.entity.SkillSet;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.entity.attr.AttributePersistence;
-import org.apollo.game.model.entity.attr.AttributeType;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.io.player.PlayerSaver;
 import org.apollo.util.NameUtil;
@@ -35,27 +34,22 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 		File file = BinaryPlayerUtil.getFile(player.getUsername());
 
 		try (DataOutputStream out = new DataOutputStream(new FileOutputStream(file))) {
-			// write credentials and privileges
 			StreamUtil.writeString(out, player.getUsername());
 			StreamUtil.writeString(out, player.getCredentials().getPassword());
 			out.writeByte(player.getPrivilegeLevel().toInteger());
 			out.writeByte(player.getMembershipStatus().getValue());
 
-			// write settings
 			out.writeByte(player.getChatPrivacy().toInteger(true));
 			out.writeByte(player.getFriendPrivacy().toInteger(false));
 			out.writeByte(player.getTradePrivacy().toInteger(false));
 			out.writeByte(player.getRunEnergy());
 			out.writeByte(player.getScreenBrightness().toInteger());
 
-			// write position
 			Position position = player.getPosition();
 			out.writeShort(position.getX());
 			out.writeShort(position.getY());
 			out.writeByte(position.getHeight());
 
-			// write appearance
-			out.writeBoolean(player.isNew());
 			Appearance appearance = player.getAppearance();
 			out.writeByte(appearance.getGender().toInteger());
 			int[] style = appearance.getStyle();
@@ -66,14 +60,11 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			for (int color : colors) {
 				out.writeByte(color);
 			}
-			out.flush();
 
-			// write inventories
 			writeInventory(out, player.getInventory());
 			writeInventory(out, player.getEquipment());
 			writeInventory(out, player.getBank());
 
-			// write skills
 			SkillSet skills = player.getSkillSet();
 			out.writeByte(skills.size());
 			for (int id = 0; id < skills.size(); id++) {
@@ -95,44 +86,17 @@ public final class BinaryPlayerSaver implements PlayerSaver {
 			}
 
 			Set<Entry<String, Attribute<?>>> attributes = player.getAttributes().entrySet();
-			attributes.removeIf(e -> AttributeMap.getDefinition(e.getKey()).getPersistence() != AttributePersistence.SERIALIZED);
+			attributes.removeIf(e -> AttributeMap.getDefinition(e.getKey()).getPersistence() != AttributePersistence.PERSISTENT);
 			out.writeInt(attributes.size());
 
 			for (Entry<String, Attribute<?>> entry : attributes) {
 				String name = entry.getKey();
 				StreamUtil.writeString(out, name);
-				saveAttribute(out, entry.getValue());
+
+				Attribute<?> attribute = entry.getValue();
+				out.writeByte(attribute.getType().getValue());
+				out.write(attribute.encode());
 			}
-		}
-	}
-
-	/**
-	 * Writes an {@link Attribute} to the specified output stream.
-	 * 
-	 * @param out The output stream.
-	 * @param attribute The attribute.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	private static void saveAttribute(DataOutputStream out, Attribute<?> attribute) throws IOException {
-		AttributeType type = attribute.getType();
-
-		out.writeByte(type.getValue());
-		switch (type) {
-			case BOOLEAN:
-				out.writeByte((Boolean) attribute.getValue() ? 1 : 0);
-				break;
-			case DOUBLE:
-				out.writeDouble((Double) attribute.getValue());
-				break;
-			case LONG:
-				out.writeLong((Long) attribute.getValue());
-				break;
-			case STRING:
-			case SYMBOL:
-				StreamUtil.writeString(out, (String) attribute.getValue());
-				break;
-			default:
-				throw new IllegalArgumentException("Undefined attribute type " + type + ".");
 		}
 	}
 

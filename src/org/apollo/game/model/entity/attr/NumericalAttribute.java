@@ -1,5 +1,7 @@
 package org.apollo.game.model.entity.attr;
 
+import com.google.common.primitives.Longs;
+
 /**
  * An {@link Attribute} with a numerical value.
  * 
@@ -24,6 +26,17 @@ public final class NumericalAttribute extends Attribute<Number> {
 	 */
 	public NumericalAttribute(Number value) {
 		super(typeOf(value), value);
+	}
+
+	@Override
+	public byte[] encode() {
+		long encoded = (type == AttributeType.DOUBLE) ? Double.doubleToLongBits((double) value) : (long) value;
+		return Longs.toByteArray(encoded);
+	}
+
+	@Override
+	public String toString() {
+		return (type == AttributeType.DOUBLE) ? Double.toString((double) value) : Long.toString((long) value);
 	}
 
 }

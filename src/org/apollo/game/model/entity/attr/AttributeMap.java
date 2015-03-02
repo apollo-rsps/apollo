@@ -3,6 +3,8 @@ package org.apollo.game.model.entity.attr;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jruby.RubySymbol;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -13,9 +15,14 @@ import com.google.common.base.Preconditions;
 public final class AttributeMap {
 
 	/**
+	 * The default size of the map.
+	 */
+	private static final int DEFAULT_MAP_SIZE = 2;
+
+	/**
 	 * The map of attribute names to definitions.
 	 */
-	private static Map<String, AttributeDefinition<?>> definitions = new HashMap<>(1);
+	private static Map<String, AttributeDefinition<?>> definitions = new HashMap<>();
 
 	/**
 	 * Registers an {@link AttributeDefinition}.
@@ -23,7 +30,7 @@ public final class AttributeMap {
 	 * @param name The name of the attribute.
 	 * @param definition The definition.
 	 */
-	public static void addDefinition(String name, AttributeDefinition<?> definition) {
+	public static void define(String name, AttributeDefinition<?> definition) {
 		definitions.put(name, definition);
 	}
 
@@ -33,8 +40,9 @@ public final class AttributeMap {
 	 * @param name The name of the attribute.
 	 * @return The attribute definition.
 	 */
-	public static AttributeDefinition<?> getDefinition(String name) {
-		return definitions.get(name);
+	@SuppressWarnings("unchecked")
+	public static <T> AttributeDefinition<T> getDefinition(String name) {
+		return (AttributeDefinition<T>) definitions.get(name);
 	}
 
 	/**
@@ -47,9 +55,19 @@ public final class AttributeMap {
 	}
 
 	/**
+	 * Returns whether or not an {@link AttributeDefinition} with the specified name exists.
+	 * 
+	 * @param name The name of the AttributeDefinition.
+	 * @return {@code true} if the AttributeDefinition exists, {@code false} if not.
+	 */
+	public static boolean hasDefinition(String name) {
+		return definitions.containsKey(name);
+	}
+
+	/**
 	 * The map of attribute names to attributes.
 	 */
-	private Map<String, Attribute<?>> attributes = new HashMap<>();
+	private Map<String, Attribute<?>> attributes = new HashMap<>(DEFAULT_MAP_SIZE);
 
 	/**
 	 * Gets the {@link Attribute} with the specified name.
@@ -57,8 +75,13 @@ public final class AttributeMap {
 	 * @param name The name of the attribute.
 	 * @return The attribute.
 	 */
-	public Attribute<?> getAttribute(String name) {
-		return attributes.get(name);
+	@SuppressWarnings("unchecked")
+	public <T> Attribute<T> get(String name) {
+		AttributeDefinition<T> definition = getDefinition(name);
+		Preconditions.checkNotNull(definition, "Attributes must be defined before their value can be retreived.");
+
+		return (Attribute<T>) attributes.computeIfAbsent(name,
+				key -> createAttribute(definition.getDefault(), definition.getType()));
 	}
 
 	/**
@@ -76,9 +99,32 @@ public final class AttributeMap {
 	 * @param name The name of the attribute.
 	 * @param attribute The attribute.
 	 */
-	public void setAttribute(String name, Attribute<?> attribute) {
+	public void set(String name, Attribute<?> attribute) {
 		Preconditions.checkNotNull(getDefinition(name), "Attributes must be defined before their value can be set.");
 		attributes.put(name, attribute);
+	}
+
+	/**
+	 * Creates an {@link Attribute} with the specified value and {@link AttributeType}.
+	 * 
+	 * @param value The value of the Attribute.
+	 * @param type The AttributeType.
+	 * @return The Attribute.
+	 */
+	private <T> Attribute<?> createAttribute(T value, AttributeType type) {
+		switch (type) {
+			case LONG:
+			case DOUBLE:
+				return new NumericalAttribute((Integer) value);
+			case STRING:
+				return new StringAttribute((String) value);
+			case SYMBOL:
+				return new StringAttribute(((RubySymbol) value).asJavaString(), true);
+			case BOOLEAN:
+				return new BooleanAttribute((Boolean) value);
+		}
+
+		throw new IllegalArgumentException("Unrecognised type " + type + ".");
 	}
 
 }

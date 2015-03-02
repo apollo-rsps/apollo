@@ -19,6 +19,11 @@ import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeDefinition;
+import org.apollo.game.model.entity.attr.AttributeMap;
+import org.apollo.game.model.entity.attr.AttributePersistence;
+import org.apollo.game.model.entity.attr.NumericalAttribute;
 import org.apollo.game.model.entity.setting.MembershipStatus;
 import org.apollo.game.model.entity.setting.PrivacyState;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
@@ -55,6 +60,11 @@ import com.google.common.base.Preconditions;
  */
 public final class Player extends Mob {
 
+	static {
+		AttributeMap.define("run_energy", AttributeDefinition.forInt(100, AttributePersistence.PERSISTENT));
+		AttributeMap.define("client_version", AttributeDefinition.forInt(0, AttributePersistence.TRANSIENT));
+	}
+
 	/**
 	 * The player's appearance.
 	 */
@@ -74,12 +84,6 @@ public final class Player extends Mob {
 	 * A deque of this player's mouse clicks.
 	 */
 	private transient Deque<Point> clicks = new ArrayDeque<>();
-
-	/**
-	 * The version of the client this player is using. This is not the same as the release number, instead denoting the
-	 * custom version.
-	 */
-	private transient int clientVersion;
 
 	/**
 	 * This player's credentials.
@@ -137,11 +141,6 @@ public final class Player extends Mob {
 	private transient MembershipStatus members = MembershipStatus.FREE;
 
 	/**
-	 * A flag indicating if the player is new.
-	 */
-	private boolean newPlayer = false;
-
-	/**
 	 * This player's prayer icon.
 	 */
 	private int prayerIcon = -1;
@@ -155,11 +154,6 @@ public final class Player extends Mob {
 	 * A temporary queue of messages sent during the login process.
 	 */
 	private final transient Deque<Message> queuedMessages = new ArrayDeque<>();
-
-	/**
-	 * The player's run energy.
-	 */
-	private int runEnergy = 100;
 
 	/**
 	 * A flag indicating if this player is running.
@@ -327,7 +321,8 @@ public final class Player extends Mob {
 	 * @return The version.
 	 */
 	public int getClientVersion() {
-		return clientVersion;
+		Attribute<Integer> version = attributes.get("client_version");
+		return version.getValue();
 	}
 
 	/**
@@ -436,7 +431,8 @@ public final class Player extends Mob {
 	 * @return The run energy.
 	 */
 	public int getRunEnergy() {
-		return runEnergy;
+		Attribute<Integer> energy = attributes.get("run_energy");
+		return energy.getValue();
 	}
 
 	/**
@@ -572,15 +568,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Checks if this player has logged in before.
-	 * 
-	 * @return A flag indicating if the player is new.
-	 */
-	public boolean isNew() {
-		return newPlayer;
-	}
-
-	/**
 	 * Checks if this player is running.
 	 * 
 	 * @return {@code true} if the player is running, otherwise {@code false}.
@@ -701,9 +688,6 @@ public final class Player extends Mob {
 		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
 		sendMessage("Welcome to RuneScape.");
-		if (newPlayer) {
-			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
-		}
 
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
 		for (int tab = 0; tab < tabs.length; tab++) {
@@ -734,7 +718,7 @@ public final class Player extends Mob {
 	 * @param filterable Whether or not the message can be filtered.
 	 */
 	public void sendMessage(String message, boolean filterable) {
-		if (clientVersion > 0) {
+		if (getClientVersion() > 0) {
 			send(new ServerChatMessage(message, filterable));
 		} else if (!filterable || !filteringMessages) {
 			send(new ServerChatMessage(message));
@@ -791,12 +775,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the value denoting the client's modified version. TODO make this an attribute?
+	 * Sets the value denoting the client's modified version.
 	 * 
-	 * @param clientVersion The client version.
+	 * @param version The client version.
 	 */
-	public void setClientVersion(int clientVersion) {
-		this.clientVersion = clientVersion;
+	public void setClientVersion(int version) {
+		attributes.set("client_version", new NumericalAttribute(version));
 	}
 
 	/**
@@ -845,15 +829,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the new player flag. TODO make this an attribute?
-	 * 
-	 * @param newPlayer A flag indicating if the player has played before.
-	 */
-	public void setNew(boolean newPlayer) {
-		this.newPlayer = newPlayer;
-	}
-
-	/**
 	 * Sets the player's prayer icon. TODO make this an attribute?
 	 * 
 	 * @param prayerIcon The prayer icon.
@@ -872,13 +847,13 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the player's run energy. TODO make this an attribute?
+	 * Sets the player's run energy.
 	 * 
-	 * @param runEnergy The energy.
+	 * @param energy The energy.
 	 */
-	public void setRunEnergy(int runEnergy) {
-		this.runEnergy = runEnergy;
-		send(new UpdateRunEnergyMessage(runEnergy));
+	public void setRunEnergy(int energy) {
+		attributes.set("run_energy", new NumericalAttribute(energy));
+		send(new UpdateRunEnergyMessage(energy));
 	}
 
 	/**
@@ -969,7 +944,7 @@ public final class Player extends Mob {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
-				.add("client version", clientVersion).toString();
+				.add("client version", getClientVersion()).toString();
 	}
 
 	/**

@@ -58,34 +58,27 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 		}
 
 		try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
-			// read credentials and privileges
 			String name = StreamUtil.readString(in);
-			String pass = StreamUtil.readString(in);
+			String password = StreamUtil.readString(in);
 
-			if (!name.equalsIgnoreCase(credentials.getUsername()) || !SCryptUtil.check(credentials.getPassword(), pass)) {
+			if (!name.equalsIgnoreCase(credentials.getUsername()) || !SCryptUtil.check(credentials.getPassword(), password)) {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_INVALID_CREDENTIALS);
 			}
 
-			// set the credentials password to the scrypted one
-			credentials.setPassword(pass);
+			credentials.setPassword(password); // Update password to the hashed one.
 
 			PrivilegeLevel privilegeLevel = PrivilegeLevel.valueOf(in.readByte());
 			MembershipStatus members = MembershipStatus.valueOf(in.readByte());
 
-			// read settings
 			PrivacyState chatPrivacy = PrivacyState.valueOf(in.readByte(), true);
 			PrivacyState friendPrivacy = PrivacyState.valueOf(in.readByte(), false);
 			PrivacyState tradePrivacy = PrivacyState.valueOf(in.readByte(), false);
 			int runEnergy = in.readByte();
 			ScreenBrightness brightness = ScreenBrightness.valueOf(in.readByte());
 
-			// read position
 			int x = in.readUnsignedShort();
 			int y = in.readUnsignedShort();
 			int height = in.readUnsignedByte();
-
-			// read appearance
-			boolean designed = in.readBoolean();
 
 			int genderIntValue = in.readUnsignedByte();
 			Gender gender = genderIntValue == Gender.MALE.toInteger() ? Gender.MALE : Gender.FEMALE;
@@ -107,15 +100,12 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 			player.setRunEnergy(runEnergy);
 			player.setScreenBrightness(brightness);
 
-			player.setNew(designed);
 			player.setAppearance(new Appearance(gender, style, colors));
 
-			// read inventories
 			readInventory(in, player.getInventory());
 			readInventory(in, player.getEquipment());
 			readInventory(in, player.getBank());
 
-			// read skills
 			int size = in.readUnsignedByte();
 			SkillSet skills = player.getSkillSet();
 			skills.stopFiringEvents();
@@ -139,7 +129,7 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 
 			int ignoreCount = in.readByte();
 			List<String> ignores = new ArrayList<>(ignoreCount);
-			for (int i = 0; i < ignoreCount; i++) {
+			for (int times = 0; times < ignoreCount; times++) {
 				ignores.add(NameUtil.decodeBase37(in.readLong()));
 			}
 			player.setIgnoredUsernames(ignores);
@@ -161,11 +151,12 @@ public final class BinaryPlayerLoader implements PlayerLoader {
 	private static Map<String, Attribute<?>> readAttributes(DataInputStream in) throws IOException {
 		int count = in.readInt();
 		Map<String, Attribute<?>> attributes = new HashMap<>(count);
-		Attribute<?> attribute;
 
-		for (int i = 0; i < count; i++) {
+		for (int times = 0; times < count; times++) {
 			String name = StreamUtil.readString(in);
 			AttributeType type = AttributeType.valueOf(in.read());
+			Attribute<?> attribute;
+
 			switch (type) {
 				case BOOLEAN:
 					attribute = new BooleanAttribute(in.read() == 1);

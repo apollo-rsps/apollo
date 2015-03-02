@@ -16,4 +16,14 @@ public final class BooleanAttribute extends Attribute<Boolean> {
 		super(AttributeType.BOOLEAN, value);
 	}
 
+	@Override
+	public byte[] encode() {
+		return new byte[] { (byte) (value ? 1 : 0) };
+	}
+
+	@Override
+	public String toString() {
+		return Boolean.toString(value);
+	}
+
 }

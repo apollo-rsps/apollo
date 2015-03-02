@@ -16,7 +16,6 @@ public final class PlayerDesignMessageHandler extends MessageHandler<PlayerDesig
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, PlayerDesignMessage message) {
 		player.setAppearance(message.getAppearance());
-		player.setNew(false);
 		player.send(new CloseInterfaceMessage());
 	}
 

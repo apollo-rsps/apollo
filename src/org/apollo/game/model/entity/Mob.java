@@ -157,7 +157,7 @@ public abstract class Mob extends Entity {
 	 * @return The value of the attribute.
 	 */
 	public final Attribute<?> getAttribute(String name) {
-		return attributes.getAttribute(name);
+		return attributes.get(name);
 	}
 
 	/**
@@ -369,7 +369,7 @@ public abstract class Mob extends Entity {
 	 * @param value The attribute.
 	 */
 	public final void setAttribute(String name, Attribute<?> value) {
-		attributes.setAttribute(name, value);
+		attributes.set(name, value);
 	}
 
 	/**
