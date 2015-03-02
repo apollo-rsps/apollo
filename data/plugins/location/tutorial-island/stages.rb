@@ -5,9 +5,11 @@ private
 STAGES = []
 
 # The stages that are used when interacting with the Runescape Guide.
-STAGES << RUNESCAPE_GUIDE = [ :not_started, :talk_to_people, :go_through_door, :runescape_guide_finished, :moving_around ]
+RUNESCAPE_GUIDE = [ :not_started, :talk_to_people, :go_through_door, :runescape_guide_finished, :moving_around ]
+STAGES.concat(RUNESCAPE_GUIDE)
 
 # The stages that are used when interacting with the Survival Expert.
-STAGES << SURVIVAL_EXPERT = [ :given_axe, :cut_tree, :cutting_tree, ]
+SURVIVAL_EXPERT = [ :given_axe, :cut_tree, :cutting_tree, ]
+STAGES.concat(SURVIVAL_EXPERT)
 
 quest :tutorial_island, STAGES

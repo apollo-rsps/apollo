@@ -10,5 +10,7 @@
   <scripts>
     <script>repository.rb</script>
   </scripts>
-  <dependencies />
+  <dependencies>
+    <dependency>attributes</dependency>
+  </dependencies>
 </plugin>

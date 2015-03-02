@@ -1,8 +1,8 @@
 
 # Defines a quest with the specified name.
-def quest(name, *stage_names)
-  stages = Array.new(stage_names.size)
-  stage_names.each_with_index { |stage, index| stages << stage.kind_of?(QuestStage) ? stage : QuestStage.new(stage, index, name) }
+def quest(name, stage_names)
+  stages = { }
+  stage_names.each_with_index { |stage, index| stages[stage] = QuestStage.new(stage, index, name) }
 
   QUESTS[name] = Quest.new(name, stages)
 end
@@ -18,6 +18,7 @@ class Quest
 
   # Creates the Quest.
   def initialize(name, stages)
+    raise "Quest name must be a symbol, received '#{name}'." unless name.kind_of?(Symbol)
     @name = name
     @stages = stages
   end
@@ -34,7 +35,9 @@ class Quest
 
   # Gets the QuestStage with the specified name.
   def stage(name)
-    @stages[name]
+    stage = @stages[name]
+    raise "No stage named #{name} exists in #{@name}." if stage.nil?
+    stage
   end
 
 end
@@ -113,14 +116,15 @@ class Player
       args[0] = arg.name if arg.kind_of?(QuestStage)
     end
 
-    result = super.method_missing(symbol, args)
+    result = super(symbol, args)
     string = symbol.to_s
 
-    if (string.ends_with('_progress'))
+    if (string.end_with?('_progress'))
       name = string[0..-10] # Cut the '_progress' from the end
       quest = QUESTS[name.to_sym]
-      result = quest.stage(result) unless quest.nil?
-      raise "No QuestStage with the name #{result} exists - define it as part of the Quest declaration." if result.nil?
+      raise "No Quest with the name '#{name}' exists." if quest.nil?
+
+      result = quest.stage(result)
     end
 
     result

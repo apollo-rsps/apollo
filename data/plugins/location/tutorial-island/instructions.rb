@@ -7,7 +7,8 @@ module TutorialInstructions
   # Sends the appropriate instruction to the player.
   def self.show_instruction(player)
     instructions = CONVERSATIONS[:tutorial_island_instructions]
-    name = case player.tutorial_island_progress
+    progress = player.tutorial_island_progress.name
+    name = case progress
              # The Runescape Guide instructions.
              when :not_started then :getting_started
              when :runescape_guide_finished then :scenery
@@ -17,6 +18,7 @@ module TutorialInstructions
              when :given_axe then :viewing_items
              when :cut_tree then :cut_tree
              when :cutting_tree then :please_wait
+             else raise "No dialogue for current stage #{progress} exists."
            end
 
     dialogue = instructions.part(name)
