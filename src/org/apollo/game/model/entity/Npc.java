@@ -101,7 +101,7 @@ public final class Npc extends Mob {
 	 * @param boundary The boundary.
 	 */
 	public void setBoundary(Position[] boundary) {
-		Preconditions.checkArgument(boundary.length == 4, "Boundary count must be 4.");
+		Preconditions.checkArgument(boundary.length == 2, "Boundary count must be 2.");
 		this.boundary = boundary.clone();
 	}
 
