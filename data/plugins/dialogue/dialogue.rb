@@ -6,6 +6,7 @@ java_import 'org.apollo.game.message.impl.SetWidgetItemModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetNpcModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetPlayerModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetTextMessage'
+java_import 'org.apollo.game.action.DistancedAction'
 
 # The map of conversation names to Conversations.
 CONVERSATIONS = {}
@@ -18,6 +19,29 @@ def conversation(name, &block)
 
   raise "Conversation named #{name} already exists." if CONVERSATIONS.has_key?(name)
   CONVERSATIONS[name] = conversation
+end
+
+# A distanced action which opens the dialogue when getting into interaction distance of the given npc
+class OpenDialogueAction < DistancedAction
+  attr_reader :player, :npc, :dialogue
+
+  def initialize(player, npc, dialogue)
+    super(0, true, player, npc.position, 1)
+
+    @player = player
+    @npc = npc
+    @dialogue = dialogue
+  end
+
+  def executeAction
+    @player.set_interacting_mob(@npc)
+    send_dialogue(@player, @dialogue)
+  end
+
+  def equals(other)
+    return (@npc == other.npc && @dialogue == other.dialogue)
+  end
+
 end
 
 # A conversation held between two entities.
@@ -42,15 +66,16 @@ class Conversation
     @dialogues[name] = dialogue
 
     if ((@dialogues.empty? || dialogue.has_precondition?) && dialogue.type == :npc_speech)
-      npc = dialogue.npc
-      raise 'Npc cannot be null when opening a dialogue.' if npc.nil?
+      npc_index = dialogue.npc
+      raise 'Npc cannot be null when opening a dialogue.' if npc_index.nil?
       @starters << dialogue
 
       on :message, :first_npc_action do |ctx, player, event|
-        if npc == $world.npc_repository.get(event.index).id
+        npc = $world.npc_repository.get(event.index)
+        if npc_index == npc.id
           @starters.each do |start|
             if dialogue.precondition(player)
-      	      send_dialogue(player, dialogue)
+              player.start_action(OpenDialogueAction.new(player, npc, dialogue))
       	      ctx.break_handler_chain()
       	      break
       	    end
