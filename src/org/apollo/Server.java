@@ -107,18 +107,19 @@ public final class Server {
 	 * @param jagGrabAddress The JAGGRAB address to bind to.
 	 */
 	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
-		logger.fine("Binding service listener to address: " + serviceAddress + "...");
-		serviceBootstrap.bind(serviceAddress);
-
-		logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
 		try {
-			httpBootstrap.bind(httpAddress);
-		} catch (Throwable t) {
-			logger.log(Level.WARNING, "Binding to HTTP failed: client will use JAGGRAB as a fallback (not recommended)!", t);
-		}
+			logger.fine("Binding service listener to address: " + serviceAddress + "...");
+			serviceBootstrap.bind(serviceAddress).sync();
 
-		logger.fine("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
-		jagGrabBootstrap.bind(jagGrabAddress);
+			logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
+			httpBootstrap.bind(httpAddress).sync();
+
+			logger.fine("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
+			jagGrabBootstrap.bind(jagGrabAddress).sync();
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Binding to a port failed: ensure apollo isn't already running.", e);
+			System.exit(1);
+		}
 
 		logger.info("Ready for connections.");
 	}

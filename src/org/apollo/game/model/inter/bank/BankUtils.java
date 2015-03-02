@@ -3,10 +3,7 @@ package org.apollo.game.model.inter.bank;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inv.Inventory;
-import org.apollo.game.model.inv.InventoryListener;
-import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
  * Contains bank-related utility methods.
@@ -65,18 +62,8 @@ public final class BankUtils {
 	 * @param player The player.
 	 */
 	public static void openBank(Player player) {
-		InventoryListener invListener = new SynchronizationInventoryListener(player, BankConstants.SIDEBAR_INVENTORY_ID);
-		InventoryListener bankListener = new SynchronizationInventoryListener(player, BankConstants.BANK_INVENTORY_ID);
-
-		player.getInventory().addListener(invListener);
-		player.getBank().addListener(bankListener);
-
-		player.getInventory().forceRefresh();
-		player.getBank().forceRefresh();
-
-		InterfaceListener interListener = new BankInterfaceListener(player, invListener, bankListener);
-
-		player.getInterfaceSet().openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID, BankConstants.SIDEBAR_ID);
+		// Required for access within plugin Actions.
+		player.openBank();
 	}
 
 	/**

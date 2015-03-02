@@ -32,8 +32,8 @@ public final class BinaryPlayerUtil {
 	 * @return The file.
 	 */
 	public static File getFile(String username) {
-		username = NameUtil.decodeBase37(NameUtil.encodeBase37(username));
-		return new File(SAVED_GAMES_DIRECTORY, username + ".dat");
+		String filtered = NameUtil.decodeBase37(NameUtil.encodeBase37(username));
+		return new File(SAVED_GAMES_DIRECTORY, filtered + ".dat");
 	}
 
 	/**

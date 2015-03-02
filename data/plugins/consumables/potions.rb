@@ -2,13 +2,23 @@ require 'java'
 
 java_import 'org.apollo.game.model.entity.Skill'
 
-DRINK_POTION_SOUND = 334
+private
+
+module Constants
+
+  # The sound made when drinking a potion.
+  DRINK_POTION_SOUND = 334
+
+  # The id of an empty vial.
+  EMPTY_VIAL_ID = 229
+
+end
 
 # A drinkable potion.
 class Potion < Consumable
 
   def initialize(id, name, doses)
-    super(name, id, DRINK_POTION_SOUND)
+    super(name, id, Constants::DRINK_POTION_SOUND)
     @doses = doses
   end
 
@@ -21,7 +31,7 @@ class Potion < Consumable
       player.send_message("You have #{ @doses.length - index } dose#{ "s" unless index == 3 } of potion left.", true)
     else
       player.send_message('You drink the last of your potion.', true)
-      player.inventory.add(EMPTY_VIAL_ID)
+      player.inventory.add(Constants::EMPTY_VIAL_ID)
     end
 
     drink(player)

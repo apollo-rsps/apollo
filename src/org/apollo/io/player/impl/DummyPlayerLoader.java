@@ -2,7 +2,8 @@ package org.apollo.io.player.impl;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.setting.PrivilegeLevel;
+import org.apollo.game.model.entity.setting.MembershipStatus;
+import org.apollo.game.model.entity.setting.PrivilegeLevel;
 import org.apollo.io.player.PlayerLoader;
 import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.net.codec.login.LoginConstants;
@@ -26,7 +27,7 @@ public final class DummyPlayerLoader implements PlayerLoader {
 
 		Player player = new Player(credentials, DEFAULT_POSITION);
 		player.setPrivilegeLevel(PrivilegeLevel.ADMINISTRATOR);
-		player.setMembers(true);
+		player.setMembers(MembershipStatus.PAID);
 
 		return new PlayerLoaderResponse(status, player);
 	}

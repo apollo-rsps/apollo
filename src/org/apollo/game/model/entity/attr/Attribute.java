@@ -13,12 +13,12 @@ public abstract class Attribute<T> {
 	/**
 	 * The type of this attribute.
 	 */
-	private final AttributeType type;
+	protected final AttributeType type;
 
 	/**
 	 * The value of this attribute.
 	 */
-	protected T value;
+	protected final T value;
 
 	/**
 	 * Creates the attribute with the specified {@link AttributeType} and value.
@@ -30,6 +30,13 @@ public abstract class Attribute<T> {
 		this.type = type;
 		this.value = value;
 	}
+
+	/**
+	 * Encodes this Attribute into a byte array.
+	 * 
+	 * @return The byte array.
+	 */
+	public abstract byte[] encode();
 
 	/**
 	 * Gets the type of this attribute.
@@ -48,5 +55,12 @@ public abstract class Attribute<T> {
 	public T getValue() {
 		return value;
 	}
+
+	/**
+	 * Returns the Sting representation of this Attribute. Will be used to write this Attribute as a String, if
+	 * required.
+	 */
+	@Override
+	public abstract String toString();
 
 }

@@ -10,25 +10,69 @@ package org.apollo.game.model.entity.attr;
 public final class AttributeDefinition<T> {
 
 	/**
-	 * The default value of this definition.
+	 * Creates an AttributeDefinition for a {@code boolean}.
+	 * 
+	 * @param defaultValue The default value of the definition.
+	 * @param persistence The {@link AttributePersistence} of the definition.
+	 * @return The AttributeDefinition.
+	 */
+	public static AttributeDefinition<Boolean> forBoolean(boolean defaultValue, AttributePersistence persistence) {
+		return new AttributeDefinition<>(defaultValue, persistence, AttributeType.BOOLEAN);
+	}
+
+	/**
+	 * Creates an AttributeDefinition for a {@code double}.
+	 * 
+	 * @param defaultValue The default value of the definition.
+	 * @param persistence The {@link AttributePersistence} of the definition.
+	 * @return The AttributeDefinition.
+	 */
+	public static AttributeDefinition<Double> forDouble(double defaultValue, AttributePersistence persistence) {
+		return new AttributeDefinition<>(defaultValue, persistence, AttributeType.DOUBLE);
+	}
+
+	/**
+	 * Creates an AttributeDefinition for an {@code int}.
+	 * 
+	 * @param defaultValue The default value of the definition.
+	 * @param persistence The {@link AttributePersistence} of the definition.
+	 * @return The AttributeDefinition.
+	 */
+	public static AttributeDefinition<Integer> forInt(int defaultValue, AttributePersistence persistence) {
+		return new AttributeDefinition<>(defaultValue, persistence, AttributeType.LONG);
+	}
+
+	/**
+	 * Creates an AttributeDefinition for a String.
+	 * 
+	 * @param defaultValue The default value of the definition.
+	 * @param persistence The {@link AttributePersistence} of the definition.
+	 * @return The AttributeDefinition.
+	 */
+	public static AttributeDefinition<String> forString(String defaultValue, AttributePersistence persistence) {
+		return new AttributeDefinition<>(defaultValue, persistence, AttributeType.STRING);
+	}
+
+	/**
+	 * The default value of the Attribute.
 	 */
 	private final T defaultValue;
 
 	/**
-	 * The persistence state of this definition.
+	 * The persistence state of the Attribute.
 	 */
 	private final AttributePersistence persistence;
 
 	/**
-	 * The type of this definition.
+	 * The type of the Attribute.
 	 */
 	private final AttributeType type;
 
 	/**
-	 * Creates the attribute definition.
+	 * Creates the AttributeDefinition.
 	 * 
 	 * @param defaultValue The default value.
-	 * @param persistence The {@link AttributePersistence} state.
+	 * @param persistence The {@link AttributePersistence}.
 	 * @param type The {@link AttributeType}.
 	 */
 	public AttributeDefinition(T defaultValue, AttributePersistence persistence, AttributeType type) {
@@ -38,7 +82,7 @@ public final class AttributeDefinition<T> {
 	}
 
 	/**
-	 * Gets the default value of this attribute definition.
+	 * Gets the default value of this AttributeDefinition.
 	 * 
 	 * @return The default value.
 	 */
@@ -47,18 +91,18 @@ public final class AttributeDefinition<T> {
 	}
 
 	/**
-	 * Gets the persistence state of this attribute definition.
+	 * Gets the {@link AttributePersistence} of this AttributeDefinition.
 	 * 
-	 * @return The persistence.
+	 * @return The AttributePersistence.
 	 */
 	public AttributePersistence getPersistence() {
 		return persistence;
 	}
 
 	/**
-	 * Gets the {@link AttributeType} of this definition.
+	 * Gets the {@link AttributeType} of this AttributeDefinition
 	 * 
-	 * @return The attribute type.
+	 * @return The AttributeType.
 	 */
 	public AttributeType getType() {
 		return type;

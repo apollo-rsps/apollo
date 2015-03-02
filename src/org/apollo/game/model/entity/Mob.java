@@ -16,6 +16,7 @@ import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeMap;
+import org.apollo.game.model.event.impl.MobPositionUpdateEvent;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.Inventory.StackMode;
 import org.apollo.game.model.inv.InventoryConstants;
@@ -156,7 +157,7 @@ public abstract class Mob extends Entity {
 	 * @return The value of the attribute.
 	 */
 	public final Attribute<?> getAttribute(String name) {
-		return attributes.getAttribute(name);
+		return attributes.get(name);
 	}
 
 	/**
@@ -368,7 +369,7 @@ public abstract class Mob extends Entity {
 	 * @param value The attribute.
 	 */
 	public final void setAttribute(String name, Attribute<?> value) {
-		attributes.setAttribute(name, value);
+		attributes.set(name, value);
 	}
 
 	/**
@@ -404,13 +405,22 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Returns this mobs interacting index.
+	 * 
+	 * @return The interaction index of this mob.
+	 */
+	public int getInteractionIndex() {
+		return index;
+	}
+
+	/**
 	 * Updates this mob's interacting mob.
 	 * 
 	 * @param mob The mob.
 	 */
 	public final void setInteractingMob(Mob mob) {
 		interactingMob = mob;
-		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.index));
+		blockSet.add(SynchronizationBlock.createInteractingMobBlock(mob.getInteractionIndex()));
 	}
 
 	/**
@@ -419,6 +429,9 @@ public abstract class Mob extends Entity {
 	 * @param position The position.
 	 */
 	public final void setPosition(Position position) {
+		World.getWorld().submit(new MobPositionUpdateEvent(this, position));
+		// Intentionally ignore the Event result - accidentally terminating this method would break the entire server.
+
 		Position old = this.position;
 		SectorRepository repository = World.getWorld().getSectorRepository();
 		Sector current = repository.fromPosition(old);

@@ -44,22 +44,20 @@ end
 
 # Appends a tiara to the list.
 def append_tiara(hash)
-  raise 'Hash must contain a tiara id, altar id, talisman id, a bitshift number, and experience.' unless hash.has_key?(:tiara_id) && hash.has_key?(:altar) && hash.has_key?(:talisman) && hash.has_key?(:bitshift) && hash.has_key?(:experience)
+  raise 'Hash must contain a tiara id, altar id, talisman id, a bitshift number, and experience.' unless hash.has_keys?(:altar, :bitshift, :experience, :talisman, :tiara_id)
   tiara_id = hash[:tiara_id]; altar = hash[:altar]; talisman = hash[:talisman]; bitshift = hash[:bitshift]; experience = hash[:experience]
 
   TIARAS_BY_TALISMAN[talisman] = TIARAS_BY_ID[tiara_id] = TIARAS_BY_ALTAR[altar] = Tiara.new(tiara_id, altar, talisman, bitshift, experience)
 end
 
 # Sets the correct config upon login, if the player is wearing a tiara.
-on :login do |player|
+on :login do |event, player|
+  player = event.player
   hat = player.equipment.get(EquipmentConstants::HAT)
-  next if hat.nil?
-
-  tiara = TIARAS_BY_ID[hat]
-  unless tiara.nil?
-    tiara.send_config
-  else
-    send_empty_config(player)
+  
+  unless hat.nil?
+    tiara = TIARAS_BY_ID[hat]
+    if tiara.nil? then send_empty_config(player) else tiara.send_config end
   end
 end
 
@@ -67,7 +65,7 @@ end
 on :message, :second_object_action do |ctx, player, message|
   object_id = message.id
   tiara = TIARAS_BY_ALTAR[object_id]
-  return if tiara.nil?
+  next if tiara.nil?
 
   hat = player.equipment.get(EquipmentConstants::HAT)
 

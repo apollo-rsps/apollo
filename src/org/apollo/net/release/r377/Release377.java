@@ -7,6 +7,7 @@ import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.game.message.impl.DisplayCrossbonesMessage;
 import org.apollo.game.message.impl.DisplayTabInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
+import org.apollo.game.message.impl.FlashTabInterfaceMessage;
 import org.apollo.game.message.impl.ForwardPrivateChatMessage;
 import org.apollo.game.message.impl.FriendServerStatusMessage;
 import org.apollo.game.message.impl.HintIconMessage;
@@ -15,8 +16,11 @@ import org.apollo.game.message.impl.IgnoreListMessage;
 import org.apollo.game.message.impl.LogoutMessage;
 import org.apollo.game.message.impl.NpcSynchronizationMessage;
 import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
+import org.apollo.game.message.impl.OpenDialogueOverlayMessage;
 import org.apollo.game.message.impl.OpenInterfaceMessage;
 import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
+import org.apollo.game.message.impl.OpenOverlayMessage;
+import org.apollo.game.message.impl.OpenSidebarMessage;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.message.impl.PositionMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
@@ -124,6 +128,7 @@ public final class Release377 extends Release {
 		register(110, new ClosedInterfaceMessageDecoder());
 		register(75, new EnteredAmountMessageDecoder());
 		register(226, new DialogueContinueMessageDecoder());
+		register(119, new FlashingTabClickedMessageDecoder());
 
 		register(1, new ItemOnItemMessageDecoder());
 		register(36, new MagicOnItemMessageDecoder());
@@ -203,6 +208,10 @@ public final class Release377 extends Release {
 		register(IgnoreListMessage.class, new IgnoreListMessageEncoder());
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
 		register(HintIconMessage.class, new HintIconMessageEncoder());
+		register(FlashTabInterfaceMessage.class, new FlashTabInterfaceMessageEncoder());
+		register(OpenSidebarMessage.class, new OpenSidebarMessageEncoder());
+		register(OpenOverlayMessage.class, new OpenOverlayMessageEncoder());
+		register(OpenDialogueOverlayMessage.class, new OpenDialogueOverlayMessageEncoder());
 	}
 
 }

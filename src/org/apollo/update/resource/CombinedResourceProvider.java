@@ -2,13 +2,14 @@ package org.apollo.update.resource;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 /**
  * A resource provider composed of multiple resource providers.
  * 
  * @author Graham
  */
-public final class CombinedResourceProvider extends ResourceProvider {
+public final class CombinedResourceProvider implements ResourceProvider {
 
 	/**
 	 * An array of resource providers.
@@ -30,13 +31,13 @@ public final class CombinedResourceProvider extends ResourceProvider {
 	}
 
 	@Override
-	public ByteBuffer get(String path) throws IOException {
+	public Optional<ByteBuffer> get(String path) throws IOException {
 		for (ResourceProvider provider : providers) {
 			if (provider.accept(path)) {
 				return provider.get(path);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 }

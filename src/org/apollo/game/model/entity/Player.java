@@ -19,6 +19,17 @@ import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeDefinition;
+import org.apollo.game.model.entity.attr.AttributeMap;
+import org.apollo.game.model.entity.attr.AttributePersistence;
+import org.apollo.game.model.entity.attr.NumericalAttribute;
+import org.apollo.game.model.entity.setting.MembershipStatus;
+import org.apollo.game.model.entity.setting.PrivacyState;
+import org.apollo.game.model.entity.setting.PrivilegeLevel;
+import org.apollo.game.model.entity.setting.ScreenBrightness;
+import org.apollo.game.model.event.impl.LoginEvent;
+import org.apollo.game.model.event.impl.LogoutEvent;
 import org.apollo.game.model.inter.InterfaceConstants;
 import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inter.InterfaceSet;
@@ -31,9 +42,6 @@ import org.apollo.game.model.inv.Inventory.StackMode;
 import org.apollo.game.model.inv.InventoryConstants;
 import org.apollo.game.model.inv.InventoryListener;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
-import org.apollo.game.model.setting.PrivacyState;
-import org.apollo.game.model.setting.PrivilegeLevel;
-import org.apollo.game.model.setting.ScreenBrightness;
 import org.apollo.game.model.skill.LevelUpSkillListener;
 import org.apollo.game.model.skill.SynchronizationSkillListener;
 import org.apollo.game.sync.block.SynchronizationBlock;
@@ -51,6 +59,11 @@ import com.google.common.base.Preconditions;
  * @author Major
  */
 public final class Player extends Mob {
+
+	static {
+		AttributeMap.define("run_energy", AttributeDefinition.forInt(100, AttributePersistence.PERSISTENT));
+		AttributeMap.define("client_version", AttributeDefinition.forInt(0, AttributePersistence.TRANSIENT));
+	}
 
 	/**
 	 * The player's appearance.
@@ -73,30 +86,9 @@ public final class Player extends Mob {
 	private transient Deque<Point> clicks = new ArrayDeque<>();
 
 	/**
-	 * The version of the client this player is using. This is not the same as the release number, instead denoting the
-	 * custom version.
-	 */
-	private transient int clientVersion;
-
-	/**
 	 * This player's credentials.
 	 */
 	private PlayerCredentials credentials;
-
-	@Override
-	public int hashCode() {
-		return credentials.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Player) {
-			Player other = (Player) obj;
-			return credentials.equals(other.credentials);
-		}
-
-		return false;
-	}
 
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
@@ -144,14 +136,9 @@ public final class Player extends Mob {
 	private transient Position lastKnownSector;
 
 	/**
-	 * The membership flag.
+	 * The MembershipStatus of this Player.
 	 */
-	private transient boolean members = false;
-
-	/**
-	 * A flag indicating if the player is new.
-	 */
-	private boolean newPlayer = false;
+	private transient MembershipStatus members = MembershipStatus.FREE;
 
 	/**
 	 * This player's prayer icon.
@@ -169,16 +156,6 @@ public final class Player extends Mob {
 	private final transient Deque<Message> queuedMessages = new ArrayDeque<>();
 
 	/**
-	 * A flag indicating if the sector changed in the last cycle.
-	 */
-	private transient boolean sectorChanged = false;
-
-	/**
-	 * The player's run energy.
-	 */
-	private int runEnergy = 100;
-
-	/**
 	 * A flag indicating if this player is running.
 	 */
 	private boolean running = false;
@@ -187,6 +164,11 @@ public final class Player extends Mob {
 	 * The brightness of this player's screen.
 	 */
 	private ScreenBrightness screenBrightness = ScreenBrightness.NORMAL;
+
+	/**
+	 * A flag indicating if the sector changed in the last cycle.
+	 */
+	private transient boolean sectorChanged = false;
 
 	/**
 	 * The {@link GameSession} currently attached to this {@link Player}.
@@ -263,6 +245,16 @@ public final class Player extends Mob {
 		}
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Player) {
+			Player other = (Player) obj;
+			return credentials.equals(other.credentials);
+		}
+
+		return false;
+	}
+
 	/**
 	 * Sets the excessive npcs flag.
 	 */
@@ -329,7 +321,8 @@ public final class Player extends Mob {
 	 * @return The version.
 	 */
 	public int getClientVersion() {
-		return clientVersion;
+		Attribute<Integer> version = attributes.get("client_version");
+		return version.getValue();
 	}
 
 	/**
@@ -380,6 +373,11 @@ public final class Player extends Mob {
 	 */
 	public List<String> getIgnoredUsernames() {
 		return ignores;
+	}
+
+	@Override
+	public int getInteractionIndex() {
+		return getIndex() | 0x8000;
 	}
 
 	/**
@@ -433,7 +431,8 @@ public final class Player extends Mob {
 	 * @return The run energy.
 	 */
 	public int getRunEnergy() {
-		return runEnergy;
+		Attribute<Integer> energy = attributes.get("run_energy");
+		return energy.getValue();
 	}
 
 	/**
@@ -488,6 +487,11 @@ public final class Player extends Mob {
 	 */
 	public int getWorldId() {
 		return worldId;
+	}
+
+	@Override
+	public int hashCode() {
+		return credentials.hashCode();
 	}
 
 	/**
@@ -551,16 +555,16 @@ public final class Player extends Mob {
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isMembers() {
-		return members;
+		return members == MembershipStatus.PAID;
 	}
 
 	/**
-	 * Checks if this player has logged in before.
+	 * Gets the {@link MembershipStatus} of this Player.
 	 * 
-	 * @return A flag indicating if the player is new.
+	 * @return The MembershipStatus.
 	 */
-	public boolean isNew() {
-		return newPlayer;
+	public MembershipStatus getMembershipStatus() {
+		return members;
 	}
 
 	/**
@@ -594,7 +598,9 @@ public final class Player extends Mob {
 	 * Logs the player out, if possible.
 	 */
 	public void logout() {
-		send(new LogoutMessage());
+		if (World.getWorld().submit(new LogoutEvent(this))) {
+			send(new LogoutMessage());
+		}
 	}
 
 	/**
@@ -676,6 +682,27 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sends the initial messages.
+	 */
+	public void sendInitialMessages() {
+		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
+		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
+		sendMessage("Welcome to RuneScape.");
+
+		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
+		for (int tab = 0; tab < tabs.length; tab++) {
+			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
+		}
+
+		inventory.forceRefresh();
+		equipment.forceRefresh();
+		bank.forceRefresh();
+		skillSet.forceRefresh();
+
+		World.getWorld().submit(new LoginEvent(this));
+	}
+
+	/**
 	 * Sends a message to the player.
 	 * 
 	 * @param message The message.
@@ -691,7 +718,7 @@ public final class Player extends Mob {
 	 * @param filterable Whether or not the message can be filtered.
 	 */
 	public void sendMessage(String message, boolean filterable) {
-		if (clientVersion > 0) {
+		if (getClientVersion() > 0) {
 			send(new ServerChatMessage(message, filterable));
 		} else if (!filterable || !filteringMessages) {
 			send(new ServerChatMessage(message));
@@ -748,12 +775,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the value denoting the client's modified version. TODO make this an attribute?
+	 * Sets the value denoting the client's modified version.
 	 * 
-	 * @param clientVersion The client version.
+	 * @param version The client version.
 	 */
-	public void setClientVersion(int clientVersion) {
-		this.clientVersion = clientVersion;
+	public void setClientVersion(int version) {
+		attributes.set("client_version", new NumericalAttribute(version));
 	}
 
 	/**
@@ -797,17 +824,8 @@ public final class Player extends Mob {
 	 * 
 	 * @param members The new membership flag.
 	 */
-	public void setMembers(boolean members) {
+	public void setMembers(MembershipStatus members) {
 		this.members = members;
-	}
-
-	/**
-	 * Sets the new player flag. TODO make this an attribute?
-	 * 
-	 * @param newPlayer A flag indicating if the player has played before.
-	 */
-	public void setNew(boolean newPlayer) {
-		this.newPlayer = newPlayer;
 	}
 
 	/**
@@ -829,22 +847,13 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the sector changed flag.
+	 * Sets the player's run energy.
 	 * 
-	 * @param sectorChanged A flag indicating if the sector has changed.
+	 * @param energy The energy.
 	 */
-	public void setSectorChanged(boolean sectorChanged) {
-		this.sectorChanged = sectorChanged;
-	}
-
-	/**
-	 * Sets the player's run energy. TODO make this an attribute?
-	 * 
-	 * @param runEnergy The energy.
-	 */
-	public void setRunEnergy(int runEnergy) {
-		this.runEnergy = runEnergy;
-		send(new UpdateRunEnergyMessage(runEnergy));
+	public void setRunEnergy(int energy) {
+		attributes.set("run_energy", new NumericalAttribute(energy));
+		send(new UpdateRunEnergyMessage(energy));
 	}
 
 	/**
@@ -857,17 +866,21 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sets the sector changed flag.
+	 * 
+	 * @param sectorChanged A flag indicating if the sector has changed.
+	 */
+	public void setSectorChanged(boolean sectorChanged) {
+		this.sectorChanged = sectorChanged;
+	}
+
+	/**
 	 * Sets the player's {@link GameSession}.
 	 * 
 	 * @param session The player's {@link GameSession}.
-	 * @param reconnecting The reconnecting flag.
 	 */
-	public void setSession(GameSession session, boolean reconnecting) {
+	public void setSession(GameSession session) {
 		this.session = session;
-		if (!reconnecting) {
-			sendInitialMessages();
-		}
-		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 	}
 
 	/**
@@ -931,7 +944,7 @@ public final class Player extends Mob {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
-				.add("client version", clientVersion).toString();
+				.add("client version", getClientVersion()).toString();
 	}
 
 	/**
@@ -975,29 +988,6 @@ public final class Player extends Mob {
 	private void initSkills() {
 		skillSet.addListener(new SynchronizationSkillListener(this));
 		skillSet.addListener(new LevelUpSkillListener(this));
-	}
-
-	/**
-	 * Sends the initial messages.
-	 */
-	private void sendInitialMessages() {
-		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
-		sendMessage("Welcome to RuneScape.");
-		if (!newPlayer) {
-			interfaceSet.openWindow(InterfaceConstants.AVATAR_DESIGN);
-		}
-
-		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
-		for (int tab = 0; tab < tabs.length; tab++) {
-			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
-		}
-
-		inventory.forceRefresh();
-		equipment.forceRefresh();
-		bank.forceRefresh();
-		skillSet.forceRefresh();
-
-		World.getWorld().getLoginDispatcher().dispatch(this);
 	}
 
 }

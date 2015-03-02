@@ -3,7 +3,7 @@ package org.apollo.game.message.impl;
 import org.apollo.game.message.Message;
 
 /**
- * A {@link Message} sent to the client to open an interface and temporary sidebar overlay.
+ * A {@link Message} sent to the client to open an interface and a sidebar.
  * 
  * @author Graham
  */
@@ -20,7 +20,7 @@ public final class OpenInterfaceSidebarMessage extends Message {
 	private final int sidebarId;
 
 	/**
-	 * Creates the open interface sidebar message.
+	 * Creates the OpenInterfaceSidebarMessage.
 	 * 
 	 * @param interfaceId The interface id.
 	 * @param sidebarId The sidebar id.

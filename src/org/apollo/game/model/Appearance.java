@@ -1,6 +1,6 @@
 package org.apollo.game.model;
 
-import org.apollo.game.model.setting.Gender;
+import org.apollo.game.model.entity.setting.Gender;
 
 import com.google.common.base.Preconditions;
 

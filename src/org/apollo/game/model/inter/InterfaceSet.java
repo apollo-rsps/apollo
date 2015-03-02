@@ -7,10 +7,16 @@ import java.util.Optional;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
+import org.apollo.game.message.impl.OpenDialogueOverlayMessage;
 import org.apollo.game.message.impl.OpenInterfaceMessage;
 import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
+import org.apollo.game.message.impl.OpenOverlayMessage;
+import org.apollo.game.message.impl.OpenSidebarMessage;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.event.impl.CloseInterfacesEvent;
 import org.apollo.game.model.inter.dialogue.DialogueListener;
+import org.apollo.game.model.inv.InventoryListener;
 
 /**
  * Represents the set of interfaces the player has open.
@@ -83,8 +89,11 @@ public final class InterfaceSet {
 	 * Closes the current open interface(s).
 	 */
 	public void close() {
-		closeAndNotify();
-		player.send(new CloseInterfaceMessage());
+		CloseInterfacesEvent event = new CloseInterfacesEvent(player);
+		if (World.getWorld().submit(event)) {
+			closeAndNotify();
+			player.send(new CloseInterfaceMessage());
+		}
 	}
 
 	/**
@@ -136,10 +145,10 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * Opens a chat box dialogue.
+	 * Opens a dialogue interface.
 	 * 
-	 * @param listener The listener for the dialogue.
-	 * @param dialogueId The dialogue's id.
+	 * @param listener The {@link DialogueListener}.
+	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogue(DialogueListener listener, int dialogueId) {
 		closeAndNotify();
@@ -152,12 +161,37 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * Opens a chat box dialogue.
+	 * Opens a dialogue.
 	 * 
-	 * @param dialogueId The dialogue's id.
+	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogue(int dialogueId) {
 		openDialogue(null, dialogueId);
+	}
+
+	/**
+	 * Opens a dialogue overlay interface.
+	 * 
+	 * @param listener The {@link DialogueListener}.
+	 * @param dialogueId The dialogue id.
+	 */
+	public void openDialogueOverlay(DialogueListener listener, int dialogueId) {
+		closeAndNotify();
+
+		this.dialogueListener = Optional.ofNullable(listener);
+		this.listener = Optional.ofNullable(listener);
+
+		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
+		player.send(new OpenDialogueOverlayMessage(dialogueId));
+	}
+
+	/**
+	 * Opens a dialogue overlay.
+	 * 
+	 * @param dialogueId The dialogue id.
+	 */
+	public void openDialogueOverlay(int dialogueId) {
+		openDialogueOverlay(null, dialogueId);
 	}
 
 	/**
@@ -168,6 +202,42 @@ public final class InterfaceSet {
 	public void openEnterAmountDialogue(EnterAmountListener listener) {
 		amountListener = Optional.of(listener);
 		player.send(new EnterAmountMessage());
+	}
+
+	/**
+	 * Opens an overlay interface.
+	 * 
+	 * @param overlay The overlay id.
+	 */
+	public void openOverlay(int overlay) {
+		interfaces.put(InterfaceType.OVERLAY, overlay);
+		player.send(new OpenOverlayMessage(overlay));
+	}
+
+	/**
+	 * Opens an sidebar interface.
+	 * 
+	 * @param sidebar The sidebar id.
+	 */
+	public void openSidebar(int sidebar) {
+		closeAndNotify();
+		interfaces.put(InterfaceType.SIDEBAR, sidebar);
+
+		player.send(new OpenSidebarMessage(sidebar));
+	}
+
+	/**
+	 * Opens an sidebar interface with the specified {@link InventoryListener}.
+	 * 
+	 * @param listener The listener.
+	 * @param sidebar The sidebar id.
+	 */
+	public void openSidebar(InterfaceListener listener, int sidebar) {
+		closeAndNotify();
+		this.listener = Optional.ofNullable(listener);
+		interfaces.put(InterfaceType.SIDEBAR, sidebar);
+
+		player.send(new OpenSidebarMessage(sidebar));
 	}
 
 	/**

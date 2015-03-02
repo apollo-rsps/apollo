@@ -1,3 +1,9 @@
+require 'java'
+
+java_import 'org.apollo.game.model.def.ItemDefinition'
+java_import 'org.apollo.game.model.def.NpcDefinition'
+java_import 'org.apollo.game.model.def.ObjectDefinition'
+
 
 # Checks whether the amount of arguments provided is correct, sending the player the specified message if not.
 def valid_arg_length(args, length, player, message)

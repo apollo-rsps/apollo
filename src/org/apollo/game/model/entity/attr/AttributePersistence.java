@@ -8,7 +8,7 @@ public enum AttributePersistence {
 	/**
 	 * The serialized persistence type, indicating that the attribute will be saved.
 	 */
-	SERIALIZED,
+	PERSISTENT,
 
 	/**
 	 * The transient persistence type, indicating that the attribute will not be saved.

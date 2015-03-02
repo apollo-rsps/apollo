@@ -4,8 +4,8 @@ java_import 'org.apollo.game.message.impl.FriendServerStatusMessage'
 java_import 'org.apollo.game.message.impl.IgnoreListMessage'
 java_import 'org.apollo.game.message.impl.SendFriendMessage'
 java_import 'org.apollo.game.model.World'
-java_import 'org.apollo.game.model.setting.ServerStatus'
-java_import 'org.apollo.game.model.setting.PrivacyState'
+java_import 'org.apollo.game.model.entity.setting.ServerStatus'
+java_import 'org.apollo.game.model.entity.setting.PrivacyState'
 java_import 'org.apollo.game.model.entity.Player'
 
 
@@ -42,7 +42,7 @@ on :message, :remove_friend do |ctx, player, message|
 end
 
 # Update the friend server status and send the friend/ignore lists of the player logging in.
-on :login do |player|
+on :login do |event, player|
   player.send(FriendServerStatusMessage.new(ServerStatus::CONNECTING))
   player.send(IgnoreListMessage.new(player.ignored_usernames)) if player.ignored_usernames.size > 0
 
@@ -62,7 +62,7 @@ on :login do |player|
 end
 
 # Notifies the player's friends that the player has logged out.
-on :logout do |player|
+on :logout do |event, player|
   update_friends(player, 0)
 end
 
