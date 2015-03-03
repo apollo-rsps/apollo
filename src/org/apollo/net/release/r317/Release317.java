@@ -24,6 +24,7 @@ import org.apollo.game.message.impl.OpenSidebarMessage;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.message.impl.PositionMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
+import org.apollo.game.message.impl.RemoveObjectMessage;
 import org.apollo.game.message.impl.RemoveTileItemMessage;
 import org.apollo.game.message.impl.SectorChangeMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
@@ -206,6 +207,7 @@ public final class Release317 extends Release {
 		register(UpdateTileItemMessage.class, new UpdateTileItemMessageEncoder());
 		register(RemoveTileItemMessage.class, new RemoveTileItemMessageEncoder());
 		register(SendObjectMessage.class, new SendObjectMessageEncoder());
+		register(RemoveObjectMessage.class, new RemoveObjectMessageEncoder());
 
 		register(ForwardPrivateChatMessage.class, new ForwardPrivateChatMessageEncoder());
 		register(FriendServerStatusMessage.class, new FriendServerStatusMessageEncoder());
