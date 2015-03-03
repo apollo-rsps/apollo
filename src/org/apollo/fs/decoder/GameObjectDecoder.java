@@ -37,12 +37,12 @@ public final class GameObjectDecoder {
 	/**
 	 * A bit flag which denotes that a specified Position is a bridge.
 	 */
-	private static final int FLAG_BRIDGE = 1;
+	private static final int FLAG_BRIDGE = 2;
 
 	/**
 	 * The sector repository.
 	 */
-	private static final SectorRepository sectors = World.getWorld().getSectorRepository();
+	private static final SectorRepository REPOSITORY = World.getWorld().getSectorRepository();
 
 	/**
 	 * The {@link IndexedFileSystem}.
@@ -70,14 +70,14 @@ public final class GameObjectDecoder {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public GameObject[] decode() throws IOException {
-		Map<Integer, MapDefinition> definitions = MapFileDecoder.parse(fs);
+		Map<Integer, MapDefinition> definitions = MapFileDecoder.decode(fs);
 
 		for (Entry<Integer, MapDefinition> entry : definitions.entrySet()) {
 			MapDefinition def = entry.getValue();
 
-			int hash = def.getHash();
-			int x = (hash >> 8 & 0xFF) * 64;
-			int y = (hash & 0xFF) * 64;
+			int packed = def.getPacketCoordinates();
+			int x = (packed >> 8 & 0xFF) * 64;
+			int y = (packed & 0xFF) * 64;
 
 			ByteBuffer gameObjectData = fs.getFile(4, def.getObjectFile());
 			ByteBuffer gameObjectBuffer = ByteBuffer.wrap(CompressionUtil.degzip(gameObjectData));
@@ -95,12 +95,12 @@ public final class GameObjectDecoder {
 		for (int deltaId, id = -1; (deltaId = BufferUtil.readSmart(buffer)) != 0;) {
 			id += deltaId;
 
-			for (int deltaPos, hash = 0; (deltaPos = BufferUtil.readSmart(buffer)) != 0;) {
-				hash += deltaPos - 1;
+			for (int deltaPos, pos = 0; (deltaPos = BufferUtil.readSmart(buffer)) != 0;) {
+				pos += deltaPos - 1;
 
-				int localX = hash >> 6 & 0x3F;
-				int localY = hash & 0x3F;
-				int height = hash >> 12 & 0x3;
+				int localY = pos & 0x3F;
+				int localX = pos >> 6 & 0x3F;
+				int height = pos >> 12;
 
 				int attributes = buffer.get() & 0xFF;
 				int type = attributes >> 2;
@@ -115,8 +115,11 @@ public final class GameObjectDecoder {
 	private void gameObjectDecoded(int id, int orientation, int type, Position position) {
 		ObjectDefinition definition = ObjectDefinition.lookup(id);
 
-		Sector sector = sectors.fromPosition(position);
-		int x = position.getLocalX(), y = position.getLocalY(), height = position.getHeight();
+		Sector sector = REPOSITORY.fromPosition(position);
+		int x = position.getX(), y = position.getY(), height = position.getHeight();
+
+		if (height < 0)
+			return;
 
 		CollisionMatrix matrix = sector.getMatrix(height);
 
@@ -143,10 +146,20 @@ public final class GameObjectDecoder {
 		if (block) {
 			for (int width = 0; width < definition.getWidth(); width++) {
 				for (int length = 0; length < definition.getLength(); length++) {
-					matrix.block(x + width, y + length);
+					int localX = (x % Sector.SECTOR_SIZE) + width, localY = (y % Sector.SECTOR_SIZE) + length;
+
+					if (localX > 7 || localY > 7) {
+						Sector next = REPOSITORY.fromPosition(new Position(x + localX - 7, y + localY - 7));
+						next.getMatrix(height).block(localX, localY);
+						continue;
+					}
+
+					matrix.block(localX, localY);
 				}
 			}
 		}
+
+		objects.add(new GameObject(id, position, type, orientation));
 	}
 
 	private void parseTerrain(ByteBuffer buffer, int x, int y) {
@@ -156,7 +169,7 @@ public final class GameObjectDecoder {
 					Position position = new Position(x + localX, y + localY, height);
 
 					int flags = 0;
-					for (;;) {
+					while (true) {
 						int attributeId = buffer.get() & 0xFF;
 						if (attributeId == 0) {
 							terrainDecoded(flags, position);
@@ -177,15 +190,34 @@ public final class GameObjectDecoder {
 	}
 
 	private void terrainDecoded(int flags, Position position) {
-		Sector sector = sectors.fromPosition(position);
-		int x = position.getLocalX(), y = position.getLocalY(), height = position.getHeight();
+		Sector sector = REPOSITORY.fromPosition(position);
+		int x = position.getX(), y = position.getY(), height = position.getHeight();
 
+		if (height < 0)
+			return;
+		CollisionMatrix current = sector.getMatrix(height);
+
+		boolean block = false;
 		if ((flags & FLAG_BLOCKED) != 0) {
-			sector.getMatrix(height).block(x, y);
+			block = true;
 		}
 
 		if ((flags & FLAG_BRIDGE) != 0) {
-			// FIXME
+			if (--height >= 0) {
+				block = true;
+			}
+		}
+
+		if (block) {
+			int localX = (x % Sector.SECTOR_SIZE), localY = (y % Sector.SECTOR_SIZE);
+
+			if (localX > 7 || localY > 7) {
+				Sector next = REPOSITORY.fromPosition(new Position(x + localX - 7, y + localY - 7));
+				next.getMatrix(height).block(localX, localY);
+				return;
+			}
+
+			current.block(localX, localY);
 		}
 	}
 

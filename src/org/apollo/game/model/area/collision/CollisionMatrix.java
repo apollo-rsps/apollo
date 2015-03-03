@@ -221,7 +221,7 @@ public final class CollisionMatrix {
 	 * @param y The y coordinate.
 	 * @param value The value.
 	 */
-	private void set(int x, int y, byte value) {
+	public void set(int x, int y, byte value) {
 		matrix[indexOf(x, y)] = value;
 	}
 
