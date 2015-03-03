@@ -28,11 +28,6 @@ public final class FileSystemConstants {
 	public static final int BLOCK_SIZE = HEADER_SIZE + CHUNK_SIZE;
 
 	/**
-	 * The number of caches.
-	 */
-	public static final int CACHE_COUNT = 5;
-
-	/**
 	 * The size of an index.
 	 */
 	public static final int INDEX_SIZE = 6;
