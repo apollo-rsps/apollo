@@ -2,6 +2,7 @@ package org.apollo.game.model.entity.path;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Optional;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
@@ -12,7 +13,12 @@ import org.apollo.game.model.Position;
  *
  * @author Major
  */
-final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
+public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
+
+	/**
+	 * The Optional containing the boundary Positions.
+	 */
+	private Optional<Position[]> boundaries = Optional.empty();
 
 	@Override
 	public Deque<Position> find(Position origin, Position target) {
@@ -20,6 +26,19 @@ final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 		Deque<Position> positions = new ArrayDeque<>(approximation);
 
 		return addHorizontal(origin, target, positions);
+	}
+
+	/**
+	 * Finds a valid path from the origin {@link Position} to the target one.
+	 * 
+	 * @param origin The origin Position.
+	 * @param target The target Position.
+	 * @param boundaries The boundary Positions, which are marking as untraversable.
+	 * @return The {@link Deque} containing the Positions to go through.
+	 */
+	public Deque<Position> find(Position origin, Position target, Position[] boundaries) {
+		this.boundaries = Optional.of(boundaries);
+		return find(origin, target);
 	}
 
 	/**
@@ -33,33 +52,33 @@ final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 	 * if so, we traverse horizontally (see {@link #addHorizontal}); if not, return the current path.
 	 * </ul>
 	 * 
-	 * @param current The current position.
+	 * @param start The current position.
 	 * @param target The target position.
 	 * @param positions The deque of positions.
 	 * @return The deque of positions containing the path.
 	 */
-	private Deque<Position> addHorizontal(Position current, Position target, Deque<Position> positions) {
-		int x = current.getX(), y = current.getY(), height = current.getHeight();
-		int dx = x - target.getX();
+	private Deque<Position> addHorizontal(Position start, Position target, Deque<Position> positions) {
+		int x = start.getX(), y = start.getY(), height = start.getHeight();
+		int dx = x - target.getX(), dy = y - target.getY();
 
 		if (dx > 0) {
-			Position west = new Position(x - 1, y, height);
+			Position current = start;
 
-			while (traversable(west) && dx-- > 0) {
-				west = new Position(--x, y, height);
-				positions.addLast(west);
+			while (traversable(current, boundaries, Direction.WEST) && dx-- > 0) {
+				current = new Position(--x, y, height);
+				positions.addLast(current);
 			}
 		} else if (dx < 0) {
-			Position east = new Position(x + 1, y, height);
+			Position current = start;
 
-			while (traversable(east) && dx++ < 0) {
-				east = new Position(++x, y, height);
-				positions.addLast(east);
+			while (traversable(current, boundaries, Direction.EAST) && dx++ < 0) {
+				current = new Position(++x, y, height);
+				positions.addLast(current);
 			}
 		}
 
 		Position last = new Position(x, y, height);
-		if (!current.equals(last) && traversable(last, Direction.NORTH, Direction.SOUTH)) {
+		if (!start.equals(last) && dy != 0 && traversable(last, boundaries, (dy > 0) ? Direction.SOUTH : Direction.NORTH)) {
 			return addVertical(last, target, positions);
 		}
 
@@ -77,33 +96,33 @@ final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 	 * if so, we traverse horizontally (see {@link #addHorizontal}); if not, return the current path.
 	 * </ul>
 	 * 
-	 * @param current The current position.
+	 * @param start The current position.
 	 * @param target The target position.
 	 * @param positions The deque of positions.
 	 * @return The deque of positions containing the path.
 	 */
-	private Deque<Position> addVertical(Position current, Position target, Deque<Position> positions) {
-		int x = current.getX(), y = current.getY(), height = current.getHeight();
-		int dy = y - target.getY();
+	private Deque<Position> addVertical(Position start, Position target, Deque<Position> positions) {
+		int x = start.getX(), y = start.getY(), height = start.getHeight();
+		int dy = y - target.getY(), dx = x - target.getX();
 
 		if (dy > 0) {
-			Position south = new Position(x, y - 1, height);
+			Position current = start;
 
-			while (traversable(south) && dy-- > 0) {
-				south = new Position(x, --y, height);
-				positions.addLast(south);
+			while (traversable(current, boundaries, Direction.SOUTH) && dy-- > 0) {
+				current = new Position(x, --y, height);
+				positions.addLast(current);
 			}
 		} else if (dy < 0) {
-			Position north = new Position(x, y + 1, height);
+			Position current = start;
 
-			while (traversable(north) && dy++ < 0) {
-				north = new Position(x, ++y, height);
-				positions.addLast(north);
+			while (traversable(current, boundaries, Direction.NORTH) && dy++ < 0) {
+				current = new Position(x, ++y, height);
+				positions.addLast(current);
 			}
 		}
 
 		Position last = new Position(x, y, height);
-		if (!last.equals(target) && traversable(last, Direction.EAST, Direction.WEST)) {
+		if (!last.equals(target) && dx != 0 && traversable(last, boundaries, (dx > 0) ? Direction.WEST : Direction.EAST)) {
 			return addHorizontal(last, target, positions);
 		}
 

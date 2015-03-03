@@ -14,6 +14,7 @@ import org.apollo.game.model.area.collision.CollisionMatrix;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Entity.EntityType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
@@ -175,14 +176,13 @@ public final class Sector {
 		Set<Entity> local = entities.get(old);
 
 		if (local == null || !local.remove(entity)) {
-			throw new IllegalArgumentException("Entity belongs in this sector but does not exist.");
+			throw new IllegalArgumentException("Entity belongs in this sector (" + this + ") but does not exist.");
 		}
 
 		local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
 
 		local.add(entity);
 		notifyListeners(entity, SectorOperation.MOVE);
-
 	}
 
 	/**
@@ -225,9 +225,14 @@ public final class Sector {
 	 */
 	public boolean traversable(Position position, EntityType entity, Direction direction) {
 		CollisionMatrix matrix = matrices[position.getHeight()];
-		int x = position.getLocalX(), y = position.getLocalY();
+		int x = position.getX(), y = position.getY();
 
-		return matrix.traversable(x, y, entity, direction);
+		return !matrix.untraversable(x % SECTOR_SIZE, y % SECTOR_SIZE, entity, direction);
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("coordinates", coordinates).toString();
 	}
 
 	/**

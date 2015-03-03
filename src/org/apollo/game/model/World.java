@@ -30,6 +30,7 @@ import org.apollo.game.model.event.EventListener;
 import org.apollo.game.model.event.EventListenerChainSet;
 import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
+import org.apollo.game.scheduling.impl.NpcMovementTask;
 import org.apollo.io.EquipmentDefinitionParser;
 import org.apollo.util.MobRepository;
 import org.apollo.util.NameUtil;
@@ -96,6 +97,11 @@ public final class World {
 	 * The EventListenerChainSet for this World.
 	 */
 	private final EventListenerChainSet events = new EventListenerChainSet();
+
+	/**
+	 * The ScheduledTask that moves Npcs.
+	 */
+	private NpcMovementTask npcMovement;
 
 	/**
 	 * The {@link MobRepository} of {@link Npc}s.
@@ -242,8 +248,12 @@ public final class World {
 		placeEntities(objects);
 		logger.fine("Loaded " + objects.length + " static objects.");
 
+		npcMovement = new NpcMovementTask(); // Must be exactly here because of ordering issues.
+		scheduler.schedule(npcMovement);
+
 		manager.start();
 		pluginManager = manager; // TODO move!!
+
 	}
 
 	/**
@@ -285,6 +295,10 @@ public final class World {
 		if (success) {
 			Sector sector = sectors.fromPosition(npc.getPosition());
 			sector.addEntity(npc);
+
+			if (npc.hasBoundaries()) {
+				npcMovement.addNpc(npc);
+			}
 		} else {
 			logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
 		}

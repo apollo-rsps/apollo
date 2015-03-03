@@ -166,16 +166,16 @@ public final class CollisionMatrix {
 	}
 
 	/**
-	 * Returns whether or not an Entity of the specified {@link EntityType type} can traverse the tile at the specified
-	 * coordinate pair.
+	 * Returns whether or not an Entity of the specified {@link EntityType type} cannot traverse the tile at the
+	 * specified coordinate pair.
 	 * 
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param entity The {@link EntityType}.
 	 * @param direction The {@link Direction} the Entity is approaching from.
-	 * @return {@code true} if the tile at the specified coordinate pair is traversable, {@code false} if not.
+	 * @return {@code true} if the tile at the specified coordinate pair is not traversable, {@code false} if not.
 	 */
-	public boolean traversable(int x, int y, EntityType entity, Direction direction) {
+	public boolean untraversable(int x, int y, EntityType entity, Direction direction) {
 		CollisionFlag[] flags = CollisionFlag.forType(entity);
 		int north = 0, east = 1, south = 2, west = 3;
 

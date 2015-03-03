@@ -1,7 +1,7 @@
 package org.apollo.game.model.entity.path;
 
 import java.util.Deque;
-import java.util.Set;
+import java.util.Optional;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
@@ -9,7 +9,8 @@ import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
 import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.entity.Entity.EntityType;
-import org.apollo.game.model.entity.GameObject;
+
+import com.google.common.base.Preconditions;
 
 /**
  * An algorithm used to find a path between two {@link Position}s.
@@ -19,46 +20,48 @@ import org.apollo.game.model.entity.GameObject;
 abstract class PathfindingAlgorithm {
 
 	/**
-	 * The repository of sectors.
+	 * The repository of Sectors.
 	 */
-	private static final SectorRepository repository = World.getWorld().getSectorRepository();
+	private static final SectorRepository REPOSITORY = World.getWorld().getSectorRepository();
 
 	/**
 	 * Finds a valid path from the origin {@link Position} to the target one.
 	 * 
-	 * @param origin The origin position.
-	 * @param target The target position.
-	 * @return The {@link Deque} containing the positions to go through.
+	 * @param origin The origin Position.
+	 * @param target The target Position.
+	 * @return The {@link Deque} containing the Positions to go through.
 	 */
 	public abstract Deque<Position> find(Position origin, Position target);
 
 	/**
-	 * Returns whether or not the tile at the specified position is walkable. FIXME do this properly w/tile collision
-	 * data!
-	 *
-	 * @param position The {@link Position}.
-	 * @return {@code true} if the tile is walkable, otherwise {@code false}.
+	 * Returns whether or not a {@link Position} walking one step in any of the specified {@link Direction}s would lead
+	 * to is traversable.
+	 * 
+	 * @param current The current Position.
+	 * @param directions The Directions that should be checked.
+	 * @return {@code true} if any of the Directions lead to a traversable tile, otherwise {@code false}.
 	 */
-	protected boolean traversable(Position position) {
-		Sector sector = repository.get(position.getSectorCoordinates());
-		Set<GameObject> objects = sector.getEntities(position, EntityType.GAME_OBJECT);
-
-		return objects.stream().anyMatch(object -> object.getDefinition().isSolid());
+	protected boolean traversable(Position current, Direction... directions) {
+		return traversable(current, Optional.empty(), directions);
 	}
 
 	/**
-	 * Returns whether or not the {@link Position}s walking one step in a specified {@link Direction} would lead to is
-	 * traversable.
+	 * Returns whether or not a {@link Position} walking one step in any of the specified {@link Direction}s would lead
+	 * to is traversable.
 	 * 
-	 * @param position The starting position.
-	 * @param directions The directions that should be checked.
-	 * @return {@code true} if any of the directions lead to a traversable tile, otherwise {@code false}.
+	 * @param current The current Position.
+	 * @param boundaries The {@link Optional} containing the Position boundaries.
+	 * @param directions The Directions that should be checked.
+	 * @return {@code true} if any of the Directions lead to a traversable tile, otherwise {@code false}.
 	 */
-	protected boolean traversable(Position position, Direction... directions) {
-		int height = position.getHeight();
+	protected boolean traversable(Position current, Optional<Position[]> boundaries, Direction... directions) {
+		Preconditions.checkArgument(directions != null && directions.length > 0, "Directions array cannot be null.");
+		int height = current.getHeight();
+
+		Position[] positions = boundaries.isPresent() ? boundaries.get() : new Position[0];
 
 		for (Direction direction : directions) {
-			int x = position.getX(), y = position.getY();
+			int x = current.getX(), y = current.getY();
 			int value = direction.toInteger();
 
 			if (value >= Direction.NORTH_WEST.toInteger() && value <= Direction.NORTH_EAST.toInteger()) {
@@ -73,12 +76,28 @@ abstract class PathfindingAlgorithm {
 				x--;
 			}
 
-			if (traversable(new Position(x, y, height))) {
+			Position next = new Position(x, y, height);
+			Sector sector = REPOSITORY.get(next.getSectorCoordinates());
+			if (sector.traversable(next, EntityType.NPC, direction) && (positions.length == 0 || inside(next, positions))) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns whether or not the specified {@link Position} is inside the specified {@code boundary}.
+	 * 
+	 * @param position The Position.
+	 * @param boundary The boundary Positions.
+	 * @return {@code true} if the specified Position is inside the boundary, {@code false} if not.
+	 */
+	private boolean inside(Position position, Position[] boundary) {
+		int x = position.getX(), y = position.getY();
+		Position min = boundary[0], max = boundary[1];
+
+		return x >= min.getX() && y >= min.getY() && x <= max.getX() && y <= max.getY();
 	}
 
 }

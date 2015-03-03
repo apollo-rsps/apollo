@@ -23,7 +23,7 @@ import org.apollo.game.model.Position;
  * 
  * @author Major
  */
-final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
+public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 
 	/**
 	 * The heuristic.
