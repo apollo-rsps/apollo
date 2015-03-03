@@ -61,7 +61,6 @@ public final class NpcMovementTask extends ScheduledTask {
 	public void addNpc(Npc npc) {
 		Preconditions.checkArgument(npc.hasBoundaries(), "Cannot add an npc with no boundaries to the NpcMovementTask.");
 		npcs.offer(npc);
-		System.out.println("Adding npc to movement task: " + npc.getId());
 	}
 
 	@Override
