@@ -221,13 +221,12 @@ public final class Position {
 	public boolean isWithinDistance(Position other, int distance) {
 		int deltaX = Math.abs(getX() - other.getX());
 		int deltaY = Math.abs(getY() - other.getY());
-		return deltaX <= distance && deltaY <= distance;
+		return deltaX <= distance && deltaY <= distance && getHeight() == other.getHeight();
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight())
-				.add("sector", getSectorCoordinates()).toString();
+		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight()).add("sector", getSectorCoordinates()).toString();
 	}
 
 }

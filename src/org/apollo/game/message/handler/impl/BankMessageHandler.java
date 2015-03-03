@@ -25,16 +25,16 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 	 */
 	private static final int optionToAmount(int option) {
 		switch (option) {
-		case 1:
-			return 1;
-		case 2:
-			return 5;
-		case 3:
-			return 10;
-		case 4:
-			return Integer.MAX_VALUE;
-		case 5:
-			return -1;
+			case 1:
+				return 1;
+			case 2:
+				return 5;
+			case 3:
+				return 10;
+			case 4:
+				return Integer.MAX_VALUE;
+			case 5:
+				return -1;
 		}
 
 		throw new IllegalArgumentException("Invalid option supplied.");

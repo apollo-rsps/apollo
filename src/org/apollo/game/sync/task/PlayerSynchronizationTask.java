@@ -70,8 +70,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext();) {
 			Player other = it.next();
-			if (!other.isActive() || other.isTeleporting()
-					|| other.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
+			if (!other.isActive() || other.isTeleporting() || other.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
 				it.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
@@ -91,8 +90,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 				break;
 			}
 
-			if (other != player && other.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())
-					&& !localPlayers.contains(other)) {
+			if (other != player && other.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance()) && !localPlayers.contains(other)) {
 				localPlayers.add(other);
 				added++;
 
@@ -107,8 +105,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 			}
 		}
 
-		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownSector, player.getPosition(),
-				sectorChanged, segment, oldLocalPlayers, segments);
+		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownSector, player.getPosition(), sectorChanged, segment, oldLocalPlayers, segments);
 		player.send(message);
 	}
 

@@ -51,7 +51,7 @@ public final class Inventory {
 	/**
 	 * A flag indicating if events are being fired.
 	 */
-	private boolean firingEvents = true; // TODO: make this reentrant
+	private boolean firingEvents = true;
 
 	/**
 	 * The items in this inventory.

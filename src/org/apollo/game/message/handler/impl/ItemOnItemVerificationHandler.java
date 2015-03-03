@@ -21,19 +21,19 @@ public final class ItemOnItemVerificationHandler extends MessageHandler<ItemOnIt
 		Inventory inventory;
 
 		switch (message.getInterfaceId()) {
-		case SynchronizationInventoryListener.INVENTORY_ID:
-		case BankConstants.SIDEBAR_INVENTORY_ID:
-			inventory = player.getInventory();
-			break;
-		case SynchronizationInventoryListener.EQUIPMENT_ID:
-			inventory = player.getEquipment();
-			break;
-		case BankConstants.BANK_INVENTORY_ID:
-			inventory = player.getBank();
-			break;
-		default:
-			ctx.breakHandlerChain();
-			return;
+			case SynchronizationInventoryListener.INVENTORY_ID:
+			case BankConstants.SIDEBAR_INVENTORY_ID:
+				inventory = player.getInventory();
+				break;
+			case SynchronizationInventoryListener.EQUIPMENT_ID:
+				inventory = player.getEquipment();
+				break;
+			case BankConstants.BANK_INVENTORY_ID:
+				inventory = player.getBank();
+				break;
+			default:
+				ctx.breakHandlerChain();
+				return;
 		}
 
 		int slot = message.getTargetSlot();

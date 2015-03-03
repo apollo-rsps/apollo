@@ -8,9 +8,10 @@ import org.apollo.net.codec.login.LoginConstants;
 import com.google.common.base.Preconditions;
 
 /**
- * A response for the {@link PlayerLoader#loadPlayer(org.apollo.security.PlayerCredentials)} call.
+ * A response for the {@link PlayerSerializer#loadPlayer} call.
  * 
  * @author Graham
+ * @author Major
  */
 public final class PlayerLoaderResponse {
 

@@ -1,6 +1,5 @@
 package org.apollo.game.model.entity;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import org.apollo.game.model.Position;
@@ -20,9 +19,9 @@ import com.google.common.base.Preconditions;
 public final class Npc extends Mob {
 
 	/**
-	 * The positions representing the bounds (i.e. walking limits) of this Npc.
+	 * The Positions representing the boundaries (i.e. walking limits) of this Npc.
 	 */
-	private Position[] boundary;
+	private Optional<Position[]> boundaries;
 
 	/**
 	 * Creates a new Npc with the specified id and {@link Position}.
@@ -31,18 +30,20 @@ public final class Npc extends Mob {
 	 * @param position The position.
 	 */
 	public Npc(int id, Position position) {
-		this(position, NpcDefinition.lookup(id));
+		this(position, NpcDefinition.lookup(id), null);
 	}
 
 	/**
 	 * Creates a new Npc with the specified {@link NpcDefinition} and {@link Position}.
 	 * 
-	 * @param position The position.
-	 * @param definition The definition.
+	 * @param position The Position.
+	 * @param definition The NpcDefinition.
+	 * @param boundaries The boundary Positions.
 	 */
-	public Npc(Position position, NpcDefinition definition) {
+	public Npc(Position position, NpcDefinition definition, Position[] boundaries) {
 		super(position, definition);
 
+		this.boundaries = Optional.ofNullable(boundaries);
 		init();
 	}
 
@@ -50,19 +51,19 @@ public final class Npc extends Mob {
 	public boolean equals(Object obj) {
 		if (obj instanceof Npc) {
 			Npc other = (Npc) obj;
-			return position.equals(other.position) && Arrays.equals(boundary, other.boundary) && getId() == other.getId();
+			return index == other.index && getId() == other.getId();
 		}
 
 		return false;
 	}
 
 	/**
-	 * Gets the boundary of this Npc.
+	 * Gets the boundaries of this Npc.
 	 * 
-	 * @return The boundary.
+	 * @return The boundaries.
 	 */
-	public Position[] getBoundary() {
-		return boundary.clone();
+	public Optional<Position[]> getBoundaries() {
+		return boundaries.isPresent() ? Optional.of(boundaries.get().clone()) : Optional.empty();
 	}
 
 	@Override
@@ -79,30 +80,29 @@ public final class Npc extends Mob {
 		return definition.get().getId();
 	}
 
+	/**
+	 * Returns whether or not this Npc has boundaries.
+	 * 
+	 * @return {@code true} if this Npc has boundaries, {@code false} if not.
+	 */
+	public boolean hasBoundaries() {
+		return boundaries.isPresent();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = prime * position.hashCode() + Arrays.hashCode(boundary);
-		return prime * result + getId();
+		return prime * index + getId();
 	}
 
 	/**
-	 * Indicates whether or not this Npc is bound to a specific set of coordinates.
+	 * Sets the boundaries of this Npc.
 	 * 
-	 * @return {@code true} if the Npc is bound, otherwise {@code false}.
+	 * @param boundaries The boundaries.
 	 */
-	public boolean isBound() {
-		return boundary == null;
-	}
-
-	/**
-	 * Sets the boundary of this Npc.
-	 * 
-	 * @param boundary The boundary.
-	 */
-	public void setBoundary(Position[] boundary) {
-		Preconditions.checkArgument(boundary.length == 4, "Boundary count must be 4.");
-		this.boundary = boundary.clone();
+	public void setBoundaries(Position[] boundaries) {
+		Preconditions.checkArgument(boundaries.length == 2, "Boundary count must be 2.");
+		this.boundaries = Optional.of(boundaries.clone());
 	}
 
 	@Override

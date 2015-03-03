@@ -6,7 +6,7 @@
 #   :y - the y coordinate where the npc will spawn.
 # Optional arguments are as follows:
 #   :face - the direction the npc should face when it spawns. Supported options are :north, :north_east, :east, :south_east, :south, :south_west, :west, and :north_west
-#   :bounds - the rectangular bound that the npc can wander about in. Order is [top-left x-coordinate, top-left y-coordinate, bottom-right x-coordinate, bottom-right y-coordinate]
+#   :bounds - the rectangular bound that the npc can wander about in. Order is [bottom-left x-coordinate, bottom-left y-coordinate, top-right x-coordinate, top-right y-coordinate]
 #   :delta_bounds - the rectangular bound that the npc can wander about in, as a difference from the spawn point. Order is [x-delta, y-delta]. Should not be used with :bounds.
 #   :spawn_animation - the animation that will be played when the npc spawns.
 #   :spawn_graphic - the graphic that will be played when the npc spawns.
@@ -16,8 +16,6 @@
 
 # 'Above-ground' npcs
 
-spawn_npc :name => :runescape_guide,   :x => 3093, :y => 3107
-spawn_npc :name => :survival_expert,   :x => 3104, :y => 3095, :face => :north
 spawn_npc :name => :master_chef,       :x => 3076, :y => 3085
 spawn_npc :name => :quest_guide,       :x => 3086, :y => 3122, :face => :north
 spawn_npc :name => :financial_advisor, :x => 3127, :y => 3124, :face => :west

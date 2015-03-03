@@ -41,8 +41,8 @@ public final class MessageHandlerChain<M extends Message> {
 	}
 
 	/**
-	 * Handles the message, passing it down the chain until the chain is broken
-	 * or the message reaches the end of the chain.
+	 * Handles the message, passing it down the chain until the chain is broken or the message reaches the end of the
+	 * chain.
 	 * 
 	 * @param player The player.
 	 * @param message The message.

@@ -6,6 +6,7 @@ java_import 'org.apollo.game.message.impl.SetWidgetItemModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetNpcModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetPlayerModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetTextMessage'
+java_import 'org.apollo.game.action.DistancedAction'
 
 # The map of conversation names to Conversations.
 CONVERSATIONS = {}
@@ -18,6 +19,30 @@ def conversation(name, &block)
 
   raise "Conversation named #{name} already exists." if CONVERSATIONS.has_key?(name)
   CONVERSATIONS[name] = conversation
+end
+
+# A distanced action which opens the dialogue when getting into interaction distance of the given npc
+class OpenDialogueAction < DistancedAction
+  attr_reader :player, :npc, :dialogue
+
+  def initialize(player, npc, dialogue)
+    super(0, true, player, npc.position, 1)
+
+    @player = player
+    @npc = npc
+    @dialogue = dialogue
+  end
+
+  def executeAction
+    @player.set_interacting_mob(@npc)
+    send_dialogue(@player, @dialogue)
+    stop
+  end
+
+  def equals(other)
+    return (@npc == other.npc && @dialogue == other.dialogue)
+  end
+
 end
 
 # A conversation held between two entities.
@@ -42,15 +67,16 @@ class Conversation
     @dialogues[name] = dialogue
 
     if ((@dialogues.empty? || dialogue.has_precondition?) && dialogue.type == :npc_speech)
-      npc = dialogue.npc
-      raise 'Npc cannot be null when opening a dialogue.' if npc.nil?
+      npc_index = dialogue.npc
+      raise 'Npc cannot be null when opening a dialogue.' if npc_index.nil?
       @starters << dialogue
 
       on :message, :first_npc_action do |ctx, player, event|
-        if npc == $world.npc_repository.get(event.index).id
+        npc = $world.npc_repository.get(event.index)
+        if npc_index == npc.id
           @starters.each do |start|
             if dialogue.precondition(player)
-      	      send_dialogue(player, dialogue)
+              player.start_action(OpenDialogueAction.new(player, npc, dialogue))
       	      ctx.break_handler_chain()
       	      break
       	    end
@@ -71,6 +97,12 @@ end
 # Declares an emote, with the specified name and id.
 def declare_emote(name, id)
   EMOTES[name] = id
+end
+
+
+# Sends the dialogue from the specified Conversation with the specified name.
+def get_dialogue(conversation, name)
+  CONVERSATIONS[conversation].part(name)
 end
 
 
@@ -144,17 +176,6 @@ class Dialogue
     @options << ->(player) { action.call(player) unless type.nil?; block.call(player) unless block.nil? }
   end
 
-  # Copies the value of every variable from the specified Dialogue, optionally updating the text array.
-  def copy_from(dialogue, text=nil)
-    @emote = dialogue.emote
-    @item = dialogue.item
-    @model = dialogue.model
-    @npc = dialogue.npc
-    @options = dialogue.options
-    @text = if text.nil? then dialogue.text.dup else text.dup end
-    @type = dialogue.type
-  end
-
   # Sets the emote performed by the dialogue head.
   def emote(emote=nil)
   	unless emote.nil?
@@ -186,14 +207,19 @@ class Dialogue
   end
 
   # Sets the id of the item displayed.
-  def item(item=nil, scale=nil)
+  def item(item=nil, scale=100)
     unless item.nil?
       raise 'Can only display an item on :message_with_item dialogues.' unless @type == :message_with_item
-      @item = item
+      @item = lookup_item(item)
       @item_scale = scale
     end
 
     @item
+  end
+
+  # Gets the scale of the item.
+  def item_scale
+    @item_scale
   end
 
   # Sets the id of the model displayed.
@@ -228,7 +254,7 @@ class Dialogue
   def options
       @options.dup
   end
-
+  
   # Sets the precondition of this dialogue.
   def precondition(player=nil, &block)
       @precondition = block unless block.nil?
@@ -296,6 +322,19 @@ class Dialogue
     @text = lines
   end
 
+  protected
+
+  # Copies the value of every variable from the specified Dialogue, optionally updating the text array.
+  def copy_from(dialogue, text=nil)
+    @emote = dialogue.emote
+    @item = dialogue.item
+    @model = dialogue.model
+    @npc = dialogue.npc
+    @options = dialogue.options
+    @text = if text.nil? then dialogue.text.dup else text.dup end
+    @type = dialogue.type
+  end
+
   private
 
   # Inserts a copy of this Dialogue into the chain, but with different text.
@@ -350,6 +389,17 @@ OPTIONS_DIALOGUE_IDS = [ 2459, 2469, 2480, 2492 ]
 
 ## TODO separate this into different Dialogue types ##
 
+# Sends a dialogue displaying an item model and text.
+def send_item_dialogue(player, dialogue)
+  text = dialogue.text
+  dialogue_id =  ITEM_DIALOGUE_IDS[text.size - 1]
+  player.send(SetWidgetItemModelMessage.new(dialogue_id + 1, dialogue.item, dialogue.item_scale))
+
+  indices = [ dialogue_id + 1 + 2, dialogue_id + 1 + 1, dialogue_id + 1 + 4, dialogue_id + 1 + 5 ]
+
+  text.each_with_index { |line, index| set_text(player, indices[index], line) }
+  player.interface_set.open_dialogue(ContinueDialogueAdapter.new(player, dialogue.options[0]), dialogue_id)
+end
 
 # Sends a dialogue displaying only text, with no 'Click here to continue...' button.
 def send_statement_dialogue(player, dialogue)

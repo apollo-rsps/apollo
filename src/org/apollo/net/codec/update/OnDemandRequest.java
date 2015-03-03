@@ -41,14 +41,14 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		 */
 		public static Priority valueOf(int value) {
 			switch (value) {
-			case 0:
-				return HIGH;
-			case 1:
-				return MEDIUM;
-			case 2:
-				return LOW;
-			default:
-				throw new IllegalArgumentException("Priority out of range - received " + value + ".");
+				case 0:
+					return HIGH;
+				case 1:
+					return MEDIUM;
+				case 2:
+					return LOW;
+				default:
+					throw new IllegalArgumentException("Priority out of range - received " + value + ".");
 			}
 		}
 

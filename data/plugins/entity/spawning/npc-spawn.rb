@@ -16,7 +16,7 @@ java_import 'org.apollo.game.model.entity.Npc'
 #   :y - the y coordinate where the npc will spawn.
 # Optional arguments are as follows:
 #   :face - the direction the npc should face when it spawns. Supported options are :north, :north_east, :east, :south_east, :south, :south_west, :west, and :north_west
-#   :bounds - the rectangular bound that the npc can wander about in. Order is [top-left x-coordinate, top-left y-coordinate, bottom-right x-coordinate, bottom-right y-coordinate]
+#   :bounds - the rectangular bound that the npc can wander about in. Order is [bottom-left x-coordinate, bottom-left y-coordinate, top-right x-coordinate, top-right y-coordinate]
 #   :delta_bounds - the rectangular bound that the npc can wander about in, as a difference from the spawn point. Order is [x-delta, y-delta]. Should not be used with :bounds.
 #   :spawn_animation - the animation that will be played when the npc spawns.
 #   :spawn_graphic - the graphic that will be played when the npc spawns.
@@ -33,11 +33,12 @@ end
 
 # Spawns the specified npc and applies the properties in the hash.
 def spawn(npc, hash)
-  $world.register(npc)
   unless hash.empty?
-    hash = decode_hash(npc.position, hash)   # Use npc.position here because sector registry events (called by World.register) can be hooked
-    apply_decoded_hash(npc, hash)            # into and someone might do something daft like move the npc immediately after it gets spawned.
+    hash = decode_hash(npc.position, hash)
+    apply_decoded_hash(npc, hash)
   end
+
+  $world.register(npc)
 end
 
 # Returns an npc with the id and position specified by the hash.
@@ -54,7 +55,7 @@ def apply_decoded_hash(npc, hash)
   hash.each do |key, value|
     case key
       when :face            then npc.turn_to(value)
-      when :boundary        then npc.boundary = value
+      when :boundary        then npc.boundaries = value
       when :spawn_animation then npc.play_animation(Animation.new(value))
       when :spawn_graphic   then npc.play_graphic(Graphic.new(value))
       else raise "Unrecognised key #{key} - value #{value}."
@@ -71,11 +72,16 @@ def decode_hash(position, hash)
       when :face
         decoded[:face] = direction_to_position(value, position)
       when :delta_bounds
+        raise ':delta_bounds must have two values.' unless value.length == 2
         dx, dy, x, y, z = value[0], value[1], position.x, position.y, position.height
         raise 'Delta values cannot be less than 0.' if (dx < 0 || dy < 0)
 
-        decoded[:boundary] = [ Position.new(x + dx, y, z), Position.new(x, y + dy, z), Position.new(x - dx, y, z), Position.new(x, y - dy, z) ]
-      when :bounds          then decoded[:boundary] = value
+        decoded[:boundary] = [ Position.new(x - dx, y - dy, z), Position.new(x + dx, y + dy, z) ]
+      when :bounds
+        raise ':bounds must have four values.' unless value.length == 4
+        min_x, min_y, max_x, max_y = value[0], value[1], value[2], value[3]
+
+        decoded[:boundary] = [ Position.new(min_x, min_y), Position.new(max_x, max_y) ]
       when :spawn_animation then decoded[:spawn_animation] = Animation.new(value)
       when :spawn_graphic   then decoded[:spawn_graphic  ] = Graphic.new(value)
       else raise "Unrecognised key #{key} - value #{value}."

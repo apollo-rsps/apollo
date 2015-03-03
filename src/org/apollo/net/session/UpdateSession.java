@@ -34,7 +34,7 @@ public final class UpdateSession extends Session {
 
 	@Override
 	public void destroy() {
-		// TODO implement
+		channel.close();
 	}
 
 	@Override

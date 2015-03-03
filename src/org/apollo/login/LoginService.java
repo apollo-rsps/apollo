@@ -8,9 +8,8 @@ import java.util.concurrent.Executors;
 
 import org.apollo.Service;
 import org.apollo.game.model.entity.Player;
-import org.apollo.io.player.PlayerLoader;
 import org.apollo.io.player.PlayerLoaderResponse;
-import org.apollo.io.player.PlayerSaver;
+import org.apollo.io.player.PlayerSerializer;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.net.codec.login.LoginRequest;
 import org.apollo.net.release.Release;
@@ -25,6 +24,7 @@ import org.xml.sax.SAXException;
  * The {@link LoginService} manages {@link LoginRequest}s.
  * 
  * @author Graham
+ * @author Major
  */
 public final class LoginService extends Service {
 
@@ -34,14 +34,9 @@ public final class LoginService extends Service {
 	private final ExecutorService executor = Executors.newCachedThreadPool(new NamedThreadFactory("LoginService"));
 
 	/**
-	 * The current {@link PlayerLoader}.
+	 * The current {@link PlayerSerializer}.
 	 */
-	private PlayerLoader loader;
-
-	/**
-	 * The current {@link PlayerSaver}.
-	 */
-	private PlayerSaver saver;
+	private PlayerSerializer serializer;
 
 	/**
 	 * Creates the login service.
@@ -70,24 +65,16 @@ public final class LoginService extends Service {
 		}
 
 		if (!rootNode.getName().equals("login")) {
-			throw new IOException("Unexpected root node name.");
+			throw new IOException("Unexpected root node name, expected 'login'.");
 		}
 
-		XmlNode loaderNode = rootNode.getChild("loader");
-		if (loaderNode == null || !loaderNode.hasValue()) {
-			throw new IOException("No loader child node or value.");
+		XmlNode serializer = rootNode.getChild("serializer");
+		if (serializer == null || !serializer.hasValue()) {
+			throw new IOException("No serializer child node or value.");
 		}
 
-		XmlNode saverNode = rootNode.getChild("saver");
-		if (saverNode == null || !saverNode.hasValue()) {
-			throw new IOException("No saver child node or value.");
-		}
-
-		Class<?> loaderClazz = Class.forName(loaderNode.getValue());
-		Class<?> saverClazz = Class.forName(saverNode.getValue());
-
-		loader = (PlayerLoader) loaderClazz.newInstance();
-		saver = (PlayerSaver) saverClazz.newInstance();
+		Class<?> clazz = Class.forName(serializer.getValue());
+		this.serializer = (PlayerSerializer) clazz.newInstance();
 	}
 
 	/**
@@ -95,7 +82,7 @@ public final class LoginService extends Service {
 	 */
 	@Override
 	public void start() {
-		/* empty - here for consistency with other services */
+
 	}
 
 	/**
@@ -110,7 +97,7 @@ public final class LoginService extends Service {
 			// TODO check archive 0 CRCs
 			session.handlePlayerLoaderResponse(request, new PlayerLoaderResponse(LoginConstants.STATUS_GAME_UPDATED));
 		} else {
-			executor.submit(new PlayerLoaderWorker(loader, session, request));
+			executor.submit(new PlayerLoaderWorker(serializer, session, request));
 		}
 	}
 
@@ -121,7 +108,7 @@ public final class LoginService extends Service {
 	 * @param player The player to save.
 	 */
 	public void submitSaveRequest(GameSession session, Player player) {
-		executor.submit(new PlayerSaverWorker(saver, session, player));
+		executor.submit(new PlayerSaverWorker(serializer, session, player));
 	}
 
 }
