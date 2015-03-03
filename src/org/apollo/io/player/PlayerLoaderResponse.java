@@ -8,9 +8,10 @@ import org.apollo.net.codec.login.LoginConstants;
 import com.google.common.base.Preconditions;
 
 /**
- * A response for the {@link PlayerLoader#loadPlayer(org.apollo.security.PlayerCredentials)} call.
+ * A response for the {@link PlayerSerializer#loadPlayer} call.
  * 
  * @author Graham
+ * @author Major
  */
 public final class PlayerLoaderResponse {
 
@@ -32,7 +33,8 @@ public final class PlayerLoaderResponse {
 	 *             {@link LoginConstants#STATUS_RECONNECTION_OK}.
 	 */
 	public PlayerLoaderResponse(int status) {
-		Preconditions.checkArgument(status != LoginConstants.STATUS_OK && status != LoginConstants.STATUS_RECONNECTION_OK, "Player required for this status code.");
+		Preconditions.checkArgument(status != LoginConstants.STATUS_OK && status != LoginConstants.STATUS_RECONNECTION_OK,
+				"Player required for this status code.");
 		this.status = status;
 		player = Optional.empty();
 	}
@@ -46,7 +48,8 @@ public final class PlayerLoaderResponse {
 	 * @throws NullPointerException If the specified player is null.
 	 */
 	public PlayerLoaderResponse(int status, Player player) {
-		Preconditions.checkArgument(status == LoginConstants.STATUS_OK || status == LoginConstants.STATUS_RECONNECTION_OK, "Player not required for this status code.");
+		Preconditions.checkArgument(status == LoginConstants.STATUS_OK || status == LoginConstants.STATUS_RECONNECTION_OK,
+				"Player not required for this status code.");
 		this.status = status;
 		this.player = Optional.of(player);
 	}

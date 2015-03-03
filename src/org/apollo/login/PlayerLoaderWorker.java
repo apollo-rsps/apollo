@@ -3,8 +3,8 @@ package org.apollo.login;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apollo.io.player.PlayerLoader;
 import org.apollo.io.player.PlayerLoaderResponse;
+import org.apollo.io.player.PlayerSerializer;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.net.codec.login.LoginRequest;
 import org.apollo.net.session.LoginSession;
@@ -22,9 +22,9 @@ public final class PlayerLoaderWorker implements Runnable {
 	private static final Logger logger = Logger.getLogger(PlayerLoaderWorker.class.getName());
 
 	/**
-	 * The player loader.
+	 * The PlayerSerializer.
 	 */
-	private final PlayerLoader loader;
+	private final PlayerSerializer loader;
 
 	/**
 	 * The request.
@@ -39,11 +39,11 @@ public final class PlayerLoaderWorker implements Runnable {
 	/**
 	 * Creates a {@link PlayerLoaderWorker} which will do the work for a single player load request.
 	 * 
-	 * @param loader The current player loader.
+	 * @param loader The {@link PlayerSerializer}.
 	 * @param session The {@link LoginSession} which initiated the request.
 	 * @param request The {@link LoginRequest} object.
 	 */
-	public PlayerLoaderWorker(PlayerLoader loader, LoginSession session, LoginRequest request) {
+	public PlayerLoaderWorker(PlayerSerializer loader, LoginSession session, LoginRequest request) {
 		this.loader = loader;
 		this.session = session;
 		this.request = request;

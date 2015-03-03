@@ -1,4 +1,3 @@
 <login>
-	<loader>org.apollo.io.player.impl.DummyPlayerLoader</loader>
-	<saver>org.apollo.io.player.impl.DiscardPlayerSaver</saver>
+	<serializer>org.apollo.io.player.DummyPlayerSerializer</serializer>
 </login>
