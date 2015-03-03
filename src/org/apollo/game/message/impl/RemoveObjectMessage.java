@@ -4,16 +4,11 @@ import org.apollo.game.message.Message;
 import org.apollo.game.model.entity.GameObject;
 
 /**
- * A {@link Message} sent to the client to spawn an object.
+ * A {@link Message} sent to the client to remove an object from a tile.
  * 
  * @author Major
  */
-public final class SendObjectMessage extends Message {
-
-	/**
-	 * The id of the object.
-	 */
-	private final int id;
+public final class RemoveObjectMessage extends Message {
 
 	/**
 	 * The orientation of the object.
@@ -31,34 +26,24 @@ public final class SendObjectMessage extends Message {
 	private final int type;
 
 	/**
-	 * Creates the SendObjectMessage.
+	 * Creates the RemoveObjectMessage.
 	 * 
 	 * @param object The {@link GameObject} to send.
 	 */
-	public SendObjectMessage(GameObject object) {
+	public RemoveObjectMessage(GameObject object) {
 		this(object, 0);
 	}
 
 	/**
-	 * Creates the SendObjectMessage.
+	 * Creates the RemoveObjectMessage.
 	 * 
 	 * @param object The {@link GameObject} to send.
 	 * @param positionOffset The offset of the object's position from the sector's central position.
 	 */
-	public SendObjectMessage(GameObject object, int positionOffset) {
-		this.id = object.getId();
+	public RemoveObjectMessage(GameObject object, int positionOffset) {
 		this.positionOffset = positionOffset;
 		this.type = object.getType();
 		this.orientation = object.getOrientation();
-	}
-
-	/**
-	 * Gets the id of the object.
-	 *
-	 * @return The id.
-	 */
-	public int getId() {
-		return id;
 	}
 
 	/**

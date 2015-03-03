@@ -49,4 +49,4 @@ area_action :wilderness_level do
 
 end
 
-area :name => :wilderness, :coordinates => MIN_X, MIN_Y, MAX_X, MAX_Y, 0, => :actions => :wilderness_level
+area :name => :wilderness, :coordinates => [ MIN_X, MIN_Y, MAX_X, MAX_Y, 0 ], :actions => :wilderness_level
