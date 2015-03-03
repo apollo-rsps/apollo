@@ -18,7 +18,6 @@ public final class ThirdObjectActionMessageDecoder extends MessageDecoder<ThirdO
 
 	@Override
 	public ThirdObjectActionMessage decode(GamePacket packet) {
-		// TODO ripped out of some Winterlove-based server, so probably wrong
 		GamePacketReader reader = new GamePacketReader(packet);
 		int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
 		int y = (int) reader.getUnsigned(DataType.SHORT);

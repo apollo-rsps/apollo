@@ -33,11 +33,12 @@ end
 
 # Spawns the specified npc and applies the properties in the hash.
 def spawn(npc, hash)
-  $world.register(npc)
   unless hash.empty?
-    hash = decode_hash(npc.position, hash)   # Use npc.position here because sector registry events (called by World.register) can be hooked
-    apply_decoded_hash(npc, hash)            # into and someone might do something daft like move the npc immediately after it gets spawned.
+    hash = decode_hash(npc.position, hash)
+    apply_decoded_hash(npc, hash)
   end
+
+  $world.register(npc)
 end
 
 # Returns an npc with the id and position specified by the hash.
@@ -54,7 +55,7 @@ def apply_decoded_hash(npc, hash)
   hash.each do |key, value|
     case key
       when :face            then npc.turn_to(value)
-      when :boundary        then npc.boundary = value
+      when :boundary        then npc.boundaries = value
       when :spawn_animation then npc.play_animation(Animation.new(value))
       when :spawn_graphic   then npc.play_graphic(Graphic.new(value))
       else raise "Unrecognised key #{key} - value #{value}."

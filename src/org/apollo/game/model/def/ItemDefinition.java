@@ -388,7 +388,7 @@ public final class ItemDefinition {
 	public void toNote() {
 		if (isNote()) {
 			if (description != null && description.startsWith("Swap this note at any bank for ")) {
-				return; // already converted TODO better way of checking?
+				return; // already converted.
 			}
 
 			ItemDefinition infoDef = lookup(noteInfoId);

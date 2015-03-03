@@ -122,13 +122,13 @@ public final class NpcDefinitionDecoder {
 				buffer.getShort();
 			} else if (opcode == 106) {
 				@SuppressWarnings("unused")
-				int morphVariableBitsIndex = wrapMorphism(buffer.getShort());
+				int morphVariableBitsIndex = wrap(buffer.getShort());
 				@SuppressWarnings("unused")
-				int morphismCount = wrapMorphism(buffer.getShort());
+				int morphismCount = wrap(buffer.getShort());
 
 				int count = buffer.get() & 0xFF;
 				int[] morphisms = new int[count + 1];
-				Arrays.setAll(morphisms, index -> wrapMorphism(buffer.getShort()));
+				Arrays.setAll(morphisms, index -> wrap(buffer.getShort()));
 			} else if (opcode == 107) {
 				@SuppressWarnings("unused")
 				boolean clickable = false;
@@ -137,12 +137,12 @@ public final class NpcDefinitionDecoder {
 	}
 
 	/**
-	 * Wraps a morphism value around, returning -1 if the specified value is 65,535. TODO name
+	 * Wraps a morphism value around, returning -1 if the specified value is 65,535.
 	 * 
 	 * @param value The value.
 	 * @return -1 if {@code value} is 65,535, otherwise {@code value}.
 	 */
-	private static int wrapMorphism(int value) {
+	private static int wrap(int value) {
 		return value == 65_535 ? -1 : value;
 	}
 
