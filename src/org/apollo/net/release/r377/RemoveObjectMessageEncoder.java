@@ -16,7 +16,7 @@ public final class RemoveObjectMessageEncoder extends MessageEncoder<RemoveObjec
 
 	@Override
 	public GamePacket encode(RemoveObjectMessage message) {
-		GamePacketBuilder builder = new GamePacketBuilder(101);
+		GamePacketBuilder builder = new GamePacketBuilder(88);
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, message.getPositionOffset());
 		builder.put(DataType.BYTE, DataTransformation.SUBTRACT, message.getType() << 2 | message.getOrientation());
 		return builder.toGamePacket();
