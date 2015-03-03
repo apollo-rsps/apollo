@@ -38,6 +38,16 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 		setState(state);
 	}
 
+	/**
+	 * Sets a new state.
+	 * 
+	 * @param state The new state.
+	 * @throws NullPointerException If the state is {@code null}.
+	 */
+	public final void setState(T state) {
+		this.state = Objects.requireNonNull(state, "State cannot be null.");
+	}
+
 	@Override
 	protected final void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		decode(ctx, in, out, state);
@@ -53,15 +63,5 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 	 * @throws Exception If there is an exception when decoding a frame.
 	 */
 	protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, T state) throws Exception;
-
-	/**
-	 * Sets a new state.
-	 * 
-	 * @param state The new state.
-	 * @throws NullPointerException If the state is {@code null}.
-	 */
-	public final void setState(T state) {
-		this.state = Objects.requireNonNull(state, "State cannot be null.");
-	}
 
 }

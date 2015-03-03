@@ -105,14 +105,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 */
 	private void decodeHeader(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
 		if (buffer.readableBytes() >= 2) {
-			int loginType = buffer.readUnsignedByte();
+			int type = buffer.readUnsignedByte();
 
-			if (loginType != LoginConstants.TYPE_STANDARD && loginType != LoginConstants.TYPE_RECONNECTION) {
+			if (type != LoginConstants.TYPE_STANDARD && type != LoginConstants.TYPE_RECONNECTION) {
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
 
-			reconnecting = loginType == LoginConstants.TYPE_RECONNECTION;
+			reconnecting = type == LoginConstants.TYPE_RECONNECTION;
 			loginLength = buffer.readUnsignedByte();
 
 			setState(LoginDecoderState.LOGIN_PAYLOAD);
@@ -129,53 +129,51 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
 		if (buffer.readableBytes() >= loginLength) {
 			ByteBuf payload = buffer.readBytes(loginLength);
-			int clientVersion = 255 - payload.readUnsignedByte();
+			int version = 255 - payload.readUnsignedByte();
 
-			int releaseNumber = payload.readUnsignedShort();
+			int release = payload.readUnsignedShort();
 
-			int lowMemoryFlag = payload.readUnsignedByte();
-			if (lowMemoryFlag != 0 && lowMemoryFlag != 1) {
+			int memoryStatus = payload.readUnsignedByte();
+			if (memoryStatus != 0 && memoryStatus != 1) {
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
 
-			boolean lowMemory = lowMemoryFlag == 1;
+			boolean lowMemory = memoryStatus == 1;
 
-			int[] archiveCrcs = new int[FileSystemConstants.ARCHIVE_COUNT];
-			for (int i = 0; i < 9; i++) {
-				archiveCrcs[i] = payload.readInt();
+			int[] crcs = new int[FileSystemConstants.ARCHIVE_COUNT];
+			for (int index = 0; index < 9; index++) {
+				crcs[index] = payload.readInt();
 			}
 
-			int securePayloadLength = payload.readUnsignedByte();
-			if (securePayloadLength != loginLength - 41) {
+			int length = payload.readUnsignedByte();
+			if (length != loginLength - 41) {
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
 
-			ByteBuf securePayload = payload.readBytes(securePayloadLength);
+			ByteBuf secure = payload.readBytes(length);
 
-			BigInteger bigInteger = new BigInteger(securePayload.array());
-			bigInteger = bigInteger.modPow(NetworkConstants.RSA_EXPONENT, NetworkConstants.RSA_MODULUS);
+			BigInteger value = new BigInteger(secure.array());
+			value = value.modPow(NetworkConstants.RSA_EXPONENT, NetworkConstants.RSA_MODULUS);
+			secure = Unpooled.wrappedBuffer(value.toByteArray());
 
-			securePayload = Unpooled.wrappedBuffer(bigInteger.toByteArray());
-
-			int secureId = securePayload.readUnsignedByte();
-			if (secureId != 10) {
+			int id = secure.readUnsignedByte();
+			if (id != 10) {
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
 
-			long clientSeed = securePayload.readLong();
-			long reportedServerSeed = securePayload.readLong();
-			if (reportedServerSeed != serverSeed) {
+			long clientSeed = secure.readLong();
+			long reportedSeed = secure.readLong();
+			if (reportedSeed != serverSeed) {
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
 
-			int uid = securePayload.readInt();
-
-			String username = BufferUtil.readString(securePayload);
-			String password = BufferUtil.readString(securePayload);
+			int uid = secure.readInt();
+			String username = BufferUtil.readString(secure);
+			String password = BufferUtil.readString(secure);
 
 			if (password.length() < 6 || password.length() > 20 || username.isEmpty() || username.length() > 12) {
 				writeResponseCode(ctx, LoginConstants.STATUS_INVALID_CREDENTIALS);
@@ -189,8 +187,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			seed[3] = (int) serverSeed;
 
 			IsaacRandom decodingRandom = new IsaacRandom(seed);
-			for (int i = 0; i < seed.length; i++) {
-				seed[i] += 50;
+			for (int index = 0; index < seed.length; index++) {
+				seed[index] += 50;
 			}
 
 			IsaacRandom encodingRandom = new IsaacRandom(seed);
@@ -198,9 +196,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid);
 			IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
-			LoginRequest request = new LoginRequest(credentials, randomPair, reconnecting, lowMemory, releaseNumber, archiveCrcs, clientVersion);
-
-			out.add(request);
+			out.add(new LoginRequest(credentials, randomPair, reconnecting, lowMemory, release, crcs, version));
 		}
 	}
 
@@ -208,11 +204,11 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * Writes a response code to the client and closes the current channel.
 	 *
 	 * @param ctx The context of the channel handler.
-	 * @param responseCode The response code to write.
+	 * @param response The response code to write.
 	 */
-	private void writeResponseCode(ChannelHandlerContext ctx, int responseCode) {
+	private void writeResponseCode(ChannelHandlerContext ctx, int response) {
 		ByteBuf buffer = ctx.alloc().buffer(1);
-		buffer.writeByte(responseCode);
+		buffer.writeByte(response);
 
 		ctx.writeAndFlush(buffer).addListener(ChannelFutureListener.CLOSE);
 	}
