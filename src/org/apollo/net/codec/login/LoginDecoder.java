@@ -60,17 +60,17 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, LoginDecoderState state) {
 		switch (state) {
-		case LOGIN_HANDSHAKE:
-			decodeHandshake(ctx, in, out);
-			break;
-		case LOGIN_HEADER:
-			decodeHeader(ctx, in, out);
-			break;
-		case LOGIN_PAYLOAD:
-			decodePayload(ctx, in, out);
-			break;
-		default:
-			throw new IllegalStateException("Invalid login decoder state: " + state);
+			case LOGIN_HANDSHAKE:
+				decodeHandshake(ctx, in, out);
+				break;
+			case LOGIN_HEADER:
+				decodeHeader(ctx, in, out);
+				break;
+			case LOGIN_PAYLOAD:
+				decodePayload(ctx, in, out);
+				break;
+			default:
+				throw new IllegalStateException("Invalid login decoder state: " + state);
 		}
 	}
 

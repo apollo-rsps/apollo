@@ -48,8 +48,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 	 * @param travelDurationY The length of time (in game pulses) the player's movement along the Y-axis will last.
 	 * @param direction The direction the player should move.
 	 */
-	ForceMovementBlock(Position initialPosition, Position finalPosition, int travelDurationX, int travelDurationY,
-			Direction direction) {
+	ForceMovementBlock(Position initialPosition, Position finalPosition, int travelDurationX, int travelDurationY, Direction direction) {
 		this.initialPosition = initialPosition;
 		this.finalPosition = finalPosition;
 		this.travelDurationX = travelDurationX;

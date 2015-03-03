@@ -26,8 +26,7 @@ public final class MovementSegment extends SynchronizationSegment {
 	 */
 	public MovementSegment(SynchronizationBlockSet blockSet, Direction[] directions) {
 		super(blockSet);
-		Preconditions.checkArgument(directions.length >= 0 && directions.length < 3,
-				"Directions length must be between 0 and 2 inclusive.");
+		Preconditions.checkArgument(directions.length >= 0 && directions.length < 3, "Directions length must be between 0 and 2 inclusive.");
 		this.directions = directions;
 	}
 
@@ -43,14 +42,14 @@ public final class MovementSegment extends SynchronizationSegment {
 	@Override
 	public SegmentType getType() {
 		switch (directions.length) {
-		case 0:
-			return SegmentType.NO_MOVEMENT;
-		case 1:
-			return SegmentType.WALK;
-		case 2:
-			return SegmentType.RUN;
-		default:
-			throw new IllegalStateException("Direction type unsupported.");
+			case 0:
+				return SegmentType.NO_MOVEMENT;
+			case 1:
+				return SegmentType.WALK;
+			case 2:
+				return SegmentType.RUN;
+			default:
+				throw new IllegalStateException("Direction type unsupported.");
 		}
 	}
 

@@ -61,8 +61,7 @@ public final class PluginMetaData {
 	 * @param dependencies The plugin's dependencies.
 	 * @param version The plugin's version.
 	 */
-	public PluginMetaData(String id, File base, String name, String description, String[] authors, String[] scripts,
-			String[] dependencies, double version) {
+	public PluginMetaData(String id, File base, String name, String description, String[] authors, String[] scripts, String[] dependencies, double version) {
 		this.id = id;
 		this.base = base;
 		this.name = name;

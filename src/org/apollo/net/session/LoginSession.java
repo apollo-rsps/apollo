@@ -103,8 +103,7 @@ public final class LoginSession extends Session {
 				optional = Optional.empty();
 				rights = 0;
 
-				status = (registration == RegistrationStatus.ALREADY_ONLINE) ? LoginConstants.STATUS_ACCOUNT_ONLINE
-						: LoginConstants.STATUS_SERVER_FULL;
+				status = (registration == RegistrationStatus.ALREADY_ONLINE) ? LoginConstants.STATUS_ACCOUNT_ONLINE : LoginConstants.STATUS_SERVER_FULL;
 			}
 		}
 
@@ -119,8 +118,7 @@ public final class LoginSession extends Session {
 			channel.pipeline().addFirst("eventEncoder", new GameMessageEncoder(release));
 			channel.pipeline().addBefore("eventEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
 
-			channel.pipeline().addBefore("handler", "gameDecoder",
-					new GamePacketDecoder(randomPair.getDecodingRandom(), serverContext.getRelease()));
+			channel.pipeline().addBefore("handler", "gameDecoder", new GamePacketDecoder(randomPair.getDecodingRandom(), serverContext.getRelease()));
 			channel.pipeline().addAfter("gameDecoder", "eventDecoder", new GameMessageDecoder(release));
 
 			channel.pipeline().remove("loginDecoder");

@@ -227,8 +227,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 	 * @param message The message.
 	 * @param builder The builder.
 	 */
-	private static void putMovementUpdate(SynchronizationSegment segment, NpcSynchronizationMessage message,
-			GamePacketBuilder builder) {
+	private static void putMovementUpdate(SynchronizationSegment segment, NpcSynchronizationMessage message, GamePacketBuilder builder) {
 		boolean updateRequired = segment.getBlockSet().size() > 0;
 		if (segment.getType() == SegmentType.RUN) {
 			Direction[] directions = ((MovementSegment) segment).getDirections();

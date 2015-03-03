@@ -34,23 +34,23 @@ public final class HandshakeDecoder extends ByteToMessageDecoder {
 		int id = buffer.readUnsignedByte();
 
 		switch (id) {
-		case HandshakeConstants.SERVICE_GAME:
-			ctx.pipeline().addFirst("loginEncoder", new LoginEncoder());
-			ctx.pipeline().addAfter("handshakeDecoder", "loginDecoder", new LoginDecoder());
-			break;
+			case HandshakeConstants.SERVICE_GAME:
+				ctx.pipeline().addFirst("loginEncoder", new LoginEncoder());
+				ctx.pipeline().addAfter("handshakeDecoder", "loginDecoder", new LoginDecoder());
+				break;
 
-		case HandshakeConstants.SERVICE_UPDATE:
-			ctx.pipeline().addFirst("updateEncoder", new UpdateEncoder());
-			ctx.pipeline().addBefore("handler", "updateDecoder", new UpdateDecoder());
+			case HandshakeConstants.SERVICE_UPDATE:
+				ctx.pipeline().addFirst("updateEncoder", new UpdateEncoder());
+				ctx.pipeline().addBefore("handler", "updateDecoder", new UpdateDecoder());
 
-			ByteBuf buf = ctx.alloc().buffer(8).writeLong(0);
-			ctx.channel().writeAndFlush(buf);
-			break;
+				ByteBuf buf = ctx.alloc().buffer(8).writeLong(0);
+				ctx.channel().writeAndFlush(buf);
+				break;
 
-		default:
-			ByteBuf data = buffer.readBytes(buffer.readableBytes());
-			logger.info(String.format("Unexpected handshake request received: %d data: %s", id, data.toString()));
-			return;
+			default:
+				ByteBuf data = buffer.readBytes(buffer.readableBytes());
+				logger.info(String.format("Unexpected handshake request received: %d data: %s", id, data.toString()));
+				return;
 		}
 
 		ctx.pipeline().remove(this);

@@ -1,9 +1,5 @@
 package org.apollo.game.model;
 
-
-
-
-
 /**
  * Represents a single movement direction.
  * 
@@ -90,7 +86,7 @@ public enum Direction {
 				return Direction.WEST;
 			}
 		}
-		
+
 		return Direction.NONE;
 	}
 

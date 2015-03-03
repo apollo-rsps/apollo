@@ -36,6 +36,11 @@ public final class WalkMessageHandler extends MessageHandler<WalkMessage> {
 			player.stopAction();
 		}
 		player.getInterfaceSet().close();
+
+		if (player.getInteractingMob() != null) {
+			player.resetInteractingMob();
+		}
+
 	}
 
 }

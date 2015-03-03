@@ -77,8 +77,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 * @param isSkulled Whether or not the player is skulled.
 	 * @param npcId The npc id of the player, if they are appearing as an npc, (otherwise {@code -1}).
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon,
-			boolean isSkulled, int npcId) {
+	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled, int npcId) {
 		this.name = name;
 		this.appearance = appearance;
 		this.combat = combat;
