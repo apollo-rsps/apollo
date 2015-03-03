@@ -18,7 +18,7 @@ public final class SendObjectMessageEncoder extends MessageEncoder<SendObjectMes
 	@Override
 	public GamePacket encode(SendObjectMessage message) {
 		GamePacketBuilder builder = new GamePacketBuilder(152);
-		builder.put(DataType.BYTE, DataTransformation.NEGATE, message.getType() << 2 + message.getOrientation());
+		builder.put(DataType.BYTE, DataTransformation.NEGATE, message.getType() << 2 | message.getOrientation());
 		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, message.getId());
 		builder.put(DataType.BYTE, DataTransformation.ADD, message.getPositionOffset());
 		return builder.toGamePacket();
