@@ -686,7 +686,7 @@ public final class Player extends Mob {
 	 */
 	public void sendInitialMessages() {
 		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
-		send(new IdAssignmentMessage(index, members)); // TODO should this be sent when we reconnect?
+		send(new IdAssignmentMessage(index, members));
 		sendMessage("Welcome to RuneScape.");
 
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;

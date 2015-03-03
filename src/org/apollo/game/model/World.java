@@ -119,7 +119,7 @@ public final class World {
 	private final Map<Long, Player> players = new HashMap<>();
 
 	/**
-	 * The {@link PluginManager}. TODO: better place than here!!
+	 * The {@link PluginManager}.
 	 */
 	private PluginManager pluginManager;
 
@@ -184,7 +184,7 @@ public final class World {
 	}
 
 	/**
-	 * Gets the plugin manager. TODO should this be here?
+	 * Gets the plugin manager.
 	 * 
 	 * @return The plugin manager.
 	 */
@@ -252,8 +252,7 @@ public final class World {
 		scheduler.schedule(npcMovement);
 
 		manager.start();
-		pluginManager = manager; // TODO move!!
-
+		pluginManager = manager;
 	}
 
 	/**

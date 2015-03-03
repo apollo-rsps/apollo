@@ -13,7 +13,7 @@ public abstract class Session {
 	/**
 	 * The channel.
 	 */
-	private final Channel channel;
+	protected final Channel channel;
 
 	/**
 	 * Creates a session for the specified channel.
