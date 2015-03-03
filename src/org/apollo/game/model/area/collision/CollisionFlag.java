@@ -10,14 +10,14 @@ import org.apollo.game.model.entity.Entity.EntityType;
 public enum CollisionFlag {
 
 	/**
-	 * The walk east flag.
-	 */
-	MOB_EAST(1),
-
-	/**
 	 * The walk north flag.
 	 */
 	MOB_NORTH(0),
+
+	/**
+	 * The walk east flag.
+	 */
+	MOB_EAST(1),
 
 	/**
 	 * The walk south flag.
@@ -30,14 +30,14 @@ public enum CollisionFlag {
 	MOB_WEST(3),
 
 	/**
-	 * The projectile east flag.
-	 */
-	PROJECTILE_EAST(5),
-
-	/**
 	 * The projectile north flag.
 	 */
 	PROJECTILE_NORTH(4),
+
+	/**
+	 * The projectile east flag.
+	 */
+	PROJECTILE_EAST(5),
 
 	/**
 	 * The projectile south flag.
