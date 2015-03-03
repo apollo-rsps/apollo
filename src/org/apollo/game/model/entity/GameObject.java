@@ -28,7 +28,7 @@ public final class GameObject extends Entity {
 	 */
 	public GameObject(int id, Position position, int type, int orientation) {
 		super(position);
-		this.packed = id << 8 | type << 2 | orientation;
+		this.packed = id << 8 | (type & 0x3F) << 2 | orientation & 0x3;
 	}
 
 	@Override
@@ -89,7 +89,8 @@ public final class GameObject extends Entity {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("id", getId()).add("type", getType()).add("orientation", getOrientation()).toString();
+		return MoreObjects.toStringHelper(this).add("id", getId()).add("type", getType()).add("orientation", getOrientation())
+				.toString();
 	}
 
 }
