@@ -79,10 +79,7 @@ public final class InterfaceSet {
 	 * @return {@code true} if the message handler chain should be broken.
 	 */
 	public boolean buttonClicked(int button) {
-		if (dialogueListener.isPresent()) {
-			return dialogueListener.get().buttonClicked(button);
-		}
-		return false;
+		return dialogueListener.isPresent() && dialogueListener.get().buttonClicked(button);
 	}
 
 	/**

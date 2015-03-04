@@ -121,9 +121,7 @@ public final class WalkingQueue {
 				points.clear();
 				oldPoints.clear();
 
-				for (Position travelBackPosition : travelBackQueue) {
-					addStep(travelBackPosition);
-				}
+				travelBackQueue.forEach(this::addStep);
 
 				addStep(clientPosition);
 				return true;

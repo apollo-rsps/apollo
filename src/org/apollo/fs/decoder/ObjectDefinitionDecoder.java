@@ -124,8 +124,6 @@ public final class ObjectDefinitionDecoder {
 				definition.setObstructive(true);
 			} else if (opcode == 75) {
 				data.get();
-			} else {
-				continue;
 			}
 		}
 	}

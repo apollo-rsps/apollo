@@ -209,7 +209,7 @@ public final class SkillSet {
 	 * @return The total level.
 	 */
 	public int getTotalLevel() {
-		return Arrays.stream(skills).map(skill -> skill.getMaximumLevel()).reduce(0, (total, level) -> total + level);
+		return Arrays.stream(skills).map(Skill::getMaximumLevel).reduce(0, (total, level) -> total + level);
 	}
 
 	/**

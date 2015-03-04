@@ -15,7 +15,7 @@ public final class NumericalAttribute extends Attribute<Number> {
 	 * @param value The value of this attribute.
 	 * @return The type.
 	 */
-	private static final AttributeType typeOf(Number value) {
+	private static AttributeType typeOf(Number value) {
 		return value instanceof Double ? AttributeType.DOUBLE : AttributeType.LONG;
 	}
 
