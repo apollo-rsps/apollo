@@ -1,11 +1,14 @@
 package org.apollo.update;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apollo.Service;
 import org.apollo.fs.IndexedFileSystem;
@@ -26,6 +29,11 @@ public final class UpdateService extends Service {
 	 * The number of threads per request type.
 	 */
 	private static final int THREADS_PER_REQUEST_TYPE = Runtime.getRuntime().availableProcessors();
+
+	/**
+	 * The logger for this class.
+	 */
+	private static final Logger logger = Logger.getLogger(UpdateService.class.getName());
 
 	/**
 	 * The update dispatcher.
@@ -59,9 +67,6 @@ public final class UpdateService extends Service {
 		return dispatcher;
 	}
 
-	/**
-	 * Starts the threads in the pool.
-	 */
 	@Override
 	public void start() {
 		int release = getContext().getRelease().getReleaseNumber();
@@ -72,23 +77,18 @@ public final class UpdateService extends Service {
 				workers.add(new OnDemandRequestWorker(dispatcher, new IndexedFileSystem(base, true)));
 				workers.add(new HttpRequestWorker(dispatcher, new IndexedFileSystem(base, true)));
 			}
-
-			for (RequestWorker<?, ?> worker : workers) {
-				service.submit(worker);
-			}
-		} catch (Exception ex) {
-			System.err.println("Error adding request workers - " + ex.getMessage());
+		} catch (FileNotFoundException reason) {
+			logger.log(Level.SEVERE, "Unable to find index or data files from the file system.", reason);
 		}
+
+		workers.forEach(service::submit);
 	}
 
 	/**
 	 * Stops the threads in the pool.
 	 */
 	public void stop() {
-		for (RequestWorker<?, ?> worker : workers) {
-			worker.stop();
-		}
-
+		workers.forEach(RequestWorker::stop);
 		service.shutdownNow();
 	}
 
