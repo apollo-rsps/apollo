@@ -6,6 +6,7 @@
   <artifactId>org.apollo</artifactId>
   <version>1.0</version>
   <groupId>apollo</groupId>
+  
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
@@ -21,28 +22,33 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
       <version>1.9</version>
     </dependency>
+
     <dependency>
       <groupId>org.jruby</groupId>
       <artifactId>jruby-complete</artifactId>
       <version>1.7.19</version>
     </dependency>
+
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>18.0</version>
     </dependency>
+
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-all</artifactId>
-      <version>4.0.25.Final</version>
+      <version>4.0.26.Final</version>
       <scope>compile</scope>
     </dependency>
+
     <dependency>
     	<groupId>com.lambdaworks</groupId>
     	<artifactId>scrypt</artifactId>
