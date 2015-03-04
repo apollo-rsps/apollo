@@ -3,6 +3,8 @@ require 'java'
 java_import 'org.apollo.game.message.impl.SetPlayerActionMessage'
 java_import 'org.apollo.game.model.entity.Player'
 
+
+
 class PlayerAction
   attr_reader :slot, :primary, :name
 
@@ -24,7 +26,7 @@ FOLLOW_ACTION = PlayerAction.new(:fifth, true, 'Follow')
 
 # Shows multiple context menu action for the specified player
 def show_actions(player, *actions)
-  raise 'Must specify at least one action to show' if actions.nil?
+  raise 'Must specify at least one action' if actions.nil?
 
   actions.each do |action|
     player.add_action(action)
@@ -39,7 +41,7 @@ end
 
 # Hides a context menu action for the specified player
 def hide_action(player, action)
-  show_action(player, PlayerAction.new('null', action.slot, action.primary))
+  show_action(player, PlayerAction.new(action.slot, action.primary, 'null'))
 end
 
 class Player
