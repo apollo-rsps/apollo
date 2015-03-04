@@ -10,7 +10,6 @@
   <scripts>
     <script>actions.rb</script>
     <script>areas.rb</script>
-    <script>wilderness.rb</script>
   </scripts>
   <dependencies />
 </plugin>
