@@ -118,8 +118,10 @@ public final class GameObjectDecoder {
 		Sector sector = REPOSITORY.fromPosition(position);
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
 
-		if (height < 0)
+		// FIXME: For some reason the height is negative on some occasions
+		if (height < 0) {
 			return;
+		}
 
 		CollisionMatrix matrix = sector.getMatrix(height);
 
@@ -149,10 +151,14 @@ public final class GameObjectDecoder {
 					int localX = (x % Sector.SECTOR_SIZE) + dx, localY = (y % Sector.SECTOR_SIZE) + dy;
 
 					if (localX > 7 || localY > 7) {
-						Position nextPosition = new Position(x + localX - 7, y + localY - 7);
+						int nextLocalX = localX > 7 ? x + localX - 7 : x + localX;
+						int nextLocalY = localY > 7 ? y + localY - 7 : y - localY;
+						Position nextPosition = new Position(nextLocalX, nextLocalY);
 						Sector next = REPOSITORY.fromPosition(nextPosition);
 
 						int nextX = (nextPosition.getX() % Sector.SECTOR_SIZE) + dx, nextY = (nextPosition.getY() % Sector.SECTOR_SIZE) + dy;
+						if(nextX > 7) nextX -= 7;
+						if(nextY > 7) nextY -= 7;
 
 						next.getMatrix(height).block(nextX, nextY);
 						continue;
@@ -197,8 +203,11 @@ public final class GameObjectDecoder {
 		Sector sector = REPOSITORY.fromPosition(position);
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
 
-		if (height < 0)
+		// FIXME: For some reason the height is negative on some occasions
+		if (height < 0) {
 			return;
+		}
+
 		CollisionMatrix current = sector.getMatrix(height);
 
 		boolean block = false;
@@ -214,17 +223,6 @@ public final class GameObjectDecoder {
 
 		if (block) {
 			int localX = (x % Sector.SECTOR_SIZE), localY = (y % Sector.SECTOR_SIZE);
-
-			if (localX > 7 || localY > 7) {
-				Position nextPosition = new Position(x + localX - 7, y + localY - 7);
-				Sector next = REPOSITORY.fromPosition(nextPosition);
-
-				int nextX = (nextPosition.getX() % Sector.SECTOR_SIZE), nextY = (nextPosition.getY() % Sector.SECTOR_SIZE);
-
-				next.getMatrix(height).block(nextX, nextY);
-				return;
-			}
-
 			current.block(localX, localY);
 		}
 	}
