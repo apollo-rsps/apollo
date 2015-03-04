@@ -90,7 +90,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			response.writeByte(LoginConstants.STATUS_EXCHANGE_DATA);
 			response.writeLong(0);
 			response.writeLong(serverSeed);
-			ctx.channel().writeAndFlush(response);
+			ctx.channel().write(response);
 
 			setState(LoginDecoderState.LOGIN_HEADER);
 		}
@@ -210,7 +210,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		ByteBuf buffer = ctx.alloc().buffer(1);
 		buffer.writeByte(response);
 
-		ctx.writeAndFlush(buffer).addListener(ChannelFutureListener.CLOSE);
+		ctx.write(buffer).addListener(ChannelFutureListener.CLOSE);
 	}
 
 }

@@ -57,7 +57,7 @@ public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, 
 			ByteBuf chunkData = Unpooled.wrappedBuffer(tmp, 0, chunkSize);
 
 			OnDemandResponse response = new OnDemandResponse(desc, length, chunk, chunkData);
-			channel.writeAndFlush(response);
+			channel.write(response);
 		}
 	}
 

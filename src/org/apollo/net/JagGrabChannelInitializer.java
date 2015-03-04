@@ -14,6 +14,8 @@ import java.nio.charset.Charset;
 import org.apollo.net.codec.jaggrab.JagGrabRequestDecoder;
 import org.apollo.net.codec.jaggrab.JagGrabResponseEncoder;
 
+import com.google.common.base.Charsets;
+
 /**
  * A {@link ChannelInitializer} for the JAGGRAB protocol.
  * 
@@ -29,7 +31,7 @@ public final class JagGrabChannelInitializer extends ChannelInitializer<SocketCh
 	/**
 	 * The character set used in the request.
 	 */
-	private static final Charset JAGGRAB_CHARSET = Charset.forName("US-ASCII");
+	private static final Charset JAGGRAB_CHARSET = Charsets.US_ASCII;
 
 	/**
 	 * The maximum length of a request, in bytes.

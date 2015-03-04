@@ -88,7 +88,7 @@ module DoorUtil
   # Gets the door object at the given position, if it exists.
   def self.get_door_object(position, object_id)
     game_objects = $world.sector_repository.from_position(position).get_entities(position, EntityType::GAME_OBJECT)
-    game_objects.each { |game_object| return game_object if game_object.get_id == object_id }
+    game_objects.each { |game_object| return game_object if game_object.id == object_id }
     return nil
   end
 
