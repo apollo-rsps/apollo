@@ -100,4 +100,9 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 		}
 	}
 
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) {
+		ctx.flush();
+	}
+
 }

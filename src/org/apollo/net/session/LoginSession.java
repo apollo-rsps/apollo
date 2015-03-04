@@ -107,7 +107,7 @@ public final class LoginSession extends Session {
 			}
 		}
 
-		ChannelFuture future = channel.writeAndFlush(new LoginResponse(status, rights, flagged));
+		ChannelFuture future = channel.write(new LoginResponse(status, rights, flagged));
 
 		destroy();
 
