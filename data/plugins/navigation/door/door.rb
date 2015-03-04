@@ -18,7 +18,7 @@ class OpenDoorAction < DistancedAction
   end
 
   def equals(other)
-    return (get_class == other.get_class && @position == other.position)
+    return (get_class == other.get_class && @door_object == other.door_object)
   end
 end
 
