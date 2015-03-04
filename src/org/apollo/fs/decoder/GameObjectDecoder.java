@@ -144,13 +144,17 @@ public final class GameObjectDecoder {
 		}
 
 		if (block) {
-			for (int width = 0; width < definition.getWidth(); width++) {
-				for (int length = 0; length < definition.getLength(); length++) {
-					int localX = (x % Sector.SECTOR_SIZE) + width, localY = (y % Sector.SECTOR_SIZE) + length;
+			for (int dx = 0; dx < definition.getWidth(); dx++) {
+				for (int dy = 0; dy < definition.getLength(); dy++) {
+					int localX = (x % Sector.SECTOR_SIZE) + dx, localY = (y % Sector.SECTOR_SIZE) + dy;
 
 					if (localX > 7 || localY > 7) {
-						Sector next = REPOSITORY.fromPosition(new Position(x + localX - 7, y + localY - 7));
-						next.getMatrix(height).block(localX, localY);
+						Position nextPosition = new Position(x + localX - 7, y + localY - 7);
+						Sector next = REPOSITORY.fromPosition(nextPosition);
+
+						int nextX = (nextPosition.getX() % Sector.SECTOR_SIZE) + dx, nextY = (nextPosition.getY() % Sector.SECTOR_SIZE) + dy;
+
+						next.getMatrix(height).block(nextX, nextY);
 						continue;
 					}
 
@@ -212,8 +216,12 @@ public final class GameObjectDecoder {
 			int localX = (x % Sector.SECTOR_SIZE), localY = (y % Sector.SECTOR_SIZE);
 
 			if (localX > 7 || localY > 7) {
-				Sector next = REPOSITORY.fromPosition(new Position(x + localX - 7, y + localY - 7));
-				next.getMatrix(height).block(localX, localY);
+				Position nextPosition = new Position(x + localX - 7, y + localY - 7);
+				Sector next = REPOSITORY.fromPosition(nextPosition);
+
+				int nextX = (nextPosition.getX() % Sector.SECTOR_SIZE), nextY = (nextPosition.getY() % Sector.SECTOR_SIZE);
+
+				next.getMatrix(height).block(nextX, nextY);
 				return;
 			}
 
