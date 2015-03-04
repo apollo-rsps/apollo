@@ -161,7 +161,8 @@ public final class CollisionMatrix {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("width", width).add("length", length).add("matrix", Arrays.toString(matrix)).toString();
+		return MoreObjects.toStringHelper(this).add("width", width).add("length", length).add("matrix", Arrays.toString(matrix))
+				.toString();
 	}
 
 	/**
@@ -209,8 +210,9 @@ public final class CollisionMatrix {
 	 * @throws ArrayIndexOutOfBoundsException If the specified coordinate pair does not fit in this matrix.
 	 */
 	private int indexOf(int x, int y) {
+		Preconditions.checkElementIndex(x, width, "X coordinate must be [0, " + width + "), received " + x + ".");
+		Preconditions.checkElementIndex(y, length, "Y coordinate must be [0, " + length + "), received " + y + ".");
 		int index = y * width + x;
-		Preconditions.checkElementIndex(index, matrix.length, "Index out of bounds.");
 		return index;
 	}
 
