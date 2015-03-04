@@ -50,4 +50,13 @@ area_action :wilderness_level do
 
 end
 
+# Monkey patch the existing player class to add method of checking whether or not a player is within the wilderness
+class Player
+
+  def in_wilderness
+    self.wilderness_level > 0
+  end
+
+end
+
 area :name => :wilderness, :coordinates => [ 2945, 3522, 3390, 3972, 0 ], :actions => :wilderness_level

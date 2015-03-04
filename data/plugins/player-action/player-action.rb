@@ -10,7 +10,7 @@ class PlayerAction
 
   def initialize(slot, primary, name)
     index = [ :first, :second, :third, :fourth, :fifth ].find_index(slot)
-    raise "Unsupport action slot #{slot}." if index.nil?
+    raise "Unsupported action slot #{slot}." if index.nil?
 
     @slot = index
     @primary = primary
@@ -55,7 +55,7 @@ class Player
   end
 
   def has_action(action)
-    return actions[action.slot] == action.name
+    actions[action.slot] == action.name
   end
 
 end
