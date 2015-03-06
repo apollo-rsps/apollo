@@ -65,7 +65,7 @@ public final class RemoveObjectMessage extends Message {
 	}
 
 	/**
-	 * Gets the orientation of the object.
+	 * Gets the type of the object.
 	 * 
 	 * @return The type.
 	 */
