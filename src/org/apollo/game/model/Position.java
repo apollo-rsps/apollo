@@ -97,7 +97,7 @@ public final class Position {
 	 * @return The height level.
 	 */
 	public int getHeight() {
-		return packed >> 30 & 0x3;
+		return packed >>> 30;
 	}
 
 	/**
