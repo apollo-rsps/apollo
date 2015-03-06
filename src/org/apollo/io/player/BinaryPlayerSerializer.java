@@ -102,7 +102,7 @@ public final class BinaryPlayerSerializer implements PlayerSerializer {
 			for (int slot = 0; slot < style.length; slot++) {
 				style[slot] = in.readUnsignedByte();
 			}
-			
+
 			int[] colors = new int[5];
 			for (int slot = 0; slot < colors.length; slot++) {
 				colors[slot] = in.readUnsignedByte();

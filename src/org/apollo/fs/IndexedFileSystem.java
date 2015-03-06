@@ -176,9 +176,7 @@ public final class IndexedFileSystem implements Closeable {
 			int nextBlock = (header[4] & 0xFF) << 16 | (header[5] & 0xFF) << 8 | header[6] & 0xFF;
 			int nextType = header[7] & 0xFF;
 
-			if (i != curChunk) {
-				Preconditions.checkArgument(i == curChunk, "Chunk id mismatch.");
-			}
+			Preconditions.checkArgument(i == curChunk, "Chunk id mismatch.");
 
 			int chunkSize = size - read;
 			if (chunkSize > FileSystemConstants.CHUNK_SIZE) {

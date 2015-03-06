@@ -23,7 +23,7 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 	 * @return The amount.
 	 * @throws IllegalArgumentException If the option is invalid.
 	 */
-	private static final int optionToAmount(int option) {
+	private static int optionToAmount(int option) {
 		switch (option) {
 			case 1:
 				return 1;

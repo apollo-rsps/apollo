@@ -24,7 +24,7 @@ public final class EventListenerChainSet {
 	public <E extends Event> boolean notify(E event) {
 		@SuppressWarnings("unchecked")
 		EventListenerChain<E> chain = (EventListenerChain<E>) chains.get(event.getClass());
-		return (chain == null) ? true : chain.notify(event);
+		return (chain == null) || chain.notify(event);
 	}
 
 	/**
