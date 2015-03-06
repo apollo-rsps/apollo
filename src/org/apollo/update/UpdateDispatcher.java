@@ -11,7 +11,7 @@ import org.apollo.net.codec.jaggrab.JagGrabRequest;
 import org.apollo.net.codec.update.OnDemandRequest;
 
 /**
- * A class which dispatches requests to worker threads.
+ * Dispatches update requests to worker threads.
  * 
  * @author Graham
  */
@@ -23,19 +23,19 @@ public final class UpdateDispatcher {
 	private static final int MAXIMUM_QUEUE_SIZE = 1024;
 
 	/**
+	 * A queue for pending 'on-demand' requests.
+	 */
+	private final BlockingQueue<ComparableChannelRequest<OnDemandRequest>> demand = new PriorityBlockingQueue<>();
+
+	/**
 	 * A queue for pending HTTP requests.
 	 */
-	private final BlockingQueue<ChannelRequest<HttpRequest>> httpQueue = new LinkedBlockingQueue<>();
+	private final BlockingQueue<ChannelRequest<HttpRequest>> http = new LinkedBlockingQueue<>();
 
 	/**
 	 * A queue for pending JAGGRAB requests.
 	 */
-	private final BlockingQueue<ChannelRequest<JagGrabRequest>> jagGrabQueue = new LinkedBlockingQueue<>();
-
-	/**
-	 * A queue for pending 'on-demand' requests.
-	 */
-	private final BlockingQueue<ChannelRequest<OnDemandRequest>> onDemandQueue = new PriorityBlockingQueue<>();
+	private final BlockingQueue<ChannelRequest<JagGrabRequest>> jaggrab = new LinkedBlockingQueue<>();
 
 	/**
 	 * Dispatches a HTTP request.
@@ -44,10 +44,10 @@ public final class UpdateDispatcher {
 	 * @param request The request.
 	 */
 	public void dispatch(Channel channel, HttpRequest request) {
-		if (httpQueue.size() >= MAXIMUM_QUEUE_SIZE) {
+		if (http.size() >= MAXIMUM_QUEUE_SIZE) {
 			channel.close();
 		}
-		httpQueue.add(new ChannelRequest<>(channel, request));
+		http.add(new ChannelRequest<>(channel, request));
 	}
 
 	/**
@@ -57,10 +57,10 @@ public final class UpdateDispatcher {
 	 * @param request The request.
 	 */
 	public void dispatch(Channel channel, JagGrabRequest request) {
-		if (jagGrabQueue.size() >= MAXIMUM_QUEUE_SIZE) {
+		if (jaggrab.size() >= MAXIMUM_QUEUE_SIZE) {
 			channel.close();
 		}
-		jagGrabQueue.add(new ChannelRequest<>(channel, request));
+		jaggrab.add(new ChannelRequest<>(channel, request));
 	}
 
 	/**
@@ -70,10 +70,10 @@ public final class UpdateDispatcher {
 	 * @param request The request.
 	 */
 	public void dispatch(Channel channel, OnDemandRequest request) {
-		if (onDemandQueue.size() >= MAXIMUM_QUEUE_SIZE) {
+		if (demand.size() >= MAXIMUM_QUEUE_SIZE) {
 			channel.close();
 		}
-		onDemandQueue.add(new ChannelRequest<>(channel, request));
+		demand.add(new ComparableChannelRequest<>(channel, request));
 	}
 
 	/**
@@ -83,7 +83,7 @@ public final class UpdateDispatcher {
 	 * @throws InterruptedException If the thread is interrupted.
 	 */
 	ChannelRequest<HttpRequest> nextHttpRequest() throws InterruptedException {
-		return httpQueue.take();
+		return http.take();
 	}
 
 	/**
@@ -93,7 +93,7 @@ public final class UpdateDispatcher {
 	 * @throws InterruptedException If the thread is interrupted.
 	 */
 	ChannelRequest<JagGrabRequest> nextJagGrabRequest() throws InterruptedException {
-		return jagGrabQueue.take();
+		return jaggrab.take();
 	}
 
 	/**
@@ -103,7 +103,7 @@ public final class UpdateDispatcher {
 	 * @throws InterruptedException If the thread is interrupted.
 	 */
 	ChannelRequest<OnDemandRequest> nextOnDemandRequest() throws InterruptedException {
-		return onDemandQueue.take();
+		return demand.take();
 	}
 
 }

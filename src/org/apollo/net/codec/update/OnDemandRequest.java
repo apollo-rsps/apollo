@@ -11,29 +11,27 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 	/**
 	 * An enumeration containing the different request priorities.
-	 * 
-	 * @author Graham
 	 */
 	public enum Priority {
 
 		/**
-		 * High priority - used in-game when data is required immediately but has not yet been received.
+		 * High priority - used when a player is in-game and data is required immediately.
 		 */
 		HIGH(0),
 
 		/**
-		 * Medium priority - used while loading the 'bare minimum' required to run the game.
+		 * Medium priority - used while loading extra resources when the client is not logged in.
 		 */
 		MEDIUM(1),
 
 		/**
-		 * Low priority - used when a file is not required urgently. The client login screen says
-		 * "loading extra files.." when low priority loading is being performed.
+		 * Low priority - used when a file is not required urgently (such as when serving the rest of the cache whilst
+		 * the player is in-game).
 		 */
 		LOW(2);
 
 		/**
-		 * Converts the integer value to a priority.
+		 * Converts the integer value to a Priority.
 		 * 
 		 * @param value The integer value.
 		 * @return The priority.
@@ -58,12 +56,24 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		private final int value;
 
 		/**
-		 * Creates a priority.
+		 * Creates the Priority.
 		 * 
 		 * @param value The integer value.
 		 */
 		private Priority(int value) {
 			this.value = value;
+		}
+
+		/**
+		 * Compares this Priority with the specified other Priority.
+		 * <p>
+		 * Used as an ordinal-independent variant of {@link #compareTo}.
+		 * 
+		 * @param other The other Priority.
+		 * @return 1 if this Priority is greater than {@code other}, 0 if they are equal, otherwise -1.
+		 */
+		public int compareWith(Priority other) {
+			return Integer.compare(value, other.value);
 		}
 
 		/**
@@ -78,52 +88,44 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 	}
 
 	/**
-	 * The file descriptor.
+	 * The FileDescriptor.
 	 */
-	private final FileDescriptor fileDescriptor;
+	private final FileDescriptor descriptor;
 
 	/**
-	 * The request priority.
+	 * The request Priority.
 	 */
 	private final Priority priority;
 
 	/**
-	 * Creates the 'on-demand' request.
+	 * Creates the OnDemandRequest.
 	 * 
-	 * @param fileDescriptor The file descriptor.
-	 * @param priority The priority.
+	 * @param descriptor The {@link FileDescriptor}.
+	 * @param priority The {@link Priority}.
 	 */
-	public OnDemandRequest(FileDescriptor fileDescriptor, Priority priority) {
-		this.fileDescriptor = fileDescriptor;
+	public OnDemandRequest(FileDescriptor descriptor, Priority priority) {
+		this.descriptor = descriptor;
 		this.priority = priority;
 	}
 
 	@Override
 	public int compareTo(OnDemandRequest other) {
-		int thisPriority = priority.toInteger();
-		int otherPriority = other.priority.toInteger();
-
-		if (thisPriority < otherPriority) {
-			return 1;
-		} else if (thisPriority == otherPriority) {
-			return 0;
-		}
-		return -1;
+		return priority.compareWith(other.priority);
 	}
 
 	/**
-	 * Gets the file descriptor.
+	 * Gets the {@link FileDescriptor}.
 	 * 
-	 * @return The file descriptor.
+	 * @return The FileDescriptor.
 	 */
 	public FileDescriptor getFileDescriptor() {
-		return fileDescriptor;
+		return descriptor;
 	}
 
 	/**
-	 * Gets the priority.
+	 * Gets the {@link Priority}.
 	 * 
-	 * @return The priority.
+	 * @return The Priority.
 	 */
 	public Priority getPriority() {
 		return priority;

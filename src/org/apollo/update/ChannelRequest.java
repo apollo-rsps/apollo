@@ -8,7 +8,7 @@ import io.netty.channel.Channel;
  * @author Graham
  * @param <T> The type of request.
  */
-public final class ChannelRequest<T> implements Comparable<ChannelRequest<T>> {
+public class ChannelRequest<T> {
 
 	/**
 	 * The channel.
@@ -18,7 +18,7 @@ public final class ChannelRequest<T> implements Comparable<ChannelRequest<T>> {
 	/**
 	 * The request.
 	 */
-	private final T request;
+	protected final T request;
 
 	/**
 	 * Creates a new channel request.
@@ -29,15 +29,6 @@ public final class ChannelRequest<T> implements Comparable<ChannelRequest<T>> {
 	public ChannelRequest(Channel channel, T request) {
 		this.channel = channel;
 		this.request = request;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public int compareTo(ChannelRequest<T> o) {
-		if (request instanceof Comparable<?> && o.request instanceof Comparable<?>) {
-			return ((Comparable<T>) request).compareTo(o.request);
-		}
-		return 0;
 	}
 
 	/**
