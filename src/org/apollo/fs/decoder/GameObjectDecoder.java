@@ -11,10 +11,10 @@ import java.util.function.Predicate;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.MapFileDecoder.MapDefinition;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.World;
 import org.apollo.game.model.area.Sector;
 import org.apollo.game.model.area.SectorRepository;
 import org.apollo.game.model.area.collision.CollisionMatrix;
+import org.apollo.game.model.area.obj.ObjectType;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.GameObject;
 import org.apollo.util.BufferUtil;
@@ -26,23 +26,19 @@ import com.google.common.collect.Iterables;
  * Parses static object definitions, which include map tiles and landscapes.
  * 
  * @author Ryley
+ * @author Major
  */
 public final class GameObjectDecoder {
 
 	/**
-	 * A bit flag which denotes that a specified Position is blocked.
+	 * A bit flag that indicates that the tile at the current Position is blocked.
 	 */
-	private static final int FLAG_BLOCKED = 1;
+	private static final int BLOCKED_TILE = 1;
 
 	/**
-	 * A bit flag which denotes that a specified Position is a bridge.
+	 * A bit flag that indicates that the tile at the current Position is a bridge tile.
 	 */
-	private static final int FLAG_BRIDGE = 2;
-
-	/**
-	 * The sector repository.
-	 */
-	private static final SectorRepository REPOSITORY = World.getWorld().getSectorRepository();
+	private static final int BRIDGE_TILE = 2;
 
 	/**
 	 * The {@link IndexedFileSystem}.
@@ -50,97 +46,85 @@ public final class GameObjectDecoder {
 	private final IndexedFileSystem fs;
 
 	/**
-	 * A {@link List} of decoded game objects.
+	 * A {@link List} of decoded GameObjects.
 	 */
 	private final List<GameObject> objects = new ArrayList<>();
 
 	/**
-	 * Creates the decoder.
-	 * 
-	 * @param fs The indexed file system.
+	 * The SectorRepository.
 	 */
-	public GameObjectDecoder(IndexedFileSystem fs) {
+	private final SectorRepository sectors;
+
+	/**
+	 * Creates the GameObjectDecoder.
+	 * 
+	 * @param fs The {@link IndexedFileSystem}.
+	 * @param sectors The {@link SectorRepository}.
+	 */
+	public GameObjectDecoder(IndexedFileSystem fs, SectorRepository sectors) {
 		this.fs = fs;
+		this.sectors = sectors;
 	}
 
 	/**
-	 * Decodes all static objects and places them in the returned array.
+	 * Decodes the GameObjects from their MapDefinitions.
 	 * 
 	 * @return The decoded objects.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws IOException If there is an error decoding the {@link MapDefinition}s.
 	 */
 	public GameObject[] decode() throws IOException {
 		Map<Integer, MapDefinition> definitions = MapFileDecoder.decode(fs);
 
 		for (Entry<Integer, MapDefinition> entry : definitions.entrySet()) {
-			MapDefinition def = entry.getValue();
+			MapDefinition definition = entry.getValue();
 
-			int packed = def.getPacketCoordinates();
+			int packed = definition.getPackedCoordinates();
 			int x = (packed >> 8 & 0xFF) * 64;
 			int y = (packed & 0xFF) * 64;
 
-			ByteBuffer gameObjectData = fs.getFile(4, def.getObjectFile());
-			ByteBuffer gameObjectBuffer = ByteBuffer.wrap(CompressionUtil.degzip(gameObjectData));
-			parseGameObject(gameObjectBuffer, x, y);
+			ByteBuffer objects = fs.getFile(4, definition.getObjectFile());
+			ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(objects));
+			decodeObjects(decompressed, x, y);
 
-			ByteBuffer terrainData = fs.getFile(4, def.getTerrainFile());
-			ByteBuffer terrainBuffer = ByteBuffer.wrap(CompressionUtil.degzip(terrainData));
-			parseTerrain(terrainBuffer, x, y);
+			ByteBuffer terrain = fs.getFile(4, definition.getTerrainFile());
+			decompressed = ByteBuffer.wrap(CompressionUtil.degzip(terrain));
+			decodeTerrain(decompressed, x, y);
 		}
 
 		return Iterables.toArray(objects, GameObject.class);
 	}
 
-	private void parseGameObject(ByteBuffer buffer, int x, int y) {
-		for (int deltaId, id = -1; (deltaId = BufferUtil.readSmart(buffer)) != 0;) {
-			id += deltaId;
+	/**
+	 * Blocks tiles covered by a GameObject, if applicable.
+	 * 
+	 * @param object The {@link GameObject}.
+	 * @param position The position of the GameObject.
+	 */
+	private void block(GameObject object, Position position) {
+		ObjectDefinition definition = ObjectDefinition.lookup(object.getId());
+		int type = object.getType();
 
-			for (int deltaPos, pos = 0; (deltaPos = BufferUtil.readSmart(buffer)) != 0;) {
-				pos += deltaPos - 1;
-
-				int localY = pos & 0x3F;
-				int localX = pos >> 6 & 0x3F;
-				int height = pos >> 12;
-
-				int attributes = buffer.get() & 0xFF;
-				int type = attributes >> 2;
-				int orientation = attributes & 0x3;
-				Position position = new Position(x + localX, y + localY, height);
-
-				gameObjectDecoded(id, orientation, type, position);
-			}
-		}
-	}
-
-	private void gameObjectDecoded(int id, int orientation, int type, Position position) {
-		ObjectDefinition definition = ObjectDefinition.lookup(id);
-
-		Sector sector = REPOSITORY.fromPosition(position);
+		Sector sector = sectors.fromPosition(position);
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
-
-		// FIXME: For some reason the height is negative on some occasions
-		if (height < 0) {
-			return;
-		}
 
 		CollisionMatrix matrix = sector.getMatrix(height);
 
 		boolean block = false;
 
-		// Ground decoration, signs, water fountains, etc
-		if (type == 22 && definition.isInteractive()) {
+		if (type == ObjectType.FLOOR_DECORATION.getValue() && definition.isInteractive()) {
 			block = true;
 		}
 
-		Predicate<Integer> walls = (value) -> value >= 0 && value < 4 || value == 9;
-		Predicate<Integer> roofs = (value) -> value >= 12 && value < 22;
+		Predicate<Integer> walls = (value) -> value >= ObjectType.LENGTHWISE_WALL.getValue()
+				&& value <= ObjectType.RECTANGULAR_CORNER.getValue() || value == ObjectType.DIAGONAL_WALL.getValue();
 
-		// Walls and roofs that intercept may intercept a mob when moving
+		Predicate<Integer> roofs = (value) -> value > ObjectType.DIAGONAL_INTERACTABLE.getValue()
+				&& value < ObjectType.FLOOR_DECORATION.getValue();
+
 		if (walls.test(type) || roofs.test(type)) {
 			block = true;
 		}
 
-		// General objects, trees, statues, etc
 		if (type == 10 && definition.isSolid()) {
 			block = true;
 		}
@@ -154,11 +138,14 @@ public final class GameObjectDecoder {
 						int nextLocalX = localX > 7 ? x + localX - 7 : x + localX;
 						int nextLocalY = localY > 7 ? y + localY - 7 : y - localY;
 						Position nextPosition = new Position(nextLocalX, nextLocalY);
-						Sector next = REPOSITORY.fromPosition(nextPosition);
+						Sector next = sectors.fromPosition(nextPosition);
 
-						int nextX = (nextPosition.getX() % Sector.SECTOR_SIZE) + dx, nextY = (nextPosition.getY() % Sector.SECTOR_SIZE) + dy;
-						if(nextX > 7) nextX -= 7;
-						if(nextY > 7) nextY -= 7;
+						int nextX = (nextPosition.getX() % Sector.SECTOR_SIZE) + dx, nextY = (nextPosition.getY() % Sector.SECTOR_SIZE)
+								+ dy;
+						if (nextX > 7)
+							nextX -= 7;
+						if (nextY > 7)
+							nextY -= 7;
 
 						next.getMatrix(height).block(nextX, nextY);
 						continue;
@@ -168,62 +155,108 @@ public final class GameObjectDecoder {
 				}
 			}
 		}
-
-		objects.add(new GameObject(id, position, type, orientation));
 	}
 
-	private void parseTerrain(ByteBuffer buffer, int x, int y) {
-		for (int height = 0; height < 4; height++) {
-			for (int localX = 0; localX < 64; localX++) {
-				for (int localY = 0; localY < 64; localY++) {
-					Position position = new Position(x + localX, y + localY, height);
-
-					int flags = 0;
-					while (true) {
-						int attributeId = buffer.get() & 0xFF;
-						if (attributeId == 0) {
-							terrainDecoded(flags, position);
-							break;
-						} else if (attributeId == 1) {
-							buffer.get();
-							terrainDecoded(flags, position);
-							break;
-						} else if (attributeId <= 49) {
-							buffer.get();
-						} else if (attributeId <= 81) {
-							flags = attributeId - 49;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private void terrainDecoded(int flags, Position position) {
-		Sector sector = REPOSITORY.fromPosition(position);
+	/**
+	 * Decodes the attributes of a terrain file, blocking the tile if necessary.
+	 * 
+	 * @param attributes The terrain attributes.
+	 * @param position The {@link Position} of the tile whose attributes are being decoded.
+	 */
+	private void decodeAttributes(int attributes, Position position) {
+		Sector sector = sectors.fromPosition(position);
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
-
-		// FIXME: For some reason the height is negative on some occasions
-		if (height < 0) {
-			return;
-		}
 
 		CollisionMatrix current = sector.getMatrix(height);
 
 		boolean block = false;
-		if ((flags & FLAG_BLOCKED) != 0) {
+		if ((attributes & BLOCKED_TILE) != 0) {
 			block = true;
 		}
-
-		if ((flags & FLAG_BRIDGE) != 0) {
-			if (--height >= 0) {
+		if ((attributes & BRIDGE_TILE) != 0) {
+			if (height > 0) {
 				block = true;
+				height--;
 			}
 		}
 
 		if (block) {
 			int localX = (x % Sector.SECTOR_SIZE), localY = (y % Sector.SECTOR_SIZE);
 			current.block(localX, localY);
+		}
+	}
+
+	/**
+	 * Decodes object data stored in the specified {@link ByteBuffer}.
+	 * 
+	 * @param buffer The ByteBuffer.
+	 * @param x The x coordinate of the top left tile of the map file.
+	 * @param y The y coordinate of the top left tile of the map file.
+	 */
+	private void decodeObjects(ByteBuffer buffer, int x, int y) {
+		int id = -1;
+		int idOffset = BufferUtil.readSmart(buffer);
+
+		while (idOffset != 0) {
+			id += idOffset;
+
+			int packed = 0;
+			int positionOffset = BufferUtil.readSmart(buffer);
+
+			while (positionOffset != 0) {
+				packed += positionOffset - 1;
+
+				int localY = packed & 0x3F;
+				int localX = packed >> 6 & 0x3F;
+				int height = (packed >> 12) & 0x3;
+
+				int attributes = buffer.get() & 0xFF;
+				int type = attributes >> 2;
+				int orientation = attributes & 0x3;
+				Position position = new Position(x + localX, y + localY, height);
+
+				GameObject object = new GameObject(id, position, type, orientation);
+				objects.add(object);
+
+				block(object, position);
+				positionOffset = BufferUtil.readSmart(buffer);
+			}
+
+			idOffset = BufferUtil.readSmart(buffer);
+		}
+	}
+
+	/**
+	 * Decodes terrain data stored in the specified {@link ByteBuffer}.
+	 * 
+	 * @param buffer The ByteBuffer.
+	 * @param x The x coordinate of the top left tile of the map file.
+	 * @param y The y coordinate of the top left tile of the map file.
+	 */
+	private void decodeTerrain(ByteBuffer buffer, int x, int y) {
+		for (int height = 0; height < 4; height++) {
+			for (int localX = 0; localX < 64; localX++) {
+				for (int localY = 0; localY < 64; localY++) {
+					Position position = new Position(x + localX, y + localY, height);
+
+					int attributes = 0;
+					while (true) {
+						int attributeId = buffer.get() & 0xFF;
+						if (attributeId == 0) {
+							decodeAttributes(attributes, position);
+							break;
+						} else if (attributeId == 1) {
+							buffer.get();
+							decodeAttributes(attributes, position);
+							break;
+						} else if (attributeId <= 49) {
+							buffer.get();
+						} else if (attributeId <= 81) {
+							attributes = attributeId - 49;
+						}
+					}
+				}
+			}
 		}
 	}
 

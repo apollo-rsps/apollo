@@ -243,7 +243,7 @@ public final class World {
 		ObjectDefinition.init(objectDefs);
 		logger.fine("Loaded " + objectDefs.length + " object definitions.");
 
-		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs);
+		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs, sectors);
 		GameObject[] objects = staticDecoder.decode();
 		placeEntities(objects);
 		logger.fine("Loaded " + objects.length + " static objects.");
