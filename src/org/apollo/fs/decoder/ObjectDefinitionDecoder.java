@@ -124,6 +124,13 @@ public final class ObjectDefinitionDecoder {
 				definition.setObstructive(true);
 			} else if (opcode == 75) {
 				data.get();
+			} else if (opcode == 77) {
+				data.getShort();
+				data.getShort();
+				int count = data.get();
+				for (int i = 0; i <= count; i++){
+					data.getShort();
+				}
 			} else {
 				continue;
 			}
