@@ -13,7 +13,7 @@ class FishingAction < DistancedAction
     super(4, true, mob, position, 1)
     @position = position
     @spot = spot
-    @tool = spot.tools[action - 1]
+    @tool = spot.tools[option - 1]
 
     @options = (option == 1) ? spot.first_option : spot.second_option
     @minimum_level = options.map { |fish| fish.level }.min
