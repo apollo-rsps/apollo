@@ -1,6 +1,7 @@
 package org.apollo.game.model.entity.attr;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 /**
  * An {@link Attribute} with a string value.
@@ -30,7 +31,12 @@ public final class StringAttribute extends Attribute<String> {
 
 	@Override
 	public byte[] encode() {
-		return value.getBytes(Charset.forName("UTF-8"));
+		byte[] bytes = value.getBytes(Charset.forName("UTF-8"));
+		int length = bytes.length;
+				
+		bytes = Arrays.copyOf(bytes, length + 1);
+		bytes[length - 1] = 0;
+		return bytes;
 	}
 
 	@Override
