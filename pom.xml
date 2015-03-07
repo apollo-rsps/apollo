@@ -6,7 +6,7 @@
   <artifactId>org.apollo</artifactId>
   <version>1.0</version>
   <groupId>apollo</groupId>
-  
+
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
@@ -18,6 +18,19 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.3.2</version>
+        <configuration>
+          <mainClass>org.apollo.Server</mainClass>
+          <arguments>
+            <argument>-server</argument>
+            <argument>-Xmx750M</argument>
+          </arguments>
         </configuration>
       </plugin>
     </plugins>
@@ -50,9 +63,9 @@
     </dependency>
 
     <dependency>
-    	<groupId>com.lambdaworks</groupId>
-    	<artifactId>scrypt</artifactId>
-    	<version>1.4.0</version>
+        <groupId>com.lambdaworks</groupId>
+        <artifactId>scrypt</artifactId>
+        <version>1.4.0</version>
     </dependency>
   </dependencies>
 </project>
