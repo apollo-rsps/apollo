@@ -98,6 +98,7 @@ public final class Release317 extends Release {
 		register(98, walkMessageDecoder);
 
 		register(0, new KeepAliveMessageDecoder());
+		register(202, new IdleMessageDecoder());
 		register(101, new PlayerDesignMessageDecoder());
 		register(4, new ChatMessageDecoder());
 		register(103, new CommandMessageDecoder());
@@ -159,6 +160,8 @@ public final class Release317 extends Release {
 		register(215, new RemoveFriendMessageDecoder());
 		register(74, new RemoveIgnoreMessageDecoder());
 		register(126, new PrivateChatMessageDecoder());
+		
+		register(218, new ReportAbuseMessageDecoder());
 
 		// register encoders
 		register(IdAssignmentMessage.class, new IdAssignmentMessageEncoder());
@@ -201,6 +204,7 @@ public final class Release317 extends Release {
 		register(FriendServerStatusMessage.class, new FriendServerStatusMessageEncoder());
 		register(IgnoreListMessage.class, new IgnoreListMessageEncoder());
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
+		
 	}
 
 }
