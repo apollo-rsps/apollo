@@ -163,17 +163,17 @@ class Dialogue
   end
 
   # Closes the dialogue interface when the player clicks the 'Click here to continue...' text.
-  def close
-    continue(:close => true)
+  def close(&block)
+    continue(:close => true, &block)
   end
 
   # Defines the event that occurs when a player clicks the 'Click here to continue...' text.
   def continue(type=nil, &block)
-    raise 'Cannot add a continue event on a dialogue with options.' unless @options.size.zero?
+    raise 'Cannot add a continue event on a dialogue with options.' if (@type == :options)
     raise 'Must declare either a type or a block for a continue event.' if (type.nil? && block.nil?)
 
     action = get_next_dialogue(type) unless type.nil?
-    @options << ->(player) { action.call(player) unless type.nil?; block.call(player) unless block.nil? }
+    @options[0] = ->(player) { action.call(player) unless type.nil?; block.call(player) unless block.nil? }
   end
 
   # Sets the emote performed by the dialogue head.

@@ -19,7 +19,7 @@ CHARACTER_DESIGN = 3559
 on :login do |event, player|
   if player.in_tutorial_island
     TutorialInstructions::show_instruction(player)
-   # INITIAL_TABS.each_with_index { |tab, index| player.send(SwitchTabInterfaceMessage.new(index, tab)) } # This is commented so the lame hack works
+    INITIAL_TABS.each_with_index { |tab, index| player.send(SwitchTabInterfaceMessage.new(index, tab)) }
 
     if (player.tutorial_island_progress == :not_started)
       show_hint_icon(player)
@@ -27,21 +27,6 @@ on :login do |event, player|
     end
   end
 end
-
-## TODO lame hack to get round the lack of door support - must remove
-
-
-on :message, :fifth_item_option do |ctx, player, message|
-    player.teleport(Position.new(3100, 3107)) if message.id == 1
-    player.tutorial_island_progress = :moving_around
-    player.interface_set.open_dialogue_overlay(-1)
-end
-
-on :login do |event, player|
-  player.inventory.add(1)
-end
-
-## END lame hack
 
 
 # The conversation with the Runescape Guide, when on tutorial island.
@@ -56,7 +41,7 @@ conversation :tutorial_runescape_guide do
 
     text "Greetings! I see you are a new arrival to this land. My job is to welcome all new visitors. So welcome!"
 
-    continue :dialogue => :go_through_door do |player|
+    continue :dialogue => :talk_to_people do |player|
       player.tutorial_island_progress = :talk_to_people
     end
   end
@@ -67,7 +52,7 @@ conversation :tutorial_runescape_guide do
     type :npc_speech
     npc :runescape_guide
 
-    precondition { |player| player.tutorial_island_progress != :not_started }
+    precondition { |player| player.tutorial_island_progress != :talk_to_people }
 
     text "Welcome back."
 
@@ -94,7 +79,7 @@ conversation :tutorial_runescape_guide do
 
     text "To continue the tutorial go through that door over there, and speak to your first instructor."
 
-    continue :close => true do |player|
+    close do |player|
       if (player.tutorial_island_progress < :runescape_guide_finished)
         reset_hint_icon(player)
         # TODO door hint icon
