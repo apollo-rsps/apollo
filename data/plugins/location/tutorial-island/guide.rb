@@ -52,7 +52,7 @@ conversation :tutorial_runescape_guide do
     type :npc_speech
     npc :runescape_guide
 
-    precondition { |player| player.tutorial_island_progress != :talk_to_people }
+    precondition { |player| player.tutorial_island_progress != :not_started }
 
     text "Welcome back."
 
