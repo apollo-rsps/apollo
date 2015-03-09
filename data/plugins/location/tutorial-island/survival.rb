@@ -112,22 +112,22 @@ end
 def add_survival_items(player)
   inventory = player.inventory
 
-  unless inventory.contains(BRONZE_AXE)
-    inventory.add(BRONZE_AXE)
+  unless inventory.contains(SurvivalConstants::BRONZE_AXE)
+    inventory.add(SurvivalConstants::BRONZE_AXE)
     dialogue = :give_bronze_axe
   end
 
-  unless inventory.contains(TINDERBOX)
-    inventory.add(TINDERBOX)
+  unless inventory.contains(SurvivalConstants::TINDERBOX)
+    inventory.add(SurvivalConstants::TINDERBOX)
     dialogue = (dialogue == :give_bronze_axe) ? :give_axe_and_tinderbox : give_tinderbox
   end
 
-  send_dialogue(player, get_dialogue(:tutorial_surivival_expert, dialogue)
+  send_dialogue(player, get_dialogue(:tutorial_surivival_expert, dialogue))
 end
 
 # Intercept the FirstObjectActionMessage to send tutorial-only events if the player is chopping down a tree.
 on :message, :first_object_action do |ctx, player, message|
-  if (player.in_tutorial_island && message.id == TREE_ID)
+  if (player.in_tutorial_island && message.id == SurvivalConstants::TREE_ID)
     progress = player.tutorial_island_progress
     if (progress < :cut_tree)
       # TODO display "You cannot cut down this tree; you must first follow the guide's instructions."
@@ -139,7 +139,7 @@ end
 
 # Intercept the FlashingTabClickedMessage to update the player's progress, if applicable.
 on :message, :flashing_tab_clicked do |ctx, player, message|
-  if (player.in_tutorial_island && message.tab == INVENTORY_TAB_INDEX && player.tutorial_island_progress == :given_axe)
+  if (player.in_tutorial_island && message.tab == SurvivalConstants::INVENTORY_TAB_INDEX && player.tutorial_island_progress == :given_axe)
     player.tutorial_island_progress = :cut_tree
     ctx.break_handler_chain()
   end
