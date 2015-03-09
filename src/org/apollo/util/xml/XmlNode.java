@@ -1,13 +1,6 @@
 package org.apollo.util.xml;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A class which represents a single node in the DOM tree, maintaining information about its children, attributes, value
@@ -152,6 +145,15 @@ public final class XmlNode implements Iterable<XmlNode> {
 	public String getValue() {
 		return value;
 	}
+
+    /**
+     * Gets the value of this node, wrapped in an {@link Optional}
+     *
+     * @return The value of this node if it exists otherwise {@link Optional#empty()} is returned
+     */
+    public Optional<String> getOptionalValue() {
+        return Optional.ofNullable(value);
+    }
 
 	/**
 	 * Checks if this node has a value.
