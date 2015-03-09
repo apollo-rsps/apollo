@@ -11,17 +11,20 @@ import org.apollo.net.session.Session;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Holds various network-related constants such as port numbers.
  * 
  * @author Graham
+ * @author Major
  */
 public final class NetworkConstants {
 
 	/**
 	 * The HTTP port.
 	 */
-	public static final int HTTP_PORT = 80;
+	public static final int HTTP_PORT;
 
 	/**
 	 * The number of seconds before a connection becomes idle.
@@ -31,7 +34,7 @@ public final class NetworkConstants {
 	/**
 	 * The JAGGRAB port.
 	 */
-	public static final int JAGGRAB_PORT = 43595;
+	public static final int JAGGRAB_PORT;
 
 	/**
 	 * The exponent used when decrypting the RSA block.
@@ -46,7 +49,7 @@ public final class NetworkConstants {
 	/**
 	 * The service port.
 	 */
-	public static final int SERVICE_PORT = 43594;
+	public static final int SERVICE_PORT;
 
 	/**
 	 * The {@link Session} {@link AttributeKey}.
@@ -59,26 +62,39 @@ public final class NetworkConstants {
 	public static final int STRING_TERMINATOR = 10;
 
 	static {
-		try (InputStream is = new FileInputStream("data/rsa.xml")) {
-			XmlNode rsa = new XmlParser().parse(is);
-			if (!rsa.getName().equals("rsa")) {
-				throw new IOException("Root node name is not 'rsa'.");
+		try (InputStream is = new FileInputStream("data/net.xml")) {
+			XmlNode net = new XmlParser().parse(is);
+			if (!net.getName().equals("net")) {
+				throw new IOException("Root node name is not 'net'.");
 			}
 
+			XmlNode rsa = net.getChild("rsa");
+			Preconditions.checkState(rsa != null, "Root node must have a child named 'rsa'.");
+
 			XmlNode modulus = rsa.getChild("modulus"), exponent = rsa.getChild("private-exponent");
-			if (modulus == null || exponent == null) {
-				throw new IOException("Root node must have two children - 'modulus' and 'private-exponent'.");
-			}
+			Preconditions.checkState(modulus != null && exponent != null,
+					"Rsa node must have two children: 'modulus' and 'private-exponent'.");
 
 			RSA_MODULUS = new BigInteger(modulus.getValue());
 			RSA_EXPONENT = new BigInteger(exponent.getValue());
-		} catch (Exception e) {
-			throw new ExceptionInInitializerError(e);
+
+			XmlNode ports = net.getChild("ports");
+			Preconditions.checkState(ports != null, "Root node must have a child named 'ports'.");
+
+			XmlNode http = ports.getChild("http"), service = ports.getChild("service"), jaggrab = ports.getChild("jaggrab");
+			Preconditions.checkState(http != null && service != null && jaggrab != null,
+					"Ports node must have three children: 'http', 'service', and 'jaggrab'.");
+
+			HTTP_PORT = Integer.parseInt(http.getValue());
+			SERVICE_PORT = Integer.parseInt(service.getValue());
+			JAGGRAB_PORT = Integer.parseInt(jaggrab.getValue());
+		} catch (Exception exception) {
+			throw new ExceptionInInitializerError(new IOException("Error parsing net.xml.", exception));
 		}
 	}
 
 	/**
-	 * Default private constructor to prevent instantiation by other classes.
+	 * Sole private constructor to prevent instantiation.
 	 */
 	private NetworkConstants() {
 
