@@ -52,7 +52,6 @@ public final class SynchronizationBlockSet implements Cloneable {
 	/**
 	 * Gets a {@link SynchronizationBlock} from this set.
 	 * 
-	 * @param <T> The type of block.
 	 * @param clazz The block's class.
 	 * @return The block.
 	 */

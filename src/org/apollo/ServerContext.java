@@ -45,7 +45,6 @@ public final class ServerContext {
 	/**
 	 * Gets a service. This method is shorthand for {@code getServiceManager().getService(...)}.
 	 * 
-	 * @param <S> The type of service.
 	 * @param clazz The service class.
 	 * @return The service, or {@code null} if it could not be found.
 	 */

@@ -42,7 +42,6 @@ public final class ServiceManager {
 	/**
 	 * Gets a service.
 	 * 
-	 * @param <S> The type of service.
 	 * @param clazz The service class.
 	 * @return The service.
 	 */
@@ -92,7 +91,6 @@ public final class ServiceManager {
 	/**
 	 * Registers a service.
 	 * 
-	 * @param <S> The type of service.
 	 * @param clazz The service's class.
 	 * @param service The service.
 	 */

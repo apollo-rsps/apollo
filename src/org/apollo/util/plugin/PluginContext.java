@@ -66,7 +66,6 @@ public final class PluginContext {
 	/**
 	 * Adds a {@link MessageHandler} to the end of the chain.
 	 * 
-	 * @param <M> The type of message.
 	 * @param message The message.
 	 * @param handler The handler.
 	 */

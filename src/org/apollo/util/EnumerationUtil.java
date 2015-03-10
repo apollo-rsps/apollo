@@ -14,7 +14,6 @@ public final class EnumerationUtil {
 	/**
 	 * Returns an {@link Iterator} which wraps around the specified {@link Enumeration}.
 	 * 
-	 * @param <E> The type of object that is iterated over.
 	 * @param enumeration The {@link Enumeration}.
 	 * @return An {@link Iterator}.
 	 */

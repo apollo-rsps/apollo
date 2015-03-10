@@ -28,7 +28,6 @@ public final class MessageHandlerChainGroup {
 	/**
 	 * Gets a {@link MessageHandlerChain} from this group.
 	 * 
-	 * @param <M> The type of message.
 	 * @param clazz The message class.
 	 * @return The {@link MessageHandlerChain} if one was found, {@code null} otherwise.
 	 */
