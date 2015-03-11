@@ -239,16 +239,3 @@ food :name => :blurberry_special,  :id => 2064, :restoration => 7 # -4attack,+6s
 # Misc
 
 
-
-
-__END__
-cabbage 1967
-cheese 1985
-chocolate_bar 1973
-triangle_sandwich 6962 
-square_sandwich 6965
-super_kebab 4608
-tomato 1982
-potato
-
-
