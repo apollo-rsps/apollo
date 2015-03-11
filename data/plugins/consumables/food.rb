@@ -85,7 +85,7 @@ food :name=> :manta_ray,        :id=> 391, :restoration=> 22
 
  # Breads/Wraps
 food :name=> :bread,            :id=> 2309, :restoration=> 5
-food :name=> :wrapped_oomlie,   :id=> 2341, :restoration=> 14
+food :name=> :oomlie_wrap,      :id=> 2343, :restoration=> 14
 food :name=> :ugthanki_kebab,   :id=> 1883, :restoration=> 19
 
  # Fruits
