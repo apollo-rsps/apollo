@@ -108,26 +108,26 @@ food :name => :orange_slices,    :id => 2112, :restoration => 2
 
  # Pies 
  #TODO Special Effects on pies (i.e.fish pie raises fishing level)
-food :name => :redberry_pie, :id => 2325, :restoration => 5, :replace => 2333, :delay=> 1
-food :name => :redberry_pie, :id => 2333, :restoration => 5, :delay=> 1
+food :name => :redberry_pie, :id => 2325, :restoration => 5, :replace => 2333, :delay => 1
+food :name => :redberry_pie, :id => 2333, :restoration => 5, :delay => 1
 
-food :name => :meat_pie,     :id => 2327, :restoration => 6, :replace => 2331, :delay=> 1
-food :name => :meat_pie,     :id => 2331, :restoration => 6, :delay=> 1
+food :name => :meat_pie,     :id => 2327, :restoration => 6, :replace => 2331, :delay => 1
+food :name => :meat_pie,     :id => 2331, :restoration => 6, :delay => 1
 
-food :name => :apple_pie,    :id => 2323, :restoration => 7, :replace => 2335, :delay=> 1
-food :name => :apple_pie,    :id => 2335, :restoration => 7, :delay=> 1
+food :name => :apple_pie,    :id => 2323, :restoration => 7, :replace => 2335, :delay => 1
+food :name => :apple_pie,    :id => 2335, :restoration => 7, :delay => 1
 
-food :name => :fish_pie,     :id => 7188, :restoration => 6, :replace => 7190, :delay=> 1
-food :name => :fish_pie,     :id => 7190, :restoration => 6, :delay=> 1
+food :name => :fish_pie,     :id => 7188, :restoration => 6, :replace => 7190, :delay => 1
+food :name => :fish_pie,     :id => 7190, :restoration => 6, :delay => 1
 
-food :name => :admiral_pie,  :id => 7198, :restoration => 8, :replace => 7200, :delay=> 1
-food :name => :admiral_pie,  :id => 7200, :restoration => 8, :delay=> 1
+food :name => :admiral_pie,  :id => 7198, :restoration => 8, :replace => 7200, :delay => 1
+food :name => :admiral_pie,  :id => 7200, :restoration => 8, :delay => 1
 
-food :name => :wild_pie,     :id => 7208, :restoration => 11, :replace => 7210, :delay=> 1
-food :name => :wild_pie,     :id => 7210, :restoration => 11, :delay=> 1
+food :name => :wild_pie,     :id => 7208, :restoration => 11, :replace => 7210, :delay => 1
+food :name => :wild_pie,     :id => 7210, :restoration => 11, :delay => 1
 
-food :name => :summer_pie,   :id => 7218, :restoration => 11, :replace => 7220, :delay=> 1
-food :name => :summer_pie,   :id => 7220, :restoration => 11, :delay=> 1
+food :name => :summer_pie,   :id => 7218, :restoration => 11, :replace => 7220, :delay => 1
+food :name => :summer_pie,   :id => 7220, :restoration => 11, :delay => 1
 
  # Stews
 food :name => :stew,        :id => 2003, :restoration => 11
