@@ -355,8 +355,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	private static void putGraphicBlock(GraphicBlock block, GamePacketBuilder builder) {
 		Graphic graphic = block.getGraphic();
 		builder.put(DataType.SHORT, DataTransformation.ADD, graphic.getId());
-		builder.put(DataType.SHORT, graphic.getDelay());
-		builder.put(DataType.SHORT, graphic.getHeight());
+		builder.put(DataType.INT, DataOrder.MIDDLE, graphic.getHeight() << 16 & 0xFFFF0000 | graphic.getDelay() & 0x0000FFFF);
 	}
 
 	/**
