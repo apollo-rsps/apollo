@@ -29,7 +29,7 @@ public abstract class PlayerActionMessage extends Message {
 	 */
 	public PlayerActionMessage(int option, int playerIndex) {
 		this.option = option;
-		this.index = playerIndex;
+		this.index = playerIndex - 1;
 	}
 
 	/**
