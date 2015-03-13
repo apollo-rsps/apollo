@@ -90,8 +90,8 @@ end
 
 # Some frequently-used boosts and skills
 # Lambda parameters are | maximum_skill_level, current_skill_level |
-basic_combat_boost = lambda { |max, level| level * 1.08 + 1 }
-super_combat_boost = lambda { |max, level| level * 1.12 + 2 }
+basic_combat_boost = lambda { |max, level| level * 1.10 + 3 }
+super_combat_boost = lambda { |max, level| level * 1.15 + 5 }
 non_combat_boost   = lambda { |max, level| level + 3        }
 
 all_skills = (Skill::ATTACK..Skill::RUNECRAFT).to_a
@@ -112,7 +112,7 @@ append_potion :name => :restore,       :doses => [ 2430, 127,  129,  131  ], :sk
 append_potion :name => :super_restore, :doses => [ 3024, 3026, 3028, 3030 ], :skills => all_skills,    :boost => lambda { |max, level| [ level * 1.25 + 8, max ].min }
 
 append_potion :name => :super_attack,   :doses => [ 2436, 145,  147,  149  ], :skills => Skill::ATTACK,   :boost => super_combat_boost
-append_potion :name => :super_strength, :doses => [ 2440, 115,  117,  119  ], :skills => Skill::STRENGTH, :boost => super_combat_boost
-append_potion :name => :super_defence,  :doses => [ 2442, 133,  135,  137  ], :skills => Skill::DEFENCE,  :boost => super_combat_boost
-append_potion :name => :ranging,        :doses => [ 2444, 169,  171,  173  ], :skills => Skill::RANGED,   :boost => super_combat_boost
-append_potion :name => :magic,          :doses => [ 3040, 3042, 3044, 3046 ], :skills => Skill::MAGIC,    :boost => super_combat_boost
+append_potion :name => :super_strength, :doses => [ 2440, 157,  159,  161  ], :skills => Skill::STRENGTH, :boost => super_combat_boost
+append_potion :name => :super_defence,  :doses => [ 2442, 163,  165,  167  ], :skills => Skill::DEFENCE,  :boost => super_combat_boost
+append_potion :name => :ranging,        :doses => [ 2444, 169,  171,  173  ], :skills => Skill::RANGED,   :boost => lambda { |max, level| level * 1.10 + 4 }
+append_potion :name => :magic,          :doses => [ 3040, 3042, 3044, 3046 ], :skills => Skill::MAGIC,    :boost => lambda { |max, level| level + 4 }
