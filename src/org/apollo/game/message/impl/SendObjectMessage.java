@@ -43,7 +43,7 @@ public final class SendObjectMessage extends Message {
 	 * Creates the SendObjectMessage.
 	 * 
 	 * @param object The {@link GameObject} to send.
-	 * @param positionOffset The offset of the object's position from the sector's central position.
+	 * @param positionOffset The offset of the object's position from the region's central position.
 	 */
 	public SendObjectMessage(GameObject object, int positionOffset) {
 		this.id = object.getId();

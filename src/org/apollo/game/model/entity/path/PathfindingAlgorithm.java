@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.Sector;
-import org.apollo.game.model.area.SectorRepository;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.Entity.EntityType;
 
 import com.google.common.base.Preconditions;
@@ -20,9 +20,9 @@ import com.google.common.base.Preconditions;
 abstract class PathfindingAlgorithm {
 
 	/**
-	 * The repository of Sectors.
+	 * The repository of Regions.
 	 */
-	private static final SectorRepository REPOSITORY = World.getWorld().getSectorRepository();
+	private static final RegionRepository REPOSITORY = World.getWorld().getRegionRepository();
 
 	/**
 	 * Finds a valid path from the origin {@link Position} to the target one.
@@ -77,8 +77,8 @@ abstract class PathfindingAlgorithm {
 			}
 
 			Position next = new Position(x, y, height);
-			Sector sector = REPOSITORY.get(next.getSectorCoordinates());
-			if (sector.traversable(next, EntityType.NPC, direction) && (positions.length == 0 || inside(next, positions))) {
+			Region region = REPOSITORY.get(next.getRegionCoordinates());
+			if (region.traversable(next, EntityType.NPC, direction) && (positions.length == 0 || inside(next, positions))) {
 				return true;
 			}
 		}

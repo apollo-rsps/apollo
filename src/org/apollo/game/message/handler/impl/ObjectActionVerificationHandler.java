@@ -8,8 +8,8 @@ import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.ObjectActionMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.Sector;
-import org.apollo.game.model.area.SectorRepository;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity.EntityType;
 import org.apollo.game.model.entity.GameObject;
@@ -23,9 +23,9 @@ import org.apollo.game.model.entity.Player;
 public final class ObjectActionVerificationHandler extends MessageHandler<ObjectActionMessage> {
 
 	/**
-	 * The world's sector repository.
+	 * The world's RegionRepository.
 	 */
-	private final SectorRepository repository = World.getWorld().getSectorRepository();
+	private final RegionRepository repository = World.getWorld().getRegionRepository();
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, ObjectActionMessage message) {
@@ -36,8 +36,8 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 		}
 
 		Position position = message.getPosition();
-		Sector sector = repository.fromPosition(position);
-		Set<GameObject> objects = sector.getEntities(position, EntityType.GAME_OBJECT);
+		Region region = repository.fromPosition(position);
+		Set<GameObject> objects = region.getEntities(position, EntityType.GAME_OBJECT);
 
 		if (!player.getPosition().isWithinDistance(position, 15) || !containsObject(id, objects)) {
 			ctx.breakHandlerChain();

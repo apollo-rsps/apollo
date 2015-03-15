@@ -26,7 +26,7 @@ import org.apollo.game.message.impl.PositionMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
 import org.apollo.game.message.impl.RemoveObjectMessage;
 import org.apollo.game.message.impl.RemoveTileItemMessage;
-import org.apollo.game.message.impl.SectorChangeMessage;
+import org.apollo.game.message.impl.RegionChangeMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.SendObjectMessage;
 import org.apollo.game.message.impl.ServerChatMessage;
@@ -169,7 +169,7 @@ public final class Release377 extends Release {
 
 		// register encoders
 		register(IdAssignmentMessage.class, new IdAssignmentMessageEncoder());
-		register(SectorChangeMessage.class, new SectorChangeMessageEncoder());
+		register(RegionChangeMessage.class, new RegionChangeMessageEncoder());
 		register(ServerChatMessage.class, new ServerMessageMessageEncoder());
 		register(PlayerSynchronizationMessage.class, new PlayerSynchronizationMessageEncoder());
 		register(OpenInterfaceMessage.class, new OpenInterfaceMessageEncoder());

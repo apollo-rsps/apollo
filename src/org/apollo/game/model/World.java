@@ -15,8 +15,8 @@ import org.apollo.fs.decoder.ItemDefinitionDecoder;
 import org.apollo.fs.decoder.NpcDefinitionDecoder;
 import org.apollo.fs.decoder.ObjectDefinitionDecoder;
 import org.apollo.game.command.CommandDispatcher;
-import org.apollo.game.model.area.Sector;
-import org.apollo.game.model.area.SectorRepository;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.def.EquipmentDefinition;
 import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.def.NpcDefinition;
@@ -134,9 +134,9 @@ public final class World {
 	private final Scheduler scheduler = new Scheduler();
 
 	/**
-	 * This world's {@link SectorRepository}.
+	 * This world's {@link RegionRepository}.
 	 */
-	private final SectorRepository sectors = SectorRepository.immutable();
+	private final RegionRepository regions = RegionRepository.immutable();
 
 	/**
 	 * Creates the world.
@@ -202,12 +202,12 @@ public final class World {
 	}
 
 	/**
-	 * Gets this world's {@link SectorRepository}.
+	 * Gets this world's {@link RegionRepository}.
 	 * 
-	 * @return The sector repository.
+	 * @return The RegionRepository.
 	 */
-	public SectorRepository getSectorRepository() {
-		return sectors;
+	public RegionRepository getRegionRepository() {
+		return regions;
 	}
 
 	/**
@@ -243,7 +243,7 @@ public final class World {
 		ObjectDefinition.init(objectDefs);
 		logger.fine("Loaded " + objectDefs.length + " object definitions.");
 
-		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs, sectors);
+		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs, regions);
 		GameObject[] objects = staticDecoder.decode();
 		placeEntities(objects);
 		logger.fine("Loaded " + objects.length + " static objects.");
@@ -292,8 +292,8 @@ public final class World {
 		boolean success = npcRepository.add(npc);
 
 		if (success) {
-			Sector sector = sectors.fromPosition(npc.getPosition());
-			sector.addEntity(npc);
+			Region region = regions.fromPosition(npc.getPosition());
+			region.addEntity(npc);
 
 			if (npc.hasBoundaries()) {
 				npcMovement.addNpc(npc);
@@ -319,8 +319,8 @@ public final class World {
 		boolean success = playerRepository.add(player);
 		if (success) {
 			players.put(NameUtil.encodeBase37(username), player);
-			Sector sector = sectors.fromPosition(player.getPosition());
-			sector.addEntity(player);
+			Region region = regions.fromPosition(player.getPosition());
+			region.addEntity(player);
 
 			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 			return RegistrationStatus.OK;
@@ -357,9 +357,9 @@ public final class World {
 	 */
 	public void unregister(final Npc npc) {
 		if (npcRepository.remove(npc)) {
-			Sector sector = sectors.fromPosition(npc.getPosition());
+			Region region = regions.fromPosition(npc.getPosition());
 
-			sector.removeEntity(npc);
+			region.removeEntity(npc);
 		} else {
 			logger.warning("Could not find npc " + npc + " to unregister!");
 		}
@@ -375,20 +375,20 @@ public final class World {
 			players.remove(NameUtil.encodeBase37(player.getUsername()));
 			logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
 
-			Sector sector = sectors.fromPosition(player.getPosition());
-			sector.removeEntity(player);
+			Region region = regions.fromPosition(player.getPosition());
+			region.removeEntity(player);
 		} else {
 			logger.warning("Could not find player " + player + " to unregister!");
 		}
 	}
 
 	/**
-	 * Adds entities to sectors in the {@link SectorRepository}.
+	 * Adds entities to regions in the {@link RegionRepository}.
 	 * 
 	 * @param entities The entities.
 	 */
 	private void placeEntities(Entity... entities) {
-		Arrays.stream(entities).forEach(entity -> sectors.fromPosition(entity.getPosition()).addEntity(entity));
+		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity));
 	}
 
 }

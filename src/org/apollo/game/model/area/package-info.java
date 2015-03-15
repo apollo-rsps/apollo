@@ -1,5 +1,4 @@
 /**
- * Contains classes which represent in-game sectors - blocks of 8x8 tiles used to store ground items, temporary objects,
- * etc. efficiently.
+ * Contains region-related classes.
  */
 package org.apollo.game.model.area;

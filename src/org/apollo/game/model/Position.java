@@ -1,7 +1,7 @@
 package org.apollo.game.model;
 
-import org.apollo.game.model.area.Sector;
-import org.apollo.game.model.area.SectorCoordinates;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionCoordinates;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -62,20 +62,20 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the x coordinate of the central sector.
+	 * Gets the x coordinate of the central region.
 	 * 
-	 * @return The x coordinate of the central sector.
+	 * @return The x coordinate of the central region.
 	 */
-	public int getCentralSectorX() {
+	public int getCentralRegionX() {
 		return getX() / 8;
 	}
 
 	/**
-	 * Gets the y coordinate of the central sector.
+	 * Gets the y coordinate of the central region.
 	 * 
-	 * @return The y coordinate of the central sector.
+	 * @return The y coordinate of the central region.
 	 */
-	public int getCentralSectorY() {
+	public int getCentralRegionY() {
 		return getY() / 8;
 	}
 
@@ -101,7 +101,7 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the x coordinate inside the sector of this position.
+	 * Gets the x coordinate inside the region of this position.
 	 * 
 	 * @return The local x coordinate.
 	 */
@@ -110,17 +110,17 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the local x coordinate inside the sector of the {@code base} position.
+	 * Gets the local x coordinate inside the region of the {@code base} position.
 	 * 
 	 * @param base The base position.
 	 * @return The local x coordinate.
 	 */
 	public int getLocalX(Position base) {
-		return getX() - base.getTopLeftSectorX() * 8;
+		return getX() - base.getTopLeftRegionX() * 8;
 	}
 
 	/**
-	 * Gets the y coordinate inside the sector of this position.
+	 * Gets the y coordinate inside the region of this position.
 	 * 
 	 * @return The local y coordinate.
 	 */
@@ -129,13 +129,13 @@ public final class Position {
 	}
 
 	/**
-	 * Gets the local y coordinate inside the sector of the {@code base} position.
+	 * Gets the local y coordinate inside the region of the {@code base} position.
 	 * 
 	 * @param base The base position.
 	 * @return The local y coordinate.
 	 */
 	public int getLocalY(Position base) {
-		return getY() - base.getTopLeftSectorY() * 8;
+		return getY() - base.getTopLeftRegionY() * 8;
 	}
 
 	/**
@@ -151,29 +151,29 @@ public final class Position {
 	}
 
 	/**
-	 * Returns the {@link SectorCoordinates} of the {@link Sector} this position is inside.
+	 * Returns the {@link RegionCoordinates} of the {@link Region} this position is inside.
 	 * 
-	 * @return The sector coordinates.
+	 * @return The region coordinates.
 	 */
-	public SectorCoordinates getSectorCoordinates() {
-		return SectorCoordinates.fromPosition(this);
+	public RegionCoordinates getRegionCoordinates() {
+		return RegionCoordinates.fromPosition(this);
 	}
 
 	/**
-	 * Gets the x coordinate of the sector this position is in.
+	 * Gets the x coordinate of the region this position is in.
 	 * 
-	 * @return The sector x coordinate.
+	 * @return The region x coordinate.
 	 */
-	public int getTopLeftSectorX() {
+	public int getTopLeftRegionX() {
 		return getX() / 8 - 6;
 	}
 
 	/**
-	 * Gets the y coordinate of the sector this position is in.
+	 * Gets the y coordinate of the region this position is in.
 	 * 
-	 * @return The sector y coordinate.
+	 * @return The region y coordinate.
 	 */
-	public int getTopLeftSectorY() {
+	public int getTopLeftRegionY() {
 		return getY() / 8 - 6;
 	}
 
@@ -201,14 +201,14 @@ public final class Position {
 	}
 
 	/**
-	 * Returns whether or not this position is inside the specified {@link Sector}.
+	 * Returns whether or not this position is inside the specified {@link Region}.
 	 * 
-	 * @param sector The sector.
-	 * @return {@code true} if this position is inside the specified sector, otherwise {@code false}.
+	 * @param region The region.
+	 * @return {@code true} if this position is inside the specified region, otherwise {@code false}.
 	 */
-	public boolean inside(Sector sector) {
-		SectorCoordinates coordinates = sector.getCoordinates();
-		return coordinates.equals(getSectorCoordinates());
+	public boolean inside(Region region) {
+		RegionCoordinates coordinates = region.getCoordinates();
+		return coordinates.equals(getRegionCoordinates());
 	}
 
 	/**
@@ -226,7 +226,8 @@ public final class Position {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight()).add("sector", getSectorCoordinates()).toString();
+		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight())
+				.add("region", getRegionCoordinates()).toString();
 	}
 
 }

@@ -38,7 +38,7 @@ public final class RemoveObjectMessage extends Message {
 	 * Creates the RemoveObjectMessage.
 	 * 
 	 * @param object The {@link GameObject} to send.
-	 * @param positionOffset The offset of the object's position from the sector's central position.
+	 * @param positionOffset The offset of the object's position from the region's central position.
 	 */
 	public RemoveObjectMessage(GameObject object, int positionOffset) {
 		this.positionOffset = positionOffset;

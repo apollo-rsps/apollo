@@ -11,8 +11,8 @@ import java.util.function.Predicate;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.MapFileDecoder.MapDefinition;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.area.Sector;
-import org.apollo.game.model.area.SectorRepository;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionMatrix;
 import org.apollo.game.model.area.obj.ObjectType;
 import org.apollo.game.model.def.ObjectDefinition;
@@ -51,19 +51,19 @@ public final class GameObjectDecoder {
 	private final List<GameObject> objects = new ArrayList<>();
 
 	/**
-	 * The SectorRepository.
+	 * The RegionRepository.
 	 */
-	private final SectorRepository sectors;
+	private final RegionRepository regions;
 
 	/**
 	 * Creates the GameObjectDecoder.
 	 * 
 	 * @param fs The {@link IndexedFileSystem}.
-	 * @param sectors The {@link SectorRepository}.
+	 * @param regions The {@link RegionRepository}.
 	 */
-	public GameObjectDecoder(IndexedFileSystem fs, SectorRepository sectors) {
+	public GameObjectDecoder(IndexedFileSystem fs, RegionRepository regions) {
 		this.fs = fs;
-		this.sectors = sectors;
+		this.regions = regions;
 	}
 
 	/**
@@ -104,10 +104,10 @@ public final class GameObjectDecoder {
 		ObjectDefinition definition = ObjectDefinition.lookup(object.getId());
 		int type = object.getType();
 
-		Sector sector = sectors.fromPosition(position);
+		Region region = regions.fromPosition(position);
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
 
-		CollisionMatrix matrix = sector.getMatrix(height);
+		CollisionMatrix matrix = region.getMatrix(height);
 
 		boolean block = false;
 
@@ -132,15 +132,15 @@ public final class GameObjectDecoder {
 		if (block) {
 			for (int dx = 0; dx < definition.getWidth(); dx++) {
 				for (int dy = 0; dy < definition.getLength(); dy++) {
-					int localX = (x % Sector.SECTOR_SIZE) + dx, localY = (y % Sector.SECTOR_SIZE) + dy;
+					int localX = (x % Region.REGION_SIZE) + dx, localY = (y % Region.REGION_SIZE) + dy;
 
 					if (localX > 7 || localY > 7) {
 						int nextLocalX = localX > 7 ? x + localX - 7 : x + localX;
 						int nextLocalY = localY > 7 ? y + localY - 7 : y - localY;
 						Position nextPosition = new Position(nextLocalX, nextLocalY);
-						Sector next = sectors.fromPosition(nextPosition);
+						Region next = regions.fromPosition(nextPosition);
 
-						int nextX = (nextPosition.getX() % Sector.SECTOR_SIZE) + dx, nextY = (nextPosition.getY() % Sector.SECTOR_SIZE)
+						int nextX = (nextPosition.getX() % Region.REGION_SIZE) + dx, nextY = (nextPosition.getY() % Region.REGION_SIZE)
 								+ dy;
 						if (nextX > 7)
 							nextX -= 7;
@@ -164,10 +164,10 @@ public final class GameObjectDecoder {
 	 * @param position The {@link Position} of the tile whose attributes are being decoded.
 	 */
 	private void decodeAttributes(int attributes, Position position) {
-		Sector sector = sectors.fromPosition(position);
+		Region region = regions.fromPosition(position);
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
 
-		CollisionMatrix current = sector.getMatrix(height);
+		CollisionMatrix current = region.getMatrix(height);
 
 		boolean block = false;
 		if ((attributes & BLOCKED_TILE) != 0) {
@@ -181,7 +181,7 @@ public final class GameObjectDecoder {
 		}
 
 		if (block) {
-			int localX = (x % Sector.SECTOR_SIZE), localY = (y % Sector.SECTOR_SIZE);
+			int localX = (x % Region.REGION_SIZE), localY = (y % Region.REGION_SIZE);
 			current.block(localX, localY);
 		}
 	}

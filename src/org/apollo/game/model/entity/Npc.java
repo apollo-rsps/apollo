@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.area.Region;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.sync.block.SynchronizationBlock;
 
@@ -127,9 +127,9 @@ public final class Npc extends Mob {
 	 */
 	private void init() {
 		// This has to be here instead of in Mob#init because of ordering issues - the Npc cannot be added to the
-		// sector until their credentials have been set, which is only done after the super constructors are called.
-		Sector sector = World.getWorld().getSectorRepository().get(position.getSectorCoordinates());
-		sector.addEntity(this);
+		// region until their credentials have been set, which is only done after the super constructors are called.
+		Region region = World.getWorld().getRegionRepository().get(position.getRegionCoordinates());
+		region.addEntity(this);
 	}
 
 }

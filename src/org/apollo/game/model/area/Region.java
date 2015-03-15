@@ -23,12 +23,12 @@ import com.google.common.collect.ImmutableSet;
  * 
  * @author Major
  */
-public final class Sector {
+public final class Region {
 
 	/**
-	 * The width and length of a Sector, in tiles.
+	 * The width and length of a Region, in tiles.
 	 */
-	public static final int SECTOR_SIZE = 8;
+	public static final int REGION_SIZE = 8;
 
 	/**
 	 * The default size of newly-created sets, to reduce memory usage.
@@ -36,9 +36,9 @@ public final class Sector {
 	private static final int DEFAULT_SET_SIZE = 2;
 
 	/**
-	 * The SectorCoordinates of this Sector.
+	 * The RegionCoordinates of this Region.
 	 */
-	private final SectorCoordinates coordinates;
+	private final RegionCoordinates coordinates;
 
 	/**
 	 * The Map of Positions to Entities in that Position.
@@ -46,40 +46,40 @@ public final class Sector {
 	private final Map<Position, Set<Entity>> entities = new HashMap<>();
 
 	/**
-	 * A List of SectorListeners registered to this Sector.
+	 * A List of RegionListeners registered to this Region.
 	 */
-	private final List<SectorListener> listeners = new ArrayList<>();
+	private final List<RegionListener> listeners = new ArrayList<>();
 
 	/**
 	 * The CollisionMatrix.
 	 */
-	private final CollisionMatrix[] matrices = CollisionMatrix.createMatrices(Position.HEIGHT_LEVELS, SECTOR_SIZE, SECTOR_SIZE);
+	private final CollisionMatrix[] matrices = CollisionMatrix.createMatrices(Position.HEIGHT_LEVELS, REGION_SIZE, REGION_SIZE);
 
 	/**
-	 * Creates a new sector.
+	 * Creates a new Region.
 	 * 
-	 * @param x The x coordinate of the sector.
-	 * @param y The y coordinate of the sector.
+	 * @param x The x coordinate of the Region.
+	 * @param y The y coordinate of the Region.
 	 */
-	public Sector(int x, int y) {
-		this(new SectorCoordinates(x, y));
+	public Region(int x, int y) {
+		this(new RegionCoordinates(x, y));
 	}
 
 	/**
-	 * Creates a new sector with the specified {@link SectorCoordinates}.
+	 * Creates a new Region with the specified {@link RegionCoordinates}.
 	 * 
 	 * @param coordinates The coordinates.
 	 */
-	public Sector(SectorCoordinates coordinates) {
+	public Region(RegionCoordinates coordinates) {
 		this.coordinates = coordinates;
 	}
 
 	/**
-	 * Adds a {@link Entity} from to sector. Note that this does not spawn the Entity, or do any other action other than
-	 * register it to this sector.
+	 * Adds a {@link Entity} from to Region. Note that this does not spawn the Entity, or do any other action other than
+	 * register it to this Region.
 	 * 
 	 * @param entity The Entity.
-	 * @throws IllegalArgumentException If the Entity does not belong in this sector.
+	 * @throws IllegalArgumentException If the Entity does not belong in this Region.
 	 */
 	public void addEntity(Entity entity) {
 		Position position = entity.getPosition();
@@ -88,16 +88,16 @@ public final class Sector {
 		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
 		local.add(entity);
 
-		notifyListeners(entity, SectorOperation.ADD);
+		notifyListeners(entity, RegionOperation.ADD);
 	}
 
 	/**
-	 * Checks if this sector contains the specified Entity.
+	 * Checks if this Region contains the specified Entity.
 	 * <p>
 	 * This method operates in constant time.
 	 * 
 	 * @param entity The Entity.
-	 * @return {@code true} if this sector contains the Entity, otherwise {@code false}.
+	 * @return {@code true} if this Region contains the Entity, otherwise {@code false}.
 	 */
 	public boolean contains(Entity entity) {
 		Position position = entity.getPosition();
@@ -107,11 +107,11 @@ public final class Sector {
 	}
 
 	/**
-	 * Gets this sector's {@link SectorCoordinates}.
+	 * Gets this Region's {@link RegionCoordinates}.
 	 * 
-	 * @return The sector coordinates.
+	 * @return The Region coordinates.
 	 */
-	public SectorCoordinates getCoordinates() {
+	public RegionCoordinates getCoordinates() {
 		return coordinates;
 	}
 
@@ -162,11 +162,11 @@ public final class Sector {
 	 * Moves the {@link Entity} that was in the specified {@code old} {@link Position}, to the current position of the
 	 * Entity.
 	 * <p>
-	 * Both the {@code old} and current positions of the Entity must belong to this sector.
+	 * Both the {@code old} and current positions of the Entity must belong to this Region.
 	 * 
 	 * @param old The old position of the Entity.
 	 * @param entity The Entity to move.
-	 * @throws IllegalArgumentException If either of the positions do not belong to this sector.
+	 * @throws IllegalArgumentException If either of the positions do not belong to this Region.
 	 */
 	public void moveEntity(Position old, Entity entity) {
 		Position position = entity.getPosition();
@@ -176,30 +176,30 @@ public final class Sector {
 		Set<Entity> local = entities.get(old);
 
 		if (local == null || !local.remove(entity)) {
-			throw new IllegalArgumentException("Entity belongs in this sector (" + this + ") but does not exist.");
+			throw new IllegalArgumentException("Entity belongs in this Region (" + this + ") but does not exist.");
 		}
 
 		local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
 
 		local.add(entity);
-		notifyListeners(entity, SectorOperation.MOVE);
+		notifyListeners(entity, RegionOperation.MOVE);
 	}
 
 	/**
-	 * Notifies the {@link SectorListener}s registered to this sector that an update has occurred.
+	 * Notifies the {@link RegionListener}s registered to this Region that an update has occurred.
 	 * 
 	 * @param entity The {@link Entity} that was updated.
-	 * @param operation The {@link SectorOperation} that occurred.
+	 * @param operation The {@link RegionOperation} that occurred.
 	 */
-	public void notifyListeners(Entity entity, SectorOperation operation) {
+	public void notifyListeners(Entity entity, RegionOperation operation) {
 		listeners.forEach(listener -> listener.execute(this, entity, operation));
 	}
 
 	/**
-	 * Removes a {@link Entity} from this sector.
+	 * Removes a {@link Entity} from this Region.
 	 * 
 	 * @param entity The Entity.
-	 * @throws IllegalArgumentException If the Entity does not belong in this sector, or if it was never added.
+	 * @throws IllegalArgumentException If the Entity does not belong in this Region, or if it was never added.
 	 */
 	public void removeEntity(Entity entity) {
 		Position position = entity.getPosition();
@@ -208,10 +208,10 @@ public final class Sector {
 		Set<Entity> local = entities.get(position);
 
 		if (local == null || !local.remove(entity)) {
-			throw new IllegalArgumentException("Entity belongs in this sector (" + this + ") but does not exist.");
+			throw new IllegalArgumentException("Entity belongs in this Region (" + this + ") but does not exist.");
 		}
 
-		notifyListeners(entity, SectorOperation.REMOVE);
+		notifyListeners(entity, RegionOperation.REMOVE);
 	}
 
 	/**
@@ -227,7 +227,7 @@ public final class Sector {
 		CollisionMatrix matrix = matrices[position.getHeight()];
 		int x = position.getX(), y = position.getY();
 
-		return !matrix.untraversable(x % SECTOR_SIZE, y % SECTOR_SIZE, entity, direction);
+		return !matrix.untraversable(x % REGION_SIZE, y % REGION_SIZE, entity, direction);
 	}
 
 	@Override
@@ -236,13 +236,14 @@ public final class Sector {
 	}
 
 	/**
-	 * Checks that the specified {@link Position} is included in this sector.
+	 * Checks that the specified {@link Position} is included in this Region.
 	 * 
 	 * @param position The position.
-	 * @throws IllegalArgumentException If the specified position is not included in this sector.
+	 * @throws IllegalArgumentException If the specified position is not included in this Region.
 	 */
 	private void checkPosition(Position position) {
-		Preconditions.checkArgument(coordinates.equals(SectorCoordinates.fromPosition(position)), "Position is not included in this sector.");
+		Preconditions.checkArgument(coordinates.equals(RegionCoordinates.fromPosition(position)),
+				"Position is not included in this Region.");
 	}
 
 }

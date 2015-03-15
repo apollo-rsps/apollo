@@ -394,10 +394,10 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 			Position pos = ((TeleportSegment) seg).getDestination();
 			builder.putBits(1, 1);
 			builder.putBits(2, 3);
-			builder.putBits(1, message.hasSectorChanged() ? 0 : 1);
+			builder.putBits(1, message.hasRegionChanged() ? 0 : 1);
 			builder.putBits(2, pos.getHeight());
-			builder.putBits(7, pos.getLocalY(message.getLastKnownSector()));
-			builder.putBits(7, pos.getLocalX(message.getLastKnownSector()));
+			builder.putBits(7, pos.getLocalY(message.getLastKnownRegion()));
+			builder.putBits(7, pos.getLocalX(message.getLastKnownRegion()));
 			builder.putBits(1, updateRequired ? 1 : 0);
 		} else if (seg.getType() == SegmentType.RUN) {
 			Direction[] directions = ((MovementSegment) seg).getDirections();

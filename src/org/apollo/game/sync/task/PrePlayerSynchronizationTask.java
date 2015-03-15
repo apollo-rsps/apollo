@@ -1,6 +1,6 @@
 package org.apollo.game.sync.task;
 
-import org.apollo.game.message.impl.SectorChangeMessage;
+import org.apollo.game.message.impl.RegionChangeMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Player;
 
@@ -26,13 +26,13 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	}
 
 	/**
-	 * Checks if a sector update is required.
+	 * Checks if a region update is required.
 	 * 
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
-	private boolean isSectorUpdateRequired() {
+	private boolean isRegionUpdateRequired() {
 		Position current = player.getPosition();
-		Position last = player.getLastKnownSector();
+		Position last = player.getLastKnownRegion();
 
 		int deltaX = current.getLocalX(last);
 		int deltaY = current.getLocalY(last);
@@ -48,12 +48,12 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 			player.resetViewingDistance();
 		}
 
-		if (!player.hasLastKnownSector() || isSectorUpdateRequired()) {
-			player.setSectorChanged(true);
+		if (!player.hasLastKnownRegion() || isRegionUpdateRequired()) {
+			player.setRegionChanged(true);
 
 			Position position = player.getPosition();
-			player.setLastKnownSector(position);
-			player.send(new SectorChangeMessage(position));
+			player.setLastKnownRegion(position);
+			player.send(new RegionChangeMessage(position));
 		}
 	}
 

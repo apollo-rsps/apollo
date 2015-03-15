@@ -18,7 +18,7 @@ import org.apollo.game.message.impl.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
@@ -131,9 +131,9 @@ public final class Player extends Mob {
 	private boolean isSkulled = false;
 
 	/**
-	 * The centre of the last sector the client has loaded.
+	 * The centre of the last region the client has loaded.
 	 */
-	private transient Position lastKnownSector;
+	private transient Position lastKnownRegion;
 
 	/**
 	 * The MembershipStatus of this Player.
@@ -166,9 +166,9 @@ public final class Player extends Mob {
 	private ScreenBrightness screenBrightness = ScreenBrightness.NORMAL;
 
 	/**
-	 * A flag indicating if the sector changed in the last cycle.
+	 * A flag indicating if the region changed in the last cycle.
 	 */
-	private transient boolean sectorChanged = false;
+	private transient boolean regionChanged = false;
 
 	/**
 	 * The {@link GameSession} currently attached to this {@link Player}.
@@ -399,12 +399,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Gets the last known sector.
+	 * Gets the last known region.
 	 * 
-	 * @return The last known sector, or {@code null} if the player has never known a sector.
+	 * @return The last known region, or {@code null} if the player has never known a region.
 	 */
-	public Position getLastKnownSector() {
-		return lastKnownSector;
+	public Position getLastKnownRegion() {
+		return lastKnownRegion;
 	}
 
 	/**
@@ -505,21 +505,21 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Checks if this player has ever known a sector.
+	 * Checks if this player has ever known a region.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public boolean hasLastKnownSector() {
-		return lastKnownSector != null;
+	public boolean hasLastKnownRegion() {
+		return lastKnownRegion != null;
 	}
 
 	/**
-	 * Checks if the sector has changed.
+	 * Checks if the region has changed.
 	 * 
 	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public boolean hasSectorChanged() {
-		return sectorChanged;
+	public boolean hasRegionChanged() {
+		return regionChanged;
 	}
 
 	/**
@@ -811,12 +811,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the last known sector.
+	 * Sets the last known region.
 	 * 
-	 * @param lastKnownSector The last known sector.
+	 * @param lastKnownRegion The last known region.
 	 */
-	public void setLastKnownSector(Position lastKnownSector) {
-		this.lastKnownSector = lastKnownSector;
+	public void setLastKnownRegion(Position lastKnownRegion) {
+		this.lastKnownRegion = lastKnownRegion;
 	}
 
 	/**
@@ -866,12 +866,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the sector changed flag.
+	 * Sets the region changed flag.
 	 * 
-	 * @param sectorChanged A flag indicating if the sector has changed.
+	 * @param regionChanged A flag indicating if the region has changed.
 	 */
-	public void setSectorChanged(boolean sectorChanged) {
-		this.sectorChanged = sectorChanged;
+	public void setRegionChanged(boolean regionChanged) {
+		this.regionChanged = regionChanged;
 	}
 
 	/**
@@ -954,9 +954,9 @@ public final class Player extends Mob {
 		initSkills();
 
 		// This has to be here instead of in Mob#init because of ordering issues - the player cannot be added to the
-		// sector until their credentials have been set, which is only done after the super constructors are called.
-		Sector sector = World.getWorld().getSectorRepository().get(position.getSectorCoordinates());
-		sector.addEntity(this);
+		// region until their credentials have been set, which is only done after the super constructors are called.
+		Region region = World.getWorld().getRegionRepository().get(position.getRegionCoordinates());
+		region.addEntity(this);
 	}
 
 	/**
@@ -969,7 +969,8 @@ public final class Player extends Mob {
 
 		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.INVENTORY_ID);
 		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
-		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.EQUIPMENT_ID);
+		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
+				SynchronizationInventoryListener.EQUIPMENT_ID);
 
 		inventory.addListener(syncInventoryListener);
 		inventory.addListener(fullInventoryListener);

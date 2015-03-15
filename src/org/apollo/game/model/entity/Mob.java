@@ -11,8 +11,8 @@ import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.Sector;
-import org.apollo.game.model.area.SectorRepository;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeMap;
@@ -433,14 +433,14 @@ public abstract class Mob extends Entity {
 		// Intentionally ignore the Event result - accidentally terminating this method would break the entire server.
 
 		Position old = this.position;
-		SectorRepository repository = World.getWorld().getSectorRepository();
-		Sector current = repository.fromPosition(old);
+		RegionRepository repository = World.getWorld().getRegionRepository();
+		Region current = repository.fromPosition(old);
 
 		if (position.inside(current)) {
 			this.position = position;
 			current.moveEntity(old, this);
 		} else {
-			Sector next = repository.fromPosition(position);
+			Region next = repository.fromPosition(position);
 			current.removeEntity(this);
 			this.position = position; // addEntity relies on the position being updated, so do that first.
 

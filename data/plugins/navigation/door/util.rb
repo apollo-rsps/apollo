@@ -43,9 +43,9 @@ module DoorUtil
   # Replaces a door object for a given player.
   # TODO: This is temporary.
   def self.replace_door(player, original, new)
-    player.send PositionMessage.new(player.last_known_sector, original.position)
+    player.send PositionMessage.new(player.last_known_region, original.position)
     player.send RemoveObjectMessage.new(original)
-    player.send PositionMessage.new(player.last_known_sector, new.position)
+    player.send PositionMessage.new(player.last_known_region, new.position)
     player.send SendObjectMessage.new(new)
   end
 
@@ -53,8 +53,8 @@ module DoorUtil
   def self.toggle(door, player)
     # First, we remove the door we're toggling (or un-toggling) from the game world.
     position = door.position
-    sector = $world.sector_repository.from_position(position)
-    sector.remove_entity door
+    region = $world.region_repository.from_position(position)
+    region.remove_entity door
 
     # Have we toggled this door already?
     if TOGGLED_DOOR_REPOSITORY.include?(door)
@@ -62,8 +62,8 @@ module DoorUtil
       original_door = TOGGLED_DOOR_REPOSITORY.delete(door)
 
       # Now we add our new door to the game world.
-      original_sector = $world.sector_repository.from_position(original_door.position)
-      original_sector.add_entity original_door
+      original_region = $world.region_repository.from_position(original_door.position)
+      original_region.add_entity original_door
 
       # TODO: This and the 'player' parameter are temporary. We still need to synchronize objects for local players.
       replace_door player, door, original_door
@@ -74,8 +74,8 @@ module DoorUtil
       toggled_door = GameObject.new(door.id, toggled_position, door.type, toggled_orientation)
 
       # Now we add our new door to the game world.
-      toggled_sector = $world.sector_repository.from_position(toggled_position)
-      toggled_sector.add_entity toggled_door
+      toggled_region = $world.region_repository.from_position(toggled_position)
+      toggled_region.add_entity toggled_door
 
       # Insert our toggled door in the repository.
       TOGGLED_DOOR_REPOSITORY[toggled_door] = door
@@ -87,7 +87,7 @@ module DoorUtil
 
   # Gets the door object at the given position, if it exists.
   def self.get_door_object(position, object_id)
-    game_objects = $world.sector_repository.from_position(position).get_entities(position, EntityType::GAME_OBJECT)
+    game_objects = $world.region_repository.from_position(position).get_entities(position, EntityType::GAME_OBJECT)
     game_objects.each { |game_object| return game_object if game_object.id == object_id }
     return nil
   end

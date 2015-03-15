@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
 import org.apollo.fs.archive.ArchiveEntry;
-import org.apollo.game.model.area.Sector;
+import org.apollo.game.model.area.Region;
 
 /**
  * Decodes {@link MapDefinition}s from the {@link IndexedFileSystem}.
@@ -21,7 +21,7 @@ public final class MapFileDecoder {
 	/**
 	 * The width (and length) of a map file, in tiles.
 	 */
-	public static final int MAP_FILE_WIDTH = Sector.SECTOR_SIZE * Sector.SECTOR_SIZE;
+	public static final int MAP_FILE_WIDTH = Region.REGION_SIZE * Region.REGION_SIZE;
 
 	/**
 	 * The file id of the versions archive.
