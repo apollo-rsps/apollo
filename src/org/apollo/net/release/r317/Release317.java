@@ -1,7 +1,6 @@
 package org.apollo.net.release.r317;
 
-import org.apollo.game.message.impl.AddGlobalTileItemMessage;
-import org.apollo.game.message.impl.AddTileItemMessage;
+import org.apollo.game.message.impl.ClearRegionMessage;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.game.message.impl.DisplayCrossbonesMessage;
@@ -10,6 +9,7 @@ import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.FlashTabInterfaceMessage;
 import org.apollo.game.message.impl.ForwardPrivateChatMessage;
 import org.apollo.game.message.impl.FriendServerStatusMessage;
+import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
 import org.apollo.game.message.impl.HintIconMessage;
 import org.apollo.game.message.impl.IdAssignmentMessage;
 import org.apollo.game.message.impl.IgnoreListMessage;
@@ -22,15 +22,17 @@ import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.OpenOverlayMessage;
 import org.apollo.game.message.impl.OpenSidebarMessage;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
-import org.apollo.game.message.impl.PositionMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
+import org.apollo.game.message.impl.RegionChangeMessage;
 import org.apollo.game.message.impl.RemoveObjectMessage;
 import org.apollo.game.message.impl.RemoveTileItemMessage;
-import org.apollo.game.message.impl.RegionChangeMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.SendObjectMessage;
+import org.apollo.game.message.impl.SendPublicTileItemMessage;
+import org.apollo.game.message.impl.SendTileItemMessage;
 import org.apollo.game.message.impl.ServerChatMessage;
 import org.apollo.game.message.impl.SetPlayerActionMessage;
+import org.apollo.game.message.impl.SetUpdatedRegionMessage;
 import org.apollo.game.message.impl.SetWidgetItemModelMessage;
 import org.apollo.game.message.impl.SetWidgetModelAnimationMessage;
 import org.apollo.game.message.impl.SetWidgetNpcModelMessage;
@@ -194,7 +196,7 @@ public final class Release317 extends Release {
 		register(SetWidgetModelAnimationMessage.class, new SetWidgetModelAnimationMessageEncoder());
 		register(ConfigMessage.class, new ConfigMessageEncoder());
 		register(DisplayTabInterfaceMessage.class, new DisplayTabInterfaceMessageEncoder());
-		register(PositionMessage.class, new PositionMessageEncoder());
+		register(SetUpdatedRegionMessage.class, new SetUpdatedRegionMessageEncoder());
 		register(UpdateRunEnergyMessage.class, new UpdateRunEnergyMessageEncoder());
 		register(PrivacyOptionMessage.class, new PrivacyOptionMessageEncoder());
 		register(OpenDialogueInterfaceMessage.class, new OpenDialogueInterfaceMessageEncoder());
@@ -202,12 +204,15 @@ public final class Release317 extends Release {
 		register(SetPlayerActionMessage.class, new SetPlayerActionMessageEncoder());
 		register(DisplayCrossbonesMessage.class, new DisplayCrossbonesMessageEncoder());
 
-		register(AddGlobalTileItemMessage.class, new AddGlobalTileItemMessageEncoder());
-		register(AddTileItemMessage.class, new AddTileItemMessageEncoder());
+		register(SendPublicTileItemMessage.class, new AddGlobalTileItemMessageEncoder());
+		register(SendTileItemMessage.class, new AddTileItemMessageEncoder());
 		register(UpdateTileItemMessage.class, new UpdateTileItemMessageEncoder());
 		register(RemoveTileItemMessage.class, new RemoveTileItemMessageEncoder());
 		register(SendObjectMessage.class, new SendObjectMessageEncoder());
 		register(RemoveObjectMessage.class, new RemoveObjectMessageEncoder());
+
+		register(GroupedRegionUpdateMessage.class, new GroupedRegionUpdateMessageEncoder(this));
+		register(ClearRegionMessage.class, new ClearRegionMessageEncoder());
 
 		register(ForwardPrivateChatMessage.class, new ForwardPrivateChatMessageEncoder());
 		register(FriendServerStatusMessage.class, new FriendServerStatusMessageEncoder());

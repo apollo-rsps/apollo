@@ -1,4 +1,4 @@
-package org.apollo.game.model.area.obj;
+package org.apollo.game.model.entity.obj;
 
 /**
  * The type of an object, which affects specified behaviour (such as whether it displaces existing objects). TODO

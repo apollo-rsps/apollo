@@ -1,7 +1,12 @@
-package org.apollo.game.model.entity;
+package org.apollo.game.model.entity.obj;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.area.EntityUpdateType;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.update.ObjectUpdateOperation;
 import org.apollo.game.model.def.ObjectDefinition;
+import org.apollo.game.model.entity.Entity;
+import org.apollo.game.model.entity.Player;
 
 import com.google.common.base.MoreObjects;
 
@@ -11,7 +16,7 @@ import com.google.common.base.MoreObjects;
  * @author Chris Fletcher
  * @author Major
  */
-public final class GameObject extends Entity {
+public abstract class GameObject extends Entity {
 
 	/**
 	 * The packed value that stores this object's id, type, and orientation.
@@ -19,12 +24,12 @@ public final class GameObject extends Entity {
 	private final int packed;
 
 	/**
-	 * Creates the game object.
+	 * Creates the GameObject.
 	 * 
-	 * @param id The object's id.
-	 * @param position The position.
-	 * @param type The type code of the object.
-	 * @param orientation The orientation of the object.
+	 * @param id The id of the GameObject
+	 * @param position The {@link Position} of the GameObject.
+	 * @param type The type of the GameObject.
+	 * @param orientation The orientation of the GameObject.
 	 */
 	public GameObject(int id, Position position, int type, int orientation) {
 		super(position);
@@ -50,18 +55,13 @@ public final class GameObject extends Entity {
 		return ObjectDefinition.lookup(getId());
 	}
 
-	@Override
-	public EntityType getEntityType() {
-		return EntityType.GAME_OBJECT;
-	}
-
 	/**
 	 * Gets this object's id.
 	 * 
 	 * @return The id.
 	 */
 	public int getId() {
-		return packed >> 8;
+		return packed >>> 8;
 	}
 
 	/**
@@ -89,7 +89,21 @@ public final class GameObject extends Entity {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("id", getId()).add("type", getType()).add("orientation", getOrientation()).toString();
+		return MoreObjects.toStringHelper(this).add("id", getId()).add("type", getType()).add("orientation", getOrientation())
+				.toString();
 	}
+
+	@Override
+	public ObjectUpdateOperation toUpdateOperation(Region region, EntityUpdateType operation) {
+		return new ObjectUpdateOperation(region, operation, this);
+	}
+
+	/**
+	 * Returns whether or not this GameObject can be seen by the specified {@link Player}.
+	 * 
+	 * @param player The Player.
+	 * @return {@code true} if the Player can see this GameObject, {@code false} if not.
+	 */
+	public abstract boolean viewableBy(Player player);
 
 }

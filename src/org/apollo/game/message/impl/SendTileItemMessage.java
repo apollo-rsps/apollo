@@ -8,7 +8,7 @@ import org.apollo.game.model.Item;
  * 
  * @author Major
  */
-public final class AddTileItemMessage extends Message {
+public final class SendTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * The item to add to the tile.
@@ -21,21 +21,12 @@ public final class AddTileItemMessage extends Message {
 	private final int positionOffset;
 
 	/**
-	 * Creates an add tile item message.
-	 * 
-	 * @param item The item to add to the tile.
-	 */
-	public AddTileItemMessage(Item item) {
-		this(item, 0);
-	}
-
-	/**
-	 * Creates an add tile item message.
+	 * Creates the SendTileItemMessage.
 	 * 
 	 * @param item The item to add to the tile.
 	 * @param positionOffset The offset from the 'base' position.
 	 */
-	public AddTileItemMessage(Item item, int positionOffset) {
+	public SendTileItemMessage(Item item, int positionOffset) {
 		this.item = item;
 		this.positionOffset = positionOffset;
 	}
@@ -65,6 +56,27 @@ public final class AddTileItemMessage extends Message {
 	 */
 	public int getPositionOffset() {
 		return positionOffset;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof SendTileItemMessage) {
+			SendTileItemMessage other = (SendTileItemMessage) obj;
+			return item.equals(other.item) && positionOffset == other.positionOffset;
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		return item.hashCode() * prime + positionOffset;
+	}
+
+	@Override
+	public int priority() {
+		return LOW_PRIORITY;
 	}
 
 }

@@ -3,8 +3,6 @@ package org.apollo.game.model.entity;
 import java.util.Optional;
 
 import org.apollo.game.model.Position;
-import org.apollo.game.model.World;
-import org.apollo.game.model.area.Region;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.sync.block.SynchronizationBlock;
 
@@ -44,7 +42,6 @@ public final class Npc extends Mob {
 		super(position, definition);
 
 		this.boundaries = Optional.ofNullable(boundaries);
-		init();
 	}
 
 	@Override
@@ -120,16 +117,6 @@ public final class Npc extends Mob {
 
 		definition = Optional.of(NpcDefinition.lookup(id));
 		blockSet.add(SynchronizationBlock.createTransformBlock(id));
-	}
-
-	/**
-	 * Initialises this Npc.
-	 */
-	private void init() {
-		// This has to be here instead of in Mob#init because of ordering issues - the Npc cannot be added to the
-		// region until their credentials have been set, which is only done after the super constructors are called.
-		Region region = World.getWorld().getRegionRepository().get(position.getRegionCoordinates());
-		region.addEntity(this);
 	}
 
 }

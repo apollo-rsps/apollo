@@ -14,9 +14,10 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionMatrix;
-import org.apollo.game.model.area.obj.ObjectType;
 import org.apollo.game.model.def.ObjectDefinition;
-import org.apollo.game.model.entity.GameObject;
+import org.apollo.game.model.entity.obj.GameObject;
+import org.apollo.game.model.entity.obj.ObjectType;
+import org.apollo.game.model.entity.obj.StaticGameObject;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
 
@@ -132,7 +133,7 @@ public final class GameObjectDecoder {
 		if (block) {
 			for (int dx = 0; dx < definition.getWidth(); dx++) {
 				for (int dy = 0; dy < definition.getLength(); dy++) {
-					int localX = (x % Region.REGION_SIZE) + dx, localY = (y % Region.REGION_SIZE) + dy;
+					int localX = (x % Region.SIZE) + dx, localY = (y % Region.SIZE) + dy;
 
 					if (localX > 7 || localY > 7) {
 						int nextLocalX = localX > 7 ? x + localX - 7 : x + localX;
@@ -140,8 +141,7 @@ public final class GameObjectDecoder {
 						Position nextPosition = new Position(nextLocalX, nextLocalY);
 						Region next = regions.fromPosition(nextPosition);
 
-						int nextX = (nextPosition.getX() % Region.REGION_SIZE) + dx, nextY = (nextPosition.getY() % Region.REGION_SIZE)
-								+ dy;
+						int nextX = (nextPosition.getX() % Region.SIZE) + dx, nextY = (nextPosition.getY() % Region.SIZE) + dy;
 						if (nextX > 7)
 							nextX -= 7;
 						if (nextY > 7)
@@ -181,7 +181,7 @@ public final class GameObjectDecoder {
 		}
 
 		if (block) {
-			int localX = (x % Region.REGION_SIZE), localY = (y % Region.REGION_SIZE);
+			int localX = (x % Region.SIZE), localY = (y % Region.SIZE);
 			current.block(localX, localY);
 		}
 	}
@@ -215,7 +215,7 @@ public final class GameObjectDecoder {
 				int orientation = attributes & 0x3;
 				Position position = new Position(x + localX, y + localY, height);
 
-				GameObject object = new GameObject(id, position, type, orientation);
+				GameObject object = new StaticGameObject(id, position, type, orientation);
 				objects.add(object);
 
 				block(object, position);

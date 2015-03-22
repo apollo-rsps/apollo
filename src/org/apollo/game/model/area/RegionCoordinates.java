@@ -14,10 +14,10 @@ import com.google.common.base.MoreObjects;
 public final class RegionCoordinates {
 
 	/**
-	 * Gets a pair of region coordinates from a {@link Position}.
+	 * Gets the RegionCoordinates for the specified {@link Position}.
 	 * 
-	 * @param position The position.
-	 * @return The region coordinates.
+	 * @param position The Position.
+	 * @return The RegionCoordinates.
 	 */
 	public static RegionCoordinates fromPosition(Position position) {
 		return new RegionCoordinates(position.getTopLeftRegionX(), position.getTopLeftRegionY());
@@ -52,6 +52,24 @@ public final class RegionCoordinates {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Gets the absolute x coordinate of this Region (which can be compared directly against {@link Position#getX()}.
+	 * 
+	 * @return The absolute x coordinate.
+	 */
+	public int getAbsoluteX() {
+		return Region.SIZE * (x + 6);
+	}
+
+	/**
+	 * Gets the absolute y coordinate of this Region (which can be compared directly against {@link Position#getY()}.
+	 * 
+	 * @return The absolute y coordinate.
+	 */
+	public int getAbsoluteY() {
+		return Region.SIZE * (y + 6);
 	}
 
 	/**

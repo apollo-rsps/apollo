@@ -1,14 +1,14 @@
 package org.apollo.game.message.impl;
 
 import org.apollo.game.message.Message;
-import org.apollo.game.model.entity.GameObject;
+import org.apollo.game.model.entity.obj.GameObject;
 
 /**
  * A {@link Message} sent to the client to remove an object from a tile.
  * 
  * @author Major
  */
-public final class RemoveObjectMessage extends Message {
+public final class RemoveObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * The orientation of the object.
@@ -29,21 +29,22 @@ public final class RemoveObjectMessage extends Message {
 	 * Creates the RemoveObjectMessage.
 	 * 
 	 * @param object The {@link GameObject} to send.
-	 */
-	public RemoveObjectMessage(GameObject object) {
-		this(object, 0);
-	}
-
-	/**
-	 * Creates the RemoveObjectMessage.
-	 * 
-	 * @param object The {@link GameObject} to send.
-	 * @param positionOffset The offset of the object's position from the region's central position.
+	 * @param positionOffset The offset of the GameObject's Position from the Region's top-left position.
 	 */
 	public RemoveObjectMessage(GameObject object, int positionOffset) {
 		this.positionOffset = positionOffset;
 		this.type = object.getType();
 		this.orientation = object.getOrientation();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof RemoveObjectMessage) {
+			RemoveObjectMessage other = (RemoveObjectMessage) obj;
+			return type == other.type && orientation == other.orientation && positionOffset == other.positionOffset;
+		}
+
+		return false;
 	}
 
 	/**
@@ -71,6 +72,18 @@ public final class RemoveObjectMessage extends Message {
 	 */
 	public int getType() {
 		return type;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = prime * positionOffset + orientation;
+		return prime * result + type;
+	}
+
+	@Override
+	public int priority() {
+		return HIGH_PRIORITY;
 	}
 
 }

@@ -1,6 +1,8 @@
 package org.apollo.game.model.area;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,14 +10,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.collision.CollisionMatrix;
+import org.apollo.game.model.area.update.UpdateOperation;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.obj.GameObject;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -26,9 +32,29 @@ import com.google.common.collect.ImmutableSet;
 public final class Region {
 
 	/**
+	 * A {@link RegionListener} for {@link UpdateOperation}s.
+	 *
+	 * @author Major
+	 */
+	private static final class UpdateRegionListener implements RegionListener {
+
+		@Override
+		public void execute(Region region, Entity entity, EntityUpdateType update) {
+			EntityType type = entity.getEntityType();
+			if (type != EntityType.PLAYER && type != EntityType.NPC
+					&& (type != EntityType.STATIC_OBJECT || update == EntityUpdateType.REMOVE)) {
+				region.record(entity, update);
+			}
+		}
+
+	}
+
+	/**
 	 * The width and length of a Region, in tiles.
 	 */
-	public static final int REGION_SIZE = 8;
+	public static final int SIZE = 8;
+
+	static final long start = System.currentTimeMillis();
 
 	/**
 	 * The default size of newly-created sets, to reduce memory usage.
@@ -53,7 +79,17 @@ public final class Region {
 	/**
 	 * The CollisionMatrix.
 	 */
-	private final CollisionMatrix[] matrices = CollisionMatrix.createMatrices(Position.HEIGHT_LEVELS, REGION_SIZE, REGION_SIZE);
+	private final CollisionMatrix[] matrices = CollisionMatrix.createMatrices(Position.HEIGHT_LEVELS, SIZE, SIZE);
+
+	/**
+	 * The Set containing RegionUpdateMessages which can be sent to add every non-Mob Entity in this Region.
+	 */
+	private final List<List<RegionUpdateMessage>> snapshots = new ArrayList<>(Position.HEIGHT_LEVELS);
+
+	/**
+	 * The Set containing UpdateOperations.
+	 */
+	private final List<List<RegionUpdateMessage>> updates = new ArrayList<>(Position.HEIGHT_LEVELS);
 
 	/**
 	 * Creates a new Region.
@@ -72,6 +108,12 @@ public final class Region {
 	 */
 	public Region(RegionCoordinates coordinates) {
 		this.coordinates = coordinates;
+		listeners.add(new UpdateRegionListener());
+
+		for (int height = 0; height < Position.HEIGHT_LEVELS; height++) {
+			snapshots.add(new ArrayList<>());
+			updates.add(new ArrayList<>(DEFAULT_SET_SIZE));
+		}
 	}
 
 	/**
@@ -88,7 +130,11 @@ public final class Region {
 		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
 		local.add(entity);
 
-		notifyListeners(entity, RegionOperation.ADD);
+		if ((System.currentTimeMillis() - start) / 1000 > 10 && (entity instanceof GameObject)) {
+			System.out.println("Adding entity " + entity + " to " + entity.getPosition());
+		}
+
+		notifyListeners(entity, EntityUpdateType.ADD);
 	}
 
 	/**
@@ -128,22 +174,24 @@ public final class Region {
 	}
 
 	/**
-	 * Gets a shallow copy of the {@link Set} of {@link Entity}s with the specified {@link EntityType}. The returned
+	 * Gets a shallow copy of the {@link Set} of {@link Entity}s with the specified {@link EntityType}(s). The returned
 	 * type will be immutable. Type will be inferred from the call, so ensure that the Entity type and the reference
 	 * correspond, or this method will fail at runtime.
 	 * 
 	 * @param position The {@link Position} containing the entities.
-	 * @param type The {@link EntityType}.
+	 * @param types The {@link EntityType}s.
 	 * @return The set of entities.
 	 */
-	public <T extends Entity> Set<T> getEntities(Position position, EntityType type) {
+	public <T extends Entity> Set<T> getEntities(Position position, EntityType... types) {
 		Set<Entity> local = entities.get(position);
 		if (local == null) {
 			return ImmutableSet.of();
 		}
 
+		Set<EntityType> set = new HashSet<>(Arrays.asList(types));
 		@SuppressWarnings("unchecked")
-		Set<T> filtered = (Set<T>) local.stream().filter(Entity -> Entity.getEntityType() == type).collect(Collectors.toSet());
+		Set<T> filtered = (Set<T>) local.stream().filter(entity -> set.contains(entity.getEntityType()))
+				.collect(Collectors.toSet());
 		return ImmutableSet.copyOf(filtered);
 	}
 
@@ -159,40 +207,41 @@ public final class Region {
 	}
 
 	/**
-	 * Moves the {@link Entity} that was in the specified {@code old} {@link Position}, to the current position of the
-	 * Entity.
-	 * <p>
-	 * Both the {@code old} and current positions of the Entity must belong to this Region.
+	 * Gets a {@link Set} containing {@link RegionUpdateMessage}s that add every {@link Entity} in this Region.
 	 * 
-	 * @param old The old position of the Entity.
-	 * @param entity The Entity to move.
-	 * @throws IllegalArgumentException If either of the positions do not belong to this Region.
+	 * @param height The height level to get the Set of RegionUpdateMessages for.
+	 * @return The Set of RegionUpdateMessages.
 	 */
-	public void moveEntity(Position old, Entity entity) {
-		Position position = entity.getPosition();
-		checkPosition(old);
-		checkPosition(position);
+	public List<RegionUpdateMessage> getSnapshot(int height) {
+		List<RegionUpdateMessage> copy = new ArrayList<>(snapshots.get(height));
+		Collections.sort(copy);
+		return ImmutableList.copyOf(copy);
+	}
 
-		Set<Entity> local = entities.get(old);
+	/**
+	 * Gets the updates that have occurred in the last tick in this Region, as a {@link Set} of
+	 * {@link RegionUpdateMessage}s.
+	 * 
+	 * @param height The height level to get the Set of RegionUpdateMessages for.
+	 * @return The Set of RegionUpdateMessages.
+	 */
+	public List<RegionUpdateMessage> getUpdates(int height) {
+		List<RegionUpdateMessage> original = this.updates.get(height);
+		List<RegionUpdateMessage> updates = new ArrayList<>(original);
+		original.clear();
 
-		if (local == null || !local.remove(entity)) {
-			throw new IllegalArgumentException("Entity belongs in this Region (" + this + ") but does not exist.");
-		}
-
-		local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
-
-		local.add(entity);
-		notifyListeners(entity, RegionOperation.MOVE);
+		Collections.sort(updates);
+		return ImmutableList.copyOf(updates);
 	}
 
 	/**
 	 * Notifies the {@link RegionListener}s registered to this Region that an update has occurred.
 	 * 
 	 * @param entity The {@link Entity} that was updated.
-	 * @param operation The {@link RegionOperation} that occurred.
+	 * @param type The {@link EntityUpdateType} that occurred.
 	 */
-	public void notifyListeners(Entity entity, RegionOperation operation) {
-		listeners.forEach(listener -> listener.execute(this, entity, operation));
+	public void notifyListeners(Entity entity, EntityUpdateType type) {
+		listeners.forEach(listener -> listener.execute(this, entity, type));
 	}
 
 	/**
@@ -211,7 +260,12 @@ public final class Region {
 			throw new IllegalArgumentException("Entity belongs in this Region (" + this + ") but does not exist.");
 		}
 
-		notifyListeners(entity, RegionOperation.REMOVE);
+		notifyListeners(entity, EntityUpdateType.REMOVE);
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("coordinates", coordinates).toString();
 	}
 
 	/**
@@ -227,12 +281,7 @@ public final class Region {
 		CollisionMatrix matrix = matrices[position.getHeight()];
 		int x = position.getX(), y = position.getY();
 
-		return !matrix.untraversable(x % REGION_SIZE, y % REGION_SIZE, entity, direction);
-	}
-
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("coordinates", coordinates).toString();
+		return !matrix.untraversable(x % SIZE, y % SIZE, entity, direction);
 	}
 
 	/**
@@ -244,6 +293,21 @@ public final class Region {
 	private void checkPosition(Position position) {
 		Preconditions.checkArgument(coordinates.equals(RegionCoordinates.fromPosition(position)),
 				"Position is not included in this Region.");
+	}
+
+	/**
+	 * Records the specified {@link Entity} as being updated this pulse.
+	 * 
+	 * @param entity The Entity.
+	 * @param type The {@link EntityUpdateType}.
+	 * @throws UnsupportedOperationException If the specified Entity cannot be operated on in this manner.
+	 */
+	private void record(Entity entity, EntityUpdateType type) {
+		RegionUpdateMessage message = entity.toUpdateOperation(this, type).toMessage();
+		int height = entity.getPosition().getHeight();
+
+		updates.get(height).add(message);
+		snapshots.get(height).add(message);
 	}
 
 }

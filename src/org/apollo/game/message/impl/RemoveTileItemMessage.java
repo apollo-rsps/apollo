@@ -1,16 +1,17 @@
 package org.apollo.game.message.impl;
 
 import org.apollo.game.message.Message;
+import org.apollo.game.model.Item;
 
 /**
  * A {@link Message} sent to the client to remove an item from a tile.
  * 
  * @author Major
  */
-public final class RemoveTileItemMessage extends Message {
+public final class RemoveTileItemMessage extends RegionUpdateMessage {
 
 	/**
-	 * The item.
+	 * The id of the Item to remove.
 	 */
 	private final int id;
 
@@ -20,23 +21,34 @@ public final class RemoveTileItemMessage extends Message {
 	private final int positionOffset;
 
 	/**
-	 * Creates a remove tile item message.
+	 * Creates the RemoveTileItemMessage.
 	 * 
-	 * @param id The id of the item to remove.
-	 */
-	public RemoveTileItemMessage(int id) {
-		this(id, 0);
-	}
-
-	/**
-	 * Creates a remove tile item message.
-	 * 
-	 * @param id The id of the item to remove.
+	 * @param id The id of the {@link Item} to remove.
 	 * @param positionOffset The offset from the 'base' position.
 	 */
 	public RemoveTileItemMessage(int id, int positionOffset) {
 		this.id = id;
 		this.positionOffset = positionOffset;
+	}
+
+	/**
+	 * Creates the RemoveTileItemMessage.
+	 * 
+	 * @param item The {@link Item} to remove.
+	 * @param positionOffset The offset from the 'base' position.
+	 */
+	public RemoveTileItemMessage(Item item, int positionOffset) {
+		this(item.getId(), positionOffset);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof RemoveTileItemMessage) {
+			RemoveTileItemMessage other = (RemoveTileItemMessage) obj;
+			return id == other.id && positionOffset == other.positionOffset;
+		}
+
+		return false;
 	}
 
 	/**
@@ -55,6 +67,17 @@ public final class RemoveTileItemMessage extends Message {
 	 */
 	public int getPositionOffset() {
 		return positionOffset;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		return prime * id + positionOffset;
+	}
+
+	@Override
+	public int priority() {
+		return HIGH_PRIORITY;
 	}
 
 }

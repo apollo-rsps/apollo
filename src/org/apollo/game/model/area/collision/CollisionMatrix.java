@@ -76,7 +76,13 @@ public final class CollisionMatrix {
 	 * @return {@code true} if all of the CollisionFlags are set, otherwise {@code false}.
 	 */
 	public boolean all(int x, int y, CollisionFlag... flags) {
-		return Arrays.stream(flags).allMatch(flag -> (get(x, y) & flag.asByte()) != 0);
+		for (CollisionFlag flag : flags) {
+			if (!flagged(x, y, flag)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -89,7 +95,13 @@ public final class CollisionMatrix {
 	 * @return {@code true} if any of the CollisionFlags are set, otherwise {@code false}.
 	 */
 	public boolean any(int x, int y, CollisionFlag... flags) {
-		return Arrays.stream(flags).anyMatch(flag -> (get(x, y) & flag.asByte()) != 0);
+		for (CollisionFlag flag : flags) {
+			if (flagged(x, y, flag)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -148,6 +160,17 @@ public final class CollisionMatrix {
 	}
 
 	/**
+	 * Sets the appropriate index for the specified coordinate pair to the specified value.
+	 * 
+	 * @param x The x coordinate.
+	 * @param y The y coordinate.
+	 * @param value The value.
+	 */
+	private void set(int x, int y, byte value) {
+		matrix[indexOf(x, y)] = value;
+	}
+
+	/**
 	 * Sets (i.e. sets to {@code true}) the value of the specified {@link CollisionFlag} for the specified coordinate
 	 * pair.
 	 * 
@@ -161,7 +184,8 @@ public final class CollisionMatrix {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("width", width).add("length", length).add("matrix", Arrays.toString(matrix)).toString();
+		return MoreObjects.toStringHelper(this).add("width", width).add("length", length).add("matrix", Arrays.toString(matrix))
+				.toString();
 	}
 
 	/**
@@ -213,17 +237,6 @@ public final class CollisionMatrix {
 		Preconditions.checkElementIndex(y, length, "Y coordinate must be [0, " + length + "), received " + y + ".");
 		int index = y * width + x;
 		return index;
-	}
-
-	/**
-	 * Sets the appropriate index for the specified coordinate pair to the specified value.
-	 * 
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
-	 * @param value The value.
-	 */
-	public void set(int x, int y, byte value) {
-		matrix[indexOf(x, y)] = value;
 	}
 
 }

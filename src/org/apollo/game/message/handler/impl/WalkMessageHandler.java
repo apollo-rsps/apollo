@@ -19,9 +19,9 @@ public final class WalkMessageHandler extends MessageHandler<WalkMessage> {
 		WalkingQueue queue = player.getWalkingQueue();
 
 		Position[] steps = message.getSteps();
-		for (int i = 0; i < steps.length; i++) {
-			Position step = steps[i];
-			if (i == 0) {
+		for (int index = 0; index < steps.length; index++) {
+			Position step = steps[index];
+			if (index == 0) {
 				if (!queue.addFirstStep(step)) {
 					return; // ignore packet
 				}
@@ -31,16 +31,15 @@ public final class WalkMessageHandler extends MessageHandler<WalkMessage> {
 		}
 
 		queue.setRunningQueue(message.isRunning() || player.isRunning());
+		player.getInterfaceSet().close();
 
 		if (queue.size() > 0) {
 			player.stopAction();
 		}
-		player.getInterfaceSet().close();
 
 		if (player.getInteractingMob() != null) {
 			player.resetInteractingMob();
 		}
-
 	}
 
 }

@@ -11,8 +11,10 @@ import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.update.UpdateOperation;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeMap;
@@ -194,8 +196,8 @@ public abstract class Mob extends Entity {
 	 */
 	public final Direction[] getDirections() {
 		if (firstDirection != Direction.NONE) {
-			return secondDirection == Direction.NONE ? new Direction[] { firstDirection } : new Direction[] {
-					firstDirection, secondDirection };
+			return secondDirection == Direction.NONE ? new Direction[] { firstDirection } : new Direction[] { firstDirection,
+					secondDirection };
 		}
 
 		return Direction.EMPTY_DIRECTION_ARRAY;
@@ -246,6 +248,15 @@ public abstract class Mob extends Entity {
 	 */
 	public final Mob getInteractingMob() {
 		return interactingMob;
+	}
+
+	/**
+	 * Returns this mobs interacting index.
+	 * 
+	 * @return The interaction index of this mob.
+	 */
+	public int getInteractionIndex() {
+		return index;
 	}
 
 	/**
@@ -405,15 +416,6 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Returns this mobs interacting index.
-	 * 
-	 * @return The interaction index of this mob.
-	 */
-	public int getInteractionIndex() {
-		return index;
-	}
-
-	/**
 	 * Updates this mob's interacting mob.
 	 * 
 	 * @param mob The mob.
@@ -425,22 +427,19 @@ public abstract class Mob extends Entity {
 
 	/**
 	 * Sets the {@link Position} of this mob.
+	 * <p>
+	 * This method may be intercepted using a {@link MobPositionUpdateEvent}, which can be terminated like any other.
+	 * Plugins that intercept this Event <strong>must</strong> be cautious, because movement will not be possible (even
+	 * through mechanisms such as teleporting) if the Event is terminated.
 	 * 
-	 * @param position The position.
+	 * @param position The Position.
 	 */
 	public final void setPosition(Position position) {
-		World.getWorld().submit(new MobPositionUpdateEvent(this, position));
-		// Intentionally ignore the Event result - accidentally terminating this method would break the entire server.
+		if (World.getWorld().submit(new MobPositionUpdateEvent(this, position))) {
+			Position old = this.position;
+			RegionRepository repository = World.getWorld().getRegionRepository();
+			Region current = repository.fromPosition(old), next = repository.fromPosition(position);
 
-		Position old = this.position;
-		RegionRepository repository = World.getWorld().getRegionRepository();
-		Region current = repository.fromPosition(old);
-
-		if (position.inside(current)) {
-			this.position = position;
-			current.moveEntity(old, this);
-		} else {
-			Region next = repository.fromPosition(position);
 			current.removeEntity(this);
 			this.position = position; // addEntity relies on the position being updated, so do that first.
 
@@ -521,6 +520,11 @@ public abstract class Mob extends Entity {
 		teleporting = true;
 		walkingQueue.clear();
 		stopAction();
+	}
+
+	@Override
+	public final UpdateOperation<Entity> toUpdateOperation(Region region, EntityUpdateType operation) {
+		throw new UnsupportedOperationException("Mobs cannot be recorded as a Region update.");
 	}
 
 	/**

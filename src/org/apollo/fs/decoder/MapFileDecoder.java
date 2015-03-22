@@ -21,7 +21,7 @@ public final class MapFileDecoder {
 	/**
 	 * The width (and length) of a map file, in tiles.
 	 */
-	public static final int MAP_FILE_WIDTH = Region.REGION_SIZE * Region.REGION_SIZE;
+	public static final int MAP_FILE_WIDTH = Region.SIZE * Region.SIZE;
 
 	/**
 	 * The file id of the versions archive.

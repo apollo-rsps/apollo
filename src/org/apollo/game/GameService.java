@@ -13,6 +13,7 @@ import org.apollo.Service;
 import org.apollo.game.message.handler.MessageHandlerChainGroup;
 import org.apollo.game.model.World;
 import org.apollo.game.model.World.RegistrationStatus;
+import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.ClientSynchronizer;
 import org.apollo.io.MessageHandlerChainParser;
@@ -49,7 +50,8 @@ public final class GameService extends Service {
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
+	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory(
+			"GameService"));
 
 	/**
 	 * The {@link ClientSynchronizer}.
@@ -154,10 +156,15 @@ public final class GameService extends Service {
 	 * @return A {@link RegistrationStatus}.
 	 */
 	public RegistrationStatus registerPlayer(Player player, GameSession session) {
+		World world = World.getWorld();
+		
 		synchronized (this) {
-			RegistrationStatus status = World.getWorld().register(player);
+			RegistrationStatus status = world.register(player);
 			if (status == RegistrationStatus.OK) {
 				player.setSession(session);
+
+				Region region = world.getRegionRepository().get(player.getPosition().getRegionCoordinates());
+				region.addEntity(player);
 			}
 
 			return status;
@@ -169,7 +176,8 @@ public final class GameService extends Service {
 	 */
 	@Override
 	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
+		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
+				TimeUnit.MILLISECONDS);
 	}
 
 	/**

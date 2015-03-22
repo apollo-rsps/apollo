@@ -1,4 +1,4 @@
-package org.apollo.game.model.area.obj;
+package org.apollo.game.model.entity.obj;
 
 import java.util.Arrays;
 
@@ -21,7 +21,7 @@ public enum ObjectGroup {
 	WALL_DECORATION(1),
 
 	/**
-	 * The interactable object group, for objects that can be clicked and interacted with.
+	 * The interactable object group, for objects that can be clicked and interacted with. TODO rename
 	 */
 	INTERACTABLE_OBJECT(2),
 

@@ -50,6 +50,16 @@ public final class Item {
 		this.definition = ItemDefinition.lookup(id);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Item) {
+			Item other = (Item) obj;
+			return id == other.id && amount == other.amount;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Gets the amount.
 	 * 
@@ -75,6 +85,12 @@ public final class Item {
 	 */
 	public int getId() {
 		return id;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		return amount * prime + id;
 	}
 
 	@Override

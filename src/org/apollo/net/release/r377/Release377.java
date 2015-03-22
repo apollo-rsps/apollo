@@ -1,7 +1,9 @@
 package org.apollo.net.release.r377;
 
-import org.apollo.game.message.impl.AddGlobalTileItemMessage;
-import org.apollo.game.message.impl.AddTileItemMessage;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apollo.game.message.impl.ClearRegionMessage;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.game.message.impl.DisplayCrossbonesMessage;
@@ -10,6 +12,7 @@ import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.FlashTabInterfaceMessage;
 import org.apollo.game.message.impl.ForwardPrivateChatMessage;
 import org.apollo.game.message.impl.FriendServerStatusMessage;
+import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
 import org.apollo.game.message.impl.HintIconMessage;
 import org.apollo.game.message.impl.IdAssignmentMessage;
 import org.apollo.game.message.impl.IgnoreListMessage;
@@ -22,15 +25,18 @@ import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
 import org.apollo.game.message.impl.OpenOverlayMessage;
 import org.apollo.game.message.impl.OpenSidebarMessage;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
-import org.apollo.game.message.impl.PositionMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
+import org.apollo.game.message.impl.RegionChangeMessage;
+import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.message.impl.RemoveObjectMessage;
 import org.apollo.game.message.impl.RemoveTileItemMessage;
-import org.apollo.game.message.impl.RegionChangeMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.SendObjectMessage;
+import org.apollo.game.message.impl.SendPublicTileItemMessage;
+import org.apollo.game.message.impl.SendTileItemMessage;
 import org.apollo.game.message.impl.ServerChatMessage;
 import org.apollo.game.message.impl.SetPlayerActionMessage;
+import org.apollo.game.message.impl.SetUpdatedRegionMessage;
 import org.apollo.game.message.impl.SetWidgetItemModelMessage;
 import org.apollo.game.message.impl.SetWidgetModelAnimationMessage;
 import org.apollo.game.message.impl.SetWidgetNpcModelMessage;
@@ -45,6 +51,7 @@ import org.apollo.game.message.impl.UpdateSlottedItemsMessage;
 import org.apollo.game.message.impl.UpdateTileItemMessage;
 import org.apollo.game.message.impl.UpdateWeightMessage;
 import org.apollo.net.meta.PacketMetaDataGroup;
+import org.apollo.net.release.MessageEncoder;
 import org.apollo.net.release.Release;
 
 /**
@@ -190,7 +197,7 @@ public final class Release377 extends Release {
 		register(SetWidgetModelAnimationMessage.class, new SetWidgetModelAnimationMessageEncoder());
 		register(ConfigMessage.class, new ConfigMessageEncoder());
 		register(DisplayTabInterfaceMessage.class, new DisplayTabInterfaceMessageEncoder());
-		register(PositionMessage.class, new PositionMessageEncoder());
+		register(SetUpdatedRegionMessage.class, new SetUpdatedRegionMessageEncoder());
 		register(UpdateRunEnergyMessage.class, new UpdateRunEnergyMessageEncoder());
 		register(PrivacyOptionMessage.class, new PrivacyOptionMessageEncoder());
 		register(OpenDialogueInterfaceMessage.class, new OpenDialogueInterfaceMessageEncoder());
@@ -198,12 +205,34 @@ public final class Release377 extends Release {
 		register(SetPlayerActionMessage.class, new SetPlayerActionMessageEncoder());
 		register(DisplayCrossbonesMessage.class, new DisplayCrossbonesMessageEncoder());
 
-		register(AddGlobalTileItemMessage.class, new AddGlobalTileItemMessageEncoder());
-		register(AddTileItemMessage.class, new AddTileItemMessageEncoder());
+		register(SendPublicTileItemMessage.class, new AddGlobalTileItemMessageEncoder());
+		register(SendTileItemMessage.class, new AddTileItemMessageEncoder());
 		register(UpdateTileItemMessage.class, new UpdateTileItemMessageEncoder());
 		register(RemoveTileItemMessage.class, new RemoveTileItemMessageEncoder());
 		register(SendObjectMessage.class, new SendObjectMessageEncoder());
 		register(RemoveObjectMessage.class, new RemoveObjectMessageEncoder());
+
+		Map<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> regionUpdates = new HashMap<>();
+
+		regionUpdates.put(SendPublicTileItemMessage.class, new AddGlobalTileItemMessageEncoder());
+		regionUpdates.put(SendTileItemMessage.class, new AddTileItemMessageEncoder());
+		regionUpdates.put(UpdateTileItemMessage.class, new UpdateTileItemMessageEncoder());
+		regionUpdates.put(RemoveTileItemMessage.class, new RemoveTileItemMessageEncoder());
+		regionUpdates.put(SendObjectMessage.class, new SendObjectMessageEncoder());
+		regionUpdates.put(RemoveObjectMessage.class, new RemoveObjectMessageEncoder());
+
+		for (Map.Entry<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> entry : regionUpdates
+				.entrySet()) {
+			@SuppressWarnings("unchecked")
+			Class<RegionUpdateMessage> clazz = (Class<RegionUpdateMessage>) entry.getKey();
+			@SuppressWarnings("unchecked")
+			MessageEncoder<RegionUpdateMessage> encoder = (MessageEncoder<RegionUpdateMessage>) entry.getValue();
+
+			register(clazz, encoder);
+		}
+
+		register(GroupedRegionUpdateMessage.class, new GroupedRegionUpdateMessageEncoder(regionUpdates));
+		register(ClearRegionMessage.class, new ClearRegionMessageEncoder());
 
 		register(ForwardPrivateChatMessage.class, new ForwardPrivateChatMessageEncoder());
 		register(FriendServerStatusMessage.class, new FriendServerStatusMessageEncoder());

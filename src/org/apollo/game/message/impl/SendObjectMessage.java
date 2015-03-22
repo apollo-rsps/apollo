@@ -1,14 +1,14 @@
 package org.apollo.game.message.impl;
 
 import org.apollo.game.message.Message;
-import org.apollo.game.model.entity.GameObject;
+import org.apollo.game.model.entity.obj.GameObject;
 
 /**
  * A {@link Message} sent to the client to spawn an object.
  * 
  * @author Major
  */
-public final class SendObjectMessage extends Message {
+public final class SendObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * The id of the object.
@@ -34,15 +34,6 @@ public final class SendObjectMessage extends Message {
 	 * Creates the SendObjectMessage.
 	 * 
 	 * @param object The {@link GameObject} to send.
-	 */
-	public SendObjectMessage(GameObject object) {
-		this(object, 0);
-	}
-
-	/**
-	 * Creates the SendObjectMessage.
-	 * 
-	 * @param object The {@link GameObject} to send.
 	 * @param positionOffset The offset of the object's position from the region's central position.
 	 */
 	public SendObjectMessage(GameObject object, int positionOffset) {
@@ -50,6 +41,20 @@ public final class SendObjectMessage extends Message {
 		this.positionOffset = positionOffset;
 		this.type = object.getType();
 		this.orientation = object.getOrientation();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof SendObjectMessage) {
+			SendObjectMessage other = (SendObjectMessage) obj;
+			if (id != other.id || type != other.type) {
+				return false;
+			}
+
+			return positionOffset == other.positionOffset && type == other.type;
+		}
+
+		return false;
 	}
 
 	/**
@@ -86,6 +91,19 @@ public final class SendObjectMessage extends Message {
 	 */
 	public int getType() {
 		return type;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = prime * id + orientation;
+		result = prime * result + type;
+		return prime * result + positionOffset;
+	}
+
+	@Override
+	public int priority() {
+		return LOW_PRIORITY;
 	}
 
 }

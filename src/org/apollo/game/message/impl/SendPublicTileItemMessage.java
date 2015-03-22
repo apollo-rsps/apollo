@@ -8,7 +8,12 @@ import org.apollo.game.model.Item;
  * 
  * @author Major
  */
-public final class AddGlobalTileItemMessage extends Message {
+public final class SendPublicTileItemMessage extends RegionUpdateMessage {
+
+	/**
+	 * The index of the player who dropped the item.
+	 */
+	private final int index;
 
 	/**
 	 * The item to add to the tile.
@@ -21,40 +26,26 @@ public final class AddGlobalTileItemMessage extends Message {
 	private final int positionOffset;
 
 	/**
-	 * The index of the player who dropped the item.
-	 */
-	private final int index;
-
-	/**
-	 * Creates the add global tile item message.
-	 * 
-	 * @param item The item to add to the tile.
-	 * @param index The index of the player who dropped the item.
-	 */
-	public AddGlobalTileItemMessage(Item item, int index) {
-		this(item, index, 0);
-	}
-
-	/**
-	 * Creates the add global tile item message.
+	 * Creates the SendPublicTileItemMessage.
 	 * 
 	 * @param item The item to add to the tile.
 	 * @param index The index of the player who dropped the item.
 	 * @param positionOffset The offset from the 'base' position.
 	 */
-	public AddGlobalTileItemMessage(Item item, int index, int positionOffset) {
+	public SendPublicTileItemMessage(Item item, int index, int positionOffset) {
 		this.item = item;
 		this.index = index;
 		this.positionOffset = positionOffset;
 	}
 
-	/**
-	 * Gets the id of the item.
-	 * 
-	 * @return The id.
-	 */
-	public int getId() {
-		return item.getId();
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof SendPublicTileItemMessage) {
+			SendPublicTileItemMessage other = (SendPublicTileItemMessage) obj;
+			return item.equals(other.item) && index == other.index && positionOffset == other.positionOffset;
+		}
+
+		return false;
 	}
 
 	/**
@@ -64,6 +55,15 @@ public final class AddGlobalTileItemMessage extends Message {
 	 */
 	public int getAmount() {
 		return item.getAmount();
+	}
+
+	/**
+	 * Gets the id of the item.
+	 * 
+	 * @return The id.
+	 */
+	public int getId() {
+		return item.getId();
 	}
 
 	/**
@@ -82,6 +82,18 @@ public final class AddGlobalTileItemMessage extends Message {
 	 */
 	public int getPositionOffset() {
 		return positionOffset;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = item.hashCode() * prime + index;
+		return result * prime + positionOffset;
+	}
+
+	@Override
+	public int priority() {
+		return LOW_PRIORITY;
 	}
 
 }

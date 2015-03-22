@@ -22,7 +22,8 @@ import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity;
-import org.apollo.game.model.entity.GameObject;
+import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.obj.GameObject;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.event.Event;
@@ -35,6 +36,8 @@ import org.apollo.io.EquipmentDefinitionParser;
 import org.apollo.util.MobRepository;
 import org.apollo.util.NameUtil;
 import org.apollo.util.plugin.PluginManager;
+
+import com.google.common.base.Preconditions;
 
 /**
  * The world class is a singleton which contains objects like the {@link MobRepository} for players and NPCs. It should
@@ -124,6 +127,11 @@ public final class World {
 	private PluginManager pluginManager;
 
 	/**
+	 * This world's {@link RegionRepository}.
+	 */
+	private final RegionRepository regions = RegionRepository.immutable();
+
+	/**
 	 * The release number (i.e. version) of this world.
 	 */
 	private int releaseNumber;
@@ -132,11 +140,6 @@ public final class World {
 	 * The scheduler.
 	 */
 	private final Scheduler scheduler = new Scheduler();
-
-	/**
-	 * This world's {@link RegionRepository}.
-	 */
-	private final RegionRepository regions = RegionRepository.immutable();
 
 	/**
 	 * Creates the world.
@@ -193,21 +196,21 @@ public final class World {
 	}
 
 	/**
-	 * Gets the release number of this world.
-	 * 
-	 * @return The release number.
-	 */
-	public int getReleaseNumber() {
-		return releaseNumber;
-	}
-
-	/**
 	 * Gets this world's {@link RegionRepository}.
 	 * 
 	 * @return The RegionRepository.
 	 */
 	public RegionRepository getRegionRepository() {
 		return regions;
+	}
+
+	/**
+	 * Gets the release number of this world.
+	 * 
+	 * @return The release number.
+	 */
+	public int getReleaseNumber() {
+		return releaseNumber;
 	}
 
 	/**
@@ -288,7 +291,7 @@ public final class World {
 	 * @param npc The npc.
 	 * @return {@code true} if the npc registered successfully, otherwise {@code false}.
 	 */
-	public boolean register(final Npc npc) {
+	public boolean register(Npc npc) {
 		boolean success = npcRepository.add(npc);
 
 		if (success) {
@@ -310,7 +313,7 @@ public final class World {
 	 * @param player The player.
 	 * @return A {@link RegistrationStatus}.
 	 */
-	public RegistrationStatus register(final Player player) {
+	public RegistrationStatus register(Player player) {
 		String username = player.getUsername();
 		if (isPlayerOnline(username)) {
 			return RegistrationStatus.ALREADY_ONLINE;
@@ -319,8 +322,6 @@ public final class World {
 		boolean success = playerRepository.add(player);
 		if (success) {
 			players.put(NameUtil.encodeBase37(username), player);
-			Region region = regions.fromPosition(player.getPosition());
-			region.addEntity(player);
 
 			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 			return RegistrationStatus.OK;
@@ -338,6 +339,20 @@ public final class World {
 	 */
 	public boolean schedule(ScheduledTask task) {
 		return scheduler.schedule(task);
+	}
+
+	/**
+	 * Spawns the specified {@link Entity}, which must not be a {@link Player} or an {@link Npc}, which have their own
+	 * register methods.
+	 * 
+	 * @param entity The Entity.
+	 */
+	public void spawn(Entity entity) {
+		EntityType type = entity.getEntityType();
+		Preconditions.checkArgument(type != EntityType.PLAYER && type != EntityType.NPC, "Cannot spawn a Mob.");
+
+		Region region = regions.fromPosition(entity.getPosition());
+		region.addEntity(entity);
 	}
 
 	/**

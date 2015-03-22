@@ -16,8 +16,8 @@ public interface RegionListener {
 	 * 
 	 * @param region The {@link Region} that was updated.
 	 * @param entity The affected {@link Entity}.
-	 * @param operation The type of {@link RegionOperation}.
+	 * @param type The type of {@link EntityUpdateType}.
 	 */
-	public abstract void execute(Region region, Entity entity, RegionOperation operation);
+	public abstract void execute(Region region, Entity entity, EntityUpdateType type);
 
 }

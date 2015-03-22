@@ -1,12 +1,17 @@
 package org.apollo.game.sync;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.ThreadFactory;
 
 import org.apollo.game.GameService;
+import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.World;
+import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.task.NpcSynchronizationTask;
@@ -59,9 +64,12 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 		int playerCount = players.size();
 		int npcCount = npcs.size();
 
+		Map<RegionCoordinates, List<RegionUpdateMessage>> updates = new HashMap<>();
+		Map<RegionCoordinates, List<RegionUpdateMessage>> snapshots = new HashMap<>();
+
 		phaser.bulkRegister(playerCount);
 		for (Player player : players) {
-			SynchronizationTask task = new PrePlayerSynchronizationTask(player);
+			SynchronizationTask task = new PrePlayerSynchronizationTask(player, updates, snapshots);
 			executor.submit(new PhasedSynchronizationTask(phaser, task));
 		}
 		phaser.arriveAndAwaitAdvance();

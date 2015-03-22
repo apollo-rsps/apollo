@@ -18,7 +18,6 @@ import org.apollo.game.message.impl.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
@@ -156,6 +155,11 @@ public final class Player extends Mob {
 	private final transient Deque<Message> queuedMessages = new ArrayDeque<>();
 
 	/**
+	 * A flag indicating if the region changed in the last cycle.
+	 */
+	private transient boolean regionChanged = false;
+
+	/**
 	 * A flag indicating if this player is running.
 	 */
 	private boolean running = false;
@@ -164,11 +168,6 @@ public final class Player extends Mob {
 	 * The brightness of this player's screen.
 	 */
 	private ScreenBrightness screenBrightness = ScreenBrightness.NORMAL;
-
-	/**
-	 * A flag indicating if the region changed in the last cycle.
-	 */
-	private transient boolean regionChanged = false;
 
 	/**
 	 * The {@link GameSession} currently attached to this {@link Player}.
@@ -408,6 +407,15 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Gets the {@link MembershipStatus} of this Player.
+	 * 
+	 * @return The MembershipStatus.
+	 */
+	public MembershipStatus getMembershipStatus() {
+		return members;
+	}
+
+	/**
 	 * Gets the player's prayer icon.
 	 * 
 	 * @return The prayer icon.
@@ -556,15 +564,6 @@ public final class Player extends Mob {
 	 */
 	public boolean isMembers() {
 		return members == MembershipStatus.PAID;
-	}
-
-	/**
-	 * Gets the {@link MembershipStatus} of this Player.
-	 * 
-	 * @return The MembershipStatus.
-	 */
-	public MembershipStatus getMembershipStatus() {
-		return members;
 	}
 
 	/**
@@ -847,6 +846,15 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Sets the region changed flag.
+	 * 
+	 * @param regionChanged A flag indicating if the region has changed.
+	 */
+	public void setRegionChanged(boolean regionChanged) {
+		this.regionChanged = regionChanged;
+	}
+
+	/**
 	 * Sets the player's run energy.
 	 * 
 	 * @param energy The energy.
@@ -863,15 +871,6 @@ public final class Player extends Mob {
 	 */
 	public void setScreenBrightness(ScreenBrightness brightness) {
 		this.screenBrightness = brightness;
-	}
-
-	/**
-	 * Sets the region changed flag.
-	 * 
-	 * @param regionChanged A flag indicating if the region has changed.
-	 */
-	public void setRegionChanged(boolean regionChanged) {
-		this.regionChanged = regionChanged;
 	}
 
 	/**
@@ -943,7 +942,8 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel).add("client version", getClientVersion()).toString();
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
+				.add("client version", getClientVersion()).toString();
 	}
 
 	/**
@@ -952,11 +952,6 @@ public final class Player extends Mob {
 	private void init() {
 		initInventories();
 		initSkills();
-
-		// This has to be here instead of in Mob#init because of ordering issues - the player cannot be added to the
-		// region until their credentials have been set, which is only done after the super constructors are called.
-		Region region = World.getWorld().getRegionRepository().get(position.getRegionCoordinates());
-		region.addEntity(this);
 	}
 
 	/**
@@ -967,7 +962,8 @@ public final class Player extends Mob {
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 
-		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.INVENTORY_ID);
+		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
+				SynchronizationInventoryListener.INVENTORY_ID);
 		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
 		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
 				SynchronizationInventoryListener.EQUIPMENT_ID);

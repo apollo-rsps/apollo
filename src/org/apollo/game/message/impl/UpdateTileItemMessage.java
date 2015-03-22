@@ -8,7 +8,7 @@ import org.apollo.game.model.Item;
  * 
  * @author Major
  */
-public final class UpdateTileItemMessage extends Message {
+public final class UpdateTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * The {@link Item}.
@@ -48,6 +48,16 @@ public final class UpdateTileItemMessage extends Message {
 		this.positionOffset = positionOffset;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof UpdateTileItemMessage) {
+			UpdateTileItemMessage other = (UpdateTileItemMessage) obj;
+			return item.equals(other.item) && previousAmount == other.previousAmount && positionOffset == other.positionOffset;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Gets the amount of the item.
 	 * 
@@ -82,6 +92,18 @@ public final class UpdateTileItemMessage extends Message {
 	 */
 	public int getPreviousAmount() {
 		return previousAmount;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = item.hashCode() * prime + positionOffset;
+		return result * prime + previousAmount;
+	}
+
+	@Override
+	public int priority() {
+		return LOW_PRIORITY;
 	}
 
 }

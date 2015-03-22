@@ -1,6 +1,6 @@
 package org.apollo.game.model.def;
 
-import org.apollo.game.model.entity.GameObject;
+import org.apollo.game.model.entity.obj.GameObject;
 
 import com.google.common.base.Preconditions;
 

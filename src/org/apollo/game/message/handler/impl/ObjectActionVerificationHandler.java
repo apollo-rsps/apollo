@@ -12,8 +12,8 @@ import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity.EntityType;
-import org.apollo.game.model.entity.GameObject;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.obj.GameObject;
 
 /**
  * A verification {@link MessageHandler} for the {@link ObjectActionMessage}.
@@ -34,10 +34,11 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 			ctx.breakHandlerChain();
 			return;
 		}
+		
 
 		Position position = message.getPosition();
 		Region region = repository.fromPosition(position);
-		Set<GameObject> objects = region.getEntities(position, EntityType.GAME_OBJECT);
+		Set<GameObject> objects = region.getEntities(position, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT);
 
 		if (!player.getPosition().isWithinDistance(position, 15) || !containsObject(id, objects)) {
 			ctx.breakHandlerChain();

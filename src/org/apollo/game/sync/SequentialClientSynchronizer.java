@@ -1,7 +1,13 @@
 package org.apollo.game.sync;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apollo.game.GameService;
+import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.World;
+import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.task.NpcSynchronizationTask;
@@ -29,8 +35,11 @@ public final class SequentialClientSynchronizer extends ClientSynchronizer {
 		MobRepository<Player> players = World.getWorld().getPlayerRepository();
 		MobRepository<Npc> npcs = World.getWorld().getNpcRepository();
 
+		Map<RegionCoordinates, List<RegionUpdateMessage>> updates = new HashMap<>();
+		Map<RegionCoordinates, List<RegionUpdateMessage>> snapshots = new HashMap<>();
+
 		for (Player player : players) {
-			SynchronizationTask task = new PrePlayerSynchronizationTask(player);
+			SynchronizationTask task = new PrePlayerSynchronizationTask(player, updates, snapshots);
 			task.run();
 		}
 
