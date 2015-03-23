@@ -1,5 +1,7 @@
 package org.apollo.game.model.skill;
 
+import java.util.stream.IntStream;
+
 import org.apollo.game.message.impl.UpdateSkillMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
@@ -29,14 +31,14 @@ public final class SynchronizationSkillListener extends SkillAdapter {
 
 	@Override
 	public void levelledUp(SkillSet set, int id, Skill skill) {
-		player.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(player));
+		if (Skill.isCombatSkill(id)) {
+			player.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(player));
+		}
 	}
 
 	@Override
 	public void skillsUpdated(SkillSet set) {
-		for (int id = 0; id < set.size(); id++) {
-			player.send(new UpdateSkillMessage(id, set.getSkill(id)));
-		}
+		IntStream.range(0, set.size()).forEach(id -> skillUpdated(set, id, set.getSkill(id)));
 	}
 
 	@Override
