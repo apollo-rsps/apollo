@@ -25,11 +25,11 @@ public abstract class PlayerActionMessage extends Message {
 	 * Creates a player action message.
 	 * 
 	 * @param option The option number.
-	 * @param playerIndex The index of the player.
+	 * @param index The index of the player.
 	 */
-	public PlayerActionMessage(int option, int playerIndex) {
+	public PlayerActionMessage(int option, int index) {
 		this.option = option;
-		this.index = playerIndex - 1;
+		this.index = index;
 	}
 
 	/**
