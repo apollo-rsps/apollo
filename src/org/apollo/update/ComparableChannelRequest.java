@@ -9,8 +9,7 @@ import io.netty.channel.Channel;
  *
  * @param <T> The type of request.
  */
-public final class ComparableChannelRequest<T extends Comparable<T>> extends ChannelRequest<T> implements
-		Comparable<ComparableChannelRequest<T>> {
+public final class ComparableChannelRequest<T extends Comparable<T>> extends ChannelRequest<T> implements Comparable<ComparableChannelRequest<T>> {
 
 	/**
 	 * Creates the ComparableChannelRequest.

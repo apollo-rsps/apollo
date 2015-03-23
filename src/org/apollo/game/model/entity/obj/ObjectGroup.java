@@ -38,8 +38,7 @@ public enum ObjectGroup {
 	 * @throws IllegalArgumentException If there is no ObjectGroup with the specified value.
 	 */
 	public static ObjectGroup valueOf(int value) {
-		return Arrays.stream(values()).filter(group -> group.value == value).findAny()
-				.orElseThrow(() -> new IllegalArgumentException("No ObjectGroup with a value of " + value + " exists."));
+		return Arrays.stream(values()).filter(group -> group.value == value).findAny().orElseThrow(() -> new IllegalArgumentException("No ObjectGroup with a value of " + value + " exists."));
 	}
 
 	/**

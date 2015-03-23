@@ -20,8 +20,7 @@ public final class RemoveObjectMessageEncoder extends MessageEncoder<RemoveObjec
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, message.getType() << 2 | message.getOrientation());
 		builder.put(DataType.BYTE, message.getPositionOffset());
 
-		System.out.println("Sending rm obj: type=" + message.getType() + ", orient=" + message.getOrientation() + ",posoff="
-				+ Integer.toBinaryString(message.getPositionOffset()));
+		System.out.println("Sending rm obj: type=" + message.getType() + ", orient=" + message.getOrientation() + ",posoff=" + Integer.toBinaryString(message.getPositionOffset()));
 		return builder.toGamePacket();
 	}
 

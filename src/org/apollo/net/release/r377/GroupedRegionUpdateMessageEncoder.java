@@ -32,8 +32,7 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 	 *
 	 * @param encoders The Map of RegionUpdateMessages to MessageEncoders.
 	 */
-	public GroupedRegionUpdateMessageEncoder(
-			Map<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> encoders) {
+	public GroupedRegionUpdateMessageEncoder(Map<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> encoders) {
 		this.encoders = ImmutableMap.copyOf(encoders);
 	}
 
@@ -49,8 +48,7 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 			@SuppressWarnings("unchecked")
 			MessageEncoder<RegionUpdateMessage> encoder = (MessageEncoder<RegionUpdateMessage>) encoders.get(update);
 
-			Preconditions.checkState(encoder != null, update.getClass()
-					+ " does not have a registered encoder in GroupedRegionUpdateMessageEncoder.");
+			Preconditions.checkState(encoder != null, update.getClass() + " does not have a registered encoder in GroupedRegionUpdateMessageEncoder.");
 
 			GamePacket packet = encoder.encode(update);
 			builder.put(DataType.BYTE, packet.getOpcode());

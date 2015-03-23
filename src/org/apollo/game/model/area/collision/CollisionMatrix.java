@@ -184,8 +184,7 @@ public final class CollisionMatrix {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("width", width).add("length", length).add("matrix", Arrays.toString(matrix))
-				.toString();
+		return MoreObjects.toStringHelper(this).add("width", width).add("length", length).add("matrix", Arrays.toString(matrix)).toString();
 	}
 
 	/**

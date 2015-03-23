@@ -194,8 +194,8 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 	private static void putGraphicBlock(GraphicBlock block, GamePacketBuilder builder) {
 		Graphic graphic = block.getGraphic();
 		builder.put(DataType.SHORT, graphic.getId());
-        builder.put(DataType.INT, graphic.getHeight() << 16 | graphic.getDelay() & 0xFFFF);
-    }
+		builder.put(DataType.INT, graphic.getHeight() << 16 | graphic.getDelay() & 0xFFFF);
+	}
 
 	/**
 	 * Puts a hit update block into the specified builder.

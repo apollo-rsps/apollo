@@ -34,7 +34,6 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 			ctx.breakHandlerChain();
 			return;
 		}
-		
 
 		Position position = message.getPosition();
 		Region region = repository.fromPosition(position);

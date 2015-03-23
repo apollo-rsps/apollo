@@ -50,8 +50,7 @@ public final class GameService extends Service {
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-			"GameService"));
+	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
 
 	/**
 	 * The {@link ClientSynchronizer}.
@@ -157,7 +156,7 @@ public final class GameService extends Service {
 	 */
 	public RegistrationStatus registerPlayer(Player player, GameSession session) {
 		World world = World.getWorld();
-		
+
 		synchronized (this) {
 			RegistrationStatus status = world.register(player);
 			if (status == RegistrationStatus.OK) {
@@ -176,8 +175,7 @@ public final class GameService extends Service {
 	 */
 	@Override
 	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
-				TimeUnit.MILLISECONDS);
+		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
 	}
 
 	/**

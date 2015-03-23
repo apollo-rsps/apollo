@@ -128,7 +128,7 @@ public final class ObjectDefinitionDecoder {
 				data.getShort();
 				data.getShort();
 				int count = data.get();
-				for (int i = 0; i <= count; i++){
+				for (int i = 0; i <= count; i++) {
 					data.getShort();
 				}
 			} else {

@@ -72,8 +72,7 @@ public final class NetworkConstants {
 			Preconditions.checkState(rsa != null, "Root node must have a child named 'rsa'.");
 
 			XmlNode modulus = rsa.getChild("modulus"), exponent = rsa.getChild("private-exponent");
-			Preconditions.checkState(modulus != null && exponent != null,
-					"Rsa node must have two children: 'modulus' and 'private-exponent'.");
+			Preconditions.checkState(modulus != null && exponent != null, "Rsa node must have two children: 'modulus' and 'private-exponent'.");
 
 			RSA_MODULUS = new BigInteger(modulus.getValue());
 			RSA_EXPONENT = new BigInteger(exponent.getValue());
@@ -82,8 +81,7 @@ public final class NetworkConstants {
 			Preconditions.checkState(ports != null, "Root node must have a child named 'ports'.");
 
 			XmlNode http = ports.getChild("http"), service = ports.getChild("service"), jaggrab = ports.getChild("jaggrab");
-			Preconditions.checkState(http != null && service != null && jaggrab != null,
-					"Ports node must have three children: 'http', 'service', and 'jaggrab'.");
+			Preconditions.checkState(http != null && service != null && jaggrab != null, "Ports node must have three children: 'http', 'service', and 'jaggrab'.");
 
 			HTTP_PORT = Integer.parseInt(http.getValue());
 			SERVICE_PORT = Integer.parseInt(service.getValue());

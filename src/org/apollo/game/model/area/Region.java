@@ -41,8 +41,7 @@ public final class Region {
 		@Override
 		public void execute(Region region, Entity entity, EntityUpdateType update) {
 			EntityType type = entity.getEntityType();
-			if (type != EntityType.PLAYER && type != EntityType.NPC
-					&& (type != EntityType.STATIC_OBJECT || update == EntityUpdateType.REMOVE)) {
+			if (type != EntityType.PLAYER && type != EntityType.NPC && (type != EntityType.STATIC_OBJECT || update == EntityUpdateType.REMOVE)) {
 				region.record(entity, update);
 			}
 		}
@@ -190,8 +189,7 @@ public final class Region {
 
 		Set<EntityType> set = new HashSet<>(Arrays.asList(types));
 		@SuppressWarnings("unchecked")
-		Set<T> filtered = (Set<T>) local.stream().filter(entity -> set.contains(entity.getEntityType()))
-				.collect(Collectors.toSet());
+		Set<T> filtered = (Set<T>) local.stream().filter(entity -> set.contains(entity.getEntityType())).collect(Collectors.toSet());
 		return ImmutableSet.copyOf(filtered);
 	}
 
@@ -291,8 +289,7 @@ public final class Region {
 	 * @throws IllegalArgumentException If the specified position is not included in this Region.
 	 */
 	private void checkPosition(Position position) {
-		Preconditions.checkArgument(coordinates.equals(RegionCoordinates.fromPosition(position)),
-				"Position is not included in this Region.");
+		Preconditions.checkArgument(coordinates.equals(RegionCoordinates.fromPosition(position)), "Position is not included in this Region.");
 	}
 
 	/**
