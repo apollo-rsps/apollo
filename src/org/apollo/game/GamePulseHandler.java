@@ -25,7 +25,7 @@ public final class GamePulseHandler implements Runnable {
 	 * 
 	 * @param service The {@link GameService}.
 	 */
-	GamePulseHandler(GameService service) {
+	protected GamePulseHandler(GameService service) {
 		this.service = service;
 	}
 
@@ -33,10 +33,11 @@ public final class GamePulseHandler implements Runnable {
 	public void run() {
 		try {
 			service.pulse();
-		} catch (Throwable t) {
-			logger.log(Level.SEVERE, "Exception during pulse.", t);
+		} catch (Throwable reason) {
+			logger.log(Level.SEVERE, "Exception occured during pulse!", reason);
+		} finally {
+			service.shutdown(false);
 		}
-
 	}
 
 }

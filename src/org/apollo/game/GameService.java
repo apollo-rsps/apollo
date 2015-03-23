@@ -125,18 +125,11 @@ public final class GameService extends Service {
 	 */
 	public void pulse() {
 		synchronized (this) {
-			LoginService loginService = getContext().getService(LoginService.class);
+			finalizeUnregisters();
+
 			World world = World.getWorld();
-
-			int unregistered = 0;
-			Player old;
-			while (unregistered < UNREGISTERS_PER_CYCLE && (old = oldPlayers.poll()) != null) {
-				loginService.submitSaveRequest(old.getSession(), old);
-				unregistered++;
-			}
-
-			for (Player p : world.getPlayerRepository()) {
-				GameSession session = p.getSession();
+			for (Player player : world.getPlayerRepository()) {
+				GameSession session = player.getSession();
 				if (session != null) {
 					session.handlePendingMessages(chainGroup);
 				}
@@ -145,6 +138,30 @@ public final class GameService extends Service {
 			world.pulse();
 			synchronizer.synchronize();
 		}
+	}
+
+	/**
+	 * Finalizes the unregistration of Player's queued to be unregistered.
+	 */
+	private void finalizeUnregisters() {
+		LoginService loginService = getContext().getService(LoginService.class);
+
+		for (int count = 0; count < UNREGISTERS_PER_CYCLE; count++) {
+			Player player = oldPlayers.poll();
+			if (player == null) {
+				break;
+			}
+
+			loginService.submitSaveRequest(player.getSession(), player);
+		}
+	}
+
+	/**
+	 * Shuts down this game service.
+	 */
+	public void shutdown(boolean natural) {
+		scheduledExecutor.shutdownNow();
+		// TODO: Other events that should happen upon natural or unexpected shutdown.
 	}
 
 	/**
@@ -170,9 +187,6 @@ public final class GameService extends Service {
 		}
 	}
 
-	/**
-	 * Starts the game service.
-	 */
 	@Override
 	public void start() {
 		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
