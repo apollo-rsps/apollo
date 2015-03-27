@@ -5,9 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
-import org.apollo.fs.FileDescriptor;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.net.codec.update.OnDemandRequest;
 import org.apollo.net.codec.update.OnDemandResponse;
@@ -20,7 +18,7 @@ import org.apollo.net.codec.update.OnDemandResponse;
 public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, IndexedFileSystem> {
 
 	/**
-	 * The maximum length of a chunk, in bytes.
+	 * The maximum length of a chunk, in {@code byte}s.
 	 */
 	private static final int CHUNK_LENGTH = 500;
 
@@ -41,22 +39,12 @@ public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, 
 
 	@Override
 	protected void service(IndexedFileSystem fs, Channel channel, OnDemandRequest request) throws IOException {
-		FileDescriptor desc = request.getFileDescriptor();
+		ByteBuf buffer = Unpooled.wrappedBuffer(fs.getFile(request.getFileDescriptor()));
+		int length = buffer.readableBytes();
 
-		ByteBuffer buffer = fs.getFile(desc);
-		int length = buffer.remaining();
-
-		for (int chunk = 0; buffer.remaining() > 0; chunk++) {
-			int chunkSize = buffer.remaining();
-			if (chunkSize > CHUNK_LENGTH) {
-				chunkSize = CHUNK_LENGTH;
-			}
-
-			byte[] tmp = new byte[chunkSize];
-			buffer.get(tmp, 0, tmp.length);
-			ByteBuf chunkData = Unpooled.wrappedBuffer(tmp, 0, chunkSize);
-
-			OnDemandResponse response = new OnDemandResponse(desc, length, chunk, chunkData);
+		for (int chunk = 0; buffer.readableBytes() > 0; chunk++) {
+			int chunkSize = Math.min(buffer.readableBytes(), CHUNK_LENGTH);
+			OnDemandResponse response = new OnDemandResponse(request.getFileDescriptor(), length, chunk, buffer.readBytes(chunkSize));
 			channel.writeAndFlush(response);
 		}
 	}
