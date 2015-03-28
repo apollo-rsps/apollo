@@ -44,8 +44,7 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 		for (RegionUpdateMessage update : message.getMessages()) {
 			System.out.println("==== Sending " + update + " as part of grum");
 			@SuppressWarnings("unchecked")
-			MessageEncoder<RegionUpdateMessage> encoder = (MessageEncoder<RegionUpdateMessage>) release.getMessageEncoder(update
-					.getClass());
+			MessageEncoder<RegionUpdateMessage> encoder = (MessageEncoder<RegionUpdateMessage>) release.getMessageEncoder(update.getClass());
 
 			GamePacket packet = encoder.encode(update);
 			builder.put(DataType.BYTE, packet.getOpcode());

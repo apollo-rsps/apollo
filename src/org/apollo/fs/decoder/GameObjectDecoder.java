@@ -118,11 +118,9 @@ public final class GameObjectDecoder {
 			block = true;
 		}
 
-		Predicate<Integer> walls = (value) -> value >= ObjectType.LENGTHWISE_WALL.getValue()
-				&& value <= ObjectType.RECTANGULAR_CORNER.getValue() || value == ObjectType.DIAGONAL_WALL.getValue();
+		Predicate<Integer> walls = (value) -> value >= ObjectType.LENGTHWISE_WALL.getValue() && value <= ObjectType.RECTANGULAR_CORNER.getValue() || value == ObjectType.DIAGONAL_WALL.getValue();
 
-		Predicate<Integer> roofs = (value) -> value > ObjectType.DIAGONAL_INTERACTABLE.getValue()
-				&& value < ObjectType.FLOOR_DECORATION.getValue();
+		Predicate<Integer> roofs = (value) -> value > ObjectType.DIAGONAL_INTERACTABLE.getValue() && value < ObjectType.FLOOR_DECORATION.getValue();
 
 		if (walls.test(type) || roofs.test(type)) {
 			block = true;

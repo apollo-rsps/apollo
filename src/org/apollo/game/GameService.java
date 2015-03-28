@@ -19,6 +19,7 @@ import org.apollo.game.sync.ClientSynchronizer;
 import org.apollo.io.MessageHandlerChainParser;
 import org.apollo.login.LoginService;
 import org.apollo.net.session.GameSession;
+import org.apollo.util.MobRepository;
 import org.apollo.util.NamedThreadFactory;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
@@ -90,60 +91,22 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Initializes the game service.
-	 * 
-	 * @throws IOException If there is an error with the file (e.g. does not exist, cannot be read, does not contain
-	 *             valid nodes).
-	 * @throws SAXException If there is an error parsing the file.
-	 * @throws ReflectiveOperationException If a MessageHandler could not be created.
-	 */
-	private void init() throws IOException, SAXException, ReflectiveOperationException {
-		try (InputStream is = new FileInputStream("data/messages.xml")) {
-			MessageHandlerChainParser chainGroupParser = new MessageHandlerChainParser(is);
-			chainGroup = chainGroupParser.parse(world);
-		}
-
-		try (InputStream is = new FileInputStream("data/synchronizer.xml")) {
-			XmlParser parser = new XmlParser();
-			XmlNode rootNode = parser.parse(is);
-
-			if (!rootNode.getName().equals("synchronizer")) {
-				throw new IOException("Invalid root node name.");
-			}
-
-			XmlNode activeNode = rootNode.getChild("active");
-			if (activeNode == null || !activeNode.hasValue()) {
-				throw new IOException("No active node/value.");
-			}
-
-			Class<?> clazz = Class.forName(activeNode.getValue());
-			synchronizer = (ClientSynchronizer) clazz.newInstance();
-		}
-	}
-
-	/**
 	 * Called every pulse.
 	 */
 	public void pulse() {
 		synchronized (this) {
-			LoginService loginService = getContext().getService(LoginService.class);
+			finalizeUnregisters();
 
-			int unregistered = 0;
-			Player old;
-			while (unregistered < UNREGISTERS_PER_CYCLE && (old = oldPlayers.poll()) != null) {
-				loginService.submitSaveRequest(old.getSession(), old);
-				unregistered++;
-			}
-
-			for (Player p : world.getPlayerRepository()) {
-				GameSession session = p.getSession();
+			MobRepository<Player> players = world.getPlayerRepository();
+			for (Player player : players) {
+				GameSession session = player.getSession();
 				if (session != null) {
 					session.handlePendingMessages(chainGroup);
 				}
 			}
 
 			world.pulse();
-			synchronizer.synchronize(world.getPlayerRepository(), world.getNpcRepository());
+			synchronizer.synchronize(players, world.getNpcRepository());
 		}
 	}
 
@@ -169,8 +132,15 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Starts the game service.
+	 * Shuts down this game service.
+	 * 
+	 * @param natural Whether or not the shutdown was expected.
 	 */
+	public void shutdown(boolean natural) {
+		scheduledExecutor.shutdownNow();
+		// TODO: Other events that should happen upon natural or unexpected shutdown.
+	}
+
 	@Override
 	public void start() {
 		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
@@ -184,6 +154,53 @@ public final class GameService extends Service {
 	 */
 	public void unregisterPlayer(Player player) {
 		oldPlayers.add(player);
+	}
+
+	/**
+	 * Finalizes the unregistration of Player's queued to be unregistered.
+	 */
+	private void finalizeUnregisters() {
+		LoginService loginService = getContext().getService(LoginService.class);
+
+		for (int count = 0; count < UNREGISTERS_PER_CYCLE; count++) {
+			Player player = oldPlayers.poll();
+			if (player == null) {
+				break;
+			}
+
+			loginService.submitSaveRequest(player.getSession(), player);
+		}
+	}
+
+	/**
+	 * Initializes the game service.
+	 * 
+	 * @throws IOException If there is an error accessing the file.
+	 * @throws SAXException If there is an error parsing the file.
+	 * @throws ReflectiveOperationException If a MessageHandler could not be created.
+	 */
+	private void init() throws IOException, SAXException, ReflectiveOperationException {
+		try (InputStream input = new FileInputStream("data/messages.xml")) {
+			MessageHandlerChainParser chainGroupParser = new MessageHandlerChainParser(input);
+			chainGroup = chainGroupParser.parse(world);
+		}
+
+		try (InputStream input = new FileInputStream("data/synchronizer.xml")) {
+			XmlParser parser = new XmlParser();
+			XmlNode root = parser.parse(input);
+
+			if (!root.getName().equals("synchronizer")) {
+				throw new IOException("Invalid root node name.");
+			}
+
+			XmlNode active = root.getChild("active");
+			if (active == null || !active.hasValue()) {
+				throw new IOException("No active node/value.");
+			}
+
+			Class<?> clazz = Class.forName(active.getValue());
+			synchronizer = (ClientSynchronizer) clazz.newInstance();
+		}
 	}
 
 }

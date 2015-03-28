@@ -1,7 +1,6 @@
 package org.apollo.util;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import org.apollo.game.model.entity.Mob;
 
@@ -11,6 +10,7 @@ import com.google.common.base.Preconditions;
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.
  * 
  * @author Graham
+ * @author Ryley
  * @param <T> The type of Mob.
  */
 public final class MobRepository<T extends Mob> implements Iterable<T> {
@@ -19,57 +19,57 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 * The {@link Iterator} implementation for the MobRepository.
 	 * 
 	 * @author Graham
+	 * @author Ryley
 	 */
 	private final class MobRepositoryIterator implements Iterator<T> {
 
 		/**
-		 * The current index of this iterator.
+		 * The repository of {@link Mob}s this {@link Iterator} iterates over.
 		 */
-		private int index = 0;
+		private final MobRepository<T> repository;
 
 		/**
-		 * The previous index of this iterator.
+		 * The current index of this iterator.
 		 */
-		private int previousIndex = -1;
+		private int currentIndex;
+
+		/**
+		 * The amount of indexes found.
+		 */
+		private int foundIndex;
+
+		/**
+		 * Constructs a new {@link MobRepositoryIterator} with the specified MobRepository.
+		 * 
+		 * @param repository The repository of Mob's this Iterator iterates over.
+		 */
+		private MobRepositoryIterator(MobRepository<T> repository) {
+			this.repository = repository;
+		}
 
 		@Override
 		public boolean hasNext() {
-			for (int i = index; i < mobs.length; i++) {
-				if (mobs[i] != null) {
-					index = i;
+			if (foundIndex == repository.size()) {
+				return false;
+			}
+
+			while (currentIndex < repository.capacity()) {
+				if (mobs[currentIndex++] != null) {
+					foundIndex++;
 					return true;
 				}
 			}
 			return false;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public T next() {
-			T mob = null;
-			for (int i = index; i < mobs.length; i++) {
-				if (mobs[i] != null) {
-					mob = (T) mobs[i];
-					index = i;
-					break;
-				}
-			}
-
-			if (mob == null) {
-				throw new NoSuchElementException("Mob does not exist.");
-			}
-
-			previousIndex = index;
-			index++;
-			return mob;
+			return repository.get(currentIndex);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public void remove() {
-			Preconditions.checkState(previousIndex != -1, "Cannot remove as the repository is empty.");
-			MobRepository.this.remove((T) mobs[previousIndex]);
-			previousIndex = -1;
+			repository.remove(currentIndex + 1);
 		}
 
 	}
@@ -78,11 +78,6 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 * The array of Mobs in this repository.
 	 */
 	private final Mob[] mobs;
-
-	/**
-	 * The position of the next free index.
-	 */
-	private int pointer = 0;
 
 	/**
 	 * The current size of this repository.
@@ -95,7 +90,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 * @param capacity The maximum number of Mobs that can be present in the repository.
 	 */
 	public MobRepository(int capacity) {
-		this.mobs = new Mob[capacity];
+		mobs = new Mob[capacity];
 	}
 
 	/**
@@ -105,41 +100,23 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 * @return {@code true} if the Mob was added, {@code false} if the size has reached the capacity of this repository.
 	 */
 	public boolean add(T mob) {
-		if (size == mobs.length) {
+		if (size == capacity()) {
 			return false;
 		}
 
-		int index = -1;
-		for (int i = pointer; i < mobs.length; i++) {
-			if (mobs[i] == null) {
-				index = i;
-				break;
+		for (int index = 0; index < capacity(); index++) {
+			if (mobs[index] != null) {
+				continue;
 			}
+
+			mobs[index] = mob;
+			mob.setIndex(index + 1);
+			size++;
+
+			return true;
 		}
 
-		if (index == -1) {
-			for (int i = 0; i < pointer; i++) {
-				if (mobs[i] == null) {
-					index = i;
-					break;
-				}
-			}
-		}
-
-		if (index == -1) {
-			return false; // shouldn't happen, but just in case
-		}
-
-		mobs[index] = mob;
-		mob.setIndex(index + 1);
-
-		if (index == mobs.length - 1) {
-			pointer = 0;
-		} else {
-			pointer = index;
-		}
-		size++;
-		return true;
+		return false;
 	}
 
 	/**
@@ -160,13 +137,15 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
-		Preconditions.checkElementIndex(index, mobs.length, "Mob index is out of bounds.");
-		return (T) mobs[index];
+		if (index < 1 || index >= capacity() + 1) {
+			throw new IndexOutOfBoundsException("Mob index is out of bounds.");
+		}
+		return (T) mobs[index - 1];
 	}
 
 	@Override
 	public Iterator<T> iterator() {
-		return new MobRepositoryIterator();
+		return new MobRepositoryIterator(this);
 	}
 
 	/**
@@ -176,18 +155,27 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 * @return {@code true} if the Mob was removed, {@code false} if not.
 	 */
 	public boolean remove(T mob) {
-		int index = mob.getIndex() - 1;
-		if (index < 0 || index >= mobs.length) {
+		Preconditions.checkNotNull(mob);
+		return remove(mob.getIndex());
+	}
+
+	/**
+	 * Removes a Mob from the repository by the specified index.
+	 * 
+	 * @param index The index of the Mob to remove.
+	 * @return {@code true} if the Mob at the specified index was removed otherwise {@code false}.
+	 */
+	public boolean remove(int index) {
+		Mob mob = get(index);
+
+		if (mob.getIndex() != index) {
 			return false;
 		}
 
-		if (mobs[index] == mob) {
-			mobs[index] = null;
-			mob.setIndex(-1);
-			size--;
-			return true;
-		}
-		return false;
+		mobs[index - 1] = null;
+		mob.setIndex(-1);
+		size--;
+		return true;
 	}
 
 	/**

@@ -9,6 +9,7 @@ import org.apollo.game.model.inter.EnterAmountListener;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inter.bank.BankDepositEnterAmountListener;
 import org.apollo.game.model.inter.bank.BankUtils;
+import org.apollo.game.model.inter.bank.BankWithdrawEnterAmountListener;
 
 /**
  * A {@link MessageHandler} that handles withdrawing and depositing items from/to a player's bank.
@@ -90,7 +91,7 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 		int amount = optionToAmount(message.getOption());
 
 		if (amount == -1) {
-			EnterAmountListener listener = new BankDepositEnterAmountListener(player, message.getSlot(), message.getId());
+			EnterAmountListener listener = new BankWithdrawEnterAmountListener(player, message.getSlot(), message.getId());
 			player.getInterfaceSet().openEnterAmountDialogue(listener);
 		} else if (!BankUtils.withdraw(player, message.getSlot(), message.getId(), amount)) {
 			ctx.breakHandlerChain();

@@ -29,7 +29,7 @@ public abstract class NpcActionMessage extends Message {
 	 */
 	public NpcActionMessage(int option, int index) {
 		this.option = option;
-		this.index = index - 1;
+		this.index = index;
 	}
 
 	/**

@@ -221,8 +221,7 @@ public final class Release377 extends Release {
 		regionUpdates.put(SendObjectMessage.class, new SendObjectMessageEncoder());
 		regionUpdates.put(RemoveObjectMessage.class, new RemoveObjectMessageEncoder());
 
-		for (Map.Entry<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> entry : regionUpdates
-				.entrySet()) {
+		for (Map.Entry<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> entry : regionUpdates.entrySet()) {
 			@SuppressWarnings("unchecked")
 			Class<RegionUpdateMessage> clazz = (Class<RegionUpdateMessage>) entry.getKey();
 			@SuppressWarnings("unchecked")

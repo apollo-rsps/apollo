@@ -7,6 +7,7 @@ import java.util.List;
 import org.apollo.game.model.skill.SkillListener;
 
 import com.google.common.base.Preconditions;
+import com.google.common.primitives.Ints;
 
 /**
  * Represents the set of the player's skills.
@@ -58,7 +59,6 @@ public final class SkillSet {
 	 */
 	public static int getLevelForExperience(double experience) {
 		Preconditions.checkArgument(experience >= 0 && experience <= MAXIMUM_EXP, "Experience must be between 0 and " + MAXIMUM_EXP + ", inclusive.");
-
 		for (int level = 1; level <= 98; level++) {
 			if (experience < EXPERIENCE_FOR_LEVEL[level + 1]) {
 				return level; // TODO binary search?
@@ -140,10 +140,10 @@ public final class SkillSet {
 		int ranged = skills[Skill.RANGED].getMaximumLevel();
 		int magic = skills[Skill.MAGIC].getMaximumLevel();
 
-		double base = (defence + hitpoints + Math.floor(prayer / 2)) * 0.25;
-		double melee = (attack + strength) * 0.325;
+		double base = Ints.max(strength + attack, magic * 2, ranged * 2);
+		double combat = (base * 1.3 + defence + hitpoints + prayer / 2) / 4;
 
-		this.combat = (int) (base + Math.max(melee, Math.max(ranged, magic) * 0.4875));
+		this.combat = (int) combat;
 	}
 
 	/**
@@ -209,7 +209,7 @@ public final class SkillSet {
 	 * @return The total level.
 	 */
 	public int getTotalLevel() {
-		return Arrays.stream(skills).map(Skill::getMaximumLevel).reduce(0, (total, level) -> total + level);
+		return Arrays.stream(skills).mapToInt(Skill::getMaximumLevel).sum();
 	}
 
 	/**

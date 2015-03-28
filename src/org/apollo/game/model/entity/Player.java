@@ -942,8 +942,7 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
-				.add("client version", getClientVersion()).toString();
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel).add("client version", getClientVersion()).toString();
 	}
 
 	/**
@@ -962,11 +961,9 @@ public final class Player extends Mob {
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 
-		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.INVENTORY_ID);
+		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.INVENTORY_ID);
 		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
-		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.EQUIPMENT_ID);
+		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.EQUIPMENT_ID);
 
 		inventory.addListener(syncInventoryListener);
 		inventory.addListener(fullInventoryListener);

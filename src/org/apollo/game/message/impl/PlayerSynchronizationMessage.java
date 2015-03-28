@@ -53,8 +53,7 @@ public final class PlayerSynchronizationMessage extends Message {
 	 * @param localPlayers The number of local players.
 	 * @param segments A list of segments.
 	 */
-	public PlayerSynchronizationMessage(Position lastKnownRegion, Position position, boolean regionChanged,
-			SynchronizationSegment segment, int localPlayers, List<SynchronizationSegment> segments) {
+	public PlayerSynchronizationMessage(Position lastKnownRegion, Position position, boolean regionChanged, SynchronizationSegment segment, int localPlayers, List<SynchronizationSegment> segments) {
 		this.lastKnownRegion = lastKnownRegion;
 		this.position = position;
 		this.regionChanged = regionChanged;

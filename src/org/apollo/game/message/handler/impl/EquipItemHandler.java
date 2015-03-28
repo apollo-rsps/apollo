@@ -73,6 +73,8 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 		Item weapon = equipment.get(EquipmentConstants.WEAPON);
 		Item shield = equipment.get(EquipmentConstants.SHIELD);
 
+		// XXX: This is still pretty ugly in some parts, improve.
+
 		if (definition.isTwoHanded()) {
 			int slotsRequired = weapon != null && shield != null ? 1 : 0;
 			if (inventory.freeSlots() < slotsRequired) {

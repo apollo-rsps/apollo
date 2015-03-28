@@ -146,14 +146,14 @@ public final class XmlNode implements Iterable<XmlNode> {
 		return value;
 	}
 
-    /**
-     * Gets the value of this node, wrapped in an {@link Optional}
-     *
-     * @return The value of this node if it exists otherwise {@link Optional#empty()} is returned
-     */
-    public Optional<String> getOptionalValue() {
-        return Optional.ofNullable(value);
-    }
+	/**
+	 * Gets the value of this node, wrapped in an {@link Optional}
+	 *
+	 * @return The value of this node if it exists otherwise {@link Optional#empty()} is returned
+	 */
+	public Optional<String> getOptionalValue() {
+		return Optional.ofNullable(value);
+	}
 
 	/**
 	 * Checks if this node has a value.

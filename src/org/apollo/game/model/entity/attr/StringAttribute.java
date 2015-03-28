@@ -33,7 +33,7 @@ public final class StringAttribute extends Attribute<String> {
 	public byte[] encode() {
 		byte[] bytes = value.getBytes(Charset.forName("UTF-8"));
 		int length = bytes.length;
-				
+
 		bytes = Arrays.copyOf(bytes, length + 1);
 		bytes[length - 1] = 0;
 		return bytes;
