@@ -1,5 +1,9 @@
 package org.apollo.game.sync;
 
+import org.apollo.game.model.entity.Npc;
+import org.apollo.game.model.entity.Player;
+import org.apollo.util.MobRepository;
+
 /**
  * The {@link ClientSynchronizer} manages the update sequence which keeps clients synchronized with the in-game world.
  * There are two implementations distributed with Apollo: {@link SequentialClientSynchronizer} which is optimized for a
@@ -16,7 +20,10 @@ public abstract class ClientSynchronizer {
 
 	/**
 	 * Synchronizes the state of the clients with the state of the server.
+	 * 
+	 * @param players The {@link MobRepository} containing the {@link Player}s.
+	 * @param npcs The {@link MobRepository} containing the {@link Npc}s.
 	 */
-	public abstract void synchronize();
+	public abstract void synchronize(MobRepository<Player> players, MobRepository<Npc> npcs);
 
 }

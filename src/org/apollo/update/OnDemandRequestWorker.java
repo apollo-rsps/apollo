@@ -47,14 +47,11 @@ public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, 
 		int length = buffer.remaining();
 
 		for (int chunk = 0; buffer.remaining() > 0; chunk++) {
-			int chunkSize = buffer.remaining();
-			if (chunkSize > CHUNK_LENGTH) {
-				chunkSize = CHUNK_LENGTH;
-			}
+			int chunkSize = Math.min(buffer.remaining(), CHUNK_LENGTH);
 
-			byte[] tmp = new byte[chunkSize];
-			buffer.get(tmp, 0, tmp.length);
-			ByteBuf chunkData = Unpooled.wrappedBuffer(tmp, 0, chunkSize);
+			byte[] data = new byte[chunkSize];
+			buffer.get(data, 0, data.length);
+			ByteBuf chunkData = Unpooled.wrappedBuffer(data, 0, chunkSize);
 
 			OnDemandResponse response = new OnDemandResponse(desc, length, chunk, chunkData);
 			channel.writeAndFlush(response);

@@ -2,8 +2,9 @@ package org.apollo.game.model.entity;
 
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.area.Region;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.EntityUpdateType;
+import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.update.ItemUpdateOperation;
 import org.apollo.game.model.area.update.UpdateOperation;
 
@@ -17,24 +18,26 @@ public final class GroundItem extends Entity {
 	/**
 	 * Creates a new GroundItem.
 	 *
+	 * @param world The {@link World} containing the GroundItem.
 	 * @param position The {@link Position} of the Item.
 	 * @param item The Item displayed on the ground.
 	 * @return The GroundItem.
 	 */
-	public static GroundItem create(Position position, Item item) {
-		return new GroundItem(position, item, -1);
+	public static GroundItem create(World world, Position position, Item item) {
+		return new GroundItem(world, position, item, -1);
 	}
 
 	/**
 	 * Creates a new dropped GroundItem.
 	 *
+	 * @param world The {@link World} containing the GroundItem.
 	 * @param position The {@link Position} of the Item.
 	 * @param item The Item displayed on the ground.
 	 * @param owner The the {@link Player} who dropped this GroundItem.
 	 * @return The GroundItem.
 	 */
-	public static GroundItem dropped(Position position, Item item, Player owner) {
-		return new GroundItem(position, item, owner.getIndex());
+	public static GroundItem dropped(World world, Position position, Item item, Player owner) {
+		return new GroundItem(world, position, item, owner.getIndex());
 	}
 
 	/**
@@ -49,13 +52,14 @@ public final class GroundItem extends Entity {
 
 	/**
 	 * Creates the GroundItem.
-	 *
-	 * @param position The {@link Position} of the Item.
+	 * 
+	 * @param world The {@link World} containing the GroundItem.
+	 * @param position The {@link Position} of the GroundItem.
 	 * @param item The Item displayed on the ground.
 	 * @param index The index of the {@link Player} who dropped this GroundItem.
 	 */
-	private GroundItem(Position position, Item item, int index) {
-		super(position);
+	private GroundItem(World world, Position position, Item item, int index) {
+		super(world, position);
 		this.item = item;
 		this.index = index;
 	}

@@ -10,7 +10,6 @@ import java.util.concurrent.ThreadFactory;
 
 import org.apollo.game.GameService;
 import org.apollo.game.message.impl.RegionUpdateMessage;
-import org.apollo.game.model.World;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
@@ -58,9 +57,7 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 	}
 
 	@Override
-	public void synchronize() {
-		MobRepository<Player> players = World.getWorld().getPlayerRepository();
-		MobRepository<Npc> npcs = World.getWorld().getNpcRepository();
+	public void synchronize(MobRepository<Player> players, MobRepository<Npc> npcs) {
 		int playerCount = players.size();
 		int npcCount = npcs.size();
 

@@ -1,6 +1,7 @@
 package org.apollo.game.model.entity;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.update.UpdateOperation;
@@ -18,19 +19,14 @@ public abstract class Entity {
 	public enum EntityType {
 
 		/**
-		 * An Item that is positioned on the ground.
-		 */
-		GROUND_ITEM,
-
-		/**
-		 * A GameObject that is loaded statically (i.e. from the game resources) at start-up.
-		 */
-		STATIC_OBJECT,
-
-		/**
 		 * A GameObject that is loaded dynamically, usually for specific Players.
 		 */
 		DYNAMIC_OBJECT,
+
+		/**
+		 * An Item that is positioned on the ground.
+		 */
+		GROUND_ITEM,
 
 		/**
 		 * An Npc.
@@ -45,7 +41,12 @@ public abstract class Entity {
 		/**
 		 * A projectile (e.g. an arrow).
 		 */
-		PROJECTILE;
+		PROJECTILE,
+
+		/**
+		 * A GameObject that is loaded statically (i.e. from the game resources) at start-up.
+		 */
+		STATIC_OBJECT;
 
 		/**
 		 * Returns whether or not this EntityType is for a Mob.
@@ -59,16 +60,23 @@ public abstract class Entity {
 	}
 
 	/**
-	 * The position of this entity.
+	 * The Position of this Entity.
 	 */
 	protected Position position;
 
 	/**
-	 * Creates a new entity with the specified position.
-	 * 
-	 * @param position The position.
+	 * The World containing this Entity.
 	 */
-	public Entity(Position position) {
+	protected final World world;
+
+	/**
+	 * Creates the Entity.
+	 * 
+	 * @param world The {@link World} containing the Entity.
+	 * @param position The {@link Position} of the Entity.
+	 */
+	public Entity(World world, Position position) {
+		this.world = world;
 		this.position = position;
 	}
 
@@ -89,6 +97,15 @@ public abstract class Entity {
 	 */
 	public final Position getPosition() {
 		return position;
+	}
+
+	/**
+	 * Gets the {@link World} this Entity is in.
+	 * 
+	 * @return The World.
+	 */
+	public World getWorld() {
+		return world;
 	}
 
 	@Override

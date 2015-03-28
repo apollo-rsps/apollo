@@ -4,6 +4,7 @@ import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.PlayerDesignMessage;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 
 /**
@@ -12,6 +13,15 @@ import org.apollo.game.model.entity.Player;
  * @author Graham
  */
 public final class PlayerDesignMessageHandler extends MessageHandler<PlayerDesignMessage> {
+
+	/**
+	 * Creates the PlayerDesignMessageHandler.
+	 *
+	 * @param world The {@link World} the {@link PlayerDesignMessage} occurred in.
+	 */
+	public PlayerDesignMessageHandler(World world) {
+		super(world);
+	}
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, PlayerDesignMessage message) {

@@ -195,13 +195,14 @@ public final class Player extends Mob {
 	private transient int worldId = 1;
 
 	/**
-	 * Creates the {@link Player}.
+	 * Creates the Player.
 	 * 
+	 * @param world The {@link World} containing the Player.
 	 * @param credentials The player's credentials.
 	 * @param position The initial position.
 	 */
-	public Player(PlayerCredentials credentials, Position position) {
-		super(position);
+	public Player(World world, PlayerCredentials credentials, Position position) {
+		super(world, position);
 		this.credentials = credentials;
 
 		init();
@@ -597,7 +598,7 @@ public final class Player extends Mob {
 	 * Logs the player out, if possible.
 	 */
 	public void logout() {
-		if (World.getWorld().submit(new LogoutEvent(this))) {
+		if (world.submit(new LogoutEvent(this))) {
 			send(new LogoutMessage());
 		}
 	}
@@ -698,7 +699,7 @@ public final class Player extends Mob {
 		bank.forceRefresh();
 		skillSet.forceRefresh();
 
-		World.getWorld().submit(new LoginEvent(this));
+		world.submit(new LoginEvent(this));
 	}
 
 	/**
@@ -747,7 +748,6 @@ public final class Player extends Mob {
 			send(new IgnoreListMessage(ignores));
 		}
 
-		World world = World.getWorld();
 		for (String username : friends) {
 			int worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
 			send(new SendFriendMessage(username, worldId));

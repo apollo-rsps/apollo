@@ -15,13 +15,18 @@ import org.apollo.util.MobRepository;
 public final class PlayerActionVerificationHandler extends MessageHandler<PlayerActionMessage> {
 
 	/**
-	 * The world's player repository.
+	 * Creates the PlayerActionVerificationHandler.
+	 *
+	 * @param world The {@link World} the {@link PlayerActionMessage} occurred in.
 	 */
-	private final MobRepository<Player> repository = World.getWorld().getPlayerRepository();
+	public PlayerActionVerificationHandler(World world) {
+		super(world);
+	}
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, PlayerActionMessage message) {
 		int index = message.getIndex();
+		MobRepository<Player> repository = world.getPlayerRepository();
 
 		if (index < 0 || index >= repository.capacity()) {
 			ctx.breakHandlerChain();

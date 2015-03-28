@@ -9,7 +9,6 @@ import org.apollo.game.message.impl.ObjectActionMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
-import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity.EntityType;
 import org.apollo.game.model.entity.Player;
@@ -23,9 +22,24 @@ import org.apollo.game.model.entity.obj.GameObject;
 public final class ObjectActionVerificationHandler extends MessageHandler<ObjectActionMessage> {
 
 	/**
-	 * The world's RegionRepository.
+	 * Indicates whether or not the {@link List} of {@link GameObject}s contains the object with the specified id.
+	 * 
+	 * @param id The id of the object.
+	 * @param objects The list of objects.
+	 * @return {@code true} if the list does contain the object with the specified id, otherwise {@code false}.
 	 */
-	private final RegionRepository repository = World.getWorld().getRegionRepository();
+	private static boolean containsObject(int id, Set<GameObject> objects) {
+		return objects.stream().anyMatch(object -> object.getId() == id);
+	}
+
+	/**
+	 * Creates the ObjectActionVerificationHandler.
+	 *
+	 * @param world The {@link World} the {@link ObjectActionMessage} occurred in.
+	 */
+	public ObjectActionVerificationHandler(World world) {
+		super(world);
+	}
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, ObjectActionMessage message) {
@@ -34,10 +48,9 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 			ctx.breakHandlerChain();
 			return;
 		}
-		
 
 		Position position = message.getPosition();
-		Region region = repository.fromPosition(position);
+		Region region = world.getRegionRepository().fromPosition(position);
 		Set<GameObject> objects = region.getEntities(position, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT);
 
 		if (!player.getPosition().isWithinDistance(position, 15) || !containsObject(id, objects)) {
@@ -50,17 +63,6 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 			ctx.breakHandlerChain();
 			return;
 		}
-	}
-
-	/**
-	 * Indicates whether or not the {@link List} of {@link GameObject}s contains the object with the specified id.
-	 * 
-	 * @param id The id of the object.
-	 * @param objects The list of objects.
-	 * @return {@code true} if the list does contain the object with the specified id, otherwise {@code false}.
-	 */
-	private static boolean containsObject(int id, Set<GameObject> objects) {
-		return objects.stream().anyMatch(object -> object.getId() == id);
 	}
 
 }

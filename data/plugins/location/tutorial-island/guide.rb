@@ -18,8 +18,8 @@ CHARACTER_DESIGN = 3559
 # Sends the appropriate data to the client when the player logs in to the game.
 on :login do |event, player|
   if player.in_tutorial_island
-    TutorialInstructions::show_instruction(player)
-    INITIAL_TABS.each_with_index { |tab, index| player.send(SwitchTabInterfaceMessage.new(index, tab)) }
+  #  TutorialInstructions::show_instruction(player)
+  #  INITIAL_TABS.each_with_index { |tab, index| player.send(SwitchTabInterfaceMessage.new(index, tab)) }
 
     if (player.tutorial_island_progress == :not_started)
       show_hint_icon(player)

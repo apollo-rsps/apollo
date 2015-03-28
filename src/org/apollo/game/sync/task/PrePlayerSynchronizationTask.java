@@ -12,7 +12,6 @@ import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
 import org.apollo.game.message.impl.RegionChangeMessage;
 import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.area.RegionRepository;
@@ -169,7 +168,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		RegionCoordinates base = position.getRegionCoordinates();
 		int baseX = base.getX(), baseY = base.getY();
 
-		RegionRepository repository = World.getWorld().getRegionRepository();
+		RegionRepository repository = player.getWorld().getRegionRepository();
 		List<GroupedRegionUpdateMessage> messages = new ArrayList<>();
 
 		for (int x = baseX - REGION_COUNT; x <= baseX + REGION_COUNT; x++) {

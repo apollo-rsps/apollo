@@ -3,6 +3,7 @@ package org.apollo.game.message.handler.impl;
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.ButtonMessage;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.InterfaceType;
 
@@ -14,12 +15,21 @@ import org.apollo.game.model.inter.InterfaceType;
  */
 public final class DialogueButtonHandler extends MessageHandler<ButtonMessage> {
 
+	/**
+	 * Creates the DialogueButtonHandler.
+	 *
+	 * @param world The {@link World} the {@link ButtonMessage} occurred in.
+	 */
+	public DialogueButtonHandler(World world) {
+		super(world);
+	}
+
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, ButtonMessage message) {
 		if (player.getInterfaceSet().contains(InterfaceType.DIALOGUE)) {
-			boolean breakChain = player.getInterfaceSet().buttonClicked(message.getWidgetId());
+			boolean terminate = player.getInterfaceSet().buttonClicked(message.getWidgetId());
 
-			if (breakChain) {
+			if (terminate) {
 				ctx.breakHandlerChain();
 			}
 		}

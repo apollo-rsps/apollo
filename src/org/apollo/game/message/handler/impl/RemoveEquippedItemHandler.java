@@ -4,6 +4,7 @@ import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.ItemActionMessage;
 import org.apollo.game.model.Item;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
@@ -15,6 +16,15 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
  * @author Major
  */
 public final class RemoveEquippedItemHandler extends MessageHandler<ItemActionMessage> {
+
+	/**
+	 * Creates the RemoveEquippedItemHandler.
+	 *
+	 * @param world The {@link World} the {@link ItemActionMessage} occurred in.
+	 */
+	public RemoveEquippedItemHandler(World world) {
+		super(world);
+	}
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, ItemActionMessage message) {

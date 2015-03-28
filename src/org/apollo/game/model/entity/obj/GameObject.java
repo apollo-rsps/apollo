@@ -1,6 +1,7 @@
 package org.apollo.game.model.entity.obj;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.update.ObjectUpdateOperation;
@@ -26,13 +27,14 @@ public abstract class GameObject extends Entity {
 	/**
 	 * Creates the GameObject.
 	 * 
+	 * @param world The {@link World} containing the GameObject.
 	 * @param id The id of the GameObject
 	 * @param position The {@link Position} of the GameObject.
 	 * @param type The type of the GameObject.
 	 * @param orientation The orientation of the GameObject.
 	 */
-	public GameObject(int id, Position position, int type, int orientation) {
-		super(position);
+	public GameObject(World world, int id, Position position, int type, int orientation) {
+		super(world, position);
 		this.packed = id << 8 | (type & 0x3F) << 2 | orientation & 0x3;
 	}
 
@@ -102,8 +104,9 @@ public abstract class GameObject extends Entity {
 	 * Returns whether or not this GameObject can be seen by the specified {@link Player}.
 	 * 
 	 * @param player The Player.
+	 * @param world The {@link World} containing the GameObject.
 	 * @return {@code true} if the Player can see this GameObject, {@code false} if not.
 	 */
-	public abstract boolean viewableBy(Player player);
+	public abstract boolean viewableBy(Player player, World world);
 
 }

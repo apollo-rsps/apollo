@@ -3,6 +3,7 @@ package org.apollo.game.model.entity;
 import java.util.Optional;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.sync.block.SynchronizationBlock;
 
@@ -22,24 +23,26 @@ public final class Npc extends Mob {
 	private Optional<Position[]> boundaries;
 
 	/**
-	 * Creates a new Npc with the specified id and {@link Position}.
+	 * Creates the Npc.
 	 * 
+	 * @param world The {@link World} containing the Npc.
 	 * @param id The id.
 	 * @param position The position.
 	 */
-	public Npc(int id, Position position) {
-		this(position, NpcDefinition.lookup(id), null);
+	public Npc(World world, int id, Position position) {
+		this(world, position, NpcDefinition.lookup(id), null);
 	}
 
 	/**
-	 * Creates a new Npc with the specified {@link NpcDefinition} and {@link Position}.
+	 * Creates the Npc.
 	 * 
+	 * @param world The {@link World} containing the Npc.
 	 * @param position The Position.
 	 * @param definition The NpcDefinition.
 	 * @param boundaries The boundary Positions.
 	 */
-	public Npc(Position position, NpcDefinition definition, Position[] boundaries) {
-		super(position, definition);
+	public Npc(World world, Position position, NpcDefinition definition, Position[] boundaries) {
+		super(world, position, definition);
 
 		this.boundaries = Optional.ofNullable(boundaries);
 	}

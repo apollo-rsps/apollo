@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apollo.Service;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.io.player.PlayerLoaderResponse;
 import org.apollo.io.player.PlayerSerializer;
@@ -41,9 +42,11 @@ public final class LoginService extends Service {
 	/**
 	 * Creates the login service.
 	 * 
+	 * @param world The {@link World} to log Players in to.
 	 * @throws Exception If an error occurs.
 	 */
-	public LoginService() throws Exception {
+	public LoginService(World world) throws Exception {
+		super(world);
 		init();
 	}
 
@@ -52,11 +55,9 @@ public final class LoginService extends Service {
 	 * 
 	 * @throws SAXException If there is an error parsing the XML file.
 	 * @throws IOException If there is an error accessing the file.
-	 * @throws ClassNotFoundException If the player loader/saver implementation could not be found.
-	 * @throws IllegalAccessException If the player loader/saver implementation could not be accessed.
-	 * @throws InstantiationException If the player loader/saver implementation could not be instantiated.
+	 * @throws ReflectiveOperationException If the {@link PlayerSerializer} implementation could not be created.
 	 */
-	private void init() throws SAXException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private void init() throws SAXException, IOException, ReflectiveOperationException {
 		XmlParser parser = new XmlParser();
 		XmlNode rootNode;
 
@@ -74,7 +75,7 @@ public final class LoginService extends Service {
 		}
 
 		Class<?> clazz = Class.forName(serializer.getValue());
-		this.serializer = (PlayerSerializer) clazz.newInstance();
+		this.serializer = (PlayerSerializer) clazz.getConstructor(World.class).newInstance(world);
 	}
 
 	/**

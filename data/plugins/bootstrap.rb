@@ -81,7 +81,7 @@ class ProcMessageHandler < MessageHandler
 
   # Creates the ProcMessageListener.
   def initialize(block, option)
-    super()
+    super($world)
     @block = block
     @option = option
   end
@@ -200,15 +200,5 @@ def on_command(args, proc)
   raise 'Command message must have one or two arguments.' unless (1..2).include?(args.length)
 
   rights = args.length == 2 ? args[1] : RIGHTS_STANDARD
-  PluginContext::add_command_listener(args[0].to_s, ProcCommandListener.new(rights, proc))
-end
-
-# Defines an action to be taken upon login.
-def on_login(proc)
-  PluginContext::add_login_listener(ProcLoginListener.new(proc))
-end
-
-# Defines an action to be taken upon logout.
-def on_logout(proc)
-  PluginContext::add_logout_listener(ProcLogoutListener.new(proc))
+  $world.command_dispatcher.register(args[0].to_s, ProcCommandListener.new(rights, proc))
 end

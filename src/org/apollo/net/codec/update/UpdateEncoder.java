@@ -22,7 +22,7 @@ public final class UpdateEncoder extends MessageToMessageEncoder<OnDemandRespons
 		int chunkId = response.getChunkId();
 		ByteBuf chunkData = response.getChunkData();
 
-		ByteBuf buffer = ctx.alloc().buffer(6 + chunkData.readableBytes());
+		ByteBuf buffer = ctx.alloc().buffer(2 * Byte.BYTES + 2 * Short.BYTES + chunkData.readableBytes());
 		buffer.writeByte(descriptor.getType() - 1);
 		buffer.writeShort(descriptor.getFile());
 		buffer.writeShort(fileSize);

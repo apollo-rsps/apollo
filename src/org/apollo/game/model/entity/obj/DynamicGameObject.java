@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 
 /**
@@ -31,7 +32,7 @@ public final class DynamicGameObject extends GameObject {
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof WeakPlayerReference) {
-				WeakPlayerReference other = (WeakPlayerReference) obj;
+				WeakPlayerReference other = (WeakPlayerReference) obj; // TODO need to have a reference queue
 
 				Player player = get();
 				return player != null && player.equals(other.get());
@@ -51,27 +52,29 @@ public final class DynamicGameObject extends GameObject {
 	/**
 	 * Creates a DynamicGameObject that is visible only to {@link Player}s specified later.
 	 *
+	 * @param world The {@link World} containing the DynamicGameObject.
 	 * @param id The id of the DynamicGameObject
 	 * @param position The {@link Position} of the DynamicGameObject.
 	 * @param type The type of the DynamicGameObject.
 	 * @param orientation The orientation of the DynamicGameObject.
 	 * @return The DynamicGameObject.
 	 */
-	public static DynamicGameObject createLocal(int id, Position position, int type, int orientation) {
-		return new DynamicGameObject(id, position, type, orientation, false);
+	public static DynamicGameObject createLocal(World world, int id, Position position, int type, int orientation) {
+		return new DynamicGameObject(world, id, position, type, orientation, false);
 	}
 
 	/**
 	 * Creates a DynamicGameObject that is always visible.
 	 *
+	 * @param world The {@link World} containing the DynamicGameObject.
 	 * @param id The id of the DynamicGameObject
 	 * @param position The {@link Position} of the DynamicGameObject.
 	 * @param type The type of the DynamicGameObject.
 	 * @param orientation The orientation of the DynamicGameObject.
 	 * @return The DynamicGameObject.
 	 */
-	public static DynamicGameObject createPublic(int id, Position position, int type, int orientation) {
-		return new DynamicGameObject(id, position, type, orientation, true);
+	public static DynamicGameObject createPublic(World world, int id, Position position, int type, int orientation) {
+		return new DynamicGameObject(world, id, position, type, orientation, true);
 	}
 
 	/**
@@ -87,14 +90,15 @@ public final class DynamicGameObject extends GameObject {
 	/**
 	 * Creates the DynamicGameObject.
 	 *
+	 * @param world The {@link World} containing the DynamicGameObject.
 	 * @param id The id of the DynamicGameObject
 	 * @param position The {@link Position} of the DynamicGameObject.
 	 * @param type The type of the DynamicGameObject.
 	 * @param orientation The orientation of the DynamicGameObject.
 	 * @param alwaysVisible The flag indicates whether or not this DynamicGameObject is visible to every player.
 	 */
-	private DynamicGameObject(int id, Position position, int type, int orientation, boolean alwaysVisible) {
-		super(id, position, type, orientation);
+	private DynamicGameObject(World world, int id, Position position, int type, int orientation, boolean alwaysVisible) {
+		super(world, id, position, type, orientation);
 		this.alwaysVisible = alwaysVisible;
 	}
 
@@ -126,7 +130,7 @@ public final class DynamicGameObject extends GameObject {
 	}
 
 	@Override
-	public boolean viewableBy(Player player) {
+	public boolean viewableBy(Player player, World world) {
 		return alwaysVisible || players.contains(new WeakPlayerReference(player));
 	}
 

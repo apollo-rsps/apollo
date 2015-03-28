@@ -7,6 +7,7 @@ import java.util.Queue;
 import java.util.Random;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.WalkingQueue;
 import org.apollo.game.model.entity.path.SimplePathfindingAlgorithm;
@@ -39,7 +40,7 @@ public final class NpcMovementTask extends ScheduledTask {
 	/**
 	 * The PathfindingAlgorithm used by this Task.
 	 */
-	private final SimplePathfindingAlgorithm algorithm = new SimplePathfindingAlgorithm();
+	private final SimplePathfindingAlgorithm algorithm;
 
 	/**
 	 * The Queue of Npcs.
@@ -48,9 +49,12 @@ public final class NpcMovementTask extends ScheduledTask {
 
 	/**
 	 * Creates the NpcMovementTask.
+	 * 
+	 * @param repository The {@link RegionRepository}.
 	 */
-	public NpcMovementTask() {
+	public NpcMovementTask(RegionRepository repository) {
 		super(DELAY, false);
+		algorithm = new SimplePathfindingAlgorithm(repository);
 	}
 
 	/**

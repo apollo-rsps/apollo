@@ -3,6 +3,7 @@ package org.apollo.game.message.handler.impl;
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.ButtonMessage;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 
 /**
@@ -11,6 +12,15 @@ import org.apollo.game.model.entity.Player;
  * @author Graham
  */
 public final class BankButtonMessageHandler extends MessageHandler<ButtonMessage> {
+
+	/**
+	 * Creates the BankButtonMessageHandler.
+	 *
+	 * @param world The {@link World} the {@link ButtonMessage} occurred in.
+	 */
+	public BankButtonMessageHandler(World world) {
+		super(world);
+	}
 
 	/**
 	 * The withdraw as item button id.

@@ -15,6 +15,7 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apollo.game.model.World;
 import org.apollo.io.PluginMetaDataParser;
 import org.xml.sax.SAXException;
 
@@ -36,12 +37,19 @@ public final class PluginManager {
 	private final PluginContext context;
 
 	/**
-	 * Creates the plugin manager.
-	 * 
-	 * @param context The plugin context.
+	 * The World this PluginManager is for.
 	 */
-	public PluginManager(PluginContext context) {
+	private final World world;
+
+	/**
+	 * Creates the PluginManager.
+	 * 
+	 * @param world The {@link World} the PluginManager is for.
+	 * @param context The PluginContext.
+	 */
+	public PluginManager(World world, PluginContext context) {
 		this.context = context;
+		this.world = world;
 		initAuthors();
 	}
 
@@ -138,7 +146,7 @@ public final class PluginManager {
 		Map<String, PluginMetaData> plugins = createMap(findPlugins());
 		Set<PluginMetaData> started = new HashSet<>();
 
-		PluginEnvironment env = new RubyPluginEnvironment(); // TODO isolate plugins if possible in the future!
+		PluginEnvironment env = new RubyPluginEnvironment(world); // TODO isolate plugins if possible in the future!
 		env.setContext(context);
 
 		for (PluginMetaData plugin : plugins.values()) {
@@ -156,7 +164,8 @@ public final class PluginManager {
 	 * @throws DependencyException If a dependency error occurs.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	private void start(PluginEnvironment env, PluginMetaData plugin, Map<String, PluginMetaData> plugins, Set<PluginMetaData> started) throws DependencyException, IOException {
+	private void start(PluginEnvironment env, PluginMetaData plugin, Map<String, PluginMetaData> plugins,
+			Set<PluginMetaData> started) throws DependencyException, IOException {
 		// TODO check for cyclic dependencies! this way just won't cut it, we need an exception
 		if (started.contains(plugin)) {
 			return;

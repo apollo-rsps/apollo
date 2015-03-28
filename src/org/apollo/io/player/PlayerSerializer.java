@@ -1,6 +1,7 @@
 package org.apollo.io.player;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.security.PlayerCredentials;
 
@@ -11,12 +12,26 @@ import org.apollo.security.PlayerCredentials;
  * @author Graham
  * @author Major
  */
-public interface PlayerSerializer {
+public abstract class PlayerSerializer {
 
 	/**
 	 * The spawn point for Players, on Tutorial Island.
 	 */
-	Position TUTORIAL_ISLAND_SPAWN = new Position(3093, 3104);
+	protected static final Position TUTORIAL_ISLAND_SPAWN = new Position(3093, 3104);
+
+	/**
+	 * The World this PlayerSerializer is for.
+	 */
+	protected final World world;
+
+	/**
+	 * Creates the PlayerSerializer.
+	 *
+	 * @param world The {@link World} this PlayerSerializer is for.
+	 */
+	public PlayerSerializer(World world) {
+		this.world = world;
+	}
 
 	/**
 	 * Loads a {@link Player}.
@@ -25,7 +40,7 @@ public interface PlayerSerializer {
 	 * @return The {@link PlayerLoaderResponse}.
 	 * @throws Exception If an error occurs.
 	 */
-	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception;
+	public abstract PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception;
 
 	/**
 	 * Saves a {@link Player}.
@@ -33,6 +48,6 @@ public interface PlayerSerializer {
 	 * @param player The Player to save.
 	 * @throws Exception If an error occurs.
 	 */
-	public void savePlayer(Player player) throws Exception;
+	public abstract void savePlayer(Player player) throws Exception;
 
 }

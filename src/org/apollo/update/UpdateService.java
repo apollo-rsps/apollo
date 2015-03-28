@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import org.apollo.Service;
 import org.apollo.fs.IndexedFileSystem;
+import org.apollo.game.model.World;
 
 /**
  * A class which services file requests.
@@ -51,9 +52,12 @@ public final class UpdateService extends Service {
 	private final List<RequestWorker<?, ?>> workers = new ArrayList<>();
 
 	/**
-	 * Creates the update service.
+	 * Creates the UpdateService.
+	 * 
+	 * @param world The {@link World} the update service is for.
 	 */
-	public UpdateService() {
+	public UpdateService(World world) {
+		super(world);
 		int totalThreads = REQUEST_TYPES * THREADS_PER_REQUEST_TYPE;
 		service = Executors.newFixedThreadPool(totalThreads);
 	}

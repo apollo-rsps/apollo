@@ -115,11 +115,11 @@ public final class LoginSession extends Session {
 			IsaacRandomPair randomPair = request.getRandomPair();
 			Release release = serverContext.getRelease();
 
-			channel.pipeline().addFirst("eventEncoder", new GameMessageEncoder(release));
-			channel.pipeline().addBefore("eventEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
+			channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
+			channel.pipeline().addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
 
 			channel.pipeline().addBefore("handler", "gameDecoder", new GamePacketDecoder(randomPair.getDecodingRandom(), serverContext.getRelease()));
-			channel.pipeline().addAfter("gameDecoder", "eventDecoder", new GameMessageDecoder(release));
+			channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
 
 			channel.pipeline().remove("loginDecoder");
 			channel.pipeline().remove("loginEncoder");

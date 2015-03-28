@@ -4,6 +4,7 @@ import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.ItemOnObjectMessage;
 import org.apollo.game.model.Item;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.Inventory;
@@ -16,9 +17,19 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
  */
 public final class ItemOnObjectVerificationHandler extends MessageHandler<ItemOnObjectMessage> {
 
+	/**
+	 * Creates the ItemOnObjectVerificationHandler.
+	 *
+	 * @param world The {@link World} the {@link ItemOnObjectMessage} occurred in.
+	 */
+	public ItemOnObjectVerificationHandler(World world) {
+		super(world);
+	}
+
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, ItemOnObjectMessage message) {
-		if (message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID && message.getInterfaceId() != BankConstants.SIDEBAR_INVENTORY_ID) {
+		if (message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID
+				&& message.getInterfaceId() != BankConstants.SIDEBAR_INVENTORY_ID) {
 			ctx.breakHandlerChain();
 			return;
 		}

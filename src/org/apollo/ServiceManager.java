@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.apollo.game.model.World;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
@@ -31,12 +32,13 @@ public final class ServiceManager {
 	/**
 	 * Creates and initializes the {@link ServiceManager}.
 	 * 
+	 * @param world The {@link World} to create the {@link Service}s for.
 	 * @throws IOException If there is an error reading from the xml file.
 	 * @throws SAXException If there is an error parsing the xml file.
 	 * @throws ReflectiveOperationException If there is an error accessing or creating services using reflection.
 	 */
-	public ServiceManager() throws IOException, SAXException, ReflectiveOperationException {
-		init();
+	public ServiceManager(World world) throws IOException, SAXException, ReflectiveOperationException {
+		init(world);
 	}
 
 	/**
@@ -53,14 +55,13 @@ public final class ServiceManager {
 	/**
 	 * Initializes this service manager.
 	 * 
+	 * @param world The {@link World} to create the {@link Service}s for.
 	 * @throws SAXException If the service XML file could not be parsed.
 	 * @throws IOException If the file could not be accessed.
-	 * @throws IllegalAccessException If the service could not be accessed.
-	 * @throws InstantiationException If the service could not be instantiated.
-	 * @throws ClassNotFoundException If the service could not be found.
+	 * @throws ReflectiveOperationException If the Service could not be created.
 	 */
 	@SuppressWarnings("unchecked")
-	private void init() throws SAXException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+	private void init(World world) throws SAXException, IOException, ReflectiveOperationException {
 		logger.fine("Registering services...");
 
 		XmlParser parser = new XmlParser();
@@ -84,7 +85,7 @@ public final class ServiceManager {
 			}
 
 			Class<? extends Service> service = (Class<? extends Service>) Class.forName(child.getValue());
-			register((Class<Service>) service, service.newInstance());
+			register((Class<Service>) service, service.getConstructor(World.class).newInstance(world));
 		}
 	}
 

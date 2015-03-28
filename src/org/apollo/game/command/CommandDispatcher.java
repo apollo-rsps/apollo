@@ -2,6 +2,7 @@ package org.apollo.game.command;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apollo.game.model.entity.Player;
 
@@ -18,10 +19,12 @@ public final class CommandDispatcher {
 	private final Map<String, CommandListener> listeners = new HashMap<>();
 
 	/**
-	 * Creates the command dispatcher and registers a listener for the credits command.
+	 * Initialises this CommandDispatcher.
+	 * 
+	 * @param authors The {@link Set} of plugin authors.
 	 */
-	public CommandDispatcher() {
-		listeners.put("credits", new CreditsCommandListener());
+	public void init(Set<String> authors) {
+		listeners.put("credits", new CreditsCommandListener(authors));
 	}
 
 	/**

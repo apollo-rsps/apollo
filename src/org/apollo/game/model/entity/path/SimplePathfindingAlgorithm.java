@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.area.RegionRepository;
 
 /**
  * A very simple pathfinding algorithm that simply walks in the direction of the target until it either reaches it or is
@@ -14,6 +15,15 @@ import org.apollo.game.model.Position;
  * @author Major
  */
 public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
+
+	/**
+	 * Creates the SimplePathfindingAlgorithm.
+	 *
+	 * @param repository The {@link RegionRepository}.
+	 */
+	public SimplePathfindingAlgorithm(RegionRepository repository) {
+		super(repository);
+	}
 
 	/**
 	 * The Optional containing the boundary Positions.

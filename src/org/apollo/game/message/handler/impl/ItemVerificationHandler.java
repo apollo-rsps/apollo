@@ -7,6 +7,7 @@ import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.InventoryItemMessage;
 import org.apollo.game.model.Item;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.Inventory;
@@ -19,6 +20,15 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
  * @author Major
  */
 public final class ItemVerificationHandler extends MessageHandler<InventoryItemMessage> {
+
+	/**
+	 * Creates the ItemVerificationHandler.
+	 *
+	 * @param world The {@link World} the {@link InventoryItemMessage} occurred in.
+	 */
+	public ItemVerificationHandler(World world) {
+		super(world);
+	}
 
 	/**
 	 * A supplier for an {@link Inventory}.

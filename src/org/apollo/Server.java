@@ -52,18 +52,12 @@ public final class Server {
 			SocketAddress http = new InetSocketAddress(NetworkConstants.HTTP_PORT);
 			SocketAddress jaggrab = new InetSocketAddress(NetworkConstants.JAGGRAB_PORT);
 
-			server.start();
 			server.bind(service, http, jaggrab);
 			logger.fine("Starting apollo took " + (System.currentTimeMillis() - start) + " ms.");
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, "Error whilst starting server.", t);
 		}
 	}
-
-	/**
-	 * The server's context.
-	 */
-	private ServerContext context;
 
 	/**
 	 * The {@link ServerBootstrap} for the HTTP listener.
@@ -86,11 +80,6 @@ public final class Server {
 	private final EventLoopGroup loopGroup = new NioEventLoopGroup();
 
 	/**
-	 * The service manager.
-	 */
-	private final ServiceManager serviceManager = new ServiceManager();
-
-	/**
 	 * Creates the Apollo server.
 	 * 
 	 * @throws Exception If an error occurs whilst creating services.
@@ -109,13 +98,13 @@ public final class Server {
 	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
 		try {
 			logger.fine("Binding service listener to address: " + serviceAddress + "...");
-			serviceBootstrap.bind(serviceAddress).sync();
+			serviceBootstrap.bind(serviceAddress).syncUninterruptibly();
 
 			logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
-			httpBootstrap.bind(httpAddress).sync();
+			httpBootstrap.bind(httpAddress).syncUninterruptibly();
 
 			logger.fine("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
-			jagGrabBootstrap.bind(jagGrabAddress).sync();
+			jagGrabBootstrap.bind(jagGrabAddress).syncUninterruptibly();
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Binding to a port failed: ensure apollo isn't already running.", e);
 			System.exit(1);
@@ -128,11 +117,9 @@ public final class Server {
 	 * Initialises the server.
 	 * 
 	 * @param releaseClassName The class name of the current active {@link Release}.
-	 * @throws ClassNotFoundException If the release class could not be found.
-	 * @throws IllegalAccessException If the release class could not be accessed.
-	 * @throws InstantiationException If the release class could not be instantiated.
+	 * @throws Exception If an error occurs.
 	 */
-	public void init(String releaseClassName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public void init(String releaseClassName) throws Exception {
 		Class<?> clazz = Class.forName(releaseClassName);
 		Release release = (Release) clazz.newInstance();
 
@@ -142,7 +129,9 @@ public final class Server {
 		httpBootstrap.group(loopGroup);
 		jagGrabBootstrap.group(loopGroup);
 
-		context = new ServerContext(release, serviceManager);
+		World world = new World();
+		ServiceManager serviceManager = new ServiceManager(world);
+		ServerContext context = new ServerContext(release, serviceManager);
 		ApolloHandler handler = new ApolloHandler(context);
 
 		ChannelInitializer<SocketChannel> serviceInitializer = new ServiceChannelInitializer(handler);
@@ -156,20 +145,13 @@ public final class Server {
 		ChannelInitializer<SocketChannel> jagGrabInitializer = new JagGrabChannelInitializer(handler);
 		jagGrabBootstrap.channel(NioServerSocketChannel.class);
 		jagGrabBootstrap.childHandler(jagGrabInitializer);
-	}
 
-	/**
-	 * Starts the server.
-	 * 
-	 * @throws Exception If an error occurs.
-	 */
-	public void start() throws Exception {
-		PluginManager manager = new PluginManager(new PluginContext(context));
+		PluginManager manager = new PluginManager(world, new PluginContext(context));
 		serviceManager.startAll();
 
-		int releaseNo = context.getRelease().getReleaseNumber();
+		int releaseNo = release.getReleaseNumber();
 		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(releaseNo)), true);
-		World.getWorld().init(releaseNo, fs, manager);
+		world.init(releaseNo, fs, manager);
 	}
 
 }

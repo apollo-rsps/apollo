@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.MapFileDecoder.MapDefinition;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionMatrix;
@@ -70,10 +71,11 @@ public final class GameObjectDecoder {
 	/**
 	 * Decodes the GameObjects from their MapDefinitions.
 	 * 
+	 * @param world The {@link World} containing the StaticGameObjects.
 	 * @return The decoded objects.
 	 * @throws IOException If there is an error decoding the {@link MapDefinition}s.
 	 */
-	public GameObject[] decode() throws IOException {
+	public GameObject[] decode(World world) throws IOException {
 		Map<Integer, MapDefinition> definitions = MapFileDecoder.decode(fs);
 
 		for (Entry<Integer, MapDefinition> entry : definitions.entrySet()) {
@@ -85,7 +87,7 @@ public final class GameObjectDecoder {
 
 			ByteBuffer objects = fs.getFile(4, definition.getObjectFile());
 			ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(objects));
-			decodeObjects(decompressed, x, y);
+			decodeObjects(world, decompressed, x, y);
 
 			ByteBuffer terrain = fs.getFile(4, definition.getTerrainFile());
 			decompressed = ByteBuffer.wrap(CompressionUtil.degzip(terrain));
@@ -189,11 +191,12 @@ public final class GameObjectDecoder {
 	/**
 	 * Decodes object data stored in the specified {@link ByteBuffer}.
 	 * 
+	 * @param world The {@link World} containing the StaticGameObjects.
 	 * @param buffer The ByteBuffer.
 	 * @param x The x coordinate of the top left tile of the map file.
 	 * @param y The y coordinate of the top left tile of the map file.
 	 */
-	private void decodeObjects(ByteBuffer buffer, int x, int y) {
+	private void decodeObjects(World world, ByteBuffer buffer, int x, int y) {
 		int id = -1;
 		int idOffset = BufferUtil.readSmart(buffer);
 
@@ -215,7 +218,7 @@ public final class GameObjectDecoder {
 				int orientation = attributes & 0x3;
 				Position position = new Position(x + localX, y + localY, height);
 
-				GameObject object = new StaticGameObject(id, position, type, orientation);
+				GameObject object = new StaticGameObject(world, id, position, type, orientation);
 				objects.add(object);
 
 				block(object, position);

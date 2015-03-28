@@ -4,6 +4,7 @@ import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.ItemOptionMessage;
 import org.apollo.game.model.Item;
+import org.apollo.game.model.World;
 import org.apollo.game.model.def.EquipmentDefinition;
 import org.apollo.game.model.entity.EquipmentConstants;
 import org.apollo.game.model.entity.Player;
@@ -20,10 +21,24 @@ import org.apollo.util.LanguageUtil;
  * @author Ryley
  */
 public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
+	
+	/**
+	 * The option used when equipping an item.
+	 */
+	private static final int EQUIP_OPTION = 2;
+
+	/**
+	 * Creates the EquipItemHandler.
+	 *
+	 * @param world The {@link World} the {@link ItemOptionMessage} occurred in.
+	 */
+	public EquipItemHandler(World world) {
+		super(world);
+	}
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, ItemOptionMessage message) {
-		if (message.getOption() != 2 || message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID) {
+		if (message.getOption() != EQUIP_OPTION || message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID) {
 			return;
 		}
 
@@ -82,7 +97,8 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 			return;
 		}
 
-		if (definition.getSlot() == EquipmentConstants.SHIELD && weapon != null && EquipmentDefinition.lookup(weapon.getId()).isTwoHanded()) {
+		if (definition.getSlot() == EquipmentConstants.SHIELD && weapon != null
+				&& EquipmentDefinition.lookup(weapon.getId()).isTwoHanded()) {
 			equipment.set(EquipmentConstants.SHIELD, inventory.reset(inventorySlot));
 			inventory.add(equipment.reset(EquipmentConstants.WEAPON));
 			return;

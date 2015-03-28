@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apollo.game.GameService;
 import org.apollo.game.message.impl.RegionUpdateMessage;
-import org.apollo.game.model.World;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
@@ -31,10 +30,7 @@ import org.apollo.util.MobRepository;
 public final class SequentialClientSynchronizer extends ClientSynchronizer {
 
 	@Override
-	public void synchronize() {
-		MobRepository<Player> players = World.getWorld().getPlayerRepository();
-		MobRepository<Npc> npcs = World.getWorld().getNpcRepository();
-
+	public void synchronize(MobRepository<Player> players, MobRepository<Npc> npcs) {
 		Map<RegionCoordinates, List<RegionUpdateMessage>> updates = new HashMap<>();
 		Map<RegionCoordinates, List<RegionUpdateMessage>> snapshots = new HashMap<>();
 

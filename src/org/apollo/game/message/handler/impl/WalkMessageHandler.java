@@ -4,6 +4,7 @@ import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.WalkMessage;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.WalkingQueue;
 
@@ -13,6 +14,15 @@ import org.apollo.game.model.entity.WalkingQueue;
  * @author Graham
  */
 public final class WalkMessageHandler extends MessageHandler<WalkMessage> {
+
+	/**
+	 * Creates the WalkMessageHandler.
+	 *
+	 * @param world The {@link World} the {@link WalkMessage} occurred in.
+	 */
+	public WalkMessageHandler(World world) {
+		super(world);
+	}
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, WalkMessage message) {

@@ -59,11 +59,13 @@ public final class GameService extends Service {
 	private ClientSynchronizer synchronizer;
 
 	/**
-	 * Creates the game service.
+	 * Creates the GameService.
 	 * 
+	 * @param world The {@link World} the GameService is for.
 	 * @throws Exception If an error occurs during initialization.
 	 */
-	public GameService() throws Exception {
+	public GameService(World world) throws Exception {
+		super(world);
 		init();
 	}
 
@@ -74,7 +76,7 @@ public final class GameService extends Service {
 	 */
 	public void finalizePlayerUnregistration(Player player) {
 		synchronized (this) {
-			World.getWorld().unregister(player);
+			world.unregister(player);
 		}
 	}
 
@@ -93,14 +95,12 @@ public final class GameService extends Service {
 	 * @throws IOException If there is an error with the file (e.g. does not exist, cannot be read, does not contain
 	 *             valid nodes).
 	 * @throws SAXException If there is an error parsing the file.
-	 * @throws ClassNotFoundException If a message handler could not be found.
-	 * @throws InstantiationException If a message handler could not be instantiated.
-	 * @throws IllegalAccessException If a message handler could not be accessed.
+	 * @throws ReflectiveOperationException If a MessageHandler could not be created.
 	 */
-	private void init() throws IOException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private void init() throws IOException, SAXException, ReflectiveOperationException {
 		try (InputStream is = new FileInputStream("data/messages.xml")) {
 			MessageHandlerChainParser chainGroupParser = new MessageHandlerChainParser(is);
-			chainGroup = chainGroupParser.parse();
+			chainGroup = chainGroupParser.parse(world);
 		}
 
 		try (InputStream is = new FileInputStream("data/synchronizer.xml")) {
@@ -127,7 +127,6 @@ public final class GameService extends Service {
 	public void pulse() {
 		synchronized (this) {
 			LoginService loginService = getContext().getService(LoginService.class);
-			World world = World.getWorld();
 
 			int unregistered = 0;
 			Player old;
@@ -144,7 +143,7 @@ public final class GameService extends Service {
 			}
 
 			world.pulse();
-			synchronizer.synchronize();
+			synchronizer.synchronize(world.getPlayerRepository(), world.getNpcRepository());
 		}
 	}
 
@@ -156,8 +155,6 @@ public final class GameService extends Service {
 	 * @return A {@link RegistrationStatus}.
 	 */
 	public RegistrationStatus registerPlayer(Player player, GameSession session) {
-		World world = World.getWorld();
-		
 		synchronized (this) {
 			RegistrationStatus status = world.register(player);
 			if (status == RegistrationStatus.OK) {

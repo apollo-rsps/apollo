@@ -3,6 +3,7 @@ package org.apollo.game.message.handler.impl;
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.SwitchItemMessage;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.Inventory;
@@ -15,6 +16,15 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
  * @author Graham
  */
 public final class SwitchItemMessageHandler extends MessageHandler<SwitchItemMessage> {
+
+	/**
+	 * Creates the SwitchItemMessageHandler.
+	 *
+	 * @param world The {@link World} the {@link SwitchItemMessage} occurred in.
+	 */
+	public SwitchItemMessageHandler(World world) {
+		super(world);
+	}
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, SwitchItemMessage message) {
@@ -37,9 +47,10 @@ public final class SwitchItemMessageHandler extends MessageHandler<SwitchItemMes
 				return; // not a known inventory, ignore
 		}
 
-		if (message.getOldSlot() >= 0 && message.getNewSlot() >= 0 && message.getOldSlot() < inventory.capacity() && message.getNewSlot() < inventory.capacity()) {
+		int old = message.getOldSlot(), next = message.getNewSlot();
+		if (old >= 0 && next >= 0 && old < inventory.capacity() && next < inventory.capacity()) {
 			// events must be fired for it to work if a sidebar inventory overlay is used
-			inventory.swap(insertPermitted && message.isInserting(), message.getOldSlot(), message.getNewSlot());
+			inventory.swap(insertPermitted && message.isInserting(), old, next);
 		}
 	}
 

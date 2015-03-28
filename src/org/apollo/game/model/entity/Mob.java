@@ -116,22 +116,24 @@ public abstract class Mob extends Entity {
 	private transient boolean teleporting = false;
 
 	/**
-	 * Creates the mob with the specified initial {@link Position}.
+	 * Creates the Mob.
 	 *
-	 * @param position The position.
+	 * @param world The {@link World} containing the Mob
+	 * @param position The {@link Position} of the Mob.
 	 */
-	public Mob(Position position) {
-		this(position, null);
+	public Mob(World world, Position position) {
+		this(world, position, null);
 	}
 
 	/**
-	 * Creates the mob.
+	 * Creates the Mob.
 	 * 
-	 * @param position The initial position.
-	 * @param definition The {@link NpcDefinition}.
+	 * @param world The {@link World} containing the Mob
+	 * @param position The {@link Position} of the Mob.
+	 * @param definition The {@link NpcDefinition} of the Mob.
 	 */
-	public Mob(Position position, NpcDefinition definition) {
-		super(position);
+	public Mob(World world, Position position, NpcDefinition definition) {
+		super(world, position);
 		this.definition = Optional.ofNullable(definition);
 
 		init();
@@ -435,9 +437,9 @@ public abstract class Mob extends Entity {
 	 * @param position The Position.
 	 */
 	public final void setPosition(Position position) {
-		if (World.getWorld().submit(new MobPositionUpdateEvent(this, position))) {
+		if (world.submit(new MobPositionUpdateEvent(this, position))) {
 			Position old = this.position;
-			RegionRepository repository = World.getWorld().getRegionRepository();
+			RegionRepository repository = world.getRegionRepository();
 			Region current = repository.fromPosition(old), next = repository.fromPosition(position);
 
 			current.removeEntity(this);
@@ -482,7 +484,7 @@ public abstract class Mob extends Entity {
 		}
 
 		this.action = action;
-		return World.getWorld().schedule(action);
+		return world.schedule(action);
 	}
 
 	/**
@@ -541,7 +543,7 @@ public abstract class Mob extends Entity {
 	 * Initialises this mob.
 	 */
 	private void init() {
-		World.getWorld().schedule(new SkillNormalizationTask(this));
+		world.schedule(new SkillNormalizationTask(this));
 	}
 
 }

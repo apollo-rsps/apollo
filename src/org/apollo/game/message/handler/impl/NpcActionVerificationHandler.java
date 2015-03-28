@@ -18,13 +18,18 @@ import org.apollo.util.MobRepository;
 public final class NpcActionVerificationHandler extends MessageHandler<NpcActionMessage> {
 
 	/**
-	 * The world's npc repository.
+	 * Creates the NpcActionVerificationHandler.
+	 *
+	 * @param world The {@link World} the {@link NpcActionMessage} occurred in.
 	 */
-	private final MobRepository<Npc> repository = World.getWorld().getNpcRepository();
+	public NpcActionVerificationHandler(World world) {
+		super(world);
+	}
 
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, NpcActionMessage message) {
 		int index = message.getIndex();
+		MobRepository<Npc> repository = world.getNpcRepository();
 
 		if (index < 0 || index >= repository.capacity()) {
 			ctx.breakHandlerChain();

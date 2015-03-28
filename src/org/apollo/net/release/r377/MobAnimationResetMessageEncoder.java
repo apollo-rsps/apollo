@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
  * 
  * @author Major
  */
-public final class MobAnimationResetEventEncoder extends MessageEncoder<MobAnimationResetMessage> {
+public final class MobAnimationResetMessageEncoder extends MessageEncoder<MobAnimationResetMessage> {
 
 	@Override
 	public GamePacket encode(MobAnimationResetMessage message) {

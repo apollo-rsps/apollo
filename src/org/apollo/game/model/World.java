@@ -23,9 +23,9 @@ import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Entity.EntityType;
-import org.apollo.game.model.entity.obj.GameObject;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.obj.GameObject;
 import org.apollo.game.model.event.Event;
 import org.apollo.game.model.event.EventListener;
 import org.apollo.game.model.event.EventListenerChainSet;
@@ -78,23 +78,9 @@ public final class World {
 	private static final Logger logger = Logger.getLogger(World.class.getName());
 
 	/**
-	 * The world.
-	 */
-	private static final World world = new World();
-
-	/**
-	 * Gets the world.
-	 * 
-	 * @return The world.
-	 */
-	public static World getWorld() {
-		return world;
-	}
-
-	/**
 	 * The command dispatcher.
 	 */
-	private final CommandDispatcher commandDispatcher = new CommandDispatcher();
+	private CommandDispatcher commandDispatcher = new CommandDispatcher();
 
 	/**
 	 * The EventListenerChainSet for this World.
@@ -144,7 +130,7 @@ public final class World {
 	/**
 	 * Creates the world.
 	 */
-	private World() {
+	public World() {
 
 	}
 
@@ -247,14 +233,15 @@ public final class World {
 		logger.fine("Loaded " + objectDefs.length + " object definitions.");
 
 		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs, regions);
-		GameObject[] objects = staticDecoder.decode();
+		GameObject[] objects = staticDecoder.decode(this);
 		placeEntities(objects);
 		logger.fine("Loaded " + objects.length + " static objects.");
 
-		npcMovement = new NpcMovementTask(); // Must be exactly here because of ordering issues.
+		npcMovement = new NpcMovementTask(regions); // Must be exactly here because of ordering issues.
 		scheduler.schedule(npcMovement);
 
 		manager.start();
+		commandDispatcher.init(manager.getAuthors());
 		pluginManager = manager;
 	}
 

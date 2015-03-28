@@ -11,6 +11,7 @@ import org.apollo.game.message.Message;
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerChain;
 import org.apollo.game.message.handler.MessageHandlerChainGroup;
+import org.apollo.game.model.World;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
@@ -45,15 +46,13 @@ public final class MessageHandlerChainParser {
 	/**
 	 * Parses the XML and produces a group of {@link MessageHandlerChain}s.
 	 * 
+	 * @param world The {@link World} this MessageHandlerChainGroup is for.
+	 * @return A {@link MessageHandlerChainGroup}.
 	 * @throws IOException If an I/O error occurs.
 	 * @throws SAXException If a SAX error occurs.
-	 * @throws ClassNotFoundException If a class was not found.
-	 * @throws IllegalAccessException If a class was accessed illegally.
-	 * @throws InstantiationException If a class could not be instantiated.
-	 * @return A {@link MessageHandlerChainGroup}.
+	 * @throws ReflectiveOperationException If a reflection error occurs.
 	 */
-	@SuppressWarnings("unchecked")
-	public MessageHandlerChainGroup parse() throws IOException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public MessageHandlerChainGroup parse(World world) throws IOException, SAXException, ReflectiveOperationException {
 		XmlNode messages = parser.parse(is);
 		if (!messages.getName().equals("messages")) {
 			throw new IOException("Root node name is not 'messages'.");
@@ -80,6 +79,7 @@ public final class MessageHandlerChainParser {
 				throw new IOException("Type node must have a value.");
 			}
 
+			@SuppressWarnings("unchecked")
 			Class<? extends Message> messageClass = (Class<? extends Message>) Class.forName(messageClassName);
 			List<MessageHandler<?>> handlers = new ArrayList<>();
 
@@ -93,13 +93,15 @@ public final class MessageHandlerChainParser {
 					throw new IOException("Handler node must have a value.");
 				}
 
-				Class<? extends MessageHandler<?>> handlerClass = (Class<? extends MessageHandler<?>>) Class.forName(handlerClassName);
-				MessageHandler<?> handler = handlerClass.newInstance();
+				@SuppressWarnings("unchecked")
+				Class<? extends MessageHandler<?>> handlerClass = (Class<? extends MessageHandler<?>>) Class
+						.forName(handlerClassName);
+				MessageHandler<?> handler = handlerClass.getConstructor(World.class).newInstance(world);
 				handlers.add(handler);
 			}
 
 			MessageHandler<?>[] handlersArray = handlers.toArray(new MessageHandler<?>[handlers.size()]);
-			@SuppressWarnings("rawtypes")
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			MessageHandlerChain<?> chain = new MessageHandlerChain(handlersArray);
 
 			chains.put(messageClass, chain);

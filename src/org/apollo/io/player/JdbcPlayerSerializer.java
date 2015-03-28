@@ -1,5 +1,6 @@
 package org.apollo.io.player;
 
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.security.PlayerCredentials;
 
@@ -8,7 +9,16 @@ import org.apollo.security.PlayerCredentials;
  * 
  * @author Major
  */
-public final class JdbcPlayerSerializer implements PlayerSerializer {
+public final class JdbcPlayerSerializer extends PlayerSerializer {
+
+	/**
+	 * Creates the JdbcPlayerSerializer.
+	 *
+	 * @param world The {@link World} to place the {@link Player}s in.
+	 */
+	public JdbcPlayerSerializer(World world) {
+		super(world);
+	}
 
 	@Override
 	public void savePlayer(Player player) throws Exception {

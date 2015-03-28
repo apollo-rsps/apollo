@@ -2,6 +2,7 @@ package org.apollo.game.message.impl;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import org.apollo.game.message.Message;
 import org.apollo.game.model.Position;
@@ -62,7 +63,7 @@ public final class HintIconMessage extends Message {
 	 * @return The HintIconMessage.
 	 */
 	public static HintIconMessage forNpc(int index) {
-		return new HintIconMessage(Type.NPC, Optional.of(index), Optional.empty());
+		return new HintIconMessage(Type.NPC, OptionalInt.of(index), Optional.empty());
 	}
 
 	/**
@@ -72,7 +73,7 @@ public final class HintIconMessage extends Message {
 	 * @return The HintIconMessage.
 	 */
 	public static HintIconMessage forPlayer(int index) {
-		return new HintIconMessage(Type.PLAYER, Optional.of(index), Optional.empty());
+		return new HintIconMessage(Type.PLAYER, OptionalInt.of(index), Optional.empty());
 	}
 
 	/**
@@ -96,7 +97,7 @@ public final class HintIconMessage extends Message {
 	/**
 	 * The index of the Mob, if applicable.
 	 */
-	private final Optional<Integer> index;
+	private final OptionalInt index;
 
 	/**
 	 * The Position of the tile, if applicable.
@@ -115,7 +116,7 @@ public final class HintIconMessage extends Message {
 	 * @param index The index of the Mob, if applicable.
 	 * @param position The Position of the tile, if applicable.
 	 */
-	private HintIconMessage(Type type, Optional<Integer> index, Optional<Position> position) {
+	private HintIconMessage(Type type, OptionalInt index, Optional<Position> position) {
 		this.type = type;
 		this.index = index;
 		this.position = position;
@@ -128,7 +129,7 @@ public final class HintIconMessage extends Message {
 	 * @throws NoSuchElementException If no index is available for this HintIcon.
 	 */
 	public int getIndex() {
-		return index.get();
+		return index.getAsInt();
 	}
 
 	/**

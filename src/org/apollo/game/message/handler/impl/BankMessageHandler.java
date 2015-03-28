@@ -3,6 +3,7 @@ package org.apollo.game.message.handler.impl;
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.ItemActionMessage;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.EnterAmountListener;
 import org.apollo.game.model.inter.bank.BankConstants;
@@ -41,21 +42,12 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 	}
 
 	/**
-	 * Handles a deposit action.
-	 * 
-	 * @param ctx The message handler context.
-	 * @param player The player.
-	 * @param message The message.
+	 * Creates the BankMessageHandler.
+	 *
+	 * @param world The {@link World} the {@link ItemActionMessage} occurred in.
 	 */
-	private static void deposit(MessageHandlerContext ctx, Player player, ItemActionMessage message) {
-		int amount = optionToAmount(message.getOption());
-
-		if (amount == -1) {
-			EnterAmountListener listener = new BankDepositEnterAmountListener(player, message.getSlot(), message.getId());
-			player.getInterfaceSet().openEnterAmountDialogue(listener);
-		} else if (!BankUtils.deposit(player, message.getSlot(), message.getId(), amount)) {
-			ctx.breakHandlerChain();
-		}
+	public BankMessageHandler(World world) {
+		super(world);
 	}
 
 	@Override
@@ -70,13 +62,31 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 	}
 
 	/**
+	 * Handles a deposit action.
+	 * 
+	 * @param ctx The message handler context.
+	 * @param player The player.
+	 * @param message The message.
+	 */
+	private void deposit(MessageHandlerContext ctx, Player player, ItemActionMessage message) {
+		int amount = optionToAmount(message.getOption());
+
+		if (amount == -1) {
+			EnterAmountListener listener = new BankDepositEnterAmountListener(player, message.getSlot(), message.getId());
+			player.getInterfaceSet().openEnterAmountDialogue(listener);
+		} else if (!BankUtils.deposit(player, message.getSlot(), message.getId(), amount)) {
+			ctx.breakHandlerChain();
+		}
+	}
+
+	/**
 	 * Handles a withdraw action.
 	 * 
 	 * @param ctx The message handler context.
 	 * @param player The player.
 	 * @param message The message.
 	 */
-	private static void withdraw(MessageHandlerContext ctx, Player player, ItemActionMessage message) {
+	private void withdraw(MessageHandlerContext ctx, Player player, ItemActionMessage message) {
 		int amount = optionToAmount(message.getOption());
 
 		if (amount == -1) {

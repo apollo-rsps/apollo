@@ -47,7 +47,7 @@ def get_npc(hash)
 
   z = hash.delete(:z)
   position = Position.new(hash.delete(:x), hash.delete(:y), z == nil ? 0 : z)
-  return Npc.new(id, position)
+  return Npc.new($world, id, position)
 end
 
 # Applies a decoded hash (one aquired using parse_hash) to the specified npc.

@@ -16,13 +16,14 @@ public final class StaticGameObject extends GameObject {
 	/**
 	 * Creates the StaticGameObject.
 	 *
+	 * @param world The {@link World} containing the StaticGameObject.
 	 * @param id The id of the StaticGameObject
 	 * @param position The {@link Position} of the StaticGameObject.
 	 * @param type The type code of the StaticGameObject.
 	 * @param orientation The orientation of the StaticGameObject.
 	 */
-	public StaticGameObject(int id, Position position, int type, int orientation) {
-		super(id, position, type, orientation);
+	public StaticGameObject(World world, int id, Position position, int type, int orientation) {
+		super(world, id, position, type, orientation);
 	}
 
 	@Override
@@ -31,8 +32,8 @@ public final class StaticGameObject extends GameObject {
 	}
 
 	@Override
-	public boolean viewableBy(Player player) {
-		RegionRepository repository = World.getWorld().getRegionRepository();
+	public boolean viewableBy(Player player, World world) {
+		RegionRepository repository = world.getRegionRepository();
 		RegionCoordinates coordinates = position.getRegionCoordinates();
 
 		return repository.get(coordinates).contains(this);

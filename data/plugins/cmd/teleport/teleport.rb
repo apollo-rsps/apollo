@@ -4,7 +4,9 @@ java_import 'org.apollo.game.model.Position'
 
 # Sends the player's position.
 on :command, :pos, RIGHTS_MOD do |player, command|
-  player.send_message("You are at: #{player.position}.")
+  position = player.position
+  player.send_message("You are at: #{position}.")
+  player.send_message("Local coordinates: (#{position.get_local_x}, #{position.get_local_y}).")
 end
 
 # Teleports the player to the specified position.

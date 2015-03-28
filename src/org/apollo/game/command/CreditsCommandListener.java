@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
-import org.apollo.util.plugin.PluginManager;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Implements a {@code ::credits} command that lists the authors of all plugins used in the server.
@@ -14,6 +14,20 @@ import org.apollo.util.plugin.PluginManager;
  * @author Graham
  */
 public final class CreditsCommandListener extends CommandListener {
+	
+	/**
+	 * The Set of authors.
+	 */
+	private final Set<String> authors;
+	
+	/**
+	 * Creates the CreditsCommandListener.
+	 *
+	 * @param authors The {@link Set} of authors.
+	 */
+	public CreditsCommandListener(Set<String> authors) {
+		this.authors = ImmutableSet.copyOf(authors);
+	}
 
 	/*
 	 * If you are considering removing this command, please bear in mind that Apollo took several people thousands of
@@ -26,9 +40,6 @@ public final class CreditsCommandListener extends CommandListener {
 
 	@Override
 	public void execute(Player player, Command command) {
-		PluginManager mgr = World.getWorld().getPluginManager();
-		final Set<String> authors = mgr.getAuthors();
-
 		List<String> text = new ArrayList<>(12 + authors.size());
 		text.add("@dre@Apollo");
 		text.add("@dre@Introduction");

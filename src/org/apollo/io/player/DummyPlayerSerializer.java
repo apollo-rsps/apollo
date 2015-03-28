@@ -1,5 +1,6 @@
 package org.apollo.io.player;
 
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.setting.MembershipStatus;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
@@ -12,13 +13,22 @@ import org.apollo.security.PlayerCredentials;
  * @author Graham
  * @author Major
  */
-public final class DummyPlayerSerializer implements PlayerSerializer {
+public final class DummyPlayerSerializer extends PlayerSerializer {
+
+	/**
+	 * Creates the DummyPlayerSerializer.
+	 *
+	 * @param world The {@link World} to place the {@link Player}s in.
+	 */
+	public DummyPlayerSerializer(World world) {
+		super(world);
+	}
 
 	@Override
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) {
 		int status = LoginConstants.STATUS_OK;
 
-		Player player = new Player(credentials, TUTORIAL_ISLAND_SPAWN);
+		Player player = new Player(world, credentials, TUTORIAL_ISLAND_SPAWN);
 		player.setPrivilegeLevel(PrivilegeLevel.ADMINISTRATOR);
 		player.setMembers(MembershipStatus.PAID);
 

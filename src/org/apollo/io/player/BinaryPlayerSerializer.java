@@ -19,6 +19,7 @@ import java.util.Set;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
 import org.apollo.game.model.entity.SkillSet;
@@ -48,7 +49,16 @@ import com.lambdaworks.crypto.SCryptUtil;
  * @author Graham
  * @author Major
  */
-public final class BinaryPlayerSerializer implements PlayerSerializer {
+public final class BinaryPlayerSerializer extends PlayerSerializer {
+
+	/**
+	 * Creates the BinaryPlayerSerializer.
+	 *
+	 * @param world The {@link World} to place the {@link Player}s in.
+	 */
+	public BinaryPlayerSerializer(World world) {
+		super(world);
+	}
 
 	/**
 	 * The Path to the saved games directory.
@@ -69,7 +79,7 @@ public final class BinaryPlayerSerializer implements PlayerSerializer {
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws IOException {
 		Path path = getFile(credentials.getUsername());
 		if (!Files.exists(path)) {
-			Player player = new Player(credentials, TUTORIAL_ISLAND_SPAWN);
+			Player player = new Player(world, credentials, TUTORIAL_ISLAND_SPAWN);
 
 			credentials.setPassword(SCryptUtil.scrypt(credentials.getPassword(), 16384, 8, 1));
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
@@ -108,7 +118,7 @@ public final class BinaryPlayerSerializer implements PlayerSerializer {
 				colors[slot] = in.readUnsignedByte();
 			}
 
-			Player player = new Player(credentials, new Position(x, y, height));
+			Player player = new Player(world, credentials, new Position(x, y, height));
 			player.setPrivilegeLevel(privilege);
 			player.setMembers(members);
 			player.setChatPrivacy(chatPrivacy);

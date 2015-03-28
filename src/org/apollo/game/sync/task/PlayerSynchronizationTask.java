@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.ChatBlock;
@@ -80,7 +79,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 		int added = 0;
 
-		MobRepository<Player> repository = World.getWorld().getPlayerRepository();
+		MobRepository<Player> repository = player.getWorld().getPlayerRepository();
 		for (Iterator<Player> it = repository.iterator(); it.hasNext();) {
 			Player other = it.next();
 			if (localPlayers.size() >= 255) {

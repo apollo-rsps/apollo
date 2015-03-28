@@ -1,6 +1,7 @@
 package org.apollo.game.message.handler.impl;
 
 import org.apollo.game.command.Command;
+import org.apollo.game.message.Message;
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerContext;
 import org.apollo.game.message.impl.CommandMessage;
@@ -14,6 +15,15 @@ import org.apollo.game.model.entity.Player;
  */
 public final class CommandMessageHandler extends MessageHandler<CommandMessage> {
 
+	/**
+	 * Creates the CommandMessageHandler.
+	 *
+	 * @param world The {@link World} the {@link Message} occurred in.
+	 */
+	public CommandMessageHandler(World world) {
+		super(world);
+	}
+
 	@Override
 	public void handle(MessageHandlerContext ctx, Player player, CommandMessage message) {
 		String[] components = message.getCommand().split(" ");
@@ -23,7 +33,7 @@ public final class CommandMessageHandler extends MessageHandler<CommandMessage> 
 		System.arraycopy(components, 1, arguments, 0, arguments.length);
 
 		Command command = new Command(name, arguments);
-		World.getWorld().getCommandDispatcher().dispatch(player, command);
+		world.getCommandDispatcher().dispatch(player, command);
 	}
 
 }
