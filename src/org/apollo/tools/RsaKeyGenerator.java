@@ -25,7 +25,7 @@ public final class RsaKeyGenerator {
 	public static void main(String[] args) {
 		Random random = new SecureRandom();
 
-		BigInteger publicKey = BigInteger.valueOf(65535);
+		BigInteger publicKey = BigInteger.valueOf(65_537);
 		BigInteger p, q, phi, modulus, privateKey;
 
 		do {
