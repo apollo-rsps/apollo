@@ -22,8 +22,8 @@ public final class Archive {
 	 * @throws IOException If there is an error decompressing the archive.
 	 */
 	public static Archive decode(ByteBuffer buffer) throws IOException {
-		int extractedSize = BufferUtil.readUnsignedTriByte(buffer);
-		int size = BufferUtil.readUnsignedTriByte(buffer);
+		int extractedSize = BufferUtil.readUnsignedMedium(buffer);
+		int size = BufferUtil.readUnsignedMedium(buffer);
 		boolean extracted = false;
 
 		if (size != extractedSize) {
@@ -42,8 +42,8 @@ public final class Archive {
 
 		for (int i = 0; i < entryCount; i++) {
 			identifiers[i] = buffer.getInt();
-			extractedSizes[i] = BufferUtil.readUnsignedTriByte(buffer);
-			sizes[i] = BufferUtil.readUnsignedTriByte(buffer);
+			extractedSizes[i] = BufferUtil.readUnsignedMedium(buffer);
+			sizes[i] = BufferUtil.readUnsignedMedium(buffer);
 		}
 
 		ArchiveEntry[] entries = new ArchiveEntry[entryCount];
