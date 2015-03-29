@@ -25,8 +25,8 @@ module HerbloreMethod
   end
 end
 
-# The ItemOnItemMessage handler for all Herblore-related functions.
-on :message, :item_on_item do |ctx, player, message|
+# The ItemOnItemMessage listener for all Herblore-related functions.
+on :message, :item_on_item do |player, message|
   primary = message.id
   secondary = message.target_id
   hash = HERBLORE_ITEM_ON_ITEM[primary]
@@ -41,25 +41,25 @@ on :message, :item_on_item do |ctx, player, message|
     method = hash[secondary]
     unless method.nil?
       method.invoke(player, primary, secondary)
-      ctx.break_handler_chain
+      message.terminate
     end
   end
 end
 
-# The ItemOptionMessage handler for all Herblore-related functions.
-on :message, :first_item_option do |ctx, player, message|
+# The ItemOptionMessage listener for all Herblore-related functions.
+on :message, :first_item_option do |player, message|
   id = message.id
   method = HERBLORE_ITEM[id]
 
   unless method.nil?
     method.invoke(player, id, message.slot)
-    ctx.break_handler_chain
+    message.terminate
   end
   method = DRINK_ITEM[id]
 
   unless method.nil?
     method.invoke(player, id, message.slot)
-    ctx.break_handler_chain
+    message.terminate
   end
 end
 

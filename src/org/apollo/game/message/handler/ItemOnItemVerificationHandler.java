@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ItemOnItemMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
@@ -27,7 +26,7 @@ public final class ItemOnItemVerificationHandler extends MessageHandler<ItemOnIt
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, ItemOnItemMessage message) {
+	public void handle(Player player, ItemOnItemMessage message) {
 		Inventory inventory;
 
 		switch (message.getInterfaceId()) {
@@ -42,19 +41,19 @@ public final class ItemOnItemVerificationHandler extends MessageHandler<ItemOnIt
 				inventory = player.getBank();
 				break;
 			default:
-				ctx.breakHandlerChain();
+				message.terminate();
 				return;
 		}
 
 		int slot = message.getTargetSlot();
 		if (slot < 0 || slot >= inventory.capacity()) {
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 
 		Item item = inventory.get(slot);
 		if (item == null || item.getId() != message.getTargetId()) {
-			ctx.breakHandlerChain();
+			message.terminate();
 		}
 	}
 

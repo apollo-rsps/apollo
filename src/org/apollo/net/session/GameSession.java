@@ -13,10 +13,10 @@ import org.apollo.ServerContext;
 import org.apollo.game.GameConstants;
 import org.apollo.game.GameService;
 import org.apollo.game.message.Message;
-import org.apollo.game.message.handler.MessageHandlerChain;
-import org.apollo.game.message.handler.MessageHandlerChainGroup;
+import org.apollo.game.message.MessageHandlerChainSet;
 import org.apollo.game.message.impl.LogoutMessage;
 import org.apollo.game.model.entity.Player;
+import org.apollo.util.CollectionUtil;
 
 /**
  * A game session.
@@ -81,34 +81,16 @@ public final class GameSession extends Session {
 	/**
 	 * Handles pending messages for this session.
 	 * 
-	 * @param chainGroup The message chain group.
+	 * @param chainSet The {@link MessageHandlerChainSet}
 	 */
-	@SuppressWarnings("unchecked")
-	public void handlePendingMessages(MessageHandlerChainGroup chainGroup) {
-		Message message;
-		while ((message = messageQueue.poll()) != null) {
-			// this lookup code really sucks!
-			// TODO improve it!
-			Class<? extends Message> messageType = message.getClass();
-			MessageHandlerChain<Message> chain = (MessageHandlerChain<Message>) chainGroup.getChain(messageType);
-
-			while (chain == null && messageType != null) {
-				messageType = (Class<? extends Message>) messageType.getSuperclass();
-				if (messageType == Message.class) {
-					messageType = null;
-				} else {
-					chain = (MessageHandlerChain<Message>) chainGroup.getChain(messageType);
-				}
+	public void handlePendingMessages(MessageHandlerChainSet chainSet) {
+		CollectionUtil.pollAll(messageQueue, message -> {
+			try {
+				chainSet.notify(player, message);
+			} catch (Exception reason) {
+				logger.log(Level.SEVERE, "Uncaught exception thrown while handling message: " + message, reason);
 			}
-
-			if (chain != null) {
-				try {
-					chain.handle(player, message);
-				} catch (Exception ex) {
-					logger.log(Level.SEVERE, "Error handling message: ", ex);
-				}
-			}
-		}
+		});
 	}
 
 	/**

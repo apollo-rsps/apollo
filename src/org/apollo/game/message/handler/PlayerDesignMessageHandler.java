@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.PlayerDesignMessage;
 import org.apollo.game.model.World;
@@ -24,7 +23,7 @@ public final class PlayerDesignMessageHandler extends MessageHandler<PlayerDesig
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, PlayerDesignMessage message) {
+	public void handle(Player player, PlayerDesignMessage message) {
 		player.setAppearance(message.getAppearance());
 		player.send(new CloseInterfaceMessage());
 	}

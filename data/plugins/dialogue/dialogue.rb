@@ -71,13 +71,13 @@ class Conversation
       raise 'Npc cannot be null when opening a dialogue.' if npc_index.nil?
       @starters << dialogue
 
-      on :message, :first_npc_action do |ctx, player, event|
-        npc = $world.npc_repository.get(event.index)
+      on :message, :first_npc_action do |player, message|
+        npc = $world.npc_repository.get(message.index)
         if npc_index == npc.id
           @starters.each do |start|
             if dialogue.precondition(player)
               player.start_action(OpenDialogueAction.new(player, npc, dialogue))
-      	      ctx.break_handler_chain()
+      	      message.terminate
       	      break
       	    end
       	  end

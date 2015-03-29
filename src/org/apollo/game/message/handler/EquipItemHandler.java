@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ItemOptionMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
@@ -37,7 +36,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, ItemOptionMessage message) {
+	public void handle(Player player, ItemOptionMessage message) {
 		if (message.getOption() != EQUIP_OPTION || message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID) {
 			return;
 		}
@@ -60,7 +59,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 				String article = LanguageUtil.getIndefiniteArticle(name);
 
 				player.sendMessage("You need " + article + " " + name + " level of " + requirement + " to equip this item.");
-				ctx.breakHandlerChain();
+				message.terminate();
 				return;
 			}
 		}
@@ -78,7 +77,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 		if (definition.isTwoHanded()) {
 			int slotsRequired = weapon != null && shield != null ? 1 : 0;
 			if (inventory.freeSlots() < slotsRequired) {
-				ctx.breakHandlerChain();
+				message.terminate();
 				return;
 			}
 

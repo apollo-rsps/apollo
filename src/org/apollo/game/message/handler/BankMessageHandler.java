@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ItemActionMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -52,12 +51,12 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, ItemActionMessage message) {
+	public void handle(Player player, ItemActionMessage message) {
 		if (player.getInterfaceSet().contains(BankConstants.BANK_WINDOW_ID)) {
 			if (message.getInterfaceId() == BankConstants.SIDEBAR_INVENTORY_ID) {
-				deposit(ctx, player, message);
+				deposit(player, message);
 			} else if (message.getInterfaceId() == BankConstants.BANK_INVENTORY_ID) {
-				withdraw(ctx, player, message);
+				withdraw(player, message);
 			}
 		}
 	}
@@ -65,36 +64,34 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 	/**
 	 * Handles a deposit action.
 	 * 
-	 * @param ctx The message handler context.
 	 * @param player The player.
 	 * @param message The message.
 	 */
-	private void deposit(MessageHandlerContext ctx, Player player, ItemActionMessage message) {
+	private void deposit(Player player, ItemActionMessage message) {
 		int amount = optionToAmount(message.getOption());
 
 		if (amount == -1) {
 			EnterAmountListener listener = new BankDepositEnterAmountListener(player, message.getSlot(), message.getId());
 			player.getInterfaceSet().openEnterAmountDialogue(listener);
 		} else if (!BankUtils.deposit(player, message.getSlot(), message.getId(), amount)) {
-			ctx.breakHandlerChain();
+			message.terminate();
 		}
 	}
 
 	/**
 	 * Handles a withdraw action.
 	 * 
-	 * @param ctx The message handler context.
 	 * @param player The player.
 	 * @param message The message.
 	 */
-	private void withdraw(MessageHandlerContext ctx, Player player, ItemActionMessage message) {
+	private void withdraw(Player player, ItemActionMessage message) {
 		int amount = optionToAmount(message.getOption());
 
 		if (amount == -1) {
 			EnterAmountListener listener = new BankWithdrawEnterAmountListener(player, message.getSlot(), message.getId());
 			player.getInterfaceSet().openEnterAmountDialogue(listener);
 		} else if (!BankUtils.withdraw(player, message.getSlot(), message.getId(), amount)) {
-			ctx.breakHandlerChain();
+			message.terminate();
 		}
 	}
 

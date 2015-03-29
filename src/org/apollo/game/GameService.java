@@ -10,13 +10,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apollo.Service;
-import org.apollo.game.message.handler.MessageHandlerChainGroup;
+import org.apollo.game.message.MessageHandlerChainSet;
 import org.apollo.game.model.World;
 import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.ClientSynchronizer;
-import org.apollo.io.MessageHandlerChainParser;
+import org.apollo.io.MessageHandlerChainSetParser;
 import org.apollo.login.LoginService;
 import org.apollo.net.session.GameSession;
 import org.apollo.util.MobRepository;
@@ -39,9 +39,9 @@ public final class GameService extends Service {
 	private static final int UNREGISTERS_PER_CYCLE = 50;
 
 	/**
-	 * The {@link MessageHandlerChainGroup}.
+	 * The {@link MessageHandlerChainSet}.
 	 */
-	private MessageHandlerChainGroup chainGroup;
+	private MessageHandlerChainSet messageHandlerChainSet;
 
 	/**
 	 * A queue of players to remove.
@@ -51,8 +51,7 @@ public final class GameService extends Service {
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-			"GameService"));
+	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
 
 	/**
 	 * The {@link ClientSynchronizer}.
@@ -82,12 +81,12 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Gets the message handler chains.
+	 * Gets the MessageHandlerChainSet
 	 * 
-	 * @return The message handler chains.
+	 * @return The set of MessageHandlerChain's.
 	 */
-	public MessageHandlerChainGroup getMessageHandlerChains() {
-		return chainGroup;
+	public MessageHandlerChainSet getMessageHandlerChainSet() {
+		return messageHandlerChainSet;
 	}
 
 	/**
@@ -101,7 +100,7 @@ public final class GameService extends Service {
 			for (Player player : players) {
 				GameSession session = player.getSession();
 				if (session != null) {
-					session.handlePendingMessages(chainGroup);
+					session.handlePendingMessages(messageHandlerChainSet);
 				}
 			}
 
@@ -143,8 +142,7 @@ public final class GameService extends Service {
 
 	@Override
 	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
-				TimeUnit.MILLISECONDS);
+		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -181,8 +179,8 @@ public final class GameService extends Service {
 	 */
 	private void init() throws IOException, SAXException, ReflectiveOperationException {
 		try (InputStream input = new FileInputStream("data/messages.xml")) {
-			MessageHandlerChainParser chainGroupParser = new MessageHandlerChainParser(input);
-			chainGroup = chainGroupParser.parse(world);
+			MessageHandlerChainSetParser chainSetParser = new MessageHandlerChainSetParser(input);
+			messageHandlerChainSet = chainSetParser.parse(world);
 		}
 
 		try (InputStream input = new FileInputStream("data/synchronizer.xml")) {

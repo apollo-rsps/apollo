@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.SwitchItemMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -27,7 +26,7 @@ public final class SwitchItemMessageHandler extends MessageHandler<SwitchItemMes
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, SwitchItemMessage message) {
+	public void handle(Player player, SwitchItemMessage message) {
 		Inventory inventory;
 		boolean insertPermitted = false;
 

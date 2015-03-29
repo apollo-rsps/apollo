@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.EnteredAmountMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -23,7 +22,7 @@ public final class EnteredAmountMessageHandler extends MessageHandler<EnteredAmo
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, EnteredAmountMessage message) {
+	public void handle(Player player, EnteredAmountMessage message) {
 		player.getInterfaceSet().enteredAmount(message.getAmount());
 	}
 

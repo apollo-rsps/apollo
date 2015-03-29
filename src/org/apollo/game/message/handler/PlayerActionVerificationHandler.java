@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.PlayerActionMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -24,19 +23,19 @@ public final class PlayerActionVerificationHandler extends MessageHandler<Player
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, PlayerActionMessage message) {
+	public void handle(Player player, PlayerActionMessage message) {
 		int index = message.getIndex();
 		MobRepository<Player> repository = world.getPlayerRepository();
 
 		if (index < 0 || index >= repository.capacity()) {
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 
 		Player other = repository.get(index);
 		if (other == null || !player.getPosition().isWithinDistance(other.getPosition(), player.getViewingDistance() + 1)) {
 			// +1 in case it was decremented after the player clicked the action.
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 	}

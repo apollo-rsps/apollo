@@ -2,26 +2,22 @@ package org.apollo.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apollo.game.message.Message;
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerChain;
-import org.apollo.game.message.handler.MessageHandlerChainGroup;
+import org.apollo.game.message.MessageHandler;
+import org.apollo.game.message.MessageHandlerChain;
+import org.apollo.game.message.MessageHandlerChainSet;
 import org.apollo.game.model.World;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
 
 /**
- * A class that parses the {@code messages.xml} file to produce {@link MessageHandlerChainGroup}s.
+ * A class that parses the {@code messages.xml} file to produce {@link MessageHandlerChainSet}s.
  * 
  * @author Graham
  */
-public final class MessageHandlerChainParser {
+public final class MessageHandlerChainSetParser {
 
 	/**
 	 * The source {@link InputStream}.
@@ -39,7 +35,7 @@ public final class MessageHandlerChainParser {
 	 * @param is The source {@link InputStream}.
 	 * @throws SAXException If a SAX error occurs.
 	 */
-	public MessageHandlerChainParser(InputStream is) throws SAXException {
+	public MessageHandlerChainSetParser(InputStream is) throws SAXException {
 		this.is = is;
 	}
 
@@ -47,18 +43,18 @@ public final class MessageHandlerChainParser {
 	 * Parses the XML and produces a group of {@link MessageHandlerChain}s.
 	 * 
 	 * @param world The {@link World} this MessageHandlerChainGroup is for.
-	 * @return A {@link MessageHandlerChainGroup}.
+	 * @return A {@link MessageHandlerChainSet}.
 	 * @throws IOException If an I/O error occurs.
 	 * @throws SAXException If a SAX error occurs.
 	 * @throws ReflectiveOperationException If a reflection error occurs.
 	 */
-	public MessageHandlerChainGroup parse(World world) throws IOException, SAXException, ReflectiveOperationException {
+	public MessageHandlerChainSet parse(World world) throws IOException, SAXException, ReflectiveOperationException {
 		XmlNode messages = parser.parse(is);
 		if (!messages.getName().equals("messages")) {
 			throw new IOException("Root node name is not 'messages'.");
 		}
 
-		Map<Class<? extends Message>, MessageHandlerChain<?>> chains = new HashMap<>();
+		MessageHandlerChainSet chainSet = new MessageHandlerChainSet();
 
 		for (XmlNode message : messages) {
 			if (!message.getName().equals("message")) {
@@ -81,7 +77,6 @@ public final class MessageHandlerChainParser {
 
 			@SuppressWarnings("unchecked")
 			Class<? extends Message> messageClass = (Class<? extends Message>) Class.forName(messageClassName);
-			List<MessageHandler<?>> handlers = new ArrayList<>();
 
 			for (XmlNode handlerNode : chainNode) {
 				if (!handlerNode.getName().equals("handler")) {
@@ -94,20 +89,13 @@ public final class MessageHandlerChainParser {
 				}
 
 				@SuppressWarnings("unchecked")
-				Class<? extends MessageHandler<?>> handlerClass = (Class<? extends MessageHandler<?>>) Class
-						.forName(handlerClassName);
-				MessageHandler<?> handler = handlerClass.getConstructor(World.class).newInstance(world);
-				handlers.add(handler);
+				Class<? extends MessageHandler<? extends Message>> handlerClass = (Class<? extends MessageHandler<? extends Message>>) Class.forName(handlerClassName);
+				MessageHandler<? extends Message> handler = handlerClass.getConstructor(World.class).newInstance(world);
+				chainSet.putHandler(messageClass, handler);
 			}
-
-			MessageHandler<?>[] handlersArray = handlers.toArray(new MessageHandler<?>[handlers.size()]);
-			@SuppressWarnings({ "rawtypes", "unchecked" })
-			MessageHandlerChain<?> chain = new MessageHandlerChain(handlersArray);
-
-			chains.put(messageClass, chain);
 		}
 
-		return new MessageHandlerChainGroup(chains);
+		return chainSet;
 	}
 
 }

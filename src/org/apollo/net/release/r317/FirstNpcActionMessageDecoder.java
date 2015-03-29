@@ -1,7 +1,10 @@
 package org.apollo.net.release.r317;
 
 import org.apollo.game.message.impl.FirstNpcActionMessage;
-import org.apollo.net.codec.game.*;
+import org.apollo.net.codec.game.DataOrder;
+import org.apollo.net.codec.game.DataType;
+import org.apollo.net.codec.game.GamePacket;
+import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;
 
 /**

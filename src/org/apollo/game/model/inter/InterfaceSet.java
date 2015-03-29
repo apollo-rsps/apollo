@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apollo.game.message.MessageHandlerChain;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
 import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
@@ -75,7 +76,7 @@ public final class InterfaceSet {
 	 * Called when the player has clicked the specified button. Notifies the current dialogue listener.
 	 * 
 	 * @param button The button.
-	 * @return {@code true} if the message handler chain should be broken.
+	 * @return {@code true} if the {@link MessageHandlerChain} should be broken.
 	 */
 	public boolean buttonClicked(int button) {
 		return dialogueListener.isPresent() && dialogueListener.get().buttonClicked(button);

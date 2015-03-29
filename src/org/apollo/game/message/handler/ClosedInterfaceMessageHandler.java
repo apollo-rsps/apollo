@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ClosedInterfaceMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -23,7 +22,7 @@ public final class ClosedInterfaceMessageHandler extends MessageHandler<ClosedIn
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, ClosedInterfaceMessage message) {
+	public void handle(Player player, ClosedInterfaceMessage message) {
 		player.getInterfaceSet().interfaceClosed();
 	}
 

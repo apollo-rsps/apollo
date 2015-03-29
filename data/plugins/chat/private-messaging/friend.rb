@@ -11,7 +11,7 @@ java_import 'org.apollo.game.model.entity.Player'
 
 
 # Processes an add friend message, updating the logged-in status of the player (and the person they added) if necessary.
-on :message, :add_friend do |ctx, player, message|
+on :message, :add_friend do |player, message|
   friend_username = message.username
   player_username = player.username
 
@@ -30,7 +30,7 @@ on :message, :add_friend do |ctx, player, message|
 end
 
 # Processes a remove friend message, updating the logged-in status of the player if necessary.
-on :message, :remove_friend do |ctx, player, message|
+on :message, :remove_friend do |player, message|
   friend_username = message.username
   player_username = player.username
 

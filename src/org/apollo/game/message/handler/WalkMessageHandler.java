@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.WalkMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -25,7 +24,7 @@ public final class WalkMessageHandler extends MessageHandler<WalkMessage> {
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, WalkMessage message) {
+	public void handle(Player player, WalkMessage message) {
 		WalkingQueue queue = player.getWalkingQueue();
 
 		Position[] steps = message.getSteps();

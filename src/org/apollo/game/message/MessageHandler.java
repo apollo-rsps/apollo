@@ -1,14 +1,14 @@
-package org.apollo.game.message.handler;
+package org.apollo.game.message;
 
-import org.apollo.game.message.Message;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 
 /**
- * Handles messages received from the client.
+ * Listens for {@link Message}s received from the client.
  * 
  * @author Graham
- * @param <M> The type of message handled by this class.
+ * @author Ryley
+ * @param <M> The type of Message this class is listening for.
  */
 public abstract class MessageHandler<M extends Message> {
 
@@ -18,7 +18,7 @@ public abstract class MessageHandler<M extends Message> {
 	protected final World world;
 
 	/**
-	 * Creates the MessageHandler.
+	 * Creates the MessageListener.
 	 *
 	 * @param world The {@link World} the {@link Message} occurred in.
 	 */
@@ -27,12 +27,11 @@ public abstract class MessageHandler<M extends Message> {
 	}
 
 	/**
-	 * Handles a message.
+	 * Handles the Message that was received.
 	 * 
-	 * @param ctx The context.
-	 * @param player The player.
-	 * @param message The message.
+	 * @param player The player to handle the Message for.
+	 * @param message The Message.
 	 */
-	public abstract void handle(MessageHandlerContext ctx, Player player, M message);
+	public abstract void handle(Player player, M message);
 
 }

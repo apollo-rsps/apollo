@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ItemActionMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
@@ -27,7 +26,7 @@ public final class RemoveEquippedItemHandler extends MessageHandler<ItemActionMe
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, ItemActionMessage message) {
+	public void handle(Player player, ItemActionMessage message) {
 		if (message.getOption() == 1 && message.getInterfaceId() == SynchronizationInventoryListener.EQUIPMENT_ID) {
 			Inventory inventory = player.getInventory();
 			Inventory equipment = player.getEquipment();
@@ -38,7 +37,7 @@ public final class RemoveEquippedItemHandler extends MessageHandler<ItemActionMe
 
 			if (inventory.freeSlots() == 0 && !item.getDefinition().isStackable()) {
 				inventory.forceCapacityExceeded();
-				ctx.breakHandlerChain();
+				message.terminate();
 				return;
 			}
 

@@ -35,8 +35,6 @@ public final class GamePulseHandler implements Runnable {
 			service.pulse();
 		} catch (Throwable reason) {
 			logger.log(Level.SEVERE, "Exception occured during pulse!", reason);
-		} finally {
-			service.shutdown(false);
 		}
 	}
 

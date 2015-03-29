@@ -126,7 +126,7 @@ def add_survival_items(player)
 end
 
 # Intercept the FirstObjectActionMessage to send tutorial-only events if the player is chopping down a tree.
-on :message, :first_object_action do |ctx, player, message|
+on :message, :first_object_action do |player, message|
   if (player.in_tutorial_island && message.id == SurvivalConstants::TREE_ID)
     progress = player.tutorial_island_progress
     if (progress < :cut_tree)
@@ -138,9 +138,9 @@ on :message, :first_object_action do |ctx, player, message|
 end
 
 # Intercept the FlashingTabClickedMessage to update the player's progress, if applicable.
-on :message, :flashing_tab_clicked do |ctx, player, message|
+on :message, :flashing_tab_clicked do |player, message|
   if (player.in_tutorial_island && message.tab == SurvivalConstants::INVENTORY_TAB_INDEX && player.tutorial_island_progress == :given_axe)
     player.tutorial_island_progress = :cut_tree
-    ctx.break_handler_chain()
+    message.terminate
   end
 end

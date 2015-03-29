@@ -51,11 +51,11 @@ class BuryBoneAction < Action
 end
 
 # Intercepts the first item option message.
-on :message, :first_item_option do |ctx, player, message|
+on :message, :first_item_option do |player, message|
   bone = BONES[message.id]
   unless bone == nil
     player.start_action(BuryBoneAction.new(player, message.slot, bone))
-    ctx.break_handler_chain
+    message.terminate
   end
 end
 

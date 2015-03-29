@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.PlayerDesignMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.World;
@@ -25,9 +24,9 @@ public final class PlayerDesignVerificationHandler extends MessageHandler<Player
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, PlayerDesignMessage message) {
+	public void handle(Player player, PlayerDesignMessage message) {
 		if (!valid(message.getAppearance())) {
-			ctx.breakHandlerChain();
+			message.terminate();
 		}
 	}
 

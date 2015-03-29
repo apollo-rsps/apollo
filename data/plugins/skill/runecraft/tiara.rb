@@ -62,7 +62,7 @@ on :login do |event, player|
 end
 
 # Intercepts the SecondObjectAction message to support left-click access to the altar when wielding the correct tiara.
-on :message, :second_object_action do |ctx, player, message|
+on :message, :second_object_action do |player, message|
   object_id = message.id
   tiara = TIARAS_BY_ALTAR[object_id]
   next if tiara.nil?
@@ -73,37 +73,37 @@ on :message, :second_object_action do |ctx, player, message|
     altar = ENTRANCE_ALTARS[tiara.altar]
     player.start_action(TeleportAction.new(player, message.position, 2, altar.entrance_position)) unless altar.nil?
 
-    ctx.break_handler_chain
+    message.terminate
   end
 end
 
 # Intercepts the SecondItemAction message to allow for config sending.
-on :message, :second_item_option do |ctx, player, message|
+on :message, :second_item_option do |player, message|
   tiara = TIARAS_BY_ID[message.id]
 
   unless tiara.nil?
     tiara.send_config(player)
-    ctx.break_handler_chain
+    message.terminate
   end
 end
 
 # Intercepts the FirstItemAction message to allow for config sending.
-on :message, :first_item_action do |ctx, player, message|
+on :message, :first_item_action do |player, message|
   tiara = TIARAS_BY_ID[message.id]
 
   unless tiara.nil?
     send_empty_config(player)
-    ctx.break_handler_chain
+    message.terminate
   end
 end
 
 # Intercepts the ItemOnObject message to create the tiara.
-on :message, :item_on_object do |ctx, player, message|
+on :message, :item_on_object do |player, message|
   tiara= TIARAS_BY_TALISMAN[message.id]; altar = CRAFTING_ALTARS[message.object_id]
   return if (tiara.nil? || altar.nil?)
 
   player.start_action(CreateTiaraAction.new(player, message.position, tiara, altar))
-  ctx.break_handler_chain
+  message.terminate
 end
 
 # An action lets the player create a tiara when it comes within the specified distance of a specified position.
