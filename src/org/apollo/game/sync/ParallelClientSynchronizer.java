@@ -22,7 +22,8 @@ import org.apollo.game.sync.task.PreNpcSynchronizationTask;
 import org.apollo.game.sync.task.PrePlayerSynchronizationTask;
 import org.apollo.game.sync.task.SynchronizationTask;
 import org.apollo.util.MobRepository;
-import org.apollo.util.NamedThreadFactory;
+
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * An implementation of {@link ClientSynchronizer} which runs in a thread pool. A {@link Phaser} is used to ensure that
@@ -52,7 +53,7 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 	 */
 	public ParallelClientSynchronizer() {
 		int processors = Runtime.getRuntime().availableProcessors();
-		ThreadFactory factory = new NamedThreadFactory("ClientSynchronizer");
+		ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("ClientSynchronizer").build();
 		executor = Executors.newFixedThreadPool(processors, factory);
 	}
 

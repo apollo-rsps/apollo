@@ -20,10 +20,11 @@ import org.apollo.io.MessageHandlerChainSetParser;
 import org.apollo.login.LoginService;
 import org.apollo.net.session.GameSession;
 import org.apollo.util.MobRepository;
-import org.apollo.util.NamedThreadFactory;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
+
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * The {@link GameService} class schedules and manages the execution of the {@link GamePulseHandler} class.
@@ -51,7 +52,7 @@ public final class GameService extends Service {
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("GameService"));
+	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat("GameService").build());
 
 	/**
 	 * The {@link ClientSynchronizer}.
