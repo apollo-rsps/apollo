@@ -49,11 +49,11 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 		@Override
 		public boolean hasNext() {
-			if (foundIndex == repository.size()) {
+			if (foundIndex == size()) {
 				return false;
 			}
 
-			while (currentIndex < repository.capacity()) {
+			while (currentIndex < capacity()) {
 				if (mobs[currentIndex++] != null) {
 					foundIndex++;
 					return true;
@@ -64,7 +64,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 		@Override
 		public T next() {
-			return repository.get(currentIndex);
+			return get(currentIndex);
 		}
 
 		@Override
