@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ChatMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -23,11 +22,11 @@ public final class ChatVerificationHandler extends MessageHandler<ChatMessage> {
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, ChatMessage message) {
+	public void handle(Player player, ChatMessage message) {
 		int color = message.getTextColor();
 		int effects = message.getTextEffects();
 		if (color < 0 || color > 11 || effects < 0 || effects > 5) {
-			ctx.breakHandlerChain();
+			message.terminate();
 		}
 	}
 

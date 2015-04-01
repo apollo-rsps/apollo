@@ -6,6 +6,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.math.BigInteger;
+import java.net.InetSocketAddress;
 import java.security.SecureRandom;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import org.apollo.security.IsaacRandomPair;
 import org.apollo.security.PlayerCredentials;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.StatefulFrameDecoder;
+
+import com.google.common.net.InetAddresses;
 
 /**
  * A {@link StatefulFrameDecoder} which decodes the login request frames.
@@ -174,6 +177,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			int uid = secure.readInt();
 			String username = BufferUtil.readString(secure);
 			String password = BufferUtil.readString(secure);
+			InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
+			String hostAddress = InetAddresses.toAddrString(socketAddress.getAddress());
 
 			if (password.length() < 6 || password.length() > 20 || username.isEmpty() || username.length() > 12) {
 				writeResponseCode(ctx, LoginConstants.STATUS_INVALID_CREDENTIALS);
@@ -193,7 +198,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			IsaacRandom encodingRandom = new IsaacRandom(seed);
 
-			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid);
+			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid, hostAddress);
 			IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
 			out.add(new LoginRequest(credentials, randomPair, reconnecting, lowMemory, release, crcs, version));
@@ -207,7 +212,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @param response The response code to write.
 	 */
 	private void writeResponseCode(ChannelHandlerContext ctx, int response) {
-		ByteBuf buffer = ctx.alloc().buffer(1);
+		ByteBuf buffer = ctx.alloc().buffer(Byte.BYTES);
 		buffer.writeByte(response);
 
 		ctx.write(buffer).addListener(ChannelFutureListener.CLOSE);

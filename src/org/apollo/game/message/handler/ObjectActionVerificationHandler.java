@@ -1,10 +1,9 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
 import java.util.List;
 import java.util.Set;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ObjectActionMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -42,10 +41,10 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, ObjectActionMessage message) {
+	public void handle(Player player, ObjectActionMessage message) {
 		int id = message.getId();
 		if (id < 0 || id >= ObjectDefinition.count()) {
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 
@@ -54,13 +53,13 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 		Set<GameObject> objects = region.getEntities(position, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT);
 
 		if (!player.getPosition().isWithinDistance(position, 15) || !containsObject(id, objects)) {
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 
 		ObjectDefinition definition = ObjectDefinition.lookup(id);
 		if (message.getOption() >= definition.getMenuActions().length) {
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 	}

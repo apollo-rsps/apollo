@@ -9,7 +9,7 @@ declare_attribute(:active_prayer, -1, :persistent)
 PRAYERS = {}
 
 # Intercept the ButtonMessage to toggle a prayer.
-on :message, :button do |ctx, player, message|
+on :message, :button do |player, message|
     button = message.widget_id
 	prayer = PRAYERS[button]
 

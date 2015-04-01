@@ -5,7 +5,7 @@
 # 
 # If you only wish to intercept a message, use the intercept method, e.g.
 #
-# intercept :item_on_item, used_id, target_id, :irreversible do |ctx, player, message|
+# intercept :item_on_item, used_id, target_id, :irreversible do |player, message|
 #   # code here
 # end
 

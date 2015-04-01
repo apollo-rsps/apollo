@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.NpcActionMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.def.NpcDefinition;
@@ -27,12 +26,12 @@ public final class NpcActionVerificationHandler extends MessageHandler<NpcAction
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, NpcActionMessage message) {
+	public void handle(Player player, NpcActionMessage message) {
 		int index = message.getIndex();
 		MobRepository<Npc> repository = world.getNpcRepository();
 
 		if (index < 0 || index >= repository.capacity()) {
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 
@@ -40,13 +39,13 @@ public final class NpcActionVerificationHandler extends MessageHandler<NpcAction
 
 		if (npc == null || !player.getPosition().isWithinDistance(npc.getPosition(), player.getViewingDistance() + 1)) {
 			// +1 in case it was decremented after the player clicked the action.
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 
 		NpcDefinition definition = npc.getDefinition();
 		if (message.getOption() >= definition.getInteractions().length) {
-			ctx.breakHandlerChain();
+			message.terminate();
 			return;
 		}
 	}

@@ -36,11 +36,11 @@ class ItemOnItemPair
 
 end
 
-# Adds a message handler to the item on item message.
-on :message, :item_on_item do |ctx, player, message|
+# Adds a message listener to the item on item message.
+on :message, :item_on_item do |player, message|
   used, target = message.id, message.target_id
   pair = ItemOnItemPair.new(used, target)
   block = ITEM_PAIRS[pair]
 
-  block.call(ctx, player, message) unless block == nil
+  block.call(player, message) unless block == nil
 end

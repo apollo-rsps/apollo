@@ -20,11 +20,10 @@ public final class BufferUtil {
 	 * @return The 'smart'.
 	 */
 	public static int readSmart(ByteBuffer buffer) {
+		// Reads a single byte from the buffer without modifying the current position.
 		int peek = buffer.get(buffer.position()) & 0xFF;
-		if (peek < 128) {
-			return buffer.get() & 0xFF;
-		}
-		return (buffer.getShort() & 0xFFFF) - 32768;
+		int value = peek > Byte.MAX_VALUE ? (buffer.getShort() & 0xFFFF) + Short.MIN_VALUE : buffer.get() & 0xFF;
+		return value;
 	}
 
 	/**
@@ -58,13 +57,14 @@ public final class BufferUtil {
 	}
 
 	/**
-	 * Reads an unsigned tri-byte from the specified {@link ByteBuffer}.
-	 * 
-	 * @param buffer The buffer.
-	 * @return The tri-byte.
+	 * Reads a 24-bit medium integer from the specified {@link ByteBuffer}s current position and increases the buffers
+	 * position by 3.
+	 *
+	 * @param buffer The {@link ByteBuffer} to read from.
+	 * @return The read 24-bit medium integer.
 	 */
-	public static int readUnsignedTriByte(ByteBuffer buffer) {
-		return (buffer.get() & 0xFF) << 16 | (buffer.get() & 0xFF) << 8 | buffer.get() & 0xFF;
+	public static int readUnsignedMedium(ByteBuffer buffer) {
+		return (buffer.getShort() & 0xFFFF) << 8 | buffer.get() & 0xFF;
 	}
 
 	/**

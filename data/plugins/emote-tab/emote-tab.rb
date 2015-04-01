@@ -12,10 +12,10 @@ ANIMATIONS = {
 }
 
 # Intercept the button message.
-on :message, :button do |ctx, player, message|
+on :message, :button do |player, message|
   anim = ANIMATIONS[message.widget_id]
   unless anim == nil
     player.play_animation(anim)
-    ctx.break_handler_chain
+    message.terminate
   end
 end

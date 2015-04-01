@@ -23,8 +23,8 @@ class OpenDoorAction < DistancedAction
 
 end
 
-# Message handler for opening and closing doors.
-on :message, :first_object_action do |ctx, player, message|
+# MessageListener for opening and closing doors.
+on :message, :first_object_action do |player, message|
   if DoorUtil::is_door?(message.id)
     puts "Player: #{player.position}, door: #{message.position}"
     door = DoorUtil::get_door_object(message.position, message.id)

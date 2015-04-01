@@ -63,4 +63,5 @@ final class EventListenerChain<E extends Event> {
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("type", type).add("listeners", listeners).toString();
 	}
+
 }

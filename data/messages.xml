@@ -2,110 +2,110 @@
   <message>
     <type>org.apollo.game.message.impl.ButtonMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.DialogueButtonHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.BankButtonMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.DialogueButtonHandler</handler>
+      <handler>org.apollo.game.message.handler.BankButtonMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.ChatMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ChatVerificationHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.ChatMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.ChatVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.ChatMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.ClosedInterfaceMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ClosedInterfaceMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.ClosedInterfaceMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.CommandMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.CommandMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.CommandMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.DialogueContinueMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.DialogueContinueMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.DialogueContinueMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.EnteredAmountMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.EnteredAmountMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.EnteredAmountMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.ItemActionMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ItemVerificationHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.RemoveEquippedItemHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.BankMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.RemoveEquippedItemHandler</handler>
+      <handler>org.apollo.game.message.handler.BankMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.ItemOnItemMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ItemVerificationHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.ItemOnItemVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.ItemOnItemVerificationHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.ItemOnObjectMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ItemOnObjectVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.ItemOnObjectVerificationHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.ItemOptionMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ItemVerificationHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.EquipItemHandler</handler>
+      <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.EquipItemHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.MagicOnItemMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ItemVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.NpcActionMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.NpcActionVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.NpcActionVerificationHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.ObjectActionMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.ObjectActionVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.ObjectActionVerificationHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.PlayerActionMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.PlayerActionVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.PlayerActionVerificationHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.PlayerDesignMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.PlayerDesignVerificationHandler</handler>
-      <handler>org.apollo.game.message.handler.impl.PlayerDesignMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.PlayerDesignVerificationHandler</handler>
+      <handler>org.apollo.game.message.handler.PlayerDesignMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.SwitchItemMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.SwitchItemMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.SwitchItemMessageHandler</handler>
     </chain>
   </message>
   <message>
     <type>org.apollo.game.message.impl.WalkMessage</type>
     <chain>
-      <handler>org.apollo.game.message.handler.impl.WalkMessageHandler</handler>
+      <handler>org.apollo.game.message.handler.WalkMessageHandler</handler>
     </chain>
   </message>
 </messages>

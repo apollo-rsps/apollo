@@ -1,7 +1,6 @@
-package org.apollo.game.message.handler.impl;
+package org.apollo.game.message.handler;
 
-import org.apollo.game.message.handler.MessageHandler;
-import org.apollo.game.message.handler.MessageHandlerContext;
+import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ChatMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -24,7 +23,7 @@ public final class ChatMessageHandler extends MessageHandler<ChatMessage> {
 	}
 
 	@Override
-	public void handle(MessageHandlerContext ctx, Player player, ChatMessage message) {
+	public void handle(Player player, ChatMessage message) {
 		player.getBlockSet().add(SynchronizationBlock.createChatBlock(player, message));
 	}
 

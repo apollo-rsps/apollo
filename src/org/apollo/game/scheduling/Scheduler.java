@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
+import org.apollo.util.CollectionUtil;
+
 /**
  * A class which manages {@link ScheduledTask}s.
  * 
@@ -14,29 +16,26 @@ import java.util.Queue;
 public final class Scheduler {
 
 	/**
-	 * A queue of new tasks that should be added.
+	 * An {@link ArrayDeque} of tasks that are pending execution.
 	 */
-	private Queue<ScheduledTask> newTasks = new ArrayDeque<>();
+	private final Queue<ScheduledTask> pendingTasks = new ArrayDeque<>();
 
 	/**
-	 * A list of currently active tasks.
+	 * An {@link ArrayList} of currently active tasks.
 	 */
-	private List<ScheduledTask> tasks = new ArrayList<>();
+	private final List<ScheduledTask> tasks = new ArrayList<>();
 
 	/**
 	 * Called every pulse: executes tasks that are still pending, adds new tasks and stops old tasks.
 	 */
 	public void pulse() {
-		ScheduledTask task;
-		while ((task = newTasks.poll()) != null) {
-			tasks.add(task);
-		}
+		CollectionUtil.pollAll(pendingTasks, tasks::add);
 
-		for (Iterator<ScheduledTask> it = tasks.iterator(); it.hasNext();) {
-			task = it.next();
+		for (Iterator<ScheduledTask> iterator = tasks.iterator(); iterator.hasNext();) {
+			ScheduledTask task = iterator.next();
 			task.pulse();
-			if (!task.isRunning()) {
-				it.remove();
+			if (task.isRunning()) {
+				iterator.remove();
 			}
 		}
 	}
@@ -48,7 +47,7 @@ public final class Scheduler {
 	 * @return {@code true} if the task was added successfully.
 	 */
 	public boolean schedule(ScheduledTask task) {
-		return newTasks.add(task);
+		return pendingTasks.add(task);
 	}
 
 }

@@ -16,10 +16,11 @@ import org.apollo.net.codec.login.LoginRequest;
 import org.apollo.net.release.Release;
 import org.apollo.net.session.GameSession;
 import org.apollo.net.session.LoginSession;
-import org.apollo.util.NamedThreadFactory;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
+
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * The {@link LoginService} manages {@link LoginRequest}s.
@@ -32,7 +33,7 @@ public final class LoginService extends Service {
 	/**
 	 * The {@link ExecutorService} to which workers are submitted.
 	 */
-	private final ExecutorService executor = Executors.newCachedThreadPool(new NamedThreadFactory("LoginService"));
+	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("LoginService").build());
 
 	/**
 	 * The current {@link PlayerSerializer}.

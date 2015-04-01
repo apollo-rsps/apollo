@@ -24,26 +24,26 @@ end
 
 
 # Intercepts the item on object message.
-on :message, :item_on_object do |ctx, player, message|
+on :message, :item_on_object do |player, message|
   talisman = TALISMANS[message.id]; altar = ENTRANCE_ALTARS[message.object_id]
   unless (talisman.nil? || altar.nil?)
     player.start_action(TeleportAction.new(player, message.position, 2, altar.entrance_position))
-    ctx.break_handler_chain
+    message.terminate
   end
 end
 
 # Intercepts the first object action message.
-on :message, :object_action do |ctx, player, message|
+on :message, :object_action do |player, message|
   if (message.option == 1)
     object_id = message.id
     
     if (altar = PORTALS[object_id]) != nil # Get the altar associated with this exit portal.
       player.start_action(TeleportAction.new(player, altar.entrance_position, 1, altar.exit_position))
-      ctx.break_handler_chain
+      message.terminate
     elsif (rune = RUNES[object_id]) != nil # Get the rune associated with this altar.
       altar = CRAFTING_ALTARS[object_id]
       player.start_action(RunecraftingAction.new(player, rune, altar.crafting_centre))
-      ctx.break_handler_chain
+      message.terminate
     end
   end
 end

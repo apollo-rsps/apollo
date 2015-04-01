@@ -134,7 +134,7 @@ class ProspectingAction < DistancedAction
 
 end
 
-on :message, :first_object_action do |ctx, mob, message|
+on :message, :first_object_action do |mob, message|
   ore = ORES[message.id]
 
   unless ore.nil?
@@ -142,7 +142,7 @@ on :message, :first_object_action do |ctx, mob, message|
   end
 end
 
-on :message, :second_object_action do |ctx, mob, message|
+on :message, :second_object_action do |mob, message|
   ore = ORES[message.id]
 
   if !ore.nil?

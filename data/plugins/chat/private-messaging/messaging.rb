@@ -4,7 +4,7 @@ java_import 'org.apollo.game.message.impl.ForwardPrivateChatMessage'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.setting.PrivacyState'
 
-on :message, :private_chat do |ctx, player, message|
+on :message, :private_chat do |player, message|
   friend = $world.get_player(message.username)
   friend.send(ForwardPrivateChatMessage.new(player.username, player.privilege_level, message.compressed_chat)) if interaction_permitted(player, friend)
 end

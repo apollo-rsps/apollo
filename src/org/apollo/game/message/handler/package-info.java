@@ -1,4 +1,4 @@
 /**
- * Contains the base classes for message handling.
+ * Contains message handler implementations.
  */
 package org.apollo.game.message.handler;

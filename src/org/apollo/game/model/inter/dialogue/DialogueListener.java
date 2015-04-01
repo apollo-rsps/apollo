@@ -1,5 +1,6 @@
 package org.apollo.game.model.inter.dialogue;
 
+import org.apollo.game.message.MessageHandlerChain;
 import org.apollo.game.model.inter.InterfaceListener;
 
 /**
@@ -17,7 +18,7 @@ public interface DialogueListener extends InterfaceListener {
 	 * </p>
 	 * 
 	 * @param button The button interface id.
-	 * @return {@code true} if the message handler chain should be broken, {@code false} if it should be continued.
+	 * @return {@code true} if the {@link MessageHandlerChain} should be broken, {@code false} if it should be continued.
 	 */
 	public boolean buttonClicked(int button);
 

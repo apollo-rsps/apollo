@@ -118,7 +118,7 @@ class ItemSpellAction < SpellAction
 end
 
 # Intercepts the magic on item message.
-on :message, :magic_on_item do |ctx, player, message|
+on :message, :magic_on_item do |player, message|
   spell = message.spell_id
   
   alch = ALCHEMY_SPELLS[spell]
@@ -126,7 +126,7 @@ on :message, :magic_on_item do |ctx, player, message|
     slot = message.slot
     item = player.inventory.get(slot)
     player.start_action(AlchemyAction.new(player, alch, slot, item))
-    ctx.break_handler_chain
+    message.terminate
     return
   end
   
@@ -135,18 +135,18 @@ on :message, :magic_on_item do |ctx, player, message|
     slot = message.slot
     item = player.inventory.get(slot)
     player.start_action(EnchantAction.new(player, ench, slot, item, ENCHANT_ITEMS[item.id]))
-    ctx.break_handler_chain
+    message.terminate
   end
 end
 
 # Intercepts the button message
-on :message, :button do |ctx, player, message|
+on :message, :button do |player, message|
   button = message.widget_id
 
   tele = TELEPORT_SPELLS[button]
   unless tele.nil?
     player.start_action(TeleportingAction.new(player, tele))
-    ctx.break_handler_chain
+    message.terminate
     return
   end
   
@@ -155,6 +155,6 @@ on :message, :button do |ctx, player, message|
     slots = bone_slots player
 
     if slots.length == 0 then player.send_message("You can't convert these bones!") else player.start_action(ConvertingAction.new(player, conv, slots)) end
-    ctx.break_handler_chain
+    message.terminate
   end
 end

@@ -46,6 +46,7 @@ import org.apollo.game.model.skill.SynchronizationSkillListener;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.net.session.GameSession;
 import org.apollo.security.PlayerCredentials;
+import org.apollo.util.CollectionUtil;
 import org.apollo.util.Point;
 
 import com.google.common.base.MoreObjects;
@@ -668,17 +669,16 @@ public final class Player extends Mob {
 	 * @param message The message..
 	 */
 	public void send(Message message) {
-		if (isActive()) {
-			if (!queuedMessages.isEmpty()) {
-				for (Message queuedMessage : queuedMessages) {
-					session.dispatchMessage(queuedMessage);
-				}
-				queuedMessages.clear();
-			}
-			session.dispatchMessage(message);
-		} else {
+		if (!isActive()) {
 			queuedMessages.add(message);
+			return;
 		}
+
+		if (!queuedMessages.isEmpty()) {
+			CollectionUtil.pollAll(queuedMessages, session::dispatchMessage);
+		}
+
+		session.dispatchMessage(message);
 	}
 
 	/**

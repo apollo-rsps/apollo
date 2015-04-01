@@ -100,12 +100,12 @@ class FishingAction < DistancedAction
 end
 
 # Intercepts the NpcAction message to determine whether or not a clicked npc was a fishing spot.
-on :message, :npc_action do |ctx, player, message|
+on :message, :npc_action do |player, message|
   npc = $world.npc_repository.get(message.index)
   spot = FISHING_SPOTS[npc.id]
 
 	unless spot.nil?
 	  player.start_action(FishingAction.new(player, npc.position, spot, message.option))
-	  ctx.break_handler_chain
+	  message.terminate
   end
 end

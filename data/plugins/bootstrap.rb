@@ -15,7 +15,7 @@
 require 'java'
 
 java_import 'org.apollo.game.command.CommandListener'
-java_import 'org.apollo.game.message.handler.MessageHandler'
+java_import 'org.apollo.game.message.MessageHandler'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
 java_import 'org.apollo.game.model.event.EventListener'
@@ -75,11 +75,10 @@ class ProcEventListener
 
 end
 
-# A MessageHandler which executes a Proc object with three arguments: the chain
-# context, the player and the message.
+# A MessageHandler which executes a Proc object with two arguments: the player and the message.
 class ProcMessageHandler < MessageHandler
 
-  # Creates the ProcMessageListener.
+  # Creates the ProcMessageHandler.
   def initialize(block, option)
     super($world)
     @block = block
@@ -87,8 +86,8 @@ class ProcMessageHandler < MessageHandler
   end
 
   # Handles the message.
-  def handle(ctx, player, message)
-    @block.call(ctx, player, message) if (@option == 0 || @option == message.option)
+  def handle(player, message)
+    @block.call(player, message) if (@option == 0 || @option == message.option)
   end
 
 end
@@ -166,7 +165,7 @@ def on_button(args, proc)
 
   id = args[0].to_i
 
-  on :message, :button do |ctx, player, message|
+  on :message, :button do |player, message|
     proc.call(player) if message.widget_id == id
   end
 end
@@ -192,7 +191,7 @@ def on_message(args, proc)
   class_name = message.to_s.camelize.concat('Message')
   message = Java::JavaClass.for_name("org.apollo.game.message.impl.#{class_name}")
 
-  $ctx.add_last_message_handler(message, ProcMessageHandler.new(proc, option))
+  $ctx.add_message_handler(message, ProcMessageHandler.new(proc, option))
 end
 
 # Defines an action to be taken upon a command.
