@@ -1,10 +1,10 @@
 package org.apollo.game.message.impl;
 
-import java.util.List;
-
 import org.apollo.game.message.Message;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.RegionCoordinates;
+
+import java.util.List;
 
 /**
  * A {@link Message} sent to the client that contains multiple
@@ -14,9 +14,9 @@ import org.apollo.game.model.area.RegionCoordinates;
 public final class GroupedRegionUpdateMessage extends Message {
 
 	/**
-	 * The Position of the Player.
+	 * The last known region Position of the Player.
 	 */
-	private final Position player;
+	private final Position lastKnownRegion;
 
 	/**
 	 * The Position of the Region being updated.
@@ -31,12 +31,12 @@ public final class GroupedRegionUpdateMessage extends Message {
 	/**
 	 * Creates the GroupedRegionUpdateMessage.
 	 * 
-	 * @param player The {@link Position} of the Player.
+	 * @param lastKnownRegion The last known region {@link Position} of the Player.
 	 * @param coordinates The {@link RegionCoordinates} of the Region being updated.
 	 * @param messages The {@link List} of {@link RegionUpdateMessage}s.
 	 */
-	public GroupedRegionUpdateMessage(Position player, RegionCoordinates coordinates, List<RegionUpdateMessage> messages) {
-		this.player = player;
+	public GroupedRegionUpdateMessage(Position lastKnownRegion, RegionCoordinates coordinates, List<RegionUpdateMessage> messages) {
+		this.lastKnownRegion = lastKnownRegion;
 		this.region = new Position(coordinates.getAbsoluteX(), coordinates.getAbsoluteY());
 		this.messages = messages;
 	}
@@ -46,8 +46,8 @@ public final class GroupedRegionUpdateMessage extends Message {
 	 * 
 	 * @return The Position.
 	 */
-	public Position getPlayerPosition() {
-		return player;
+	public Position getLastKnownRegion() {
+		return lastKnownRegion;
 	}
 
 	/**

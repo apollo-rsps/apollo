@@ -46,7 +46,7 @@ module DoorUtil
   end
 
   # Toggles the given door.
-  def self.toggle(door, player)
+  def self.toggle(door)
     position = door.position
     region = $world.region_repository.from_position(position)
     region.remove_entity(door)
@@ -59,7 +59,7 @@ module DoorUtil
     else
       toggled_position = translate_door_position(door)
       toggled_orientation = translate_door_orientation(door)
-      toggled_door = DynamicGameObject.createPublic(door.id, toggled_position, door.type, toggled_orientation)
+      toggled_door = DynamicGameObject.createPublic($world, door.id, toggled_position, door.type, toggled_orientation)
 
       toggled_region = $world.region_repository.from_position(toggled_position)
       toggled_region.add_entity(toggled_door)
