@@ -2,7 +2,7 @@ package org.apollo.util;
 
 /**
  * A class which contains text-related utility methods.
- * 
+ *
  * @author Graham
  */
 public final class TextUtil {
@@ -18,37 +18,28 @@ public final class TextUtil {
 
 	/**
 	 * Capitalizes the string correctly.
-	 * 
+	 *
 	 * @param str The input string.
 	 * @return The string with correct capitalization.
 	 */
 	public static String capitalize(String str) {
-		char[] chars = str.toCharArray();
-		boolean sentenceStart = true;
-		for (int i = 0; i < chars.length; i++) {
-			char c = chars[i];
-			if (sentenceStart) {
-				if (c >= 'a' && c <= 'z') {
-					chars[i] -= 0x20;
-					sentenceStart = false;
-				} else if (c >= 'A' && c <= 'Z') {
-					sentenceStart = false;
-				}
-			} else {
-				if (c >= 'A' && c <= 'Z') {
-					chars[i] += 0x20;
-				}
-			}
-			if (c == '.' || c == '!' || c == '?') {
-				sentenceStart = true;
+		boolean capitalize = true;
+		StringBuilder bldr = new StringBuilder(str);
+		for (int index = 0, length = str.length(); index < length; index++) {
+			char character = bldr.charAt(index);
+			if (character == '.' || character == '!' || character == '?') {
+				capitalize = true;
+			} else if (capitalize && !Character.isWhitespace(character)) {
+				bldr.setCharAt(index, Character.toUpperCase(character));
+				capitalize = false;
 			}
 		}
-		return new String(chars, 0, chars.length);
+		return bldr.toString();
 	}
 
 	/**
 	 * Compresses the input text ({@code in}) and places the result in the {@code out} array.
-	 * 
+	 *
 	 * @param in The input text.
 	 * @param out The output array.
 	 * @return The number of bytes written to the output array.
@@ -95,7 +86,7 @@ public final class TextUtil {
 
 	/**
 	 * Filters invalid characters from the specified string.
-	 * 
+	 *
 	 * @param str The input string.
 	 * @return The filtered string.
 	 */
@@ -115,7 +106,7 @@ public final class TextUtil {
 	/**
 	 * Uncompresses the compressed data ({@code in}) with the length ({@code len}) and returns the uncompressed
 	 * {@link String}.
-	 * 
+	 *
 	 * @param in The compressed input data.
 	 * @param len The length.
 	 * @return The uncompressed {@link String}.
