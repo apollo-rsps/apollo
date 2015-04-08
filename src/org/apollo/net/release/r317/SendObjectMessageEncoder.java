@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SendObjectMessage}.
- * 
+ *
  * @author Major
  */
 public final class SendObjectMessageEncoder extends MessageEncoder<SendObjectMessage> {

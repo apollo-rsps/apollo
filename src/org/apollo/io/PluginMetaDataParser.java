@@ -12,7 +12,7 @@ import org.xml.sax.SAXException;
 
 /**
  * A class that parses {@code plugin.xml} files into {@link PluginMetaData} objects.
- * 
+ *
  * @author Graham
  */
 public final class PluginMetaDataParser {
@@ -34,7 +34,7 @@ public final class PluginMetaDataParser {
 
 	/**
 	 * Creates the plugin meta data parser.
-	 * 
+	 *
 	 * @param is The input stream.
 	 * @throws SAXException If a SAX error occurs.
 	 */
@@ -45,7 +45,7 @@ public final class PluginMetaDataParser {
 
 	/**
 	 * Gets the specified child element, if it exists.
-	 * 
+	 *
 	 * @param node The root node.
 	 * @param name The element name.
 	 * @return The node object.
@@ -57,7 +57,7 @@ public final class PluginMetaDataParser {
 
 	/**
 	 * Parses the XML and creates a meta data object.
-	 * 
+	 *
 	 * @param base The base path for this plugin
 	 * @return The meta data object.
 	 * @throws SAXException If a SAX error occurs.

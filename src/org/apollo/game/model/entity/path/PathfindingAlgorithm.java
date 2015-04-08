@@ -34,7 +34,7 @@ abstract class PathfindingAlgorithm {
 
 	/**
 	 * Finds a valid path from the origin {@link Position} to the target one.
-	 * 
+	 *
 	 * @param origin The origin Position.
 	 * @param target The target Position.
 	 * @return The {@link Deque} containing the Positions to go through.
@@ -44,7 +44,7 @@ abstract class PathfindingAlgorithm {
 	/**
 	 * Returns whether or not a {@link Position} walking one step in any of the specified {@link Direction}s would lead
 	 * to is traversable.
-	 * 
+	 *
 	 * @param current The current Position.
 	 * @param directions The Directions that should be checked.
 	 * @return {@code true} if any of the Directions lead to a traversable tile, otherwise {@code false}.
@@ -56,7 +56,7 @@ abstract class PathfindingAlgorithm {
 	/**
 	 * Returns whether or not a {@link Position} walking one step in any of the specified {@link Direction}s would lead
 	 * to is traversable.
-	 * 
+	 *
 	 * @param current The current Position.
 	 * @param boundaries The {@link Optional} containing the Position boundaries.
 	 * @param directions The Directions that should be checked.
@@ -96,7 +96,7 @@ abstract class PathfindingAlgorithm {
 
 	/**
 	 * Returns whether or not the specified {@link Position} is inside the specified {@code boundary}.
-	 * 
+	 *
 	 * @param position The Position.
 	 * @param boundary The boundary Positions.
 	 * @return {@code true} if the specified Position is inside the boundary, {@code false} if not.

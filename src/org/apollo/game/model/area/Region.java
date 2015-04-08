@@ -26,7 +26,7 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * An 8x8 area of the map.
- * 
+ *
  * @author Major
  */
 public final class Region {
@@ -92,7 +92,7 @@ public final class Region {
 
 	/**
 	 * Creates a new Region.
-	 * 
+	 *
 	 * @param x The x coordinate of the Region.
 	 * @param y The y coordinate of the Region.
 	 */
@@ -102,7 +102,7 @@ public final class Region {
 
 	/**
 	 * Creates a new Region with the specified {@link RegionCoordinates}.
-	 * 
+	 *
 	 * @param coordinates The coordinates.
 	 */
 	public Region(RegionCoordinates coordinates) {
@@ -118,7 +118,7 @@ public final class Region {
 	/**
 	 * Adds a {@link Entity} from to Region. Note that this does not spawn the Entity, or do any other action other than
 	 * register it to this Region.
-	 * 
+	 *
 	 * @param entity The Entity.
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region.
 	 */
@@ -129,7 +129,7 @@ public final class Region {
 		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
 		local.add(entity);
 
-		if ((System.currentTimeMillis() - start) / 1000 > 10 && (entity instanceof GameObject)) {
+		if ((System.currentTimeMillis() - start) / 1000 > 10 && entity instanceof GameObject) {
 			System.out.println("Adding entity " + entity + " to " + entity.getPosition());
 		}
 
@@ -140,7 +140,7 @@ public final class Region {
 	 * Checks if this Region contains the specified Entity.
 	 * <p>
 	 * This method operates in constant time.
-	 * 
+	 *
 	 * @param entity The Entity.
 	 * @return {@code true} if this Region contains the Entity, otherwise {@code false}.
 	 */
@@ -153,7 +153,7 @@ public final class Region {
 
 	/**
 	 * Gets this Region's {@link RegionCoordinates}.
-	 * 
+	 *
 	 * @return The Region coordinates.
 	 */
 	public RegionCoordinates getCoordinates() {
@@ -163,20 +163,20 @@ public final class Region {
 	/**
 	 * Gets a shallow copy of the {@link Set} of {@link Entity} objects at the specified {@link Position}. The returned
 	 * type will be immutable.
-	 * 
+	 *
 	 * @param position The position containing the entities.
 	 * @return The list.
 	 */
 	public Set<Entity> getEntities(Position position) {
 		Set<Entity> set = entities.get(position);
-		return (set == null) ? ImmutableSet.of() : ImmutableSet.copyOf(set);
+		return set == null ? ImmutableSet.of() : ImmutableSet.copyOf(set);
 	}
 
 	/**
 	 * Gets a shallow copy of the {@link Set} of {@link Entity}s with the specified {@link EntityType}(s). The returned
 	 * type will be immutable. Type will be inferred from the call, so ensure that the Entity type and the reference
 	 * correspond, or this method will fail at runtime.
-	 * 
+	 *
 	 * @param position The {@link Position} containing the entities.
 	 * @param types The {@link EntityType}s.
 	 * @return The set of entities.
@@ -195,7 +195,7 @@ public final class Region {
 
 	/**
 	 * Gets the {@link CollisionMatrix} at the specified height level.
-	 * 
+	 *
 	 * @param height The height level.
 	 * @return The CollisionMatrix.
 	 */
@@ -206,7 +206,7 @@ public final class Region {
 
 	/**
 	 * Gets a {@link Set} containing {@link RegionUpdateMessage}s that add every {@link Entity} in this Region.
-	 * 
+	 *
 	 * @param height The height level to get the Set of RegionUpdateMessages for.
 	 * @return The Set of RegionUpdateMessages.
 	 */
@@ -219,12 +219,12 @@ public final class Region {
 	/**
 	 * Gets the updates that have occurred in the last tick in this Region, as a {@link Set} of
 	 * {@link RegionUpdateMessage}s.
-	 * 
+	 *
 	 * @param height The height level to get the Set of RegionUpdateMessages for.
 	 * @return The Set of RegionUpdateMessages.
 	 */
 	public List<RegionUpdateMessage> getUpdates(int height) {
-		List<RegionUpdateMessage> original = this.updates.get(height);
+		List<RegionUpdateMessage> original = updates.get(height);
 		List<RegionUpdateMessage> updates = new ArrayList<>(original);
 		original.clear();
 
@@ -234,7 +234,7 @@ public final class Region {
 
 	/**
 	 * Notifies the {@link RegionListener}s registered to this Region that an update has occurred.
-	 * 
+	 *
 	 * @param entity The {@link Entity} that was updated.
 	 * @param type The {@link EntityUpdateType} that occurred.
 	 */
@@ -244,7 +244,7 @@ public final class Region {
 
 	/**
 	 * Removes a {@link Entity} from this Region.
-	 * 
+	 *
 	 * @param entity The Entity.
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region, or if it was never added.
 	 */
@@ -269,7 +269,7 @@ public final class Region {
 	/**
 	 * Returns whether or not an Entity of the specified {@link EntityType type} can traverse the tile at the specified
 	 * coordinate pair.
-	 * 
+	 *
 	 * @param position The {@link Position} of the tile.
 	 * @param entity The {@link EntityType}.
 	 * @param direction The {@link Direction} the Entity is approaching from.
@@ -284,7 +284,7 @@ public final class Region {
 
 	/**
 	 * Checks that the specified {@link Position} is included in this Region.
-	 * 
+	 *
 	 * @param position The position.
 	 * @throws IllegalArgumentException If the specified position is not included in this Region.
 	 */
@@ -294,7 +294,7 @@ public final class Region {
 
 	/**
 	 * Records the specified {@link Entity} as being updated this pulse.
-	 * 
+	 *
 	 * @param entity The Entity.
 	 * @param type The {@link EntityUpdateType}.
 	 * @throws UnsupportedOperationException If the specified Entity cannot be operated on in this manner.

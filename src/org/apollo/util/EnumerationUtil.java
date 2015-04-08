@@ -6,14 +6,14 @@ import java.util.Iterator;
 /**
  * A utility class for wrapping old {@link Enumeration} objects inside an {@link Iterator} to allow for greater
  * compatibility.
- * 
+ *
  * @author Graham
  */
 public final class EnumerationUtil {
 
 	/**
 	 * Returns an {@link Iterator} which wraps around the specified {@link Enumeration}.
-	 * 
+	 *
 	 * @param enumeration The {@link Enumeration}.
 	 * @return An {@link Iterator}.
 	 */

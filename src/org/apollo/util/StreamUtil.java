@@ -6,14 +6,14 @@ import java.io.OutputStream;
 
 /**
  * A class which contains {@link InputStream}- and {@link OutputStream}-related utility methods.
- * 
+ *
  * @author Graham
  */
 public final class StreamUtil {
 
 	/**
 	 * Reads a string from the specified input stream.
-	 * 
+	 *
 	 * @param is The input stream.
 	 * @return The string.
 	 * @throws IOException If an I/O error occurs.
@@ -29,7 +29,7 @@ public final class StreamUtil {
 
 	/**
 	 * Writes a string to the specified output stream.
-	 * 
+	 *
 	 * @param os The output stream.
 	 * @param str The string.
 	 * @throws IOException If an I/O error occurs.

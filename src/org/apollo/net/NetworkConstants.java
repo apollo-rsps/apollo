@@ -15,7 +15,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * Holds various network-related constants such as port numbers.
- * 
+ *
  * @author Graham
  * @author Major
  */

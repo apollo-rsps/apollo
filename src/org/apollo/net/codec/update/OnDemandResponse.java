@@ -6,7 +6,7 @@ import org.apollo.fs.FileDescriptor;
 
 /**
  * Represents a single 'on-demand' response.
- * 
+ *
  * @author Graham
  */
 public final class OnDemandResponse {
@@ -33,7 +33,7 @@ public final class OnDemandResponse {
 
 	/**
 	 * Creates the 'on-demand' response.
-	 * 
+	 *
 	 * @param fileDescriptor The file descriptor.
 	 * @param fileSize The file size.
 	 * @param chunkId The chunk id.
@@ -48,7 +48,7 @@ public final class OnDemandResponse {
 
 	/**
 	 * Gets the chunk data.
-	 * 
+	 *
 	 * @return The chunk data.
 	 */
 	public ByteBuf getChunkData() {
@@ -57,7 +57,7 @@ public final class OnDemandResponse {
 
 	/**
 	 * Gets the chunk id.
-	 * 
+	 *
 	 * @return The chunk id.
 	 */
 	public int getChunkId() {
@@ -66,7 +66,7 @@ public final class OnDemandResponse {
 
 	/**
 	 * Gets the file descriptor.
-	 * 
+	 *
 	 * @return The file descriptor.
 	 */
 	public FileDescriptor getFileDescriptor() {
@@ -75,7 +75,7 @@ public final class OnDemandResponse {
 
 	/**
 	 * Gets the file size.
-	 * 
+	 *
 	 * @return The file size.
 	 */
 	public int getFileSize() {

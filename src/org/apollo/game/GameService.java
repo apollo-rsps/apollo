@@ -28,7 +28,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * The {@link GameService} class schedules and manages the execution of the {@link GamePulseHandler} class.
- * 
+ *
  * @author Graham
  */
 public final class GameService extends Service {
@@ -61,7 +61,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Creates the GameService.
-	 * 
+	 *
 	 * @param world The {@link World} the GameService is for.
 	 * @throws Exception If an error occurs during initialization.
 	 */
@@ -72,7 +72,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Finalizes the unregistration of a player.
-	 * 
+	 *
 	 * @param player The player.
 	 */
 	public void finalizePlayerUnregistration(Player player) {
@@ -83,7 +83,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Gets the MessageHandlerChainSet
-	 * 
+	 *
 	 * @return The set of MessageHandlerChain's.
 	 */
 	public MessageHandlerChainSet getMessageHandlerChainSet() {
@@ -112,7 +112,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Registers a {@link Player} (may block!).
-	 * 
+	 *
 	 * @param player The Player.
 	 * @param session The {@link GameSession} of the Player.
 	 * @return A {@link RegistrationStatus}.
@@ -133,7 +133,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Shuts down this game service.
-	 * 
+	 *
 	 * @param natural Whether or not the shutdown was expected.
 	 */
 	public void shutdown(boolean natural) {
@@ -148,7 +148,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Unregisters a player. Returns immediately. The player is unregistered at the start of the next cycle.
-	 * 
+	 *
 	 * @param player The player.
 	 */
 	public void unregisterPlayer(Player player) {
@@ -173,7 +173,7 @@ public final class GameService extends Service {
 
 	/**
 	 * Initializes the game service.
-	 * 
+	 *
 	 * @throws IOException If there is an error accessing the file.
 	 * @throws SAXException If there is an error parsing the file.
 	 * @throws ReflectiveOperationException If a MessageHandler could not be created.

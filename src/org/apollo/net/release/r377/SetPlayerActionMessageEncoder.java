@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * The {@link MessageEncoder} for the {@link SetPlayerActionMessage}.
- * 
+ *
  * @author Major
  */
 public final class SetPlayerActionMessageEncoder extends MessageEncoder<SetPlayerActionMessage> {

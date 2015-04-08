@@ -4,7 +4,7 @@ import org.apollo.game.model.Item;
 
 /**
  * A class which contains an {@link Item} and its corresponding slot.
- * 
+ *
  * @author Graham
  */
 public final class SlottedItem {
@@ -21,7 +21,7 @@ public final class SlottedItem {
 
 	/**
 	 * Creates a new slotted item.
-	 * 
+	 *
 	 * @param slot The slot.
 	 * @param item The item.
 	 */
@@ -32,7 +32,7 @@ public final class SlottedItem {
 
 	/**
 	 * Gets the amount of the {@link Item}.
-	 * 
+	 *
 	 * @return The amount.
 	 */
 	public int getAmount() {
@@ -41,7 +41,7 @@ public final class SlottedItem {
 
 	/**
 	 * Gets the id of the {@link Item}.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {
@@ -50,7 +50,7 @@ public final class SlottedItem {
 
 	/**
 	 * Gets the item.
-	 * 
+	 *
 	 * @return The item.
 	 */
 	public Item getItem() {
@@ -59,7 +59,7 @@ public final class SlottedItem {
 
 	/**
 	 * Gets the slot.
-	 * 
+	 *
 	 * @return The slot.
 	 */
 	public int getSlot() {

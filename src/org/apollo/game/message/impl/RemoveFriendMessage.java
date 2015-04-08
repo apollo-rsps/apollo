@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client when a player removes someone from their friends list.
- * 
+ *
  * @author Major
  */
 public final class RemoveFriendMessage extends Message {
@@ -16,7 +16,7 @@ public final class RemoveFriendMessage extends Message {
 
 	/**
 	 * Creates a new defriend user message.
-	 * 
+	 *
 	 * @param username The defriended player's username.
 	 */
 	public RemoveFriendMessage(String username) {
@@ -25,7 +25,7 @@ public final class RemoveFriendMessage extends Message {
 
 	/**
 	 * Gets the username of the defriended player.
-	 * 
+	 *
 	 * @return The username.
 	 */
 	public String getUsername() {

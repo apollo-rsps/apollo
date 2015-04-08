@@ -9,7 +9,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link ThirdPlayerActionMessage}.
- * 
+ *
  * @author Major
  */
 public final class ThirdPlayerActionMessageDecoder extends MessageDecoder<ThirdPlayerActionMessage> {

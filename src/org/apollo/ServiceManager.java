@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 
 /**
  * A class which manages {@link Service}s.
- * 
+ *
  * @author Graham
  */
 public final class ServiceManager {
@@ -27,11 +27,11 @@ public final class ServiceManager {
 	/**
 	 * The service map.
 	 */
-	private Map<Class<? extends Service>, Service> services = new HashMap<>();
+	private final Map<Class<? extends Service>, Service> services = new HashMap<>();
 
 	/**
 	 * Creates and initializes the {@link ServiceManager}.
-	 * 
+	 *
 	 * @param world The {@link World} to create the {@link Service}s for.
 	 * @throws IOException If there is an error reading from the xml file.
 	 * @throws SAXException If there is an error parsing the xml file.
@@ -43,7 +43,7 @@ public final class ServiceManager {
 
 	/**
 	 * Gets a service.
-	 * 
+	 *
 	 * @param clazz The service class.
 	 * @return The service.
 	 */
@@ -54,7 +54,7 @@ public final class ServiceManager {
 
 	/**
 	 * Initializes this service manager.
-	 * 
+	 *
 	 * @param world The {@link World} to create the {@link Service}s for.
 	 * @throws SAXException If the service XML file could not be parsed.
 	 * @throws IOException If the file could not be accessed.
@@ -91,7 +91,7 @@ public final class ServiceManager {
 
 	/**
 	 * Registers a service.
-	 * 
+	 *
 	 * @param clazz The service's class.
 	 * @param service The service.
 	 */
@@ -102,7 +102,7 @@ public final class ServiceManager {
 
 	/**
 	 * Sets the context of all services.
-	 * 
+	 *
 	 * @param ctx The server context.
 	 */
 	public void setContext(ServerContext ctx) {

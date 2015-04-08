@@ -33,7 +33,7 @@ import org.apollo.game.model.inv.InventoryListener;
  * <li><strong>Fullscreen background:</strong> Interfaces displayed behind the fullscreen window, typically a blank,
  * black screen.</li>
  * </ul>
- * 
+ *
  * @author Graham
  */
 public final class InterfaceSet {
@@ -51,7 +51,7 @@ public final class InterfaceSet {
 	/**
 	 * A map of open interfaces.
 	 */
-	private Map<InterfaceType, Integer> interfaces = new HashMap<>();
+	private final Map<InterfaceType, Integer> interfaces = new HashMap<>();
 
 	/**
 	 * The current listener.
@@ -65,7 +65,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Creates an interface set.
-	 * 
+	 *
 	 * @param player The player.
 	 */
 	public InterfaceSet(Player player) {
@@ -74,7 +74,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Called when the player has clicked the specified button. Notifies the current dialogue listener.
-	 * 
+	 *
 	 * @param button The button.
 	 * @return {@code true} if the {@link MessageHandlerChain} should be broken.
 	 */
@@ -95,7 +95,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Checks if this interface sets contains the specified interface.
-	 * 
+	 *
 	 * @param id The interface's id.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -105,7 +105,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Checks if this interface set contains the specified interface type.
-	 * 
+	 *
 	 * @param type The interface's type.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -124,7 +124,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Called when the client has entered the specified amount. Notifies the current listener.
-	 * 
+	 *
 	 * @param amount The amount.
 	 */
 	public void enteredAmount(int amount) {
@@ -143,14 +143,14 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a dialogue interface.
-	 * 
+	 *
 	 * @param listener The {@link DialogueListener}.
 	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogue(DialogueListener listener, int dialogueId) {
 		closeAndNotify();
 
-		this.dialogueListener = Optional.ofNullable(listener);
+		dialogueListener = Optional.ofNullable(listener);
 		this.listener = Optional.ofNullable(listener);
 
 		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
@@ -159,7 +159,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a dialogue.
-	 * 
+	 *
 	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogue(int dialogueId) {
@@ -168,14 +168,14 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a dialogue overlay interface.
-	 * 
+	 *
 	 * @param listener The {@link DialogueListener}.
 	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogueOverlay(DialogueListener listener, int dialogueId) {
 		closeAndNotify();
 
-		this.dialogueListener = Optional.ofNullable(listener);
+		dialogueListener = Optional.ofNullable(listener);
 		this.listener = Optional.ofNullable(listener);
 
 		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
@@ -184,7 +184,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a dialogue overlay.
-	 * 
+	 *
 	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogueOverlay(int dialogueId) {
@@ -193,7 +193,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens the enter amount dialogue.
-	 * 
+	 *
 	 * @param listener The enter amount listener.
 	 */
 	public void openEnterAmountDialogue(EnterAmountListener listener) {
@@ -203,7 +203,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens an overlay interface.
-	 * 
+	 *
 	 * @param overlay The overlay id.
 	 */
 	public void openOverlay(int overlay) {
@@ -213,7 +213,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens an sidebar interface.
-	 * 
+	 *
 	 * @param sidebar The sidebar id.
 	 */
 	public void openSidebar(int sidebar) {
@@ -225,7 +225,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens an sidebar interface with the specified {@link InventoryListener}.
-	 * 
+	 *
 	 * @param listener The listener.
 	 * @param sidebar The sidebar id.
 	 */
@@ -239,7 +239,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a window.
-	 * 
+	 *
 	 * @param windowId The window's id.
 	 */
 	public void openWindow(int windowId) {
@@ -248,7 +248,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a window with the specified listener.
-	 * 
+	 *
 	 * @param listener The listener for this interface.
 	 * @param windowId The window's id.
 	 */
@@ -262,7 +262,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a window and inventory sidebar.
-	 * 
+	 *
 	 * @param windowId The window's id.
 	 * @param sidebarId The sidebar's id.
 	 */
@@ -272,7 +272,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Opens a window and inventory sidebar with the specified listener.
-	 * 
+	 *
 	 * @param listener The listener for this interface.
 	 * @param windowId The window's id.
 	 * @param sidebarId The sidebar's id.
@@ -289,7 +289,7 @@ public final class InterfaceSet {
 
 	/**
 	 * Gets the size of the interface set.
-	 * 
+	 *
 	 * @return The size.
 	 */
 	public int size() {

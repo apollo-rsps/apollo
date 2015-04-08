@@ -11,7 +11,7 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 /**
  * A {@link MessageHandler} which updates an {@link Inventory} when the client sends a {@link SwitchItemMessage} to the
  * server.
- * 
+ *
  * @author Graham
  */
 public final class SwitchItemMessageHandler extends MessageHandler<SwitchItemMessage> {

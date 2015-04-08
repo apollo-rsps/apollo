@@ -56,7 +56,7 @@ import org.apollo.net.release.Release;
 
 /**
  * A {@link Release} implementation for the 377 protocol.
- * 
+ *
  * @author Graham
  */
 public final class Release377 extends Release {

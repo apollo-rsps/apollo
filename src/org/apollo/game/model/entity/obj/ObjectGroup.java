@@ -32,7 +32,7 @@ public enum ObjectGroup {
 
 	/**
 	 * Gets the ObjectGroup with the specified integer value.
-	 * 
+	 *
 	 * @param value The integer value of the ObjectGroup.
 	 * @return The ObjectGroup.
 	 * @throws IllegalArgumentException If there is no ObjectGroup with the specified value.
@@ -57,7 +57,7 @@ public enum ObjectGroup {
 
 	/**
 	 * Gets the value of this ObjectGroup.
-	 * 
+	 *
 	 * @return The value.
 	 */
 	public int getValue() {

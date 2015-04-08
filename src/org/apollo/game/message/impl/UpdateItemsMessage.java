@@ -5,7 +5,7 @@ import org.apollo.game.model.Item;
 
 /**
  * A {@link Message} sent to the client that updates all the items in an interface.
- * 
+ *
  * @author Graham
  */
 public final class UpdateItemsMessage extends Message {
@@ -22,7 +22,7 @@ public final class UpdateItemsMessage extends Message {
 
 	/**
 	 * Creates the update inventory interface message.
-	 * 
+	 *
 	 * @param interfaceId The interface id.
 	 * @param items The items.
 	 */
@@ -33,7 +33,7 @@ public final class UpdateItemsMessage extends Message {
 
 	/**
 	 * Gets the interface id.
-	 * 
+	 *
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
@@ -42,7 +42,7 @@ public final class UpdateItemsMessage extends Message {
 
 	/**
 	 * Gets the items.
-	 * 
+	 *
 	 * @return The items.
 	 */
 	public Item[] getItems() {

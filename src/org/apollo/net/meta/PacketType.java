@@ -2,7 +2,7 @@ package org.apollo.net.meta;
 
 /**
  * An enumeration which contains the different types of packets.
- * 
+ *
  * @author Graham
  */
 public enum PacketType {

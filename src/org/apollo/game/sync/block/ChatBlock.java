@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.setting.PrivilegeLevel;
 
 /**
  * The chat {@link SynchronizationBlock}. Only players can utilise this block.
- * 
+ *
  * @author Graham
  */
 public final class ChatBlock extends SynchronizationBlock {
@@ -22,7 +22,7 @@ public final class ChatBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates the chat block.
-	 * 
+	 *
 	 * @param privilegeLevel The {@link PrivilegeLevel} of the player who said the message.
 	 * @param chatMessage The {@link ChatMessage}.
 	 */
@@ -33,7 +33,7 @@ public final class ChatBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the compressed message.
-	 * 
+	 *
 	 * @return The compressed message.
 	 */
 	public byte[] getCompressedMessage() {
@@ -42,7 +42,7 @@ public final class ChatBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the message.
-	 * 
+	 *
 	 * @return The message.
 	 */
 	public String getMessage() {
@@ -51,7 +51,7 @@ public final class ChatBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the {@link PrivilegeLevel} of the player who said the message.
-	 * 
+	 *
 	 * @return The privilege level.
 	 */
 	public PrivilegeLevel getPrivilegeLevel() {
@@ -60,7 +60,7 @@ public final class ChatBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the text color.
-	 * 
+	 *
 	 * @return The text color.
 	 */
 	public int getTextColor() {
@@ -69,7 +69,7 @@ public final class ChatBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the text effects.
-	 * 
+	 *
 	 * @return The text effects.
 	 */
 	public int getTextEffects() {

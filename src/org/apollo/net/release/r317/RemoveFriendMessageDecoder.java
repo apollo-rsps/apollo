@@ -9,7 +9,7 @@ import org.apollo.util.NameUtil;
 
 /**
  * A {@link MessageDecoder} for the {@link RemoveFriendMessage}.
- * 
+ *
  * @author Major
  */
 public final class RemoveFriendMessageDecoder extends MessageDecoder<RemoveFriendMessage> {

@@ -12,7 +12,7 @@ import org.apollo.util.NameUtil;
 
 /**
  * A {@link MessageEncoder} for the {@link IgnoreListMessage}.
- * 
+ *
  * @author Major
  */
 public final class IgnoreListMessageEncoder extends MessageEncoder<IgnoreListMessage> {

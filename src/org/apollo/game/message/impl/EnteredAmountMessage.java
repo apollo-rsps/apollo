@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client when the player has entered an amount.
- * 
+ *
  * @author Graham
  */
 public final class EnteredAmountMessage extends Message {
@@ -16,7 +16,7 @@ public final class EnteredAmountMessage extends Message {
 
 	/**
 	 * Creates the entered amount message.
-	 * 
+	 *
 	 * @param amount The amount.
 	 */
 	public EnteredAmountMessage(int amount) {
@@ -25,7 +25,7 @@ public final class EnteredAmountMessage extends Message {
 
 	/**
 	 * Gets the amount.
-	 * 
+	 *
 	 * @return The amount.
 	 */
 	public int getAmount() {

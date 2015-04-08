@@ -9,7 +9,7 @@ import org.apollo.security.PlayerCredentials;
 
 /**
  * A {@link PlayerSerializer} that saves no data and returns an administrator member account, ideal for debugging.
- * 
+ *
  * @author Graham
  * @author Major
  */

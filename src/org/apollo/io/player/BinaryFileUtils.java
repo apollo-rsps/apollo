@@ -11,7 +11,7 @@ import org.apollo.util.NameUtil;
 
 /**
  * A utility class with common functionality used by the binary player loader/ savers.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -37,7 +37,7 @@ public final class BinaryFileUtils {
 
 	/**
 	 * Gets the save {@link File} for the specified player.
-	 * 
+	 *
 	 * @param username The username of the player.
 	 * @return The file.
 	 */

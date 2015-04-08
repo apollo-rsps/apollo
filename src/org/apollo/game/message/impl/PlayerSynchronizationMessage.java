@@ -8,7 +8,7 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**
  * A {@link Message} sent to the client to synchronize players.
- * 
+ *
  * @author Graham
  */
 public final class PlayerSynchronizationMessage extends Message {
@@ -45,7 +45,7 @@ public final class PlayerSynchronizationMessage extends Message {
 
 	/**
 	 * Creates the player synchronization message.
-	 * 
+	 *
 	 * @param lastKnownRegion The last known region.
 	 * @param position The player's current position.
 	 * @param regionChanged A flag indicating if the region has changed.
@@ -64,7 +64,7 @@ public final class PlayerSynchronizationMessage extends Message {
 
 	/**
 	 * Gets the last known region.
-	 * 
+	 *
 	 * @return The last known region.
 	 */
 	public Position getLastKnownRegion() {
@@ -73,7 +73,7 @@ public final class PlayerSynchronizationMessage extends Message {
 
 	/**
 	 * Gets the number of local players.
-	 * 
+	 *
 	 * @return The number of local players.
 	 */
 	public int getLocalPlayers() {
@@ -82,7 +82,7 @@ public final class PlayerSynchronizationMessage extends Message {
 
 	/**
 	 * Gets the player's position.
-	 * 
+	 *
 	 * @return The player's position.
 	 */
 	public Position getPosition() {
@@ -91,7 +91,7 @@ public final class PlayerSynchronizationMessage extends Message {
 
 	/**
 	 * Gets the current player's segment.
-	 * 
+	 *
 	 * @return The current player's segment.
 	 */
 	public SynchronizationSegment getSegment() {
@@ -100,7 +100,7 @@ public final class PlayerSynchronizationMessage extends Message {
 
 	/**
 	 * Gets the synchronization segments.
-	 * 
+	 *
 	 * @return The segments.
 	 */
 	public List<SynchronizationSegment> getSegments() {
@@ -109,7 +109,7 @@ public final class PlayerSynchronizationMessage extends Message {
 
 	/**
 	 * Checks if the region has changed.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasRegionChanged() {

@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to display crossbones when the player enters a multi-combat zone.
- * 
+ *
  * @author Major
  */
 public final class DisplayCrossbonesMessage extends Message {
@@ -16,7 +16,7 @@ public final class DisplayCrossbonesMessage extends Message {
 
 	/**
 	 * Creates a display crossbones message.
-	 * 
+	 *
 	 * @param display Whether or not the crossbones should be displayed.
 	 */
 	public DisplayCrossbonesMessage(boolean display) {
@@ -25,7 +25,7 @@ public final class DisplayCrossbonesMessage extends Message {
 
 	/**
 	 * Indicates whether the crossbones will be displayed.
-	 * 
+	 *
 	 * @return {@code true} if the crossbones will be displayed, otherwise {@code false}.
 	 */
 	public boolean isDisplayed() {

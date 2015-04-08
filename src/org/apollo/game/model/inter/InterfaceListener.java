@@ -2,7 +2,7 @@ package org.apollo.game.model.inter;
 
 /**
  * Listens to interface-related messages.
- * 
+ *
  * @author Graham
  */
 @FunctionalInterface

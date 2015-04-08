@@ -10,7 +10,7 @@ import org.apollo.game.message.MessageHandlerChainSet;
 /**
  * The {@link PluginContext} contains methods a plugin can use to interface with the server, for example, by adding
  * {@link MessageHandler}s to {@link MessageHandlerChain}s.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -23,7 +23,7 @@ public final class PluginContext {
 
 	/**
 	 * Creates the PluginContext.
-	 * 
+	 *
 	 * @param context The {@link ServerContext}.
 	 */
 	public PluginContext(ServerContext context) {
@@ -32,7 +32,7 @@ public final class PluginContext {
 
 	/**
 	 * Adds a {@link MessageHandler} to the {@link MessageHandlerChainSet}.
-	 * 
+	 *
 	 * @param message The message.
 	 * @param handler The handler.
 	 */

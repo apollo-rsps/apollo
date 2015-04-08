@@ -27,7 +27,7 @@ import org.apollo.util.plugin.PluginManager;
 
 /**
  * The core class of the Apollo server.
- * 
+ *
  * @author Graham
  */
 public final class Server {
@@ -39,7 +39,7 @@ public final class Server {
 
 	/**
 	 * The entry point of the Apollo server application.
-	 * 
+	 *
 	 * @param args The command-line arguments passed to the application.
 	 */
 	public static void main(String[] args) {
@@ -81,7 +81,7 @@ public final class Server {
 
 	/**
 	 * Creates the Apollo server.
-	 * 
+	 *
 	 * @throws Exception If an error occurs whilst creating services.
 	 */
 	public Server() throws Exception {
@@ -90,7 +90,7 @@ public final class Server {
 
 	/**
 	 * Binds the server to the specified address.
-	 * 
+	 *
 	 * @param serviceAddress The service address to bind to.
 	 * @param httpAddress The HTTP address to bind to.
 	 * @param jagGrabAddress The JAGGRAB address to bind to.
@@ -115,7 +115,7 @@ public final class Server {
 
 	/**
 	 * Initialises the server.
-	 * 
+	 *
 	 * @param releaseClassName The class name of the current active {@link Release}.
 	 * @throws Exception If an error occurs.
 	 */

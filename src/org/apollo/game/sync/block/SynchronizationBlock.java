@@ -12,14 +12,14 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
  * A synchronization block is part of a {@link SynchronizationSegment}. A segment can have up to one block of each type.
  * <p>
  * This class also has static factory methods for creating {@link SynchronizationBlock}s.
- * 
+ *
  * @author Graham
  */
 public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates an {@link AnimationBlock} with the specified animation.
-	 * 
+	 *
 	 * @param animation The animation.
 	 * @return The animation block.
 	 */
@@ -29,7 +29,7 @@ public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates an {@link AppearanceBlock} for the specified player.
-	 * 
+	 *
 	 * @param player The player.
 	 * @return The appearance block.
 	 */
@@ -42,7 +42,7 @@ public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates a {@link ChatBlock} for the specified player.
-	 * 
+	 *
 	 * @param player The player.
 	 * @param chatMessage The chat message.
 	 * @return The chat block.
@@ -53,7 +53,7 @@ public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates a {@link ForceChatBlock} with the specified message.
-	 * 
+	 *
 	 * @param message The message.
 	 * @return The force chat block.
 	 */
@@ -63,7 +63,7 @@ public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates a {@link ForceMovementBlock} with the specified parameters.
-	 * 
+	 *
 	 * @param initialPosition The initial {@link Position} of the player.
 	 * @param finalPosition The final position of the player
 	 * @param travelDurationX The length of time (in game pulses) the player's movement along the X axis will last.
@@ -77,7 +77,7 @@ public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates a {@link GraphicBlock} with the specified graphic.
-	 * 
+	 *
 	 * @param graphic The graphic.
 	 * @return The graphic block.
 	 */
@@ -88,7 +88,7 @@ public abstract class SynchronizationBlock {
 	/**
 	 * Creates a {@link HitUpdateBlock} or {@link SecondaryHitUpdateBlock}, depending on the value of the
 	 * {@code secondary} flag.
-	 * 
+	 *
 	 * @param damage The damage dealt by the hit.
 	 * @param type The type of hit.
 	 * @param currentHealth The current health of the mob.
@@ -102,7 +102,7 @@ public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates an {@link InteractingMobBlock} with the specified index.
-	 * 
+	 *
 	 * @param index The index of the mob being interacted with.
 	 * @return The interacting mob block.
 	 */
@@ -112,7 +112,7 @@ public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates a {@link TransformBlock} with the specified id.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return The transform block.
 	 */
@@ -122,7 +122,7 @@ public abstract class SynchronizationBlock {
 
 	/**
 	 * Creates a {@link TurnToPositionBlock} with the specified {@link Position}.
-	 * 
+	 *
 	 * @param position The position.
 	 * @return The turn to position block.
 	 */

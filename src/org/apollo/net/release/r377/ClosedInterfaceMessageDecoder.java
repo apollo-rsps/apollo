@@ -6,7 +6,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link ClosedInterfaceMessage}.
- * 
+ *
  * @author Graham
  */
 public final class ClosedInterfaceMessageDecoder extends MessageDecoder<ClosedInterfaceMessage> {

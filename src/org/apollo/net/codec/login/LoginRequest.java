@@ -5,7 +5,7 @@ import org.apollo.security.PlayerCredentials;
 
 /**
  * Represents a login request.
- * 
+ *
  * @author Graham
  */
 public final class LoginRequest {
@@ -47,7 +47,7 @@ public final class LoginRequest {
 
 	/**
 	 * Creates a login request.
-	 * 
+	 *
 	 * @param credentials The player credentials.
 	 * @param randomPair The pair of random number generators.
 	 * @param lowMemory The low memory flag.
@@ -68,7 +68,7 @@ public final class LoginRequest {
 
 	/**
 	 * Gets the archive CRCs.
-	 * 
+	 *
 	 * @return The array of archive CRCs.
 	 */
 	public int[] getArchiveCrcs() {
@@ -77,7 +77,7 @@ public final class LoginRequest {
 
 	/**
 	 * Gets the value denoting the client's (modified) version.
-	 * 
+	 *
 	 * @return The client version.
 	 */
 	public int getClientVersion() {
@@ -86,7 +86,7 @@ public final class LoginRequest {
 
 	/**
 	 * Gets the player's credentials.
-	 * 
+	 *
 	 * @return The player's credentials.
 	 */
 	public PlayerCredentials getCredentials() {
@@ -95,7 +95,7 @@ public final class LoginRequest {
 
 	/**
 	 * Gets the pair of random number generators.
-	 * 
+	 *
 	 * @return The pair of random number generators.
 	 */
 	public IsaacRandomPair getRandomPair() {
@@ -104,7 +104,7 @@ public final class LoginRequest {
 
 	/**
 	 * Gets the release number.
-	 * 
+	 *
 	 * @return The release number.
 	 */
 	public int getReleaseNumber() {
@@ -113,7 +113,7 @@ public final class LoginRequest {
 
 	/**
 	 * Checks if this client is in low memory mode.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isLowMemory() {
@@ -122,7 +122,7 @@ public final class LoginRequest {
 
 	/**
 	 * Checks if this client is reconnecting.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isReconnecting() {

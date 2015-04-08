@@ -12,14 +12,14 @@ import com.google.common.base.Preconditions;
 
 /**
  * Represents an inventory - a collection of {@link Item}s.
- * 
+ *
  * @author Graham
  */
 public final class Inventory {
 
 	/**
 	 * An enumeration containing the different 'stacking modes' of an {@link Inventory}.
-	 * 
+	 *
 	 * @author Graham
 	 */
 	public static enum StackMode {
@@ -75,7 +75,7 @@ public final class Inventory {
 
 	/**
 	 * Creates an inventory.
-	 * 
+	 *
 	 * @param capacity The capacity.
 	 */
 	public Inventory(int capacity) {
@@ -84,7 +84,7 @@ public final class Inventory {
 
 	/**
 	 * Creates an inventory.
-	 * 
+	 *
 	 * @param capacity The capacity.
 	 * @param mode The {@link StackMode}.
 	 * @throws IllegalArgumentException If the capacity is negative.
@@ -101,7 +101,7 @@ public final class Inventory {
 
 	/**
 	 * An alias for {@code add(id, 1)}.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return {@code true} if the item was added, {@code false} if there was not enough room.
 	 */
@@ -111,7 +111,7 @@ public final class Inventory {
 
 	/**
 	 * An alias for {@code add(new Item(id, amount)}.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param amount The amount.
 	 * @return The amount that remains.
@@ -205,7 +205,7 @@ public final class Inventory {
 
 	/**
 	 * Adds an {@link InventoryListener}.
-	 * 
+	 *
 	 * @param listener The listener.
 	 */
 	public void addListener(InventoryListener listener) {
@@ -214,7 +214,7 @@ public final class Inventory {
 
 	/**
 	 * Gets the capacity of this inventory.
-	 * 
+	 *
 	 * @return The capacity.
 	 */
 	public int capacity() {
@@ -223,7 +223,7 @@ public final class Inventory {
 
 	/**
 	 * Checks the bounds of the specified slots.
-	 * 
+	 *
 	 * @param slots The slots.
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
@@ -244,7 +244,7 @@ public final class Inventory {
 
 	/**
 	 * Creates a copy of this inventory. Listeners are not copied.
-	 * 
+	 *
 	 * @return The duplicated inventory.
 	 */
 	public Inventory duplicate() {
@@ -256,7 +256,7 @@ public final class Inventory {
 
 	/**
 	 * Checks if this inventory contains an item with the specified id.
-	 * 
+	 *
 	 * @param id The item's id.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -266,7 +266,7 @@ public final class Inventory {
 
 	/**
 	 * Returns whether or not this inventory contains any items with one of the specified ids.
-	 * 
+	 *
 	 * @param ids The ids.
 	 * @return {@code true} if the inventory does contain at least one of the items, otherwise {@code false}.
 	 */
@@ -276,7 +276,7 @@ public final class Inventory {
 
 	/**
 	 * Returns whether or not this inventory contains an item for each of the specified ids.
-	 * 
+	 *
 	 * @param ids The ids.
 	 * @return {@code true} if items in this inventory every id is
 	 */
@@ -300,7 +300,7 @@ public final class Inventory {
 
 	/**
 	 * Forces a refresh of a specific slot.
-	 * 
+	 *
 	 * @param slot The slot.
 	 */
 	public void forceRefresh(int slot) {
@@ -309,7 +309,7 @@ public final class Inventory {
 
 	/**
 	 * Gets the number of free slots.
-	 * 
+	 *
 	 * @return The number of free slots.
 	 */
 	public int freeSlots() {
@@ -318,7 +318,7 @@ public final class Inventory {
 
 	/**
 	 * Gets the item in the specified slot.
-	 * 
+	 *
 	 * @param slot The slot.
 	 * @return The item, or {@code null} if the slot is empty.
 	 */
@@ -329,7 +329,7 @@ public final class Inventory {
 
 	/**
 	 * Gets the amount of items with the specified id in this inventory.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return The number of matching items, or {@code 0} if none were found.
 	 */
@@ -356,7 +356,7 @@ public final class Inventory {
 
 	/**
 	 * Gets a clone of the items array.
-	 * 
+	 *
 	 * @return A clone of the items array.
 	 */
 	public Item[] getItems() {
@@ -365,7 +365,7 @@ public final class Inventory {
 
 	/**
 	 * Checks if the item with the specified {@link ItemDefinition} should be stacked.
-	 * 
+	 *
 	 * @param definition The item definition.
 	 * @return {@code true} if the item should be stacked, {@code false} otherwise.
 	 */
@@ -403,7 +403,7 @@ public final class Inventory {
 
 	/**
 	 * Notifies listeners that the specified slot has been updated.
-	 * 
+	 *
 	 * @param slot The slot.
 	 */
 	private void notifyItemUpdated(int slot) {
@@ -414,7 +414,7 @@ public final class Inventory {
 
 	/**
 	 * Removes one item with the specified id.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return {@code true} if the item was removed, {@code false} otherwise.
 	 */
@@ -427,7 +427,7 @@ public final class Inventory {
 	 * <p>
 	 * This method will attempt to remove one of each item, and will continue even if a previous item could not be
 	 * removed.
-	 * 
+	 *
 	 * @param ids The ids of the item to remove.
 	 * @return {@code true} if one of each item could be removed, otherwise {@code false}.
 	 */
@@ -443,7 +443,7 @@ public final class Inventory {
 	/**
 	 * Removes {@code amount} of the item with the specified {@code id}. If the item is stackable, it will remove it
 	 * from the stack. If not, it'll remove {@code amount} items.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param amount The amount.
 	 * @return The amount that was removed.
@@ -499,7 +499,7 @@ public final class Inventory {
 
 	/**
 	 * An alias for {@code remove(item.getId(), item.getAmount())}.
-	 * 
+	 *
 	 * @param item The item to remove.
 	 * @return The amount that was removed.
 	 */
@@ -516,7 +516,7 @@ public final class Inventory {
 
 	/**
 	 * Removes a listener.
-	 * 
+	 *
 	 * @param listener The listener to remove.
 	 */
 	public void removeListener(InventoryListener listener) {
@@ -527,7 +527,7 @@ public final class Inventory {
 	 * Removes {@code amount} of the item at the specified {@code slot}. If the item is not stacked, it will only remove
 	 * the single item at the slot (meaning it will ignore any amount higher than 1). This means that this method will
 	 * under no circumstances make any changes to other slots.
-	 * 
+	 *
 	 * @param slot The slot.
 	 * @param amount The amount to remove.
 	 * @return The amount that was removed (0 if nothing was removed).
@@ -540,7 +540,7 @@ public final class Inventory {
 				int removed = Math.min(amount, itemAmount);
 				int remainder = itemAmount - removed;
 
-				set(slot, (remainder > 0) ? new Item(item.getId(), remainder) : null);
+				set(slot, remainder > 0 ? new Item(item.getId(), remainder) : null);
 				return removed;
 			}
 		}
@@ -550,7 +550,7 @@ public final class Inventory {
 
 	/**
 	 * Removes the item (if any) that is in the specified slot.
-	 * 
+	 *
 	 * @param slot The slot to reset.
 	 * @return The item that was in the slot.
 	 */
@@ -569,7 +569,7 @@ public final class Inventory {
 
 	/**
 	 * Sets the item that is in the specified slot.
-	 * 
+	 *
 	 * @param slot The slot.
 	 * @param item The item, or {@code null} to remove the item that is in the slot.
 	 * @return The item that was in the slot.
@@ -609,7 +609,7 @@ public final class Inventory {
 
 	/**
 	 * Gets the size of this inventory - the number of used slots.
-	 * 
+	 *
 	 * @return The size.
 	 */
 	public int size() {
@@ -618,7 +618,7 @@ public final class Inventory {
 
 	/**
 	 * Gets the inventory slot for the specified id.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return The first slot containing the specified item, or {@code -1} if none of the slots matched the conditions.
 	 */
@@ -654,7 +654,7 @@ public final class Inventory {
 
 	/**
 	 * Swaps the two items at the specified slots.
-	 * 
+	 *
 	 * @param insert If the swap should be done in insertion mode.
 	 * @param oldSlot The old slot.
 	 * @param newSlot The new slot.
@@ -684,7 +684,7 @@ public final class Inventory {
 
 	/**
 	 * Swaps the two items at the specified slots.
-	 * 
+	 *
 	 * @param oldSlot The old slot.
 	 * @param newSlot The new slot.
 	 */

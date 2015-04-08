@@ -11,7 +11,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SetWidgetTextMessage}.
- * 
+ *
  * @author Graham
  */
 public final class SetWidgetTexMessageEncoder extends MessageEncoder<SetWidgetTextMessage> {

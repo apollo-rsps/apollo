@@ -12,7 +12,7 @@ import org.apollo.net.codec.update.OnDemandRequest;
 
 /**
  * Dispatches update requests to worker threads.
- * 
+ *
  * @author Graham
  */
 public final class UpdateDispatcher {
@@ -39,7 +39,7 @@ public final class UpdateDispatcher {
 
 	/**
 	 * Dispatches a HTTP request.
-	 * 
+	 *
 	 * @param channel The channel.
 	 * @param request The request.
 	 */
@@ -52,7 +52,7 @@ public final class UpdateDispatcher {
 
 	/**
 	 * Dispatches a JAGGRAB request.
-	 * 
+	 *
 	 * @param channel The channel.
 	 * @param request The request.
 	 */
@@ -65,7 +65,7 @@ public final class UpdateDispatcher {
 
 	/**
 	 * Dispatches an 'on-demand' request.
-	 * 
+	 *
 	 * @param channel The channel.
 	 * @param request The request.
 	 */
@@ -78,7 +78,7 @@ public final class UpdateDispatcher {
 
 	/**
 	 * Gets the next HTTP request from the queue, blocking if none are available.
-	 * 
+	 *
 	 * @return The HTTP request.
 	 * @throws InterruptedException If the thread is interrupted.
 	 */
@@ -88,7 +88,7 @@ public final class UpdateDispatcher {
 
 	/**
 	 * Gets the next JAGGRAB request from the queue, blocking if none are available.
-	 * 
+	 *
 	 * @return The JAGGRAB request.
 	 * @throws InterruptedException If the thread is interrupted.
 	 */
@@ -98,7 +98,7 @@ public final class UpdateDispatcher {
 
 	/**
 	 * Gets the next 'on-demand' request from the queue, blocking if none are available.
-	 * 
+	 *
 	 * @return The 'on-demand' request.
 	 * @throws InterruptedException If the thread is interrupted.
 	 */

@@ -23,7 +23,7 @@ public final class ClearRegionMessage extends Message {
 
 	/**
 	 * Creates the ClearRegionMessage.
-	 * 
+	 *
 	 * @param player The {@link Position} of the Player this {@link Message} is being sent to.
 	 * @param region The {@link RegionCoordinates} of the Region being cleared.
 	 */
@@ -34,7 +34,7 @@ public final class ClearRegionMessage extends Message {
 
 	/**
 	 * Gets the {@link Position} of the Player this {@link Message} is being sent to..
-	 * 
+	 *
 	 * @return The Position.
 	 */
 	public Position getPlayerPosition() {
@@ -43,7 +43,7 @@ public final class ClearRegionMessage extends Message {
 
 	/**
 	 * Gets the {@link Position} of the Region being cleared.
-	 * 
+	 *
 	 * @return The Position.
 	 */
 	public Position getRegionPosition() {

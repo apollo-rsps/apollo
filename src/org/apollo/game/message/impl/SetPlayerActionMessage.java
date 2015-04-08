@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client to add an action to the menu when a player right-clicks another.
- * 
+ *
  * @author Major
  */
 public final class SetPlayerActionMessage extends Message {
@@ -26,7 +26,7 @@ public final class SetPlayerActionMessage extends Message {
 
 	/**
 	 * Creates the set player action message.
-	 * 
+	 *
 	 * @param text The action text.
 	 * @param slot The menu slot.
 	 */
@@ -36,7 +36,7 @@ public final class SetPlayerActionMessage extends Message {
 
 	/**
 	 * Creates the set player action message.
-	 * 
+	 *
 	 * @param text The action text.
 	 * @param slot The menu slot.
 	 * @param primaryInteraction Whether or not the action is the primary action.
@@ -44,12 +44,12 @@ public final class SetPlayerActionMessage extends Message {
 	public SetPlayerActionMessage(String text, int slot, boolean primaryInteraction) {
 		this.text = text;
 		this.slot = slot;
-		this.primaryAction = primaryInteraction;
+		primaryAction = primaryInteraction;
 	}
 
 	/**
 	 * Gets the action text.
-	 * 
+	 *
 	 * @return The text.
 	 */
 	public String getText() {
@@ -58,7 +58,7 @@ public final class SetPlayerActionMessage extends Message {
 
 	/**
 	 * Gets the menu slot this action occupies.
-	 * 
+	 *
 	 * @return The slot.
 	 */
 	public int getSlot() {
@@ -68,7 +68,7 @@ public final class SetPlayerActionMessage extends Message {
 	/**
 	 * Whether or not this action is the primary one (i.e. should be displayed when the player hovers over the other
 	 * player).
-	 * 
+	 *
 	 * @return {@code true} if this action is the primary action, {@code false} if not.
 	 */
 	public boolean isPrimaryAction() {

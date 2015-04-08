@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * Represents a type of {@link Npc}.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class NpcDefinition {
@@ -18,7 +18,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the total number of npc definitions.
-	 * 
+	 *
 	 * @return The count.
 	 */
 	public static int count() {
@@ -27,7 +27,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the array of npc definitions.
-	 * 
+	 *
 	 * @return The definitions.
 	 */
 	public static NpcDefinition[] getDefinitions() {
@@ -36,7 +36,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Initialises the class with the specified set of definitions.
-	 * 
+	 *
 	 * @param definitions The definitions.
 	 * @throws RuntimeException If there is an id mismatch.
 	 */
@@ -52,7 +52,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the npc definition for the specified id.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return The definition.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
@@ -80,7 +80,7 @@ public final class NpcDefinition {
 	/**
 	 * An array of interaction options.
 	 */
-	private String[] interactions = new String[5];
+	private final String[] interactions = new String[5];
 
 	/**
 	 * The name of the npc.
@@ -99,7 +99,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Creates a new npc definition.
-	 * 
+	 *
 	 * @param id The npc id.
 	 */
 	public NpcDefinition(int id) {
@@ -108,7 +108,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the npc's combat level.
-	 * 
+	 *
 	 * @return The combat level, or -1 if it doesn't have one.
 	 */
 	public int getCombatLevel() {
@@ -117,7 +117,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the description of the npc.
-	 * 
+	 *
 	 * @return The description.
 	 */
 	public String getDescription() {
@@ -126,7 +126,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the npc id.
-	 * 
+	 *
 	 * @return The npc id.
 	 */
 	public int getId() {
@@ -135,7 +135,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets an interaction option.
-	 * 
+	 *
 	 * @param slot The slot of the option.
 	 * @return The option, or {@code null} if there isn't any at the specified slot.
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
@@ -147,7 +147,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the array of interaction options.
-	 * 
+	 *
 	 * @return The interaction options.
 	 */
 	public String[] getInteractions() {
@@ -156,7 +156,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the name of the npc.
-	 * 
+	 *
 	 * @return The name of the npc.
 	 */
 	public String getName() {
@@ -165,7 +165,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the npc's size, in tiles.
-	 * 
+	 *
 	 * @return The size.
 	 */
 	public int getSize() {
@@ -174,7 +174,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the id of the npc's standing animation.
-	 * 
+	 *
 	 * @return The stand animation id, or -1 if it doesn't have one.
 	 */
 	public int getStandAnimation() {
@@ -183,7 +183,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the walking animation of the npc.
-	 * 
+	 *
 	 * @return The walking animation.
 	 */
 	public int getWalkAnimation() {
@@ -192,7 +192,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the walk-back animation of the npc.
-	 * 
+	 *
 	 * @return The walk-back animation.
 	 */
 	public int getWalkBackAnimation() {
@@ -201,7 +201,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the walk-left animation of the npc.
-	 * 
+	 *
 	 * @return The walk-left animation.
 	 */
 	public int getWalkLeftAnimation() {
@@ -210,7 +210,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Gets the walk-right animation of the npc.
-	 * 
+	 *
 	 * @return The walk-right animation.
 	 */
 	public int getWalkRightAnimation() {
@@ -219,7 +219,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Checks if the npc has a combat level.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasCombatLevel() {
@@ -228,7 +228,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Checks if there is an interaction option present.
-	 * 
+	 *
 	 * @param slot The slot to check.
 	 * @return {@code true} if so, {@code false} if not.
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
@@ -240,7 +240,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Checks if the npc has a standing animation id.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasStandAnimation() {
@@ -249,7 +249,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Checks if the npc has a walking animation.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasWalkAnimation() {
@@ -258,7 +258,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Checks if the npc has a walk-back animation.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasWalkBackAnimation() {
@@ -267,7 +267,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Checks if the npc has a walk-left animation.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasWalkLeftAnimation() {
@@ -276,7 +276,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Checks if the npc has a walk-right animation.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasWalkRightAnimation() {
@@ -285,7 +285,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Sets the npc's combat level.
-	 * 
+	 *
 	 * @param combatLevel The combat level.
 	 */
 	public void setCombatLevel(int combatLevel) {
@@ -294,7 +294,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Sets the description of the npc.
-	 * 
+	 *
 	 * @param description The description.
 	 */
 	public void setDescription(String description) {
@@ -303,7 +303,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Sets an interaction option.
-	 * 
+	 *
 	 * @param slot The slot of the option.
 	 * @param interaction The interaction options.
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
@@ -315,7 +315,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Sets the name of the npc.
-	 * 
+	 *
 	 * @param name The name.
 	 */
 	public void setName(String name) {
@@ -324,7 +324,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Sets the size of the npc, in tiles.
-	 * 
+	 *
 	 * @param size The size.
 	 */
 	public void setSize(int size) {
@@ -333,7 +333,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Sets the id of the npc's standing animation.
-	 * 
+	 *
 	 * @param standAnim The stand animation id.
 	 */
 	public void setStandAnimation(int standAnim) {
@@ -342,7 +342,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Sets the walking animation of the npc.
-	 * 
+	 *
 	 * @param walkAnim The walking animation.
 	 */
 	public void setWalkAnimation(int walkAnim) {
@@ -351,7 +351,7 @@ public final class NpcDefinition {
 
 	/**
 	 * Sets the various walking animations of the npc.
-	 * 
+	 *
 	 * @param walkAnim The walking animation.
 	 * @param walkBackAnim The walk-back animation.
 	 * @param walkLeftAnim The walk-left animation.

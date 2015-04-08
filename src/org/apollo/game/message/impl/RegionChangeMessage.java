@@ -5,7 +5,7 @@ import org.apollo.game.model.Position;
 
 /**
  * A {@link Message} sent to the client instructing it to load the specified region.
- * 
+ *
  * @author Graham
  */
 public final class RegionChangeMessage extends Message {
@@ -17,7 +17,7 @@ public final class RegionChangeMessage extends Message {
 
 	/**
 	 * Creates the region changed message.
-	 * 
+	 *
 	 * @param position The position of the region.
 	 */
 	public RegionChangeMessage(Position position) {
@@ -26,7 +26,7 @@ public final class RegionChangeMessage extends Message {
 
 	/**
 	 * Gets the position of the region to load.
-	 * 
+	 *
 	 * @return The position of the region to load.
 	 */
 	public Position getPosition() {

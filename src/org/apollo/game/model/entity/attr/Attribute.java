@@ -2,7 +2,7 @@ package org.apollo.game.model.entity.attr;
 
 /**
  * An attribute belonging to an entity.
- * 
+ *
  * @author Major
  *
  * @param <T> The type of attribute.
@@ -22,7 +22,7 @@ public abstract class Attribute<T> {
 
 	/**
 	 * Creates the attribute with the specified {@link AttributeType} and value.
-	 * 
+	 *
 	 * @param type The type.
 	 * @param value The value.
 	 */
@@ -33,14 +33,14 @@ public abstract class Attribute<T> {
 
 	/**
 	 * Encodes this Attribute into a byte array.
-	 * 
+	 *
 	 * @return The byte array.
 	 */
 	public abstract byte[] encode();
 
 	/**
 	 * Gets the type of this attribute.
-	 * 
+	 *
 	 * @return The type.
 	 */
 	public AttributeType getType() {
@@ -49,7 +49,7 @@ public abstract class Attribute<T> {
 
 	/**
 	 * Gets the value of this attribute.
-	 * 
+	 *
 	 * @return The value.
 	 */
 	public T getValue() {

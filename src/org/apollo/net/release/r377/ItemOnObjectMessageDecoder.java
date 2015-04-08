@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link ItemOnObjectMessage}.
- * 
+ *
  * @author Major
  */
 public final class ItemOnObjectMessageDecoder extends MessageDecoder<ItemOnObjectMessage> {

@@ -2,7 +2,7 @@ package org.apollo.net.codec.game;
 
 /**
  * Represents the different ways data values can be transformed.
- * 
+ *
  * @author Graham
  */
 public enum DataTransformation {

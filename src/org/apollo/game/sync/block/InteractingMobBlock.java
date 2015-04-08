@@ -2,7 +2,7 @@ package org.apollo.game.sync.block;
 
 /**
  * The interacting mob {@link SynchronizationBlock}. Both players and npcs can utilise this block.
- * 
+ *
  * @author Major
  */
 public final class InteractingMobBlock extends SynchronizationBlock {
@@ -19,7 +19,7 @@ public final class InteractingMobBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates the interacting mob block.
-	 * 
+	 *
 	 * @param index The index of the current interacting mob.
 	 */
 	InteractingMobBlock(int index) {
@@ -28,7 +28,7 @@ public final class InteractingMobBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the interacting mob's index.
-	 * 
+	 *
 	 * @return The index.
 	 */
 	public int getIndex() {

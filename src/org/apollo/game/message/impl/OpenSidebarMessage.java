@@ -16,7 +16,7 @@ public final class OpenSidebarMessage extends Message {
 
 	/**
 	 * Creates the OpenSidebarMessage.
-	 * 
+	 *
 	 * @param sidebarId The sidebar id.
 	 */
 	public OpenSidebarMessage(int sidebarId) {
@@ -25,7 +25,7 @@ public final class OpenSidebarMessage extends Message {
 
 	/**
 	 * Gets the sidebar id.
-	 * 
+	 *
 	 * @return The sidebar id.
 	 */
 	public int getSidebarId() {

@@ -25,7 +25,7 @@ public final class FlashingTabClickedMessage extends Message {
 
 	/**
 	 * Gets the index of the tab that was clicked.
-	 * 
+	 *
 	 * @return The tab index.
 	 */
 	public int getTab() {

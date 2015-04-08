@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A utility class containing helper methods for various {@link Collection} objects.
- * 
+ *
  * @author Ryley
  */
 public final class CollectionUtil {
@@ -16,7 +16,7 @@ public final class CollectionUtil {
 	/**
 	 * Polls every element within the specified {@link Queue} and performs the specified {@link Consumer} event for each
 	 * element.
-	 * 
+	 *
 	 * @param queue The Queue to poll each element for, may not be {@code null}.
 	 * @param consumer The Consumer event to execute for each polled element, may not be {@code null}.
 	 */

@@ -9,7 +9,7 @@ import org.apollo.game.model.entity.setting.Gender;
 
 /**
  * A {@link MessageHandler} that verifies {@link PlayerDesignMessage}s.
- * 
+ *
  * @author Graham
  */
 public final class PlayerDesignVerificationHandler extends MessageHandler<PlayerDesignMessage> {
@@ -32,7 +32,7 @@ public final class PlayerDesignVerificationHandler extends MessageHandler<Player
 
 	/**
 	 * Checks if an appearance combination is valid.
-	 * 
+	 *
 	 * @param appearance The appearance combination.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -58,7 +58,7 @@ public final class PlayerDesignVerificationHandler extends MessageHandler<Player
 
 	/**
 	 * Checks if a {@link Gender#FEMALE} style combination is valid.
-	 * 
+	 *
 	 * @param appearance The appearance combination.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -78,7 +78,7 @@ public final class PlayerDesignVerificationHandler extends MessageHandler<Player
 
 	/**
 	 * Checks if a {@link Gender#MALE} style combination is valid.
-	 * 
+	 *
 	 * @param appearance The appearance combination.
 	 * @return {@code true} if so, {@code false} if not.
 	 */

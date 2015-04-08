@@ -8,7 +8,7 @@ import org.apollo.game.model.inter.InterfaceType;
 
 /**
  * A {@link MessageHandler} for the {@link DialogueContinueMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class DialogueContinueMessageHandler extends MessageHandler<DialogueContinueMessage> {

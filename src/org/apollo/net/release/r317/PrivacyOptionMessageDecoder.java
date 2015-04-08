@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link PrivacyOptionMessage}.
- * 
+ *
  * @author Kyle Stevenson
  */
 public final class PrivacyOptionMessageDecoder extends MessageDecoder<PrivacyOptionMessage> {

@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link DisplayCrossbonesMessage}.
- * 
+ *
  * @author Major
  */
 public final class DisplayCrossbonesMessageEncoder extends MessageEncoder<DisplayCrossbonesMessage> {

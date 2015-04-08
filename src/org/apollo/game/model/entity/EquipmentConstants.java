@@ -2,7 +2,7 @@ package org.apollo.game.model.entity;
 
 /**
  * Contains equipment-related constants.
- * 
+ *
  * @author Graham
  */
 public final class EquipmentConstants {

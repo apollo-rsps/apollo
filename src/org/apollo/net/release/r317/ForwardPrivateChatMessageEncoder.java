@@ -12,7 +12,7 @@ import org.apollo.util.NameUtil;
 
 /**
  * A {@link MessageEncoder} for the {@link ForwardPrivateChatMessage}.
- * 
+ *
  * @author Major
  */
 public final class ForwardPrivateChatMessageEncoder extends MessageEncoder<ForwardPrivateChatMessage> {

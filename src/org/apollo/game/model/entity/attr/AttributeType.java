@@ -3,7 +3,7 @@ package org.apollo.game.model.entity.attr;
 /**
  * The type of attribute. The functionality of this enum (and other classes) is dependent on the ordering of the values
  * - the expected order is {@link #BOOLEAN}, {@link #DOUBLE}, {@link #LONG}, {@link #STRING}, {@link #SYMBOL}.
- * 
+ *
  * @author Major
  */
 public enum AttributeType {
@@ -35,7 +35,7 @@ public enum AttributeType {
 
 	/**
 	 * Gets the type with the specified ordinal.
-	 * 
+	 *
 	 * @param ordinal The ordinal.
 	 * @return The type.
 	 */
@@ -45,7 +45,7 @@ public enum AttributeType {
 
 	/**
 	 * Gets the value of this attribute type.
-	 * 
+	 *
 	 * @return The value.
 	 */
 	public int getValue() {

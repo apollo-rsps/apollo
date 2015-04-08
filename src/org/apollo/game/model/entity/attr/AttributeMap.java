@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A {@link Map} wrapper used to store {@link Attribute}s and their {@link AttributeDefinition definitions}.
- * 
+ *
  * @author Major
  */
 public final class AttributeMap {
@@ -26,7 +26,7 @@ public final class AttributeMap {
 
 	/**
 	 * Registers an {@link AttributeDefinition}.
-	 * 
+	 *
 	 * @param name The name of the attribute.
 	 * @param definition The definition.
 	 */
@@ -36,7 +36,7 @@ public final class AttributeMap {
 
 	/**
 	 * Gets the {@link AttributeDefinition} with the specified name, or {@code null} if it is not defined.
-	 * 
+	 *
 	 * @param name The name of the attribute.
 	 * @return The attribute definition.
 	 */
@@ -47,7 +47,7 @@ public final class AttributeMap {
 
 	/**
 	 * Gets the {@link AttributeDefinition}s, as a {@link Map}.
-	 * 
+	 *
 	 * @return The map of attribute names to definitions.
 	 */
 	public static Map<String, AttributeDefinition<?>> getDefinitions() {
@@ -56,7 +56,7 @@ public final class AttributeMap {
 
 	/**
 	 * Returns whether or not an {@link AttributeDefinition} with the specified name exists.
-	 * 
+	 *
 	 * @param name The name of the AttributeDefinition.
 	 * @return {@code true} if the AttributeDefinition exists, {@code false} if not.
 	 */
@@ -67,11 +67,11 @@ public final class AttributeMap {
 	/**
 	 * The map of attribute names to attributes.
 	 */
-	private Map<String, Attribute<?>> attributes = new HashMap<>(DEFAULT_MAP_SIZE);
+	private final Map<String, Attribute<?>> attributes = new HashMap<>(DEFAULT_MAP_SIZE);
 
 	/**
 	 * Gets the {@link Attribute} with the specified name.
-	 * 
+	 *
 	 * @param name The name of the attribute.
 	 * @return The attribute.
 	 */
@@ -85,7 +85,7 @@ public final class AttributeMap {
 
 	/**
 	 * Gets a shallow copy of the {@link Map} of {@link Attribute}s.
-	 * 
+	 *
 	 * @return The attributes.
 	 */
 	public Map<String, Attribute<?>> getAttributes() {
@@ -94,7 +94,7 @@ public final class AttributeMap {
 
 	/**
 	 * Sets the value of the {@link Attribute} with the specified name.
-	 * 
+	 *
 	 * @param name The name of the attribute.
 	 * @param attribute The attribute.
 	 */
@@ -105,7 +105,7 @@ public final class AttributeMap {
 
 	/**
 	 * Creates an {@link Attribute} with the specified value and {@link AttributeType}.
-	 * 
+	 *
 	 * @param value The value of the Attribute.
 	 * @param type The AttributeType.
 	 * @return The Attribute.

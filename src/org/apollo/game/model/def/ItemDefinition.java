@@ -8,7 +8,7 @@ import com.google.common.collect.HashBiMap;
 
 /**
  * Represents a type of {@link Item}.
- * 
+ *
  * @author Graham
  */
 public final class ItemDefinition {
@@ -30,7 +30,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets the total number of item definitions.
-	 * 
+	 *
 	 * @return The count.
 	 */
 	public static int count() {
@@ -39,7 +39,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets the array of item definitions.
-	 * 
+	 *
 	 * @return The definitions.
 	 */
 	public static ItemDefinition[] getDefinitions() {
@@ -48,7 +48,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Initialises the class with the specified set of definitions.
-	 * 
+	 *
 	 * @param definitions The definitions.
 	 * @throws RuntimeException If there is an id mismatch.
 	 */
@@ -68,7 +68,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Converts an item id to a noted id.
-	 * 
+	 *
 	 * @param id The item id.
 	 * @return The noted id.
 	 */
@@ -82,7 +82,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets the item definition for the specified id.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return The definition.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
@@ -94,7 +94,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Converts a noted id to the normal item id.
-	 * 
+	 *
 	 * @param id The note id.
 	 * @return The item id.
 	 */
@@ -114,7 +114,7 @@ public final class ItemDefinition {
 	/**
 	 * The ground actions array.
 	 */
-	private String[] groundActions = new String[5];
+	private final String[] groundActions = new String[5];
 
 	/**
 	 * The item's id.
@@ -124,7 +124,7 @@ public final class ItemDefinition {
 	/**
 	 * The inventory actions array.
 	 */
-	private String[] inventoryActions = new String[5];
+	private final String[] inventoryActions = new String[5];
 
 	/**
 	 * A flag indicating if this item is members only.
@@ -163,7 +163,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Creates an item definition with the default values.
-	 * 
+	 *
 	 * @param id The item's id.
 	 */
 	public ItemDefinition(int id) {
@@ -172,7 +172,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets the description of this item.
-	 * 
+	 *
 	 * @return The item's description.
 	 */
 	public String getDescription() {
@@ -181,7 +181,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets a ground action.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return The action.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
@@ -193,7 +193,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets this item's id.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {
@@ -202,7 +202,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets an inventory action.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return The action.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
@@ -214,7 +214,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets this item's name.
-	 * 
+	 *
 	 * @return The name.
 	 */
 	public String getName() {
@@ -223,7 +223,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets this item's note graphic id.
-	 * 
+	 *
 	 * @return The note graphic id.
 	 */
 	public int getNoteGraphicId() {
@@ -232,7 +232,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets this item's note info id.
-	 * 
+	 *
 	 * @return The note info id.
 	 */
 	public int getNoteInfoId() {
@@ -241,7 +241,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets this item's team.
-	 * 
+	 *
 	 * @return The team.
 	 */
 	public int getTeam() {
@@ -250,7 +250,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Gets this item's value.
-	 * 
+	 *
 	 * @return The value.
 	 */
 	public int getValue() {
@@ -259,7 +259,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Checks if this item is members only.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isMembersOnly() {
@@ -268,7 +268,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Checks if this item is a note.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} otherwise.
 	 */
 	public boolean isNote() {
@@ -277,7 +277,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Checks if the item specified by this definition is stackable.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isStackable() {
@@ -286,7 +286,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets this item's description.
-	 * 
+	 *
 	 * @param description The description.
 	 */
 	public void setDescription(String description) {
@@ -295,7 +295,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets a ground action.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param action The action.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
@@ -307,7 +307,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets an inventory action.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param action The action.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
@@ -319,7 +319,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets this item's members only flag.
-	 * 
+	 *
 	 * @param members The flag.
 	 */
 	public void setMembersOnly(boolean members) {
@@ -328,7 +328,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets this item's name.
-	 * 
+	 *
 	 * @param name The name.
 	 */
 	public void setName(String name) {
@@ -337,7 +337,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets this item's note graphic id.
-	 * 
+	 *
 	 * @param noteGraphicId The note graphic id.
 	 */
 	public void setNoteGraphicId(int noteGraphicId) {
@@ -346,7 +346,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets this item's note info id.
-	 * 
+	 *
 	 * @param noteInfoId The note info id.
 	 */
 	public void setNoteInfoId(int noteInfoId) {
@@ -355,7 +355,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets this item's stackable flag.
-	 * 
+	 *
 	 * @param stackable The stackable flag.
 	 */
 	public void setStackable(boolean stackable) {
@@ -364,7 +364,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Sets this item's team.
-	 * 
+	 *
 	 * @param team The team.
 	 */
 	public void setTeam(int team) {
@@ -373,7 +373,7 @@ public final class ItemDefinition {
 
 	/**
 	 * sets this item's value.
-	 * 
+	 *
 	 * @param value The value.
 	 */
 	public void setValue(int value) {
@@ -382,7 +382,7 @@ public final class ItemDefinition {
 
 	/**
 	 * Converts this item to a note, if possible.
-	 * 
+	 *
 	 * @throws IllegalStateException If {@link ItemDefinition#isNote()} returns {@code false}.
 	 */
 	public void toNote() {

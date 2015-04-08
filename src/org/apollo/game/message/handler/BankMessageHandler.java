@@ -12,14 +12,14 @@ import org.apollo.game.model.inter.bank.BankWithdrawEnterAmountListener;
 
 /**
  * A {@link MessageHandler} that handles withdrawing and depositing items from/to a player's bank.
- * 
+ *
  * @author Graham
  */
 public final class BankMessageHandler extends MessageHandler<ItemActionMessage> {
 
 	/**
 	 * Converts an option to an amount.
-	 * 
+	 *
 	 * @param option The option.
 	 * @return The amount.
 	 * @throws IllegalArgumentException If the option is invalid.
@@ -63,7 +63,7 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 
 	/**
 	 * Handles a deposit action.
-	 * 
+	 *
 	 * @param player The player.
 	 * @param message The message.
 	 */
@@ -80,7 +80,7 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 
 	/**
 	 * Handles a withdraw action.
-	 * 
+	 *
 	 * @param player The player.
 	 * @param message The message.
 	 */

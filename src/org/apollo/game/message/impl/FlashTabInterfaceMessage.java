@@ -25,7 +25,7 @@ public final class FlashTabInterfaceMessage extends Message {
 
 	/**
 	 * Gets the id of the tab to flash.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getTab() {

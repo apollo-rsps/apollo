@@ -5,7 +5,7 @@ import org.apollo.game.model.event.PlayerEvent;
 
 /**
  * A {@link PlayerEvent} that is fired when a {@link Player} logs in.
- * 
+ *
  * @author Major
  */
 public final class LoginEvent extends PlayerEvent {

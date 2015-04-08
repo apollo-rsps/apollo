@@ -2,7 +2,7 @@ package org.apollo.game.model.entity;
 
 /**
  * Represents a single skill.
- * 
+ *
  * @author Graham
  */
 public final class Skill {
@@ -121,7 +121,7 @@ public final class Skill {
 
 	/**
 	 * Gets the name of a skill.
-	 * 
+	 *
 	 * @param id The skill's id.
 	 * @return The skill's name.
 	 */
@@ -131,7 +131,7 @@ public final class Skill {
 
 	/**
 	 * Whether the skill affects the combat level or not.
-	 * 
+	 *
 	 * @param skill The id of the skill.
 	 * @return {@code true} if the skill is a combat skill, otherwise {@code false}.
 	 */
@@ -142,10 +142,10 @@ public final class Skill {
 	/**
 	 * Creates a skill from an existing skill, using the existing skill's experience and maximum level values, but the
 	 * specified current level.
-	 * 
+	 *
 	 * @param currentLevel The current level.
 	 * @param skill The existing skill.
-	 * 
+	 *
 	 * @return The new skill with the updated current level.
 	 */
 	public static Skill updateCurrentLevel(int currentLevel, Skill skill) {
@@ -155,7 +155,7 @@ public final class Skill {
 	/**
 	 * Creates a skill from an existing skill, using the existing skill's current and maximum level values, but the
 	 * specified experience.
-	 * 
+	 *
 	 * @param experience The experience.
 	 * @param skill The existing skill.
 	 * @return The new skill with the updated experience.
@@ -167,7 +167,7 @@ public final class Skill {
 	/**
 	 * Creates a skill from an existing skill, using the existing skill's experience and current level values, but the
 	 * specified maximum level.
-	 * 
+	 *
 	 * @param maximumLevel experience The maximum level.
 	 * @param skill The existing skill.
 	 * @return The new skill with the updated maximum level.
@@ -193,7 +193,7 @@ public final class Skill {
 
 	/**
 	 * Creates a skill.
-	 * 
+	 *
 	 * @param experience The experience.
 	 * @param currentLevel The current level.
 	 * @param maximumLevel The maximum level.
@@ -206,7 +206,7 @@ public final class Skill {
 
 	/**
 	 * Gets the current level.
-	 * 
+	 *
 	 * @return The current level.
 	 */
 	public int getCurrentLevel() {
@@ -215,7 +215,7 @@ public final class Skill {
 
 	/**
 	 * Gets the experience.
-	 * 
+	 *
 	 * @return The experience.
 	 */
 	public double getExperience() {
@@ -224,7 +224,7 @@ public final class Skill {
 
 	/**
 	 * Gets the maximum level.
-	 * 
+	 *
 	 * @return The maximum level.
 	 */
 	public int getMaximumLevel() {

@@ -4,7 +4,7 @@ import org.apollo.game.model.World;
 
 /**
  * Represents a service that the server provides for a {@link World}.
- * 
+ *
  * @author Graham
  */
 public abstract class Service {
@@ -30,7 +30,7 @@ public abstract class Service {
 
 	/**
 	 * Gets the {@link ServerContext}.
-	 * 
+	 *
 	 * @return The context.
 	 */
 	public final ServerContext getContext() {
@@ -39,7 +39,7 @@ public abstract class Service {
 
 	/**
 	 * Sets the {@link ServerContext}.
-	 * 
+	 *
 	 * @param context The context.
 	 */
 	public final void setContext(ServerContext context) {

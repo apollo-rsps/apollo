@@ -2,7 +2,7 @@ package org.apollo.game.model.inter;
 
 /**
  * Represents the different types of interfaces.
- * 
+ *
  * @author Graham
  */
 public enum InterfaceType {

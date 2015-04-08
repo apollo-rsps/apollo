@@ -19,9 +19,9 @@ public final class MouseClickedMessageDecoder extends MessageDecoder<MouseClicke
 		int value = (int) reader.getUnsigned(DataType.INT);
 
 		long delay = (value >> 20) * 50;
-		boolean right = ((value >> 19) & 0x1) == 1;
+		boolean right = (value >> 19 & 0x1) == 1;
 
-		int cords = (value & 0x3FFFF);
+		int cords = value & 0x3FFFF;
 		int x = cords % 765;
 		int y = cords / 765;
 

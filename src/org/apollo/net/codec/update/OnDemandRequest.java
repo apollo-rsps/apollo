@@ -4,7 +4,7 @@ import org.apollo.fs.FileDescriptor;
 
 /**
  * Represents a single 'on-demand' request.
- * 
+ *
  * @author Graham
  */
 public final class OnDemandRequest implements Comparable<OnDemandRequest> {
@@ -32,7 +32,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 		/**
 		 * Converts the integer value to a Priority.
-		 * 
+		 *
 		 * @param value The integer value.
 		 * @return The priority.
 		 * @throws IllegalArgumentException If the value is outside of the range 1-3 inclusive.
@@ -57,7 +57,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 		/**
 		 * Creates the Priority.
-		 * 
+		 *
 		 * @param value The integer value.
 		 */
 		private Priority(int value) {
@@ -68,7 +68,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		 * Compares this Priority with the specified other Priority.
 		 * <p>
 		 * Used as an ordinal-independent variant of {@link #compareTo}.
-		 * 
+		 *
 		 * @param other The other Priority.
 		 * @return 1 if this Priority is greater than {@code other}, 0 if they are equal, otherwise -1.
 		 */
@@ -78,7 +78,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 		/**
 		 * Converts the priority to an integer.
-		 * 
+		 *
 		 * @return The integer value.
 		 */
 		public int toInteger() {
@@ -99,7 +99,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 	/**
 	 * Creates the OnDemandRequest.
-	 * 
+	 *
 	 * @param descriptor The {@link FileDescriptor}.
 	 * @param priority The {@link Priority}.
 	 */
@@ -115,7 +115,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 	/**
 	 * Gets the {@link FileDescriptor}.
-	 * 
+	 *
 	 * @return The FileDescriptor.
 	 */
 	public FileDescriptor getFileDescriptor() {
@@ -124,7 +124,7 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 
 	/**
 	 * Gets the {@link Priority}.
-	 * 
+	 *
 	 * @return The Priority.
 	 */
 	public Priority getPriority() {

@@ -7,7 +7,7 @@ import com.google.common.base.MoreObjects;
 /**
  * An immutable class representing the coordinates of a region, where the coordinates ({@code x, y}) are the top-left of
  * the region.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -15,7 +15,7 @@ public final class RegionCoordinates {
 
 	/**
 	 * Gets the RegionCoordinates for the specified {@link Position}.
-	 * 
+	 *
 	 * @param position The Position.
 	 * @return The RegionCoordinates.
 	 */
@@ -35,7 +35,7 @@ public final class RegionCoordinates {
 
 	/**
 	 * Creates the RegionCoordinates.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
@@ -56,7 +56,7 @@ public final class RegionCoordinates {
 
 	/**
 	 * Gets the absolute x coordinate of this Region (which can be compared directly against {@link Position#getX()}.
-	 * 
+	 *
 	 * @return The absolute x coordinate.
 	 */
 	public int getAbsoluteX() {
@@ -65,7 +65,7 @@ public final class RegionCoordinates {
 
 	/**
 	 * Gets the absolute y coordinate of this Region (which can be compared directly against {@link Position#getY()}.
-	 * 
+	 *
 	 * @return The absolute y coordinate.
 	 */
 	public int getAbsoluteY() {
@@ -74,7 +74,7 @@ public final class RegionCoordinates {
 
 	/**
 	 * Gets the x coordinate (equivalent to the {@link Position#getTopLeftRegionX()} of a position within this region).
-	 * 
+	 *
 	 * @return The x coordinate.
 	 */
 	public int getX() {
@@ -83,7 +83,7 @@ public final class RegionCoordinates {
 
 	/**
 	 * Gets the y coordinate (equivalent to the {@link Position#getTopLeftRegionY()} of a position within this region).
-	 * 
+	 *
 	 * @return The y coordinate.
 	 */
 	public int getY() {

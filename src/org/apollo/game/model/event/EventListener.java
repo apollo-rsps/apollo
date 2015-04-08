@@ -12,7 +12,7 @@ public interface EventListener<E> {
 
 	/**
 	 * Handles the {@link Event} that occurred.
-	 * 
+	 *
 	 * @param event The Event.
 	 */
 	public void handle(E event);

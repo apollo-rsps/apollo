@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SetWidgetNpcModelMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 final class SetWidgetNpcModelMessageEncoder extends MessageEncoder<SetWidgetNpcModelMessage> {

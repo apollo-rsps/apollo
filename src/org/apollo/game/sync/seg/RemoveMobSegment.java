@@ -4,7 +4,7 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
  * A {@link SynchronizationSegment} which removes a mob.
- * 
+ *
  * @author Graham
  */
 public final class RemoveMobSegment extends SynchronizationSegment {

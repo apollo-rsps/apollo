@@ -2,7 +2,7 @@ package org.apollo.game.sync.seg;
 
 /**
  * An enumeration which contains the types of segments.
- * 
+ *
  * @author Graham
  */
 public enum SegmentType {

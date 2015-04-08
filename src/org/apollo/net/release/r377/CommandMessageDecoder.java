@@ -7,7 +7,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link CommandMessage}.
- * 
+ *
  * @author Graham
  */
 public final class CommandMessageDecoder extends MessageDecoder<CommandMessage> {

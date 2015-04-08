@@ -9,7 +9,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link MagicOnItemMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 final class MagicOnItemMessageDecoder extends MessageDecoder<MagicOnItemMessage> {

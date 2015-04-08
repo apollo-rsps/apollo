@@ -2,7 +2,7 @@ package org.apollo.net.codec.game;
 
 /**
  * A class holding data-related constants.
- * 
+ *
  * @author Graham
  */
 public final class DataConstants {

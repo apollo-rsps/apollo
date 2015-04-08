@@ -8,7 +8,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * A {@link MessageHandler} that handles {@link PlayerDesignMessage}s.
- * 
+ *
  * @author Graham
  */
 public final class PlayerDesignMessageHandler extends MessageHandler<PlayerDesignMessage> {

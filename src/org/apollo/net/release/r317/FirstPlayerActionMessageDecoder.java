@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link FirstPlayerActionMessage}.
- * 
+ *
  * @author Major
  */
 public final class FirstPlayerActionMessageDecoder extends MessageDecoder<FirstPlayerActionMessage> {

@@ -17,14 +17,14 @@ import org.apollo.update.resource.VirtualResourceProvider;
 
 /**
  * A worker which services JAGGRAB requests.
- * 
+ *
  * @author Graham
  */
 public final class JagGrabRequestWorker extends RequestWorker<JagGrabRequest, ResourceProvider> {
 
 	/**
 	 * Creates the JAGGRAB request worker.
-	 * 
+	 *
 	 * @param dispatcher The dispatcher.
 	 * @param fs The file system.
 	 */

@@ -2,7 +2,7 @@ package org.apollo.game.model;
 
 /**
  * Represents a 'still graphic'.
- * 
+ *
  * @author Graham
  */
 public final class Graphic {
@@ -29,7 +29,7 @@ public final class Graphic {
 
 	/**
 	 * Creates a new graphic with no delay and a height of zero.
-	 * 
+	 *
 	 * @param id The id.
 	 */
 	public Graphic(int id) {
@@ -38,7 +38,7 @@ public final class Graphic {
 
 	/**
 	 * Creates a new graphic with a height of zero.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param delay The delay.
 	 */
@@ -48,7 +48,7 @@ public final class Graphic {
 
 	/**
 	 * Creates a new graphic.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param delay The delay.
 	 * @param height The height.
@@ -61,7 +61,7 @@ public final class Graphic {
 
 	/**
 	 * Gets the graphic's delay.
-	 * 
+	 *
 	 * @return The delay.
 	 */
 	public int getDelay() {
@@ -70,7 +70,7 @@ public final class Graphic {
 
 	/**
 	 * Gets the graphic's height.
-	 * 
+	 *
 	 * @return The height.
 	 */
 	public int getHeight() {
@@ -79,7 +79,7 @@ public final class Graphic {
 
 	/**
 	 * Gets the graphic's id.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {

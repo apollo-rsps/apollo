@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.obj.GameObject;
 
 /**
  * A {@link Message} sent to the client to spawn an object.
- * 
+ *
  * @author Major
  */
 public final class SendObjectMessage extends RegionUpdateMessage {
@@ -32,15 +32,15 @@ public final class SendObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * Creates the SendObjectMessage.
-	 * 
+	 *
 	 * @param object The {@link GameObject} to send.
 	 * @param positionOffset The offset of the object's position from the region's central position.
 	 */
 	public SendObjectMessage(GameObject object, int positionOffset) {
-		this.id = object.getId();
+		id = object.getId();
 		this.positionOffset = positionOffset;
-		this.type = object.getType();
-		this.orientation = object.getOrientation();
+		type = object.getType();
+		orientation = object.getOrientation();
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public final class SendObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the orientation of the object.
-	 * 
+	 *
 	 * @return The orientation.
 	 */
 	public int getOrientation() {
@@ -86,7 +86,7 @@ public final class SendObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the orientation of the object.
-	 * 
+	 *
 	 * @return The type.
 	 */
 	public int getType() {

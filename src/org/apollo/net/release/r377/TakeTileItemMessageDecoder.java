@@ -11,7 +11,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link TakeTileItemMessage}.
- * 
+ *
  * @author Major
  */
 public final class TakeTileItemMessageDecoder extends MessageDecoder<TakeTileItemMessage> {

@@ -21,7 +21,7 @@ import org.apollo.net.session.UpdateSession;
 
 /**
  * An implementation of {@link ChannelInboundHandlerAdapter} which handles incoming upstream events from Netty.
- * 
+ *
  * @author Graham
  */
 @Sharable
@@ -39,7 +39,7 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 
 	/**
 	 * Creates the Apollo event handler.
-	 * 
+	 *
 	 * @param context The server context.
 	 */
 	public ApolloHandler(ServerContext context) {

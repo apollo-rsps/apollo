@@ -12,7 +12,7 @@ import org.apollo.game.model.area.Region;
 
 /**
  * Decodes {@link MapDefinition}s from the {@link IndexedFileSystem}.
- * 
+ *
  * @author Ryley
  * @author Major
  */
@@ -82,7 +82,7 @@ public final class MapFileDecoder {
 
 		/**
 		 * Creates the {@link MapDefinition}.
-		 * 
+		 *
 		 * @param packedCoordinates The packed coordinates.
 		 * @param terrain The terrain file id.
 		 * @param objects The object file id.
@@ -97,7 +97,7 @@ public final class MapFileDecoder {
 
 		/**
 		 * Gets the packed coordinates.
-		 * 
+		 *
 		 * @return The packed coordinates.
 		 */
 		public int getPackedCoordinates() {
@@ -106,7 +106,7 @@ public final class MapFileDecoder {
 
 		/**
 		 * Gets the id of the file containing the terrain data.
-		 * 
+		 *
 		 * @return The file id.
 		 */
 		public int getTerrainFile() {
@@ -115,7 +115,7 @@ public final class MapFileDecoder {
 
 		/**
 		 * Gets the id of the file containing the object data.
-		 * 
+		 *
 		 * @return The file id.
 		 */
 		public int getObjectFile() {
@@ -124,7 +124,7 @@ public final class MapFileDecoder {
 
 		/**
 		 * Returns whether or not this MapDefinition is for a members-only area of the world.
-		 * 
+		 *
 		 * @return {@code true} if this MapDefinition is for a members-only area, {@code false} if not.
 		 */
 		public boolean isMembersOnly() {

@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link UpdateWeightMessage}.
- * 
+ *
  * @author Major
  */
 public final class UpdateWeightMessageEncoder extends MessageEncoder<UpdateWeightMessage> {

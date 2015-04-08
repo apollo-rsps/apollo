@@ -20,7 +20,7 @@ import org.apollo.util.MobRepository;
 
 /**
  * A {@link SynchronizationTask} which synchronizes the specified {@link Player} .
- * 
+ *
  * @author Graham
  */
 public final class PlayerSynchronizationTask extends SynchronizationTask {
@@ -38,7 +38,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Creates the {@link PlayerSynchronizationTask} for the specified player.
-	 * 
+	 *
 	 * @param player The player.
 	 */
 	public PlayerSynchronizationTask(Player player) {
@@ -80,8 +80,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		int added = 0;
 
 		MobRepository<Player> repository = player.getWorld().getPlayerRepository();
-		for (Iterator<Player> it = repository.iterator(); it.hasNext();) {
-			Player other = it.next();
+		for (Player other : repository) {
 			if (localPlayers.size() >= 255) {
 				player.flagExcessivePlayers();
 				break;

@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * A repository of {@link Region}s, backed by a {@link HashMap} of {@link RegionCoordinates} that correspond to their
  * appropriate regions.
- * 
+ *
  * @author Major
  */
 public final class RegionRepository {
@@ -22,7 +22,7 @@ public final class RegionRepository {
 	 * <p>
 	 * Note that, internally, regions are added lazily (i.e. only when necessary). As such, repositories are (again,
 	 * internally) not actually immutable, so do not rely on such behaviour.
-	 * 
+	 *
 	 * @return The RegionRepository.
 	 */
 	public static RegionRepository immutable() {
@@ -31,7 +31,7 @@ public final class RegionRepository {
 
 	/**
 	 * Returns a mutable RegionRepository, where {@link Region}s may be removed.
-	 * 
+	 *
 	 * @return The RegionRepository.
 	 */
 	public static RegionRepository mutable() {
@@ -50,7 +50,7 @@ public final class RegionRepository {
 
 	/**
 	 * Creates a new RegionRepository.
-	 * 
+	 *
 	 * @param permitRemoval If removal (of {@link Region}s) from this repository should be permitted.
 	 */
 	private RegionRepository(boolean permitRemoval) {
@@ -59,7 +59,7 @@ public final class RegionRepository {
 
 	/**
 	 * Adds a {@link Region} to the repository.
-	 * 
+	 *
 	 * @param region The Region.
 	 * @throws IllegalArgumentException If the provided Region is null.
 	 * @throws UnsupportedOperationException If the coordinates of the provided Region are already mapped (and hence the
@@ -76,7 +76,7 @@ public final class RegionRepository {
 
 	/**
 	 * Indicates whether the supplied value (i.e. the {@link Region}) has a mapping.
-	 * 
+	 *
 	 * @param region The Region.
 	 * @return {@code true} if this repository contains an entry with {@link RegionCoordinates} equal to the specified
 	 *         Region, otherwise {@code false}.
@@ -87,7 +87,7 @@ public final class RegionRepository {
 
 	/**
 	 * Indicates whether the supplied key (i.e. the {@link RegionCoordinates}) has a mapping.
-	 * 
+	 *
 	 * @param coordinates The coordinates.
 	 * @return {@code true} if the key is already mapped to a value (i.e. a {@link Region}), otherwise {@code false}.
 	 */
@@ -98,7 +98,7 @@ public final class RegionRepository {
 	/**
 	 * Gets the {@link Region} that contains the specified {@link Position}. If the Region does not exist in this
 	 * repository then a new Region is created, submitted to the repository, and returned.
-	 * 
+	 *
 	 * @param position The position.
 	 * @return The Region.
 	 */
@@ -109,7 +109,7 @@ public final class RegionRepository {
 	/**
 	 * Gets a {@link Region} with the specified {@link RegionCoordinates}. If the Region does not exist in this
 	 * repository then a new Region is created, submitted to the repository, and returned.
-	 * 
+	 *
 	 * @param coordinates The RegionCoordinates.
 	 * @return The Region. Will never be null.
 	 */
@@ -125,7 +125,7 @@ public final class RegionRepository {
 
 	/**
 	 * Gets a shallow copy of the {@link List} of {@link Region}s. This will be an {@link ImmutableList}.
-	 * 
+	 *
 	 * @return The List.
 	 */
 	public List<Region> getRegions() {
@@ -135,7 +135,7 @@ public final class RegionRepository {
 	/**
 	 * Removes a {@link Region} from the repository, if permitted. This method removes the entry that has a key
 	 * identical to the {@link RegionCoordinates} of the specified Region.
-	 * 
+	 *
 	 * @param region The Region to remove.
 	 * @return {@code true} if the specified Region existed and was removed, {@code false} if not.
 	 * @throws UnsupportedOperationException If this method is called on a repository that does not permit removal.

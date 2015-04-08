@@ -9,7 +9,7 @@ import com.google.common.base.MoreObjects;
 
 /**
  * A node representing a weighted {@link Position}.
- * 
+ *
  * @author Major
  */
 final class Node {
@@ -36,7 +36,7 @@ final class Node {
 
 	/**
 	 * Creates the node with the specified {@link Position} and cost.
-	 * 
+	 *
 	 * @param position The position.
 	 */
 	public Node(Position position) {
@@ -45,7 +45,7 @@ final class Node {
 
 	/**
 	 * Creates the node with the specified {@link Position} and cost.
-	 * 
+	 *
 	 * @param position The position.
 	 * @param cost The cost of the node.
 	 */
@@ -74,7 +74,7 @@ final class Node {
 
 	/**
 	 * Gets the cost of this node.
-	 * 
+	 *
 	 * @return The cost.
 	 */
 	public int getCost() {
@@ -83,7 +83,7 @@ final class Node {
 
 	/**
 	 * Gets the parent node of this node.
-	 * 
+	 *
 	 * @return The parent node.
 	 * @throws NoSuchElementException If this node does not have a parent.
 	 */
@@ -93,7 +93,7 @@ final class Node {
 
 	/**
 	 * Gets the {@link Position} this node represents.
-	 * 
+	 *
 	 * @return The position.
 	 */
 	public Position getPosition() {
@@ -107,7 +107,7 @@ final class Node {
 
 	/**
 	 * Returns whether or not this node has a parent node.
-	 * 
+	 *
 	 * @return {@code true} if this node has a parent node, otherwise {@code false}.
 	 */
 	public boolean hasParent() {
@@ -116,7 +116,7 @@ final class Node {
 
 	/**
 	 * Returns whether or not this {@link Node} is open.
-	 * 
+	 *
 	 * @return {@code true} if this node is open, otherwise {@code false}.
 	 */
 	public boolean isOpen() {
@@ -125,7 +125,7 @@ final class Node {
 
 	/**
 	 * Sets the cost of this node.
-	 * 
+	 *
 	 * @param cost The cost.
 	 */
 	public void setCost(int cost) {
@@ -134,7 +134,7 @@ final class Node {
 
 	/**
 	 * Sets the parent node of this node.
-	 * 
+	 *
 	 * @param parent The parent node. May be {@code null}.
 	 */
 	public void setParent(Node parent) {

@@ -4,7 +4,7 @@ import org.apollo.game.model.Position;
 
 /**
  * The Chebyshev heuristic, ideal for a system that allows for 8-directional movement.
- * 
+ *
  * @author Major
  */
 final class ChebyshevHeuristic extends Heuristic {

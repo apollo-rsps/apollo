@@ -5,7 +5,7 @@ import org.apollo.game.message.Message;
 /**
  * A {@link Message} sent by the client when the player clicks the "Click here to continue" button on a dialogue
  * interface.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class DialogueContinueMessage extends Message {
@@ -17,7 +17,7 @@ public final class DialogueContinueMessage extends Message {
 
 	/**
 	 * Creates a new dialogue continue message.
-	 * 
+	 *
 	 * @param interfaceId The interface id.
 	 */
 	public DialogueContinueMessage(int interfaceId) {
@@ -26,7 +26,7 @@ public final class DialogueContinueMessage extends Message {
 
 	/**
 	 * Gets the interface id of the button.
-	 * 
+	 *
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {

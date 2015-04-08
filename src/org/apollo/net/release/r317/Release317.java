@@ -51,7 +51,7 @@ import org.apollo.net.release.Release;
 
 /**
  * A {@link Release} implementation for the 317 protocol.
- * 
+ *
  * @author Graham
  */
 public final class Release317 extends Release {

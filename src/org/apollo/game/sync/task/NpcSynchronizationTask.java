@@ -15,7 +15,7 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**
  * A {@link SynchronizationTask} which synchronizes npcs with the specified {@link Player}.
- * 
+ *
  * @author Major
  */
 public final class NpcSynchronizationTask extends SynchronizationTask {
@@ -33,7 +33,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Creates the {@link NpcSynchronizationTask} for the specified player.
-	 * 
+	 *
 	 * @param player The player.
 	 */
 	public NpcSynchronizationTask(Player player) {
@@ -49,8 +49,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 
 		for (Iterator<Npc> it = localNpcs.iterator(); it.hasNext();) {
 			Npc npc = it.next();
-			if (!npc.isActive() || npc.isTeleporting()
-					|| npc.getPosition().getLongestDelta(playerPosition) > player.getViewingDistance()) {
+			if (!npc.isActive() || npc.isTeleporting() || npc.getPosition().getLongestDelta(playerPosition) > player.getViewingDistance()) {
 				it.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
@@ -69,8 +68,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 			}
 
 			Position npcPosition = npc.getPosition();
-			if (npcPosition.isWithinDistance(playerPosition, player.getViewingDistance()) && !localNpcs.contains(npc)
-					&& npcPosition.getHeight() == playerPosition.getHeight()) {
+			if (npcPosition.isWithinDistance(playerPosition, player.getViewingDistance()) && !localNpcs.contains(npc) && npcPosition.getHeight() == playerPosition.getHeight()) {
 				localNpcs.add(npc);
 				added++;
 				npc.turnTo(npc.getFacingPosition());

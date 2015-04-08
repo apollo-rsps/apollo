@@ -45,7 +45,7 @@ import com.lambdaworks.crypto.SCryptUtil;
 
 /**
  * A {@link PlayerSerializer} implementation that uses a binary file to store player data.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -107,7 +107,7 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 			int y = in.readUnsignedShort();
 			int height = in.readUnsignedByte();
 
-			Gender gender = (in.readUnsignedByte() == Gender.MALE.toInteger()) ? Gender.MALE : Gender.FEMALE;
+			Gender gender = in.readUnsignedByte() == Gender.MALE.toInteger() ? Gender.MALE : Gender.FEMALE;
 			int[] style = new int[7];
 			for (int slot = 0; slot < style.length; slot++) {
 				style[slot] = in.readUnsignedByte();
@@ -239,7 +239,7 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 
 	/**
 	 * Gets the save {@link File} for the specified player.
-	 * 
+	 *
 	 * @param username The username of the player.
 	 * @return The file.
 	 */
@@ -250,7 +250,7 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 
 	/**
 	 * Reads the player's {@link Attribute}s.
-	 * 
+	 *
 	 * @param in The input stream.
 	 * @return The {@link Map} of attribute names to attributes.
 	 * @throws IOException If there is an error reading from the stream.
@@ -289,7 +289,7 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 
 	/**
 	 * Reads an inventory from the input stream.
-	 * 
+	 *
 	 * @param in The input stream.
 	 * @param inventory The inventory.
 	 * @throws IOException If an I/O error occurs.
@@ -315,7 +315,7 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 
 	/**
 	 * Writes an inventory to the specified output stream.
-	 * 
+	 *
 	 * @param out The output stream.
 	 * @param inventory The inventory.
 	 * @throws IOException If an I/O error occurs.

@@ -9,7 +9,7 @@ import org.apollo.game.model.event.Event;
  * <p>
  * This Event intentionally ignores the result of execution - it should not be possible for a plugin to prevent this
  * Event from happening, only to listen for it.
- * 
+ *
  * @author Major
  */
 public final class MobPositionUpdateEvent extends Event {
@@ -37,7 +37,7 @@ public final class MobPositionUpdateEvent extends Event {
 
 	/**
 	 * Gets the {@link Mob} being moved.
-	 * 
+	 *
 	 * @return The Mob.
 	 */
 	public Mob getMob() {
@@ -46,7 +46,7 @@ public final class MobPositionUpdateEvent extends Event {
 
 	/**
 	 * Gets the {@link Position} this {@link Mob} is being moved to.
-	 * 
+	 *
 	 * @return The Position.
 	 */
 	public Position getNext() {

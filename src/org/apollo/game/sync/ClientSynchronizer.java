@@ -13,14 +13,14 @@ import org.apollo.util.MobRepository;
  * To switch between the two synchronizer implementations, edit the {@code synchronizers.xml} configuration file. The
  * default implementation is currently {@link ParallelClientSynchronizer} as the vast majority of machines today have
  * two or more cores.
- * 
+ *
  * @author Graham
  */
 public abstract class ClientSynchronizer {
 
 	/**
 	 * Synchronizes the state of the clients with the state of the server.
-	 * 
+	 *
 	 * @param players The {@link MobRepository} containing the {@link Player}s.
 	 * @param npcs The {@link MobRepository} containing the {@link Npc}s.
 	 */

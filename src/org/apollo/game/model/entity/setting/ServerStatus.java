@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 /**
  * Represents the status of the friend server. This enumeration relies on the ordering of the elements within, which
  * should be as follows: {@code OFFLINE}, {@code CONNECTING}, {@code ONLINE}.
- * 
+ *
  * @author Major
  */
 public enum ServerStatus {
@@ -27,7 +27,7 @@ public enum ServerStatus {
 
 	/**
 	 * Gets the code of this server status.
-	 * 
+	 *
 	 * @return The code.
 	 */
 	public int getCode() {
@@ -36,7 +36,7 @@ public enum ServerStatus {
 
 	/**
 	 * Gets the server status for the specified numerical value.
-	 * 
+	 *
 	 * @param value The value.
 	 * @return The server status.
 	 * @throws IndexOutOfBoundsException If the specified value is out of bounds.

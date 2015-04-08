@@ -11,14 +11,14 @@ import com.google.common.base.MoreObjects;
 
 /**
  * A queue of {@link Direction}s which a {@link Mob} will follow.
- * 
+ *
  * @author Graham
  */
 public final class WalkingQueue {
 
 	/**
 	 * Represents a single point in the queue.
-	 * 
+	 *
 	 * @author Graham
 	 */
 	private static final class Point {
@@ -35,7 +35,7 @@ public final class WalkingQueue {
 
 		/**
 		 * Creates a point.
-		 * 
+		 *
 		 * @param position The position.
 		 * @param direction The direction.
 		 */
@@ -78,7 +78,7 @@ public final class WalkingQueue {
 
 	/**
 	 * Creates a walking queue for the specified mob.
-	 * 
+	 *
 	 * @param mob The mob.
 	 */
 	public WalkingQueue(Mob mob) {
@@ -88,7 +88,7 @@ public final class WalkingQueue {
 	/**
 	 * Adds the first step to the queue, attempting to connect the server and client position by looking at the previous
 	 * queue.
-	 * 
+	 *
 	 * @param clientPosition The first step.
 	 * @return {@code true} if the queues could be connected correctly, {@code false} if not.
 	 */
@@ -134,7 +134,7 @@ public final class WalkingQueue {
 
 	/**
 	 * Adds a step.
-	 * 
+	 *
 	 * @param x The x coordinate of this step.
 	 * @param y The y coordinate of this step.
 	 */
@@ -159,7 +159,7 @@ public final class WalkingQueue {
 
 	/**
 	 * Adds a step to the queue.
-	 * 
+	 *
 	 * @param step The step to add.
 	 */
 	public void addStep(Position step) {
@@ -198,7 +198,7 @@ public final class WalkingQueue {
 
 	/**
 	 * Gets the last point.
-	 * 
+	 *
 	 * @return The last point.
 	 */
 	private Point getLast() {
@@ -235,7 +235,7 @@ public final class WalkingQueue {
 
 	/**
 	 * Sets the running queue flag.
-	 * 
+	 *
 	 * @param running The running queue flag.
 	 */
 	public void setRunningQueue(boolean running) {
@@ -244,7 +244,7 @@ public final class WalkingQueue {
 
 	/**
 	 * Gets the size of the queue.
-	 * 
+	 *
 	 * @return The size of the queue.
 	 */
 	public int size() {

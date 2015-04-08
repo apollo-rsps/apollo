@@ -18,7 +18,7 @@ import com.google.common.base.Charsets;
 
 /**
  * A {@link ChannelInitializer} for the JAGGRAB protocol.
- * 
+ *
  * @author Graham
  */
 public final class JagGrabChannelInitializer extends ChannelInitializer<SocketChannel> {
@@ -52,7 +52,7 @@ public final class JagGrabChannelInitializer extends ChannelInitializer<SocketCh
 
 	/**
 	 * Creates a {@code JAGGRAB} pipeline factory.
-	 * 
+	 *
 	 * @param handler The file server event handler.
 	 */
 	public JagGrabChannelInitializer(ApolloHandler handler) {

@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link DialogueContinueMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class DialogueContinueMessageDecoder extends MessageDecoder<DialogueContinueMessage> {

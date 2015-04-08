@@ -23,7 +23,7 @@ import com.google.common.net.InetAddresses;
 
 /**
  * A {@link StatefulFrameDecoder} which decodes the login request frames.
- * 
+ *
  * @author Graham
  */
 public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> {
@@ -79,7 +79,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 	/**
 	 * Decodes in the handshake state.
-	 * 
+	 *
 	 * @param ctx The channel handler context.
 	 * @param buffer The buffer.
 	 * @param out The {@link List} of objects to pass forward through the pipeline.
@@ -101,7 +101,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 	/**
 	 * Decodes in the header state.
-	 * 
+	 *
 	 * @param ctx The channel handler context.
 	 * @param buffer The buffer.
 	 * @param out The {@link List} of objects to pass forward through the pipeline.
@@ -124,7 +124,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 	/**
 	 * Decodes in the payload state.
-	 * 
+	 *
 	 * @param ctx The channel handler context.
 	 * @param buffer The buffer.
 	 * @param out The {@link List} of objects to pass forward through the pipeline.

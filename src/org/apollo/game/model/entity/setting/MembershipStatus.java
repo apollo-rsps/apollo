@@ -22,7 +22,7 @@ public enum MembershipStatus {
 
 	/**
 	 * Gets the MembershipStatus with the specified value.
-	 * 
+	 *
 	 * @param value The integer value of the MembershipStatus.
 	 * @return The MembershipStatus.
 	 * @throws IllegalArgumentException If no MembershipStatus with the specified the value exists.
@@ -48,7 +48,7 @@ public enum MembershipStatus {
 
 	/**
 	 * Gets the value of this MembershipStatus.
-	 * 
+	 *
 	 * @return The value.
 	 */
 	public int getValue() {

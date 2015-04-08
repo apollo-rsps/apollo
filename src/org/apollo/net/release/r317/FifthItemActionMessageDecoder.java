@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link FifthItemActionMessage}.
- * 
+ *
  * @author Graham
  */
 public final class FifthItemActionMessageDecoder extends MessageDecoder<FifthItemActionMessage> {

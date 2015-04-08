@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to set a widget's displayed mob's animation.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class SetWidgetModelAnimationMessage extends Message {
@@ -21,7 +21,7 @@ public final class SetWidgetModelAnimationMessage extends Message {
 
 	/**
 	 * Creates a new set interface npc model's animation message.
-	 * 
+	 *
 	 * @param interfaceId The interface id.
 	 * @param animation The model's animation id.
 	 */
@@ -32,7 +32,7 @@ public final class SetWidgetModelAnimationMessage extends Message {
 
 	/**
 	 * Gets the model's mood id.
-	 * 
+	 *
 	 * @return The model's mood id.
 	 */
 	public int getAnimation() {
@@ -41,7 +41,7 @@ public final class SetWidgetModelAnimationMessage extends Message {
 
 	/**
 	 * Gets the interface id.
-	 * 
+	 *
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {

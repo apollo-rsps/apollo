@@ -2,7 +2,7 @@ package org.apollo.game.command;
 
 /**
  * Represents a command.
- * 
+ *
  * @author Graham
  */
 public final class Command {
@@ -19,7 +19,7 @@ public final class Command {
 
 	/**
 	 * Creates the command.
-	 * 
+	 *
 	 * @param name The name of the command.
 	 * @param arguments The command's arguments.
 	 */
@@ -30,7 +30,7 @@ public final class Command {
 
 	/**
 	 * Gets the command's arguments.
-	 * 
+	 *
 	 * @return The command's arguments.
 	 */
 	public String[] getArguments() {
@@ -39,7 +39,7 @@ public final class Command {
 
 	/**
 	 * Gets the name of the command.
-	 * 
+	 *
 	 * @return The name of the command.
 	 */
 	public String getName() {

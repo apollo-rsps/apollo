@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A game-related task that is scheduled to run in the future.
- * 
+ *
  * @author Graham
  */
 public abstract class ScheduledTask {
@@ -26,7 +26,7 @@ public abstract class ScheduledTask {
 
 	/**
 	 * Creates a new scheduled task.
-	 * 
+	 *
 	 * @param delay The delay between executions of the task, in pulses.
 	 * @param immediate A flag indicating if this task should (for the first execution) be ran immediately, or after the
 	 *            {@code delay}.
@@ -44,7 +44,7 @@ public abstract class ScheduledTask {
 
 	/**
 	 * Checks if this task is running.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public final boolean isRunning() {
@@ -63,7 +63,7 @@ public abstract class ScheduledTask {
 
 	/**
 	 * Sets the delay.
-	 * 
+	 *
 	 * @param delay The delay.
 	 * @throws IllegalArgumentException If the delay is less than zero.
 	 */

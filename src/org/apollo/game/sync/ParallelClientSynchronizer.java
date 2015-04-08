@@ -31,7 +31,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  * synchronization. This class will scale well with machines that have multiple cores/processors. The
  * {@link SequentialClientSynchronizer} will work better on machines with a single core/processor, however, both classes
  * will work.
- * 
+ *
  * @author Graham
  * @author Major
  */

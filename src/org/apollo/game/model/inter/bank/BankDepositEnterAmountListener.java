@@ -5,7 +5,7 @@ import org.apollo.game.model.inter.EnterAmountListener;
 
 /**
  * An {@link EnterAmountListener} for depositing items.
- * 
+ *
  * @author Graham
  */
 public final class BankDepositEnterAmountListener implements EnterAmountListener {
@@ -27,7 +27,7 @@ public final class BankDepositEnterAmountListener implements EnterAmountListener
 
 	/**
 	 * Creates the bank deposit amount listener.
-	 * 
+	 *
 	 * @param player The player.
 	 * @param slot The slot.
 	 * @param id The id.

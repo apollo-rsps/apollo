@@ -2,7 +2,7 @@ package org.apollo.net.codec.login;
 
 /**
  * Represents a login response.
- * 
+ *
  * @author Graham
  */
 public final class LoginResponse {
@@ -24,7 +24,7 @@ public final class LoginResponse {
 
 	/**
 	 * Creates the login response.
-	 * 
+	 *
 	 * @param status The login status.
 	 * @param rights The rights level.
 	 * @param flagged The flagged flag.
@@ -37,7 +37,7 @@ public final class LoginResponse {
 
 	/**
 	 * Gets the rights level.
-	 * 
+	 *
 	 * @return The rights level.
 	 */
 	public int getRights() {
@@ -46,7 +46,7 @@ public final class LoginResponse {
 
 	/**
 	 * Gets the status.
-	 * 
+	 *
 	 * @return The status.
 	 */
 	public int getStatus() {
@@ -55,7 +55,7 @@ public final class LoginResponse {
 
 	/**
 	 * Checks if the player should be flagged.
-	 * 
+	 *
 	 * @return The flagged flag.
 	 */
 	public boolean isFlagged() {

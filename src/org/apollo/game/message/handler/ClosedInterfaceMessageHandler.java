@@ -7,7 +7,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * A {@link MessageHandler} for the {@link ClosedInterfaceMessage}.
- * 
+ *
  * @author Graham
  */
 public final class ClosedInterfaceMessageHandler extends MessageHandler<ClosedInterfaceMessage> {

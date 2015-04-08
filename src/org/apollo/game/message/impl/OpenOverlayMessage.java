@@ -16,7 +16,7 @@ public final class OpenOverlayMessage extends Message {
 
 	/**
 	 * Creates the OpenSidebarMessage.
-	 * 
+	 *
 	 * @param overlayId The overlay id.
 	 */
 	public OpenOverlayMessage(int overlayId) {
@@ -25,7 +25,7 @@ public final class OpenOverlayMessage extends Message {
 
 	/**
 	 * Gets the overlay id.
-	 * 
+	 *
 	 * @return The overlay id.
 	 */
 	public int getOverlayId() {

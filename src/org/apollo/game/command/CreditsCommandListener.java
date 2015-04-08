@@ -10,16 +10,16 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Implements a {@code ::credits} command that lists the authors of all plugins used in the server.
- * 
+ *
  * @author Graham
  */
 public final class CreditsCommandListener extends CommandListener {
-	
+
 	/**
 	 * The Set of authors.
 	 */
 	private final Set<String> authors;
-	
+
 	/**
 	 * Creates the CreditsCommandListener.
 	 *

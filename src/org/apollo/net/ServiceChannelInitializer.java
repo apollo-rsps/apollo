@@ -9,7 +9,7 @@ import org.apollo.net.codec.handshake.HandshakeDecoder;
 
 /**
  * A {@link ChannelInitializer} for the service pipeline.
- * 
+ *
  * @author Graham
  */
 public final class ServiceChannelInitializer extends ChannelInitializer<SocketChannel> {
@@ -21,7 +21,7 @@ public final class ServiceChannelInitializer extends ChannelInitializer<SocketCh
 
 	/**
 	 * Creates the service pipeline factory.
-	 * 
+	 *
 	 * @param handler The networking event handler.
 	 */
 	public ServiceChannelInitializer(ApolloHandler handler) {

@@ -10,7 +10,7 @@ import org.apollo.util.BufferUtil;
 
 /**
  * Decodes item data from the {@code obj.dat} file into {@link ItemDefinition}s.
- * 
+ *
  * @author Graham
  */
 public final class ItemDefinitionDecoder {
@@ -22,7 +22,7 @@ public final class ItemDefinitionDecoder {
 
 	/**
 	 * Creates the item definition decoder.
-	 * 
+	 *
 	 * @param fs The indexed file system.
 	 */
 	public ItemDefinitionDecoder(IndexedFileSystem fs) {
@@ -31,7 +31,7 @@ public final class ItemDefinitionDecoder {
 
 	/**
 	 * Decodes the item definitions.
-	 * 
+	 *
 	 * @return The item definitions.
 	 * @throws IOException If an I/O error occurs.
 	 */
@@ -58,7 +58,7 @@ public final class ItemDefinitionDecoder {
 
 	/**
 	 * Decodes a single definition.
-	 * 
+	 *
 	 * @param id The item's id.
 	 * @param buffer The buffer.
 	 * @return The {@link ItemDefinition}.

@@ -24,7 +24,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * The {@link LoginService} manages {@link LoginRequest}s.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -42,7 +42,7 @@ public final class LoginService extends Service {
 
 	/**
 	 * Creates the login service.
-	 * 
+	 *
 	 * @param world The {@link World} to log Players in to.
 	 * @throws Exception If an error occurs.
 	 */
@@ -53,7 +53,7 @@ public final class LoginService extends Service {
 
 	/**
 	 * Initialises the login service.
-	 * 
+	 *
 	 * @throws SAXException If there is an error parsing the XML file.
 	 * @throws IOException If there is an error accessing the file.
 	 * @throws ReflectiveOperationException If the {@link PlayerSerializer} implementation could not be created.
@@ -89,7 +89,7 @@ public final class LoginService extends Service {
 
 	/**
 	 * Submits a login request.
-	 * 
+	 *
 	 * @param session The session submitting this request.
 	 * @param request The login request.
 	 */
@@ -105,7 +105,7 @@ public final class LoginService extends Service {
 
 	/**
 	 * Submits a save request.
-	 * 
+	 *
 	 * @param session The session submitting this request.
 	 * @param player The player to save.
 	 */

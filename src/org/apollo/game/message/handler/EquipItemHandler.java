@@ -14,13 +14,13 @@ import org.apollo.util.LanguageUtil;
 
 /**
  * A {@link MessageHandler} that equips items.
- * 
+ *
  * @author Major
  * @author Graham
  * @author Ryley
  */
 public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
-	
+
 	/**
 	 * The option used when equipping an item.
 	 */
@@ -98,8 +98,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 			return;
 		}
 
-		if (definition.getSlot() == EquipmentConstants.SHIELD && weapon != null
-				&& EquipmentDefinition.lookup(weapon.getId()).isTwoHanded()) {
+		if (definition.getSlot() == EquipmentConstants.SHIELD && weapon != null && EquipmentDefinition.lookup(weapon.getId()).isTwoHanded()) {
 			equipment.set(EquipmentConstants.SHIELD, inventory.reset(inventorySlot));
 			inventory.add(equipment.reset(EquipmentConstants.WEAPON));
 			return;

@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 
 /**
  * A class that parses the {@code messages.xml} file to produce {@link MessageHandlerChainSet}s.
- * 
+ *
  * @author Graham
  */
 public final class MessageHandlerChainSetParser {
@@ -31,7 +31,7 @@ public final class MessageHandlerChainSetParser {
 
 	/**
 	 * Creates the message chain parser.
-	 * 
+	 *
 	 * @param is The source {@link InputStream}.
 	 * @throws SAXException If a SAX error occurs.
 	 */
@@ -41,7 +41,7 @@ public final class MessageHandlerChainSetParser {
 
 	/**
 	 * Parses the XML and produces a group of {@link MessageHandlerChain}s.
-	 * 
+	 *
 	 * @param world The {@link World} this MessageHandlerChainGroup is for.
 	 * @return A {@link MessageHandlerChainSet}.
 	 * @throws IOException If an I/O error occurs.

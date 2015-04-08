@@ -4,7 +4,7 @@ import org.apollo.game.model.Animation;
 
 /**
  * The animation {@link SynchronizationBlock}. Both npcs and players can utilise this block.
- * 
+ *
  * @author Graham
  */
 public final class AnimationBlock extends SynchronizationBlock {
@@ -16,7 +16,7 @@ public final class AnimationBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates the animation block.
-	 * 
+	 *
 	 * @param animation The animation.
 	 */
 	AnimationBlock(Animation animation) {
@@ -25,7 +25,7 @@ public final class AnimationBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the {@link Animation}.
-	 * 
+	 *
 	 * @return The animation.
 	 */
 	public Animation getAnimation() {

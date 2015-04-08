@@ -4,14 +4,14 @@ import org.apollo.game.model.Position;
 
 /**
  * A heuristic used by the A* algorithm.
- * 
+ *
  * @author Major
  */
 abstract class Heuristic {
 
 	/**
 	 * Estimates the value for this heuristic.
-	 * 
+	 *
 	 * @param current The current {@link Position}.
 	 * @param target The target position.
 	 * @return The heuristic value.

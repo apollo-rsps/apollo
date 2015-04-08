@@ -2,7 +2,7 @@ package org.apollo.game.model.inter.dialogue;
 
 /**
  * An adapter for the {@link DialogueListener}.
- * 
+ *
  * @author Chris Fletcher
  */
 public abstract class DialogueAdapter implements DialogueListener {

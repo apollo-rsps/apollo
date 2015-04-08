@@ -5,7 +5,7 @@ import org.apollo.game.model.Position;
 
 /**
  * A {@link Message} sent by the client when an item is used on an object.
- * 
+ *
  * @author Major
  */
 public final class ItemOnObjectMessage extends InventoryItemMessage {
@@ -22,7 +22,7 @@ public final class ItemOnObjectMessage extends InventoryItemMessage {
 
 	/**
 	 * Creates an item on object message.
-	 * 
+	 *
 	 * @param interfaceId The interface id.
 	 * @param itemId The item id.
 	 * @param itemSlot The slot the item is in.
@@ -33,12 +33,12 @@ public final class ItemOnObjectMessage extends InventoryItemMessage {
 	public ItemOnObjectMessage(int interfaceId, int itemId, int itemSlot, int objectId, int x, int y) {
 		super(0, interfaceId, itemId, itemSlot);
 		this.objectId = objectId;
-		this.position = new Position(x, y);
+		position = new Position(x, y);
 	}
 
 	/**
 	 * Gets the object id.
-	 * 
+	 *
 	 * @return The object id.
 	 */
 	public int getObjectId() {
@@ -47,7 +47,7 @@ public final class ItemOnObjectMessage extends InventoryItemMessage {
 
 	/**
 	 * Gets the position of the object.
-	 * 
+	 *
 	 * @return The position.
 	 */
 	public Position getPosition() {

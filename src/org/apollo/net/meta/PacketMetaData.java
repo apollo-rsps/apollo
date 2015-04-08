@@ -4,14 +4,14 @@ import com.google.common.base.Preconditions;
 
 /**
  * A class containing meta data for a single type of packet.
- * 
+ *
  * @author Graham
  */
 public final class PacketMetaData {
 
 	/**
 	 * Creates packet meta data for a fixed-length packet.
-	 * 
+	 *
 	 * @param length The length of the packet.
 	 * @return The packet meta data.
 	 * @throws IllegalArgumentException If {@code length} is less than 0.
@@ -23,7 +23,7 @@ public final class PacketMetaData {
 
 	/**
 	 * Creates a packet meta data object for a variable byte length packet.
-	 * 
+	 *
 	 * @return The packet meta data object.
 	 */
 	public static PacketMetaData createVariableByte() {
@@ -32,7 +32,7 @@ public final class PacketMetaData {
 
 	/**
 	 * Creates a packet meta data object for a variable short length packet.
-	 * 
+	 *
 	 * @return The packet meta data object.
 	 */
 	public static PacketMetaData createVariableShort() {
@@ -52,7 +52,7 @@ public final class PacketMetaData {
 	/**
 	 * Creates the packet meta data object. This should not be called directly. Use the {@link #createFixed},
 	 * {@link #createVariableByte}, and {@link #createVariableShort} methods instead!
-	 * 
+	 *
 	 * @param type The type of packet.
 	 * @param length The length of the packet.
 	 */
@@ -63,7 +63,7 @@ public final class PacketMetaData {
 
 	/**
 	 * Gets the length of this packet.
-	 * 
+	 *
 	 * @return The length of this packet.
 	 * @throws IllegalStateException If the packet is not a fixed-size packet.
 	 */
@@ -74,7 +74,7 @@ public final class PacketMetaData {
 
 	/**
 	 * Gets the type of packet.
-	 * 
+	 *
 	 * @return The type of packet.
 	 */
 	public PacketType getType() {

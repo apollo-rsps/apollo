@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SetWidgetPlayerModelMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 final class SetWidgetPlayerModelMessageEncoder extends MessageEncoder<SetWidgetPlayerModelMessage> {

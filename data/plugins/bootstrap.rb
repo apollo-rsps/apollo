@@ -177,16 +177,15 @@ def on_message(args, proc)
   numbers = [ 'first', 'second', 'third', 'fourth', 'fifth' ]
   message = args[0]; option = 0
 
-  # TODO
-  # numbers.each_index do |index|
-  #   number = numbers[index]
-  #
-  #   if message.to_s.start_with?(number)
-  #     option = index + 1
-  #     message = message[number.length + 1, message.length].to_sym
-  #     break
-  #   end
-  # end
+  numbers.each_index do |index|
+    number = numbers[index]
+  
+    if message.to_s.start_with?(number)
+      option = index + 1
+      message = message[number.length + 1, message.length].to_sym
+      break
+    end
+  end
 
   
   class_name = message.to_s.camelize.concat('Message')

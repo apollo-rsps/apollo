@@ -2,7 +2,7 @@ package org.apollo.net.codec.handshake;
 
 /**
  * A handshake message in the service handshake protocol.
- * 
+ *
  * @author Graham
  */
 public final class HandshakeMessage {
@@ -14,7 +14,7 @@ public final class HandshakeMessage {
 
 	/**
 	 * Creates the handshake message.
-	 * 
+	 *
 	 * @param serviceId The service id.
 	 */
 	public HandshakeMessage(int serviceId) {
@@ -23,7 +23,7 @@ public final class HandshakeMessage {
 
 	/**
 	 * Gets the service id.
-	 * 
+	 *
 	 * @return The service id.
 	 */
 	public int getServiceId() {

@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * Represents the appearance of a player.
- * 
+ *
  * @author Graham
  */
 public final class Appearance {
@@ -34,7 +34,7 @@ public final class Appearance {
 
 	/**
 	 * Creates the appearance with the specified gender, style and colors.
-	 * 
+	 *
 	 * @param gender The gender.
 	 * @param style The style.
 	 * @param colors The colors.
@@ -53,7 +53,7 @@ public final class Appearance {
 
 	/**
 	 * Gets the player's colors.
-	 * 
+	 *
 	 * @return The player's colors.
 	 */
 	public int[] getColors() {
@@ -62,7 +62,7 @@ public final class Appearance {
 
 	/**
 	 * Gets the gender of the player.
-	 * 
+	 *
 	 * @return The gender of the player.
 	 */
 	public Gender getGender() {
@@ -71,7 +71,7 @@ public final class Appearance {
 
 	/**
 	 * Gets the player's styles.
-	 * 
+	 *
 	 * @return The player's styles.
 	 */
 	public int[] getStyle() {
@@ -81,7 +81,7 @@ public final class Appearance {
 
 	/**
 	 * Checks if the player is female.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isFemale() {
@@ -90,7 +90,7 @@ public final class Appearance {
 
 	/**
 	 * Checks if the player is male.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isMale() {

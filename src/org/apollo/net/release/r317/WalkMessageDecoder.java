@@ -11,7 +11,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link WalkMessage}.
- * 
+ *
  * @author Graham
  */
 public final class WalkMessageDecoder extends MessageDecoder<WalkMessage> {

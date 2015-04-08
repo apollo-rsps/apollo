@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.Mob;
 
 /**
  * An @{link Action} which fires when a distance requirement is met.
- * 
+ *
  * @author Blake
  * @author Graham
  * @param <T> The type of {@link Mob}.
@@ -39,7 +39,7 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 
 	/**
 	 * Creates a new DistancedAction.
-	 * 
+	 *
 	 * @param delay The delay between executions once the distance threshold is reached.
 	 * @param immediate Whether or not this action fires immediately after the distance threshold is reached.
 	 * @param mob The mob.

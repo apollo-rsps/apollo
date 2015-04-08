@@ -2,7 +2,7 @@ package org.apollo.util.plugin;
 
 /**
  * An {@link Exception} thrown when a dependency cannot be resolved, or when there is a circular dependency.
- * 
+ *
  * @author Graham
  */
 public final class DependencyException extends Exception {
@@ -14,7 +14,7 @@ public final class DependencyException extends Exception {
 
 	/**
 	 * Creates the dependency exception.
-	 * 
+	 *
 	 * @param message The message describing what happened.
 	 */
 	public DependencyException(String message) {

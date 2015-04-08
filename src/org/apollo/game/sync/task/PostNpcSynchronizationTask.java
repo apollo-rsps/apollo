@@ -4,7 +4,7 @@ import org.apollo.game.model.entity.Npc;
 
 /**
  * A {@link SynchronizationTask} which does post-synchronization work for the specified {@link Npc}.
- * 
+ *
  * @author Major
  */
 public final class PostNpcSynchronizationTask extends SynchronizationTask {
@@ -16,7 +16,7 @@ public final class PostNpcSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Creates the {@link PostNpcSynchronizationTask} for the specified player.
-	 * 
+	 *
 	 * @param npc The npc.
 	 */
 	public PostNpcSynchronizationTask(Npc npc) {

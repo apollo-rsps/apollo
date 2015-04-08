@@ -39,7 +39,7 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 
 		builder.put(DataType.BYTE, region.getLocalY(lastKnownRegion));
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, region.getLocalX(lastKnownRegion));
-        System.out.println("Grum: local x: " + lastKnownRegion.getLocalX(region) + ", local y: " + lastKnownRegion.getLocalY(region));
+		System.out.println("Grum: local x: " + lastKnownRegion.getLocalX(region) + ", local y: " + lastKnownRegion.getLocalY(region));
 
 		for (RegionUpdateMessage update : message.getMessages()) {
 			System.out.println("==== Sending " + update + " as part of grum");

@@ -10,7 +10,7 @@ import org.jruby.embed.ScriptingContainer;
 
 /**
  * A {@link PluginEnvironment} which uses Ruby.
- * 
+ *
  * @author Graham
  */
 public final class RubyPluginEnvironment implements PluginEnvironment {
@@ -27,7 +27,7 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 
 	/**
 	 * Creates and bootstraps the Ruby plugin environment.
-	 * 
+	 *
 	 * @param world The {@link World} this RubyPluginEnvironment is for.
 	 * @throws IOException If an I/O error occurs during bootstrapping.
 	 */
@@ -48,7 +48,7 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 
 	/**
 	 * Parses the bootstrapper.
-	 * 
+	 *
 	 * @throws IOException If an I/O error occurs.
 	 */
 	private void parseBootstrapper() throws IOException {

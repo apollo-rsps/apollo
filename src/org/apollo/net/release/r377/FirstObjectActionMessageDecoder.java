@@ -11,7 +11,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link FirstObjectActionMessage}.
- * 
+ *
  * @author Graham
  */
 public final class FirstObjectActionMessageDecoder extends MessageDecoder<FirstObjectActionMessage> {

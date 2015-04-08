@@ -27,7 +27,7 @@ import org.apollo.security.IsaacRandomPair;
 
 /**
  * A login session.
- * 
+ *
  * @author Graham
  */
 public final class LoginSession extends Session {
@@ -44,13 +44,13 @@ public final class LoginSession extends Session {
 
 	/**
 	 * Creates a login session for the specified channel.
-	 * 
+	 *
 	 * @param ctx The context of the {@link ApolloHandler}.
 	 * @param serverContext The server context.
 	 */
 	public LoginSession(ChannelHandlerContext ctx, ServerContext serverContext) {
 		super(ctx.channel());
-		this.channelContext = ctx;
+		channelContext = ctx;
 		this.serverContext = serverContext;
 	}
 
@@ -61,7 +61,7 @@ public final class LoginSession extends Session {
 
 	/**
 	 * Gets the release.
-	 * 
+	 *
 	 * @return The release.
 	 */
 	public Release getRelease() {
@@ -70,7 +70,7 @@ public final class LoginSession extends Session {
 
 	/**
 	 * Handles a login request.
-	 * 
+	 *
 	 * @param request The login request.
 	 */
 	private void handleLoginRequest(LoginRequest request) {
@@ -80,7 +80,7 @@ public final class LoginSession extends Session {
 
 	/**
 	 * Handles a response from the login service.
-	 * 
+	 *
 	 * @param request The request this response corresponds to.
 	 * @param response The response.
 	 */
@@ -103,7 +103,7 @@ public final class LoginSession extends Session {
 				optional = Optional.empty();
 				rights = 0;
 
-				status = (registration == RegistrationStatus.ALREADY_ONLINE) ? LoginConstants.STATUS_ACCOUNT_ONLINE : LoginConstants.STATUS_SERVER_FULL;
+				status = registration == RegistrationStatus.ALREADY_ONLINE ? LoginConstants.STATUS_ACCOUNT_ONLINE : LoginConstants.STATUS_SERVER_FULL;
 			}
 		}
 

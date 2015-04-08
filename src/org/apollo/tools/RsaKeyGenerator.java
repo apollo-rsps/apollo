@@ -19,7 +19,7 @@ public final class RsaKeyGenerator {
 
 	/**
 	 * The entry point of the RsaKeyGenerator.
-	 * 
+	 *
 	 * @param args The application arguments.
 	 */
 	public static void main(String[] args) {
@@ -31,12 +31,11 @@ public final class RsaKeyGenerator {
 		do {
 			p = BigInteger.probablePrime(BIT_COUNT / 2, random);
 			q = BigInteger.probablePrime(BIT_COUNT / 2, random);
-			phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
+			phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
 
 			modulus = p.multiply(q);
 			privateKey = publicKey.modInverse(phi);
-		} while (modulus.bitLength() != BIT_COUNT || privateKey.bitLength() != BIT_COUNT
-				|| !phi.gcd(publicKey).equals(BigInteger.ONE));
+		} while (modulus.bitLength() != BIT_COUNT || privateKey.bitLength() != BIT_COUNT || !phi.gcd(publicKey).equals(BigInteger.ONE));
 
 		System.out.println("modulus: " + modulus);
 		System.out.println("public key: " + publicKey);

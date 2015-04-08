@@ -5,14 +5,14 @@ import java.util.Arrays;
 
 /**
  * An {@link Attribute} with a string value.
- * 
+ *
  * @author Major
  */
 public final class StringAttribute extends Attribute<String> {
 
 	/**
 	 * Creates the string attribute.
-	 * 
+	 *
 	 * @param value The value.
 	 */
 	public StringAttribute(String value) {
@@ -21,7 +21,7 @@ public final class StringAttribute extends Attribute<String> {
 
 	/**
 	 * Creates the string attribute.
-	 * 
+	 *
 	 * @param value The value.
 	 * @param symbol Whether or not the attribute is a symbol.
 	 */

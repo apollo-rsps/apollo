@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to open an interface and a sidebar.
- * 
+ *
  * @author Graham
  */
 public final class OpenInterfaceSidebarMessage extends Message {
@@ -21,7 +21,7 @@ public final class OpenInterfaceSidebarMessage extends Message {
 
 	/**
 	 * Creates the OpenInterfaceSidebarMessage.
-	 * 
+	 *
 	 * @param interfaceId The interface id.
 	 * @param sidebarId The sidebar id.
 	 */
@@ -32,7 +32,7 @@ public final class OpenInterfaceSidebarMessage extends Message {
 
 	/**
 	 * Gets the interface id.
-	 * 
+	 *
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
@@ -41,7 +41,7 @@ public final class OpenInterfaceSidebarMessage extends Message {
 
 	/**
 	 * Gets the sidebar id.
-	 * 
+	 *
 	 * @return The sidebar id.
 	 */
 	public int getSidebarId() {

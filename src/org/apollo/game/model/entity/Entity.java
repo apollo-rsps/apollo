@@ -8,7 +8,7 @@ import org.apollo.game.model.area.update.UpdateOperation;
 
 /**
  * Represents an in-game entity, such as a mob, object, projectile, etc.
- * 
+ *
  * @author Major
  */
 public abstract class Entity {
@@ -50,7 +50,7 @@ public abstract class Entity {
 
 		/**
 		 * Returns whether or not this EntityType is for a Mob.
-		 * 
+		 *
 		 * @return {@code true} if this EntityType is for a Mob, otherwise {@code false}.
 		 */
 		public boolean isMob() {
@@ -71,7 +71,7 @@ public abstract class Entity {
 
 	/**
 	 * Creates the Entity.
-	 * 
+	 *
 	 * @param world The {@link World} containing the Entity.
 	 * @param position The {@link Position} of the Entity.
 	 */
@@ -85,14 +85,14 @@ public abstract class Entity {
 
 	/**
 	 * Gets the {@link EntityType} of this entity.
-	 * 
+	 *
 	 * @return The entity type.
 	 */
 	public abstract EntityType getEntityType();
 
 	/**
 	 * Gets the {@link Position} of this entity.
-	 * 
+	 *
 	 * @return The position.
 	 */
 	public final Position getPosition() {
@@ -101,7 +101,7 @@ public abstract class Entity {
 
 	/**
 	 * Gets the {@link World} this Entity is in.
-	 * 
+	 *
 	 * @return The World.
 	 */
 	public World getWorld() {
@@ -113,7 +113,7 @@ public abstract class Entity {
 
 	/**
 	 * Gets this Entity, as an {@link UpdateOperation} of a {@link Region}.
-	 * 
+	 *
 	 * @param region The Region.
 	 * @param type The EntityUpdateType.
 	 * @return The UpdateOperation.

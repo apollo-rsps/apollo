@@ -12,7 +12,7 @@ import org.apollo.fs.IndexedFileSystem;
 /**
  * A {@link ResourceProvider} which maps virtual resources (such as {@code /media}) to files in an
  * {@link IndexedFileSystem}.
- * 
+ *
  * @author Graham
  */
 public final class VirtualResourceProvider implements ResourceProvider {

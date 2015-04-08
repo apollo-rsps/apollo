@@ -6,7 +6,7 @@ import org.apollo.game.model.area.RegionCoordinates;
 
 /**
  * A {@link Message} sent to the client to set the coordinates of the Region currently being updated.
- * 
+ *
  * @author Major
  */
 public final class SetUpdatedRegionMessage extends Message {
@@ -23,7 +23,7 @@ public final class SetUpdatedRegionMessage extends Message {
 
 	/**
 	 * Creates the SetUpdatedRegionMessage.
-	 * 
+	 *
 	 * @param player The {@link Position} of the Player this {@link Message} is being sent to.
 	 * @param region The {@link RegionCoordinates} of the Region being set.
 	 */
@@ -34,7 +34,7 @@ public final class SetUpdatedRegionMessage extends Message {
 
 	/**
 	 * Gets the {@link Position} of the Player this {@link Message} is being sent to..
-	 * 
+	 *
 	 * @return The Position.
 	 */
 	public Position getPlayerPosition() {
@@ -43,7 +43,7 @@ public final class SetUpdatedRegionMessage extends Message {
 
 	/**
 	 * Gets the {@link Position} of the Region being cleared.
-	 * 
+	 *
 	 * @return The Position.
 	 */
 	public Position getRegionPosition() {

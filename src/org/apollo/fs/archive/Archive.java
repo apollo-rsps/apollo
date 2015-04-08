@@ -9,14 +9,14 @@ import org.apollo.util.CompressionUtil;
 
 /**
  * Represents an archive.
- * 
+ *
  * @author Graham
  */
 public final class Archive {
 
 	/**
 	 * Decodes the archive in the specified buffer.
-	 * 
+	 *
 	 * @param buffer The buffer.
 	 * @return The archive.
 	 * @throws IOException If there is an error decompressing the archive.
@@ -72,7 +72,7 @@ public final class Archive {
 
 	/**
 	 * Creates a new archive.
-	 * 
+	 *
 	 * @param entries The entries in this archive.
 	 */
 	public Archive(ArchiveEntry[] entries) {
@@ -81,7 +81,7 @@ public final class Archive {
 
 	/**
 	 * Gets an {@link ArchiveEntry} by its name.
-	 * 
+	 *
 	 * @param name The name.
 	 * @return The entry.
 	 * @throws FileNotFoundException If the entry could not be found.
@@ -99,7 +99,7 @@ public final class Archive {
 
 	/**
 	 * Hashes the specified string into an integer used to identify an {@link ArchiveEntry}.
-	 * 
+	 *
 	 * @param name The name of the entry.
 	 * @return The hash.
 	 */

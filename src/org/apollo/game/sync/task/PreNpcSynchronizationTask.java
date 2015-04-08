@@ -4,7 +4,7 @@ import org.apollo.game.model.entity.Npc;
 
 /**
  * A {@link SynchronizationTask} which does pre-synchronization work for the specified npc.
- * 
+ *
  * @author Major
  */
 public final class PreNpcSynchronizationTask extends SynchronizationTask {
@@ -16,7 +16,7 @@ public final class PreNpcSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Creates the {@link PreNpcSynchronizationTask} for the specified npc.
-	 * 
+	 *
 	 * @param npc The npc.
 	 */
 	public PreNpcSynchronizationTask(Npc npc) {

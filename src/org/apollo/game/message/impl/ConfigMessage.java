@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to adjust a certain config or attribute setting.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class ConfigMessage extends Message {
@@ -21,7 +21,7 @@ public final class ConfigMessage extends Message {
 
 	/**
 	 * Creates a new config message.
-	 * 
+	 *
 	 * @param id The config's identifier.
 	 * @param value The value.
 	 */
@@ -32,7 +32,7 @@ public final class ConfigMessage extends Message {
 
 	/**
 	 * Gets the config's identifier.
-	 * 
+	 *
 	 * @return The config id.
 	 */
 	public int getId() {
@@ -41,7 +41,7 @@ public final class ConfigMessage extends Message {
 
 	/**
 	 * Gets the config's value.
-	 * 
+	 *
 	 * @return The config value.
 	 */
 	public int getValue() {

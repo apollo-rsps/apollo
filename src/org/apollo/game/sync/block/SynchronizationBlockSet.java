@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * A specialized collection of {@link SynchronizationBlock}s.
- * 
+ *
  * @author Graham
  */
 public final class SynchronizationBlockSet implements Cloneable {
@@ -17,7 +17,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 
 	/**
 	 * Adds a {@link SynchronizationBlock}.
-	 * 
+	 *
 	 * @param block The block to add.
 	 */
 	public void add(SynchronizationBlock block) {
@@ -41,7 +41,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 
 	/**
 	 * Checks if this set contains the specified {@link SynchronizationBlock}.
-	 * 
+	 *
 	 * @param clazz The block's class.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -51,7 +51,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 
 	/**
 	 * Gets a {@link SynchronizationBlock} from this set.
-	 * 
+	 *
 	 * @param clazz The block's class.
 	 * @return The block.
 	 */
@@ -62,7 +62,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 
 	/**
 	 * Removes a {@link SynchronizationBlock} from this set.
-	 * 
+	 *
 	 * @param clazz The block's class.
 	 * @return The removed block.
 	 */
@@ -73,7 +73,7 @@ public final class SynchronizationBlockSet implements Cloneable {
 
 	/**
 	 * Gets the size of this set.
-	 * 
+	 *
 	 * @return The size.
 	 */
 	public int size() {

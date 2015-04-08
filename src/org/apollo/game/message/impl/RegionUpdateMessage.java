@@ -34,7 +34,7 @@ public abstract class RegionUpdateMessage extends Message implements Comparable<
 
 	/**
 	 * Gets the priority of this RegionUpdateMessage, to use when sorting.
-	 * 
+	 *
 	 * @return The priority. Should be either 1 (low) or 0 (high).
 	 */
 	public abstract int priority();

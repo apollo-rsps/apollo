@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link ServerChatMessage}.
- * 
+ *
  * @author Graham
  */
 public final class ServerMessageMessageEncoder extends MessageEncoder<ServerChatMessage> {

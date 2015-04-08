@@ -5,7 +5,7 @@ import org.apollo.game.model.Position;
 
 /**
  * A {@link Message} sent by the client to pick up an item on a tile.
- * 
+ *
  * @author Major
  */
 public final class TakeTileItemMessage extends Message {
@@ -22,7 +22,7 @@ public final class TakeTileItemMessage extends Message {
 
 	/**
 	 * Creates a new take tile item message.
-	 * 
+	 *
 	 * @param id The id of the item.
 	 * @param position The position of the tile.
 	 */
@@ -33,7 +33,7 @@ public final class TakeTileItemMessage extends Message {
 
 	/**
 	 * Gets the id of the item.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {
@@ -42,7 +42,7 @@ public final class TakeTileItemMessage extends Message {
 
 	/**
 	 * Gets the position of the tile.
-	 * 
+	 *
 	 * @return The position.
 	 */
 	public Position getPosition() {

@@ -7,7 +7,7 @@ import org.apollo.game.model.Position;
  * A {@link Message} sent by the client that represents some sort of action on an object. Note that the actual message
  * sent by the client is one of the five object action messages, but this is the message that should be intercepted (and
  * the option verified).
- * 
+ *
  * @author Graham
  */
 public abstract class ObjectActionMessage extends Message {
@@ -29,7 +29,7 @@ public abstract class ObjectActionMessage extends Message {
 
 	/**
 	 * Creates a new object action message.
-	 * 
+	 *
 	 * @param option The option number.
 	 * @param id The id of the object.
 	 * @param position The position of the object.
@@ -42,7 +42,7 @@ public abstract class ObjectActionMessage extends Message {
 
 	/**
 	 * Gets the id of the object.
-	 * 
+	 *
 	 * @return The id of the object.
 	 */
 	public int getId() {
@@ -51,7 +51,7 @@ public abstract class ObjectActionMessage extends Message {
 
 	/**
 	 * Gets the option number.
-	 * 
+	 *
 	 * @return The option number.
 	 */
 	public int getOption() {
@@ -60,7 +60,7 @@ public abstract class ObjectActionMessage extends Message {
 
 	/**
 	 * Gets the position of the object.
-	 * 
+	 *
 	 * @return The position of the object.
 	 */
 	public Position getPosition() {

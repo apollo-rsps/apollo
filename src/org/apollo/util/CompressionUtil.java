@@ -15,14 +15,14 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream
 
 /**
  * A utility class for performing compression/decompression.
- * 
+ *
  * @author Graham
  */
 public final class CompressionUtil {
 
 	/**
 	 * Bzip2s the specified array, removing the header.
-	 * 
+	 *
 	 * @param uncompressed The uncompressed array.
 	 * @return The compressed array.
 	 * @throws IOException If there is an error compressing the array.
@@ -42,7 +42,7 @@ public final class CompressionUtil {
 
 	/**
 	 * Gzips the specified array.
-	 * 
+	 *
 	 * @param uncompressed The uncompressed array.
 	 * @return The compressed array.
 	 * @throws IOException If there is an error compressing the array.
@@ -58,7 +58,7 @@ public final class CompressionUtil {
 
 	/**
 	 * Debzip2s the compressed array and places the result into the decompressed array.
-	 * 
+	 *
 	 * @param compressed The compressed array, <strong>without</strong> the header.
 	 * @param decompressed The decompressed array.
 	 * @throws IOException If there is an error decompressing the array.
@@ -78,7 +78,7 @@ public final class CompressionUtil {
 
 	/**
 	 * Degzips the compressed array and places the results into the decompressed array.
-	 * 
+	 *
 	 * @param compressed The compressed array.
 	 * @param decompressed The decompressed array.
 	 * @throws IOException If an I/O error occurs.
@@ -91,7 +91,7 @@ public final class CompressionUtil {
 
 	/**
 	 * Degzips the compressed {@link ByteBuffer} and returns the result as a byte array.
-	 * 
+	 *
 	 * @param compressed The compressed buffer.
 	 * @return The decompressed array.
 	 * @throws IOException If there is an error decompressing the buffer.

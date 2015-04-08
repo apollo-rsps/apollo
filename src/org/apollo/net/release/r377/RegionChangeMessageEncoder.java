@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link RegionChangeMessage}.
- * 
+ *
  * @author Graham
  */
 public final class RegionChangeMessageEncoder extends MessageEncoder<RegionChangeMessage> {
