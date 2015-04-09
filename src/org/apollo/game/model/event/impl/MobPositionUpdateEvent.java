@@ -6,9 +6,6 @@ import org.apollo.game.model.event.Event;
 
 /**
  * An {@link Event} created when a Mob's Position is being updated.
- * <p>
- * This Event intentionally ignores the result of execution - it should not be possible for a plugin to prevent this
- * Event from happening, only to listen for it.
  *
  * @author Major
  */
