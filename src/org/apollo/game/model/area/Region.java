@@ -75,7 +75,7 @@ public final class Region {
     /**
      * The Set containing RegionUpdateMessages which can be sent to add every non-Mob Entity in this Region.
      */
-    private final List<List<RegionUpdateMessage>> snapshots = new ArrayList<>(Position.HEIGHT_LEVELS);
+    private final List<Map<Entity, RegionUpdateMessage>> snapshots = new ArrayList<>(Position.HEIGHT_LEVELS);
 
     /**
      * The Set containing UpdateOperations.
@@ -102,7 +102,7 @@ public final class Region {
         listeners.add(new UpdateRegionListener());
 
         for (int height = 0; height < Position.HEIGHT_LEVELS; height++) {
-            snapshots.add(new ArrayList<>());
+            snapshots.add(new HashMap<>());
             updates.add(new ArrayList<>(DEFAULT_SET_SIZE));
         }
     }
@@ -220,7 +220,7 @@ public final class Region {
      * @return The Set of RegionUpdateMessages.
      */
     public List<RegionUpdateMessage> getSnapshot(int height) {
-        List<RegionUpdateMessage> copy = new ArrayList<>(snapshots.get(height));
+        List<RegionUpdateMessage> copy = new ArrayList<>(snapshots.get(height).values());
         Collections.sort(copy);
         return ImmutableList.copyOf(copy);
     }
@@ -313,9 +313,10 @@ public final class Region {
         int height = entity.getPosition().getHeight();
 
         updates.get(height).add(message);
+        snapshots.get(height).remove(entity);
 
         if (entity.getEntityType() != EntityType.STATIC_OBJECT || type == EntityUpdateType.REMOVE) {
-            snapshots.get(height).add(message);
+            snapshots.get(height).put(entity, message);
         }
     }
 
