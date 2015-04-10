@@ -1,13 +1,6 @@
 package org.apollo.game.model;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
-
+import com.google.common.base.Preconditions;
 import org.apollo.Service;
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.GameObjectDecoder;
@@ -37,7 +30,13 @@ import org.apollo.util.MobRepository;
 import org.apollo.util.NameUtil;
 import org.apollo.util.plugin.PluginManager;
 
-import com.google.common.base.Preconditions;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * The world class is a singleton which contains objects like the {@link MobRepository} for players and NPCs. It should
@@ -385,12 +384,12 @@ public final class World {
 	}
 
 	/**
-	 * Adds entities to regions in the {@link RegionRepository}.
+	 * Adds entities to regions in the {@link RegionRepository}. By default, we do not notify listeners.
 	 * 
 	 * @param entities The entities.
 	 */
 	private void placeEntities(Entity... entities) {
-		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity));
+		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity, false));
 	}
 
 }
