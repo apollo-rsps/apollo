@@ -315,7 +315,8 @@ public final class Region {
         updates.get(height).add(message);
         snapshots.get(height).remove(entity);
 
-        if (entity.getEntityType() != EntityType.STATIC_OBJECT || type == EntityUpdateType.REMOVE) {
+        if ((entity.getEntityType() == EntityType.STATIC_OBJECT && type == EntityUpdateType.REMOVE) ||
+                (entity.getEntityType() != EntityType.STATIC_OBJECT && type == EntityUpdateType.ADD)) {
             snapshots.get(height).put(entity, message);
         }
     }
