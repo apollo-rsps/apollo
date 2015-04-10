@@ -385,12 +385,12 @@ public final class World {
 	}
 
 	/**
-	 * Adds entities to regions in the {@link RegionRepository}.
+	 * Adds entities to regions in the {@link RegionRepository}. By default, we do not notify listeners.
 	 *
 	 * @param entities The entities.
 	 */
 	private void placeEntities(Entity... entities) {
-		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity));
+		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity, false));
 	}
 
 }
