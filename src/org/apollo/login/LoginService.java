@@ -115,7 +115,7 @@ public final class LoginService extends Service {
 	 * @throws IOException If some I/O exception occurs.
 	 */
 	private boolean requiresUpdate(LoginSession session, LoginRequest request) throws IOException {
-		Release release = session.getRelease();
+		Release release = getContext().getRelease();
 		if (release.getReleaseNumber() != request.getReleaseNumber()) {
 			return true;
 		}
