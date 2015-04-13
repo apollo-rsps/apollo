@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,8 @@ import org.apollo.net.release.Release;
 import org.apollo.net.release.r317.Release317;
 import org.apollo.util.plugin.PluginContext;
 import org.apollo.util.plugin.PluginManager;
+
+import com.google.common.base.Stopwatch;
 
 /**
  * The core class of the Apollo server.
@@ -43,8 +46,9 @@ public final class Server {
 	 * @param args The command-line arguments passed to the application.
 	 */
 	public static void main(String[] args) {
+		Stopwatch stopwatch = Stopwatch.createStarted();
+
 		try {
-			long start = System.currentTimeMillis();
 			Server server = new Server();
 			server.init(args.length == 1 ? args[0] : Release317.class.getName());
 
@@ -53,10 +57,11 @@ public final class Server {
 			SocketAddress jaggrab = new InetSocketAddress(NetworkConstants.JAGGRAB_PORT);
 
 			server.bind(service, http, jaggrab);
-			logger.fine("Starting apollo took " + (System.currentTimeMillis() - start) + " ms.");
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, "Error whilst starting server.", t);
 		}
+
+		logger.fine("Starting apollo took " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
 	}
 
 	/**
@@ -81,10 +86,8 @@ public final class Server {
 
 	/**
 	 * Creates the Apollo server.
-	 *
-	 * @throws Exception If an error occurs whilst creating services.
 	 */
-	public Server() throws Exception {
+	public Server() {
 		logger.info("Starting Apollo...");
 	}
 
@@ -98,14 +101,14 @@ public final class Server {
 	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
 		try {
 			logger.fine("Binding service listener to address: " + serviceAddress + "...");
-			serviceBootstrap.bind(serviceAddress).syncUninterruptibly();
+			serviceBootstrap.bind(serviceAddress).sync();
 
 			logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
-			httpBootstrap.bind(httpAddress).syncUninterruptibly();
+			httpBootstrap.bind(httpAddress).sync();
 
 			logger.fine("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
-			jagGrabBootstrap.bind(jagGrabAddress).syncUninterruptibly();
-		} catch (Exception e) {
+			jagGrabBootstrap.bind(jagGrabAddress).sync();
+		} catch (InterruptedException e) {
 			logger.log(Level.SEVERE, "Binding to a port failed: ensure apollo isn't already running.", e);
 			System.exit(1);
 		}

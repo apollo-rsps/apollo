@@ -1,5 +1,7 @@
 package org.apollo;
 
+import java.util.Objects;
+
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.net.release.Release;
 
@@ -32,12 +34,13 @@ public final class ServerContext {
 	 *
 	 * @param release The current release.
 	 * @param serviceManager The service manager.
+	 * @param fileSystem The indexed file system.
 	 */
-	ServerContext(Release release, ServiceManager serviceManager, IndexedFileSystem fileSystem) {
-		this.release = release;
-		this.serviceManager = serviceManager;
+	protected ServerContext(Release release, ServiceManager serviceManager, IndexedFileSystem fileSystem) {
+		this.release = Objects.requireNonNull(release);
+		this.serviceManager = Objects.requireNonNull(serviceManager);
 		this.serviceManager.setContext(this);
-		this.fileSystem = fileSystem;
+		this.fileSystem = Objects.requireNonNull(fileSystem);
 	}
 
 	/**
