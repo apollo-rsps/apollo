@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Phaser;
-import java.util.concurrent.ThreadFactory;
 
 import org.apollo.game.GameService;
 import org.apollo.game.message.impl.RegionUpdateMessage;
@@ -22,8 +21,7 @@ import org.apollo.game.sync.task.PreNpcSynchronizationTask;
 import org.apollo.game.sync.task.PrePlayerSynchronizationTask;
 import org.apollo.game.sync.task.SynchronizationTask;
 import org.apollo.util.MobRepository;
-
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.apollo.util.ThreadUtil;
 
 /**
  * An implementation of {@link ClientSynchronizer} which runs in a thread pool. A {@link Phaser} is used to ensure that
@@ -49,12 +47,10 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 
 	/**
 	 * Creates the parallel client synchronizer backed by a thread pool with a number of threads equal to the number of
-	 * processing cores available (this is found by the {@link Runtime#availableProcessors()} method.
+	 * processing cores available (this is found by the {@link ThreadUtil#AVAILABLE_PROCESSORS} method.
 	 */
 	public ParallelClientSynchronizer() {
-		int processors = Runtime.getRuntime().availableProcessors();
-		ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("ClientSynchronizer").build();
-		executor = Executors.newFixedThreadPool(processors, factory);
+		executor = Executors.newFixedThreadPool(ThreadUtil.AVAILABLE_PROCESSORS, ThreadUtil.build("ClientSynchronizer"));
 	}
 
 	@Override
