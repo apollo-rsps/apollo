@@ -7,6 +7,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.zip.CRC32;
 
 import com.google.common.base.Preconditions;
@@ -23,6 +24,11 @@ public final class IndexedFileSystem implements Closeable {
 	 * The cached CRC table.
 	 */
 	private ByteBuffer crcTable;
+
+	/**
+	 * The {@link #crcTable} represented as an {@code int} array.
+	 */
+	private int[] crcs;
 
 	/**
 	 * The data file.
@@ -141,6 +147,23 @@ public final class IndexedFileSystem implements Closeable {
 			}
 		}
 		throw new IllegalStateException("Cannot get CRC table from a writable file system.");
+	}
+
+	/**
+	 * Gets the CRC table as an {@code int} array.
+	 *
+	 * @return The CRC table as an {@code int} array.
+	 * @throws IOException If there is an error accessing files to create the table.
+	 */
+	public int[] getCrcs() throws IOException {
+		if (crcs != null) {
+			return crcs;
+		}
+
+		ByteBuffer buffer = getCrcTable();
+		crcs = new int[(buffer.remaining() / Integer.BYTES) - 1];
+		Arrays.setAll(crcs, crc -> buffer.getInt());
+		return crcs;
 	}
 
 	/**
