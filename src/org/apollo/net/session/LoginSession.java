@@ -5,6 +5,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.apollo.ServerContext;
@@ -72,8 +73,9 @@ public final class LoginSession extends Session {
 	 * Handles a login request.
 	 *
 	 * @param request The login request.
+	 * @throws IOException If some I/O exception occurs.
 	 */
-	private void handleLoginRequest(LoginRequest request) {
+	private void handleLoginRequest(LoginRequest request) throws IOException {
 		LoginService loginService = serverContext.getService(LoginService.class);
 		loginService.submitLoadRequest(this, request);
 	}
@@ -135,7 +137,7 @@ public final class LoginSession extends Session {
 	}
 
 	@Override
-	public void messageReceived(Object message) {
+	public void messageReceived(Object message) throws Exception {
 		if (message.getClass() == LoginRequest.class) {
 			handleLoginRequest((LoginRequest) message);
 		}

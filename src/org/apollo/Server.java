@@ -122,8 +122,9 @@ public final class Server {
 	public void init(String releaseClassName) throws Exception {
 		Class<?> clazz = Class.forName(releaseClassName);
 		Release release = (Release) clazz.newInstance();
+		int releaseNo = release.getReleaseNumber();
 
-		logger.info("Initialized release #" + release.getReleaseNumber() + ".");
+		logger.info("Initialized release #" + releaseNo + ".");
 
 		serviceBootstrap.group(loopGroup);
 		httpBootstrap.group(loopGroup);
@@ -131,7 +132,8 @@ public final class Server {
 
 		World world = new World();
 		ServiceManager serviceManager = new ServiceManager(world);
-		ServerContext context = new ServerContext(release, serviceManager);
+		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(releaseNo)), true);
+		ServerContext context = new ServerContext(release, serviceManager, fs);
 		ApolloHandler handler = new ApolloHandler(context);
 
 		ChannelInitializer<SocketChannel> serviceInitializer = new ServiceChannelInitializer(handler);
@@ -149,8 +151,6 @@ public final class Server {
 		PluginManager manager = new PluginManager(world, new PluginContext(context));
 		serviceManager.startAll();
 
-		int releaseNo = release.getReleaseNumber();
-		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(releaseNo)), true);
 		world.init(releaseNo, fs, manager);
 	}
 

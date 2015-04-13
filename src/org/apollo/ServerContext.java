@@ -1,5 +1,6 @@
 package org.apollo;
 
+import org.apollo.fs.IndexedFileSystem;
 import org.apollo.net.release.Release;
 
 /**
@@ -22,15 +23,21 @@ public final class ServerContext {
 	private final ServiceManager serviceManager;
 
 	/**
+	 * The IndexedFileSystem.
+	 */
+	private final IndexedFileSystem fileSystem;
+
+	/**
 	 * Creates a new server context.
 	 *
 	 * @param release The current release.
 	 * @param serviceManager The service manager.
 	 */
-	ServerContext(Release release, ServiceManager serviceManager) {
+	ServerContext(Release release, ServiceManager serviceManager, IndexedFileSystem fileSystem) {
 		this.release = release;
 		this.serviceManager = serviceManager;
 		this.serviceManager.setContext(this);
+		this.fileSystem = fileSystem;
 	}
 
 	/**
@@ -40,6 +47,15 @@ public final class ServerContext {
 	 */
 	public Release getRelease() {
 		return release;
+	}
+
+	/**
+	 * Gets the IndexeFileSystem
+	 *
+	 * @return The IndexedFileSystem.
+	 */
+	public IndexedFileSystem getFileSystem() {
+		return fileSystem;
 	}
 
 	/**

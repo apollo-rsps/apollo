@@ -3,6 +3,8 @@ package org.apollo.login;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -16,11 +18,10 @@ import org.apollo.net.codec.login.LoginRequest;
 import org.apollo.net.release.Release;
 import org.apollo.net.session.GameSession;
 import org.apollo.net.session.LoginSession;
+import org.apollo.util.ThreadUtil;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
-
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * The {@link LoginService} manages {@link LoginRequest}s.
@@ -33,7 +34,7 @@ public final class LoginService extends Service {
 	/**
 	 * The {@link ExecutorService} to which workers are submitted.
 	 */
-	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("LoginService").build());
+	private final ExecutorService executor = Executors.newCachedThreadPool(ThreadUtil.build("LoginService"));
 
 	/**
 	 * The current {@link PlayerSerializer}.
@@ -79,9 +80,6 @@ public final class LoginService extends Service {
 		this.serializer = (PlayerSerializer) clazz.getConstructor(World.class).newInstance(world);
 	}
 
-	/**
-	 * Starts the login service.
-	 */
 	@Override
 	public void start() {
 
@@ -92,15 +90,48 @@ public final class LoginService extends Service {
 	 *
 	 * @param session The session submitting this request.
 	 * @param request The login request.
+	 * @throws IOException If some I/O exception occurs.
 	 */
-	public void submitLoadRequest(LoginSession session, LoginRequest request) {
+	public void submitLoadRequest(LoginSession session, LoginRequest request) throws IOException {
+		int response = LoginConstants.STATUS_OK;
+
+		if (requiresUpdate(session, request)) {
+			response = LoginConstants.STATUS_GAME_UPDATED;
+		}
+
+		if (response == LoginConstants.STATUS_OK) {
+			executor.submit(new PlayerLoaderWorker(serializer, session, request));
+		} else {
+			session.handlePlayerLoaderResponse(request, new PlayerLoaderResponse(response));
+		}
+	}
+
+	/**
+	 * Checks if an update is required whenever a {@link Player} submits a login request.
+	 *
+	 * @param session The login session.
+	 * @param request The login request.
+	 * @return {@code true} if an update is required, otherwise return {@code false}.
+	 * @throws IOException If some I/O exception occurs.
+	 */
+	private boolean requiresUpdate(LoginSession session, LoginRequest request) throws IOException {
 		Release release = session.getRelease();
 		if (release.getReleaseNumber() != request.getReleaseNumber()) {
-			// TODO check archive 0 CRCs
-			session.handlePlayerLoaderResponse(request, new PlayerLoaderResponse(LoginConstants.STATUS_GAME_UPDATED));
-		} else {
-			executor.submit(new PlayerLoaderWorker(serializer, session, request));
+			return true;
 		}
+
+		ByteBuffer buffer = getContext().getFileSystem().getCrcTable();
+
+		int[] clientCrcs = request.getArchiveCrcs();
+		int[] serverCrcs = new int[clientCrcs.length];
+
+		Arrays.setAll(serverCrcs, crc -> buffer.getInt());
+
+		if (Arrays.equals(clientCrcs, serverCrcs)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
