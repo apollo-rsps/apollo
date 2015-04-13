@@ -3,7 +3,6 @@ package org.apollo.login;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -120,12 +119,8 @@ public final class LoginService extends Service {
 			return true;
 		}
 
-		ByteBuffer buffer = getContext().getFileSystem().getCrcTable();
-
 		int[] clientCrcs = request.getArchiveCrcs();
-		int[] serverCrcs = new int[clientCrcs.length];
-
-		Arrays.setAll(serverCrcs, crc -> buffer.getInt());
+		int[] serverCrcs = getContext().getFileSystem().getCrcs();
 
 		if (Arrays.equals(clientCrcs, serverCrcs)) {
 			return false;
