@@ -16,7 +16,6 @@ import org.apollo.game.message.Message;
 import org.apollo.game.message.MessageHandlerChainSet;
 import org.apollo.game.message.impl.LogoutMessage;
 import org.apollo.game.model.entity.Player;
-import org.apollo.util.CollectionUtil;
 
 /**
  * A game session.
@@ -84,13 +83,14 @@ public final class GameSession extends Session {
 	 * @param chainSet The {@link MessageHandlerChainSet}
 	 */
 	public void handlePendingMessages(MessageHandlerChainSet chainSet) {
-		CollectionUtil.pollAll(messageQueue, message -> {
+		Message message;
+		while ((message = messageQueue.poll()) != null) {
 			try {
 				chainSet.notify(player, message);
 			} catch (Exception reason) {
 				logger.log(Level.SEVERE, "Uncaught exception thrown while handling message: " + message, reason);
 			}
-		});
+		}
 	}
 
 	/**
