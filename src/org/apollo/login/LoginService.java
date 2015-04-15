@@ -33,7 +33,7 @@ public final class LoginService extends Service {
 	/**
 	 * The {@link ExecutorService} to which workers are submitted.
 	 */
-	private final ExecutorService executor = Executors.newCachedThreadPool(ThreadUtil.build("LoginService"));
+	private final ExecutorService executor = Executors.newCachedThreadPool(ThreadUtil.create("LoginService"));
 
 	/**
 	 * The current {@link PlayerSerializer}.

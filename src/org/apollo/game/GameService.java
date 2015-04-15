@@ -51,7 +51,8 @@ public final class GameService extends Service {
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.build("GameService"));
+	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(ThreadUtil
+			.create("GameService"));
 
 	/**
 	 * The {@link ClientSynchronizer}.
@@ -142,7 +143,8 @@ public final class GameService extends Service {
 
 	@Override
 	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
+		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
+				TimeUnit.MILLISECONDS);
 	}
 
 	/**

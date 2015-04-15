@@ -50,7 +50,7 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 	 * processing cores available (this is found by the {@link ThreadUtil#AVAILABLE_PROCESSORS} method.
 	 */
 	public ParallelClientSynchronizer() {
-		executor = Executors.newFixedThreadPool(ThreadUtil.AVAILABLE_PROCESSORS, ThreadUtil.build("ClientSynchronizer"));
+		executor = Executors.newFixedThreadPool(ThreadUtil.AVAILABLE_PROCESSORS, ThreadUtil.create("ClientSynchronizer"));
 	}
 
 	@Override
