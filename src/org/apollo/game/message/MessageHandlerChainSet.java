@@ -22,6 +22,7 @@ public final class MessageHandlerChainSet {
 	/**
 	 * Notifies the appropriate {@link MessageHandlerChain} that a {@link Message} has been received.
 	 * 
+	 * @param player The {@link Player} receiving the Message.
 	 * @param message The Message.
 	 * @return {@code true} if the Message propagated down the chain without being terminated or if the chain for the
 	 *         Message was not found, otherwise {@code false}.
