@@ -16,25 +16,26 @@ import org.apollo.util.CollectionUtil;
 public final class Scheduler {
 
 	/**
-	 * An {@link ArrayDeque} of tasks that are pending execution.
+	 * The Queue of tasks that are pending execution.
 	 */
-	private final Queue<ScheduledTask> pendingTasks = new ArrayDeque<>();
+	private final Queue<ScheduledTask> pending = new ArrayDeque<>();
 
 	/**
-	 * An {@link ArrayList} of currently active tasks.
+	 * The List of currently active tasks.
 	 */
-	private final List<ScheduledTask> tasks = new ArrayList<>();
+	private final List<ScheduledTask> active = new ArrayList<>();
 
 	/**
-	 * Called every pulse: executes tasks that are still pending, adds new tasks and stops old tasks.
+	 * Pulses the {@link Queue} of {@link ScheduledTask}s, removing those that are no longer running.
 	 */
 	public void pulse() {
-		CollectionUtil.pollAll(pendingTasks, tasks::add);
+		CollectionUtil.pollAll(pending, active::add);
 
-		for (Iterator<ScheduledTask> iterator = tasks.iterator(); iterator.hasNext();) {
+		for (Iterator<ScheduledTask> iterator = active.iterator(); iterator.hasNext();) {
 			ScheduledTask task = iterator.next();
 			task.pulse();
-			if (task.isRunning()) {
+
+			if (!task.isRunning()) {
 				iterator.remove();
 			}
 		}
@@ -47,7 +48,7 @@ public final class Scheduler {
 	 * @return {@code true} if the task was added successfully.
 	 */
 	public boolean schedule(ScheduledTask task) {
-		return pendingTasks.add(task);
+		return pending.add(task);
 	}
 
 }
