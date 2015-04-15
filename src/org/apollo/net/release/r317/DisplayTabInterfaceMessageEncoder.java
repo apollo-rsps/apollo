@@ -9,7 +9,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link DisplayTabInterfaceMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 final class DisplayTabInterfaceMessageEncoder extends MessageEncoder<DisplayTabInterfaceMessage> {

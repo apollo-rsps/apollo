@@ -10,14 +10,14 @@ import java.util.Objects;
 /**
  * A stateful implementation of a {@link ByteToMessageDecoder} which may be extended and used by other classes. The
  * current state is tracked by this class and is a user-specified enumeration.
- * 
+ *
  * The state may be changed by calling the {@link StatefulFrameDecoder#setState} method.
- * 
+ *
  * The current state is supplied as a parameter in the {@link StatefulFrameDecoder#decode} and
  * {@link StatefulFrameDecoder#decodeLast} methods.
- * 
+ *
  * This class is not thread safe: it is recommended that the state is only set in the decode methods overridden.
- * 
+ *
  * @author Graham
  * @param <T> The state enumeration.
  */
@@ -30,7 +30,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 
 	/**
 	 * Creates the stateful frame decoder with the specified initial state.
-	 * 
+	 *
 	 * @param state The initial state.
 	 * @throws NullPointerException If the state is {@code null}.
 	 */
@@ -40,7 +40,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 
 	/**
 	 * Sets a new state.
-	 * 
+	 *
 	 * @param state The new state.
 	 * @throws NullPointerException If the state is {@code null}.
 	 */
@@ -55,7 +55,7 @@ public abstract class StatefulFrameDecoder<T extends Enum<T>> extends ByteToMess
 
 	/**
 	 * Decodes the received packets into a frame.
-	 * 
+	 *
 	 * @param ctx The current context of this handler.
 	 * @param in The cumulative buffer, which may contain zero or more bytes.
 	 * @param out The {@link List} of objects to pass forward through the pipeline.

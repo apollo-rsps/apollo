@@ -8,7 +8,7 @@ import org.apollo.game.model.def.EquipmentDefinition;
 
 /**
  * A class that parses the {@code data/equipment-[release].dat} file to create an array of {@link EquipmentDefinition}s.
- * 
+ *
  * @author Graham
  */
 public final class EquipmentDefinitionParser {
@@ -20,7 +20,7 @@ public final class EquipmentDefinitionParser {
 
 	/**
 	 * Creates the equipment definition parser.
-	 * 
+	 *
 	 * @param is The input stream.
 	 */
 	public EquipmentDefinitionParser(InputStream is) {
@@ -29,7 +29,7 @@ public final class EquipmentDefinitionParser {
 
 	/**
 	 * Parses the input stream.
-	 * 
+	 *
 	 * @return The equipment definition array.
 	 * @throws IOException If an I/O error occurs.
 	 */

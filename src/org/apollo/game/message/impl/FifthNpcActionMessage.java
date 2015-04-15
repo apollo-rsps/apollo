@@ -2,7 +2,7 @@ package org.apollo.game.message.impl;
 
 /**
  * The fifth {@link NpcActionMessage}.
- * 
+ *
  * @author Major
  * @author Stuart
  */

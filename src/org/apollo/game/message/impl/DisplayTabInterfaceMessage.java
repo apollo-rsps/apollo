@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to change the currently displayed tab interface.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class DisplayTabInterfaceMessage extends Message {
@@ -16,7 +16,7 @@ public final class DisplayTabInterfaceMessage extends Message {
 
 	/**
 	 * Creates a new display tab interface message.
-	 * 
+	 *
 	 * @param tab The index of the tab to display.
 	 */
 	public DisplayTabInterfaceMessage(int tab) {
@@ -25,7 +25,7 @@ public final class DisplayTabInterfaceMessage extends Message {
 
 	/**
 	 * Gets the index of the tab to display.
-	 * 
+	 *
 	 * @return The tab index.
 	 */
 	public int getTab() {

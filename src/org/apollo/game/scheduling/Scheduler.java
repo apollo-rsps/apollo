@@ -10,7 +10,7 @@ import org.apollo.util.CollectionUtil;
 
 /**
  * A class which manages {@link ScheduledTask}s.
- * 
+ *
  * @author Graham
  */
 public final class Scheduler {
@@ -42,7 +42,7 @@ public final class Scheduler {
 
 	/**
 	 * Schedules a new task.
-	 * 
+	 *
 	 * @param task The task to schedule.
 	 * @return {@code true} if the task was added successfully.
 	 */

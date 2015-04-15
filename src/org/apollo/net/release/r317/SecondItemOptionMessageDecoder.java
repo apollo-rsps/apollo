@@ -9,7 +9,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link SecondItemOptionMessage}.
- * 
+ *
  * @author Graham
  */
 final class SecondItemOptionMessageDecoder extends MessageDecoder<SecondItemOptionMessage> {

@@ -5,7 +5,7 @@ import org.apollo.game.message.Message;
 /**
  * A {@link Message} sent to the client that changes the state of a hidden widget component (e.g. the special attack bar
  * on the weapon tab).
- * 
+ *
  * @author Chris Fletcher
  */
 public final class SetWidgetVisibilityMessage extends Message {
@@ -22,7 +22,7 @@ public final class SetWidgetVisibilityMessage extends Message {
 
 	/**
 	 * Creates the interface component state message.
-	 * 
+	 *
 	 * @param component The compononent id.
 	 * @param visible The flag for showing or hiding the component.
 	 */
@@ -33,7 +33,7 @@ public final class SetWidgetVisibilityMessage extends Message {
 
 	/**
 	 * Gets the id of the interface component.
-	 * 
+	 *
 	 * @return The component id.
 	 */
 	public int getWidgetId() {
@@ -42,7 +42,7 @@ public final class SetWidgetVisibilityMessage extends Message {
 
 	/**
 	 * Gets the visible flag.
-	 * 
+	 *
 	 * @return {@code true} if the component has been set to visible, {@code false} if not.
 	 */
 	public boolean isVisible() {

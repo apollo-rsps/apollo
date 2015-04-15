@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * A {@link MessageToMessageEncoder} for the JAGGRAB protocol.
- * 
+ *
  * @author Graham
  */
 public final class JagGrabResponseEncoder extends MessageToMessageEncoder<JagGrabResponse> {

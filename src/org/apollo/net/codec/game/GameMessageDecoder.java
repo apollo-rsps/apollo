@@ -11,7 +11,7 @@ import org.apollo.net.release.Release;
 
 /**
  * A {@link MessageToMessageDecoder} that decodes {@link GamePacket}s into {@link Message}s.
- * 
+ *
  * @author Graham
  */
 public final class GameMessageDecoder extends MessageToMessageDecoder<GamePacket> {
@@ -23,7 +23,7 @@ public final class GameMessageDecoder extends MessageToMessageDecoder<GamePacket
 
 	/**
 	 * Creates the game message decoder with the specified release.
-	 * 
+	 *
 	 * @param release The release.
 	 */
 	public GameMessageDecoder(Release release) {

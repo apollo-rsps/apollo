@@ -13,7 +13,7 @@ import org.apollo.net.meta.PacketType;
 
 /**
  * A {@link MessageToMessageEncoder} which encodes in-game packets.
- * 
+ *
  * @author Graham
  */
 public final class GamePacketEncoder extends MessageToMessageEncoder<GamePacket> {
@@ -25,7 +25,7 @@ public final class GamePacketEncoder extends MessageToMessageEncoder<GamePacket>
 
 	/**
 	 * Creates the {@link GamePacketEncoder}.
-	 * 
+	 *
 	 * @param random The random number generator.
 	 */
 	public GamePacketEncoder(IsaacRandom random) {

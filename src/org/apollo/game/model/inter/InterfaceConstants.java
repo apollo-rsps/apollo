@@ -2,7 +2,7 @@ package org.apollo.game.model.inter;
 
 /**
  * Contains interface-related constants.
- * 
+ *
  * @author Major
  */
 public class InterfaceConstants {

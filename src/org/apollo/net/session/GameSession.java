@@ -16,11 +16,10 @@ import org.apollo.game.message.Message;
 import org.apollo.game.message.MessageHandlerChainSet;
 import org.apollo.game.message.impl.LogoutMessage;
 import org.apollo.game.model.entity.Player;
-import org.apollo.util.CollectionUtil;
 
 /**
  * A game session.
- * 
+ *
  * @author Graham
  */
 public final class GameSession extends Session {
@@ -47,7 +46,7 @@ public final class GameSession extends Session {
 
 	/**
 	 * Creates a login session for the specified channel.
-	 * 
+	 *
 	 * @param channel The channel.
 	 * @param context The server context.
 	 * @param player The player.
@@ -65,7 +64,7 @@ public final class GameSession extends Session {
 
 	/**
 	 * Encodes and dispatches the specified message.
-	 * 
+	 *
 	 * @param message The message.
 	 */
 	public void dispatchMessage(Message message) {
@@ -80,22 +79,23 @@ public final class GameSession extends Session {
 
 	/**
 	 * Handles pending messages for this session.
-	 * 
+	 *
 	 * @param chainSet The {@link MessageHandlerChainSet}
 	 */
 	public void handlePendingMessages(MessageHandlerChainSet chainSet) {
-		CollectionUtil.pollAll(messageQueue, message -> {
+		Message message;
+		while ((message = messageQueue.poll()) != null) {
 			try {
 				chainSet.notify(player, message);
 			} catch (Exception reason) {
 				logger.log(Level.SEVERE, "Uncaught exception thrown while handling message: " + message, reason);
 			}
-		});
+		}
 	}
 
 	/**
 	 * Handles a player saver response.
-	 * 
+	 *
 	 * @param success A flag indicating if the save was successful.
 	 */
 	public void handlePlayerSaverResponse(boolean success) {

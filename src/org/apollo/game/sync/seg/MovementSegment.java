@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A {@link SynchronizationSegment} where a mob is moved (or doesn't move!).
- * 
+ *
  * @author Graham
  */
 public final class MovementSegment extends SynchronizationSegment {
@@ -19,7 +19,7 @@ public final class MovementSegment extends SynchronizationSegment {
 
 	/**
 	 * Creates the movement segment.
-	 * 
+	 *
 	 * @param blockSet The block set.
 	 * @param directions The directions array.
 	 * @throws IllegalArgumentException If there are not 0, 1 or 2 directions.
@@ -32,7 +32,7 @@ public final class MovementSegment extends SynchronizationSegment {
 
 	/**
 	 * Gets the directions.
-	 * 
+	 *
 	 * @return The directions.
 	 */
 	public Direction[] getDirections() {

@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link OpenDialogueOverlayMessage}.
- * 
+ *
  * @author Major
  */
 public final class OpenDialogueOverlayMessageEncoder extends MessageEncoder<OpenDialogueOverlayMessage> {

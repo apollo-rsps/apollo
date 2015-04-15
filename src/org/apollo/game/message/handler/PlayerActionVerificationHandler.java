@@ -8,7 +8,7 @@ import org.apollo.util.MobRepository;
 
 /**
  * A verification {@link MessageHandler} for the {@link PlayerActionMessage}.
- * 
+ *
  * @author Major
  */
 public final class PlayerActionVerificationHandler extends MessageHandler<PlayerActionMessage> {

@@ -8,7 +8,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * A class that dispatches {@link Command}s to {@link CommandListener}s.
- * 
+ *
  * @author Graham
  */
 public final class CommandDispatcher {
@@ -20,7 +20,7 @@ public final class CommandDispatcher {
 
 	/**
 	 * Initialises this CommandDispatcher.
-	 * 
+	 *
 	 * @param authors The {@link Set} of plugin authors.
 	 */
 	public void init(Set<String> authors) {
@@ -29,7 +29,7 @@ public final class CommandDispatcher {
 
 	/**
 	 * Dispatches a command to the appropriate listener.
-	 * 
+	 *
 	 * @param player The player.
 	 * @param command The command.
 	 */
@@ -42,7 +42,7 @@ public final class CommandDispatcher {
 
 	/**
 	 * Registers a listener with the dispatcher.
-	 * 
+	 *
 	 * @param command The command's name.
 	 * @param listener The listener.
 	 */

@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to display a server chat message.
- * 
+ *
  * @author Graham
  */
 public final class ServerChatMessage extends Message {
@@ -16,7 +16,7 @@ public final class ServerChatMessage extends Message {
 
 	/**
 	 * Creates a server chat message.
-	 * 
+	 *
 	 * @param message The chat message.
 	 */
 	public ServerChatMessage(String message) {
@@ -25,7 +25,7 @@ public final class ServerChatMessage extends Message {
 
 	/**
 	 * Creates a server chat message.
-	 * 
+	 *
 	 * @param message The chat message.
 	 * @param filterable Whether or not the message can be filtered.
 	 */
@@ -35,7 +35,7 @@ public final class ServerChatMessage extends Message {
 
 	/**
 	 * Gets the chat message.
-	 * 
+	 *
 	 * @return The chat message.
 	 */
 	public String getMessage() {

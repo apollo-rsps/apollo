@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link SwitchItemMessage}.
- * 
+ *
  * @author Graham
  */
 public final class SwitchItemMessageDecoder extends MessageDecoder<SwitchItemMessage> {

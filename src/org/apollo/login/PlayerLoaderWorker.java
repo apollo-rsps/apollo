@@ -11,7 +11,7 @@ import org.apollo.net.session.LoginSession;
 
 /**
  * A class which processes a single login request.
- * 
+ *
  * @author Graham
  */
 public final class PlayerLoaderWorker implements Runnable {
@@ -38,7 +38,7 @@ public final class PlayerLoaderWorker implements Runnable {
 
 	/**
 	 * Creates a {@link PlayerLoaderWorker} which will do the work for a single player load request.
-	 * 
+	 *
 	 * @param loader The {@link PlayerSerializer}.
 	 * @param session The {@link LoginSession} which initiated the request.
 	 * @param request The {@link LoginRequest} object.

@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A class which contains name-related utility methods.
- * 
+ *
  * @author Graham
  */
 public final class NameUtil {
@@ -19,7 +19,7 @@ public final class NameUtil {
 
 	/**
 	 * Converts a long to a player name.
-	 * 
+	 *
 	 * @param l The long.
 	 * @return The player name.
 	 */
@@ -36,7 +36,7 @@ public final class NameUtil {
 
 	/**
 	 * Converts a player name to a long.
-	 * 
+	 *
 	 * @param name The player name.
 	 * @return The long.
 	 */

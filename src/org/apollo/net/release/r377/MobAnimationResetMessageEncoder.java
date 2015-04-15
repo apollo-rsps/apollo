@@ -7,7 +7,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link MobAnimationResetMessage}.
- * 
+ *
  * @author Major
  */
 public final class MobAnimationResetMessageEncoder extends MessageEncoder<MobAnimationResetMessage> {

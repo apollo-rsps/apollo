@@ -15,14 +15,14 @@ import org.apollo.game.model.entity.obj.GameObject;
 
 /**
  * A verification {@link MessageHandler} for the {@link ObjectActionMessage}.
- * 
+ *
  * @author Major
  */
 public final class ObjectActionVerificationHandler extends MessageHandler<ObjectActionMessage> {
 
 	/**
 	 * Indicates whether or not the {@link List} of {@link GameObject}s contains the object with the specified id.
-	 * 
+	 *
 	 * @param id The id of the object.
 	 * @param objects The list of objects.
 	 * @return {@code true} if the list does contain the object with the specified id, otherwise {@code false}.

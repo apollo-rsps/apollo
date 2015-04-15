@@ -10,7 +10,7 @@ import org.apollo.util.BufferUtil;
 
 /**
  * Decodes object data from the {@code loc.dat} file into {@link ObjectDefinition}s.
- * 
+ *
  * @author Major
  */
 public final class ObjectDefinitionDecoder {
@@ -22,7 +22,7 @@ public final class ObjectDefinitionDecoder {
 
 	/**
 	 * Creates the decoder.
-	 * 
+	 *
 	 * @param fs The {@link IndexedFileSystem}.
 	 */
 	public ObjectDefinitionDecoder(IndexedFileSystem fs) {
@@ -31,7 +31,7 @@ public final class ObjectDefinitionDecoder {
 
 	/**
 	 * Decodes all of the data into {@link ObjectDefinition}s.
-	 * 
+	 *
 	 * @return The definitions.
 	 * @throws IOException If an error occurs when decoding the archive or finding an entry.
 	 */
@@ -57,7 +57,7 @@ public final class ObjectDefinitionDecoder {
 
 	/**
 	 * Decodes data from the cache into an {@link ObjectDefinition}.
-	 * 
+	 *
 	 * @param id The id of the object.
 	 * @param data The {@link ByteBuffer} containing the data.
 	 * @return The object definition.

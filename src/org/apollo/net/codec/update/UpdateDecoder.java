@@ -11,7 +11,7 @@ import org.apollo.net.codec.update.OnDemandRequest.Priority;
 
 /**
  * A {@link ByteToMessageDecoder} for the 'on-demand' protocol.
- * 
+ *
  * @author Graham
  */
 public final class UpdateDecoder extends ByteToMessageDecoder {

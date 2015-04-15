@@ -2,7 +2,7 @@ package org.apollo.net.codec.game;
 
 /**
  * An enumeration with the different states the {@link GamePacketDecoder} can be in.
- * 
+ *
  * @author Graham
  */
 public enum GameDecoderState {

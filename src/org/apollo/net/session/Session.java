@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 /**
  * A session which is used as an attribute of a {@link ChannelHandlerContext} in Netty.
- * 
+ *
  * @author Graham
  */
 public abstract class Session {
@@ -17,7 +17,7 @@ public abstract class Session {
 
 	/**
 	 * Creates a session for the specified channel.
-	 * 
+	 *
 	 * @param channel The channel.
 	 */
 	public Session(Channel channel) {
@@ -31,7 +31,7 @@ public abstract class Session {
 
 	/**
 	 * Gets the channel.
-	 * 
+	 *
 	 * @return The channel.
 	 */
 	protected final Channel getChannel() {
@@ -40,9 +40,10 @@ public abstract class Session {
 
 	/**
 	 * Processes a message received from the channel.
-	 * 
+	 *
 	 * @param message The message.
+	 * @throws Exception If some error occurs.
 	 */
-	public abstract void messageReceived(Object message);
+	public abstract void messageReceived(Object message) throws Exception;
 
 }

@@ -2,7 +2,7 @@ package org.apollo.util;
 
 /**
  * Represents a point on a 2-dimensional Cartesian plane.
- * 
+ *
  * @author Major
  */
 public final class Point {
@@ -19,7 +19,7 @@ public final class Point {
 
 	/**
 	 * Creates a new point with the specified coordinates.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
@@ -30,7 +30,7 @@ public final class Point {
 
 	/**
 	 * Gets the x coordinate of this point.
-	 * 
+	 *
 	 * @return The x coordinate.
 	 */
 	public int getX() {
@@ -39,7 +39,7 @@ public final class Point {
 
 	/**
 	 * Gets the y coordinate of this point.
-	 * 
+	 *
 	 * @return The y coordinate.
 	 */
 	public int getY() {

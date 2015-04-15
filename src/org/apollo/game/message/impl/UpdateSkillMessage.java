@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.Skill;
 
 /**
  * A {@link Message} sent to the client to update a player's skill level.
- * 
+ *
  * @author Graham
  */
 public final class UpdateSkillMessage extends Message {
@@ -22,7 +22,7 @@ public final class UpdateSkillMessage extends Message {
 
 	/**
 	 * Creates an update skill message.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param skill The skill.
 	 */
@@ -33,7 +33,7 @@ public final class UpdateSkillMessage extends Message {
 
 	/**
 	 * Gets the skill's id.
-	 * 
+	 *
 	 * @return The skill's id.
 	 */
 	public int getId() {
@@ -42,7 +42,7 @@ public final class UpdateSkillMessage extends Message {
 
 	/**
 	 * Gets the skill.
-	 * 
+	 *
 	 * @return The skill.
 	 */
 	public Skill getSkill() {

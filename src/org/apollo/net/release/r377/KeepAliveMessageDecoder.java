@@ -6,7 +6,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link KeepAliveMessage}.
- * 
+ *
  * @author Graham
  */
 public final class KeepAliveMessageDecoder extends MessageDecoder<KeepAliveMessage> {

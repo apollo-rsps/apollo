@@ -4,7 +4,7 @@ import io.netty.channel.Channel;
 
 /**
  * A specialised request which contains a channel as well as the request object itself.
- * 
+ *
  * @author Graham
  * @param <T> The type of request.
  */
@@ -22,7 +22,7 @@ public class ChannelRequest<T> {
 
 	/**
 	 * Creates a new channel request.
-	 * 
+	 *
 	 * @param channel The channel.
 	 * @param request The request.
 	 */
@@ -33,7 +33,7 @@ public class ChannelRequest<T> {
 
 	/**
 	 * Gets the channel.
-	 * 
+	 *
 	 * @return The channel.
 	 */
 	public Channel getChannel() {
@@ -42,7 +42,7 @@ public class ChannelRequest<T> {
 
 	/**
 	 * Gets the request.
-	 * 
+	 *
 	 * @return The request.
 	 */
 	public T getRequest() {

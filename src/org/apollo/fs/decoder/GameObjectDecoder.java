@@ -26,7 +26,7 @@ import com.google.common.collect.Iterables;
 
 /**
  * Parses static object definitions, which include map tiles and landscapes.
- * 
+ *
  * @author Ryley
  * @author Major
  */
@@ -59,7 +59,7 @@ public final class GameObjectDecoder {
 
 	/**
 	 * Creates the GameObjectDecoder.
-	 * 
+	 *
 	 * @param fs The {@link IndexedFileSystem}.
 	 * @param regions The {@link RegionRepository}.
 	 */
@@ -70,7 +70,7 @@ public final class GameObjectDecoder {
 
 	/**
 	 * Decodes the GameObjects from their MapDefinitions.
-	 * 
+	 *
 	 * @param world The {@link World} containing the StaticGameObjects.
 	 * @return The decoded objects.
 	 * @throws IOException If there is an error decoding the {@link MapDefinition}s.
@@ -99,7 +99,7 @@ public final class GameObjectDecoder {
 
 	/**
 	 * Blocks tiles covered by a GameObject, if applicable.
-	 * 
+	 *
 	 * @param object The {@link GameObject}.
 	 * @param position The position of the GameObject.
 	 */
@@ -133,7 +133,7 @@ public final class GameObjectDecoder {
 		if (block) {
 			for (int dx = 0; dx < definition.getWidth(); dx++) {
 				for (int dy = 0; dy < definition.getLength(); dy++) {
-					int localX = (x % Region.SIZE) + dx, localY = (y % Region.SIZE) + dy;
+					int localX = x % Region.SIZE + dx, localY = y % Region.SIZE + dy;
 
 					if (localX > 7 || localY > 7) {
 						int nextLocalX = localX > 7 ? x + localX - 7 : x + localX;
@@ -141,11 +141,13 @@ public final class GameObjectDecoder {
 						Position nextPosition = new Position(nextLocalX, nextLocalY);
 						Region next = regions.fromPosition(nextPosition);
 
-						int nextX = (nextPosition.getX() % Region.SIZE) + dx, nextY = (nextPosition.getY() % Region.SIZE) + dy;
-						if (nextX > 7)
+						int nextX = nextPosition.getX() % Region.SIZE + dx, nextY = nextPosition.getY() % Region.SIZE + dy;
+						if (nextX > 7) {
 							nextX -= 7;
-						if (nextY > 7)
+						}
+						if (nextY > 7) {
 							nextY -= 7;
+						}
 
 						next.getMatrix(height).block(nextX, nextY);
 						continue;
@@ -159,7 +161,7 @@ public final class GameObjectDecoder {
 
 	/**
 	 * Decodes the attributes of a terrain file, blocking the tile if necessary.
-	 * 
+	 *
 	 * @param attributes The terrain attributes.
 	 * @param position The {@link Position} of the tile whose attributes are being decoded.
 	 */
@@ -181,14 +183,14 @@ public final class GameObjectDecoder {
 		}
 
 		if (block) {
-			int localX = (x % Region.SIZE), localY = (y % Region.SIZE);
+			int localX = x % Region.SIZE, localY = y % Region.SIZE;
 			current.block(localX, localY);
 		}
 	}
 
 	/**
 	 * Decodes object data stored in the specified {@link ByteBuffer}.
-	 * 
+	 *
 	 * @param world The {@link World} containing the StaticGameObjects.
 	 * @param buffer The ByteBuffer.
 	 * @param x The x coordinate of the top left tile of the map file.
@@ -209,7 +211,7 @@ public final class GameObjectDecoder {
 
 				int localY = packed & 0x3F;
 				int localX = packed >> 6 & 0x3F;
-				int height = (packed >> 12) & 0x3;
+				int height = packed >> 12 & 0x3;
 
 				int attributes = buffer.get() & 0xFF;
 				int type = attributes >> 2;
@@ -229,7 +231,7 @@ public final class GameObjectDecoder {
 
 	/**
 	 * Decodes terrain data stored in the specified {@link ByteBuffer}.
-	 * 
+	 *
 	 * @param buffer The ByteBuffer.
 	 * @param x The x coordinate of the top left tile of the map file.
 	 * @param y The y coordinate of the top left tile of the map file.

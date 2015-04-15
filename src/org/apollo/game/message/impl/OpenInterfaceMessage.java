@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client that opens an interface.
- * 
+ *
  * @author Graham
  */
 public final class OpenInterfaceMessage extends Message {
@@ -16,7 +16,7 @@ public final class OpenInterfaceMessage extends Message {
 
 	/**
 	 * Creates the message with the specified interface id.
-	 * 
+	 *
 	 * @param id The interface id.
 	 */
 	public OpenInterfaceMessage(int id) {
@@ -25,7 +25,7 @@ public final class OpenInterfaceMessage extends Message {
 
 	/**
 	 * Gets the interface id.
-	 * 
+	 *
 	 * @return The interface id.
 	 */
 	public int getId() {

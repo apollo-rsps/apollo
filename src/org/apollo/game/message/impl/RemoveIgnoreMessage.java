@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client when a player removes someone from their ignore list.
- * 
+ *
  * @author Major
  */
 public final class RemoveIgnoreMessage extends Message {
@@ -16,7 +16,7 @@ public final class RemoveIgnoreMessage extends Message {
 
 	/**
 	 * Creates a new unignore player message.
-	 * 
+	 *
 	 * @param username The unignored player's username.
 	 */
 	public RemoveIgnoreMessage(String username) {
@@ -25,7 +25,7 @@ public final class RemoveIgnoreMessage extends Message {
 
 	/**
 	 * Gets the username of the unignored player.
-	 * 
+	 *
 	 * @return The username.
 	 */
 	public String getUsername() {

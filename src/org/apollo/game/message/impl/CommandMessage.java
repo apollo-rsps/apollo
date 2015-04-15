@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client to send a {@code ::} command.
- * 
+ *
  * @author Graham
  */
 public final class CommandMessage extends Message {
@@ -16,7 +16,7 @@ public final class CommandMessage extends Message {
 
 	/**
 	 * Creates the command message.
-	 * 
+	 *
 	 * @param command The command.
 	 */
 	public CommandMessage(String command) {
@@ -25,7 +25,7 @@ public final class CommandMessage extends Message {
 
 	/**
 	 * Gets the command.
-	 * 
+	 *
 	 * @return The command.
 	 */
 	public String getCommand() {

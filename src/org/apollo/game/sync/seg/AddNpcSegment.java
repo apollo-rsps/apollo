@@ -5,7 +5,7 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
  * A {@link SynchronizationSegment} that adds an npc.
- * 
+ *
  * @author Major
  */
 public final class AddNpcSegment extends SynchronizationSegment {
@@ -27,7 +27,7 @@ public final class AddNpcSegment extends SynchronizationSegment {
 
 	/**
 	 * Creates the add npc segment.
-	 * 
+	 *
 	 * @param blockSet The block set.
 	 * @param index The npcs's index.
 	 * @param position The position.
@@ -42,7 +42,7 @@ public final class AddNpcSegment extends SynchronizationSegment {
 
 	/**
 	 * Gets the npc's index.
-	 * 
+	 *
 	 * @return The index.
 	 */
 	public int getIndex() {
@@ -51,7 +51,7 @@ public final class AddNpcSegment extends SynchronizationSegment {
 
 	/**
 	 * Gets the npc id.
-	 * 
+	 *
 	 * @return The npcId
 	 */
 	public int getNpcId() {
@@ -60,7 +60,7 @@ public final class AddNpcSegment extends SynchronizationSegment {
 
 	/**
 	 * Gets the position.
-	 * 
+	 *
 	 * @return The position.
 	 */
 	public Position getPosition() {

@@ -9,7 +9,7 @@ import org.apollo.game.model.entity.WalkingQueue;
 
 /**
  * A {@link MessageHandler} that handles {@link WalkMessage}s.
- * 
+ *
  * @author Graham
  */
 public final class WalkMessageHandler extends MessageHandler<WalkMessage> {

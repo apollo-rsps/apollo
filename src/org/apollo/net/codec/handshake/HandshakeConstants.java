@@ -2,7 +2,7 @@ package org.apollo.net.codec.handshake;
 
 /**
  * Holds handshake-related constants.
- * 
+ *
  * @author Graham
  */
 public final class HandshakeConstants {

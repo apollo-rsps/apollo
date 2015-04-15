@@ -10,7 +10,7 @@ import org.apollo.fs.FileDescriptor;
 
 /**
  * A {@link MessageToMessageEncoder} for the 'on-demand' protocol.
- * 
+ *
  * @author Graham
  */
 public final class UpdateEncoder extends MessageToMessageEncoder<OnDemandResponse> {

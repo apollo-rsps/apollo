@@ -7,7 +7,7 @@ import org.apollo.util.LanguageUtil;
 
 /**
  * A {@link SkillListener} which notifies the player when they have levelled up a skill.
- * 
+ *
  * @author Graham
  */
 public final class LevelUpSkillListener extends SkillAdapter {
@@ -19,7 +19,7 @@ public final class LevelUpSkillListener extends SkillAdapter {
 
 	/**
 	 * Creates the level up listener for the specified player.
-	 * 
+	 *
 	 * @param player The player.
 	 */
 	public LevelUpSkillListener(Player player) {

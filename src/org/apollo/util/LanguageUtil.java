@@ -2,7 +2,7 @@ package org.apollo.util;
 
 /**
  * Contains language-related utility methods.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -10,7 +10,7 @@ public final class LanguageUtil {
 
 	/**
 	 * Returns whether or not the each letter in the specified String is upper case (i.e. digits etc are ignored).
-	 * 
+	 *
 	 * @param string The string.
 	 * @return {@code true} if no letters in the specified String are lower case, otherwise {@code false}.
 	 */
@@ -26,7 +26,7 @@ public final class LanguageUtil {
 
 	/**
 	 * Gets the indefinite article of the specified String.
-	 * 
+	 *
 	 * @param string The String.
 	 * @return The indefinite article.
 	 */

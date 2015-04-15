@@ -7,7 +7,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * A {@link MessageHandler} that verifies {@link ChatMessage}s.
- * 
+ *
  * @author Graham
  */
 public final class ChatVerificationHandler extends MessageHandler<ChatMessage> {

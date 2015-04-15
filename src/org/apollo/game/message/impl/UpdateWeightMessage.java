@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to update the player's weight.
- * 
+ *
  * @author Major
  */
 public final class UpdateWeightMessage extends Message {
@@ -16,7 +16,7 @@ public final class UpdateWeightMessage extends Message {
 
 	/**
 	 * Creates the update weight message.
-	 * 
+	 *
 	 * @param weight The weight of the player.
 	 */
 	public UpdateWeightMessage(int weight) {
@@ -25,7 +25,7 @@ public final class UpdateWeightMessage extends Message {
 
 	/**
 	 * Gets the weight of the player.
-	 * 
+	 *
 	 * @return The weight.
 	 */
 	public int getWeight() {

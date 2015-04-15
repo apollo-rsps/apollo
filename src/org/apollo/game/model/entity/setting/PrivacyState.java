@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
  * An enumeration representing the different privacy states for public, private and trade chat. This enumeration relies
  * on the ordering of the elements within, which should be as follows: {@code ON}, {@code HIDE}, {@code FRIENDS},
  * {@code OFF}, {@code FILTERABLE}.
- * 
+ *
  * @author Kyle Stevenson
  */
 public enum PrivacyState {
@@ -40,7 +40,7 @@ public enum PrivacyState {
 
 	/**
 	 * Gets the privacy state for the specified numerical value.
-	 * 
+	 *
 	 * @param value The numerical value.
 	 * @param chat Whether or not the value is for public chat.
 	 * @return The privacy state.
@@ -62,7 +62,7 @@ public enum PrivacyState {
 
 	/**
 	 * Creates the privacy state.
-	 * 
+	 *
 	 * @param value The numerical value.
 	 */
 	private PrivacyState(int value) {
@@ -76,7 +76,7 @@ public enum PrivacyState {
 
 	/**
 	 * Converts this privacy state to an integer.
-	 * 
+	 *
 	 * @param chat Whether or not the value is for public chat.
 	 * @return The numerical value used by the client.
 	 */

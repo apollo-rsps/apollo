@@ -2,7 +2,7 @@ package org.apollo.game.sync.block;
 
 /**
  * The transform {@link SynchronizationBlock}. Only npcs can utilise this block.
- * 
+ *
  * @author Major
  */
 public final class TransformBlock extends SynchronizationBlock {
@@ -14,7 +14,7 @@ public final class TransformBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates a new transform block.
-	 * 
+	 *
 	 * @param id The id.
 	 */
 	TransformBlock(int id) {
@@ -23,7 +23,7 @@ public final class TransformBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the id of the npc to transform into.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {

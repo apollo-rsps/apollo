@@ -40,7 +40,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 
 	/**
 	 * Finds a valid path from the origin {@link Position} to the target one.
-	 * 
+	 *
 	 * @param origin The origin Position.
 	 * @param target The target Position.
 	 * @param boundaries The boundary Positions, which are marking as untraversable.
@@ -61,7 +61,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 	 * <li>Checks if we are not at the target, and that either of the horizontally-adjacent positions are traversable:
 	 * if so, we traverse horizontally (see {@link #addHorizontal}); if not, return the current path.
 	 * </ul>
-	 * 
+	 *
 	 * @param start The current position.
 	 * @param target The target position.
 	 * @param positions The deque of positions.
@@ -88,7 +88,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 		}
 
 		Position last = new Position(x, y, height);
-		if (!start.equals(last) && dy != 0 && traversable(last, boundaries, (dy > 0) ? Direction.SOUTH : Direction.NORTH)) {
+		if (!start.equals(last) && dy != 0 && traversable(last, boundaries, dy > 0 ? Direction.SOUTH : Direction.NORTH)) {
 			return addVertical(last, target, positions);
 		}
 
@@ -105,7 +105,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 	 * <li>Checks if we are not at the target, and that either of the horizontally-adjacent positions are traversable:
 	 * if so, we traverse horizontally (see {@link #addHorizontal}); if not, return the current path.
 	 * </ul>
-	 * 
+	 *
 	 * @param start The current position.
 	 * @param target The target position.
 	 * @param positions The deque of positions.
@@ -132,7 +132,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 		}
 
 		Position last = new Position(x, y, height);
-		if (!last.equals(target) && dx != 0 && traversable(last, boundaries, (dx > 0) ? Direction.WEST : Direction.EAST)) {
+		if (!last.equals(target) && dx != 0 && traversable(last, boundaries, dx > 0 ? Direction.WEST : Direction.EAST)) {
 			return addHorizontal(last, target, positions);
 		}
 

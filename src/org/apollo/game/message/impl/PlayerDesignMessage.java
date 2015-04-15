@@ -5,7 +5,7 @@ import org.apollo.game.model.Appearance;
 
 /**
  * A {@link Message} sent by the client when the player modifies their design.
- * 
+ *
  * @author Graham
  */
 public final class PlayerDesignMessage extends Message {
@@ -17,7 +17,7 @@ public final class PlayerDesignMessage extends Message {
 
 	/**
 	 * Creates the player design message.
-	 * 
+	 *
 	 * @param appearance The appearance.
 	 */
 	public PlayerDesignMessage(Appearance appearance) {
@@ -26,7 +26,7 @@ public final class PlayerDesignMessage extends Message {
 
 	/**
 	 * Gets the appearance.
-	 * 
+	 *
 	 * @return The appearance.
 	 */
 	public Appearance getAppearance() {

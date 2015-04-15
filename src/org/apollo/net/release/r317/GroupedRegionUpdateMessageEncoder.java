@@ -35,11 +35,11 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 	@Override
 	public GamePacket encode(GroupedRegionUpdateMessage message) {
 		GamePacketBuilder builder = new GamePacketBuilder(60, PacketType.VARIABLE_SHORT);
-		Position player = message.getPlayerPosition(), region = message.getRegionPosition();
+		Position lastKnownRegion = message.getLastKnownRegion(), region = message.getRegionPosition();
 
-		builder.put(DataType.BYTE, player.getLocalY(region));
-		System.out.println("Grum: local x: " + player.getLocalX(region) + ", local y: " + player.getLocalY(region));
-		builder.put(DataType.BYTE, DataTransformation.NEGATE, player.getLocalX(region));
+		builder.put(DataType.BYTE, region.getLocalY(lastKnownRegion));
+		builder.put(DataType.BYTE, DataTransformation.NEGATE, region.getLocalX(lastKnownRegion));
+		System.out.println("Grum: local x: " + lastKnownRegion.getLocalX(region) + ", local y: " + lastKnownRegion.getLocalY(region));
 
 		for (RegionUpdateMessage update : message.getMessages()) {
 			System.out.println("==== Sending " + update + " as part of grum");

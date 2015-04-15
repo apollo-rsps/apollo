@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link EnteredAmountMessage}.
- * 
+ *
  * @author Graham
  */
 public final class EnteredAmountMessageDecoder extends MessageDecoder<EnteredAmountMessage> {

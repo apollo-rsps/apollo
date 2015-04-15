@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.setting.PrivilegeLevel;
 
 /**
  * A {@link Message} sent to the client that forwards a private chat.
- * 
+ *
  * @author Major
  */
 public final class ForwardPrivateChatMessage extends Message {
@@ -27,20 +27,20 @@ public final class ForwardPrivateChatMessage extends Message {
 
 	/**
 	 * Creates a new forward private message message.
-	 * 
+	 *
 	 * @param username The username of the player sending the message.
 	 * @param level The {@link PrivilegeLevel} of the player sending the message.
 	 * @param message The compressed message.
 	 */
 	public ForwardPrivateChatMessage(String username, PrivilegeLevel level, byte[] message) {
 		this.username = username;
-		this.privilege = level;
+		privilege = level;
 		this.message = message;
 	}
 
 	/**
 	 * Gets the username of the sender.
-	 * 
+	 *
 	 * @return The username.
 	 */
 	public String getSenderUsername() {
@@ -49,7 +49,7 @@ public final class ForwardPrivateChatMessage extends Message {
 
 	/**
 	 * Gets the {@link PrivilegeLevel} of the sender.
-	 * 
+	 *
 	 * @return The privilege level.
 	 */
 	public PrivilegeLevel getSenderPrivilege() {
@@ -58,7 +58,7 @@ public final class ForwardPrivateChatMessage extends Message {
 
 	/**
 	 * Gets the compressed message.
-	 * 
+	 *
 	 * @return The message.
 	 */
 	public byte[] getCompressedMessage() {

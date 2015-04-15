@@ -23,7 +23,7 @@ import org.apollo.util.MobRepository;
  * which this is called). Each client is processed sequentially. Therefore this class will work well on machines with a
  * single core/processor. The {@link ParallelClientSynchronizer} will work better on machines with multiple
  * cores/processors, however, both classes will work.
- * 
+ *
  * @author Graham
  * @author Major
  */

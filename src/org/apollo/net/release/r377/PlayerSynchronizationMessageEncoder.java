@@ -37,7 +37,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link PlayerSynchronizationMessage}.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -81,7 +81,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts an add player update.
-	 * 
+	 *
 	 * @param seg The segment.
 	 * @param message The message.
 	 * @param builder The builder.
@@ -99,7 +99,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts an Animation block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -111,7 +111,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts an Appearance block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -226,7 +226,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts the blocks for the specified segment.
-	 * 
+	 *
 	 * @param segment The segment.
 	 * @param builder The block builder.
 	 */
@@ -308,7 +308,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a chat block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -322,7 +322,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a force chat block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -332,7 +332,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a force movement block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -348,7 +348,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a graphic block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -360,7 +360,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a hit update block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -373,7 +373,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts an interacting mob block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -383,7 +383,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a movement update for the specified segment.
-	 * 
+	 *
 	 * @param seg The segment.
 	 * @param message The message.
 	 * @param builder The builder.
@@ -424,7 +424,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a remove player update.
-	 * 
+	 *
 	 * @param builder The builder.
 	 */
 	private static void putRemovePlayerUpdate(GamePacketBuilder builder) {
@@ -434,7 +434,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a secondary hit update block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -447,7 +447,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	/**
 	 * Puts a turn to position block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */

@@ -15,7 +15,7 @@ import org.apollo.net.codec.update.UpdateEncoder;
 /**
  * A {@link ByteToMessageDecoder} which decodes the handshake and makes changes to the pipeline as appropriate for the
  * selected service.
- * 
+ *
  * @author Graham
  */
 public final class HandshakeDecoder extends ByteToMessageDecoder {

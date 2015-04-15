@@ -6,7 +6,7 @@ import org.apollo.game.model.entity.setting.PrivacyState;
 /**
  * A {@link Message} sent both by and to the client to update the public chat, private (friend) chat, and trade chat
  * privacy state.
- * 
+ *
  * @author Kyle Stevenson
  * @author Major
  */
@@ -29,7 +29,7 @@ public final class PrivacyOptionMessage extends Message {
 
 	/**
 	 * Creates a privacy option message.
-	 * 
+	 *
 	 * @param chatPrivacy The privacy state of the player's chat.
 	 * @param friendPrivacy The privacy state of the player's friend chat.
 	 * @param tradePrivacy The privacy state of the player's trade chat.
@@ -42,7 +42,7 @@ public final class PrivacyOptionMessage extends Message {
 
 	/**
 	 * Gets the chat {@link PrivacyState}.
-	 * 
+	 *
 	 * @return The privacy state.
 	 */
 	public PrivacyState getChatPrivacy() {
@@ -51,7 +51,7 @@ public final class PrivacyOptionMessage extends Message {
 
 	/**
 	 * Gets the friend {@link PrivacyState}.
-	 * 
+	 *
 	 * @return The privacy state.
 	 */
 	public PrivacyState getFriendPrivacy() {
@@ -60,7 +60,7 @@ public final class PrivacyOptionMessage extends Message {
 
 	/**
 	 * Gets the trade {@link PrivacyState}.
-	 * 
+	 *
 	 * @return The privacy state.
 	 */
 	public PrivacyState getTradePrivacy() {

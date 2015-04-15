@@ -8,7 +8,7 @@ import org.apollo.security.PlayerCredentials;
 /**
  * An interface which may be implemented by others which are capable of serializing and deserializing players. For
  * example, implementations might include text-based, binary and SQL serializers.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -35,7 +35,7 @@ public abstract class PlayerSerializer {
 
 	/**
 	 * Loads a {@link Player}.
-	 * 
+	 *
 	 * @param credentials The {@link PlayerCredentials}.
 	 * @return The {@link PlayerLoaderResponse}.
 	 * @throws Exception If an error occurs.
@@ -44,7 +44,7 @@ public abstract class PlayerSerializer {
 
 	/**
 	 * Saves a {@link Player}.
-	 * 
+	 *
 	 * @param player The Player to save.
 	 * @throws Exception If an error occurs.
 	 */

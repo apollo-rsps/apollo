@@ -7,7 +7,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * A {@link MessageHandler} that responds to {@link ButtonMessage}s for withdrawing items as notes.
- * 
+ *
  * @author Graham
  */
 public final class BankButtonMessageHandler extends MessageHandler<ButtonMessage> {

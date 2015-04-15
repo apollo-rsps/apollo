@@ -9,7 +9,7 @@ import org.apollo.net.session.GameSession;
 
 /**
  * A class which processes a single save request.
- * 
+ *
  * @author Graham
  */
 public final class PlayerSaverWorker implements Runnable {
@@ -36,7 +36,7 @@ public final class PlayerSaverWorker implements Runnable {
 
 	/**
 	 * Creates the player saver worker.
-	 * 
+	 *
 	 * @param saver The player saver.
 	 * @param session The game session.
 	 * @param player The player to save.

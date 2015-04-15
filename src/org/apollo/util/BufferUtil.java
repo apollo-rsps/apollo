@@ -8,14 +8,14 @@ import org.apollo.net.NetworkConstants;
 
 /**
  * A utility class which contains {@link ByteBuffer}-related utility methods.
- * 
+ *
  * @author Graham
  */
 public final class BufferUtil {
 
 	/**
 	 * Reads a 'smart' (either a {@code byte} or {@code short} depending on the value) from the specified buffer.
-	 * 
+	 *
 	 * @param buffer The buffer.
 	 * @return The 'smart'.
 	 */
@@ -28,7 +28,7 @@ public final class BufferUtil {
 
 	/**
 	 * Reads a string from the specified {@link ByteBuffer}.
-	 * 
+	 *
 	 * @param buffer The buffer.
 	 * @return The string.
 	 */
@@ -43,7 +43,7 @@ public final class BufferUtil {
 
 	/**
 	 * Reads a string from the specified {@link ByteBuf}.
-	 * 
+	 *
 	 * @param buffer The buffer.
 	 * @return The string.
 	 */

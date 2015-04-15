@@ -52,7 +52,7 @@ public final class GroundItem extends Entity {
 
 	/**
 	 * Creates the GroundItem.
-	 * 
+	 *
 	 * @param world The {@link World} containing the GroundItem.
 	 * @param position The {@link Position} of the GroundItem.
 	 * @param item The Item displayed on the ground.
@@ -81,7 +81,7 @@ public final class GroundItem extends Entity {
 
 	/**
 	 * Gets the {@link Item} displayed on the ground.
-	 * 
+	 *
 	 * @return The Item.
 	 */
 	public Item getItem() {
@@ -91,7 +91,7 @@ public final class GroundItem extends Entity {
 	/**
 	 * Gets the index of the {@link Player} who dropped this GroundItem, or {@code -1} if this GroundItem was not
 	 * dropped by a Player.
-	 * 
+	 *
 	 * @return The index.
 	 */
 	public int getOwnerIndex() {

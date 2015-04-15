@@ -5,7 +5,7 @@ import org.apollo.game.model.Item;
 
 /**
  * A {@link Message} sent to the client to update the amount of an item display on a tile.
- * 
+ *
  * @author Major
  */
 public final class UpdateTileItemMessage extends RegionUpdateMessage {
@@ -27,7 +27,7 @@ public final class UpdateTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Creates a new message that updates the previous amount of the item.
-	 * 
+	 *
 	 * @param item The item to be placed.
 	 * @param previousAmount The previous amount of the item.
 	 */
@@ -37,7 +37,7 @@ public final class UpdateTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Creates a new set tile item message.
-	 * 
+	 *
 	 * @param item The item to be placed.
 	 * @param previousAmount The previous amount of the item.
 	 * @param positionOffset The offset from the client's base position.
@@ -60,7 +60,7 @@ public final class UpdateTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the amount of the item.
-	 * 
+	 *
 	 * @return The amount.
 	 */
 	public int getAmount() {
@@ -69,7 +69,7 @@ public final class UpdateTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the id of the item.
-	 * 
+	 *
 	 * @return The item.
 	 */
 	public int getId() {
@@ -78,7 +78,7 @@ public final class UpdateTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the offset from the client's base position.
-	 * 
+	 *
 	 * @return The offset.
 	 */
 	public int getPositionOffset() {
@@ -87,7 +87,7 @@ public final class UpdateTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the previous amount of the item.
-	 * 
+	 *
 	 * @return The previous amount.
 	 */
 	public int getPreviousAmount() {

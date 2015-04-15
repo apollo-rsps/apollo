@@ -2,7 +2,7 @@ package org.apollo.game.message;
 
 /**
  * A message sent by the client that can be intercepted.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -22,7 +22,7 @@ public abstract class Message {
 
 	/**
 	 * Returns whether or not the Message chain has been terminated.
-	 * 
+	 *
 	 * @return {@code true} if the Message chain has been terminated, otherwise {@code false}.
 	 */
 	public final boolean terminated() {

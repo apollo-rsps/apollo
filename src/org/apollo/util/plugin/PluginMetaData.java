@@ -4,7 +4,7 @@ import java.io.File;
 
 /**
  * Contains attributes which describe a plugin.
- * 
+ *
  * @author Graham
  */
 public final class PluginMetaData {
@@ -51,7 +51,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Creates the plugin meta data.
-	 * 
+	 *
 	 * @param id The plugin's id.
 	 * @param base The plugin's base folder.
 	 * @param name The plugin's name.
@@ -74,7 +74,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Gets the plugin's authors.
-	 * 
+	 *
 	 * @return The plugin's authors.
 	 */
 	public String[] getAuthors() {
@@ -83,7 +83,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Gets the plugin's dependencies.
-	 * 
+	 *
 	 * @return The plugin's dependencies.
 	 */
 	public String[] getDependencies() {
@@ -92,7 +92,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Gets the plugin's description.
-	 * 
+	 *
 	 * @return The plugin's description.
 	 */
 	public String getDescription() {
@@ -101,7 +101,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Gets the plugin's id.
-	 * 
+	 *
 	 * @return The plugin's id.
 	 */
 	public String getId() {
@@ -110,7 +110,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Gets the plugin's name.
-	 * 
+	 *
 	 * @return The plugin's name.
 	 */
 	public String getName() {
@@ -119,7 +119,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Gets the plugin's scripts.
-	 * 
+	 *
 	 * @return The plugin's scripts.
 	 */
 	public String[] getScripts() {
@@ -128,7 +128,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Gets the plugin's version.
-	 * 
+	 *
 	 * @return The plugin's version.
 	 */
 	public double getVersion() {
@@ -137,7 +137,7 @@ public final class PluginMetaData {
 
 	/**
 	 * Gets the plugin's base folder.
-	 * 
+	 *
 	 * @return The plugin's base folder (where plugin.xml is)
 	 */
 	public File getBase() {

@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link FourthItemOptionMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 final class FourthItemOptionMessageDecoder extends MessageDecoder<FourthItemOptionMessage> {

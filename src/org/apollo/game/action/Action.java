@@ -9,7 +9,7 @@ import org.apollo.game.scheduling.ScheduledTask;
  * <strong>ALL</strong> actions <strong>MUST</strong> implement the {@link #equals(Object)} method. This is to check if
  * two actions are identical: if they are, then the new action does not replace the old one (so spam/accidental clicking
  * won't cancel your action, and start another from scratch).
- * 
+ *
  * @author Graham
  * @param <T> The type of mob.
  */
@@ -27,7 +27,7 @@ public abstract class Action<T extends Mob> extends ScheduledTask {
 
 	/**
 	 * Creates a new action.
-	 * 
+	 *
 	 * @param delay The delay in pulses.
 	 * @param immediate A flag indicating if the action should happen immediately.
 	 * @param mob The mob performing the action.
@@ -39,7 +39,7 @@ public abstract class Action<T extends Mob> extends ScheduledTask {
 
 	/**
 	 * Gets the mob which performed the action.
-	 * 
+	 *
 	 * @return The mob.
 	 */
 	public final T getMob() {

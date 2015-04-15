@@ -9,7 +9,7 @@ import org.apollo.util.NameUtil;
 
 /**
  * A {@link MessageDecoder} for the {@link AddIgnoreMessage}.
- * 
+ *
  * @author Major
  */
 public final class AddIgnoreMessageDecoder extends MessageDecoder<AddIgnoreMessage> {

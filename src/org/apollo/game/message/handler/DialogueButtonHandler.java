@@ -9,7 +9,7 @@ import org.apollo.game.model.inter.InterfaceType;
 /**
  * A {@link MessageHandler} which intercepts button clicks on dialogues, and forwards the message to the current
  * listener.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class DialogueButtonHandler extends MessageHandler<ButtonMessage> {

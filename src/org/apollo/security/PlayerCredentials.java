@@ -4,7 +4,7 @@ import org.apollo.util.NameUtil;
 
 /**
  * Holds the credentials for a player.
- * 
+ *
  * @author Graham
  */
 public final class PlayerCredentials {
@@ -41,7 +41,7 @@ public final class PlayerCredentials {
 
 	/**
 	 * Creates a new {@link PlayerCredentials} object with the specified name, password and uid.
-	 * 
+	 *
 	 * @param username The player's username.
 	 * @param password The player's password.
 	 * @param usernameHash The hash of the player's username.
@@ -59,7 +59,7 @@ public final class PlayerCredentials {
 
 	/**
 	 * Gets the player's username encoded as a long.
-	 * 
+	 *
 	 * @return The username as encoded by {@link NameUtil#encodeBase37(String)}.
 	 */
 	public long getEncodedUsername() {
@@ -68,7 +68,7 @@ public final class PlayerCredentials {
 
 	/**
 	 * Sets the player's password
-	 * 
+	 *
 	 * @param password The player's new password
 	 */
 	public void setPassword(String password) {
@@ -77,7 +77,7 @@ public final class PlayerCredentials {
 
 	/**
 	 * Gets the player's password.
-	 * 
+	 *
 	 * @return The player's password.
 	 */
 	public String getPassword() {
@@ -86,7 +86,7 @@ public final class PlayerCredentials {
 
 	/**
 	 * Gets the computer's uid.
-	 * 
+	 *
 	 * @return The computer's uid.
 	 */
 	public int getUid() {
@@ -95,7 +95,7 @@ public final class PlayerCredentials {
 
 	/**
 	 * Gets the player's username.
-	 * 
+	 *
 	 * @return The player's username.
 	 */
 	public String getUsername() {
@@ -104,7 +104,7 @@ public final class PlayerCredentials {
 
 	/**
 	 * Gets the username hash.
-	 * 
+	 *
 	 * @return The username hash.
 	 */
 	public int getUsernameHash() {
@@ -113,7 +113,7 @@ public final class PlayerCredentials {
 
 	/**
 	 * Gets the Player's connecting host address.
-	 * 
+	 *
 	 * @return The Player's host address, represented as a String.
 	 */
 	public String getHostAddress() {

@@ -9,7 +9,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link RemoveObjectMessage}.
- * 
+ *
  * @author Major
  */
 public final class RemoveObjectMessageEncoder extends MessageEncoder<RemoveObjectMessage> {

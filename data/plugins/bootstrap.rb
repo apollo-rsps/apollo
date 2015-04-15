@@ -179,7 +179,7 @@ def on_message(args, proc)
 
   numbers.each_index do |index|
     number = numbers[index]
-
+  
     if message.to_s.start_with?(number)
       option = index + 1
       message = message[number.length + 1, message.length].to_sym

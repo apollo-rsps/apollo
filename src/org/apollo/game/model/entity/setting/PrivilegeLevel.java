@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 /**
  * An enumeration with the different privilege levels a player can have. This enumeration relies on the ordering of the
  * elements within, which should be as follows: {@code STANDARD}, {@code MODERATOR}, {@code ADMINISTRATOR}.
- * 
+ *
  * @author Graham
  */
 public enum PrivilegeLevel {
@@ -27,7 +27,7 @@ public enum PrivilegeLevel {
 
 	/**
 	 * Gets the privilege level for the specified numerical value.
-	 * 
+	 *
 	 * @param value The numerical value.
 	 * @return The privilege level.
 	 * @throws IllegalArgumentException If the specified value is out of bounds.
@@ -40,7 +40,7 @@ public enum PrivilegeLevel {
 
 	/**
 	 * Gets the numerical value of this privilege level.
-	 * 
+	 *
 	 * @return The numerical value used in the protocol.
 	 */
 	public int toInteger() {

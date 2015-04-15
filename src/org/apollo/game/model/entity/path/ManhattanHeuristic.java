@@ -4,7 +4,7 @@ import org.apollo.game.model.Position;
 
 /**
  * The Manhattan heuristic, ideal for a system that limits movement to 4 directions.
- * 
+ *
  * @author Major
  */
 final class ManhattanHeuristic extends Heuristic {

@@ -11,7 +11,7 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
  * A {@link MessageHandler} that verifies the target item in {@link ItemOnItemMessage}s.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class ItemOnItemVerificationHandler extends MessageHandler<ItemOnItemMessage> {

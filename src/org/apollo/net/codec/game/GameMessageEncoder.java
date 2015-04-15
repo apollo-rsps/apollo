@@ -11,7 +11,7 @@ import org.apollo.net.release.Release;
 
 /**
  * A {@link MessageToMessageEncoder} which encodes {@link Message}s into {@link GamePacket}s.
- * 
+ *
  * @author Graham
  */
 public final class GameMessageEncoder extends MessageToMessageEncoder<Message> {
@@ -23,7 +23,7 @@ public final class GameMessageEncoder extends MessageToMessageEncoder<Message> {
 
 	/**
 	 * Creates the game message encoder with the specified release.
-	 * 
+	 *
 	 * @param release The release.
 	 */
 	public GameMessageEncoder(Release release) {

@@ -10,7 +10,7 @@ import org.apollo.util.TextUtil;
 
 /**
  * A {@link MessageDecoder} for the {@link ChatMessage}.
- * 
+ *
  * @author Graham
  */
 public final class ChatMessageDecoder extends MessageDecoder<ChatMessage> {

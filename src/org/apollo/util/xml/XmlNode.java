@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * A class which represents a single node in the DOM tree, maintaining information about its children, attributes, value
  * and name.
- * 
+ *
  * @author Graham
  */
 public final class XmlNode implements Iterable<XmlNode> {
@@ -40,7 +40,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Creates a new {@link XmlNode} with the specified name.
-	 * 
+	 *
 	 * @param name The name of this node.
 	 */
 	public XmlNode(String name) {
@@ -49,7 +49,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Adds a child {@link XmlNode}.
-	 * 
+	 *
 	 * @param child The child to add.
 	 */
 	public void addChild(XmlNode child) {
@@ -58,7 +58,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Checks if an attribute with the specified name exists.
-	 * 
+	 *
 	 * @param name The attribute's name.
 	 * @return {@code true} if an attribute with that name exists, {@code false} otherwise.
 	 */
@@ -68,7 +68,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets an attribute by it's name.
-	 * 
+	 *
 	 * @param name The name of the attribute.
 	 * @return The attribute's value, or {@code null} if it doesn't exist.
 	 */
@@ -78,7 +78,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets the attribute count.
-	 * 
+	 *
 	 * @return The number of attributes.
 	 */
 	public int getAttributeCount() {
@@ -87,7 +87,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets a {@link Set} of attribute names.
-	 * 
+	 *
 	 * @return The set of names.
 	 */
 	public Set<String> getAttributeNames() {
@@ -96,7 +96,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets a {@link Set} of attribute map entries.
-	 * 
+	 *
 	 * @return The set of entries.
 	 */
 	public Set<Map.Entry<String, String>> getAttributes() {
@@ -105,7 +105,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets the first child with the specified name.
-	 * 
+	 *
 	 * @param name The name of the child.
 	 * @return The {@link XmlNode} if a child was found with a matching name, {@code null} otherwise.
 	 */
@@ -120,7 +120,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets the child count.
-	 * 
+	 *
 	 * @return The number of child {@link XmlNode}s.
 	 */
 	public int getChildCount() {
@@ -129,7 +129,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets a {@link Collection} of child {@link XmlNode}s.
-	 * 
+	 *
 	 * @return The collection.
 	 */
 	public Collection<XmlNode> getChildren() {
@@ -138,7 +138,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets the name of this node.
-	 * 
+	 *
 	 * @return The name of this node.
 	 */
 	public String getName() {
@@ -147,7 +147,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Gets the value of this node.
-	 * 
+	 *
 	 * @return The value of this node, or {@code null} if it has no value.
 	 */
 	public String getValue() {
@@ -165,7 +165,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Checks if this node has a value.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasValue() {
@@ -193,7 +193,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Removes an attribute.
-	 * 
+	 *
 	 * @param name The name of the attribute.
 	 */
 	public void removeAttribute(String name) {
@@ -202,7 +202,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Removes a child {@link XmlNode}.
-	 * 
+	 *
 	 * @param child The child to remove.
 	 */
 	public void removeChild(XmlNode child) {
@@ -218,7 +218,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Adds an attribute. It will overwrite an existing attribute if it exists.
-	 * 
+	 *
 	 * @param name The name of the attribute.
 	 * @param value The value of the attribute.
 	 */
@@ -228,7 +228,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Sets the name of this node.
-	 * 
+	 *
 	 * @param name The name of this node.
 	 */
 	public void setName(String name) {
@@ -237,7 +237,7 @@ public final class XmlNode implements Iterable<XmlNode> {
 
 	/**
 	 * Sets the value of this node.
-	 * 
+	 *
 	 * @param value The value of this node.
 	 */
 	public void setValue(String value) {

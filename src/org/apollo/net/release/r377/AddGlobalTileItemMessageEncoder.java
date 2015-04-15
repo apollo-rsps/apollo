@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SendPublicTileItemMessage}.
- * 
+ *
  * @author Major
  */
 public final class AddGlobalTileItemMessageEncoder extends MessageEncoder<SendPublicTileItemMessage> {

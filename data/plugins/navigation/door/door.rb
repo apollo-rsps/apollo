@@ -13,12 +13,12 @@ class OpenDoorAction < DistancedAction
 
   def executeAction
     mob.turn_to(@door.position)
-    DoorUtil::toggle(@door, mob)
+    DoorUtil::toggle(@door)
     stop
   end
 
   def equals(other)
-    return (get_class == other.get_class && @door_object == other.door_object)
+    return (get_class == other.get_class && @door == other.door)
   end
 
 end
@@ -28,6 +28,7 @@ on :message, :first_object_action do |player, message|
   if DoorUtil::is_door?(message.id)
     puts "Player: #{player.position}, door: #{message.position}"
     door = DoorUtil::get_door_object(message.position, message.id)
-    player.start_action(OpenDoorAction.new(player, door)) unless door.nil?
+    DoorUtil::toggle(door) unless door.nil?
+    # player.start_action(OpenDoorAction.new(player, door)) unless door.nil?
   end
 end

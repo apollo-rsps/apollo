@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to set a widget's displayed npc model.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class SetWidgetNpcModelMessage extends Message {
@@ -21,7 +21,7 @@ public final class SetWidgetNpcModelMessage extends Message {
 
 	/**
 	 * Creates a new set interface NPC model message.
-	 * 
+	 *
 	 * @param interfaceId The interface's id.
 	 * @param modelId The model's (NPC) id.
 	 */
@@ -32,7 +32,7 @@ public final class SetWidgetNpcModelMessage extends Message {
 
 	/**
 	 * Gets the interface's id.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getInterfaceId() {
@@ -41,7 +41,7 @@ public final class SetWidgetNpcModelMessage extends Message {
 
 	/**
 	 * Gets the model's (NPC) id.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getModelId() {

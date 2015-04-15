@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.setting.ServerStatus;
 
 /**
  * A {@link Message} sent to the client to update the friend server status.
- * 
+ *
  * @author Major
  */
 public final class FriendServerStatusMessage extends Message {
@@ -17,7 +17,7 @@ public final class FriendServerStatusMessage extends Message {
 
 	/**
 	 * Creates a new friend server status message.
-	 * 
+	 *
 	 * @param status The status.
 	 */
 	public FriendServerStatusMessage(ServerStatus status) {
@@ -26,7 +26,7 @@ public final class FriendServerStatusMessage extends Message {
 
 	/**
 	 * Gets the status code of the friend server.
-	 * 
+	 *
 	 * @return The status code.
 	 */
 	public int getStatusCode() {

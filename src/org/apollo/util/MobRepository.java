@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.
- * 
+ *
  * @author Graham
  * @author Ryley
  * @param <T> The type of Mob.
@@ -17,7 +17,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 	/**
 	 * The {@link Iterator} implementation for the MobRepository.
-	 * 
+	 *
 	 * @author Graham
 	 * @author Ryley
 	 */
@@ -40,7 +40,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 		/**
 		 * Constructs a new {@link MobRepositoryIterator} with the specified MobRepository.
-		 * 
+		 *
 		 * @param repository The repository of Mob's this Iterator iterates over.
 		 */
 		private MobRepositoryIterator(MobRepository<T> repository) {
@@ -86,7 +86,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 	/**
 	 * Creates a new Mob repository with the specified capacity.
-	 * 
+	 *
 	 * @param capacity The maximum number of Mobs that can be present in the repository.
 	 */
 	public MobRepository(int capacity) {
@@ -95,7 +95,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 	/**
 	 * Adds a Mob to the repository.
-	 * 
+	 *
 	 * @param mob The Mob to add.
 	 * @return {@code true} if the Mob was added, {@code false} if the size has reached the capacity of this repository.
 	 */
@@ -121,7 +121,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 	/**
 	 * Gets the capacity of this repository.
-	 * 
+	 *
 	 * @return The maximum size of this repository.
 	 */
 	public int capacity() {
@@ -150,7 +150,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 	/**
 	 * Removes a Mob from the repository.
-	 * 
+	 *
 	 * @param mob The Mob to remove.
 	 * @return {@code true} if the Mob was removed, {@code false} if not.
 	 */
@@ -161,7 +161,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 	/**
 	 * Removes a Mob from the repository by the specified index.
-	 * 
+	 *
 	 * @param index The index of the Mob to remove.
 	 * @return {@code true} if the Mob at the specified index was removed otherwise {@code false}.
 	 */
@@ -180,7 +180,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 	/**
 	 * Gets the size of this repository.
-	 * 
+	 *
 	 * @return The number of Mobs in this repository.
 	 */
 	public int size() {

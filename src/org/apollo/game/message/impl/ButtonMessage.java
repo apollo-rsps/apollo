@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client when a player clicks a button.
- * 
+ *
  * @author Graham
  */
 public final class ButtonMessage extends Message {
@@ -16,7 +16,7 @@ public final class ButtonMessage extends Message {
 
 	/**
 	 * Creates the button message.
-	 * 
+	 *
 	 * @param widgetId The widget id.
 	 */
 	public ButtonMessage(int widgetId) {
@@ -25,7 +25,7 @@ public final class ButtonMessage extends Message {
 
 	/**
 	 * Gets the widget id.
-	 * 
+	 *
 	 * @return The widget id.
 	 */
 	public int getWidgetId() {

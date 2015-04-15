@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link ThirdItemActionMessage}.
- * 
+ *
  * @author Graham
  */
 public final class ThirdItemActionMessageDecoder extends MessageDecoder<ThirdItemActionMessage> {

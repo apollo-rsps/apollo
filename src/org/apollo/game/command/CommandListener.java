@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.setting.PrivilegeLevel;
 
 /**
  * An interface which should be implemented to listen to {@link Command}s.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -25,7 +25,7 @@ public abstract class CommandListener {
 
 	/**
 	 * Creates a new command listener.
-	 * 
+	 *
 	 * @param level The required {@link PrivilegeLevel}.
 	 */
 	public CommandListener(PrivilegeLevel level) {
@@ -34,7 +34,7 @@ public abstract class CommandListener {
 
 	/**
 	 * Executes the action for this command.
-	 * 
+	 *
 	 * @param player The player.
 	 * @param command The command.
 	 */
@@ -42,7 +42,7 @@ public abstract class CommandListener {
 
 	/**
 	 * Executes a privileged command.
-	 * 
+	 *
 	 * @param player The player.
 	 * @param command The command.
 	 */

@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 /**
  * A class which handles the logic for each pulse of the {@link GameService}.
- * 
+ *
  * @author Graham
  */
 public final class GamePulseHandler implements Runnable {
@@ -22,7 +22,7 @@ public final class GamePulseHandler implements Runnable {
 
 	/**
 	 * Creates the game pulse handler object.
-	 * 
+	 *
 	 * @param service The {@link GameService}.
 	 */
 	protected GamePulseHandler(GameService service) {

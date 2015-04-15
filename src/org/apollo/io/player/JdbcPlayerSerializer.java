@@ -6,7 +6,7 @@ import org.apollo.security.PlayerCredentials;
 
 /**
  * A {@link PlayerSerializer} that utilises {@code JDBC} to communicate with an SQL database containing player data.
- * 
+ *
  * @author Major
  */
 public final class JdbcPlayerSerializer extends PlayerSerializer {

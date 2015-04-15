@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * Represents a single item.
- * 
+ *
  * @author Graham
  */
 public final class Item {
@@ -29,7 +29,7 @@ public final class Item {
 
 	/**
 	 * Creates an item with an amount of {@code 1}.
-	 * 
+	 *
 	 * @param id The item's id.
 	 */
 	public Item(int id) {
@@ -38,7 +38,7 @@ public final class Item {
 
 	/**
 	 * Creates an item with the specified the amount.
-	 * 
+	 *
 	 * @param id The item's id.
 	 * @param amount The amount.
 	 * @throws IllegalArgumentException If the amount is negative.
@@ -47,7 +47,7 @@ public final class Item {
 		Preconditions.checkArgument(amount >= 0, "Amount cannot be negative.");
 		this.id = id;
 		this.amount = amount;
-		this.definition = ItemDefinition.lookup(id);
+		definition = ItemDefinition.lookup(id);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public final class Item {
 
 	/**
 	 * Gets the amount.
-	 * 
+	 *
 	 * @return The amount.
 	 */
 	public int getAmount() {
@@ -71,7 +71,7 @@ public final class Item {
 
 	/**
 	 * Gets the {@link ItemDefinition} that describes this item.
-	 * 
+	 *
 	 * @return The definition.
 	 */
 	public ItemDefinition getDefinition() {
@@ -80,7 +80,7 @@ public final class Item {
 
 	/**
 	 * Gets the id.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {

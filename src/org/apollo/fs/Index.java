@@ -4,14 +4,14 @@ import com.google.common.base.Preconditions;
 
 /**
  * An {@link Index} points to a file in the {@code main_file_cache.dat} file.
- * 
+ *
  * @author Graham
  */
 public final class Index {
 
 	/**
 	 * Decodes a buffer into an index.
-	 * 
+	 *
 	 * @param buffer The buffer.
 	 * @return The decoded {@link Index}.
 	 * @throws IllegalArgumentException If the buffer length is invalid.
@@ -37,7 +37,7 @@ public final class Index {
 
 	/**
 	 * Creates the index.
-	 * 
+	 *
 	 * @param size The size of the file.
 	 * @param block The first block of the file.
 	 */
@@ -48,7 +48,7 @@ public final class Index {
 
 	/**
 	 * Gets the first block of the file.
-	 * 
+	 *
 	 * @return The first block of the file.
 	 */
 	public int getBlock() {
@@ -57,7 +57,7 @@ public final class Index {
 
 	/**
 	 * Gets the size of the file.
-	 * 
+	 *
 	 * @return The size of the file.
 	 */
 	public int getSize() {

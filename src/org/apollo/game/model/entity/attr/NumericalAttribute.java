@@ -4,14 +4,14 @@ import com.google.common.primitives.Longs;
 
 /**
  * An {@link Attribute} with a numerical value.
- * 
+ *
  * @author Major
  */
 public final class NumericalAttribute extends Attribute<Number> {
 
 	/**
 	 * Gets the {@link AttributeType} of number this attribute is.
-	 * 
+	 *
 	 * @param value The value of this attribute.
 	 * @return The type.
 	 */
@@ -21,7 +21,7 @@ public final class NumericalAttribute extends Attribute<Number> {
 
 	/**
 	 * Creates the number attribute.
-	 * 
+	 *
 	 * @param value The value of this attribute.
 	 */
 	public NumericalAttribute(Number value) {
@@ -30,13 +30,13 @@ public final class NumericalAttribute extends Attribute<Number> {
 
 	@Override
 	public byte[] encode() {
-		long encoded = (type == AttributeType.DOUBLE) ? Double.doubleToLongBits((double) value) : (long) value;
+		long encoded = type == AttributeType.DOUBLE ? Double.doubleToLongBits((double) value) : (long) value;
 		return Longs.toByteArray(encoded);
 	}
 
 	@Override
 	public String toString() {
-		return (type == AttributeType.DOUBLE) ? Double.toString((double) value) : Long.toString((long) value);
+		return type == AttributeType.DOUBLE ? Double.toString((double) value) : Long.toString((long) value);
 	}
 
 }

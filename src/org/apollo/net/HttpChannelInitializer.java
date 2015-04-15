@@ -10,7 +10,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * A {@link ChannelInitializer} for the HTTP protocol.
- * 
+ *
  * @author Graham
  */
 public final class HttpChannelInitializer extends ChannelInitializer<SocketChannel> {
@@ -27,7 +27,7 @@ public final class HttpChannelInitializer extends ChannelInitializer<SocketChann
 
 	/**
 	 * Creates the HTTP pipeline factory.
-	 * 
+	 *
 	 * @param handler The file server event handler.
 	 */
 	public HttpChannelInitializer(ApolloHandler handler) {

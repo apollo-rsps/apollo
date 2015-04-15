@@ -6,7 +6,7 @@ import org.apollo.game.message.Message;
  * A {@link Message} sent by the client representing the clicking of an npc menu action. Note that the actual message
  * sent by the client is one of the three npc action messages, but this is the message that should be intercepted (and
  * the option verified).
- * 
+ *
  * @author Major
  */
 public abstract class NpcActionMessage extends Message {
@@ -23,7 +23,7 @@ public abstract class NpcActionMessage extends Message {
 
 	/**
 	 * Creates an npc action message.
-	 * 
+	 *
 	 * @param option The option number.
 	 * @param index The index of the npc.
 	 */
@@ -34,7 +34,7 @@ public abstract class NpcActionMessage extends Message {
 
 	/**
 	 * Gets the menu action number (i.e. the action message 'option') clicked.
-	 * 
+	 *
 	 * @return The option number.
 	 */
 	public int getOption() {
@@ -43,7 +43,7 @@ public abstract class NpcActionMessage extends Message {
 
 	/**
 	 * Gets the index of the npc clicked.
-	 * 
+	 *
 	 * @return The npc index.
 	 */
 	public int getIndex() {

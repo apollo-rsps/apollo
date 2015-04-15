@@ -27,7 +27,7 @@ public final class CollisionMatrix {
 
 	/**
 	 * Creates an array of CollisionMatrix objects, all of the specified width and length.
-	 * 
+	 *
 	 * @param count The length of the array to create.
 	 * @param width The width of each CollisionMatrix.
 	 * @param length The length of each CollisionMatrix.
@@ -69,7 +69,7 @@ public final class CollisionMatrix {
 	/**
 	 * Returns whether or not <strong>all</strong> of the specified {@link CollisionFlag}s are set for the specified
 	 * coordinate pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param flags The CollisionFlags.
@@ -88,7 +88,7 @@ public final class CollisionMatrix {
 	/**
 	 * Returns whether or not <strong>any</strong> of the specified {@link CollisionFlag}s are set for the specified
 	 * coordinate pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param flags The CollisionFlags.
@@ -106,7 +106,7 @@ public final class CollisionMatrix {
 
 	/**
 	 * Completely blocks the tile at the specified coordinate pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
@@ -117,7 +117,7 @@ public final class CollisionMatrix {
 	/**
 	 * Clears (i.e. sets to {@code false}) the value of the specified {@link CollisionFlag} for the specified coordinate
 	 * pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param flag The CollisionFlag.
@@ -128,7 +128,7 @@ public final class CollisionMatrix {
 
 	/**
 	 * Returns whether or not the specified {@link CollisionFlag} is set for the specified coordinate pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param flag The CollisionFlag.
@@ -140,7 +140,7 @@ public final class CollisionMatrix {
 
 	/**
 	 * Gets the value of the specified tile.
-	 * 
+	 *
 	 * @param x The x coordinate of the tile.
 	 * @param y The y coordinate of the tile.
 	 * @return The value.
@@ -151,7 +151,7 @@ public final class CollisionMatrix {
 
 	/**
 	 * Resets the cell of the specified coordinate pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
@@ -161,7 +161,7 @@ public final class CollisionMatrix {
 
 	/**
 	 * Sets the appropriate index for the specified coordinate pair to the specified value.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param value The value.
@@ -173,7 +173,7 @@ public final class CollisionMatrix {
 	/**
 	 * Sets (i.e. sets to {@code true}) the value of the specified {@link CollisionFlag} for the specified coordinate
 	 * pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param flag The CollisionFlag.
@@ -190,7 +190,7 @@ public final class CollisionMatrix {
 	/**
 	 * Returns whether or not an Entity of the specified {@link EntityType type} cannot traverse the tile at the
 	 * specified coordinate pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param entity The {@link EntityType}.
@@ -225,7 +225,7 @@ public final class CollisionMatrix {
 
 	/**
 	 * Gets the index in the matrix for the specified coordinate pair.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @return The index.

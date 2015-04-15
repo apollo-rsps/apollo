@@ -17,7 +17,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A {@link StatefulFrameDecoder} that decodes {@link GamePacket}s.
- * 
+ *
  * @author Graham
  */
 public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderState> {
@@ -49,7 +49,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	/**
 	 * Creates the {@link GamePacketDecoder}.
-	 * 
+	 *
 	 * @param random The random number generator.
 	 * @param release The current release.
 	 */
@@ -78,7 +78,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	/**
 	 * Decodes the length state.
-	 * 
+	 *
 	 * @param buffer The buffer.
 	 */
 	private void decodeLength(ByteBuf buffer) {
@@ -92,7 +92,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	/**
 	 * Decodes the opcode state.
-	 * 
+	 *
 	 * @param buffer The buffer.
 	 * @param out The {@link List} of objects to be passed along the pipeline.
 	 */
@@ -126,7 +126,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 
 	/**
 	 * Decodes the payload state.
-	 * 
+	 *
 	 * @param buffer The buffer.
 	 * @param out The {@link List} of objects to be passed along the pipeline.
 	 */

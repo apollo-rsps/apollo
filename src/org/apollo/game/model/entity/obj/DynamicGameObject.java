@@ -44,7 +44,7 @@ public final class DynamicGameObject extends GameObject {
 		@Override
 		public int hashCode() {
 			Player player = get();
-			return (player == null) ? 0 : player.hashCode();
+			return player == null ? 0 : player.hashCode();
 		}
 
 	}
@@ -104,7 +104,7 @@ public final class DynamicGameObject extends GameObject {
 
 	/**
 	 * Adds this DynamicGameObject to the view of the specified {@link Player}.
-	 * 
+	 *
 	 * @param player The Player.
 	 * @return {@code true} if this GameObject was not already visible to the specified Player.
 	 */
@@ -120,7 +120,7 @@ public final class DynamicGameObject extends GameObject {
 
 	/**
 	 * Removes this DynamicGameObject from the view of the specified {@link Player}.
-	 * 
+	 *
 	 * @param player The Player.
 	 * @return {@code true} if this GameObject was visible to the specified Player.
 	 */

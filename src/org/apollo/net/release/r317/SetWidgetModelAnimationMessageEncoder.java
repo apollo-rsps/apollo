@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SetWidgetModelAnimationMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 final class SetWidgetModelAnimationMessageEncoder extends MessageEncoder<SetWidgetModelAnimationMessage> {

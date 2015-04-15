@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * Listens for {@link Message}s received from the client.
- * 
+ *
  * @author Graham
  * @author Ryley
  * @param <M> The type of Message this class is listening for.
@@ -28,7 +28,7 @@ public abstract class MessageHandler<M extends Message> {
 
 	/**
 	 * Handles the Message that was received.
-	 * 
+	 *
 	 * @param player The player to handle the Message for.
 	 * @param message The Message.
 	 */

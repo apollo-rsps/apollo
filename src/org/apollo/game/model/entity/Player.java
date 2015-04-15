@@ -54,7 +54,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A {@link Player} is a {@link Mob} that a user is controlling.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -88,7 +88,7 @@ public final class Player extends Mob {
 	/**
 	 * This player's credentials.
 	 */
-	private PlayerCredentials credentials;
+	private final PlayerCredentials credentials;
 
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
@@ -197,7 +197,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Creates the Player.
-	 * 
+	 *
 	 * @param world The {@link World} containing the Player.
 	 * @param credentials The player's credentials.
 	 * @param position The initial position.
@@ -211,7 +211,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Adds a click, represented by a {@link Point}, to the {@link List} of clicks.
-	 * 
+	 *
 	 * @param point The point.
 	 * @return {@code true} if the point was added successfully.
 	 */
@@ -221,7 +221,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Adds the specified username to this player's friend list.
-	 * 
+	 *
 	 * @param username The username.
 	 */
 	public void addFriend(String username) {
@@ -230,7 +230,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Adds the specified username to this player's ignore list.
-	 * 
+	 *
 	 * @param username The username.
 	 */
 	public void addIgnore(String username) {
@@ -272,7 +272,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Indicates whether this player is friends with the player with the specified username or not.
-	 * 
+	 *
 	 * @param username The username of the other player.
 	 * @return {@code true} if the specified username is on this player's friend list, otherwise {@code false}.
 	 */
@@ -282,7 +282,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the player's appearance.
-	 * 
+	 *
 	 * @return The appearance.
 	 */
 	public Appearance getAppearance() {
@@ -291,7 +291,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the mob's bank.
-	 * 
+	 *
 	 * @return The bank.
 	 */
 	public Inventory getBank() {
@@ -300,7 +300,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets this player's public chat privacy state.
-	 * 
+	 *
 	 * @return The privacy state.
 	 */
 	public PrivacyState getChatPrivacy() {
@@ -309,7 +309,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the {@link Deque} of clicks.
-	 * 
+	 *
 	 * @return The deque.
 	 */
 	public Deque<Point> getClicks() {
@@ -318,7 +318,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the value denoting the clients modified version (0 if it is an unmodified jagex client).
-	 * 
+	 *
 	 * @return The version.
 	 */
 	public int getClientVersion() {
@@ -328,7 +328,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the player's credentials.
-	 * 
+	 *
 	 * @return The player's credentials.
 	 */
 	public PlayerCredentials getCredentials() {
@@ -337,7 +337,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the player's name, encoded as a long.
-	 * 
+	 *
 	 * @return The encoded player name.
 	 */
 	public long getEncodedName() {
@@ -351,7 +351,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets this player's friend chat {@link PrivacyState}.
-	 * 
+	 *
 	 * @return The privacy state.
 	 */
 	public PrivacyState getFriendPrivacy() {
@@ -360,7 +360,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the {@link List} of this player's friends.
-	 * 
+	 *
 	 * @return The list.
 	 */
 	public List<String> getFriendUsernames() {
@@ -369,7 +369,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the {@link List} of usernames of ignored players.
-	 * 
+	 *
 	 * @return The list.
 	 */
 	public List<String> getIgnoredUsernames() {
@@ -383,7 +383,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets this player's interface set.
-	 * 
+	 *
 	 * @return The interface set for this player.
 	 */
 	public InterfaceSet getInterfaceSet() {
@@ -392,7 +392,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets this player's last click, represented by a {@link Point}.
-	 * 
+	 *
 	 * @return The click.
 	 */
 	public Point getLastClick() {
@@ -401,7 +401,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the last known region.
-	 * 
+	 *
 	 * @return The last known region, or {@code null} if the player has never known a region.
 	 */
 	public Position getLastKnownRegion() {
@@ -410,7 +410,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the {@link MembershipStatus} of this Player.
-	 * 
+	 *
 	 * @return The MembershipStatus.
 	 */
 	public MembershipStatus getMembershipStatus() {
@@ -419,7 +419,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the player's prayer icon.
-	 * 
+	 *
 	 * @return The prayer icon.
 	 */
 	public int getPrayerIcon() {
@@ -428,7 +428,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the privilege level.
-	 * 
+	 *
 	 * @return The privilege level.
 	 */
 	public PrivilegeLevel getPrivilegeLevel() {
@@ -437,7 +437,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the player's run energy.
-	 * 
+	 *
 	 * @return The run energy.
 	 */
 	public int getRunEnergy() {
@@ -447,7 +447,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets this player's {@link ScreenBrightness}.
-	 * 
+	 *
 	 * @return The screen brightness.
 	 */
 	public ScreenBrightness getScreenBrightness() {
@@ -456,7 +456,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the game session.
-	 * 
+	 *
 	 * @return The game session.
 	 */
 	public GameSession getSession() {
@@ -465,7 +465,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets this player's trade {@link PrivacyState}.
-	 * 
+	 *
 	 * @return The privacy state.
 	 */
 	public PrivacyState getTradePrivacy() {
@@ -474,7 +474,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets this player's name.
-	 * 
+	 *
 	 * @return The name.
 	 */
 	public String getUsername() {
@@ -483,7 +483,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets this player's viewing distance.
-	 * 
+	 *
 	 * @return The viewing distance.
 	 */
 	public int getViewingDistance() {
@@ -492,7 +492,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Gets the id of the world this player is in.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getWorldId() {
@@ -506,7 +506,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Indicates whether or not the player with the specified username is on this player's ignore list.
-	 * 
+	 *
 	 * @param username The username of the player.
 	 * @return {@code true} if the player is ignored, {@code false} if not.
 	 */
@@ -516,7 +516,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Checks if this player has ever known a region.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasLastKnownRegion() {
@@ -525,7 +525,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Checks if the region has changed.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean hasRegionChanged() {
@@ -543,7 +543,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Checks if there are excessive npcs.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isExcessiveNpcsSet() {
@@ -552,7 +552,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Checks if there are excessive players.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isExcessivePlayersSet() {
@@ -561,7 +561,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Checks if this player has membership.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isMembers() {
@@ -570,7 +570,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Checks if this player is running.
-	 * 
+	 *
 	 * @return {@code true} if the player is running, otherwise {@code false}.
 	 */
 	public boolean isRunning() {
@@ -579,7 +579,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Indicates whether or not the player is skulled
-	 * 
+	 *
 	 * @return {@code true} if the player is skulled, otherwise {@code false}.
 	 */
 	public boolean isSkulled() {
@@ -588,7 +588,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Checks if this player is withdrawing noted items.
-	 * 
+	 *
 	 * @return {@code true} if the player is currently withdrawing notes, otherwise {@code false}.
 	 */
 	public boolean isWithdrawingNotes() {
@@ -606,7 +606,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Indicates whether the message filter is enabled.
-	 * 
+	 *
 	 * @return {@code true} if the filter is enabled, otherwise {@code false}.
 	 */
 	public boolean messageFilterEnabled() {
@@ -631,7 +631,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Removes the specified username from this player's friend list.
-	 * 
+	 *
 	 * @param username The username.
 	 * @return {@code true} if the player's friend list contained the specified user, {@code false} if not.
 	 */
@@ -641,7 +641,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Removes the specified username from this player's ignore list.
-	 * 
+	 *
 	 * @param username The username.
 	 * @return {@code true} if the player's ignore list contained the specified user, {@code false} if not.
 	 */
@@ -665,7 +665,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sends a {@link Message} to this player.
-	 * 
+	 *
 	 * @param message The message..
 	 */
 	public void send(Message message) {
@@ -704,7 +704,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sends a message to the player.
-	 * 
+	 *
 	 * @param message The message.
 	 */
 	public void sendMessage(String message) {
@@ -713,7 +713,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sends a message to the player.
-	 * 
+	 *
 	 * @param message The message.
 	 * @param filterable Whether or not the message can be filtered.
 	 */
@@ -727,7 +727,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sends the quest interface
-	 * 
+	 *
 	 * @param text The text to display on the interface.
 	 */
 	public void sendQuestInterface(List<String> text) {
@@ -756,7 +756,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the player's appearance.
-	 * 
+	 *
 	 * @param appearance The new appearance.
 	 */
 	public void setAppearance(Appearance appearance) {
@@ -766,7 +766,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the chat {@link PrivacyState}.
-	 * 
+	 *
 	 * @param chatPrivacy The privacy state.
 	 */
 	public void setChatPrivacy(PrivacyState chatPrivacy) {
@@ -775,7 +775,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the value denoting the client's modified version.
-	 * 
+	 *
 	 * @param version The client version.
 	 */
 	public void setClientVersion(int version) {
@@ -784,7 +784,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the friend {@link PrivacyState}.
-	 * 
+	 *
 	 * @param friendPrivacy The privacy state.
 	 */
 	public void setFriendPrivacy(PrivacyState friendPrivacy) {
@@ -793,7 +793,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the {@link List} of this player's friends.
-	 * 
+	 *
 	 * @param friends The friends.
 	 */
 	public void setFriendUsernames(List<String> friends) {
@@ -802,7 +802,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the {@link List} of this player's ignored players.
-	 * 
+	 *
 	 * @param ignores The ignored player list.
 	 */
 	public void setIgnoredUsernames(List<String> ignores) {
@@ -811,7 +811,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the last known region.
-	 * 
+	 *
 	 * @param lastKnownRegion The last known region.
 	 */
 	public void setLastKnownRegion(Position lastKnownRegion) {
@@ -820,7 +820,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Changes the membership status of this player.
-	 * 
+	 *
 	 * @param members The new membership flag.
 	 */
 	public void setMembers(MembershipStatus members) {
@@ -829,7 +829,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the player's prayer icon. TODO make this an attribute?
-	 * 
+	 *
 	 * @param prayerIcon The prayer icon.
 	 */
 	public void setPrayerIcon(int prayerIcon) {
@@ -838,7 +838,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the privilege level.
-	 * 
+	 *
 	 * @param privilegeLevel The privilege level.
 	 */
 	public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
@@ -847,7 +847,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the region changed flag.
-	 * 
+	 *
 	 * @param regionChanged A flag indicating if the region has changed.
 	 */
 	public void setRegionChanged(boolean regionChanged) {
@@ -856,7 +856,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the player's run energy.
-	 * 
+	 *
 	 * @param energy The energy.
 	 */
 	public void setRunEnergy(int energy) {
@@ -866,16 +866,16 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the {@link ScreenBrightness} of this player.
-	 * 
+	 *
 	 * @param brightness The screen brightness.
 	 */
 	public void setScreenBrightness(ScreenBrightness brightness) {
-		this.screenBrightness = brightness;
+		screenBrightness = brightness;
 	}
 
 	/**
 	 * Sets the player's {@link GameSession}.
-	 * 
+	 *
 	 * @param session The player's {@link GameSession}.
 	 */
 	public void setSession(GameSession session) {
@@ -884,7 +884,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets whether or not the player is skulled. TODO make this an attribute
-	 * 
+	 *
 	 * @param isSkulled Whether or not the player is skulled.
 	 */
 	public void setSkulled(boolean isSkulled) {
@@ -893,7 +893,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets the trade {@link PrivacyState}.
-	 * 
+	 *
 	 * @param tradePrivacy The privacy state.
 	 */
 	public void setTradePrivacy(PrivacyState tradePrivacy) {
@@ -902,7 +902,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Sets whether or not the player is withdrawing notes from the bank.
-	 * 
+	 *
 	 * @param withdrawingNotes Whether or not the player is withdrawing noted items.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
@@ -924,7 +924,7 @@ public final class Player extends Mob {
 
 	/**
 	 * Toggles the message filter.
-	 * 
+	 *
 	 * @return The new value of the filter.
 	 */
 	public boolean toggleMessageFilter() {

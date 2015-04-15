@@ -2,7 +2,7 @@ package org.apollo.game.model;
 
 /**
  * Holds world-related constants.
- * 
+ *
  * @author Graham
  */
 public final class WorldConstants {

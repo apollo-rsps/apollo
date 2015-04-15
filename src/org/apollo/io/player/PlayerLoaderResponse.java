@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A response for the {@link PlayerSerializer#loadPlayer} call.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -27,7 +27,7 @@ public final class PlayerLoaderResponse {
 
 	/**
 	 * Creates a {@link PlayerLoaderResponse} with only a status code.
-	 * 
+	 *
 	 * @param status The status code.
 	 * @throws IllegalArgumentException If the status code is {@link LoginConstants#STATUS_OK} or
 	 *             {@link LoginConstants#STATUS_RECONNECTION_OK}.
@@ -40,7 +40,7 @@ public final class PlayerLoaderResponse {
 
 	/**
 	 * Creates a {@link PlayerLoaderResponse} with a status code and {@link Player}.
-	 * 
+	 *
 	 * @param status The status code.
 	 * @param player The player.
 	 * @throws IllegalArgumentException If the status code does not need a player.
@@ -54,7 +54,7 @@ public final class PlayerLoaderResponse {
 
 	/**
 	 * Gets the player.
-	 * 
+	 *
 	 * @return The player, wrapped in an {@link Optional}.
 	 */
 	public Optional<Player> getPlayer() {
@@ -63,7 +63,7 @@ public final class PlayerLoaderResponse {
 
 	/**
 	 * Gets the status code.
-	 * 
+	 *
 	 * @return The status code.
 	 */
 	public int getStatus() {

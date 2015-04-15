@@ -34,7 +34,7 @@ final class EventListenerChain<E extends Event> {
 
 	/**
 	 * Adds an {@link EventListener} to this chain.
-	 * 
+	 *
 	 * @param listener The EventListener to add.
 	 */
 	public void addListener(EventListener<E> listener) {
@@ -43,7 +43,7 @@ final class EventListenerChain<E extends Event> {
 
 	/**
 	 * Notifies each {@link EventListener} in this chain that an {@link Event} has occurred.
-	 * 
+	 *
 	 * @param event The event.
 	 * @return {@code true} if the Event should continue on with its outcome, {@code false} if not.
 	 */

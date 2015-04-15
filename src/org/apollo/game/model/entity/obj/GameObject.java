@@ -13,7 +13,7 @@ import com.google.common.base.MoreObjects;
 
 /**
  * Represents an object in the game world.
- * 
+ *
  * @author Chris Fletcher
  * @author Major
  */
@@ -26,7 +26,7 @@ public abstract class GameObject extends Entity {
 
 	/**
 	 * Creates the GameObject.
-	 * 
+	 *
 	 * @param world The {@link World} containing the GameObject.
 	 * @param id The id of the GameObject
 	 * @param position The {@link Position} of the GameObject.
@@ -35,7 +35,7 @@ public abstract class GameObject extends Entity {
 	 */
 	public GameObject(World world, int id, Position position, int type, int orientation) {
 		super(world, position);
-		this.packed = id << 8 | (type & 0x3F) << 2 | orientation & 0x3;
+		packed = id << 8 | (type & 0x3F) << 2 | orientation & 0x3;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public abstract class GameObject extends Entity {
 
 	/**
 	 * Gets the definition of this object.
-	 * 
+	 *
 	 * @return The object's definition.
 	 */
 	public ObjectDefinition getDefinition() {
@@ -59,7 +59,7 @@ public abstract class GameObject extends Entity {
 
 	/**
 	 * Gets this object's id.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {
@@ -68,7 +68,7 @@ public abstract class GameObject extends Entity {
 
 	/**
 	 * Gets this object's orientation.
-	 * 
+	 *
 	 * @return The orientation.
 	 */
 	public int getOrientation() {
@@ -77,11 +77,11 @@ public abstract class GameObject extends Entity {
 
 	/**
 	 * Gets this object's type.
-	 * 
+	 *
 	 * @return The type.
 	 */
 	public int getType() {
-		return (packed >> 2) & 0x3F;
+		return packed >> 2 & 0x3F;
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public abstract class GameObject extends Entity {
 
 	/**
 	 * Returns whether or not this GameObject can be seen by the specified {@link Player}.
-	 * 
+	 *
 	 * @param player The Player.
 	 * @param world The {@link World} containing the GameObject.
 	 * @return {@code true} if the Player can see this GameObject, {@code false} if not.

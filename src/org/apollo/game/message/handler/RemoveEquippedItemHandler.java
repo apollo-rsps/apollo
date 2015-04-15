@@ -10,7 +10,7 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
  * A {@link MessageHandler} that removes equipped items.
- * 
+ *
  * @author Graham
  * @author Major
  */

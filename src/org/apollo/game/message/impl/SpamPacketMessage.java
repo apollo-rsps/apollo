@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client after a short period of time containing random data.
- * 
+ *
  * @author Major
  */
 public final class SpamPacketMessage extends Message {
@@ -16,7 +16,7 @@ public final class SpamPacketMessage extends Message {
 
 	/**
 	 * Creates a new spam packet message.
-	 * 
+	 *
 	 * @param data The data sent.
 	 */
 	public SpamPacketMessage(byte[] data) {
@@ -25,7 +25,7 @@ public final class SpamPacketMessage extends Message {
 
 	/**
 	 * Gets the data sent.
-	 * 
+	 *
 	 * @return The data.
 	 */
 	public byte[] getData() {

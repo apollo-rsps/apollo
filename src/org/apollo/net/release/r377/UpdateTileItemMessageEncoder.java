@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link UpdateTileItemMessage}.
- * 
+ *
  * @author Major
  */
 public final class UpdateTileItemMessageEncoder extends MessageEncoder<UpdateTileItemMessage> {

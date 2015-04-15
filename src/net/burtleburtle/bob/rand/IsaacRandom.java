@@ -5,7 +5,7 @@ package net.burtleburtle.bob.rand;
  * An implementation of the <a href="http://www.burtleburtle.net/bob/rand/isaacafa.html">ISAAC</a> psuedorandom number
  * generator.
  * </p>
- * 
+ *
  * <pre>
  * ------------------------------------------------------------------------------
  * Rand.java: By Bob Jenkins.  My random number generator, ISAAC.
@@ -20,7 +20,7 @@ package net.burtleburtle.bob.rand;
  * <p>
  * This class has been changed to be more conformant to Java and javadoc conventions.
  * </p>
- * 
+ *
  * @author Bob Jenkins
  */
 public final class IsaacRandom {
@@ -31,79 +31,125 @@ public final class IsaacRandom {
 	private static final int GOLDEN_RATIO = 0x9e3779b9;
 
 	/**
-	 * The log of the size of the result and memory arrays.
+	 * The log of the size of the result and state arrays.
 	 */
-	private static final int LOG_SIZE = 8;
+	private static final int LOG_SIZE = Long.BYTES;
 
 	/**
-	 * The size of the result and memory arrays.
+	 * The size of the result and states arrays.
 	 */
 	private static final int SIZE = 1 << LOG_SIZE;
 
 	/**
-	 * A mask for pseudorandom lookup.
+	 * A mask for pseudo-random lookup.
 	 */
 	private static int MASK = SIZE - 1 << 2;
 
 	/**
-	 * The accumulator.
+	 * The results given to the user.
 	 */
-	private int a;
-
-	/**
-	 * The last result.
-	 */
-	private int b;
-
-	/**
-	 * The counter.
-	 */
-	private int c;
-
-	/**
-	 * The count through the results in the results array.
-	 */
-	private int count;
+	private final int[] results = new int[SIZE];
 
 	/**
 	 * The internal state.
 	 */
-	private int[] mem;
+	private final int[] state = new int[SIZE];
 
 	/**
-	 * The results given to the user.
+	 * The count through the results in the results array.
 	 */
-	private int[] rsl;
+	private int count = SIZE;
 
 	/**
-	 * Creates the random number generator without an initial seed.
+	 * The accumulator.
 	 */
-	public IsaacRandom() {
-		mem = new int[SIZE];
-		rsl = new int[SIZE];
-		init(false);
-	}
+	private int accumulator;
+
+	/**
+	 * The last result.
+	 */
+	private int last;
+
+	/**
+	 * The counter.
+	 */
+	private int counter;
 
 	/**
 	 * Creates the random number generator with the specified seed.
-	 * 
+	 *
 	 * @param seed The seed.
 	 */
 	public IsaacRandom(int[] seed) {
-		mem = new int[SIZE];
-		rsl = new int[SIZE];
-		for (int i = 0; i < seed.length; ++i) {
-			rsl[i] = seed[i];
-		}
-		init(true);
+		int length = Math.min(seed.length, results.length);
+		System.arraycopy(seed, 0, results, 0, length);
+		init();
 	}
 
 	/**
-	 * Initialises this random number generator.
-	 * 
-	 * @param hasSeed Set to {@code true} if a seed was passed to the constructor.
+	 * Generates 256 results.
 	 */
-	private void init(boolean hasSeed) {
+	private void isaac() {
+		int i, j, x, y;
+
+		last += ++counter;
+		for (i = 0, j = SIZE / 2; i < SIZE / 2;) {
+			x = state[i];
+			accumulator ^= accumulator << 13;
+			accumulator += state[j++];
+			state[i] = y = state[(x & MASK) >> 2] + accumulator + last;
+			results[i++] = last = state[(y >> LOG_SIZE & MASK) >> 2] + x;
+
+			x = state[i];
+			accumulator ^= accumulator >>> 6;
+			accumulator += state[j++];
+			state[i] = y = state[(x & MASK) >> 2] + accumulator + last;
+			results[i++] = last = state[(y >> LOG_SIZE & MASK) >> 2] + x;
+
+			x = state[i];
+			accumulator ^= accumulator << 2;
+			accumulator += state[j++];
+			state[i] = y = state[(x & MASK) >> 2] + accumulator + last;
+			results[i++] = last = state[(y >> LOG_SIZE & MASK) >> 2] + x;
+
+			x = state[i];
+			accumulator ^= accumulator >>> 16;
+			accumulator += state[j++];
+			state[i] = y = state[(x & MASK) >> 2] + accumulator + last;
+			results[i++] = last = state[(y >> LOG_SIZE & MASK) >> 2] + x;
+		}
+
+		for (j = 0; j < SIZE / 2;) {
+			x = state[i];
+			accumulator ^= accumulator << 13;
+			accumulator += state[j++];
+			state[i] = y = state[(x & MASK) >> 2] + accumulator + last;
+			results[i++] = last = state[(y >> LOG_SIZE & MASK) >> 2] + x;
+
+			x = state[i];
+			accumulator ^= accumulator >>> 6;
+			accumulator += state[j++];
+			state[i] = y = state[(x & MASK) >> 2] + accumulator + last;
+			results[i++] = last = state[(y >> LOG_SIZE & MASK) >> 2] + x;
+
+			x = state[i];
+			accumulator ^= accumulator << 2;
+			accumulator += state[j++];
+			state[i] = y = state[(x & MASK) >> 2] + accumulator + last;
+			results[i++] = last = state[(y >> LOG_SIZE & MASK) >> 2] + x;
+
+			x = state[i];
+			accumulator ^= accumulator >>> 16;
+			accumulator += state[j++];
+			state[i] = y = state[(x & MASK) >> 2] + accumulator + last;
+			results[i++] = last = state[(y >> LOG_SIZE & MASK) >> 2] + x;
+		}
+	}
+
+	/**
+	 * Initializes this random number generator.
+	 */
+	private void init() {
 		int i;
 		int a, b, c, d, e, f, g, h;
 		a = b = c = d = e = f = g = h = GOLDEN_RATIO;
@@ -136,16 +182,15 @@ public final class IsaacRandom {
 		}
 
 		for (i = 0; i < SIZE; i += 8) { /* fill in mem[] with messy stuff */
-			if (hasSeed) {
-				a += rsl[i];
-				b += rsl[i + 1];
-				c += rsl[i + 2];
-				d += rsl[i + 3];
-				e += rsl[i + 4];
-				f += rsl[i + 5];
-				g += rsl[i + 6];
-				h += rsl[i + 7];
-			}
+			a += results[i];
+			b += results[i + 1];
+			c += results[i + 2];
+			d += results[i + 3];
+			e += results[i + 4];
+			f += results[i + 5];
+			g += results[i + 6];
+			h += results[i + 7];
+
 			a ^= b << 11;
 			d += a;
 			b += c;
@@ -170,128 +215,65 @@ public final class IsaacRandom {
 			h ^= a >>> 9;
 			c += h;
 			a += b;
-			mem[i] = a;
-			mem[i + 1] = b;
-			mem[i + 2] = c;
-			mem[i + 3] = d;
-			mem[i + 4] = e;
-			mem[i + 5] = f;
-			mem[i + 6] = g;
-			mem[i + 7] = h;
+			state[i] = a;
+			state[i + 1] = b;
+			state[i + 2] = c;
+			state[i + 3] = d;
+			state[i + 4] = e;
+			state[i + 5] = f;
+			state[i + 6] = g;
+			state[i + 7] = h;
 		}
 
-		if (hasSeed) { /* second pass makes all of seed affect all of mem */
-			for (i = 0; i < SIZE; i += 8) {
-				a += mem[i];
-				b += mem[i + 1];
-				c += mem[i + 2];
-				d += mem[i + 3];
-				e += mem[i + 4];
-				f += mem[i + 5];
-				g += mem[i + 6];
-				h += mem[i + 7];
-				a ^= b << 11;
-				d += a;
-				b += c;
-				b ^= c >>> 2;
-				e += b;
-				c += d;
-				c ^= d << 8;
-				f += c;
-				d += e;
-				d ^= e >>> 16;
-				g += d;
-				e += f;
-				e ^= f << 10;
-				h += e;
-				f += g;
-				f ^= g >>> 4;
-				a += f;
-				g += h;
-				g ^= h << 8;
-				b += g;
-				h += a;
-				h ^= a >>> 9;
-				c += h;
-				a += b;
-				mem[i] = a;
-				mem[i + 1] = b;
-				mem[i + 2] = c;
-				mem[i + 3] = d;
-				mem[i + 4] = e;
-				mem[i + 5] = f;
-				mem[i + 6] = g;
-				mem[i + 7] = h;
-			}
+		for (i = 0; i < SIZE; i += 8) {
+			a += state[i];
+			b += state[i + 1];
+			c += state[i + 2];
+			d += state[i + 3];
+			e += state[i + 4];
+			f += state[i + 5];
+			g += state[i + 6];
+			h += state[i + 7];
+			a ^= b << 11;
+			d += a;
+			b += c;
+			b ^= c >>> 2;
+			e += b;
+			c += d;
+			c ^= d << 8;
+			f += c;
+			d += e;
+			d ^= e >>> 16;
+			g += d;
+			e += f;
+			e ^= f << 10;
+			h += e;
+			f += g;
+			f ^= g >>> 4;
+			a += f;
+			g += h;
+			g ^= h << 8;
+			b += g;
+			h += a;
+			h ^= a >>> 9;
+			c += h;
+			a += b;
+			state[i] = a;
+			state[i + 1] = b;
+			state[i + 2] = c;
+			state[i + 3] = d;
+			state[i + 4] = e;
+			state[i + 5] = f;
+			state[i + 6] = g;
+			state[i + 7] = h;
 		}
 
 		isaac();
-		count = SIZE;
-	}
-
-	/**
-	 * Generates 256 results.
-	 */
-	private void isaac() {
-		int i, j, x, y;
-
-		b += ++c;
-		for (i = 0, j = SIZE / 2; i < SIZE / 2;) {
-			x = mem[i];
-			a ^= a << 13;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a >>> 6;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a << 2;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a >>> 16;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
-		}
-
-		for (j = 0; j < SIZE / 2;) {
-			x = mem[i];
-			a ^= a << 13;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a >>> 6;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a << 2;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
-
-			x = mem[i];
-			a ^= a >>> 16;
-			a += mem[j++];
-			mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-			rsl[i++] = b = mem[(y >> LOG_SIZE & MASK) >> 2] + x;
-		}
 	}
 
 	/**
 	 * Gets the next random value.
-	 * 
+	 *
 	 * @return The next random value.
 	 */
 	public int nextInt() {
@@ -299,7 +281,7 @@ public final class IsaacRandom {
 			isaac();
 			count = SIZE - 1;
 		}
-		return rsl[count];
+		return results[count];
 	}
 
 }

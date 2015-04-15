@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
 /**
  * An type that is contained in the snapshot of a {@link Region}, which consists of an {@link Entity} being added,
  * removed, or moved.
- * 
+ *
  * @author Major
  * @param <E> The type of {@link Entity} in this type.
  */
@@ -49,7 +49,7 @@ public abstract class UpdateOperation<E extends Entity> {
 
 	/**
 	 * Returns this UpdateOperation as a {@link Message}.
-	 * 
+	 *
 	 * @return The Message.
 	 */
 	public final RegionUpdateMessage toMessage() {
@@ -67,7 +67,7 @@ public abstract class UpdateOperation<E extends Entity> {
 
 	/**
 	 * Returns a {@link RegionUpdateMessage} that adds the {@link Entity} in this UpdateOperation.
-	 * 
+	 *
 	 * @param offset The offset of the {@link Position} of the Entity from the Position of the {@link Region}.
 	 * @return The RegionUpdateMessage.
 	 */
@@ -75,7 +75,7 @@ public abstract class UpdateOperation<E extends Entity> {
 
 	/**
 	 * Returns a {@link RegionUpdateMessage} that removes the {@link Entity} in this UpdateOperation.
-	 * 
+	 *
 	 * @param offset The offset of the {@link Position} of the Entity from the Position of the {@link Region}.
 	 * @return The RegionUpdateMessage.
 	 */
@@ -83,7 +83,7 @@ public abstract class UpdateOperation<E extends Entity> {
 
 	/**
 	 * Gets the position offset for the specified {@link Position}.
-	 * 
+	 *
 	 * @param position The Position.
 	 * @return The position offset.
 	 */
@@ -95,7 +95,7 @@ public abstract class UpdateOperation<E extends Entity> {
 		Preconditions.checkArgument(dx >= 0 && dx < Region.SIZE, position + " not in expected Region of " + region + ".");
 		Preconditions.checkArgument(dy >= 0 && dy < Region.SIZE, position + " not in expected Region of " + region + ".");
 
-		return (dx << 4) | dy;
+		return dx << 4 | dy;
 	}
 
 }

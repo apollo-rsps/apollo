@@ -9,7 +9,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * The {@link MessageDecoder} for the {@link SecondNpcActionMessage}.
- * 
+ *
  * @author Major
  */
 public final class SecondNpcActionMessageDecoder extends MessageDecoder<SecondNpcActionMessage> {

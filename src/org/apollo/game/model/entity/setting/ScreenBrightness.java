@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 /**
  * An enumeration representing the brightness of a player's screen. This enumeration relies on the ordering of the
  * elements within, which should be as follows: {@code DARK}, {@code NORMAL}, {@code BRIGHT}, {@code VERY_BRIGHT}.
- * 
+ *
  * @author Major
  */
 public enum ScreenBrightness {
@@ -32,7 +32,7 @@ public enum ScreenBrightness {
 
 	/**
 	 * Gets the screen brightness for the specified numerical value.
-	 * 
+	 *
 	 * @param value The numerical value.
 	 * @return The screen brightness.
 	 * @throws IllegalArgumentException If the specified value is out of bounds.
@@ -45,7 +45,7 @@ public enum ScreenBrightness {
 
 	/**
 	 * Converts this screen brightness to an integer.
-	 * 
+	 *
 	 * @return The numerical value.
 	 */
 	public int toInteger() {

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 /**
  * A {@link ResourceProvider} which provides additional hypertext resources.
- * 
+ *
  * @author Graham
  */
 public final class HypertextResourceProvider implements ResourceProvider {
@@ -23,7 +23,7 @@ public final class HypertextResourceProvider implements ResourceProvider {
 
 	/**
 	 * Creates a new hypertext resource provider with the specified base directory.
-	 * 
+	 *
 	 * @param base The base directory.
 	 */
 	public HypertextResourceProvider(Path base) {

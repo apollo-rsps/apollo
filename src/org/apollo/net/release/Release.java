@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A {@link Release} is a distinct client version, e.g. {@code 317}.
- * 
+ *
  * @author Graham
  */
 public abstract class Release {
@@ -38,7 +38,7 @@ public abstract class Release {
 
 	/**
 	 * Creates the release.
-	 * 
+	 *
 	 * @param releaseNumber The release number.
 	 * @param incomingPacketMetaData The incoming packet meta data.
 	 */
@@ -49,7 +49,7 @@ public abstract class Release {
 
 	/**
 	 * Gets meta data for the specified incoming packet.
-	 * 
+	 *
 	 * @param opcode The opcode of the incoming packet.
 	 * @return The {@link PacketMetaData} object.
 	 */
@@ -59,7 +59,7 @@ public abstract class Release {
 
 	/**
 	 * Gets the {@link MessageDecoder} for the specified opcode.
-	 * 
+	 *
 	 * @param opcode The opcode.
 	 * @return The message decoder.
 	 * @throws IndexOutOfBoundsException If the opcode is less than 0, or greater than 255.
@@ -71,7 +71,7 @@ public abstract class Release {
 
 	/**
 	 * Gets the {@link MessageEncoder} for the specified message type.
-	 * 
+	 *
 	 * @param type The type of message.
 	 * @return The message encoder.
 	 */
@@ -82,7 +82,7 @@ public abstract class Release {
 
 	/**
 	 * Gets the release number.
-	 * 
+	 *
 	 * @return The release number.
 	 */
 	public final int getReleaseNumber() {
@@ -91,7 +91,7 @@ public abstract class Release {
 
 	/**
 	 * Registers a {@link MessageEncoder} for the specified message type.
-	 * 
+	 *
 	 * @param type The message type.
 	 * @param encoder The message encoder.
 	 */
@@ -101,7 +101,7 @@ public abstract class Release {
 
 	/**
 	 * Registers a {@link MessageDecoder} for the specified opcode.
-	 * 
+	 *
 	 * @param opcode The opcode, between 0 and 255 inclusive.
 	 * @param decoder The message decoder.
 	 * @throws IndexOutOfBoundsException If the opcode is less than 0, or greater than 255.

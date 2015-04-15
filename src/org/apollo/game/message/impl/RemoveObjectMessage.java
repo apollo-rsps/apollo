@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.obj.GameObject;
 
 /**
  * A {@link Message} sent to the client to remove an object from a tile.
- * 
+ *
  * @author Major
  */
 public final class RemoveObjectMessage extends RegionUpdateMessage {
@@ -27,14 +27,14 @@ public final class RemoveObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * Creates the RemoveObjectMessage.
-	 * 
+	 *
 	 * @param object The {@link GameObject} to send.
 	 * @param positionOffset The offset of the GameObject's Position from the Region's top-left position.
 	 */
 	public RemoveObjectMessage(GameObject object, int positionOffset) {
 		this.positionOffset = positionOffset;
-		this.type = object.getType();
-		this.orientation = object.getOrientation();
+		type = object.getType();
+		orientation = object.getOrientation();
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public final class RemoveObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the orientation of the object.
-	 * 
+	 *
 	 * @return The orientation.
 	 */
 	public int getOrientation() {
@@ -67,7 +67,7 @@ public final class RemoveObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the type of the object.
-	 * 
+	 *
 	 * @return The type.
 	 */
 	public int getType() {

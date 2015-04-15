@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client to send private chat to another player.
- * 
+ *
  * @author Major
  */
 public final class PrivateChatMessage extends Message {
@@ -26,7 +26,7 @@ public final class PrivateChatMessage extends Message {
 
 	/**
 	 * Creates a new private chat message.
-	 * 
+	 *
 	 * @param username The username of the player the message is being sent to.
 	 * @param chat The chat string.
 	 * @param compressedChat The chat string, in a compressed form.
@@ -39,7 +39,7 @@ public final class PrivateChatMessage extends Message {
 
 	/**
 	 * Gets the chat string being sent.
-	 * 
+	 *
 	 * @return The chat string.
 	 */
 	public String getChat() {
@@ -48,7 +48,7 @@ public final class PrivateChatMessage extends Message {
 
 	/**
 	 * Gets the compressed chat string.
-	 * 
+	 *
 	 * @return The compressed chat string.
 	 */
 	public byte[] getCompressedChat() {
@@ -57,7 +57,7 @@ public final class PrivateChatMessage extends Message {
 
 	/**
 	 * Gets the username of the player the chat string is being sent to.
-	 * 
+	 *
 	 * @return The username.
 	 */
 	public String getUsername() {

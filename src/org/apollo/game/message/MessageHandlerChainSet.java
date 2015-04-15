@@ -7,7 +7,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * A group of {@link MessageHandlerChain}s classified by the {@link Message} type.
- * 
+ *
  * @author Graham
  * @author Ryley
  * @author Major
@@ -30,12 +30,12 @@ public final class MessageHandlerChainSet {
 	public <M extends Message> boolean notify(Player player, M message) {
 		@SuppressWarnings("unchecked")
 		MessageHandlerChain<M> chain = (MessageHandlerChain<M>) chains.get(message.getClass());
-		return (chain == null) || chain.notify(player, message);
+		return chain == null || chain.notify(player, message);
 	}
 
 	/**
 	 * Places the {@link MessageHandlerChain} into this set.
-	 * 
+	 *
 	 * @param clazz The {@link Class} to associate the MessageHandlerChain with.
 	 * @param handler The MessageHandlerChain.
 	 */

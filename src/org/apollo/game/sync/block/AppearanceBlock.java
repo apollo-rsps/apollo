@@ -5,7 +5,7 @@ import org.apollo.game.model.inv.Inventory;
 
 /**
  * The appearance {@link SynchronizationBlock}. Only players can utilise this block.
- * 
+ *
  * @author Graham
  */
 public final class AppearanceBlock extends SynchronizationBlock {
@@ -52,7 +52,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates the appearance block. Assumes that the player is not appearing as an npc.
-	 * 
+	 *
 	 * @param name The player's username, encoded to base 37.
 	 * @param appearance The {@link Appearance}.
 	 * @param combat The player's combat.
@@ -67,7 +67,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates the appearance block.
-	 * 
+	 *
 	 * @param name The player's username, encoded to base 37.
 	 * @param appearance The {@link Appearance}.
 	 * @param combat The player's combat.
@@ -90,7 +90,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * If the player is appearing as an npc or not.
-	 * 
+	 *
 	 * @return {@code true} if the player is appearing as an npc, otherwise {@code false}.
 	 */
 	public boolean appearingAsNpc() {
@@ -99,7 +99,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the player's {@link Appearance}.
-	 * 
+	 *
 	 * @return The player's appearance.
 	 */
 	public Appearance getAppearance() {
@@ -108,7 +108,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the player's combat level.
-	 * 
+	 *
 	 * @return The player's combat level.
 	 */
 	public int getCombatLevel() {
@@ -117,7 +117,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the player's equipment.
-	 * 
+	 *
 	 * @return The player's equipment.
 	 */
 	public Inventory getEquipment() {
@@ -126,7 +126,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Whether or not the player is skulled.
-	 * 
+	 *
 	 * @return {@code true} if the player is skulled, otherwise {@code false}.
 	 */
 	public boolean isSkulled() {
@@ -135,7 +135,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the player's name.
-	 * 
+	 *
 	 * @return The player's name.
 	 */
 	public long getName() {
@@ -144,7 +144,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the npc id the player is appearing as, or {@code -1} if the player is not appearing as one.
-	 * 
+	 *
 	 * @return The npc id.
 	 */
 	public int getNpcId() {
@@ -153,7 +153,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the player's head icon.
-	 * 
+	 *
 	 * @return The head icon.
 	 */
 	public int getHeadIcon() {
@@ -162,7 +162,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the player's skill level.
-	 * 
+	 *
 	 * @return The player's skill level.
 	 */
 	public int getSkillLevel() {

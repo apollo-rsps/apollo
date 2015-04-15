@@ -9,7 +9,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * A {@link MessageHandler} that dispatches {@link CommandMessage}s.
- * 
+ *
  * @author Graham
  */
 public final class CommandMessageHandler extends MessageHandler<CommandMessage> {

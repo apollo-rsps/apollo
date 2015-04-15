@@ -2,7 +2,7 @@ package org.apollo.game.model.inter.bank;
 
 /**
  * Contains bank-related constants.
- * 
+ *
  * @author Graham
  */
 public final class BankConstants {

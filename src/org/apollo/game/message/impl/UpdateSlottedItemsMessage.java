@@ -5,7 +5,7 @@ import org.apollo.game.model.inv.SlottedItem;
 
 /**
  * A {@link Message} sent to the client that updates a single item in an interface.
- * 
+ *
  * @author Graham
  */
 public final class UpdateSlottedItemsMessage extends Message {
@@ -22,7 +22,7 @@ public final class UpdateSlottedItemsMessage extends Message {
 
 	/**
 	 * Creates the update item in interface message.
-	 * 
+	 *
 	 * @param interfaceId The interface id.
 	 * @param items The slotted items.
 	 */
@@ -33,7 +33,7 @@ public final class UpdateSlottedItemsMessage extends Message {
 
 	/**
 	 * Gets the interface id.
-	 * 
+	 *
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {
@@ -42,7 +42,7 @@ public final class UpdateSlottedItemsMessage extends Message {
 
 	/**
 	 * Gets an array of slotted items.
-	 * 
+	 *
 	 * @return The slotted items.
 	 */
 	public SlottedItem[] getSlottedItems() {

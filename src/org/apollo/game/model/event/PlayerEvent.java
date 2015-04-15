@@ -25,7 +25,7 @@ public abstract class PlayerEvent extends Event {
 
 	/**
 	 * Gets the {@link Player}.
-	 * 
+	 *
 	 * @return The Player.
 	 */
 	public Player getPlayer() {

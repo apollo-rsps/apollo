@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client when a player adds someone to their friends list.
- * 
+ *
  * @author Major
  */
 public final class AddFriendMessage extends Message {
@@ -16,7 +16,7 @@ public final class AddFriendMessage extends Message {
 
 	/**
 	 * Creates a new befriend user message.
-	 * 
+	 *
 	 * @param username The befriended player's username.
 	 */
 	public AddFriendMessage(String username) {
@@ -25,7 +25,7 @@ public final class AddFriendMessage extends Message {
 
 	/**
 	 * Gets the username of the befriended player.
-	 * 
+	 *
 	 * @return The username.
 	 */
 	public String getUsername() {

@@ -5,7 +5,7 @@ import org.apollo.game.model.Item;
 
 /**
  * A {@link Message} sent to the client that adds an item to a tile.
- * 
+ *
  * @author Major
  */
 public final class SendTileItemMessage extends RegionUpdateMessage {
@@ -22,7 +22,7 @@ public final class SendTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Creates the SendTileItemMessage.
-	 * 
+	 *
 	 * @param item The item to add to the tile.
 	 * @param positionOffset The offset from the 'base' position.
 	 */
@@ -33,7 +33,7 @@ public final class SendTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the id of the item.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {
@@ -42,7 +42,7 @@ public final class SendTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the amount of the item.
-	 * 
+	 *
 	 * @return The amount.
 	 */
 	public int getAmount() {
@@ -51,7 +51,7 @@ public final class SendTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the offset from the 'base' position.
-	 * 
+	 *
 	 * @return The offset.
 	 */
 	public int getPositionOffset() {

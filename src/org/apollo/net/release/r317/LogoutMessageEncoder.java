@@ -7,7 +7,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link LogoutMessage}.
- * 
+ *
  * @author Graham
  */
 public final class LogoutMessageEncoder extends MessageEncoder<LogoutMessage> {

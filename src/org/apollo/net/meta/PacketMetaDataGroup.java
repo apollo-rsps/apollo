@@ -4,14 +4,14 @@ import com.google.common.base.Preconditions;
 
 /**
  * A class containing a group of {@link PacketMetaData} objects.
- * 
+ *
  * @author Graham
  */
 public final class PacketMetaDataGroup {
 
 	/**
 	 * Creates a packet meta data group from the packet length array.
-	 * 
+	 *
 	 * @param lengths The packet lengths.
 	 * @return The packet meta data group.
 	 * @throws IllegalArgumentException If the array length is not 256, or if there is an element in the array with a
@@ -51,7 +51,7 @@ public final class PacketMetaDataGroup {
 
 	/**
 	 * Gets the meta data for the specified packet.
-	 * 
+	 *
 	 * @param opcode The opcode of the packet.
 	 * @return The {@link PacketMetaData}, or {@code null} if the packet does not exist.
 	 * @throws IllegalArgumentException If the opcode is less than 0, or greater than 255.

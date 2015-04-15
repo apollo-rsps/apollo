@@ -49,7 +49,7 @@ public final class NpcMovementTask extends ScheduledTask {
 
 	/**
 	 * Creates the NpcMovementTask.
-	 * 
+	 *
 	 * @param repository The {@link RegionRepository}.
 	 */
 	public NpcMovementTask(RegionRepository repository) {
@@ -59,7 +59,7 @@ public final class NpcMovementTask extends ScheduledTask {
 
 	/**
 	 * Adds the {@link Npc} to this {@link ScheduledTask}.
-	 * 
+	 *
 	 * @param npc The Npc to add.
 	 */
 	public void addNpc(Npc npc) {
@@ -82,8 +82,8 @@ public final class NpcMovementTask extends ScheduledTask {
 			int currentX = current.getX(), currentY = current.getY();
 
 			boolean negativeX = RANDOM.nextBoolean(), negativeY = RANDOM.nextBoolean();
-			int x = RANDOM.nextInt(negativeX ? (currentX - min.getX()) : (max.getX() - currentX));
-			int y = RANDOM.nextInt(negativeY ? (currentY - min.getY()) : (max.getY() - currentY));
+			int x = RANDOM.nextInt(negativeX ? currentX - min.getX() : max.getX() - currentX);
+			int y = RANDOM.nextInt(negativeY ? currentY - min.getY() : max.getY() - currentY);
 
 			int dx = negativeX ? -x : x;
 			int dy = negativeY ? -y : y;

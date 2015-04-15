@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SetWidgetTextMessage}.
- * 
+ *
  * @author The Wanderer
  */
 public final class SetWidgetTextMessageEncoder extends MessageEncoder<SetWidgetTextMessage> {

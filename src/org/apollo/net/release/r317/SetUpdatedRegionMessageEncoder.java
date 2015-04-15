@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SetUpdatedRegionMessage}.
- * 
+ *
  * @author Chris Fletcher
  */
 final class SetUpdatedRegionMessageEncoder extends MessageEncoder<SetUpdatedRegionMessage> {

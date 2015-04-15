@@ -4,14 +4,14 @@ import org.apollo.game.model.Position;
 
 /**
  * The first {@link ObjectActionMessage}.
- * 
+ *
  * @author Graham
  */
 public final class FirstObjectActionMessage extends ObjectActionMessage {
 
 	/**
 	 * Creates the first object action message.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param position The position.
 	 */

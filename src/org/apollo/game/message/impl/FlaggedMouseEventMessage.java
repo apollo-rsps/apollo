@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent by the client when the player clicks with their mouse (or mousekeys etc).
- * 
+ *
  * @author Major
  */
 public final class FlaggedMouseEventMessage extends Message {
@@ -32,7 +32,7 @@ public final class FlaggedMouseEventMessage extends Message {
 
 	/**
 	 * Creates a new mouse click message.
-	 * 
+	 *
 	 * @param clickCount The number of clicks on this point.
 	 * @param x The x coordinate of the mouse click.
 	 * @param y The y coordinate of the mouse click.
@@ -47,7 +47,7 @@ public final class FlaggedMouseEventMessage extends Message {
 
 	/**
 	 * Gets the number of clicks on this point - maximum value of 2047.
-	 * 
+	 *
 	 * @return The number of clicks.
 	 */
 	public int getClickCount() {
@@ -56,7 +56,7 @@ public final class FlaggedMouseEventMessage extends Message {
 
 	/**
 	 * The x coordinate of the click.
-	 * 
+	 *
 	 * @return The x coordinate.
 	 */
 	public int getX() {
@@ -65,7 +65,7 @@ public final class FlaggedMouseEventMessage extends Message {
 
 	/**
 	 * The y coordinate of the click.
-	 * 
+	 *
 	 * @return The y coordinate.
 	 */
 	public int getY() {
@@ -75,7 +75,7 @@ public final class FlaggedMouseEventMessage extends Message {
 	/**
 	 * Gets the value indicating whether the {@link #x} and {@link #y} values represent the deviation from the last
 	 * click or an actual point.
-	 * 
+	 *
 	 * @return The value.
 	 */
 	public boolean getDelta() {

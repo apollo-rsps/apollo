@@ -9,7 +9,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link SwitchTabInterfaceMessage}.
- * 
+ *
  * @author Graham
  */
 public final class SwitchTabInterfaceMessageEncoder extends MessageEncoder<SwitchTabInterfaceMessage> {

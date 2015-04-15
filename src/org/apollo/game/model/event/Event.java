@@ -21,7 +21,7 @@ public abstract class Event {
 
 	/**
 	 * Returns whether or not the Event chain has been terminated.
-	 * 
+	 *
 	 * @return {@code true} if the Event chain has been terminated, otherwise {@code false}.
 	 */
 	public final boolean terminated() {

@@ -9,7 +9,7 @@ import org.apollo.game.model.Position;
  * Note: This block is used to force a player to walk to a set location. The player can then perform an action (e.g. an
  * animation), as used in the Agility skill, hence this block earning the name 'Asynchronous Animation/Walking',
  * although the action is not restricted to animations.
- * 
+ *
  * @author Major
  */
 public final class ForceMovementBlock extends SynchronizationBlock {
@@ -41,7 +41,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * Creates a new force movement block.
-	 * 
+	 *
 	 * @param initialPosition The initial {@link Position} of the player.
 	 * @param finalPosition The final {@link Position} of the player
 	 * @param travelDurationX The length of time (in game pulses) the player's movement along the X-axis will last.
@@ -58,7 +58,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the {@link Direction} the player should move.
-	 * 
+	 *
 	 * @return The direction.
 	 */
 	public Direction getDirection() {
@@ -67,7 +67,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the X coordinate of the final {@link Position}.
-	 * 
+	 *
 	 * @return The X coordinate.
 	 */
 	public int getFinalX() {
@@ -76,7 +76,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the Y coordinate of the final {@link Position}.
-	 * 
+	 *
 	 * @return The Y coordinate.
 	 */
 	public int getFinalY() {
@@ -85,7 +85,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the X coordinate of the initial {@link Position}.
-	 * 
+	 *
 	 * @return The X coordinate.
 	 */
 	public int getInitialX() {
@@ -94,7 +94,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the Y coordinate of the initial {@link Position}.
-	 * 
+	 *
 	 * @return The Y coordinate.
 	 */
 	public int getInitialY() {
@@ -103,7 +103,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the length of time (in game pulses) the player's movement along the X-axis will last.
-	 * 
+	 *
 	 * @return The time period.
 	 */
 	public int getTravelDurationX() {
@@ -112,7 +112,7 @@ public final class ForceMovementBlock extends SynchronizationBlock {
 
 	/**
 	 * Gets the length of time (in game pulses) the player's movement along the Y-axis will last.
-	 * 
+	 *
 	 * @return The time period.
 	 */
 	public int getTravelDurationY() {

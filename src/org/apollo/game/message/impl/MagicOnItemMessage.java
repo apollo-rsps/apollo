@@ -2,7 +2,7 @@ package org.apollo.game.message.impl;
 
 /**
  * A {@link InventoryItemMessage} sent by the client when a player casts a spell on an inventory item.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class MagicOnItemMessage extends InventoryItemMessage {
@@ -14,7 +14,7 @@ public final class MagicOnItemMessage extends InventoryItemMessage {
 
 	/**
 	 * Creates a new magic on item message.
-	 * 
+	 *
 	 * @param interfaceId The interface id.
 	 * @param id The item id.
 	 * @param slot The item slot.
@@ -27,7 +27,7 @@ public final class MagicOnItemMessage extends InventoryItemMessage {
 
 	/**
 	 * Gets the spell id.
-	 * 
+	 *
 	 * @return The spell id.
 	 */
 	public int getSpellId() {

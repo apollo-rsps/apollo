@@ -5,7 +5,7 @@ import org.apollo.game.model.Item;
 
 /**
  * A {@link Message} sent to the client to remove an item from a tile.
- * 
+ *
  * @author Major
  */
 public final class RemoveTileItemMessage extends RegionUpdateMessage {
@@ -22,7 +22,7 @@ public final class RemoveTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Creates the RemoveTileItemMessage.
-	 * 
+	 *
 	 * @param id The id of the {@link Item} to remove.
 	 * @param positionOffset The offset from the 'base' position.
 	 */
@@ -33,7 +33,7 @@ public final class RemoveTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Creates the RemoveTileItemMessage.
-	 * 
+	 *
 	 * @param item The {@link Item} to remove.
 	 * @param positionOffset The offset from the 'base' position.
 	 */
@@ -53,7 +53,7 @@ public final class RemoveTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the id of the item to remove.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {
@@ -62,7 +62,7 @@ public final class RemoveTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * Gets the offset from the 'base' position.
-	 * 
+	 *
 	 * @return The offset.
 	 */
 	public int getPositionOffset() {

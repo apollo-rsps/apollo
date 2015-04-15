@@ -8,7 +8,7 @@ import org.apollo.net.meta.PacketType;
 
 /**
  * A class which assists in creating a {@link GamePacket}.
- * 
+ *
  * @author Graham
  */
 public final class GamePacketBuilder {
@@ -48,7 +48,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Creates the {@link GamePacketBuilder} for a {@link PacketType#FIXED} packet with the specified opcode.
-	 * 
+	 *
 	 * @param opcode The opcode.
 	 */
 	public GamePacketBuilder(int opcode) {
@@ -57,7 +57,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Creates the {@link GamePacketBuilder} for the specified packet type and opcode.
-	 * 
+	 *
 	 * @param opcode The opcode.
 	 * @param type The packet type.
 	 */
@@ -68,7 +68,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Checks that this builder is in the bit access mode.
-	 * 
+	 *
 	 * @throws IllegalStateException If the builder is not in bit access mode.
 	 */
 	private void checkBitAccess() {
@@ -79,7 +79,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Checks that this builder is in the byte access mode.
-	 * 
+	 *
 	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	private void checkByteAccess() {
@@ -90,7 +90,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Gets the current length of the builder's buffer.
-	 * 
+	 *
 	 * @return The length of the buffer.
 	 */
 	public int getLength() {
@@ -100,7 +100,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a standard data type with the specified value, byte order and transformation.
-	 * 
+	 *
 	 * @param type The data type.
 	 * @param order The byte order.
 	 * @param transformation The transformation.
@@ -172,7 +172,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a standard data type with the specified value and byte order.
-	 * 
+	 *
 	 * @param type The data type.
 	 * @param order The byte order.
 	 * @param value The value.
@@ -183,7 +183,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a standard data type with the specified value and transformation.
-	 * 
+	 *
 	 * @param type The type.
 	 * @param transformation The transformation.
 	 * @param value The value.
@@ -194,7 +194,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a standard data type with the specified value.
-	 * 
+	 *
 	 * @param type The data type.
 	 * @param value The value.
 	 */
@@ -205,7 +205,7 @@ public final class GamePacketBuilder {
 	/**
 	 * Puts a single bit into the buffer. If {@code flag} is {@code true}, the value of the bit is {@code 1}. If
 	 * {@code flag} is {@code false}, the value of the bit is {@code 0}.
-	 * 
+	 *
 	 * @param flag The flag.
 	 */
 	public void putBit(boolean flag) {
@@ -214,7 +214,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a single bit into the buffer with the value {@code value}.
-	 * 
+	 *
 	 * @param value The value.
 	 */
 	public void putBit(int value) {
@@ -223,7 +223,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts {@code numBits} into the buffer with the value {@code value}.
-	 * 
+	 *
 	 * @param numBits The number of bits to put into the buffer.
 	 * @param value The value.
 	 * @throws IllegalArgumentException If the number of bits is not between 1 and 31 inclusive.
@@ -265,7 +265,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts the specified byte array into the buffer.
-	 * 
+	 *
 	 * @param bytes The byte array.
 	 */
 	public void putBytes(byte[] bytes) {
@@ -274,7 +274,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts the bytes from the specified buffer into this packet's buffer.
-	 * 
+	 *
 	 * @param buffer The source {@link ByteBuf}.
 	 */
 	public void putBytes(ByteBuf buffer) {
@@ -290,7 +290,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts the bytes into the buffer with the specified transformation.
-	 * 
+	 *
 	 * @param transformation The transformation.
 	 * @param bytes The byte array.
 	 */
@@ -306,7 +306,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts the specified byte array into the buffer in reverse.
-	 * 
+	 *
 	 * @param bytes The byte array.
 	 */
 	public void putBytesReverse(byte[] bytes) {
@@ -318,7 +318,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts the bytes from the specified buffer into this packet's buffer, in reverse.
-	 * 
+	 *
 	 * @param buffer The source {@link ByteBuf}.
 	 */
 	public void putBytesReverse(ByteBuf buffer) {
@@ -334,7 +334,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts the specified byte array into the buffer in reverse with the specified transformation.
-	 * 
+	 *
 	 * @param transformation The transformation.
 	 * @param bytes The byte array.
 	 */
@@ -350,7 +350,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a raw builder. Both builders (this and parameter) must be in byte access mode.
-	 * 
+	 *
 	 * @param builder The builder.
 	 * @throws IllegalArgumentException If the builder is not raw.
 	 */
@@ -365,7 +365,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a raw builder in reverse. Both builders (this and parameter) must be in byte access mode.
-	 * 
+	 *
 	 * @param builder The builder.
 	 * @throws IllegalArgumentException If the builder is not raw.
 	 */
@@ -380,7 +380,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a smart into the buffer.
-	 * 
+	 *
 	 * @param value The value.
 	 */
 	public void putSmart(int value) {
@@ -394,7 +394,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Puts a string into the buffer.
-	 * 
+	 *
 	 * @param str The string.
 	 */
 	public void putString(String str) {
@@ -408,7 +408,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Switches this builder's mode to the bit access mode.
-	 * 
+	 *
 	 * @throws IllegalStateException If the builder is already in bit access mode.
 	 */
 	public void switchToBitAccess() {
@@ -421,7 +421,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Switches this builder's mode to the byte access mode.
-	 * 
+	 *
 	 * @throws IllegalStateException If the builder is already in byte access mode.
 	 */
 	public void switchToByteAccess() {
@@ -434,7 +434,7 @@ public final class GamePacketBuilder {
 
 	/**
 	 * Creates a {@link GamePacket} based on the current contents of this builder.
-	 * 
+	 *
 	 * @return The {@link GamePacket}.
 	 * @throws IllegalStateException If the builder is not in byte access mode, or if the packet is raw.
 	 */

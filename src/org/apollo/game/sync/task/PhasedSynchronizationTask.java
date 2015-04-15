@@ -8,7 +8,7 @@ import java.util.concurrent.Phaser;
  * <p>
  * The phaser must have already registered this task. This can be done using the {@link Phaser#register()} or
  * {@link Phaser#bulkRegister(int)} methods.
- * 
+ *
  * @author Graham
  */
 public final class PhasedSynchronizationTask extends SynchronizationTask {
@@ -25,7 +25,7 @@ public final class PhasedSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Creates the phased synchronization task.
-	 * 
+	 *
 	 * @param phaser The phaser.
 	 * @param task The task.
 	 */

@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link FirstItemOptionMessage}.
- * 
+ *
  * @author Graham
  */
 final class FirstItemOptionMessageDecoder extends MessageDecoder<FirstItemOptionMessage> {

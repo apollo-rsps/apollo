@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to set a widget's displayed item model.
- * 
+ *
  * @author Chris Fletcher
  */
 public final class SetWidgetItemModelMessage extends Message {
@@ -26,7 +26,7 @@ public final class SetWidgetItemModelMessage extends Message {
 
 	/**
 	 * Creates a new set interface item model message.
-	 * 
+	 *
 	 * @param interfaceId The interface's id.
 	 * @param modelId The model's (item) id.
 	 * @param zoom The zoom level.
@@ -39,7 +39,7 @@ public final class SetWidgetItemModelMessage extends Message {
 
 	/**
 	 * Gets the interface's id.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getInterfaceId() {
@@ -48,7 +48,7 @@ public final class SetWidgetItemModelMessage extends Message {
 
 	/**
 	 * Gets the model's (item) id.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getModelId() {
@@ -57,7 +57,7 @@ public final class SetWidgetItemModelMessage extends Message {
 
 	/**
 	 * Gets the zoom level.
-	 * 
+	 *
 	 * @return The zoom.
 	 */
 	public int getZoom() {

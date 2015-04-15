@@ -7,7 +7,7 @@ import org.apollo.game.model.entity.Player;
 
 /**
  * A {@link MessageHandler} for the {@link EnteredAmountMessage}.
- * 
+ *
  * @author Graham
  */
 public final class EnteredAmountMessageHandler extends MessageHandler<EnteredAmountMessage> {

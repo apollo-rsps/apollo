@@ -2,7 +2,7 @@ package org.apollo.game.model.entity.attr;
 
 /**
  * A definition for an {@link Attribute}.
- * 
+ *
  * @author Major
  *
  * @param <T> The type of attribute.
@@ -11,7 +11,7 @@ public final class AttributeDefinition<T> {
 
 	/**
 	 * Creates an AttributeDefinition for a {@code boolean}.
-	 * 
+	 *
 	 * @param defaultValue The default value of the definition.
 	 * @param persistence The {@link AttributePersistence} of the definition.
 	 * @return The AttributeDefinition.
@@ -22,7 +22,7 @@ public final class AttributeDefinition<T> {
 
 	/**
 	 * Creates an AttributeDefinition for a {@code double}.
-	 * 
+	 *
 	 * @param defaultValue The default value of the definition.
 	 * @param persistence The {@link AttributePersistence} of the definition.
 	 * @return The AttributeDefinition.
@@ -33,7 +33,7 @@ public final class AttributeDefinition<T> {
 
 	/**
 	 * Creates an AttributeDefinition for an {@code int}.
-	 * 
+	 *
 	 * @param defaultValue The default value of the definition.
 	 * @param persistence The {@link AttributePersistence} of the definition.
 	 * @return The AttributeDefinition.
@@ -44,7 +44,7 @@ public final class AttributeDefinition<T> {
 
 	/**
 	 * Creates an AttributeDefinition for a String.
-	 * 
+	 *
 	 * @param defaultValue The default value of the definition.
 	 * @param persistence The {@link AttributePersistence} of the definition.
 	 * @return The AttributeDefinition.
@@ -70,7 +70,7 @@ public final class AttributeDefinition<T> {
 
 	/**
 	 * Creates the AttributeDefinition.
-	 * 
+	 *
 	 * @param defaultValue The default value.
 	 * @param persistence The {@link AttributePersistence}.
 	 * @param type The {@link AttributeType}.
@@ -83,7 +83,7 @@ public final class AttributeDefinition<T> {
 
 	/**
 	 * Gets the default value of this AttributeDefinition.
-	 * 
+	 *
 	 * @return The default value.
 	 */
 	public T getDefault() {
@@ -92,7 +92,7 @@ public final class AttributeDefinition<T> {
 
 	/**
 	 * Gets the {@link AttributePersistence} of this AttributeDefinition.
-	 * 
+	 *
 	 * @return The AttributePersistence.
 	 */
 	public AttributePersistence getPersistence() {
@@ -101,7 +101,7 @@ public final class AttributeDefinition<T> {
 
 	/**
 	 * Gets the {@link AttributeType} of this AttributeDefinition
-	 * 
+	 *
 	 * @return The AttributeType.
 	 */
 	public AttributeType getType() {

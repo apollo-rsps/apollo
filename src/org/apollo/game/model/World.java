@@ -43,14 +43,14 @@ import com.google.common.base.Preconditions;
  * The world class is a singleton which contains objects like the {@link MobRepository} for players and NPCs. It should
  * only contain things relevant to the in-game world and not classes which deal with I/O and such (these may be better
  * off inside some custom {@link Service} or other code, however, the circumstances are rare).
- * 
+ *
  * @author Graham
  */
 public final class World {
 
 	/**
 	 * Represents the different status codes for registering a player.
-	 * 
+	 *
 	 * @author Graham
 	 */
 	public enum RegistrationStatus {
@@ -80,7 +80,7 @@ public final class World {
 	/**
 	 * The command dispatcher.
 	 */
-	private CommandDispatcher commandDispatcher = new CommandDispatcher();
+	private final CommandDispatcher commandDispatcher = new CommandDispatcher();
 
 	/**
 	 * The EventListenerChainSet for this World.
@@ -136,7 +136,7 @@ public final class World {
 
 	/**
 	 * Gets the command dispatcher.
-	 * 
+	 *
 	 * @return The command dispatcher.
 	 */
 	public CommandDispatcher getCommandDispatcher() {
@@ -145,7 +145,7 @@ public final class World {
 
 	/**
 	 * Gets the npc repository.
-	 * 
+	 *
 	 * @return The npc repository.
 	 */
 	public MobRepository<Npc> getNpcRepository() {
@@ -155,7 +155,7 @@ public final class World {
 	/**
 	 * Gets the {@link Player} with the specified username. Note that this will return {@code null} if the player is
 	 * offline.
-	 * 
+	 *
 	 * @param username The username.
 	 * @return The player.
 	 */
@@ -165,7 +165,7 @@ public final class World {
 
 	/**
 	 * Gets the player repository.
-	 * 
+	 *
 	 * @return The player repository.
 	 */
 	public MobRepository<Player> getPlayerRepository() {
@@ -174,7 +174,7 @@ public final class World {
 
 	/**
 	 * Gets the plugin manager.
-	 * 
+	 *
 	 * @return The plugin manager.
 	 */
 	public PluginManager getPluginManager() {
@@ -183,7 +183,7 @@ public final class World {
 
 	/**
 	 * Gets this world's {@link RegionRepository}.
-	 * 
+	 *
 	 * @return The RegionRepository.
 	 */
 	public RegionRepository getRegionRepository() {
@@ -192,7 +192,7 @@ public final class World {
 
 	/**
 	 * Gets the release number of this world.
-	 * 
+	 *
 	 * @return The release number.
 	 */
 	public int getReleaseNumber() {
@@ -201,14 +201,14 @@ public final class World {
 
 	/**
 	 * Initialises the world by loading definitions from the specified file system.
-	 * 
+	 *
 	 * @param release The release number.
 	 * @param fs The file system.
 	 * @param manager The plugin manager. TODO move this.
 	 * @throws Exception If any definitions could not be loaded or there was a failure when loading plugins.
 	 */
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
-		this.releaseNumber = release;
+		releaseNumber = release;
 
 		ItemDefinitionDecoder itemDecoder = new ItemDefinitionDecoder(fs);
 		ItemDefinition[] items = itemDecoder.decode();
@@ -247,7 +247,7 @@ public final class World {
 
 	/**
 	 * Checks if the {@link Player} with the specified name is online.
-	 * 
+	 *
 	 * @param username The name.
 	 * @return {@code true} if the player is online, otherwise {@code false}.
 	 */
@@ -257,7 +257,7 @@ public final class World {
 
 	/**
 	 * Adds an {@link EventListener}, listening for an {@link Event} of the specified type.
-	 * 
+	 *
 	 * @param type The type of the Event.
 	 * @param listener The EventListener.
 	 */
@@ -274,7 +274,7 @@ public final class World {
 
 	/**
 	 * Registers the specified npc.
-	 * 
+	 *
 	 * @param npc The npc.
 	 * @return {@code true} if the npc registered successfully, otherwise {@code false}.
 	 */
@@ -296,7 +296,7 @@ public final class World {
 
 	/**
 	 * Registers the specified player.
-	 * 
+	 *
 	 * @param player The player.
 	 * @return A {@link RegistrationStatus}.
 	 */
@@ -320,7 +320,7 @@ public final class World {
 
 	/**
 	 * Schedules a new task.
-	 * 
+	 *
 	 * @param task The {@link ScheduledTask}.
 	 * @return {@code true} if the task was added successfully.
 	 */
@@ -331,7 +331,7 @@ public final class World {
 	/**
 	 * Spawns the specified {@link Entity}, which must not be a {@link Player} or an {@link Npc}, which have their own
 	 * register methods.
-	 * 
+	 *
 	 * @param entity The Entity.
 	 */
 	public void spawn(Entity entity) {
@@ -344,7 +344,7 @@ public final class World {
 
 	/**
 	 * Submits the specified {@link Event}, passing it to the listeners..
-	 * 
+	 *
 	 * @param event The Event.
 	 * @return {@code true} if the Event should proceed, {@code false} if not.
 	 */
@@ -354,7 +354,7 @@ public final class World {
 
 	/**
 	 * Unregisters the specified {@link Npc}.
-	 * 
+	 *
 	 * @param npc The npc.
 	 */
 	public void unregister(final Npc npc) {
@@ -369,7 +369,7 @@ public final class World {
 
 	/**
 	 * Unregisters the specified player.
-	 * 
+	 *
 	 * @param player The player.
 	 */
 	public void unregister(final Player player) {
@@ -385,12 +385,12 @@ public final class World {
 	}
 
 	/**
-	 * Adds entities to regions in the {@link RegionRepository}.
-	 * 
+	 * Adds entities to regions in the {@link RegionRepository}. By default, we do not notify listeners.
+	 *
 	 * @param entities The entities.
 	 */
 	private void placeEntities(Entity... entities) {
-		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity));
+		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity, false));
 	}
 
 }

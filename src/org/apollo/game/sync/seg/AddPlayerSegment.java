@@ -5,7 +5,7 @@ import org.apollo.game.sync.block.SynchronizationBlockSet;
 
 /**
  * A {@link SynchronizationSegment} which adds a player.
- * 
+ *
  * @author Graham
  */
 public final class AddPlayerSegment extends SynchronizationSegment {
@@ -22,7 +22,7 @@ public final class AddPlayerSegment extends SynchronizationSegment {
 
 	/**
 	 * Creates the add player segment.
-	 * 
+	 *
 	 * @param blockSet The block set.
 	 * @param index The player's index.
 	 * @param position The position.
@@ -35,7 +35,7 @@ public final class AddPlayerSegment extends SynchronizationSegment {
 
 	/**
 	 * Gets the player's index.
-	 * 
+	 *
 	 * @return The index.
 	 */
 	public int getIndex() {
@@ -44,7 +44,7 @@ public final class AddPlayerSegment extends SynchronizationSegment {
 
 	/**
 	 * Gets the position.
-	 * 
+	 *
 	 * @return The position.
 	 */
 	public Position getPosition() {

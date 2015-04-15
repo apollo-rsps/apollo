@@ -11,7 +11,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link SecondObjectActionMessage}.
- * 
+ *
  * @author Graham
  */
 public final class SecondObjectActionMessageDecoder extends MessageDecoder<SecondObjectActionMessage> {

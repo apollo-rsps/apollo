@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,9 +26,11 @@ import org.apollo.net.release.r317.Release317;
 import org.apollo.util.plugin.PluginContext;
 import org.apollo.util.plugin.PluginManager;
 
+import com.google.common.base.Stopwatch;
+
 /**
  * The core class of the Apollo server.
- * 
+ *
  * @author Graham
  */
 public final class Server {
@@ -39,12 +42,13 @@ public final class Server {
 
 	/**
 	 * The entry point of the Apollo server application.
-	 * 
+	 *
 	 * @param args The command-line arguments passed to the application.
 	 */
 	public static void main(String[] args) {
+		Stopwatch stopwatch = Stopwatch.createStarted();
+
 		try {
-			long start = System.currentTimeMillis();
 			Server server = new Server();
 			server.init(args.length == 1 ? args[0] : Release317.class.getName());
 
@@ -53,10 +57,11 @@ public final class Server {
 			SocketAddress jaggrab = new InetSocketAddress(NetworkConstants.JAGGRAB_PORT);
 
 			server.bind(service, http, jaggrab);
-			logger.fine("Starting apollo took " + (System.currentTimeMillis() - start) + " ms.");
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, "Error whilst starting server.", t);
 		}
+
+		logger.fine("Starting apollo took " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
 	}
 
 	/**
@@ -81,16 +86,14 @@ public final class Server {
 
 	/**
 	 * Creates the Apollo server.
-	 * 
-	 * @throws Exception If an error occurs whilst creating services.
 	 */
-	public Server() throws Exception {
+	public Server() {
 		logger.info("Starting Apollo...");
 	}
 
 	/**
 	 * Binds the server to the specified address.
-	 * 
+	 *
 	 * @param serviceAddress The service address to bind to.
 	 * @param httpAddress The HTTP address to bind to.
 	 * @param jagGrabAddress The JAGGRAB address to bind to.
@@ -98,14 +101,14 @@ public final class Server {
 	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
 		try {
 			logger.fine("Binding service listener to address: " + serviceAddress + "...");
-			serviceBootstrap.bind(serviceAddress).syncUninterruptibly();
+			serviceBootstrap.bind(serviceAddress).sync();
 
 			logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
-			httpBootstrap.bind(httpAddress).syncUninterruptibly();
+			httpBootstrap.bind(httpAddress).sync();
 
 			logger.fine("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
-			jagGrabBootstrap.bind(jagGrabAddress).syncUninterruptibly();
-		} catch (Exception e) {
+			jagGrabBootstrap.bind(jagGrabAddress).sync();
+		} catch (InterruptedException e) {
 			logger.log(Level.SEVERE, "Binding to a port failed: ensure apollo isn't already running.", e);
 			System.exit(1);
 		}
@@ -115,15 +118,16 @@ public final class Server {
 
 	/**
 	 * Initialises the server.
-	 * 
+	 *
 	 * @param releaseClassName The class name of the current active {@link Release}.
 	 * @throws Exception If an error occurs.
 	 */
 	public void init(String releaseClassName) throws Exception {
 		Class<?> clazz = Class.forName(releaseClassName);
 		Release release = (Release) clazz.newInstance();
+		int releaseNo = release.getReleaseNumber();
 
-		logger.info("Initialized release #" + release.getReleaseNumber() + ".");
+		logger.info("Initialized release #" + releaseNo + ".");
 
 		serviceBootstrap.group(loopGroup);
 		httpBootstrap.group(loopGroup);
@@ -131,7 +135,8 @@ public final class Server {
 
 		World world = new World();
 		ServiceManager serviceManager = new ServiceManager(world);
-		ServerContext context = new ServerContext(release, serviceManager);
+		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(releaseNo)), true);
+		ServerContext context = new ServerContext(release, serviceManager, fs);
 		ApolloHandler handler = new ApolloHandler(context);
 
 		ChannelInitializer<SocketChannel> serviceInitializer = new ServiceChannelInitializer(handler);
@@ -149,8 +154,6 @@ public final class Server {
 		PluginManager manager = new PluginManager(world, new PluginContext(context));
 		serviceManager.startAll();
 
-		int releaseNo = release.getReleaseNumber();
-		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(releaseNo)), true);
 		world.init(releaseNo, fs, manager);
 	}
 

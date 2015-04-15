@@ -16,7 +16,7 @@ import org.apollo.game.model.World;
 
 /**
  * A class which services file requests.
- * 
+ *
  * @author Graham
  */
 public final class UpdateService extends Service {
@@ -53,7 +53,7 @@ public final class UpdateService extends Service {
 
 	/**
 	 * Creates the UpdateService.
-	 * 
+	 *
 	 * @param world The {@link World} the update service is for.
 	 */
 	public UpdateService(World world) {
@@ -64,7 +64,7 @@ public final class UpdateService extends Service {
 
 	/**
 	 * Gets the update dispatcher.
-	 * 
+	 *
 	 * @return The update dispatcher.
 	 */
 	public UpdateDispatcher getDispatcher() {

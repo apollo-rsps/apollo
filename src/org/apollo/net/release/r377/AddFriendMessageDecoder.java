@@ -9,7 +9,7 @@ import org.apollo.util.NameUtil;
 
 /**
  * A {@link MessageDecoder} for the {@link AddFriendMessage}.
- * 
+ *
  * @author Major
  */
 public final class AddFriendMessageDecoder extends MessageDecoder<AddFriendMessage> {

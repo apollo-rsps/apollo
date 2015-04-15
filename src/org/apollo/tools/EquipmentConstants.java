@@ -2,7 +2,7 @@ package org.apollo.tools;
 
 /**
  * Contains equipment name constants.
- * 
+ *
  * @author Graham
  * @author Palidino76
  */

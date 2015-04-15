@@ -14,7 +14,7 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 
 /**
  * A {@link MessageHandler} that verifies {@link InventoryItemMessage}s.
- * 
+ *
  * @author Chris Fletcher
  * @author Major
  */
@@ -31,7 +31,7 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 
 	/**
 	 * A supplier for an {@link Inventory}.
-	 * 
+	 *
 	 * @author Major
 	 */
 	@FunctionalInterface
@@ -39,7 +39,7 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 
 		/**
 		 * Gets the appropriate {@link Inventory}.
-		 * 
+		 *
 		 * @param player The {@link Player} who prompted the verification call.
 		 * @return The inventory. Must not be {@code null}.
 		 */
@@ -62,7 +62,7 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 	/**
 	 * Adds an {@link Inventory} with the specified interface id to the {@link Map} of supported ones,
 	 * <strong>iff</strong> the specified id does <strong>not</strong> already have a mapping.
-	 * 
+	 *
 	 * @param id The id of the interface.
 	 * @param supplier The {@link InventorySupplier}.
 	 */

@@ -12,7 +12,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link UpdateItemsMessage}.
- * 
+ *
  * @author Graham
  */
 public final class UpdateItemsMessageEncoder extends MessageEncoder<UpdateItemsMessage> {

@@ -7,6 +7,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.zip.CRC32;
 
 import com.google.common.base.Preconditions;
@@ -14,7 +15,7 @@ import com.google.common.base.Preconditions;
 /**
  * A file system based on top of the operating system's file system. It consists of a data file and index files. Index
  * files point to blocks in the data file, which contains the actual data.
- * 
+ *
  * @author Graham
  */
 public final class IndexedFileSystem implements Closeable {
@@ -25,6 +26,11 @@ public final class IndexedFileSystem implements Closeable {
 	private ByteBuffer crcTable;
 
 	/**
+	 * The {@link #crcTable} represented as an {@code int} array.
+	 */
+	private int[] crcs;
+
+	/**
 	 * The data file.
 	 */
 	private RandomAccessFile data;
@@ -32,7 +38,7 @@ public final class IndexedFileSystem implements Closeable {
 	/**
 	 * The index files.
 	 */
-	private RandomAccessFile[] indices = new RandomAccessFile[256];
+	private final RandomAccessFile[] indices = new RandomAccessFile[256];
 
 	/**
 	 * Read only flag.
@@ -41,7 +47,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Creates the file system with the specified base directory.
-	 * 
+	 *
 	 * @param base The base directory.
 	 * @param readOnly Indicates whether the file system will be read only or not.
 	 * @throws FileNotFoundException If the data files could not be found.
@@ -70,7 +76,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Automatically detect the layout of the specified directory.
-	 * 
+	 *
 	 * @param base The base directory.
 	 * @throws FileNotFoundException If the data files could not be found.
 	 */
@@ -97,7 +103,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets the CRC table.
-	 * 
+	 *
 	 * @return The CRC table.
 	 * @throws IOException If there is an error accessing files to create the table.
 	 * @throws IllegalStateException If this file system is not read-only.
@@ -144,8 +150,25 @@ public final class IndexedFileSystem implements Closeable {
 	}
 
 	/**
+	 * Gets the CRC table as an {@code int} array.
+	 *
+	 * @return The CRC table as an {@code int} array.
+	 * @throws IOException If there is an error accessing files to create the table.
+	 */
+	public int[] getCrcs() throws IOException {
+		if (crcs != null) {
+			return crcs;
+		}
+
+		ByteBuffer buffer = getCrcTable();
+		crcs = new int[(buffer.remaining() / Integer.BYTES) - 1];
+		Arrays.setAll(crcs, crc -> buffer.getInt());
+		return crcs;
+	}
+
+	/**
 	 * Gets a file.
-	 * 
+	 *
 	 * @param descriptor The {@link FileDescriptor} pointing to the file.
 	 * @return A {@link ByteBuffer} containing the contents of the file.
 	 * @throws IOException If there is an error decoding the file.
@@ -211,7 +234,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets a file.
-	 * 
+	 *
 	 * @param type The file type.
 	 * @param file The file id.
 	 * @return A {@link ByteBuffer} which contains the contents of the file.
@@ -223,7 +246,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets the number of files with the specified type.
-	 * 
+	 *
 	 * @param type The type.
 	 * @return The number of files.
 	 * @throws IOException If there is an error getting the length of the specified index file.
@@ -241,7 +264,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Gets the index of a file.
-	 * 
+	 *
 	 * @param descriptor The {@link FileDescriptor} which points to the file.
 	 * @return The {@link Index}.
 	 * @throws IOException If there is an error reading from the index file.
@@ -269,7 +292,7 @@ public final class IndexedFileSystem implements Closeable {
 
 	/**
 	 * Checks if this {@link IndexedFileSystem} is read only.
-	 * 
+	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public boolean isReadOnly() {

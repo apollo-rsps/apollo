@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to add a player to the friend list.
- * 
+ *
  * @author Major
  */
 public final class SendFriendMessage extends Message {
@@ -21,7 +21,7 @@ public final class SendFriendMessage extends Message {
 
 	/**
 	 * Creates a new send friend message.
-	 * 
+	 *
 	 * @param username The username of the friend.
 	 * @param world The world the friend is in.
 	 */
@@ -32,7 +32,7 @@ public final class SendFriendMessage extends Message {
 
 	/**
 	 * Gets the username of the friend.
-	 * 
+	 *
 	 * @return The username.
 	 */
 	public String getUsername() {
@@ -41,7 +41,7 @@ public final class SendFriendMessage extends Message {
 
 	/**
 	 * Gets the world id the friend is in.
-	 * 
+	 *
 	 * @return The world id.
 	 */
 	public int getWorld() {

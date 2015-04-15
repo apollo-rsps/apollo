@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client to update the remaining run energy value.
- * 
+ *
  * @author Major
  */
 public final class UpdateRunEnergyMessage extends Message {
@@ -16,7 +16,7 @@ public final class UpdateRunEnergyMessage extends Message {
 
 	/**
 	 * Creates a new update run energy message.
-	 * 
+	 *
 	 * @param energy The energy.
 	 */
 	public UpdateRunEnergyMessage(int energy) {
@@ -25,7 +25,7 @@ public final class UpdateRunEnergyMessage extends Message {
 
 	/**
 	 * Gets the amount of run energy.
-	 * 
+	 *
 	 * @return The energy.
 	 */
 	public int getEnergy() {

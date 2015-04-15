@@ -47,7 +47,7 @@ public final class HintIconMessage extends Message {
 
 		/**
 		 * Gets the value of this type.
-		 * 
+		 *
 		 * @return The value.
 		 */
 		public int getValue() {
@@ -58,7 +58,7 @@ public final class HintIconMessage extends Message {
 
 	/**
 	 * Creates a HintIconMessage for the Npc with the specified index.
-	 * 
+	 *
 	 * @param index The index of the Npc.
 	 * @return The HintIconMessage.
 	 */
@@ -68,7 +68,7 @@ public final class HintIconMessage extends Message {
 
 	/**
 	 * Creates a HintIconMessage for the Player with the specified index.
-	 * 
+	 *
 	 * @param index The index of the Player.
 	 * @return The HintIconMessage.
 	 */
@@ -78,7 +78,7 @@ public final class HintIconMessage extends Message {
 
 	/**
 	 * Creates a HintIconMessage that removes the current Npc hint icon.
-	 * 
+	 *
 	 * @return The HintIconMessage.
 	 */
 	public static HintIconMessage resetNpc() {
@@ -87,7 +87,7 @@ public final class HintIconMessage extends Message {
 
 	/**
 	 * Creates a HintIconMessage that removes the current Player hint icon.
-	 * 
+	 *
 	 * @return The HintIconMessage.
 	 */
 	public static HintIconMessage resetPlayer() {

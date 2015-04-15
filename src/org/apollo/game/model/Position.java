@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * Represents a position in the world.
- * 
+ *
  * @author Graham
  */
 public final class Position {
@@ -30,7 +30,7 @@ public final class Position {
 
 	/**
 	 * Creates a position at the default height.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
@@ -40,7 +40,7 @@ public final class Position {
 
 	/**
 	 * Creates a position with the specified height.
-	 * 
+	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param height The height.
@@ -63,7 +63,7 @@ public final class Position {
 
 	/**
 	 * Gets the x coordinate of the central region.
-	 * 
+	 *
 	 * @return The x coordinate of the central region.
 	 */
 	public int getCentralRegionX() {
@@ -72,7 +72,7 @@ public final class Position {
 
 	/**
 	 * Gets the y coordinate of the central region.
-	 * 
+	 *
 	 * @return The y coordinate of the central region.
 	 */
 	public int getCentralRegionY() {
@@ -81,7 +81,7 @@ public final class Position {
 
 	/**
 	 * Gets the distance between this position and another position. Only x and y are considered (i.e. 2 dimensions).
-	 * 
+	 *
 	 * @param other The other position.
 	 * @return The distance.
 	 */
@@ -93,7 +93,7 @@ public final class Position {
 
 	/**
 	 * Gets the height level.
-	 * 
+	 *
 	 * @return The height level.
 	 */
 	public int getHeight() {
@@ -102,7 +102,7 @@ public final class Position {
 
 	/**
 	 * Gets the x coordinate inside the region of this position.
-	 * 
+	 *
 	 * @return The local x coordinate.
 	 */
 	public int getLocalX() {
@@ -111,7 +111,7 @@ public final class Position {
 
 	/**
 	 * Gets the local x coordinate inside the region of the {@code base} position.
-	 * 
+	 *
 	 * @param base The base position.
 	 * @return The local x coordinate.
 	 */
@@ -121,7 +121,7 @@ public final class Position {
 
 	/**
 	 * Gets the y coordinate inside the region of this position.
-	 * 
+	 *
 	 * @return The local y coordinate.
 	 */
 	public int getLocalY() {
@@ -130,7 +130,7 @@ public final class Position {
 
 	/**
 	 * Gets the local y coordinate inside the region of the {@code base} position.
-	 * 
+	 *
 	 * @param base The base position.
 	 * @return The local y coordinate.
 	 */
@@ -140,7 +140,7 @@ public final class Position {
 
 	/**
 	 * Gets the longest horizontal or vertical delta between the two positions.
-	 * 
+	 *
 	 * @param other The other position.
 	 * @return The longest horizontal or vertical delta.
 	 */
@@ -152,7 +152,7 @@ public final class Position {
 
 	/**
 	 * Returns the {@link RegionCoordinates} of the {@link Region} this position is inside.
-	 * 
+	 *
 	 * @return The region coordinates.
 	 */
 	public RegionCoordinates getRegionCoordinates() {
@@ -161,7 +161,7 @@ public final class Position {
 
 	/**
 	 * Gets the x coordinate of the region this position is in.
-	 * 
+	 *
 	 * @return The region x coordinate.
 	 */
 	public int getTopLeftRegionX() {
@@ -170,7 +170,7 @@ public final class Position {
 
 	/**
 	 * Gets the y coordinate of the region this position is in.
-	 * 
+	 *
 	 * @return The region y coordinate.
 	 */
 	public int getTopLeftRegionY() {
@@ -179,7 +179,7 @@ public final class Position {
 
 	/**
 	 * Gets the x coordinate.
-	 * 
+	 *
 	 * @return The x coordinate.
 	 */
 	public int getX() {
@@ -188,11 +188,11 @@ public final class Position {
 
 	/**
 	 * Gets the y coordinate.
-	 * 
+	 *
 	 * @return The y coordinate.
 	 */
 	public int getY() {
-		return (packed >> 15) & 0x7FFF;
+		return packed >> 15 & 0x7FFF;
 	}
 
 	@Override
@@ -202,7 +202,7 @@ public final class Position {
 
 	/**
 	 * Returns whether or not this position is inside the specified {@link Region}.
-	 * 
+	 *
 	 * @param region The region.
 	 * @return {@code true} if this position is inside the specified region, otherwise {@code false}.
 	 */
@@ -213,7 +213,7 @@ public final class Position {
 
 	/**
 	 * Checks if the position is within distance of another.
-	 * 
+	 *
 	 * @param other The other position.
 	 * @param distance The distance.
 	 * @return {@code true} if so, {@code false} if not.

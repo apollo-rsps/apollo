@@ -14,9 +14,9 @@ import org.apollo.game.model.area.RegionCoordinates;
 public final class GroupedRegionUpdateMessage extends Message {
 
 	/**
-	 * The Position of the Player.
+	 * The last known region Position of the Player.
 	 */
-	private final Position player;
+	private final Position lastKnownRegion;
 
 	/**
 	 * The Position of the Region being updated.
@@ -30,29 +30,29 @@ public final class GroupedRegionUpdateMessage extends Message {
 
 	/**
 	 * Creates the GroupedRegionUpdateMessage.
-	 * 
-	 * @param player The {@link Position} of the Player.
+	 *
+	 * @param lastKnownRegion The last known region {@link Position} of the Player.
 	 * @param coordinates The {@link RegionCoordinates} of the Region being updated.
 	 * @param messages The {@link List} of {@link RegionUpdateMessage}s.
 	 */
-	public GroupedRegionUpdateMessage(Position player, RegionCoordinates coordinates, List<RegionUpdateMessage> messages) {
-		this.player = player;
-		this.region = new Position(coordinates.getAbsoluteX(), coordinates.getAbsoluteY());
+	public GroupedRegionUpdateMessage(Position lastKnownRegion, RegionCoordinates coordinates, List<RegionUpdateMessage> messages) {
+		this.lastKnownRegion = lastKnownRegion;
+		region = new Position(coordinates.getAbsoluteX(), coordinates.getAbsoluteY());
 		this.messages = messages;
 	}
 
 	/**
 	 * Gets the {@link Position} of the Player.
-	 * 
+	 *
 	 * @return The Position.
 	 */
-	public Position getPlayerPosition() {
-		return player;
+	public Position getLastKnownRegion() {
+		return lastKnownRegion;
 	}
 
 	/**
 	 * Gets the {@link List} of {@link RegionUpdateMessage}s.
-	 * 
+	 *
 	 * @return The Collection.
 	 */
 	public List<RegionUpdateMessage> getMessages() {
@@ -61,7 +61,7 @@ public final class GroupedRegionUpdateMessage extends Message {
 
 	/**
 	 * Gets the {@link Position} of the Region these updates affect.
-	 * 
+	 *
 	 * @return The Position.
 	 */
 	public Position getRegionPosition() {

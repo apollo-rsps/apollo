@@ -11,7 +11,7 @@ import com.google.common.primitives.Ints;
 
 /**
  * Represents the set of the player's skills.
- * 
+ *
  * @author Graham
  */
 public final class SkillSet {
@@ -42,7 +42,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets the minimum experience required for the specified level.
-	 * 
+	 *
 	 * @param level The level.
 	 * @return The minimum experience.
 	 */
@@ -53,7 +53,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets the minimum level to get the specified experience.
-	 * 
+	 *
 	 * @param experience The experience.
 	 * @return The minimum level.
 	 */
@@ -96,7 +96,7 @@ public final class SkillSet {
 
 	/**
 	 * Adds experience to the specified skill.
-	 * 
+	 *
 	 * @param id The skill id.
 	 * @param experience The amount of experience.
 	 */
@@ -121,7 +121,7 @@ public final class SkillSet {
 
 	/**
 	 * Adds a {@link SkillListener} to this set.
-	 * 
+	 *
 	 * @param listener The listener.
 	 */
 	public void addListener(SkillListener listener) {
@@ -155,7 +155,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets the combat level of this skill set.
-	 * 
+	 *
 	 * @return The combat level.
 	 */
 	public int getCombatLevel() {
@@ -164,7 +164,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets the current level of the specified skill.
-	 * 
+	 *
 	 * @param skill The skill.
 	 * @return The current level.
 	 */
@@ -174,7 +174,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets the experience of the specified skill.
-	 * 
+	 *
 	 * @param skill The skill.
 	 * @return The experience.
 	 */
@@ -184,7 +184,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets the maximum level of the specified skill.
-	 * 
+	 *
 	 * @param skill The skill.
 	 * @return The maximum level.
 	 */
@@ -194,7 +194,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets a skill by its id.
-	 * 
+	 *
 	 * @param id The id.
 	 * @return The skill.
 	 */
@@ -205,7 +205,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets the total level for this skill set.
-	 * 
+	 *
 	 * @return The total level.
 	 */
 	public int getTotalLevel() {
@@ -223,7 +223,7 @@ public final class SkillSet {
 				continue;
 			}
 
-			current += (current < max ? 1 : -1);
+			current += current < max ? 1 : -1;
 			setSkill(id, new Skill(skills[id].getExperience(), current, max));
 		}
 	}
@@ -237,7 +237,7 @@ public final class SkillSet {
 
 	/**
 	 * Removes a {@link SkillListener}.
-	 * 
+	 *
 	 * @param listener The listener to remove.
 	 */
 	public void removeListener(SkillListener listener) {
@@ -246,7 +246,7 @@ public final class SkillSet {
 
 	/**
 	 * Sets the current level of the specified skill.
-	 * 
+	 *
 	 * @param skill The skill.
 	 * @param level The level.
 	 */
@@ -257,7 +257,7 @@ public final class SkillSet {
 
 	/**
 	 * Sets the experience level of the specified skill.
-	 * 
+	 *
 	 * @param skill The skill.
 	 * @param experience The experience.
 	 */
@@ -268,7 +268,7 @@ public final class SkillSet {
 
 	/**
 	 * Sets the maximum level of the specified skill.
-	 * 
+	 *
 	 * @param skill The skill.
 	 * @param level The level.
 	 */
@@ -279,7 +279,7 @@ public final class SkillSet {
 
 	/**
 	 * Sets a {@link Skill}.
-	 * 
+	 *
 	 * @param id The id.
 	 * @param skill The skill.
 	 */
@@ -291,7 +291,7 @@ public final class SkillSet {
 
 	/**
 	 * Gets the number of {@link Skill}s in this set.
-	 * 
+	 *
 	 * @return The number of skills.
 	 */
 	public int size() {
@@ -314,7 +314,7 @@ public final class SkillSet {
 
 	/**
 	 * Checks the bounds of the id.
-	 * 
+	 *
 	 * @param id The id.
 	 * @throws IndexOutOfBoundsException If the id is out of bounds.
 	 */
@@ -331,7 +331,7 @@ public final class SkillSet {
 
 	/**
 	 * Notifies listeners that a skill has been levelled up.
-	 * 
+	 *
 	 * @param id The skill's id.
 	 */
 	private void notifyLevelledUp(int id) {
@@ -352,7 +352,7 @@ public final class SkillSet {
 
 	/**
 	 * Notifies listeners that a skill has been updated.
-	 * 
+	 *
 	 * @param id The skill's id.
 	 */
 	private void notifySkillUpdated(int id) {

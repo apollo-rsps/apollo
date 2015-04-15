@@ -5,7 +5,7 @@ import org.apollo.game.model.event.PlayerEvent;
 
 /**
  * A {@link PlayerEvent} that is fired when a {@link Player} logs out.
- * 
+ *
  * @author Major
  */
 public final class LogoutEvent extends PlayerEvent {

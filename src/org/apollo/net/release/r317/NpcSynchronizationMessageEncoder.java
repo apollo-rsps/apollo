@@ -28,7 +28,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link NpcSynchronizationMessage}.
- * 
+ *
  * @author Major
  */
 public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSynchronizationMessage> {
@@ -67,7 +67,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts an add npc update.
-	 * 
+	 *
 	 * @param seg The segment.
 	 * @param message The message.
 	 * @param builder The builder.
@@ -86,7 +86,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts an animation block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -98,7 +98,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts the blocks for the specified segment.
-	 * 
+	 *
 	 * @param segment The segment.
 	 * @param builder The block builder.
 	 */
@@ -177,7 +177,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts a force chat block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -187,7 +187,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts a graphic block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -199,7 +199,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts a hit update block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -212,7 +212,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts an interacting mob block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -222,7 +222,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts a movement update for the specified segment.
-	 * 
+	 *
 	 * @param segment The segment.
 	 * @param message The message.
 	 * @param builder The builder.
@@ -254,7 +254,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts a remove mob update.
-	 * 
+	 *
 	 * @param builder The builder.
 	 */
 	private static void putRemoveMobUpdate(GamePacketBuilder builder) {
@@ -264,7 +264,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts a second hit update block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -277,7 +277,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts a transform block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */
@@ -287,7 +287,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 
 	/**
 	 * Puts a turn to position block into the specified builder.
-	 * 
+	 *
 	 * @param block The block.
 	 * @param builder The builder.
 	 */

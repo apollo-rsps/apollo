@@ -4,7 +4,7 @@ import org.apollo.game.message.Message;
 
 /**
  * A {@link Message} sent to the client that opens a dialogue interface (an interface that appears in the chat box).
- * 
+ *
  * @author Chris Fletcher
  */
 public final class OpenDialogueOverlayMessage extends Message {
@@ -16,7 +16,7 @@ public final class OpenDialogueOverlayMessage extends Message {
 
 	/**
 	 * Creates a new message with the specified interface id.
-	 * 
+	 *
 	 * @param interfaceId The interface id.
 	 */
 	public OpenDialogueOverlayMessage(int interfaceId) {
@@ -25,7 +25,7 @@ public final class OpenDialogueOverlayMessage extends Message {
 
 	/**
 	 * Gets the interface id.
-	 * 
+	 *
 	 * @return The interface id.
 	 */
 	public int getInterfaceId() {

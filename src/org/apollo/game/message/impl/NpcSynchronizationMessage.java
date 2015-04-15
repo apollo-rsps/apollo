@@ -9,7 +9,7 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**
  * A {@link Message} sent to the client to synchronize npcs with players.
- * 
+ *
  * @author Major
  */
 public final class NpcSynchronizationMessage extends Message {
@@ -31,7 +31,7 @@ public final class NpcSynchronizationMessage extends Message {
 
 	/**
 	 * Creates a new {@link NpcSynchronizationMessage}.
-	 * 
+	 *
 	 * @param position The position of the {@link Npc}.
 	 * @param segments The list of segments.
 	 * @param localNpcs The amount of local npcs.
@@ -44,7 +44,7 @@ public final class NpcSynchronizationMessage extends Message {
 
 	/**
 	 * Gets the number of local npcs.
-	 * 
+	 *
 	 * @return The number of local npcs.
 	 */
 	public int getLocalNpcCount() {
@@ -53,7 +53,7 @@ public final class NpcSynchronizationMessage extends Message {
 
 	/**
 	 * Gets the npc's position.
-	 * 
+	 *
 	 * @return The npc's position.
 	 */
 	public Position getPosition() {
@@ -62,7 +62,7 @@ public final class NpcSynchronizationMessage extends Message {
 
 	/**
 	 * Gets the synchronization segments.
-	 * 
+	 *
 	 * @return The segments.
 	 */
 	public List<SynchronizationSegment> getSegments() {

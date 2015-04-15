@@ -5,7 +5,7 @@ import org.apollo.game.model.entity.SkillSet;
 
 /**
  * An adapter for the {@link SkillListener}.
- * 
+ *
  * @author Graham
  */
 public abstract class SkillAdapter implements SkillListener {

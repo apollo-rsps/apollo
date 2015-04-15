@@ -11,7 +11,7 @@ import org.apollo.util.BufferUtil;
 
 /**
  * Decodes npc data from the {@code npc.dat} file into {@link NpcDefinition}s.
- * 
+ *
  * @author Major
  */
 public final class NpcDefinitionDecoder {
@@ -23,7 +23,7 @@ public final class NpcDefinitionDecoder {
 
 	/**
 	 * Creates the npc definition decoder.
-	 * 
+	 *
 	 * @param fs The indexed file system.
 	 */
 	public NpcDefinitionDecoder(IndexedFileSystem fs) {
@@ -32,7 +32,7 @@ public final class NpcDefinitionDecoder {
 
 	/**
 	 * Decodes the npc definitions.
-	 * 
+	 *
 	 * @return An array of all parsed npc definitions.
 	 * @throws IOException If an I/O error occurs.
 	 */
@@ -59,7 +59,7 @@ public final class NpcDefinitionDecoder {
 
 	/**
 	 * Decodes a single definition.
-	 * 
+	 *
 	 * @param id The npc's id.
 	 * @param buffer The buffer.
 	 * @return The {@link NpcDefinition}.
@@ -121,24 +121,20 @@ public final class NpcDefinitionDecoder {
 			} else if (opcode == 102 || opcode == 103) {
 				buffer.getShort();
 			} else if (opcode == 106) {
-				@SuppressWarnings("unused")
-				int morphVariableBitsIndex = wrap(buffer.getShort());
-				@SuppressWarnings("unused")
-				int morphismCount = wrap(buffer.getShort());
+				wrap(buffer.getShort());
+				wrap(buffer.getShort());
 
 				int count = buffer.get() & 0xFF;
 				int[] morphisms = new int[count + 1];
 				Arrays.setAll(morphisms, index -> wrap(buffer.getShort()));
 			} else if (opcode == 107) {
-				@SuppressWarnings("unused")
-				boolean clickable = false;
 			}
 		}
 	}
 
 	/**
 	 * Wraps a morphism value around, returning -1 if the specified value is 65,535.
-	 * 
+	 *
 	 * @param value The value.
 	 * @return -1 if {@code value} is 65,535, otherwise {@code value}.
 	 */

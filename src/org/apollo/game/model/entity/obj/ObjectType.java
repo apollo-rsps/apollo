@@ -3,7 +3,7 @@ package org.apollo.game.model.entity.obj;
 /**
  * The type of an object, which affects specified behaviour (such as whether it displaces existing objects). TODO
  * complete this...
- * 
+ *
  * @author Major
  * @author Scu11
  */

@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * A {@link SynchronizationTask} which does pre-synchronization work for the specified {@link Player}.
- * 
+ *
  * @author Graham
  * @author Major
  */
@@ -73,7 +73,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Creates the {@link PrePlayerSynchronizationTask} for the specified {@link Player}.
-	 * 
+	 *
 	 * @param player The Player.
 	 * @param updates The {@link Map} containing {@link Region} updates.
 	 * @param snapshots The Map containing Region snapshots.
@@ -116,7 +116,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	/**
 	 * Gets the {@link Set} of {@link RegionCoordinates} of {@link Region}s that the {@link Player} in this task has
 	 * only just became able to view.
-	 * 
+	 *
 	 * @param old The old {@link Position} of the Player.
 	 * @param next The new Position of the Player.
 	 * @return The Set of RegionCoordinates. Will not be {@code null}, but may be empty.
@@ -158,7 +158,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Gets the {@link List} of {@link GroupedRegionUpdateMessage}s.
-	 * 
+	 *
 	 * @param mode The {@link RegionUpdateMode} used when creating the Messages.
 	 * @param newRegions The {@link Set} of {@link RegionCoordinates} that should be sent as a full update.
 	 */
@@ -181,7 +181,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 					player.send(new ClearRegionMessage(position, coordinates));
 				}
 
-				Optional<GroupedRegionUpdateMessage> message = toUpdateMessage(local, position, coordinates, repository);
+				Optional<GroupedRegionUpdateMessage> message = toUpdateMessage(local, player.getLastKnownRegion(), coordinates, repository);
 				if (message.isPresent()) {
 					messages.add(message.get());
 				}
@@ -198,7 +198,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 	/**
 	 * Checks if a region update is required.
-	 * 
+	 *
 	 * @return {@code true} if a Region update is required, {@code false} if not.
 	 */
 	private boolean isRegionUpdateRequired() {
@@ -208,20 +208,20 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		int deltaX = current.getLocalX(last);
 		int deltaY = current.getLocalY(last);
 
-		return deltaX <= Position.MAX_DISTANCE || deltaX >= (VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1) || deltaY <= Position.MAX_DISTANCE || deltaY >= (VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1);
+		return deltaX <= Position.MAX_DISTANCE || deltaX >= VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1 || deltaY <= Position.MAX_DISTANCE || deltaY >= VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
 	}
 
 	/**
 	 * Creates a {@link GroupedRegionUpdateMessage} using the specified {@link RegionUpdateMode}, returning
 	 * {@link Optional#empty()} if no update message is required.
-	 * 
+	 *
 	 * @param mode The RegionUpdateMode for the Message.
-	 * @param position The {@link Position} of the Player.
+	 * @param lastKnownRegion The last known region {@link Position} of the Player.
 	 * @param coordinates The {@link RegionCoordinates} of the {@link Region}.
 	 * @param repository The {@link RegionRepository} containing the Regions.
 	 * @return The Optional containing the GroupedRegionUpdateMessage.
 	 */
-	private Optional<GroupedRegionUpdateMessage> toUpdateMessage(RegionUpdateMode mode, Position position, RegionCoordinates coordinates, RegionRepository repository) {
+	private Optional<GroupedRegionUpdateMessage> toUpdateMessage(RegionUpdateMode mode, Position lastKnownRegion, RegionCoordinates coordinates, RegionRepository repository) {
 		List<RegionUpdateMessage> messages;
 
 		/*
@@ -237,7 +237,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 				messages = updates.get(coordinates);
 				if (messages == null) {
 					synchronized (updates) {
-						messages = updates.computeIfAbsent(coordinates, coords -> repository.get(coords).getUpdates(position.getHeight()));
+						messages = updates.computeIfAbsent(coordinates, coords -> repository.get(coords).getUpdates(lastKnownRegion.getHeight()));
 					}
 				}
 
@@ -246,7 +246,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 				messages = snapshots.get(coordinates);
 				if (messages == null) {
 					synchronized (snapshots) {
-						messages = snapshots.computeIfAbsent(coordinates, coords -> repository.get(coords).getSnapshot(position.getHeight()));
+						messages = snapshots.computeIfAbsent(coordinates, coords -> repository.get(coords).getSnapshot(lastKnownRegion.getHeight()));
 					}
 				}
 
@@ -255,7 +255,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 				throw new IllegalArgumentException("Unrecognised RegionUpdateMode " + mode + ".");
 		}
 
-		return messages.isEmpty() ? Optional.empty() : Optional.of(new GroupedRegionUpdateMessage(position, coordinates, messages));
+		return messages.isEmpty() ? Optional.empty() : Optional.of(new GroupedRegionUpdateMessage(lastKnownRegion, coordinates, messages));
 	}
 
 }

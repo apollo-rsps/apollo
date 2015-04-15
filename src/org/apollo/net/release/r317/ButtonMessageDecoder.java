@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageDecoder;
 
 /**
  * A {@link MessageDecoder} for the {@link ButtonMessage}.
- * 
+ *
  * @author Graham
  */
 public final class ButtonMessageDecoder extends MessageDecoder<ButtonMessage> {

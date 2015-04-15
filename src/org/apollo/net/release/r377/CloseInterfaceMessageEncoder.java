@@ -7,7 +7,7 @@ import org.apollo.net.release.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} for the {@link CloseInterfaceMessage}.
- * 
+ *
  * @author Graham
  */
 public final class CloseInterfaceMessageEncoder extends MessageEncoder<CloseInterfaceMessage> {

@@ -21,7 +21,7 @@ import org.apollo.game.model.area.RegionRepository;
  * <p>
  * This implementation also avoids the linear-time removal from the queue by polling until the first open node is found
  * when identifying the cheapest node.
- * 
+ *
  * @author Major
  */
 public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
@@ -33,7 +33,7 @@ public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 
 	/**
 	 * Creates the A* pathfinding algorithm with the specified heuristic.
-	 * 
+	 *
 	 * @param repository The {@link RegionRepository}.
 	 * @param heuristic The heuristic.
 	 */
@@ -100,7 +100,7 @@ public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 	/**
 	 * Compares the two specified {@link Node}s, adding the other node to the open {@link Set} if the estimation is
 	 * cheaper than the current cost.
-	 * 
+	 *
 	 * @param active The active node.
 	 * @param other The node to compare the active node against.
 	 * @param open The set of open nodes.
@@ -123,7 +123,7 @@ public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 
 	/**
 	 * Gets the cheapest open {@link Node} from the {@link Queue}.
-	 * 
+	 *
 	 * @param nodes The queue of nodes.
 	 * @return The cheapest node.
 	 */

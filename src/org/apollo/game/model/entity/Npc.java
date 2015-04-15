@@ -12,7 +12,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A {@link Mob} that is not controlled by a player.
- * 
+ *
  * @author Major
  */
 public final class Npc extends Mob {
@@ -24,7 +24,7 @@ public final class Npc extends Mob {
 
 	/**
 	 * Creates the Npc.
-	 * 
+	 *
 	 * @param world The {@link World} containing the Npc.
 	 * @param id The id.
 	 * @param position The position.
@@ -35,7 +35,7 @@ public final class Npc extends Mob {
 
 	/**
 	 * Creates the Npc.
-	 * 
+	 *
 	 * @param world The {@link World} containing the Npc.
 	 * @param position The Position.
 	 * @param definition The NpcDefinition.
@@ -59,7 +59,7 @@ public final class Npc extends Mob {
 
 	/**
 	 * Gets the boundaries of this Npc.
-	 * 
+	 *
 	 * @return The boundaries.
 	 */
 	public Optional<Position[]> getBoundaries() {
@@ -73,7 +73,7 @@ public final class Npc extends Mob {
 
 	/**
 	 * Gets the id of this Npc.
-	 * 
+	 *
 	 * @return The id.
 	 */
 	public int getId() {
@@ -82,7 +82,7 @@ public final class Npc extends Mob {
 
 	/**
 	 * Returns whether or not this Npc has boundaries.
-	 * 
+	 *
 	 * @return {@code true} if this Npc has boundaries, {@code false} if not.
 	 */
 	public boolean hasBoundaries() {
@@ -97,7 +97,7 @@ public final class Npc extends Mob {
 
 	/**
 	 * Sets the boundaries of this Npc.
-	 * 
+	 *
 	 * @param boundaries The boundaries.
 	 */
 	public void setBoundaries(Position[] boundaries) {
@@ -112,7 +112,7 @@ public final class Npc extends Mob {
 
 	/**
 	 * Transforms this Npc into the Npc with the specified id.
-	 * 
+	 *
 	 * @param id The id.
 	 */
 	public void transform(int id) {
