@@ -69,7 +69,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext();) {
 			Player other = it.next();
-			if (!other.isActive() || other.isTeleporting() || other.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance()) {
+			if (!other.isActive() || other.isTeleporting() || other.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance() || !other.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())) {
 				it.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
