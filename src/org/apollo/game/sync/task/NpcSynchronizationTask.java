@@ -49,7 +49,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 
 		for (Iterator<Npc> it = localNpcs.iterator(); it.hasNext();) {
 			Npc npc = it.next();
-			if (!npc.isActive() || npc.isTeleporting() || npc.getPosition().getLongestDelta(playerPosition) > player.getViewingDistance()) {
+			if (!npc.isActive() || npc.isTeleporting() || npc.getPosition().getLongestDelta(playerPosition) > player.getViewingDistance() || !npc.getPosition().isWithinDistance(playerPosition, player.getViewingDistance())) {
 				it.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
@@ -68,7 +68,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 			}
 
 			Position npcPosition = npc.getPosition();
-			if (npcPosition.isWithinDistance(playerPosition, player.getViewingDistance()) && !localNpcs.contains(npc) && npcPosition.getHeight() == playerPosition.getHeight()) {
+			if (npcPosition.isWithinDistance(playerPosition, player.getViewingDistance()) && !localNpcs.contains(npc)) {
 				localNpcs.add(npc);
 				added++;
 				npc.turnTo(npc.getFacingPosition());
