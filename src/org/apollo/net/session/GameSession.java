@@ -89,6 +89,7 @@ public final class GameSession extends Session {
 				chainSet.notify(player, message);
 			} catch (Exception reason) {
 				logger.log(Level.SEVERE, "Uncaught exception thrown while handling message: " + message, reason);
+				destroy();
 			}
 		}
 	}
