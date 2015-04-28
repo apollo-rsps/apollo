@@ -49,7 +49,7 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) {
 		Channel channel = ctx.channel();
-		Session session = ctx.attr(NetworkConstants.SESSION_KEY).getAndRemove();
+		Session session = channel.attr(NetworkConstants.SESSION_KEY).getAndRemove();
 		if (session != null) {
 			session.destroy();
 		}
