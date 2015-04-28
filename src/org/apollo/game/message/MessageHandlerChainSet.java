@@ -21,15 +21,20 @@ public final class MessageHandlerChainSet {
 
 	/**
 	 * Notifies the appropriate {@link MessageHandlerChain} that a {@link Message} has been received.
-	 * 
+	 *
 	 * @param player The {@link Player} receiving the Message.
 	 * @param message The Message.
 	 * @return {@code true} if the Message propagated down the chain without being terminated or if the chain for the
 	 *         Message was not found, otherwise {@code false}.
 	 */
+	@SuppressWarnings("unchecked")
 	public <M extends Message> boolean notify(Player player, M message) {
-		@SuppressWarnings("unchecked")
-		MessageHandlerChain<M> chain = (MessageHandlerChain<M>) chains.get(message.getClass());
+		Class<M> clazz = (Class<M>) message.getClass();
+		while (clazz.getSuperclass() != Message.class) {
+			clazz = (Class<M>) clazz.getSuperclass();
+		}
+
+		MessageHandlerChain<M> chain = (MessageHandlerChain<M>) chains.computeIfAbsent(clazz, MessageHandlerChain::new);
 		return chain == null || chain.notify(player, message);
 	}
 
