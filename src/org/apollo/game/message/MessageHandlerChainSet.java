@@ -35,7 +35,7 @@ public final class MessageHandlerChainSet {
 		}
 
 		MessageHandlerChain<M> chain = (MessageHandlerChain<M>) chains.computeIfAbsent(clazz, MessageHandlerChain::new);
-		return chain == null || chain.notify(player, message);
+		return chain.notify(player, message);
 	}
 
 	/**
