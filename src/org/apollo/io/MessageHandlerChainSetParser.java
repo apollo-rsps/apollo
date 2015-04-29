@@ -48,6 +48,7 @@ public final class MessageHandlerChainSetParser {
 	 * @throws SAXException If a SAX error occurs.
 	 * @throws ReflectiveOperationException If a reflection error occurs.
 	 */
+	@SuppressWarnings("unchecked")
 	public MessageHandlerChainSet parse(World world) throws IOException, SAXException, ReflectiveOperationException {
 		XmlNode messages = parser.parse(is);
 		if (!messages.getName().equals("messages")) {
@@ -75,7 +76,6 @@ public final class MessageHandlerChainSetParser {
 				throw new IOException("Type node must have a value.");
 			}
 
-			@SuppressWarnings("unchecked")
 			Class<? extends Message> messageClass = (Class<? extends Message>) Class.forName(messageClassName);
 
 			for (XmlNode handlerNode : chainNode) {
@@ -88,7 +88,6 @@ public final class MessageHandlerChainSetParser {
 					throw new IOException("Handler node must have a value.");
 				}
 
-				@SuppressWarnings("unchecked")
 				Class<? extends MessageHandler<? extends Message>> handlerClass = (Class<? extends MessageHandler<? extends Message>>) Class.forName(handlerClassName);
 				MessageHandler<? extends Message> handler = handlerClass.getConstructor(World.class).newInstance(world);
 				chainSet.putHandler(messageClass, handler);
