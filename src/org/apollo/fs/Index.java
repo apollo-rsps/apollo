@@ -17,8 +17,9 @@ public final class Index {
 	 * @throws IllegalArgumentException If the buffer length is invalid.
 	 */
 	public static Index decode(byte[] buffer) {
-		Preconditions.checkArgument(buffer.length == FileSystemConstants.INDEX_SIZE, "Incorrect buffer length.");
-
+		if(buffer.lenght != FileSystemConstants.INDEX_SIZE) {
+			throw new IllegalArgumentException("Incorrect buffer length.");
+		}
 		int size = (buffer[0] & 0xFF) << 16 | (buffer[1] & 0xFF) << 8 | buffer[2] & 0xFF;
 		int block = (buffer[3] & 0xFF) << 16 | (buffer[4] & 0xFF) << 8 | buffer[5] & 0xFF;
 
