@@ -1,7 +1,7 @@
 require 'java'
 
 java_import 'org.apollo.game.model.Position'
-java_import 'org.apollo.game.model.entity.Entity$EntityType'
+java_import 'org.apollo.game.model.entity.EntityType'
 java_import 'org.apollo.game.model.entity.Player'
 
 

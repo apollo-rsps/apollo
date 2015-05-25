@@ -3,7 +3,9 @@ package org.apollo.game.model.entity;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apollo.game.message.Message;
 import org.apollo.game.message.impl.ConfigMessage;
@@ -23,6 +25,7 @@ import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.entity.attr.AttributePersistence;
 import org.apollo.game.model.entity.attr.NumericalAttribute;
+import org.apollo.game.model.entity.obj.DynamicGameObject;
 import org.apollo.game.model.entity.setting.MembershipStatus;
 import org.apollo.game.model.entity.setting.PrivacyState;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
@@ -62,7 +65,6 @@ public final class Player extends Mob {
 
 	static {
 		AttributeMap.define("run_energy", AttributeDefinition.forInt(100, AttributePersistence.PERSISTENT));
-		AttributeMap.define("client_version", AttributeDefinition.forInt(0, AttributePersistence.TRANSIENT));
 	}
 
 	/**
@@ -83,7 +85,7 @@ public final class Player extends Mob {
 	/**
 	 * A deque of this player's mouse clicks.
 	 */
-	private transient Deque<Point> clicks = new ArrayDeque<>();
+	private Deque<Point> clicks = new ArrayDeque<>();
 
 	/**
 	 * This player's credentials.
@@ -93,12 +95,12 @@ public final class Player extends Mob {
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
 	 */
-	private transient boolean excessiveNpcs = false;
+	private boolean excessiveNpcs = false;
 
 	/**
 	 * A flag which indicates there are players that couldn't be added.
 	 */
-	private transient boolean excessivePlayers = false;
+	private boolean excessivePlayers = false;
 
 	/**
 	 * Indicates whether this player has the message filter enabled.
@@ -123,7 +125,7 @@ public final class Player extends Mob {
 	/**
 	 * This player's interface set.
 	 */
-	private final transient InterfaceSet interfaceSet = new InterfaceSet(this);
+	private final InterfaceSet interfaceSet = new InterfaceSet(this);
 
 	/**
 	 * Whether or not the player is skulled.
@@ -133,12 +135,17 @@ public final class Player extends Mob {
 	/**
 	 * The centre of the last region the client has loaded.
 	 */
-	private transient Position lastKnownRegion;
+	private Position lastKnownRegion;
+
+	/**
+	 * The Set of DynamicGameObjects that are visible to this Player.
+	 */
+	private final Set<DynamicGameObject> localObjects = new HashSet<>();
 
 	/**
 	 * The MembershipStatus of this Player.
 	 */
-	private transient MembershipStatus members = MembershipStatus.FREE;
+	private MembershipStatus members = MembershipStatus.FREE;
 
 	/**
 	 * This player's prayer icon.
@@ -153,12 +160,12 @@ public final class Player extends Mob {
 	/**
 	 * A temporary queue of messages sent during the login process.
 	 */
-	private final transient Deque<Message> queuedMessages = new ArrayDeque<>();
+	private final Deque<Message> queuedMessages = new ArrayDeque<>();
 
 	/**
 	 * A flag indicating if the region changed in the last cycle.
 	 */
-	private transient boolean regionChanged = false;
+	private boolean regionChanged = false;
 
 	/**
 	 * A flag indicating if this player is running.
@@ -173,7 +180,7 @@ public final class Player extends Mob {
 	/**
 	 * The {@link GameSession} currently attached to this {@link Player}.
 	 */
-	private transient GameSession session;
+	private GameSession session;
 
 	/**
 	 * The privacy state of this player's trade chat.
@@ -193,7 +200,7 @@ public final class Player extends Mob {
 	/**
 	 * The id of the world this player is in.
 	 */
-	private transient int worldId = 1;
+	private int worldId = 1;
 
 	/**
 	 * Creates the Player.
@@ -235,6 +242,16 @@ public final class Player extends Mob {
 	 */
 	public void addIgnore(String username) {
 		ignores.add(username.toLowerCase());
+	}
+
+	/**
+	 * Adds the specified {@link DynamicGameObject} to this Player's {@link Set} of visible objects.
+	 *
+	 * @param object The DynamicGameObject.
+	 */
+	public void addObject(DynamicGameObject object) {
+		localObjects.add(object);
+		object.addTo(this);
 	}
 
 	/**
@@ -314,16 +331,6 @@ public final class Player extends Mob {
 	 */
 	public Deque<Point> getClicks() {
 		return clicks;
-	}
-
-	/**
-	 * Gets the value denoting the clients modified version (0 if it is an unmodified jagex client).
-	 *
-	 * @return The version.
-	 */
-	public int getClientVersion() {
-		Attribute<Integer> version = attributes.get("client_version");
-		return version.getValue();
 	}
 
 	/**
@@ -602,6 +609,8 @@ public final class Player extends Mob {
 		if (world.submit(new LogoutEvent(this))) {
 			send(new LogoutMessage());
 		}
+
+		localObjects.forEach(object -> object.removeFrom(this));
 	}
 
 	/**
@@ -647,6 +656,16 @@ public final class Player extends Mob {
 	 */
 	public boolean removeIgnore(String username) {
 		return ignores.remove(username.toLowerCase());
+	}
+
+	/**
+	 * Removes the specified {@link DynamicGameObject} from this Player's {@link Set} of visible objects.
+	 *
+	 * @param object The DynamicGameObject.
+	 */
+	public void removeObject(DynamicGameObject object) {
+		localObjects.remove(object);
+		object.removeFrom(this);
 	}
 
 	/**
@@ -718,9 +737,7 @@ public final class Player extends Mob {
 	 * @param filterable Whether or not the message can be filtered.
 	 */
 	public void sendMessage(String message, boolean filterable) {
-		if (getClientVersion() > 0) {
-			send(new ServerChatMessage(message, filterable));
-		} else if (!filterable || !filteringMessages) {
+		if (!filterable || !filteringMessages) {
 			send(new ServerChatMessage(message));
 		}
 	}
@@ -942,7 +959,8 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel).add("client version", getClientVersion()).toString();
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
+				.toString();
 	}
 
 	/**
@@ -957,13 +975,16 @@ public final class Player extends Mob {
 	 * Initialises the player's inventories.
 	 */
 	private void initInventories() {
-		InventoryListener fullInventoryListener = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
+		InventoryListener fullInventoryListener = new FullInventoryListener(this,
+				FullInventoryListener.FULL_INVENTORY_MESSAGE);
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 
-		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.INVENTORY_ID);
+		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
+				SynchronizationInventoryListener.INVENTORY_ID);
 		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
-		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.EQUIPMENT_ID);
+		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
+				SynchronizationInventoryListener.EQUIPMENT_ID);
 
 		inventory.addListener(syncInventoryListener);
 		inventory.addListener(fullInventoryListener);

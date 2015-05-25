@@ -14,52 +14,6 @@ import org.apollo.game.model.area.update.UpdateOperation;
 public abstract class Entity {
 
 	/**
-	 * Represents a type of {@link Entity}.
-	 */
-	public enum EntityType {
-
-		/**
-		 * A GameObject that is loaded dynamically, usually for specific Players.
-		 */
-		DYNAMIC_OBJECT,
-
-		/**
-		 * An Item that is positioned on the ground.
-		 */
-		GROUND_ITEM,
-
-		/**
-		 * An Npc.
-		 */
-		NPC,
-
-		/**
-		 * A Player.
-		 */
-		PLAYER,
-
-		/**
-		 * A projectile (e.g. an arrow).
-		 */
-		PROJECTILE,
-
-		/**
-		 * A GameObject that is loaded statically (i.e. from the game resources) at start-up.
-		 */
-		STATIC_OBJECT;
-
-		/**
-		 * Returns whether or not this EntityType is for a Mob.
-		 *
-		 * @return {@code true} if this EntityType is for a Mob, otherwise {@code false}.
-		 */
-		public boolean isMob() {
-			return this == PLAYER || this == NPC;
-		}
-
-	}
-
-	/**
 	 * The Position of this Entity.
 	 */
 	protected Position position;
@@ -84,16 +38,9 @@ public abstract class Entity {
 	public abstract boolean equals(Object obj);
 
 	/**
-	 * Gets the {@link EntityType} of this entity.
+	 * Gets the {@link Position} of this Entity.
 	 *
-	 * @return The entity type.
-	 */
-	public abstract EntityType getEntityType();
-
-	/**
-	 * Gets the {@link Position} of this entity.
-	 *
-	 * @return The position.
+	 * @return The Position.
 	 */
 	public final Position getPosition() {
 		return position;
@@ -107,6 +54,13 @@ public abstract class Entity {
 	public World getWorld() {
 		return world;
 	}
+
+	/**
+	 * Gets the {@link EntityType} of this Entity.
+	 *
+	 * @return The EntityType.
+	 */
+	public abstract EntityType getEntityType();
 
 	@Override
 	public abstract int hashCode();

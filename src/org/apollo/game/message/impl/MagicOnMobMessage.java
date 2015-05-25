@@ -1,7 +1,7 @@
 package org.apollo.game.message.impl;
 
 import org.apollo.game.message.Message;
-import org.apollo.game.model.entity.Entity;
+import org.apollo.game.model.entity.EntityType;
 
 /**
  * A {@link Message} sent by the client when a Player uses a magic spell on a Mob.
@@ -13,7 +13,7 @@ public abstract class MagicOnMobMessage extends Message {
 	/**
 	 * The type of the Mob.
 	 */
-	private final Entity.EntityType type;
+	private final EntityType type;
 
 	/**
 	 * The index of the Mob.
@@ -32,7 +32,7 @@ public abstract class MagicOnMobMessage extends Message {
 	 * @param index The Mob index.
 	 * @param spellId The spell id.
 	 */
-	public MagicOnMobMessage(Entity.EntityType type, int index, int spellId) {
+	public MagicOnMobMessage(EntityType type, int index, int spellId) {
 		this.type = type;
 		this.index = index;
 		this.spellId = spellId;
@@ -43,7 +43,7 @@ public abstract class MagicOnMobMessage extends Message {
 	 *
 	 * @return The Mob type.
 	 */
-	public Entity.EntityType getType() {
+	public EntityType getType() {
 		return type;
 	}
 

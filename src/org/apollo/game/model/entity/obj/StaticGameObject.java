@@ -4,6 +4,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
 
 /**

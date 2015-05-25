@@ -16,7 +16,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.area.collision.CollisionMatrix;
 import org.apollo.game.model.area.update.UpdateOperation;
 import org.apollo.game.model.entity.Entity;
-import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.obj.GameObject;
 
 import com.google.common.base.MoreObjects;

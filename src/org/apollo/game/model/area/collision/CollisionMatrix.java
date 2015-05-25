@@ -3,7 +3,7 @@ package org.apollo.game.model.area.collision;
 import java.util.Arrays;
 
 import org.apollo.game.model.Direction;
-import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.EntityType;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;

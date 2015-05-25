@@ -1,6 +1,6 @@
 package org.apollo.game.message.impl;
 
-import org.apollo.game.model.entity.Entity;
+import org.apollo.game.model.entity.EntityType;
 
 /**
  * The Player {@link MagicOnMobMessage}.
@@ -16,7 +16,7 @@ public final class MagicOnPlayerMessage extends MagicOnMobMessage {
 	 * @param spellId The spell id used.
 	 */
 	public MagicOnPlayerMessage(int index, int spellId) {
-		super(Entity.EntityType.PLAYER, index, spellId);
+		super(EntityType.PLAYER, index, spellId);
 	}
 
 }

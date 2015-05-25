@@ -1,11 +1,11 @@
 package org.apollo.game.model.entity.obj;
 
-import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
 
 /**
@@ -14,40 +14,6 @@ import org.apollo.game.model.entity.Player;
  * @author Major
  */
 public final class DynamicGameObject extends GameObject {
-
-	/**
-	 * A {@link WeakReference} for {@link Player}s.
-	 */
-	private static final class WeakPlayerReference extends WeakReference<Player> {
-
-		/**
-		 * Creates the WeakPlayerReference.
-		 *
-		 * @param player The Player wrapped in this {@link WeakReference}.
-		 */
-		public WeakPlayerReference(Player player) {
-			super(player);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof WeakPlayerReference) {
-				WeakPlayerReference other = (WeakPlayerReference) obj; // TODO need to have a reference queue
-
-				Player player = get();
-				return player != null && player.equals(other.get());
-			}
-
-			return false;
-		}
-
-		@Override
-		public int hashCode() {
-			Player player = get();
-			return player == null ? 0 : player.hashCode();
-		}
-
-	}
 
 	/**
 	 * Creates a DynamicGameObject that is visible only to {@link Player}s specified later.
@@ -85,7 +51,7 @@ public final class DynamicGameObject extends GameObject {
 	/**
 	 * The Set of Players that can view this DynamicGameObject.
 	 */
-	private final Set<WeakPlayerReference> players = new HashSet<>();
+	private final Set<Player> players = new HashSet<>();
 
 	/**
 	 * Creates the DynamicGameObject.
@@ -109,8 +75,7 @@ public final class DynamicGameObject extends GameObject {
 	 * @return {@code true} if this GameObject was not already visible to the specified Player.
 	 */
 	public boolean addTo(Player player) {
-		WeakPlayerReference reference = new WeakPlayerReference(player);
-		return players.add(reference);
+		return players.add(player);
 	}
 
 	@Override
@@ -125,13 +90,12 @@ public final class DynamicGameObject extends GameObject {
 	 * @return {@code true} if this GameObject was visible to the specified Player.
 	 */
 	public boolean removeFrom(Player player) {
-		WeakPlayerReference reference = new WeakPlayerReference(player);
-		return players.remove(reference);
+		return players.remove(player);
 	}
 
 	@Override
 	public boolean viewableBy(Player player, World world) {
-		return alwaysVisible || players.contains(new WeakPlayerReference(player));
+		return alwaysVisible || players.contains(player);
 	}
 
 }

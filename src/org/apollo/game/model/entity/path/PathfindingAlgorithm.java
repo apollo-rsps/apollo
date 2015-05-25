@@ -7,7 +7,7 @@ import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
-import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.EntityType;
 
 import com.google.common.base.Preconditions;
 

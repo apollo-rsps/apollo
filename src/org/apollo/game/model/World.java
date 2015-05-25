@@ -22,7 +22,7 @@ import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity;
-import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.obj.GameObject;

@@ -9,7 +9,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.def.ObjectDefinition;
-import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.obj.GameObject;
 

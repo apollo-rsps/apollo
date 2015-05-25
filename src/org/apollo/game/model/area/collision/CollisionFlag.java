@@ -1,6 +1,6 @@
 package org.apollo.game.model.area.collision;
 
-import org.apollo.game.model.entity.Entity.EntityType;
+import org.apollo.game.model.entity.EntityType;
 
 /**
  * A type of flag in a {@link CollisionMatrix}.
