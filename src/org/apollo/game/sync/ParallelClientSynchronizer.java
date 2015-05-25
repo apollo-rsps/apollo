@@ -36,18 +36,18 @@ import org.apollo.util.ThreadUtil;
 public final class ParallelClientSynchronizer extends ClientSynchronizer {
 
 	/**
-	 * The executor service.
+	 * The ExecutorService.
 	 */
 	private final ExecutorService executor;
 
 	/**
-	 * The phaser.
+	 * The Phaser.
 	 */
 	private final Phaser phaser = new Phaser(1);
 
 	/**
-	 * Creates the parallel client synchronizer backed by a thread pool with a number of threads equal to the number of
-	 * processing cores available (this is found by the {@link ThreadUtil#AVAILABLE_PROCESSORS} method.
+	 * Creates the ParallelClientSynchronizer backed by a thread pool with a number of threads equal to the number of
+	 * processing cores available.
 	 */
 	public ParallelClientSynchronizer() {
 		executor = Executors.newFixedThreadPool(ThreadUtil.AVAILABLE_PROCESSORS, ThreadUtil.create("ClientSynchronizer"));
