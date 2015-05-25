@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apollo.fs.def.NpcDefinition;
 import org.apollo.game.action.Action;
 import org.apollo.game.model.Animation;
 import org.apollo.game.model.Direction;
@@ -15,7 +16,6 @@ import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.update.UpdateOperation;
-import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.event.impl.MobPositionUpdateEvent;

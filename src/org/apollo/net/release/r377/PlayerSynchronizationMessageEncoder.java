@@ -1,5 +1,6 @@
 package org.apollo.net.release.r377;
 
+import org.apollo.fs.def.EquipmentDefinition;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Animation;
 import org.apollo.game.model.Appearance;
@@ -7,7 +8,6 @@ import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.def.EquipmentDefinition;
 import org.apollo.game.model.entity.EquipmentConstants;
 import org.apollo.game.model.entity.setting.Gender;
 import org.apollo.game.model.inv.Inventory;

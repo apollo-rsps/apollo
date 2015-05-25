@@ -1,7 +1,7 @@
 package org.apollo.game.model.inter.bank;
 
+import org.apollo.fs.def.ItemDefinition;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.def.ItemDefinition;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inv.Inventory;
 

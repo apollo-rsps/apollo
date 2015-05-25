@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
-import org.apollo.game.model.def.ItemDefinition;
+import org.apollo.fs.def.ItemDefinition;
 import org.apollo.util.BufferUtil;
 
 /**

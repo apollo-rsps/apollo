@@ -1,10 +1,10 @@
 package org.apollo.game.message.handler;
 
+import org.apollo.fs.def.EquipmentDefinition;
 import org.apollo.game.message.MessageHandler;
 import org.apollo.game.message.impl.ItemOptionMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
-import org.apollo.game.model.def.EquipmentDefinition;
 import org.apollo.game.model.entity.EquipmentConstants;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;

@@ -1,4 +1,4 @@
-package org.apollo.game.model.def;
+package org.apollo.fs.def;
 
 import java.util.HashMap;
 import java.util.Map;

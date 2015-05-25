@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.apollo.fs.def.ItemDefinition;
 import org.apollo.game.model.Item;
-import org.apollo.game.model.def.ItemDefinition;
 
 import com.google.common.base.Preconditions;
 

@@ -1,11 +1,11 @@
 package org.apollo.game.model.entity.obj;
 
+import org.apollo.fs.def.ObjectDefinition;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.update.ObjectUpdateOperation;
-import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Player;
 

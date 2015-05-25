@@ -2,9 +2,9 @@ package org.apollo.game.model.entity;
 
 import java.util.Optional;
 
+import org.apollo.fs.def.NpcDefinition;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.def.NpcDefinition;
 import org.apollo.game.sync.block.SynchronizationBlock;
 
 import com.google.common.base.MoreObjects;

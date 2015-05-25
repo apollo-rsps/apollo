@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.archive.Archive;
-import org.apollo.game.model.def.NpcDefinition;
+import org.apollo.fs.def.NpcDefinition;
 import org.apollo.util.BufferUtil;
 
 /**

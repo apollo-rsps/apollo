@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apollo.game.model.def.EquipmentDefinition;
+import org.apollo.fs.def.EquipmentDefinition;
 
 /**
  * A class that parses the {@code data/equipment-[release].dat} file to create an array of {@link EquipmentDefinition}s.

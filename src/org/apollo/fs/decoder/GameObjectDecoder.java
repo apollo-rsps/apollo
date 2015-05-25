@@ -10,12 +10,12 @@ import java.util.function.Predicate;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.MapFileDecoder.MapDefinition;
+import org.apollo.fs.def.ObjectDefinition;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionMatrix;
-import org.apollo.game.model.def.ObjectDefinition;
 import org.apollo.game.model.entity.obj.GameObject;
 import org.apollo.game.model.entity.obj.ObjectType;
 import org.apollo.game.model.entity.obj.StaticGameObject;

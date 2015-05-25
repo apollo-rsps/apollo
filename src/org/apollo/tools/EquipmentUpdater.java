@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 import org.apollo.fs.IndexedFileSystem;
 import org.apollo.fs.decoder.ItemDefinitionDecoder;
-import org.apollo.game.model.def.ItemDefinition;
+import org.apollo.fs.def.ItemDefinition;
 
 import com.google.common.base.Preconditions;
 
