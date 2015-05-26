@@ -1,6 +1,6 @@
 require 'java'
 
-java_import 'org.apollo.game.model.def.ItemDefinition'
+java_import 'org.apollo.cache.def.ItemDefinition'
 
 # Adds the specified item to the player's inventory.
 on :command, :item, RIGHTS_ADMIN do |player, command|

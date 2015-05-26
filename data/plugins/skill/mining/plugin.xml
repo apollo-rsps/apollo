@@ -18,5 +18,7 @@
     <script>respawn.rb</script>
     <script>mining.rb</script>
   </scripts>
-  <dependencies />
+  <dependencies>
+    <dependency>util</dependency>
+  </dependencies>
 </plugin>

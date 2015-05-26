@@ -1,7 +1,6 @@
 require 'java'
 
 java_import 'org.apollo.game.action.DistancedAction'
-java_import 'org.apollo.game.model.def.ItemDefinition'
 java_import 'org.apollo.game.model.entity.EquipmentConstants'
 java_import 'org.apollo.game.model.entity.Skill'
 
@@ -62,11 +61,10 @@ class MiningAction < DistancedAction
     else
       # count down and check if we can have a chance at some ore now
       if @counter == 0
-        # TODO: calculate the chance that the mob can actually get the rock
+        # TODO: calculate the chance that the player can actually get the rock
 
         if mob.inventory.add(ore.id)
-          ore_def = ItemDefinition.lookup(@ore.id) # TODO: split off into some method
-          name = ore_def.name.sub(/ ore$/, '').downcase
+          name = name_of(@ore.id).sub(/ ore$/, '').downcase
 
           mob.send_message("You manage to mine some #{name}.", true)
           skills.add_experience(Skill::MINING, ore.exp)

@@ -3,7 +3,6 @@ require 'java'
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Item'
-java_import 'org.apollo.game.model.def.ItemDefinition'
 java_import 'org.apollo.game.model.inter.EnterAmountListener'
 java_import 'org.apollo.game.model.inter.dialogue.DialogueAdapter'
 
@@ -190,8 +189,7 @@ class GrindingAction < Action
       return true if pst_mrt and ingr
     end
 
-    ingr = ItemDefinition.lookup(raw).name.downcase
-    mob.send_message("You do not have any more #{ingr}s.")
+    mob.send_message("You do not have any more #{name_of(raw).downcase}s.")
     return false
   end
   

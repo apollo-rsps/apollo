@@ -1,11 +1,11 @@
 require 'java'
 
+java_import 'org.apollo.cache.def.NpcDefinition'
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Graphic'
 java_import 'org.apollo.game.model.Position'
 java_import 'org.apollo.game.model.World'
-java_import 'org.apollo.game.model.def.NpcDefinition'
 java_import 'org.apollo.game.model.entity.Npc'
 
 # Information about npc spawning

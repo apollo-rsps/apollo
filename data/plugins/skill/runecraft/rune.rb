@@ -1,7 +1,5 @@
 require 'java'
 
-java_import 'org.apollo.game.model.def.ItemDefinition'
-
 # The hash of runes.
 RUNES = {}
 

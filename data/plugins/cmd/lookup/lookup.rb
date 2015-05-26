@@ -1,9 +1,9 @@
 require 'java'
 
 java_import 'org.apollo.game.model.World'
-java_import 'org.apollo.game.model.def.ItemDefinition'
-java_import 'org.apollo.game.model.def.NpcDefinition'
-java_import 'org.apollo.game.model.def.ObjectDefinition'
+java_import 'org.apollo.cache.def.ItemDefinition'
+java_import 'org.apollo.cache.def.NpcDefinition'
+java_import 'org.apollo.cache.def.ObjectDefinition'
 java_import 'org.apollo.game.model.entity.Entity'
 java_import 'org.apollo.game.model.entity.Player'
 

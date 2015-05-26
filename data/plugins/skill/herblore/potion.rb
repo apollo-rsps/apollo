@@ -3,7 +3,6 @@ require 'java'
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Item'
-java_import 'org.apollo.game.model.def.ItemDefinition'
 java_import 'org.apollo.game.model.inter.EnterAmountListener'
 java_import 'org.apollo.game.model.inter.dialogue.DialogueAdapter'
 
@@ -271,7 +270,7 @@ class FinishedMixingAction < MixingAction
   
   def execute_action
     player = mob    
-    ingredient = ItemDefinition.lookup(@ingredient).name.downcase
+    ingredient = name_of(@ingredient).downcase
     name = @potion.item.definition.name.sub('(3)', '')
 
     player.send_message("You add the #{ingredient} to the mixture to make an #{name}.", true)

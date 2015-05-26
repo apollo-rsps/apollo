@@ -15,14 +15,14 @@
 require 'java'
 
 java_import 'org.apollo.game.command.CommandListener'
-java_import 'org.apollo.game.message.MessageHandler'
+java_import 'org.apollo.game.message.handler.MessageHandler'
 java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
 java_import 'org.apollo.game.model.event.EventListener'
 java_import 'org.apollo.game.model.event.PlayerEvent'
 java_import 'org.apollo.game.model.entity.setting.PrivilegeLevel'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
-java_import 'org.apollo.util.plugin.PluginContext'
+java_import 'org.apollo.game.plugin.PluginContext'
 
 # Alias the privilege levels.
 RIGHTS_ADMIN    = PrivilegeLevel::ADMINISTRATOR

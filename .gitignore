@@ -1,9 +1,9 @@
 !.gitignore
 .*
 *~
-/target
+*.class
 *.iml
+
 /data/fs
 /data/savedGames
-/bin/
 /lib/
