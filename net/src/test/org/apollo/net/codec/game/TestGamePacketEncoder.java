@@ -46,7 +46,7 @@ public class TestGamePacketEncoder {
 
 		packet = new GamePacket(9, PacketType.VARIABLE_BYTE, payload.copy());
 		out.clear();
-		encoder.encode(null, null, out);
+		encoder.encode(null, packet, out);
 		buf = (ByteBuf) out.get(0);
 
 		assertEquals(7, buf.readableBytes());

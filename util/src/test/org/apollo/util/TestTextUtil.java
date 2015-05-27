@@ -16,9 +16,11 @@ public class TestTextUtil {
 	 */
 	@Test
 	public void testCapitalize() {
-		String str = "tHiS is BAD capitAliZation. do You AGreE? YES!";
-		String capitalized = "This is bad capitalization. Do you agree? Yes!";
-		assertEquals(capitalized, TextUtil.capitalize(str));
+		String incorrect = "tHiS is BAD capitAliZation. do You AGreE? YES!";
+		String correct = "This is bad capitalization. Do you agree? Yes!";
+		assertEquals(correct, TextUtil.capitalize(incorrect));
+
+		assertEquals("Test", TextUtil.capitalize("test"));
 	}
 
 	/**

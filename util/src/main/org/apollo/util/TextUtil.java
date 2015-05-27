@@ -19,22 +19,28 @@ public final class TextUtil {
 	/**
 	 * Capitalizes the string correctly.
 	 *
-	 * @param str The input string.
+	 * @param string The input string.
 	 * @return The string with correct capitalization.
 	 */
-	public static String capitalize(String str) {
+	public static String capitalize(String string) {
 		boolean capitalize = true;
-		StringBuilder bldr = new StringBuilder(str);
-		for (int index = 0, length = str.length(); index < length; index++) {
-			char character = bldr.charAt(index);
+		StringBuilder builder = new StringBuilder(string);
+		int length = string.length();
+
+		for (int index = 0; index < length; index++) {
+			char character = builder.charAt(index);
+
 			if (character == '.' || character == '!' || character == '?') {
 				capitalize = true;
 			} else if (capitalize && !Character.isWhitespace(character)) {
-				bldr.setCharAt(index, Character.toUpperCase(character));
+				builder.setCharAt(index, Character.toUpperCase(character));
 				capitalize = false;
+			} else {
+				builder.setCharAt(index, Character.toLowerCase(character));
 			}
 		}
-		return bldr.toString();
+
+		return builder.toString();
 	}
 
 	/**
