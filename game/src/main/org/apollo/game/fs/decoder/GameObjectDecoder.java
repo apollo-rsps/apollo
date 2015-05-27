@@ -9,8 +9,9 @@ import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.decoder.MapFileDecoder;
+import org.apollo.cache.decoder.MapFileDecoder.MapDefinition;
 import org.apollo.cache.def.ObjectDefinition;
-import org.apollo.game.fs.decoder.MapFileDecoder.MapDefinition;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;

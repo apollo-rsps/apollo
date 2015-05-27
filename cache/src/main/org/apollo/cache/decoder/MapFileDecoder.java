@@ -1,4 +1,4 @@
-package org.apollo.game.fs.decoder;
+package org.apollo.cache.decoder;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.archive.Archive;
 import org.apollo.cache.archive.ArchiveEntry;
-import org.apollo.game.model.area.Region;
 
 /**
  * Decodes {@link MapDefinition}s from the {@link IndexedFileSystem}.
@@ -21,7 +20,7 @@ public final class MapFileDecoder {
 	/**
 	 * The width (and length) of a map file, in tiles.
 	 */
-	public static final int MAP_FILE_WIDTH = Region.SIZE * Region.SIZE;
+	public static final int MAP_FILE_WIDTH = 64;
 
 	/**
 	 * The file id of the versions archive.
@@ -35,7 +34,7 @@ public final class MapFileDecoder {
 	 * @return A {@link Map} of packed coordinates to their MapDefinitions.
 	 * @throws IOException If there is an error reading or decoding the Archive.
 	 */
-	protected static Map<Integer, MapDefinition> decode(IndexedFileSystem fs) throws IOException {
+	public static Map<Integer, MapDefinition> decode(IndexedFileSystem fs) throws IOException {
 		Archive archive = Archive.decode(fs.getFile(0, VERSIONS_ARCHIVE_FILE_ID));
 		ArchiveEntry entry = archive.getEntry("map_index");
 		Map<Integer, MapDefinition> definitions = new HashMap<>();
