@@ -59,7 +59,7 @@ module DoorUtil
     else
       toggled_position = translate_door_position(door)
       toggled_orientation = translate_door_orientation(door)
-      toggled_door = DynamicGameObject.createPublic($world, door.id, toggled_position, door.type, toggled_orientation)
+      toggled_door = DynamicGameObject.create_public($world, door.id, toggled_position, door.type, toggled_orientation)
 
       toggled_region = $world.region_repository.from_position(toggled_position)
       toggled_region.add_entity(toggled_door)
