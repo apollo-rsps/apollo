@@ -27,15 +27,15 @@ import org.apollo.game.model.area.RegionRepository;
 public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 
 	/**
-	 * The heuristic.
+	 * The Heuristic used by this PathfindingAlgorithm.
 	 */
 	private final Heuristic heuristic;
 
 	/**
-	 * Creates the A* pathfinding algorithm with the specified heuristic.
+	 * Creates the A* pathfinding algorithm with the specified {@link Heuristic}.
 	 *
 	 * @param repository The {@link RegionRepository}.
-	 * @param heuristic The heuristic.
+	 * @param heuristic The Heuristic.
 	 */
 	public AStarPathfindingAlgorithm(RegionRepository repository, Heuristic heuristic) {
 		super(repository);
@@ -66,8 +66,8 @@ public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 			active.close();
 
 			int x = position.getX(), y = position.getY();
-			for (int nextX = x - 1; x <= x + 1; nextX++) {
-				for (int nextY = y - 1; y <= y + 1; nextY++) {
+			for (int nextX = x - 1; nextX <= x + 1; nextX++) {
+				for (int nextY = y - 1; nextY <= y + 1; nextY++) {
 					if (nextX == x && nextY == y) {
 						continue;
 					}

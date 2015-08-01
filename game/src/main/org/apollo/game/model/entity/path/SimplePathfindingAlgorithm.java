@@ -132,7 +132,8 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 		}
 
 		Position last = new Position(x, y, height);
-		if (!last.equals(target) && dx != 0 && traversable(last, boundaries, dx > 0 ? Direction.WEST : Direction.EAST)) {
+		if (!last.equals(target) && dx != 0
+				&& traversable(last, boundaries, dx > 0 ? Direction.WEST : Direction.EAST)) {
 			return addHorizontal(last, target, positions);
 		}
 
