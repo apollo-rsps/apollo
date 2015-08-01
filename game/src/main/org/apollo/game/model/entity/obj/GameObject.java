@@ -5,6 +5,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.update.GroupableEntity;
 import org.apollo.game.model.area.update.ObjectUpdateOperation;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Player;
@@ -17,7 +18,7 @@ import com.google.common.base.MoreObjects;
  * @author Chris Fletcher
  * @author Major
  */
-public abstract class GameObject extends Entity {
+public abstract class GameObject extends Entity implements GroupableEntity {
 
 	/**
 	 * The packed value that stores this object's id, type, and orientation.
@@ -91,7 +92,8 @@ public abstract class GameObject extends Entity {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("id", getId()).add("type", getType()).add("orientation", getOrientation()).toString();
+		return MoreObjects.toStringHelper(this).add("id", getId()).add("type", getType())
+				.add("orientation", getOrientation()).toString();
 	}
 
 	@Override

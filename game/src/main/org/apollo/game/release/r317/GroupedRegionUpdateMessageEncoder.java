@@ -26,7 +26,8 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 	/**
 	 * Creates the GroupedRegionUpdateMessageEncoder.
 	 *
-	 * @param release The {@link Release} containing the {@link MessageEncoder}s for the {@link RegionUpdateMessage}s.
+	 * @param release The {@link Release} containing the {@link MessageEncoder}s for the {@link RegionUpdateMessage}
+	 *                s.
 	 */
 	public GroupedRegionUpdateMessageEncoder(Release release) {
 		this.release = release;
@@ -39,11 +40,8 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 
 		builder.put(DataType.BYTE, region.getLocalY(lastKnownRegion));
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, region.getLocalX(lastKnownRegion));
-		System.out.println("Grum: local x: " + lastKnownRegion.getLocalX(region) + ", local y: "
-				+ lastKnownRegion.getLocalY(region));
 
 		for (RegionUpdateMessage update : message.getMessages()) {
-			System.out.println("==== Sending " + update + " as part of grum");
 			@SuppressWarnings("unchecked")
 			MessageEncoder<RegionUpdateMessage> encoder = (MessageEncoder<RegionUpdateMessage>) release
 					.getMessageEncoder(update.getClass());

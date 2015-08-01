@@ -14,6 +14,7 @@ import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.collision.CollisionMatrix;
+import org.apollo.game.model.area.update.GroupableEntity;
 import org.apollo.game.model.area.update.UpdateOperation;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.EntityType;
@@ -40,8 +41,8 @@ public final class Region {
 		@Override
 		public void execute(Region region, Entity entity, EntityUpdateType update) {
 			EntityType type = entity.getEntityType();
-			if (type != EntityType.PLAYER && type != EntityType.NPC) {
-				region.record(entity, update);
+			if (!type.isMob()) {
+				region.record((Entity & GroupableEntity) entity, update);
 			}
 		}
 
@@ -53,9 +54,9 @@ public final class Region {
 	public static final int SIZE = 8;
 
 	/**
-	 * The default size of newly-created sets, to reduce memory usage.
+	 * The default size of newly-created Lists, to reduce memory usage.
 	 */
-	private static final int DEFAULT_SET_SIZE = 2;
+	private static final int DEFAULT_LIST_SIZE = 2;
 
 	/**
 	 * The RegionCoordinates of this Region.
@@ -108,7 +109,7 @@ public final class Region {
 
 		for (int height = 0; height < Position.HEIGHT_LEVELS; height++) {
 			snapshots.add(new HashMap<>());
-			updates.add(new ArrayList<>(DEFAULT_SET_SIZE));
+			updates.add(new ArrayList<>(DEFAULT_LIST_SIZE));
 		}
 	}
 
@@ -124,7 +125,7 @@ public final class Region {
 		Position position = entity.getPosition();
 		checkPosition(position);
 
-		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_SET_SIZE));
+		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_LIST_SIZE));
 		local.add(entity);
 
 		if (notify) {
@@ -212,7 +213,7 @@ public final class Region {
 	 */
 	public CollisionMatrix getMatrix(int height) {
 		Preconditions.checkElementIndex(height, matrices.length, "Matrix height level must be [0, " + matrices.length
-				+ ").");
+				+ "), received " + height + ".");
 		return matrices[height];
 	}
 
@@ -307,22 +308,23 @@ public final class Region {
 	}
 
 	/**
-	 * Records the specified {@link Entity} as being updated this pulse.
+	 * Records the specified {@link GroupableEntity} as being updated this pulse.
 	 *
-	 * @param entity The Entity.
+	 * @param entity The GroupableEntity.
 	 * @param type The {@link EntityUpdateType}.
 	 * @throws UnsupportedOperationException If the specified Entity cannot be operated on in this manner.
 	 */
-	private void record(Entity entity, EntityUpdateType type) {
+	private <T extends Entity & GroupableEntity> void record(T entity, EntityUpdateType type) {
 		RegionUpdateMessage message = entity.toUpdateOperation(this, type).toMessage();
 		int height = entity.getPosition().getHeight();
 
+		Map<Entity, RegionUpdateMessage> snapshot = snapshots.get(height);
 		updates.get(height).add(message);
-		snapshots.get(height).remove(entity);
 
+		snapshot.remove(entity);
 		if ((entity.getEntityType() == EntityType.STATIC_OBJECT && type == EntityUpdateType.REMOVE)
 				|| (entity.getEntityType() != EntityType.STATIC_OBJECT && type == EntityUpdateType.ADD)) {
-			snapshots.get(height).put(entity, message);
+			snapshot.put(entity, message);
 		}
 	}
 

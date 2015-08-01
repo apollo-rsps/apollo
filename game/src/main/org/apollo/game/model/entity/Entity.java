@@ -2,9 +2,6 @@ package org.apollo.game.model.entity;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.EntityUpdateType;
-import org.apollo.game.model.area.Region;
-import org.apollo.game.model.area.update.UpdateOperation;
 
 /**
  * Represents an in-game entity, such as a mob, object, projectile, etc.
@@ -64,14 +61,5 @@ public abstract class Entity {
 
 	@Override
 	public abstract int hashCode();
-
-	/**
-	 * Gets this Entity, as an {@link UpdateOperation} of a {@link Region}.
-	 *
-	 * @param region The Region.
-	 * @param type The EntityUpdateType.
-	 * @return The UpdateOperation.
-	 */
-	public abstract UpdateOperation<?> toUpdateOperation(Region region, EntityUpdateType type);
 
 }

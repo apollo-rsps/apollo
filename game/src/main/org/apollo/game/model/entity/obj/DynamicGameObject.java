@@ -39,7 +39,8 @@ public final class DynamicGameObject extends GameObject {
 	 * @param orientation The orientation of the DynamicGameObject.
 	 * @return The DynamicGameObject.
 	 */
-	public static DynamicGameObject createPublic(World world, int id, Position position, int type, int orientation) {
+	public static DynamicGameObject createPublic(World world, int id, Position position, int type,
+			int orientation) {
 		return new DynamicGameObject(world, id, position, type, orientation, true);
 	}
 
@@ -49,9 +50,9 @@ public final class DynamicGameObject extends GameObject {
 	private final boolean alwaysVisible;
 
 	/**
-	 * The Set of Players that can view this DynamicGameObject.
+	 * The Set of Player usernames that can view this DynamicGameObject.
 	 */
-	private final Set<Player> players = new HashSet<>();
+	private final Set<String> players = new HashSet<>(); // TODO more appropriate type?
 
 	/**
 	 * Creates the DynamicGameObject.
@@ -63,7 +64,8 @@ public final class DynamicGameObject extends GameObject {
 	 * @param orientation The orientation of the DynamicGameObject.
 	 * @param alwaysVisible The flag indicates whether or not this DynamicGameObject is visible to every player.
 	 */
-	private DynamicGameObject(World world, int id, Position position, int type, int orientation, boolean alwaysVisible) {
+	private DynamicGameObject(World world, int id, Position position, int type, int orientation,
+			boolean alwaysVisible) {
 		super(world, id, position, type, orientation);
 		this.alwaysVisible = alwaysVisible;
 	}
@@ -72,10 +74,10 @@ public final class DynamicGameObject extends GameObject {
 	 * Adds this DynamicGameObject to the view of the specified {@link Player}.
 	 *
 	 * @param player The Player.
-	 * @return {@code true} if this GameObject was not already visible to the specified Player.
+	 * @return {@code true} if this DynamicGameObject was not already visible to the specified Player.
 	 */
 	public boolean addTo(Player player) {
-		return players.add(player);
+		return players.add(player.getUsername());
 	}
 
 	@Override
@@ -87,15 +89,15 @@ public final class DynamicGameObject extends GameObject {
 	 * Removes this DynamicGameObject from the view of the specified {@link Player}.
 	 *
 	 * @param player The Player.
-	 * @return {@code true} if this GameObject was visible to the specified Player.
+	 * @return {@code true} if this DynamicGameObject was visible to the specified Player.
 	 */
 	public boolean removeFrom(Player player) {
-		return players.remove(player);
+		return players.remove(player.getUsername());
 	}
 
 	@Override
 	public boolean viewableBy(Player player, World world) {
-		return alwaysVisible || players.contains(player);
+		return alwaysVisible || players.contains(player.getUsername());
 	}
 
 }

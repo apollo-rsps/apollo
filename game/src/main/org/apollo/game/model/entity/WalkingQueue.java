@@ -46,7 +46,8 @@ public final class WalkingQueue {
 
 		@Override
 		public String toString() {
-			return MoreObjects.toStringHelper(this).add("direction", direction).add("position", position).toString();
+			return MoreObjects.toStringHelper(this).add("direction", direction).add("position", position)
+					.toString();
 		}
 
 	}
@@ -86,8 +87,8 @@ public final class WalkingQueue {
 	}
 
 	/**
-	 * Adds the first step to the queue, attempting to connect the server and client position by looking at the previous
-	 * queue.
+	 * Adds the first step to the queue, attempting to connect the server and client position by looking at the
+	 * previous queue.
 	 *
 	 * @param clientPosition The first step.
 	 * @return {@code true} if the queues could be connected correctly, {@code false} if not.
@@ -202,11 +203,7 @@ public final class WalkingQueue {
 	 * @return The last point.
 	 */
 	private Point getLast() {
-		Point last = points.peekLast();
-		if (last == null) {
-			return new Point(mob.getPosition(), Direction.NONE);
-		}
-		return last;
+		return points.isEmpty() ? new Point(mob.getPosition(), Direction.NONE) : points.peekLast();
 	}
 
 	/**
@@ -223,13 +220,16 @@ public final class WalkingQueue {
 
 			if (runningQueue /* and enough energy */) {
 				next = points.poll();
+
 				if (next != null) {
 					second = next.direction;
 					position = next.position;
 				}
 			}
+
 			mob.setPosition(position);
 		}
+
 		mob.setDirections(first, second);
 	}
 

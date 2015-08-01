@@ -12,10 +12,8 @@ import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
-import org.apollo.game.model.area.update.UpdateOperation;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.event.impl.MobPositionUpdateEvent;
@@ -53,7 +51,8 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's equipment.
 	 */
-	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
+	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY,
+			StackMode.STACK_ALWAYS);
 
 	/**
 	 * The index of this mob.
@@ -198,8 +197,8 @@ public abstract class Mob extends Entity {
 	 */
 	public final Direction[] getDirections() {
 		if (firstDirection != Direction.NONE) {
-			return secondDirection == Direction.NONE ? new Direction[] { firstDirection } : new Direction[] {
-					firstDirection, secondDirection };
+			return secondDirection == Direction.NONE ? new Direction[] { firstDirection }
+					: new Direction[] { firstDirection, secondDirection };
 		}
 
 		return Direction.EMPTY_DIRECTION_ARRAY;
@@ -430,14 +429,14 @@ public abstract class Mob extends Entity {
 	/**
 	 * Sets the {@link Position} of this mob.
 	 * <p>
-	 * This method may be intercepted using a {@link MobPositionUpdateEvent}, which can be terminated like any other.
-	 * Plugins that intercept this Event <strong>must</strong> be cautious, because movement will not be possible (even
-	 * through mechanisms such as teleporting) if the Event is terminated.
+	 * This method may be intercepted using a {@link MobPositionUpdateEvent}, which can be terminated like any
+	 * other. Plugins that intercept this Event <strong>must</strong> be cautious, because movement will not be
+	 * possible (even through mechanisms such as teleporting) if the Event is terminated.
 	 *
 	 * @param position The Position.
 	 */
 	public final void setPosition(Position position) {
-		if (world.submit(new MobPositionUpdateEvent(this, position))) {
+		if (!position.equals(this.position) && world.submit(new MobPositionUpdateEvent(this, position))) {
 			Position old = this.position;
 			RegionRepository repository = world.getRegionRepository();
 			Region current = repository.fromPosition(old), next = repository.fromPosition(position);
@@ -522,11 +521,6 @@ public abstract class Mob extends Entity {
 		teleporting = true;
 		walkingQueue.clear();
 		stopAction();
-	}
-
-	@Override
-	public final UpdateOperation<Entity> toUpdateOperation(Region region, EntityUpdateType operation) {
-		throw new UnsupportedOperationException("Mobs cannot be recorded as a Region update.");
 	}
 
 	/**

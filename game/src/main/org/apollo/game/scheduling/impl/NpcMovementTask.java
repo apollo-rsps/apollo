@@ -94,7 +94,7 @@ public final class NpcMovementTask extends ScheduledTask {
 
 			Position first = positions.pollFirst();
 			if (first != null && queue.addFirstStep(first)) {
-				positions.forEach(npc.getWalkingQueue()::addStep);
+				positions.forEach(queue::addStep);
 			}
 
 			npcs.offer(npc);

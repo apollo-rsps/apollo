@@ -5,6 +5,7 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.update.GroupableEntity;
 import org.apollo.game.model.area.update.ItemUpdateOperation;
 import org.apollo.game.model.area.update.UpdateOperation;
 
@@ -13,7 +14,7 @@ import org.apollo.game.model.area.update.UpdateOperation;
  *
  * @author Major
  */
-public final class GroundItem extends Entity {
+public final class GroundItem extends Entity implements GroupableEntity {
 
 	/**
 	 * Creates a new GroundItem.
