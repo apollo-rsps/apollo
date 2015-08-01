@@ -72,7 +72,7 @@ public final class Server {
 	/**
 	 * The {@link ServerBootstrap} for the JAGGRAB listener.
 	 */
-	private final ServerBootstrap jagGrabBootstrap = new ServerBootstrap();
+	private final ServerBootstrap jaggrabBootstrap = new ServerBootstrap();
 
 	/**
 	 * The {@link ServerBootstrap} for the service listener.
@@ -94,22 +94,22 @@ public final class Server {
 	/**
 	 * Binds the server to the specified address.
 	 *
-	 * @param serviceAddress The service address to bind to.
-	 * @param httpAddress The HTTP address to bind to.
-	 * @param jagGrabAddress The JAGGRAB address to bind to.
+	 * @param service The service address to bind to.
+	 * @param http The HTTP address to bind to.
+	 * @param jaggrab The JAGGRAB address to bind to.
 	 */
-	public void bind(SocketAddress serviceAddress, SocketAddress httpAddress, SocketAddress jagGrabAddress) {
+	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) {
 		try {
-			logger.fine("Binding service listener to address: " + serviceAddress + "...");
-			serviceBootstrap.bind(serviceAddress).sync();
+			logger.fine("Binding service listener to address: " + service + "...");
+			serviceBootstrap.bind(service).sync();
 
-			logger.fine("Binding HTTP listener to address: " + httpAddress + "...");
-			httpBootstrap.bind(httpAddress).sync();
+			logger.fine("Binding HTTP listener to address: " + http + "...");
+			httpBootstrap.bind(http).sync();
 
-			logger.fine("Binding JAGGRAB listener to address: " + jagGrabAddress + "...");
-			jagGrabBootstrap.bind(jagGrabAddress).sync();
-		} catch (InterruptedException e) {
-			logger.log(Level.SEVERE, "Binding to a port failed: ensure apollo isn't already running.", e);
+			logger.fine("Binding JAGGRAB listener to address: " + jaggrab + "...");
+			jaggrabBootstrap.bind(jaggrab).sync();
+		} catch (InterruptedException exception) {
+			logger.log(Level.SEVERE, "Binding to a port failed: ensure apollo isn't already running.", exception);
 			System.exit(1);
 		}
 
@@ -119,42 +119,42 @@ public final class Server {
 	/**
 	 * Initialises the server.
 	 *
-	 * @param releaseClassName The class name of the current active {@link Release}.
+	 * @param releaseName The class name of the current active {@link Release}.
 	 * @throws Exception If an error occurs.
 	 */
-	public void init(String releaseClassName) throws Exception {
-		Class<?> clazz = Class.forName(releaseClassName);
+	public void init(String releaseName) throws Exception {
+		Class<?> clazz = Class.forName(releaseName);
 		Release release = (Release) clazz.newInstance();
-		int releaseNo = release.getReleaseNumber();
+		int version = release.getReleaseNumber();
 
-		logger.info("Initialized release #" + releaseNo + ".");
+		logger.info("Initialized " + release + ".");
 
 		serviceBootstrap.group(loopGroup);
 		httpBootstrap.group(loopGroup);
-		jagGrabBootstrap.group(loopGroup);
+		jaggrabBootstrap.group(loopGroup);
 
 		World world = new World();
 		ServiceManager services = new ServiceManager(world);
-		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(releaseNo)), true);
+		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(version)), true);
 		ServerContext context = new ServerContext(release, services, fs);
 		ApolloHandler handler = new ApolloHandler(context);
 
-		ChannelInitializer<SocketChannel> serviceInitializer = new ServiceChannelInitializer(handler);
+		ChannelInitializer<SocketChannel> service = new ServiceChannelInitializer(handler);
 		serviceBootstrap.channel(NioServerSocketChannel.class);
-		serviceBootstrap.childHandler(serviceInitializer);
+		serviceBootstrap.childHandler(service);
 
-		ChannelInitializer<SocketChannel> httpInitializer = new HttpChannelInitializer(handler);
+		ChannelInitializer<SocketChannel> http = new HttpChannelInitializer(handler);
 		httpBootstrap.channel(NioServerSocketChannel.class);
-		httpBootstrap.childHandler(httpInitializer);
+		httpBootstrap.childHandler(http);
 
-		ChannelInitializer<SocketChannel> jagGrabInitializer = new JagGrabChannelInitializer(handler);
-		jagGrabBootstrap.channel(NioServerSocketChannel.class);
-		jagGrabBootstrap.childHandler(jagGrabInitializer);
+		ChannelInitializer<SocketChannel> jaggrab = new JagGrabChannelInitializer(handler);
+		jaggrabBootstrap.channel(NioServerSocketChannel.class);
+		jaggrabBootstrap.childHandler(jaggrab);
 
 		PluginManager manager = new PluginManager(world, new PluginContext(context));
 		services.startAll();
 
-		world.init(releaseNo, fs, manager);
+		world.init(version, fs, manager);
 	}
 
 }

@@ -111,4 +111,9 @@ public abstract class Release {
 		decoders[opcode] = decoder;
 	}
 
+	@Override
+	public final String toString() {
+		return Release.class.getSimpleName() + " " + releaseNumber;
+	}
+
 }
