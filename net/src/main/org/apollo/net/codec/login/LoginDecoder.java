@@ -214,7 +214,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		ByteBuf buffer = ctx.alloc().buffer(Byte.BYTES);
 		buffer.writeByte(response);
 
-		ctx.write(buffer).addListener(ChannelFutureListener.CLOSE);
+		ctx.writeAndFlush(buffer).addListener(ChannelFutureListener.CLOSE);
 	}
 
 }

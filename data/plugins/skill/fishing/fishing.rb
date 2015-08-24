@@ -15,7 +15,7 @@ class FishingAction < DistancedAction
     @spot = spot
     @tool = spot.tools[option - 1]
 
-    @options = (option == 1) ? spot.first_option : spot.second_option
+    options = (option == 1) ? spot.first_fish : spot.fish_second
     @minimum_level = options.map { |fish| fish.level }.min
   end
 
