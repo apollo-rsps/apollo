@@ -67,9 +67,10 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		int oldLocalPlayers = localPlayers.size();
 		List<SynchronizationSegment> segments = new ArrayList<>();
 
-		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext();) {
+		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext(); ) {
 			Player other = it.next();
-			if (!other.isActive() || other.isTeleporting() || other.getPosition().getLongestDelta(player.getPosition()) > player.getViewingDistance() || !other.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance())) {
+
+			if (removePlayer(other)) {
 				it.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
@@ -103,8 +104,27 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 			}
 		}
 
-		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownRegion, player.getPosition(), regionChanged, segment, oldLocalPlayers, segments);
+		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownRegion, player.getPosition(),
+				regionChanged, segment, oldLocalPlayers, segments);
 		player.send(message);
+	}
+
+	/**
+	 * Returns whether or not the specified {@link Player} should be removed.
+	 *
+	 * @param other The Player being tested.
+	 * @return {@code true} iff the specified Player should be removed.
+	 */
+	private boolean removePlayer(Player other) {
+		if (other.isTeleporting() || !other.isActive()) {
+			return true;
+		}
+
+		Position position = player.getPosition();
+		Position otherPosition = other.getPosition();
+		int distance = player.getViewingDistance();
+
+		return otherPosition.getLongestDelta(position) > distance || !otherPosition.isWithinDistance(position, distance);
 	}
 
 }

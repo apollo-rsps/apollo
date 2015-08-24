@@ -93,7 +93,9 @@ public final class NpcMovementTask extends ScheduledTask {
 			WalkingQueue queue = npc.getWalkingQueue();
 
 			Position first = positions.pollFirst();
-			if (first != null && queue.addFirstStep(first)) {
+
+			if (first != null) {
+				queue.addFirstStep(first);
 				positions.forEach(queue::addStep);
 			}
 

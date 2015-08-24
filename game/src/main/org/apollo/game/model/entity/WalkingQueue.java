@@ -7,8 +7,6 @@ import java.util.Queue;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 
-import com.google.common.base.MoreObjects;
-
 /**
  * A queue of {@link Direction}s which a {@link Mob} will follow.
  *
@@ -17,162 +15,167 @@ import com.google.common.base.MoreObjects;
 public final class WalkingQueue {
 
 	/**
-	 * Represents a single point in the queue.
-	 *
-	 * @author Graham
-	 */
-	private static final class Point {
-
-		/**
-		 * The direction to walk to this point.
-		 */
-		private final Direction direction;
-
-		/**
-		 * The point's position.
-		 */
-		private final Position position;
-
-		/**
-		 * Creates a point.
-		 *
-		 * @param position The position.
-		 * @param direction The direction.
-		 */
-		public Point(Position position, Direction direction) {
-			this.position = position;
-			this.direction = direction;
-		}
-
-		@Override
-		public String toString() {
-			return MoreObjects.toStringHelper(this).add("direction", direction).add("position", position)
-					.toString();
-		}
-
-	}
-
-	/**
-	 * The maximum size of the queue. If any additional steps are added, they are discarded.
-	 */
-	private static final int MAXIMUM_SIZE = 128;
-
-	/**
-	 * The mob whose walking queue this is.
+	 * The Mob this WalkingQueue belongs to.
 	 */
 	private final Mob mob;
 
 	/**
-	 * The old queue of directions.
+	 * The Deque of active points in this WalkingQueue.
 	 */
-	private final Deque<Point> oldPoints = new ArrayDeque<>();
+	private final Deque<Position> points = new ArrayDeque<>();
 
 	/**
-	 * The queue of directions.
+	 * The Deque of previous points in this WalkingQueue.
 	 */
-	private final Deque<Point> points = new ArrayDeque<>();
+	private final Deque<Position> previousPoints = new ArrayDeque<>();
 
 	/**
-	 * Flag indicating if this queue (only) should be ran.
+	 * The running status of this WalkingQueue.
 	 */
-	private boolean runningQueue;
+	private boolean running;
 
 	/**
-	 * Creates a walking queue for the specified mob.
+	 * Creates the WalkingQueue.
 	 *
-	 * @param mob The mob.
+	 * @param mob The {@link Mob} the WalkingQueue is for.
 	 */
 	public WalkingQueue(Mob mob) {
 		this.mob = mob;
 	}
 
 	/**
-	 * Adds the first step to the queue, attempting to connect the server and client position by looking at the
-	 * previous queue.
+	 * Adds a first step into this WalkingQueue.
 	 *
-	 * @param clientPosition The first step.
-	 * @return {@code true} if the queues could be connected correctly, {@code false} if not.
+	 * @param next The {@link Position} of the step.
 	 */
-	public boolean addFirstStep(Position clientPosition) {
-		Position serverPosition = mob.getPosition();
+	public void addFirstStep(Position next) {
+		points.clear();
+		running = false;
 
-		int deltaX = clientPosition.getX() - serverPosition.getX();
-		int deltaY = clientPosition.getY() - serverPosition.getY();
+		/*
+		 * We need to connect 'current' and 'next' whilst accounting for the
+		 * fact that the client and server might be out of sync (i.e. what the
+		 * client thinks is 'current' is different to what the server thinks is
+		 * 'current').
+		 *
+		 * First try to connect them via points from the previous queue.
+		 */
+		Queue<Position> backtrack = new ArrayDeque<>();
 
-		if (Direction.isConnectable(deltaX, deltaY)) {
-			points.clear();
-			oldPoints.clear();
+		while (!previousPoints.isEmpty()) {
+			Position position = previousPoints.pollLast();
+			backtrack.add(position);
 
-			addStep(clientPosition);
-			return true;
-		}
-
-		Queue<Position> travelBackQueue = new ArrayDeque<>();
-
-		Point oldPoint;
-		while ((oldPoint = oldPoints.pollLast()) != null) {
-			Position oldPosition = oldPoint.position;
-
-			deltaX = oldPosition.getX() - serverPosition.getX();
-			deltaY = oldPosition.getX() - serverPosition.getY();
-
-			travelBackQueue.add(oldPosition);
-
-			if (Direction.isConnectable(deltaX, deltaY)) {
-				points.clear();
-				oldPoints.clear();
-
-				travelBackQueue.forEach(this::addStep);
-
-				addStep(clientPosition);
-				return true;
+			if (position.equals(next)) {
+				backtrack.forEach(this::addStep);
+				previousPoints.clear();
+				return;
 			}
 		}
 
-		oldPoints.clear();
-		return false;
+		/* If that doesn't work, connect the points directly. */
+		previousPoints.clear();
+		addStep(next);
 	}
 
 	/**
-	 * Adds a step.
+	 * Adds a step to this WalkingQueue.
 	 *
-	 * @param x The x coordinate of this step.
-	 * @param y The y coordinate of this step.
+	 * @param next The {@link Position} of the step.
 	 */
-	private void addStep(int x, int y) {
-		if (points.size() >= MAXIMUM_SIZE) {
-			return;
+	public void addStep(Position next) {
+		Position current = points.peekLast();
+
+		/*
+		 * If current equals next, addFirstStep doesn't end up adding anything points queue. This makes peekLast()
+		 * return null. If it does, the correct behaviour is to fill it in with mob.getPosition().
+		 */
+		if (current == null) {
+			current = mob.getPosition();
 		}
 
-		Point last = getLast();
-
-		int deltaX = x - last.position.getX();
-		int deltaY = y - last.position.getY();
-
-		Direction direction = Direction.fromDeltas(deltaX, deltaY);
-
-		if (direction != Direction.NONE) {
-			Point point = new Point(new Position(x, y, mob.getPosition().getHeight()), direction);
-			points.add(point);
-			oldPoints.add(point);
-		}
+		addStep(current, next);
 	}
 
 	/**
-	 * Adds a step to the queue.
-	 *
-	 * @param step The step to add.
+	 * Clears this WalkingQueue.
 	 */
-	public void addStep(Position step) {
-		int x = step.getX(), y = step.getY();
-		Point last = getLast();
+	public void clear() {
+		points.clear();
+		running = false;
+		previousPoints.clear();
+	}
 
-		int deltaX = x - last.position.getX();
-		int deltaY = y - last.position.getY();
+	/**
+	 * Returns whether or not this WalkingQueue has running enabled.
+	 *
+	 * @return {@code true} iff this WalkingQueue has running enabled.
+	 */
+	public boolean isRunning() {
+		return running;
+	}
+
+	/**
+	 * Pulses this WalkingQueue.
+	 */
+	public void pulse() {
+		Position position = mob.getPosition();
+
+		Direction firstDirection = Direction.NONE;
+		Direction secondDirection = Direction.NONE;
+
+		Position next = points.poll();
+		if (next != null) {
+			previousPoints.add(next);
+			firstDirection = Direction.between(position, next);
+			position = next;
+
+			if (running) {
+				next = points.poll();
+				if (next != null) {
+					previousPoints.add(next);
+					secondDirection = Direction.between(position, next);
+					position = next;
+				}
+			}
+		}
+
+		mob.setDirections(firstDirection, secondDirection);
+		mob.setPosition(position);
+	}
+
+	/**
+	 * Sets the running flag status of this WalkingQueue.
+	 *
+	 * @param running The running flag.
+	 */
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	/**
+	 * Gets the size of this WalkingQueue, which is the number of points remaining in it.
+	 *
+	 * @return The size.
+	 */
+	public int size() {
+		return points.size();
+	}
+
+	/**
+	 * Adds the {@code next} step to this WalkingQueue.
+	 *
+	 * @param current The current {@link Position}.
+	 * @param next The next Position.
+	 */
+	private void addStep(Position current, Position next) {
+		int nextX = next.getX(), nextY = next.getY(), height = next.getHeight();
+		int deltaX = nextX - current.getX();
+		int deltaY = nextY - current.getY();
 
 		int max = Math.max(Math.abs(deltaX), Math.abs(deltaY));
 
-		for (int i = 0; i < max; i++) {
+		for (int count = 0; count < max; count++) {
 			if (deltaX < 0) {
 				deltaX++;
 			} else if (deltaX > 0) {
@@ -185,70 +188,8 @@ public final class WalkingQueue {
 				deltaY--;
 			}
 
-			addStep(x - deltaX, y - deltaY);
+			points.add(new Position(nextX - deltaX, nextY - deltaY, height));
 		}
-	}
-
-	/**
-	 * Clears the walking queue.
-	 */
-	public void clear() {
-		points.clear();
-		oldPoints.clear();
-	}
-
-	/**
-	 * Gets the last point.
-	 *
-	 * @return The last point.
-	 */
-	private Point getLast() {
-		return points.isEmpty() ? new Point(mob.getPosition(), Direction.NONE) : points.peekLast();
-	}
-
-	/**
-	 * Called every pulse, updates the queue.
-	 */
-	public void pulse() {
-		Position position = mob.getPosition();
-		Direction first = Direction.NONE, second = Direction.NONE;
-
-		Point next = points.poll();
-		if (next != null) {
-			first = next.direction;
-			position = next.position;
-
-			if (runningQueue /* and enough energy */) {
-				next = points.poll();
-
-				if (next != null) {
-					second = next.direction;
-					position = next.position;
-				}
-			}
-
-			mob.setPosition(position);
-		}
-
-		mob.setDirections(first, second);
-	}
-
-	/**
-	 * Sets the running queue flag.
-	 *
-	 * @param running The running queue flag.
-	 */
-	public void setRunningQueue(boolean running) {
-		runningQueue = running;
-	}
-
-	/**
-	 * Gets the size of the queue.
-	 *
-	 * @return The size of the queue.
-	 */
-	public int size() {
-		return points.size();
 	}
 
 }

@@ -68,14 +68,34 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * The player's appearance.
-	 */
-	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
-
-	/**
 	 * This player's bank.
 	 */
 	private final Inventory bank = new Inventory(InventoryConstants.BANK_CAPACITY, StackMode.STACK_ALWAYS);
+
+	/**
+	 * This player's credentials.
+	 */
+	private final PlayerCredentials credentials;
+
+	/**
+	 * This player's interface set.
+	 */
+	private final InterfaceSet interfaceSet = new InterfaceSet(this);
+
+	/**
+	 * The Set of DynamicGameObjects that are visible to this Player.
+	 */
+	private final Set<DynamicGameObject> localObjects = new HashSet<>();
+
+	/**
+	 * A temporary queue of messages sent during the login process.
+	 */
+	private final Deque<Message> queuedMessages = new ArrayDeque<>();
+
+	/**
+	 * The player's appearance.
+	 */
+	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
 
 	/**
 	 * The privacy state of this player's public chat.
@@ -86,11 +106,6 @@ public final class Player extends Mob {
 	 * A deque of this player's mouse clicks.
 	 */
 	private Deque<Point> clicks = new ArrayDeque<>();
-
-	/**
-	 * This player's credentials.
-	 */
-	private final PlayerCredentials credentials;
 
 	/**
 	 * A flag which indicates there are npcs that couldn't be added.
@@ -123,11 +138,6 @@ public final class Player extends Mob {
 	private List<String> ignores = new ArrayList<>();
 
 	/**
-	 * This player's interface set.
-	 */
-	private final InterfaceSet interfaceSet = new InterfaceSet(this);
-
-	/**
 	 * Whether or not the player is skulled.
 	 */
 	private boolean isSkulled = false;
@@ -136,11 +146,6 @@ public final class Player extends Mob {
 	 * The centre of the last region the client has loaded.
 	 */
 	private Position lastKnownRegion;
-
-	/**
-	 * The Set of DynamicGameObjects that are visible to this Player.
-	 */
-	private final Set<DynamicGameObject> localObjects = new HashSet<>();
 
 	/**
 	 * The MembershipStatus of this Player.
@@ -156,11 +161,6 @@ public final class Player extends Mob {
 	 * The privilege level.
 	 */
 	private PrivilegeLevel privilegeLevel = PrivilegeLevel.STANDARD;
-
-	/**
-	 * A temporary queue of messages sent during the login process.
-	 */
-	private final Deque<Message> queuedMessages = new ArrayDeque<>();
 
 	/**
 	 * A flag indicating if the region changed in the last cycle.
@@ -506,11 +506,6 @@ public final class Player extends Mob {
 		return worldId;
 	}
 
-	@Override
-	public int hashCode() {
-		return credentials.hashCode();
-	}
-
 	/**
 	 * Indicates whether or not the player with the specified username is on this player's ignore list.
 	 *
@@ -537,6 +532,11 @@ public final class Player extends Mob {
 	 */
 	public boolean hasRegionChanged() {
 		return regionChanged;
+	}
+
+	@Override
+	public int hashCode() {
+		return credentials.hashCode();
 	}
 
 	/**
@@ -791,15 +791,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the value denoting the client's modified version.
-	 *
-	 * @param version The client version.
-	 */
-	public void setClientVersion(int version) {
-		attributes.set("client_version", new NumericalAttribute(version));
-	}
-
-	/**
 	 * Sets the friend {@link PrivacyState}.
 	 *
 	 * @param friendPrivacy The privacy state.
@@ -939,6 +930,12 @@ public final class Player extends Mob {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
+				.toString();
+	}
+
 	/**
 	 * Toggles the message filter.
 	 *
@@ -953,14 +950,8 @@ public final class Player extends Mob {
 	 */
 	public void toggleRunning() {
 		running = !running;
-		walkingQueue.setRunningQueue(running);
+		walkingQueue.setRunning(running);
 		send(new ConfigMessage(173, running ? 1 : 0));
-	}
-
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
-				.toString();
 	}
 
 	/**

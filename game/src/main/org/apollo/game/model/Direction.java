@@ -58,48 +58,43 @@ public enum Direction {
 	public static final Direction[] EMPTY_DIRECTION_ARRAY = new Direction[0];
 
 	/**
-	 * Creates a direction from the differences between X and Y.
+	 * Gets the Direction between the two {@link Position}s..
 	 *
-	 * @param deltaX The difference between two X coordinates.
-	 * @param deltaY The difference between two Y coordinates.
+	 * @param current The difference between two X coordinates.
+	 * @param next The difference between two Y coordinates.
 	 * @return The direction.
 	 */
-	public static Direction fromDeltas(int deltaX, int deltaY) {
+	public static Direction between(Position current, Position next) {
+		int deltaX = next.getX() - current.getX();
+		int deltaY = next.getY() - current.getY();
+
 		if (deltaY == 1) {
 			if (deltaX == 1) {
-				return Direction.NORTH_EAST;
+				return NORTH_EAST;
 			} else if (deltaX == 0) {
-				return Direction.NORTH;
+				return NORTH;
+			} else if (deltaX == -1) {
+				return NORTH_WEST;
 			}
-			return Direction.NORTH_WEST;
 		} else if (deltaY == -1) {
 			if (deltaX == 1) {
-				return Direction.SOUTH_EAST;
+				return SOUTH_EAST;
 			} else if (deltaX == 0) {
-				return Direction.SOUTH;
-			}
-			return Direction.SOUTH_WEST;
-		} else {
-			if (deltaX == 1) {
-				return Direction.EAST;
+				return SOUTH;
 			} else if (deltaX == -1) {
-				return Direction.WEST;
+				return SOUTH_WEST;
+			}
+		} else if (deltaY == 0) {
+			if (deltaX == 1) {
+				return EAST;
+			} else if (deltaX == 0) {
+				return NONE;
+			} else if (deltaX == -1) {
+				return WEST;
 			}
 		}
 
-		return Direction.NONE;
-	}
-
-	/**
-	 * Checks if the direction represented by the two delta values can connect two points together in a single
-	 * direction.
-	 *
-	 * @param deltaX The difference in X coordinates.
-	 * @param deltaY The difference in X coordinates.
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public static boolean isConnectable(int deltaX, int deltaY) {
-		return Math.abs(deltaX) == Math.abs(deltaY) || deltaX == 0 || deltaY == 0;
+		throw new IllegalArgumentException("Difference between Positions must be [-1, 1].");
 	}
 
 	/**
@@ -112,7 +107,7 @@ public enum Direction {
 	 *
 	 * @param intValue The direction as an integer.
 	 */
-	private Direction(int intValue) {
+	Direction(int intValue) {
 		this.intValue = intValue;
 	}
 

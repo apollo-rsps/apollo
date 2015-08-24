@@ -66,7 +66,8 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	private final Map<RegionCoordinates, List<RegionUpdateMessage>> snapshots;
 
 	/**
-	 * The Map of RegionCoordinates to Sets of RegionUpdateMessages, which contain the updates for a Region a Player can
+	 * The Map of RegionCoordinates to Sets of RegionUpdateMessages, which contain the updates for a Region a Player
+	 * can
 	 * already view.
 	 */
 	private final Map<RegionCoordinates, List<RegionUpdateMessage>> updates;
@@ -78,7 +79,8 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	 * @param updates The {@link Map} containing {@link Region} updates.
 	 * @param snapshots The Map containing Region snapshots.
 	 */
-	public PrePlayerSynchronizationTask(Player player, Map<RegionCoordinates, List<RegionUpdateMessage>> updates, Map<RegionCoordinates, List<RegionUpdateMessage>> snapshots) {
+	public PrePlayerSynchronizationTask(Player player, Map<RegionCoordinates, List<RegionUpdateMessage>> updates,
+	                                    Map<RegionCoordinates, List<RegionUpdateMessage>> snapshots) {
 		this.player = player;
 		this.updates = updates;
 		this.snapshots = snapshots;
@@ -157,6 +159,22 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	}
 
 	/**
+	 * Checks if a region update is required.
+	 *
+	 * @return {@code true} if a Region update is required, {@code false} if not.
+	 */
+	private boolean isRegionUpdateRequired() {
+		Position current = player.getPosition();
+		Position last = player.getLastKnownRegion();
+
+		int deltaX = current.getLocalX(last);
+		int deltaY = current.getLocalY(last);
+
+		return deltaX <= Position.MAX_DISTANCE || deltaX >= VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1
+				|| deltaY <= Position.MAX_DISTANCE || deltaY >= VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
+	}
+
+	/**
 	 * Gets the {@link List} of {@link GroupedRegionUpdateMessage}s.
 	 *
 	 * @param mode The {@link RegionUpdateMode} used when creating the Messages.
@@ -181,29 +199,11 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 					player.send(new ClearRegionMessage(position, coordinates));
 				}
 
-				Optional<GroupedRegionUpdateMessage> message = toUpdateMessage(local, player.getLastKnownRegion(), coordinates, repository);
-				if (message.isPresent()) {
-					messages.add(message.get());
-				}
+				toUpdateMessage(local, player.getLastKnownRegion(), coordinates, repository).ifPresent(messages::add);
 			}
 		}
 
 		messages.forEach(player::send);
-	}
-
-	/**
-	 * Checks if a region update is required.
-	 *
-	 * @return {@code true} if a Region update is required, {@code false} if not.
-	 */
-	private boolean isRegionUpdateRequired() {
-		Position current = player.getPosition();
-		Position last = player.getLastKnownRegion();
-
-		int deltaX = current.getLocalX(last);
-		int deltaY = current.getLocalY(last);
-
-		return deltaX <= Position.MAX_DISTANCE || deltaX >= VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1 || deltaY <= Position.MAX_DISTANCE || deltaY >= VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
 	}
 
 	/**
@@ -216,7 +216,8 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	 * @param repository The {@link RegionRepository} containing the Regions.
 	 * @return The Optional containing the GroupedRegionUpdateMessage.
 	 */
-	private Optional<GroupedRegionUpdateMessage> toUpdateMessage(RegionUpdateMode mode, Position lastKnownRegion, RegionCoordinates coordinates, RegionRepository repository) {
+	private Optional<GroupedRegionUpdateMessage> toUpdateMessage(RegionUpdateMode mode, Position lastKnownRegion,
+	                                                             RegionCoordinates coordinates, RegionRepository repository) {
 		List<RegionUpdateMessage> messages;
 
 		/*

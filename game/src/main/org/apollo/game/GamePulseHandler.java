@@ -13,7 +13,7 @@ import org.apollo.game.service.GameService;
 public final class GamePulseHandler implements Runnable {
 
 	/**
-	 * The logger for this class.
+	 * The Logger for this class.
 	 */
 	private static final Logger logger = Logger.getLogger(GamePulseHandler.class.getName());
 
@@ -23,7 +23,7 @@ public final class GamePulseHandler implements Runnable {
 	private final GameService service;
 
 	/**
-	 * Creates the game pulse handler object.
+	 * Creates the GamePulseHandler.
 	 *
 	 * @param service The {@link GameService}.
 	 */
@@ -35,8 +35,8 @@ public final class GamePulseHandler implements Runnable {
 	public void run() {
 		try {
 			service.pulse();
-		} catch (Throwable reason) {
-			logger.log(Level.SEVERE, "Exception occured during pulse!", reason);
+		} catch (Throwable throwable) {
+			logger.log(Level.SEVERE, "Exception occurred during pulse!", throwable);
 		}
 	}
 

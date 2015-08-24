@@ -34,20 +34,15 @@ import org.xml.sax.SAXException;
 public final class GameService extends Service {
 
 	/**
-	 * The World this Service is for.
-	 */
-	protected final World world;
-
-	/**
 	 * The number of times to unregister players per cycle. This is to ensure the saving threads don't get swamped with
 	 * requests and slow everything down.
 	 */
 	private static final int UNREGISTERS_PER_CYCLE = 50;
 
 	/**
-	 * The {@link MessageHandlerChainSet}.
+	 * The World this Service is for.
 	 */
-	private MessageHandlerChainSet messageHandlerChainSet;
+	protected final World world;
 
 	/**
 	 * A queue of players to remove.
@@ -59,6 +54,11 @@ public final class GameService extends Service {
 	 */
 	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(ThreadUtil
 			.create("GameService"));
+
+	/**
+	 * The {@link MessageHandlerChainSet}.
+	 */
+	private MessageHandlerChainSet handlers;
 
 	/**
 	 * The {@link ClientSynchronizer}.
@@ -90,30 +90,28 @@ public final class GameService extends Service {
 	/**
 	 * Gets the MessageHandlerChainSet
 	 *
-	 * @return The set of MessageHandlerChain's.
+	 * @return The MessageHandlerChainSet.
 	 */
 	public MessageHandlerChainSet getMessageHandlerChainSet() {
-		return messageHandlerChainSet;
+		return handlers;
 	}
 
 	/**
 	 * Called every pulse.
 	 */
-	public void pulse() {
-		synchronized (this) {
-			finalizeUnregisters();
+	public synchronized void pulse() {
+		finalizeUnregistrations();
 
-			MobRepository<Player> players = world.getPlayerRepository();
-			for (Player player : players) {
-				GameSession session = player.getSession();
-				if (session != null) {
-					session.handlePendingMessages(messageHandlerChainSet);
-				}
+		MobRepository<Player> players = world.getPlayerRepository();
+		for (Player player : players) {
+			GameSession session = player.getSession();
+			if (session != null) {
+				session.handlePendingMessages(handlers);
 			}
-
-			world.pulse();
-			synchronizer.synchronize(players, world.getNpcRepository());
 		}
+
+		world.pulse();
+		synchronizer.synchronize(players, world.getNpcRepository());
 	}
 
 	/**
@@ -123,18 +121,16 @@ public final class GameService extends Service {
 	 * @param session The {@link GameSession} of the Player.
 	 * @return A {@link RegistrationStatus}.
 	 */
-	public RegistrationStatus registerPlayer(Player player, GameSession session) {
-		synchronized (this) {
-			RegistrationStatus status = world.register(player);
-			if (status == RegistrationStatus.OK) {
-				player.setSession(session);
+	public synchronized RegistrationStatus registerPlayer(Player player, GameSession session) {
+		RegistrationStatus status = world.register(player);
+		if (status == RegistrationStatus.OK) {
+			player.setSession(session);
 
-				Region region = world.getRegionRepository().get(player.getPosition().getRegionCoordinates());
-				region.addEntity(player);
-			}
-
-			return status;
+			Region region = world.getRegionRepository().fromPosition(player.getPosition());
+			region.addEntity(player);
 		}
+
+		return status;
 	}
 
 	/**
@@ -165,7 +161,7 @@ public final class GameService extends Service {
 	/**
 	 * Finalizes the unregistration of Player's queued to be unregistered.
 	 */
-	private void finalizeUnregisters() {
+	private void finalizeUnregistrations() {
 		LoginService loginService = context.getLoginService();
 
 		for (int count = 0; count < UNREGISTERS_PER_CYCLE; count++) {
@@ -188,7 +184,7 @@ public final class GameService extends Service {
 	private void init() throws IOException, SAXException, ReflectiveOperationException {
 		try (InputStream input = new FileInputStream("data/messages.xml")) {
 			MessageHandlerChainSetParser chainSetParser = new MessageHandlerChainSetParser(input);
-			messageHandlerChainSet = chainSetParser.parse(world);
+			handlers = chainSetParser.parse(world);
 		}
 
 		try (InputStream input = new FileInputStream("data/synchronizer.xml")) {
