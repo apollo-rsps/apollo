@@ -1,10 +1,13 @@
 package org.apollo.game.message.impl;
 
+import com.google.common.base.Preconditions;
 import org.apollo.net.message.Message;
 
+import java.util.NoSuchElementException;
+import java.util.OptionalInt;
+
 /**
- * A {@link Message} that represents some sort of action on an item in an inventory. Note that this is the parent of
- * both item option and item action message, and so cannot be used to determine when one of those messages is fired.
+ * A {@link Message} that represents some sort of action on an item in an inventory.
  *
  * @author Chris Fletcher
  */
@@ -21,9 +24,9 @@ public abstract class InventoryItemMessage extends Message {
 	private final int interfaceId;
 
 	/**
-	 * The option number (1-5).
+	 * The option number (1-5 if present).
 	 */
-	private final int option;
+	private final OptionalInt option;
 
 	/**
 	 * The item's slot.
@@ -31,14 +34,14 @@ public abstract class InventoryItemMessage extends Message {
 	private final int slot;
 
 	/**
-	 * Creates the item action message.
+	 * Creates the InventoryItemMessage.
 	 *
-	 * @param option The option number.
+	 * @param option The option number, if applicable.
 	 * @param interfaceId The interface id.
 	 * @param id The id.
 	 * @param slot The slot.
 	 */
-	protected InventoryItemMessage(int option, int interfaceId, int id, int slot) {
+	protected InventoryItemMessage(OptionalInt option, int interfaceId, int id, int slot) {
 		this.option = option;
 		this.interfaceId = interfaceId;
 		this.id = id;
@@ -67,9 +70,10 @@ public abstract class InventoryItemMessage extends Message {
 	 * Gets the option number.
 	 *
 	 * @return The option number.
+	 * @throws NoSuchElementException If there is no option.
 	 */
 	public final int getOption() {
-		return option;
+		return option.getAsInt();
 	}
 
 	/**
@@ -79,6 +83,15 @@ public abstract class InventoryItemMessage extends Message {
 	 */
 	public final int getSlot() {
 		return slot;
+	}
+
+	/**
+	 * Returns whether or not this InventoryItemMessage has an option number.
+	 *
+	 * @return {@code true} iff this InventoryItemMessage has an option number.
+	 */
+	public final boolean hasOption() {
+		return option.isPresent();
 	}
 
 }

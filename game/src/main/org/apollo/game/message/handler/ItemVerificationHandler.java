@@ -20,15 +20,6 @@ import org.apollo.game.model.inv.SynchronizationInventoryListener;
 public final class ItemVerificationHandler extends MessageHandler<InventoryItemMessage> {
 
 	/**
-	 * Creates the ItemVerificationHandler.
-	 *
-	 * @param world The {@link World} the {@link InventoryItemMessage} occurred in.
-	 */
-	public ItemVerificationHandler(World world) {
-		super(world);
-	}
-
-	/**
 	 * A supplier for an {@link Inventory}.
 	 *
 	 * @author Major
@@ -67,6 +58,15 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 	 */
 	public static void addInventory(int id, InventorySupplier supplier) {
 		inventories.putIfAbsent(id, supplier);
+	}
+
+	/**
+	 * Creates the ItemVerificationHandler.
+	 *
+	 * @param world The {@link World} the {@link InventoryItemMessage} occurred in.
+	 */
+	public ItemVerificationHandler(World world) {
+		super(world);
 	}
 
 	@Override

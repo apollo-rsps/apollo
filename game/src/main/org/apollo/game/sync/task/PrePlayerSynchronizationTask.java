@@ -188,11 +188,6 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 			}
 		}
 
-		if (messages.size() > 0) {
-			System.out.println("Sending in mode " + mode + ", new regions=" + newRegions);
-
-		}
-
 		messages.forEach(player::send);
 	}
 

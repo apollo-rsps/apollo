@@ -1,5 +1,7 @@
 package org.apollo.game.message.impl;
 
+import java.util.OptionalInt;
+
 /**
  * A {@link InventoryItemMessage} sent by the client when a player uses one inventory item on another.
  *
@@ -33,7 +35,7 @@ public final class ItemOnItemMessage extends InventoryItemMessage {
 	 * @param targetSlot The slot of the target item.
 	 */
 	public ItemOnItemMessage(int usedInterface, int usedId, int usedSlot, int targetInterface, int targetId, int targetSlot) {
-		super(0, usedInterface, usedId, usedSlot);
+		super(OptionalInt.empty(), usedInterface, usedId, usedSlot);
 		this.targetInterface = targetInterface;
 		this.targetSlot = targetSlot;
 		this.targetId = targetId;

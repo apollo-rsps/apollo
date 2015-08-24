@@ -14,7 +14,7 @@ import org.apollo.net.release.MessageEncoder;
  *
  * @author Graham
  */
-public final class SetWidgetTexMessageEncoder extends MessageEncoder<SetWidgetTextMessage> {
+public final class SetWidgetTextMessageEncoder extends MessageEncoder<SetWidgetTextMessage> {
 
 	@Override
 	public GamePacket encode(SetWidgetTextMessage message) {

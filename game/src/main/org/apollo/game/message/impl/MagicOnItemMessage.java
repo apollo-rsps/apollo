@@ -1,5 +1,7 @@
 package org.apollo.game.message.impl;
 
+import java.util.OptionalInt;
+
 /**
  * A {@link InventoryItemMessage} sent by the client when a player casts a spell on an inventory item.
  *
@@ -21,7 +23,7 @@ public final class MagicOnItemMessage extends InventoryItemMessage {
 	 * @param spell The spell id.
 	 */
 	public MagicOnItemMessage(int interfaceId, int id, int slot, int spell) {
-		super(0, interfaceId, id, slot);
+		super(OptionalInt.empty(), interfaceId, id, slot);
 		this.spell = spell;
 	}
 

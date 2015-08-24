@@ -11,14 +11,14 @@ import com.google.common.base.MoreObjects;
 /**
  * A chain of {@link MessageHandler}s
  *
+ * @param <M> The Message type this chain represents.
  * @author Graham
  * @author Ryley
- * @param <M> The Message type this chain represents.
  */
 public final class MessageHandlerChain<M extends Message> {
 
 	/**
-	 * The handlers.
+	 * The List of MessageHandlers.
 	 */
 	private final List<MessageHandler<M>> handlers = new ArrayList<>();
 
@@ -50,8 +50,7 @@ public final class MessageHandlerChain<M extends Message> {
 	 *
 	 * @param player The Player to handle this message for.
 	 * @param message The Message.
-	 * @return {@code true} if and only if the Message propagated down the chain without being terminated, otherwise
-	 *         {@code false}.
+	 * @return {@code true} iff the Message propagated down the chain without being terminated.
 	 */
 	public boolean notify(Player player, M message) {
 		for (MessageHandler<M> handler : handlers) {

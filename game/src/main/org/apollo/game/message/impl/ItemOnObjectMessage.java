@@ -3,6 +3,8 @@ package org.apollo.game.message.impl;
 import org.apollo.game.model.Position;
 import org.apollo.net.message.Message;
 
+import java.util.OptionalInt;
+
 /**
  * A {@link Message} sent by the client when an item is used on an object.
  *
@@ -31,7 +33,7 @@ public final class ItemOnObjectMessage extends InventoryItemMessage {
 	 * @param y The y coordinate.
 	 */
 	public ItemOnObjectMessage(int interfaceId, int itemId, int itemSlot, int objectId, int x, int y) {
-		super(0, interfaceId, itemId, itemSlot);
+		super(OptionalInt.empty(), interfaceId, itemId, itemSlot);
 		this.objectId = objectId;
 		position = new Position(x, y);
 	}

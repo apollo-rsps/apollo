@@ -36,7 +36,7 @@ public final class GameSession extends Session {
 	/**
 	 * The queue of pending {@link Message}s.
 	 */
-	private final BlockingQueue<Message> messageQueue = new ArrayBlockingQueue<>(GameConstants.MESSAGES_PER_PULSE);
+	private final BlockingQueue<Message> messages = new ArrayBlockingQueue<>(GameConstants.MESSAGES_PER_PULSE);
 
 	/**
 	 * The player.
@@ -82,8 +82,9 @@ public final class GameSession extends Session {
 	 * @param chainSet The {@link MessageHandlerChainSet}
 	 */
 	public void handlePendingMessages(MessageHandlerChainSet chainSet) {
-		Message message;
-		while ((message = messageQueue.poll()) != null) {
+		while (!messages.isEmpty()) {
+			Message message = messages.poll();
+
 			try {
 				chainSet.notify(player, message);
 			} catch (Exception reason) {
@@ -103,10 +104,10 @@ public final class GameSession extends Session {
 
 	@Override
 	public void messageReceived(Object message) {
-		if (messageQueue.size() >= GameConstants.MESSAGES_PER_PULSE) {
+		if (messages.size() >= GameConstants.MESSAGES_PER_PULSE) {
 			logger.warning("Too many messages in queue for game session, dropping...");
 		} else {
-			messageQueue.add((Message) message);
+			messages.add((Message) message);
 		}
 	}
 
