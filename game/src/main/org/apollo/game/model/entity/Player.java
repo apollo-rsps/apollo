@@ -62,6 +62,18 @@ import com.google.common.base.Preconditions;
  * @author Major
  */
 public final class Player extends Mob {
+	
+	private final ArrayList<Integer> activePrayers = new ArrayList<>();
+	
+	public boolean isPrayerActive(int button) {
+		return activePrayers.contains(button);
+	}
+	
+	
+	public ArrayList<Integer> getActivePrayers() {
+		return activePrayers;
+	}
+
 
 	static {
 		AttributeMap.define("run_energy", AttributeDefinition.forInt(100, AttributePersistence.PERSISTENT));

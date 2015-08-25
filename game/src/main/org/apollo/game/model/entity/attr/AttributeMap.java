@@ -114,7 +114,7 @@ public final class AttributeMap {
 		switch (type) {
 			case LONG:
 			case DOUBLE:
-				return new NumericalAttribute((Integer) value);
+				return new NumericalAttribute((Number) value);
 			case STRING:
 				return new StringAttribute((String) value);
 			case SYMBOL:

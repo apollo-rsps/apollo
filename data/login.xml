@@ -1,3 +1,0 @@
-<login>
-	<serializer>org.apollo.game.io.player.DummyPlayerSerializer</serializer>
-</login>
