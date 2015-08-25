@@ -1,12 +1,6 @@
 package org.apollo;
 
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-
+import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.file.Paths;
@@ -27,6 +21,13 @@ import org.apollo.net.ServiceChannelInitializer;
 import org.apollo.net.release.Release;
 
 import com.google.common.base.Stopwatch;
+
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
  * The core class of the Apollo server.
@@ -97,23 +98,36 @@ public final class Server {
 	 * @param service The service address to bind to.
 	 * @param http The HTTP address to bind to.
 	 * @param jaggrab The JAGGRAB address to bind to.
+	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress for any
+	 *             reason.
 	 */
-	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) {
-		try {
-			logger.fine("Binding service listener to address: " + service + "...");
-			serviceBootstrap.bind(service).sync();
+	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) throws BindException {
+		logger.info("Binding service listener to address: " + service + "...");
+		bind(serviceBootstrap, service);
 
-			logger.fine("Binding HTTP listener to address: " + http + "...");
-			httpBootstrap.bind(http).sync();
+		logger.info("Binding HTTP listener to address: " + http + "...");
+		bind(httpBootstrap, http);
 
-			logger.fine("Binding JAGGRAB listener to address: " + jaggrab + "...");
-			jaggrabBootstrap.bind(jaggrab).sync();
-		} catch (InterruptedException exception) {
-			logger.log(Level.SEVERE, "Binding to a port failed: ensure apollo isn't already running.", exception);
-			System.exit(1);
-		}
+		logger.info("Binding JAGGRAB listener to address: " + jaggrab + "...");
+		bind(jaggrabBootstrap, jaggrab);
 
 		logger.info("Ready for connections.");
+	}
+
+	/**
+	 * Attempts to bind the specified ServerBootstrap to the specified SocketAddress.
+	 * 
+	 * @param bootstrap The ServerBootstrap.
+	 * @param address The SocketAddress.
+	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress for any
+	 *             reason.
+	 */
+	private void bind(ServerBootstrap bootstrap, SocketAddress address) throws BindException {
+	    try {
+		bootstrap.bind(address).sync();
+	    } catch (Exception cause) {
+		throw new BindException("Failed to bind to: " + address);
+	    }
 	}
 
 	/**
