@@ -14,7 +14,7 @@ import com.google.common.base.Preconditions;
 public final class Position {
 
 	/**
-	 * The number of height levels.
+	 * The number of height levels, (0, 3] inclusive.
 	 */
 	public static final int HEIGHT_LEVELS = 4;
 
@@ -46,7 +46,7 @@ public final class Position {
 	 * @param height The height.
 	 */
 	public Position(int x, int y, int height) {
-		Preconditions.checkArgument(height >= 0 && height < HEIGHT_LEVELS, "Height level out of bounds.");
+		Preconditions.checkElementIndex(height, HEIGHT_LEVELS, "Height must be [0, 3), received " + height + ".");
 
 		packed = height << 30 | (y & 0x7FFF) << 15 | x & 0x7FFF;
 	}
