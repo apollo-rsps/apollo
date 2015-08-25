@@ -6,7 +6,7 @@ java_import 'org.apollo.game.model.entity.Skill'
 
 # An action that causes a mob to fish at a spot.
 class FishingAction < DistancedAction
-  attr_reader :spot, :tool, :position, :started
+  attr_reader :position, :options, :spot, :started, :tool
 
   # Creates the FishingAction.
   def initialize(mob, position, spot, option)
@@ -15,13 +15,13 @@ class FishingAction < DistancedAction
     @spot = spot
     @tool = spot.tools[option - 1]
 
-    @options = (option == 1) ? spot.first_option : spot.second_option
-    @minimum_level = options.map { |fish| fish.level }.min
+    @options = (option == 1) ? spot.first_fish : spot.second_fish
+    @minimum_level = @options.map { |fish| fish.level }.min
   end
 
   # Returns whether or not a catch is successful.
   def successful_catch(level, requirement)
-    return [level - requirement, 30].min > rand(40)
+    return [level - requirement + 5, 30].min > rand(40)
   end
 
   # Starts the fishing process.
@@ -49,43 +49,52 @@ class FishingAction < DistancedAction
       return
     end
 
-	  unless inventory.contains(@tool.id)
-	    mob.send_message("You need a #{@tool.name} to fish at this spot.")
-	    stop
+    unless inventory.contains(@tool.id)
+      mob.send_message("You need a #{@tool.name.downcase} to fish at this spot.")
+      stop
       return
- 	  end
+    end
 
-    bait = @tool.bait
-	  if (bait.empty? && !mob.inventory.contains(bait))
-		  mob.send_message("You need #{name_of(:item, bait)}s to fish at this spot.")
-	  	stop
+    bait = find_bait
+    if bait == -1
+      mob.send_message("You need #{name_of(:item, bait).downcase}s to fish at this spot.")
+      stop
       return
-	  end
+    end
 
     unless @started
       start_fishing
     else
-      options = @options.reject { |fish| fish.level > fishing_level } # Player may level up mid-action so reject here, not at initialisation.
+      options = @options.reject { |fish| fish.level > fishing_level }
+      # Player may level up mid-action so reject here, not at initialisation.
       fish = options.sample # TODO it's a ~70/30 chance, not 50/50
 
-  	  if successful_catch(fishing_level, fish.level)
-  	    inventory.remove(bait) unless bait.empty?
-  	    inventory.add(type.id)
+      if successful_catch(fishing_level, fish.level)
+        inventory.remove(bait) unless bait.nil?
+        inventory.add(fish.id)
 
-  	    name = fish.name
-  	    mob.send_message("You catch #{name.end_with?('s') ? 'some' : 'a'} #{name}.", true)
-  	    skills.add_experience(Skill::FISHING, fish.experience)
+        name = fish.name
+        mob.send_message("You catch #{name.end_with?('s') ? 'some' : 'a'} #{name.downcase}.", true)
+        skills.add_experience(Skill::FISHING, fish.experience)
 
-  	    unless (bait != -1 && !mob.inventory.contains(bait))
-          mob.send_message("You need more #{name_of(:item, bait)}s to fish at this spot.")
+        if (find_bait == -1)
+          mob.send_message("You need more #{name_of(:item, bait).downcase}s to fish at this spot.")
           stop
           return
         end
-  	  end
+      end
     end
 
     mob.play_animation(@tool.animation)
   end
+
+  # Finds the id of the first piece of bait in the player's inventory, or nil if no bait is
+  # required, or -1 if the player's inventory does not contain any valid bait.
+  def find_bait()
+    baits = @tool.bait
+    if baits.empty? then nil else baits.find(-1) { |bait| mob.inventory.contains(bait) } end
+  end
+
 
   # Stops this action.
   def stop()
@@ -94,7 +103,8 @@ class FishingAction < DistancedAction
   end
 
   def equals(other)
-    return (get_class == other.get_class and @spot == other.spot and @position == other.position && @options == @other.options)
+    get_class == other.get_class && @spot == other.spot && @position == other.position &&
+      @options == @other.options
   end
 
 end
@@ -104,8 +114,8 @@ on :message, :npc_action do |player, message|
   npc = $world.npc_repository.get(message.index)
   spot = FISHING_SPOTS[npc.id]
 
-	unless spot.nil?
-	  player.start_action(FishingAction.new(player, npc.position, spot, message.option))
-	  message.terminate
+  unless spot.nil?
+    player.start_action(FishingAction.new(player, npc.position, spot, message.option))
+    message.terminate
   end
 end

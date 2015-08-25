@@ -40,7 +40,7 @@ FLY_FISHING_ROD_BAIT = [ 314 ]
 
 append_tool(:lobster_cage, Tool.new(301, CAGE_ANIMATION_ID,    'You attempt to catch a lobster...'))
 append_tool(:small_net,    Tool.new(303, NET_ANIMATION_ID,     'You cast out your net...'))
-append_tool(:big_net,      Tool.new(305, NET_ANIMATION_ID,      'You cast out your net...'))
+append_tool(:big_net,      Tool.new(305, NET_ANIMATION_ID,     'You cast out your net...'))
 append_tool(:harpoon,      Tool.new(311, HARPOON_ANIMATION_ID, 'You start harpooning fish...'))
 
 append_tool(:fishing_rod,     Tool.new(307, FISHING_ROD_BAIT,     ROD_ANIMATION_ID, 'You attempt to catch a fish...'))
