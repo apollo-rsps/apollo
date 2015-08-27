@@ -28,8 +28,7 @@ public abstract class ScheduledTask {
 	 * Creates a new scheduled task.
 	 *
 	 * @param delay The delay between executions of the task, in pulses.
-	 * @param immediate A flag indicating if this task should (for the first execution) be ran immediately, or after the
-	 *            {@code delay}.
+	 * @param immediate Indicates whether or not this task should be executed immediately, or after the {@code delay}.
 	 * @throws IllegalArgumentException If the delay is less than or equal to zero.
 	 */
 	public ScheduledTask(int delay, boolean immediate) {
@@ -38,27 +37,12 @@ public abstract class ScheduledTask {
 	}
 
 	/**
-	 * Executes this task.
-	 */
-	public abstract void execute();
-
-	/**
 	 * Checks if this task is running.
 	 *
 	 * @return {@code true} if so, {@code false} if not.
 	 */
 	public final boolean isRunning() {
 		return running;
-	}
-
-	/**
-	 * Pulses this task: updates the delay and calls {@link #execute()} if necessary.
-	 */
-	final void pulse() {
-		if (running && pulses-- == 0) {
-			execute();
-			pulses = delay;
-		}
 	}
 
 	/**
@@ -77,6 +61,21 @@ public abstract class ScheduledTask {
 	 */
 	public void stop() {
 		running = false;
+	}
+
+	/**
+	 * Executes this task.
+	 */
+	public abstract void execute();
+
+	/**
+	 * Pulses this task: updates the delay and calls {@link #execute()} if necessary.
+	 */
+	final void pulse() {
+		if (running && --pulses <= 0) {
+			execute();
+			pulses = delay;
+		}
 	}
 
 }
