@@ -178,7 +178,7 @@ def on_message(args, proc)
   message = args[0].to_s
   option = 0
 
-  (0..numbers.length).each do |index|
+  (0...numbers.length).each do |index|
     number = numbers[index]
 
     if message.start_with?(number)
