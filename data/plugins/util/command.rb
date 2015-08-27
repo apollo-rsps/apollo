@@ -4,40 +4,41 @@ java_import 'org.apollo.cache.def.ItemDefinition'
 java_import 'org.apollo.cache.def.NpcDefinition'
 java_import 'org.apollo.cache.def.ObjectDefinition'
 
-
-# Checks whether the amount of arguments provided is correct, sending the player the specified message if not.
+# Checks whether the amount of arguments provided is correct, sending the player the specified
+# message if not.
 def valid_arg_length(args, length, player, message)
-  valid = length.kind_of?(Range) ? length.include?(args.length) : length == args.length
+  valid = length.is_a?(Range) ? length.include?(args.length) : length == args.length
 
-  player.send_message(message) if !valid
-  return valid
+  player.send_message(message) unless valid
+  valid
 end
 
 # Returns the name of the Object, Npc, or Item with the specified id.
 def name_of(type, id)
-  types = [ :object, :item, :npc ]
+  types = [:object, :item, :npc]
   unless types.include?(type)
-    raise "Invalid type of #{type} specified, must be one of #{types}"
+    fail "Invalid type of #{type} specified, must be one of #{types}"
   end
 
-  return Kernel.const_get("#{type.capitalize}Definition").lookup(id).name.to_s
+  Kernel.const_get("#{type.capitalize}Definition").lookup(id).name.to_s
 end
 
-# Add a has_keys? method to hash
+# Monkey-patches Hash to add a has_keys? method.
 class Hash
-  
+
   def has_keys?(*keys)
-    keys.each { |key| return false unless has_key?(key) }
-    return true
+    keys.all? { |key| self.key?(key) }
   end
+
 end
 
-
+# Monkey-patches Player to add a hash_level? method.
 class Player
 
-  # Returns whether or not the player's current level is greater than or equal to the specified level.
-  def has_level(skill, level)
-    return skill_set.get_skill(skill).current_level >= level
+  # Returns whether or not the player's current level is greater than or equal to the specified
+  # level.
+  def level?(skill, level)
+    skill_set.get_skill(skill).current_level >= level
   end
 
 end

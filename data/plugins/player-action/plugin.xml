@@ -8,7 +8,7 @@
     <author>Ryley</author>
   </authors>
   <scripts>
-    <script>player-action.rb</script>
+    <script>action.rb</script>
     <script>login.rb</script>
   </scripts>
   <dependencies />

@@ -8,7 +8,7 @@
     <author>Major</author>
   </authors>
   <scripts>
-    <script>emote-tab.rb</script>
+    <script>emote_tab.rb</script>
   </scripts>
   <dependencies />
 </plugin>

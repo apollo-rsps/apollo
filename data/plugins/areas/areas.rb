@@ -4,18 +4,17 @@ java_import 'org.apollo.game.model.Position'
 java_import 'org.apollo.game.model.entity.EntityType'
 java_import 'org.apollo.game.model.entity.Player'
 
-
-
 # Creates a new area and registers it with the supplied coordinates.
 def area(hash)
-  raise 'Hash must contain a name, coordinates, and actions pair.' unless hash.has_keys?(:name, :coordinates, :actions)
-  name = hash[:name]; coordinates = hash[:coordinates]; actions = hash[:actions]
+  failure_message = 'Hash must contain a name, coordinates, and actions pair.'
+  fail failure_message unless hash.has_keys?(:name, :coordinates, :actions)
 
-  actions = [ actions ] if actions.is_a?(Symbol)
-  actions.map! { |action| AREA_ACTIONS[action]}
+  name, coordinates, actions = hash[:name], hash[:coordinates], hash[:actions]
+
+  actions = [actions] if actions.is_a?(Symbol)
+  actions.map! { |action| AREA_ACTIONS[action] }
   @areas << Area.new(name, coordinates, actions)
 end
-
 
 private
 
@@ -31,23 +30,23 @@ class Area
     @actions = actions
   end
 
-  def min_x() # TODO better data structure and methods than this
+  def min_x # TODO: better data structure and methods than this
     @coordinates[0]
   end
 
-  def min_y()
+  def min_y
     @coordinates[1]
   end
 
-  def max_x()
+  def max_x
     @coordinates[2]
   end
 
-  def max_y()
+  def max_y
     @coordinates[3]
   end
 
-  def height()
+  def height
     @coordinates[4]
   end
 
@@ -79,7 +78,7 @@ on :mob_position_update do |event|
     next_inside = event.next.inside(area)
 
     if was_inside
-      if next_inside then area.inside(mob) else area.exited(mob) end
+      next_inside ? area.inside(mob) : area.exited(mob)
     else
       area.entered(mob) if next_inside
     end
@@ -91,10 +90,10 @@ class Position
 
   # Returns whether or not this Position is inside the specified Area.
   def inside(area)
-    return false if (x < area.min_x() || x > area.max_x() || y < area.min_y() || y > area.max_y())
-    z = area.height()
+    return false if x < area.min_x || x > area.max_x || y < area.min_y || y > area.max_y
+    z = area.height
 
-    return true if (z.nil? || z == height)
+    z.nil? || z == height
   end
 
 end
