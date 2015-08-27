@@ -9,9 +9,7 @@
   </authors>
   <scripts>
     <script>command.rb</script>
-    <script>intercept.rb</script>
-    <script>item-on-item-intercept.rb</script>
-    <script>name-lookup.rb</script>
+    <script>name_lookup.rb</script>
   </scripts>
   <dependencies /> <!-- This plugin should _NOT_ depend on anything. -->
 </plugin>

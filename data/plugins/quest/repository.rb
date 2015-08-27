@@ -1,7 +1,7 @@
 
 # Defines a quest with the specified name.
 def quest(name, stage_names)
-  stages = { }
+  stages = {}
   stage_names.each_with_index { |stage, index| stages[stage] = QuestStage.new(stage, index, name) }
 
   QUESTS[name] = Quest.new(name, stages)
@@ -18,25 +18,26 @@ class Quest
 
   # Creates the Quest.
   def initialize(name, stages)
-    raise "Quest name must be a symbol, received '#{name}'." unless name.kind_of?(Symbol)
+    fail "Quest name must be a symbol, received '#{name}'." unless name.is_a?(Symbol)
     @name = name
     @stages = stages
   end
 
-  # Gets the finishing quest stage (i.e. the stage that indicates the Player has completed the quest).
-  def final_stage()
+  # Gets the finishing quest stage (i.e. the stage that indicates the Player has completed the
+  # quest).
+  def final_stage
     @stages.last
   end
 
   # Gets the starting quest stage.
-  def initial_stage()
+  def initial_stage
     @stages.first
   end
 
   # Gets the QuestStage with the specified name.
   def stage(name)
     stage = @stages[name]
-    raise "No stage named #{name} exists in #{@name}." if stage.nil?
+    fail "No stage named #{name} exists in #{@name}." if stage.nil?
     stage
   end
 
@@ -47,7 +48,7 @@ class QuestStage
   attr_reader :name, :index
 
   # Creates the QuestProgress.
-  def initialize(name, index, quest, log_text=nil)
+  def initialize(name, index, quest, log_text = nil)
     @name = name
     @index = index
     @quest = quest
@@ -61,40 +62,39 @@ class QuestStage
 
   # Gets the log text for this stage.
   def log_text
-    raise "Cannot get the log text from an unlogged quest stage." unless logged
+    fail 'Cannot get the log text from an unlogged quest stage.' unless logged
     @log_text
   end
 
   # Defines the equality operator.
-  def ==(name)
-    @index == index_of(name)
+  def ==(other)
+    @index == index_of(other)
   end
 
   # Defines the not equal operator.
-  def !=(name)
-    @index != index_of(name)
+  def !=(other)
+    @index != index_of(other)
   end
 
   # Defines the greater than or equal to operator.
-  def >=(name)
-    @index >= index_of(name)
+  def >=(other)
+    @index >= index_of(other)
   end
 
   # Defines the greater than operator.
-  def >(name)
-    @index > index_of(name)
+  def >(other)
+    @index > index_of(other)
   end
 
   # Defines the less than operator.
-  def <(name)
-    @index < index_of(name)
+  def <(other)
+    @index < index_of(other)
   end
 
   # Defines the less than or equal to operator.
-  def <=(name)
-    @index <= index_of(name)
+  def <=(other)
+    @index <= index_of(other)
   end
-
 
   private
 
@@ -105,7 +105,6 @@ class QuestStage
 
 end
 
-
 # Define method_missing for player
 class Player
 
@@ -113,16 +112,16 @@ class Player
   def method_missing(symbol, *args)
     unless args.nil?
       arg = args[0]
-      args[0] = arg.name if arg.kind_of?(QuestStage)
+      args[0] = arg.name if arg.is_a?(QuestStage)
     end
 
     result = super(symbol, *args)
     string = symbol.to_s
 
-    if (string.end_with?('_progress'))
+    if string.end_with?('_progress')
       name = string[0..-10] # Cut the '_progress' from the end
       quest = QUESTS[name.to_sym]
-      raise "No Quest with the name '#{name}' exists." if quest.nil?
+      fail "No Quest with the name '#{name}' exists." if quest.nil?
 
       result = quest.stage(result)
     end

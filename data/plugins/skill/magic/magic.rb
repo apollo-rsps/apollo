@@ -5,11 +5,13 @@ java_import 'org.apollo.game.message.impl.DisplayTabInterfaceMessage'
 java_import 'org.apollo.game.model.entity.EquipmentConstants'
 java_import 'org.apollo.game.model.entity.Skill'
 
+# A `Message` to display the magic spellbook.
 DISPLAY_SPELLBOOK = DisplayTabInterfaceMessage.new(6)
 
+# A spell that can be cast.
 class Spell
   attr_reader :level, :elements, :experience
-  
+
   def initialize(level, elements, experience)
     @level = level
     @elements = elements
@@ -18,71 +20,72 @@ class Spell
 
 end
 
+# An `Action` for casting a `Spell`.
 class SpellAction < Action
   attr_reader :spell, :pulses
-  
+
   def initialize(mob, spell)
     super(0, true, mob)
-    
     @spell = spell
     @pulses = 0
   end
-  
+
   def execute
     if @pulses == 0
-      unless (check_skill and process_elements)
+      unless check_skill && process_elements
         stop
         return
       end
     end
+
     execute_action
     @pulses += 1
   end
-  
+
   def execute_action
     stop
   end
-  
+
   def check_skill
     required = @spell.level
     if required > mob.skill_set.skill(Skill::MAGIC).maximum_level
       mob.send_message("You need a Magic level of at least #{required} to cast this spell.")
       return false
     end
-    
-    return true
+
+    true
   end
-  
+
   def process_elements
     elements = @spell.elements
-    
+
     elements.each do |element, amount|
       unless element.check_remove(mob, amount, false)
         mob.send_message("You do not have enough #{element.name}s to cast this spell.")
         return false
       end
     end
-    
+
     elements.each { |element, amount| element.check_remove(mob, amount, true) }
-    
-    return true
+    true
   end
-  
+
   def equals(other)
-    return (get_class == other.get_class and @spell == other.spell)
+    get_class == other.get_class && @spell == other.spell
   end
 
 end
 
+# A `SpellAction` that verifies an input `Item` is legal.
 class ItemSpellAction < SpellAction
   attr_reader :slot, :item
 
   def initialize(mob, spell, slot, item)
-    super(mob, spell)    
+    super(mob, spell)
     @slot = slot
     @item = item
   end
-  
+
   # We override SpellAction#execute to implement an illegal item check (e.g. coins for alchemy)
   def execute
     if @pulses == 0
@@ -91,9 +94,9 @@ class ItemSpellAction < SpellAction
         stop
         next
       end
-      
+
       id = @item.id
-      
+
       # TODO: There has to be a better way to do this.
       @spell.elements.each do |element, amount|
         element.runes.each do |rune|
@@ -106,13 +109,13 @@ class ItemSpellAction < SpellAction
       end
 
     end
-    
+
     super
   end
 
   def illegal_item?
     # Override this method if necessary
-    return false
+    false
   end
 
 end
@@ -120,7 +123,7 @@ end
 # Intercepts the magic on item message.
 on :message, :magic_on_item do |player, message|
   spell = message.spell_id
-  
+
   alch = ALCHEMY_SPELLS[spell]
   unless alch.nil?
     slot = message.slot
@@ -129,9 +132,9 @@ on :message, :magic_on_item do |player, message|
     message.terminate
     return
   end
-  
+
   ench = ENCHANT_SPELLS[message.id]
-  if !ench.nil? and ench.button == spell
+  if !ench.nil? && ench.button == spell
     slot = message.slot
     item = player.inventory.get(slot)
     player.start_action(EnchantAction.new(player, ench, slot, item, ENCHANT_ITEMS[item.id]))
@@ -149,12 +152,18 @@ on :message, :button do |player, message|
     message.terminate
     return
   end
-  
+
   conv = CONVERT_SPELLS[button]
   unless conv.nil?
-    slots = bone_slots player
+    slots = bone_slots(player)
 
-    if slots.length == 0 then player.send_message("You can't convert these bones!") else player.start_action(ConvertingAction.new(player, conv, slots)) end
+    if slots.length == 0
+      player.send_message("You can't convert these bones!")
+    else
+      player.start_action(ConvertingAction.new(player, conv, slots))
+    end
+
     message.terminate
   end
+
 end

@@ -2,57 +2,50 @@ require 'java'
 
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Graphic'
+java_import 'org.apollo.game.model.entity.Skill'
 
 ALCHEMY_SPELLS = {}
 
-LOW_ALCH_ANIM = Animation.new(712)
-LOW_ALCH_GRAPHIC = Graphic.new(112, 0, 100)
-LOW_ALCH_MULTIPLIER = 0.4
+ILLEGAL_ALCH_ITEMS = [995, 6529, 6306, 6307, 6308, 6309, 6310]
 
-HIGH_ALCH_ANIM = Animation.new(713)
-HIGH_ALCH_GRAPHIC = Graphic.new(113, 0, 100)
-HIGH_ALCH_MULTIPLIER = 0.6
-
-ILLEGAL_ALCH_ITEMS = [ 995, 6529, 6306, 6307, 6308, 6309, 6310 ]
-
+# A spell that alchemises an item.
 class AlchemySpell < Spell
-  attr_reader :high, :animation, :graphic, :multiplier, :experience, :delay
-  
-  def initialize(level, elements, high, animation, graphic, multiplier, experience, delay)
-    super(level, elements, experience)    
-    @high = high
+  attr_reader :animation, :graphic, :multiplier, :experience
+
+  def initialize(level, elements, experience, animation, graphic, multiplier)
+    super(level, elements, experience)
     @animation = animation
     @graphic = graphic
     @multiplier = multiplier
-    @delay = delay
   end
 
 end
 
+# An Action that performs an AlchemySpell.
 class AlchemyAction < ItemSpellAction
-  
+
   def initialize(player, alchemy, slot, item)
     super(player, alchemy, slot, item)
   end
-  
+
   def illegal_item?
-    return ILLEGAL_ALCH_ITEMS.include?(@item.id)
+    ILLEGAL_ALCH_ITEMS.include?(@item.id)
   end
-  
-  def execute_action
+
+  def executeAction
     if @pulses == 0
       mob.play_animation(@spell.animation)
       mob.play_graphic(@spell.graphic)
       mob.send(DISPLAY_SPELLBOOK)
-      
+
       inventory = mob.inventory
       gold = (item.definition.value * @spell.multiplier) + 1
-      
+
       inventory.remove(inventory.get(@slot).id, 1)
       inventory.add(995, gold)
-      
-      mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)      
-      set_delay(@spell.delay)
+
+      mob.skill_set.add_experience(Skill::MAGIC, @spell.experience)
+      set_delay(ALCHEMY_DELAY)
     elsif @pulses == 1
       mob.stop_animation
       mob.stop_graphic
@@ -62,9 +55,31 @@ class AlchemyAction < ItemSpellAction
 
 end
 
-def append_alchemy(button, level, elements, high, animation, graphic, multiplier, experience, delay)
-  ALCHEMY_SPELLS[button] = AlchemySpell.new(level, elements, high, animation, graphic, multiplier, experience, delay)
+private
+
+# The delay of an alchemy spell.
+ALCHEMY_DELAY = 4
+
+# The height of the graphic.
+GRAPHIC_HEIGHT = 100
+
+# Inserts an `AlchemySpell` into the hash of available alchemy spells.
+def alchemy(_name, hash)
+  unless hash.has_keys?(:button, :level, :runes, :animation, :graphic, :multiplier, :experience)
+    fail 'Hash must have button, level, runes, animation, graphic, multiplier, experience keys.'
+  end
+
+  id, multiplier = hash[:button], hash[:multiplier]
+  level, runes, experience = hash[:level], hash[:runes], hash[:experience]
+
+  animation = Animation.new(hash[:animation])
+  graphic = Graphic.new(hash[:graphic], 0, GRAPHIC_HEIGHT)
+
+  ALCHEMY_SPELLS[id] = AlchemySpell.new(level, runes, experience, animation, graphic, multiplier)
 end
 
-append_alchemy(1162, 21, { FIRE => 3, NATURE => 1 }, false, LOW_ALCH_ANIM,  LOW_ALCH_GRAPHIC,  0.48, 31, 1) # Low level alchemy
-append_alchemy(1178, 55, { FIRE => 5, NATURE => 1 },  true, HIGH_ALCH_ANIM, HIGH_ALCH_GRAPHIC, 0.72, 65, 4) # High level alchemy
+alchemy :low_level, button: 1_162, level: 21, runes: { FIRE => 3, NATURE => 1 }, animation: 712,
+                    graphic: 112, multiplier: 0.48, experience: 31
+
+alchemy :high_level, button: 1_178, level: 55, runes: { FIRE => 5, NATURE => 1 }, animation: 713,
+                     graphic: 113, multiplier: 0.72, experience: 65

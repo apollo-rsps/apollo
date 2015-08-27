@@ -25,11 +25,11 @@ class RunecraftingAction < DistancedAction
   def executeAction
     runecrafting_level = @player.skill_set.get_skill(Skill::RUNECRAFT).current_level
 
-    if (runecrafting_level < @rune.level)
+    if runecrafting_level < @rune.level
       @player.send_message("You need a runecrafting level of #{@rune.level} to craft this rune.")
       stop
     elsif !@player.inventory.contains(RUNE_ESSENCE_ID)
-      @player.send_message('You need rune essence to craft runes.') 
+      @player.send_message('You need rune essence to craft runes.')
       stop
     elsif @executions == 0
       @player.turn_to(@position)
@@ -37,18 +37,22 @@ class RunecraftingAction < DistancedAction
       @player.play_graphic(RUNECRAFTING_GRAPHIC)
       @executions += 1
     elsif @executions == 1
-      removed = @player.inventory.remove(RUNE_ESSENCE_ID, @player.inventory.get_amount(RUNE_ESSENCE_ID))
-      added = removed * @rune.multiplier(runecrafting_level)
-      @player.inventory.add(@rune.id, added)
+      inventory = @player.inventory
+      removed = inventory.remove(RUNE_ESSENCE_ID, inventory.get_amount(RUNE_ESSENCE_ID))
 
-      @player.send_message("Your craft the rune essence into #{added > 1 ? 'some ' + @rune.name + 's' : 'an ' + @rune.name}.", true)
+      added = removed * @rune.multiplier(runecrafting_level)
+      inventory.add(@rune.id, added)
+
+      name = added > 1 ? 'some ' + @rune.name + 's' : 'an ' + @rune.name
+      @player.send_message("Your craft the rune essence into #{name}.", true)
+
       @player.skill_set.add_experience(Skill::RUNECRAFT, removed * @rune.experience)
       stop
     end
   end
 
   def equals(other)
-    return (get_class == other.get_class && @player == other.player && @rune == other.rune)
+    get_class == other.get_class && @player == other.player && @rune == other.rune
   end
 
 end

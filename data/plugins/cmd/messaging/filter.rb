@@ -1,5 +1,6 @@
 require 'java'
 
 on :command, :filter do |player, command|
-  player.send_message('Your message filter is now ' + (player.toggle_message_filter ? 'enabled.' : 'disabled.'))
+  status = player.toggle_message_filter ? 'enabled' : 'disabled'
+  player.send_message('Your message filter is now ' + status + '.')
 end

@@ -3,17 +3,13 @@ require 'java'
 java_import 'org.apollo.game.message.impl.DisplayCrossbonesMessage'
 java_import 'org.apollo.game.model.entity.Player'
 
-
-
 # Registers an area action.
 def area_action(name, &block)
   AREA_ACTIONS[name] = action = AreaAction.new
   action.instance_eval(&block)
 end
 
-
 AREA_ACTIONS = {}
-
 
 private
 

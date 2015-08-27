@@ -10,6 +10,7 @@ ANIMATION_PULSES = 0
 LEVEL_THRESHOLD = 8
 EXP_PER_HIT = 5
 
+# A DistancedAction for attacking a training dummy.
 class DummyAction < DistancedAction
   attr_reader :position
 
@@ -21,13 +22,7 @@ class DummyAction < DistancedAction
   end
 
   def executeAction
-    unless @started
-      @started = true
-
-      mob.send_message('You hit the dummy.', true)
-      mob.turn_to(position)
-      mob.play_animation(PUNCH_ANIMATION)
-    else
+    if @started
       skills = mob.skill_set
 
       if (skills.skill(ATTACK_SKILL_ID).maximum_level >= LEVEL_THRESHOLD)
@@ -37,11 +32,17 @@ class DummyAction < DistancedAction
       end
 
       stop
+    else
+      @started = true
+
+      mob.send_message('You hit the dummy.', true)
+      mob.turn_to(position)
+      mob.play_animation(PUNCH_ANIMATION)
     end
   end
 
   def equals(other)
-    return (get_class == other.get_class and @position == other.position)
+    get_class == other.get_class && @position == other.position
   end
 end
 
