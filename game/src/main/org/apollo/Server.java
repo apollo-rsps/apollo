@@ -60,6 +60,7 @@ public final class Server {
 			server.bind(service, http, jaggrab);
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, "Error whilst starting server.", t);
+			System.exit(0);
 		}
 
 		logger.fine("Starting apollo took " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
@@ -102,13 +103,17 @@ public final class Server {
 	 *             reason.
 	 */
 	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) throws BindException {
-		logger.info("Binding service listener to address: " + service + "...");
+		logger.fine("Binding service listener to address: " + service + "...");
 		bind(serviceBootstrap, service);
 
-		logger.info("Binding HTTP listener to address: " + http + "...");
-		bind(httpBootstrap, http);
+		try {
+		    logger.fine("Binding HTTP listener to address: " + http + "...");
+		    bind(httpBootstrap, http);
+		} catch (Exception cause) {
+		    logger.warning("Unable to bind to HTTP, JAGGRAB will be used as a fallback however this is not recommended.");
+		}
 
-		logger.info("Binding JAGGRAB listener to address: " + jaggrab + "...");
+		logger.fine("Binding JAGGRAB listener to address: " + jaggrab + "...");
 		bind(jaggrabBootstrap, jaggrab);
 
 		logger.info("Ready for connections.");
