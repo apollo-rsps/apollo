@@ -1,4 +1,6 @@
 !.gitignore
+!.rubocop.yml
+
 .*
 *~
 *.class
@@ -7,3 +9,4 @@
 /data/fs
 /data/savedGames
 /lib/
+*/target/

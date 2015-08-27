@@ -8,6 +8,7 @@ PROSPECT_PULSES = 3
 ORE_SIZE = 1
 
 # TODO: finish implementing this
+# A `DistancedAction` for mining ore.
 class MiningAction < DistancedAction
   attr_reader :position, :ore, :counter, :started
 
@@ -21,9 +22,11 @@ class MiningAction < DistancedAction
 
   def find_pickaxe
     weapon = mob.equipment.get(EquipmentConstants::WEAPON)
-    PICKAXE_IDS.each { |id| return PICKAXES[id] if (!weapon.nil? && weapon.id == id) || mob.inventory.contains(id) }
+    PICKAXE_IDS.each do |id|
+      return PICKAXES[id] if (!weapon.nil? && weapon.id == id) || mob.inventory.contains(id)
+    end
 
-    return nil
+    nil
   end
 
   # starts the mining animation, sets counters/flags and turns the mob to
@@ -42,7 +45,7 @@ class MiningAction < DistancedAction
     mob.turn_to(@position)
 
     # verify the mob can mine with their pickaxe
-    unless (!pickaxe.nil? and level >= pickaxe.level)
+    if pickaxe.nil? || level < pickaxe.level
       mob.send_message('You do not have a pickaxe for which you have the level to use.')
       stop
       return
@@ -56,9 +59,7 @@ class MiningAction < DistancedAction
     end
 
     # check if we need to kick start things
-    unless @started
-      start_mine(pickaxe)
-    else
+    if @started
       # count down and check if we can have a chance at some ore now
       if @counter == 0
         # TODO: calculate the chance that the player can actually get the rock
@@ -73,16 +74,20 @@ class MiningAction < DistancedAction
 
         stop
       end
-      @counter -= 1
-    end
 
+      @counter -= 1
+    else
+      start_mine(pickaxe)
+    end
   end
 
   def equals(other)
-    return (get_class == other.get_class and @position == other.position and @ore == other.ore)
+    get_class == other.get_class && @position == other.position && @ore == other.ore
   end
+
 end
 
+# A `DistancedAction` for a rock with no available ore.
 class ExpiredProspectingAction < DistancedAction
   attr_reader :position
 
@@ -96,11 +101,12 @@ class ExpiredProspectingAction < DistancedAction
   end
 
   def equals(other)
-    return (get_class == other.get_class and @position == other.position)
+    get_class == other.get_class && @position == other.position
   end
 
 end
 
+# A `DistancedAction` for prospecting a rock.
 class ProspectingAction < DistancedAction
   attr_reader :position, :ore
 
@@ -112,22 +118,22 @@ class ProspectingAction < DistancedAction
   end
 
   def executeAction
-    unless @started
-      @started = true
-
-      mob.send_message('You examine the rock for ores...')
-      mob.turn_to(@position)
-    else
+    if @started
       ore_def = ItemDefinition.lookup(@ore.id)
       name = ore_def.name.sub(/ ore$/, '').downcase
 
       mob.send_message("This rock contains #{name}.")
       stop
+    else
+      @started = true
+
+      mob.send_message('You examine the rock for ores...')
+      mob.turn_to(@position)
     end
   end
 
   def equals(other)
-    return (get_class == other.get_class and @position == other.position and @ore == other.ore)
+    get_class == other.get_class && @position == other.position && @ore == other.ore
   end
 
 end
@@ -135,9 +141,7 @@ end
 on :message, :first_object_action do |mob, message|
   ore = ORES[message.id]
 
-  unless ore.nil?
-    mob.start_action(MiningAction.new(mob, message.position, ore))
-  end
+  mob.start_action(MiningAction.new(mob, message.position, ore)) unless ore.nil?
 end
 
 on :message, :second_object_action do |mob, message|

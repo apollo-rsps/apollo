@@ -1,5 +1,6 @@
 GEMSTONES = {}
 
+# A gemstone that can be received when mining.
 class Gemstone
   attr_reader :id, :chance
 
@@ -9,11 +10,11 @@ class Gemstone
   end
 end
 
-def append_gem(gem)
+def gem(gem)
   GEMSTONES[gem.id] = gem
 end
 
-append_gem(Gemstone.new(1623, 0)) # uncut sapphire
-append_gem(Gemstone.new(1605, 0)) # uncut emerald
-append_gem(Gemstone.new(1619, 0)) # uncut ruby
-append_gem(Gemstone.new(1617, 0)) # uncut diamond
+gem(Gemstone.new(1623, 0)) # uncut sapphire
+gem(Gemstone.new(1605, 0)) # uncut emerald
+gem(Gemstone.new(1619, 0)) # uncut ruby
+gem(Gemstone.new(1617, 0)) # uncut diamond

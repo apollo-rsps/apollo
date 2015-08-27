@@ -18,16 +18,15 @@ class Ingredient
     @item = Item.new(item) # Share item instances.
   end
 
-  # Checks if the specified player has the specified amount of this ingredient. Optionally, they can immediately be removed if that
-  # amount was indeed found.
+  # Checks if the specified player has the specified amount of this ingredient. Optionally, they
+  # can immediately be removed if that amount was indeed found.
   def check_remove(player, amount, remove)
     inventory = player.inventory
     counter = 0
 
     inventory.items.each do |inv_item|
       break unless counter < amount
-
-      next if inv_item == nil
+      next if inv_item.nil?
 
       id = inv_item.id
       inventory_amount = inv_item.amount
@@ -47,7 +46,7 @@ class Ingredient
       return true
     end
 
-    return false
+    false
   end
 end
 
@@ -59,11 +58,10 @@ class GroundIngredient < Ingredient
 
   def initialize(item_id, raw)
     super(item_id)
-
     @raw = raw
   end
 
-  def invoke(player, pestle_mortar, ingredient)
+  def invoke(player, _pestle_mortar, _ingredient)
     action = GrindingAction.new(player, self)
     listener = GrindingDialogueListener.new(player, action)
 
@@ -71,7 +69,8 @@ class GroundIngredient < Ingredient
   end
 end
 
-# A DialogueAdapter used for grinding ingredients. It is also used as an EnterAmountListener for the amount of grinding actions.
+# A DialogueAdapter used for grinding ingredients. It is also used as an EnterAmountListener for
+# the amount of grinding actions.
 class GrindingDialogueListener < DialogueAdapter
   include EnterAmountListener
 
@@ -79,7 +78,6 @@ class GrindingDialogueListener < DialogueAdapter
 
   def initialize(player, action)
     super()
-    
     @player = player
     @action = action
   end
@@ -103,7 +101,7 @@ class GrindingDialogueListener < DialogueAdapter
 
   # Called when an amount of grinding actions has been entered.
   def amountEntered(amount)
-    if amount <= 0 then return else execute(amount) end
+    execute(amount) if amount > 0
   end
 
   # Called to set the action(s) in motion.
@@ -129,7 +127,7 @@ class GrindingAction < Action
   attr_reader :ingredient, :amount, :pulses, :slot, :listener
 
   def initialize(player, ingredient)
-    super 0, true, player
+    super(0, true, player)
 
     @ingredient = ingredient
     @pulses = 0
@@ -145,7 +143,7 @@ class GrindingAction < Action
     if @pulses == 0
       mob.play_animation GRINDING_ANIM
     elsif @pulses == 1
-      if not gather_materials
+      unless gather_materials
         stop
         return
       end
@@ -159,45 +157,45 @@ class GrindingAction < Action
 
       inventory.reset(@slot)
       inventory.add(@ingredient.item)
-      
+
       set_delay(1)
     elsif @pulses == 2
       mob.stop_animation
-      continue()
+      continue
     end
   end
 
   # Checks if the player has the required materials to perform the (next) action.
   def gather_materials
     items = mob.inventory.items
-    
+
     pst_mrt = false
     ingr = false
     raw = @ingredient.raw
     (0...items.length).each do |slot|
       item = items[slot]
-      next if item == nil
+      next if item.nil?
 
       id = item.id
-      if id == PESTLE_MORTAR and !pst_mrt
+      if id == PESTLE_MORTAR && !pst_mrt
         pst_mrt = true
-      elsif id == raw and !ingr
+      elsif id == raw && !ingr
         ingr = true
         @slot = slot
       end
 
-      return true if pst_mrt and ingr
+      return true if pst_mrt && ingr
     end
 
     mob.send_message("You do not have any more #{name_of(raw).downcase}s.")
-    return false
+    false
   end
-  
+
   # Either invokes the stop() method in Action to shut it down
   # or continues to the next ingredient.
   def continue
     @amount -= 1
-    
+
     if @amount > 0
       set_delay(0)
       @pulses = -1
@@ -213,11 +211,11 @@ class GrindingAction < Action
 
   def stop
     super
-    mob.inventory.remove_listener(@listener) unless listener == nil
+    mob.inventory.remove_listener(@listener) unless listener.nil?
   end
-  
+
   def equals(other)
-    return (get_class == other.get_class and @ingredient == other.ingredient)
+    get_class == other.get_class && @ingredient == other.ingredient
   end
 end
 
@@ -225,7 +223,7 @@ end
 def append_ground(id, raw)
   ground = GroundIngredient.new(id, raw)
   append_herblore_item(ground, PESTLE_MORTAR, raw)
-  return ground
+  ground
 end
 
 # Normal ingredients
@@ -250,4 +248,4 @@ MAGIC_ROOTS        = Ingredient.new(6051)
 UNICORN_HORN_DUST = append_ground(235,  237)
 DRAGON_SCALE_DUST = append_ground(241,  243)
 CHOCOLATE_DUST    = append_ground(1975, 1973)
-# CRUSHED_NEST      = append_ground(6693, 5075)
+# CRUSHED_NEST      = append_ground(6693, 5075) # TODO: only in 377

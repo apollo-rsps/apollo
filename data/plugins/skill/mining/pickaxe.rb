@@ -5,6 +5,7 @@ java_import 'org.apollo.game.model.Animation'
 PICKAXES = {}
 PICKAXE_IDS = []
 
+# A pickaxe that can be mined with.
 class Pickaxe
   attr_reader :id, :level, :animation, :pulses
 

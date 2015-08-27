@@ -1,10 +1,12 @@
-# Thanks to phl0w <http://www.rune-server.org/members/phl0w/> for providing
+# Thanks to phl0w <http://www.rune-server.org/members/phl0w> for providing
 # the correct destination coordinates of the ancient teleports.
 
 require 'java'
+
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Graphic'
 java_import 'org.apollo.game.model.Position'
+java_import 'org.apollo.game.model.entity.Skill'
 
 TELEPORT_SPELLS = {}
 
@@ -16,9 +18,10 @@ ANCIENT_TELE_END_GRAPHIC = Graphic.new(455)
 ANCIENT_TELE_ANIM = Animation.new(1979)
 ANCIENT_TELE_GRAPHIC = Graphic.new(392)
 
+# A `Spell` that teleports a `Player` to another `Position`.
 class TeleportSpell < Spell
   attr_reader :ancient, :destination, :experience, :name
-  
+
   def initialize(ancient, level, elements, destination, experience, name)
     super(level, elements, experience)
     @ancient = ancient
@@ -28,67 +31,74 @@ class TeleportSpell < Spell
 
 end
 
+# A `SpellAction` for a `TeleportSpell`.
 class TeleportingAction < SpellAction
-  
+
   def initialize(mob, spell)
     super(mob, spell)
   end
-  
+
   def execute_action
     @spell.ancient ? execute_ancient : execute_modern
   end
-  
+
   def execute_modern
     if @pulses == 0
       mob.play_animation(MODERN_TELE_ANIM)
     elsif @pulses == 1
       mob.play_graphic(MODERN_TELE_GRAPHIC)
-      delay = 1
+      set_delay(1)
     elsif @pulses == 2
       mob.stop_graphic
-      mob.play_animation(MODERN_TELE_END_ANIM)      
+      mob.play_animation(MODERN_TELE_END_ANIM)
       mob.teleport(@spell.destination)
       mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)
       stop
     end
   end
-  
+
   def execute_ancient
     if @pulses == 0
       mob.play_graphic(ANCIENT_TELE_GRAPHIC)
       mob.play_animation(ANCIENT_TELE_ANIM)
-      delay = 2
+      set_delay(2)
     elsif @pulses == 2
       mob.stop_graphic
       mob.stop_animation
       mob.teleport(@spell.destination)
-      mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)
+      mob.skill_set.add_experience(Skill::MAGIC, @spell.experience)
       stop
     end
   end
 
 end
 
-def append_tele(ancient, button, level, elements, x, y, experience, name)
-  TELEPORT_SPELLS[button] = TeleportSpell.new(ancient, level, elements, Position.new(x, y), experience, name)
+def tele(ancient = false, button, level, elements, x, y, experience, name)
+  position = Position.new(x, y)
+  TELEPORT_SPELLS[button] = TeleportSpell.new(ancient, level, elements, position, experience, name)
+end
+
+def ancient_tele(*args)
+  tele(true, *args)
 end
 
 # Modern teleports
-append_tele(false, 1164, 25, { FIRE => 1, AIR => 3, LAW => 1 }, 3213, 3424, 35, "Varrock")
-append_tele(false, 1167, 31, { EARTH => 1, AIR => 3, LAW => 1 }, 3222, 3219, 41, "Lumbridge")
-append_tele(false, 1170, 37, { WATER => 1, AIR => 3, LAW => 1 }, 2965, 3379, 47, "Falador")
-append_tele(false, 1174, 45, { AIR => 5, LAW => 1 }, 2757, 3478, 55.5, "Camelot")
-append_tele(false, 1540, 51, { WATER => 2, LAW => 2 }, 2662, 3306, 61, "Ardougne")
-append_tele(false, 1541, 58, { EARTH => 2, LAW => 2 }, 2549, 3114, 68, "the Watchtower")
-append_tele(false, 7455, 61, { FIRE => 2, LAW => 2 }, 2871, 3590, 68, "Trollheim")
-append_tele(false, 18470, 64, { FIRE => 2, WATER => 2, LAW => 2, Element.new([1963], nil, "Banana") => 1 }, 2754, 2785, 76, "Ape Atoll")
+tele 1_164, 25, { FIRE => 1, AIR => 3, LAW => 1 }, 3213, 3424, 35, 'Varrock'
+tele 1_167, 31, { EARTH => 1, AIR => 3, LAW => 1 }, 3222, 3219, 41, 'Lumbridge'
+tele 1_170, 37, { WATER => 1, AIR => 3, LAW => 1 }, 2965, 3379, 47, 'Falador'
+tele 1_174, 45, { AIR => 5, LAW => 1 }, 2757, 3478, 55.5, 'Camelot'
+tele 1_540, 51, { WATER => 2, LAW => 2 }, 2662, 3306, 61, 'Ardougne'
+tele 1_541, 58, { EARTH => 2, LAW => 2 }, 2549, 3114, 68, 'the Watchtower'
+tele 7_455, 61, { FIRE => 2, LAW => 2 }, 2871, 3590, 68, 'Trollheim'
+tele 18_470, 64, { FIRE => 2, WATER => 2, LAW => 2, Element.new([1963], nil, 'Banana') => 1 },
+     2_754, 2_785, 76, 'Ape Atoll'
 
 # Ancient teleports
-append_tele(true, 13035, 54, { LAW => 2, FIRE => 1, AIR => 1 }, 3098, 9882, 64, "Paddewwa")
-append_tele(true, 13045, 60, { LAW => 2, SOUL => 2 }, 3320, 3338, 70, "Senntisten")
-append_tele(true, 13053, 66, { LAW => 2, BLOOD => 1 }, 3493, 3472, 76, "Kharyll")
-append_tele(true, 13061, 72, { LAW => 2, WATER => 4 }, 3003, 3470, 82, "Lassar")
-append_tele(true, 13069, 78, { LAW => 2, FIRE => 3, AIR => 2 }, 2966, 3696, 88, "Dareeyak")
-append_tele(true, 13079, 84, { LAW => 2, SOUL => 2 }, 3163, 3664, 94, "Carrallangar")
-append_tele(true, 13087, 90, { LAW => 2, BLOOD => 2 }, 3287, 3883, 100, "Annakarl")
-append_tele(true, 13095, 96, { LAW => 2, WATER => 8 }, 2972, 3873, 106, "Ghorrock")
+ancient_tele 13_035, 54, { LAW => 2, FIRE => 1, AIR => 1 }, 3098, 9882, 64, 'Paddewwa'
+ancient_tele 13_045, 60, { LAW => 2, SOUL => 2 }, 3320, 3338, 70, 'Senntisten'
+ancient_tele 13_053, 66, { LAW => 2, BLOOD => 1 }, 3493, 3472, 76, 'Kharyll'
+ancient_tele 13_061, 72, { LAW => 2, WATER => 4 }, 3003, 3470, 82, 'Lassar'
+ancient_tele 13_069, 78, { LAW => 2, FIRE => 3, AIR => 2 }, 2966, 3_696, 88, 'Dareeyak'
+ancient_tele 13_079, 84, { LAW => 2, SOUL => 2 }, 3163, 3664, 94, 'Carrallangar'
+ancient_tele 13_087, 90, { LAW => 2, BLOOD => 2 }, 3287, 3883, 100, 'Annakarl'
+ancient_tele 13_095, 96, { LAW => 2, WATER => 8 }, 2972, 3873, 106, 'Ghorrock'
