@@ -30,39 +30,13 @@ public final class ObjectDefinitionDecoder {
 	}
 
 	/**
-	 * Decodes all of the data into {@link ObjectDefinition}s.
-	 *
-	 * @return The definitions.
-	 * @throws IOException If an error occurs when decoding the archive or finding an entry.
-	 */
-	public ObjectDefinition[] decode() throws IOException {
-		Archive config = Archive.decode(fs.getFile(0, 2));
-		ByteBuffer data = config.getEntry("loc.dat").getBuffer();
-		ByteBuffer idx = config.getEntry("loc.idx").getBuffer();
-
-		int count = idx.getShort(), index = 2;
-		int[] indices = new int[count];
-		for (int i = 0; i < count; i++) {
-			indices[i] = index;
-			index += idx.getShort();
-		}
-
-		ObjectDefinition[] defs = new ObjectDefinition[count];
-		for (int i = 0; i < count; i++) {
-			data.position(indices[i]);
-			defs[i] = decode(i, data);
-		}
-		return defs;
-	}
-
-	/**
 	 * Decodes data from the cache into an {@link ObjectDefinition}.
 	 *
 	 * @param id The id of the object.
 	 * @param data The {@link ByteBuffer} containing the data.
 	 * @return The object definition.
 	 */
-	public static ObjectDefinition decode(int id, ByteBuffer data) {
+	public ObjectDefinition decode(int id, ByteBuffer data) {
 		ObjectDefinition definition = new ObjectDefinition(id);
 		while (true) {
 			int opcode = data.get() & 0xFF;
@@ -135,6 +109,32 @@ public final class ObjectDefinitionDecoder {
 				continue;
 			}
 		}
+	}
+
+	/**
+	 * Decodes all of the data into {@link ObjectDefinition}s.
+	 *
+	 * @return The definitions.
+	 * @throws IOException If an error occurs when decoding the archive or finding an entry.
+	 */
+	public ObjectDefinition[] decode() throws IOException {
+		Archive config = fs.getArchive(0, 2);
+		ByteBuffer data = config.getEntry("loc.dat").getBuffer();
+		ByteBuffer idx = config.getEntry("loc.idx").getBuffer();
+
+		int count = idx.getShort(), index = 2;
+		int[] indices = new int[count];
+		for (int i = 0; i < count; i++) {
+			indices[i] = index;
+			index += idx.getShort();
+		}
+
+		ObjectDefinition[] defs = new ObjectDefinition[count];
+		for (int i = 0; i < count; i++) {
+			data.position(indices[i]);
+			defs[i] = decode(i, data);
+		}
+		return defs;
 	}
 
 }
