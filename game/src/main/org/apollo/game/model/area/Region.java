@@ -2,7 +2,6 @@ package org.apollo.game.model.area;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.apollo.game.model.entity.EntityType;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -79,14 +77,17 @@ public final class Region {
 	private final CollisionMatrix[] matrices = CollisionMatrix.createMatrices(Position.HEIGHT_LEVELS, SIZE, SIZE);
 
 	/**
-	 * The Set containing RegionUpdateMessages which can be sent to add every non-Mob Entity in this Region.
+	 * The List of Sets containing RegionUpdateMessages that specifically remove StaticGameObjects. The
+	 * List is ordered based on the height level the RegionUpdateMessages concern.
 	 */
-	private final List<Map<Entity, RegionUpdateMessage>> snapshots = new ArrayList<>(Position.HEIGHT_LEVELS);
+	private final List<Set<RegionUpdateMessage>> removedObjects = new ArrayList<>(Position.HEIGHT_LEVELS);
 
 	/**
-	 * The Set containing UpdateOperations.
+	 * The List of Sets containing RegionUpdateMessages. The List is ordered based on the height level the
+	 * RegionUpdateMessages concern. This only contains the updates to this Region that have occurred in the last
+	 * pulse.
 	 */
-	private final List<List<RegionUpdateMessage>> updates = new ArrayList<>(Position.HEIGHT_LEVELS);
+	private final List<Set<RegionUpdateMessage>> updates = new ArrayList<>(Position.HEIGHT_LEVELS);
 
 	/**
 	 * Creates a new Region.
@@ -108,8 +109,8 @@ public final class Region {
 		listeners.add(new UpdateRegionListener());
 
 		for (int height = 0; height < Position.HEIGHT_LEVELS; height++) {
-			snapshots.add(new HashMap<>());
-			updates.add(new ArrayList<>(DEFAULT_LIST_SIZE));
+			removedObjects.add(new HashSet<>());
+			updates.add(new HashSet<>(DEFAULT_LIST_SIZE));
 		}
 	}
 
@@ -154,12 +155,27 @@ public final class Region {
 	 * @param entity The Entity.
 	 * @return {@code true} if this Region contains the Entity, otherwise {@code false}.
 	 */
-
 	public boolean contains(Entity entity) {
 		Position position = entity.getPosition();
 		Set<Entity> local = entities.get(position);
 
 		return local != null && local.contains(entity);
+	}
+
+	/**
+	 * Encodes the contents of this Region into a {@link Set} of {@link RegionUpdateMessage}s, to be sent to a client.
+	 *
+	 * @return The Set of RegionUpdateMessages.
+	 */
+	public Set<RegionUpdateMessage> encode(int height) {
+		Set<RegionUpdateMessage> additions = entities.values().stream()
+				.flatMap(Set::stream).filter(entity -> entity instanceof GroupableEntity)
+				.map(entity -> ((GroupableEntity) entity).toUpdateOperation(this, EntityUpdateType.ADD).toMessage())
+				.collect(Collectors.toSet());
+
+		ImmutableSet.Builder<RegionUpdateMessage> builder = ImmutableSet.builder();
+		builder.addAll(additions).addAll(updates.get(height)).addAll(removedObjects.get(height));
+		return builder.build();
 	}
 
 	/**
@@ -218,31 +234,14 @@ public final class Region {
 	}
 
 	/**
-	 * Gets a {@link Set} containing {@link RegionUpdateMessage}s that add every {@link Entity} in this Region.
+	 * Gets the {@link Set} of {@link RegionUpdateMessage}s that have occurred in the last pulse. This method can
+	 * only be called <strong>once</strong> per pulse.
 	 *
-	 * @param height The height level to get the Set of RegionUpdateMessages for.
+	 * @param height The height level to get the RegionUpdateMessages for.
 	 * @return The Set of RegionUpdateMessages.
 	 */
-	public List<RegionUpdateMessage> getSnapshot(int height) {
-		List<RegionUpdateMessage> copy = new ArrayList<>(snapshots.get(height).values());
-		Collections.sort(copy);
-		return ImmutableList.copyOf(copy);
-	}
-
-	/**
-	 * Gets the updates that have occurred in the last tick in this Region, as a {@link Set} of
-	 * {@link RegionUpdateMessage}s.
-	 *
-	 * @param height The height level to get the Set of RegionUpdateMessages for.
-	 * @return The Set of RegionUpdateMessages.
-	 */
-	public List<RegionUpdateMessage> getUpdates(int height) {
-		List<RegionUpdateMessage> original = this.updates.get(height);
-		List<RegionUpdateMessage> updates = new ArrayList<>(original);
-		original.clear();
-
-		Collections.sort(updates);
-		return ImmutableList.copyOf(updates);
+	public Set<RegionUpdateMessage> getUpdates(int height) {
+		return ImmutableSet.copyOf(updates.get(height));
 	}
 
 	/**
@@ -261,15 +260,14 @@ public final class Region {
 	 * @param entity The Entity.
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region, or if it was never added.
 	 */
-	public void removeEntity(Entity entity) {
+	public void removeEntity(Entity entity) { // TODO entity update stuff
 		Position position = entity.getPosition();
 		checkPosition(position);
 
 		Set<Entity> local = entities.get(position);
 
 		if (local == null || !local.remove(entity)) {
-			throw new IllegalArgumentException("Entity (" + entity + ") belongs in this Region (" + this
-					+ ") but does not exist.");
+			throw new IllegalArgumentException("Entity (" + entity + ") belongs in (" + this + ") but does not exist.");
 		}
 
 		notifyListeners(entity, EntityUpdateType.REMOVE);
@@ -315,16 +313,19 @@ public final class Region {
 	 * @throws UnsupportedOperationException If the specified Entity cannot be operated on in this manner.
 	 */
 	private <T extends Entity & GroupableEntity> void record(T entity, EntityUpdateType type) {
-		RegionUpdateMessage message = entity.toUpdateOperation(this, type).toMessage();
+		UpdateOperation<?> operation = entity.toUpdateOperation(this, type);
+		RegionUpdateMessage message = operation.toMessage(), inverse = operation.inverse();
+
 		int height = entity.getPosition().getHeight();
+		Set<RegionUpdateMessage> updates = this.updates.get(height);
 
-		Map<Entity, RegionUpdateMessage> snapshot = snapshots.get(height);
-		updates.get(height).add(message);
-
-		snapshot.remove(entity);
-		if ((entity.getEntityType() == EntityType.STATIC_OBJECT && type == EntityUpdateType.REMOVE)
-				|| (entity.getEntityType() != EntityType.STATIC_OBJECT && type == EntityUpdateType.ADD)) {
-			snapshot.put(entity, message);
+		if (entity.getEntityType() == EntityType.STATIC_OBJECT && type == EntityUpdateType.REMOVE) {
+			removedObjects.get(height).add(message);
+			updates.add(message);
+			updates.remove(inverse);
+		} else {
+			updates.add(message);
+			updates.remove(inverse);
 		}
 	}
 

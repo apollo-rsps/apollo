@@ -1,12 +1,5 @@
 package org.apollo.game.sync;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Phaser;
-
 import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.entity.MobRepository;
@@ -23,11 +16,19 @@ import org.apollo.game.sync.task.PrePlayerSynchronizationTask;
 import org.apollo.game.sync.task.SynchronizationTask;
 import org.apollo.util.ThreadUtil;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Phaser;
+
 /**
  * An implementation of {@link ClientSynchronizer} which runs in a thread pool. A {@link Phaser} is used to ensure that
  * the synchronization is complete, allowing control to return to the {@link GameService} that started the
  * synchronization. This class will scale well with machines that have multiple cores/processors. The
- * {@link SequentialClientSynchronizer} will work better on machines with a single core/processor, however, both classes
+ * {@link SequentialClientSynchronizer} will work better on machines with a single core/processor, however, both
+ * classes
  * will work.
  *
  * @author Graham
@@ -58,12 +59,12 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 		int playerCount = players.size();
 		int npcCount = npcs.size();
 
-		Map<RegionCoordinates, List<RegionUpdateMessage>> updates = new HashMap<>();
-		Map<RegionCoordinates, List<RegionUpdateMessage>> snapshots = new HashMap<>();
+		Map<RegionCoordinates, Set<RegionUpdateMessage>> encodes = new ConcurrentHashMap<>();
+		Map<RegionCoordinates, Set<RegionUpdateMessage>> updates = new ConcurrentHashMap<>();
 
 		phaser.bulkRegister(playerCount);
 		for (Player player : players) {
-			SynchronizationTask task = new PrePlayerSynchronizationTask(player, updates, snapshots);
+			SynchronizationTask task = new PrePlayerSynchronizationTask(player, encodes, updates);
 			executor.submit(new PhasedSynchronizationTask(phaser, task));
 		}
 		phaser.arriveAndAwaitAdvance();

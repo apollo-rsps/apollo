@@ -81,10 +81,8 @@ public final class GameService extends Service {
 	 *
 	 * @param player The player.
 	 */
-	public void finalizePlayerUnregistration(Player player) {
-		synchronized (this) {
-			world.unregister(player);
-		}
+	public synchronized void finalizePlayerUnregistration(Player player) {
+		world.unregister(player);
 	}
 
 	/**
