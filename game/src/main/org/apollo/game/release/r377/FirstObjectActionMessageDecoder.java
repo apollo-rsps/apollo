@@ -1,6 +1,6 @@
 package org.apollo.game.release.r377;
 
-import org.apollo.game.message.impl.FirstObjectActionMessage;
+import org.apollo.game.message.impl.ObjectActionMessage;
 import org.apollo.game.model.Position;
 import org.apollo.net.codec.game.DataOrder;
 import org.apollo.net.codec.game.DataTransformation;
@@ -10,19 +10,21 @@ import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;
 
 /**
- * A {@link MessageDecoder} for the {@link FirstObjectActionMessage}.
+ * A {@link MessageDecoder} for the first {@link ObjectActionMessage}.
  *
  * @author Graham
  */
-public final class FirstObjectActionMessageDecoder extends MessageDecoder<FirstObjectActionMessage> {
+public final class FirstObjectActionMessageDecoder extends MessageDecoder<ObjectActionMessage> {
 
 	@Override
-	public FirstObjectActionMessage decode(GamePacket packet) {
+	public ObjectActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
+
 		int x = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
 		int y = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
 		int id = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-		return new FirstObjectActionMessage(id, new Position(x, y));
+
+		return new ObjectActionMessage(1, id, new Position(x, y));
 	}
 
 }

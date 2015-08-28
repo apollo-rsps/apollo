@@ -21,7 +21,7 @@ public abstract class MagicOnMobMessage extends Message {
 	private final int index;
 
 	/**
-	 * The spell if used.
+	 * The spell id used.
 	 */
 	private final int spellId;
 

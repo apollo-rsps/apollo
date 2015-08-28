@@ -1,6 +1,6 @@
 package org.apollo.game.release.r377;
 
-import org.apollo.game.message.impl.FirstItemOptionMessage;
+import org.apollo.game.message.impl.ItemOptionMessage;
 import org.apollo.net.codec.game.DataOrder;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
@@ -9,21 +9,21 @@ import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;
 
 /**
- * A {@link MessageDecoder} for the {@link FirstItemOptionMessage}.
+ * A {@link MessageDecoder} for the first {@link ItemOptionMessage}.
  *
  * @author Chris Fletcher
  */
-final class FirstItemOptionMessageDecoder extends MessageDecoder<FirstItemOptionMessage> {
+public final class FirstItemOptionMessageDecoder extends MessageDecoder<ItemOptionMessage> {
 
 	@Override
-	public FirstItemOptionMessage decode(GamePacket packet) {
+	public ItemOptionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
 		int interfaceId = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
 		int slot = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
 		int id = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
 
-		return new FirstItemOptionMessage(interfaceId, id, slot);
+		return new ItemOptionMessage(1, interfaceId, id, slot);
 	}
 
 }

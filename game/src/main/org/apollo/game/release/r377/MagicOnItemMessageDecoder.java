@@ -12,7 +12,7 @@ import org.apollo.net.release.MessageDecoder;
  *
  * @author Chris Fletcher
  */
-final class MagicOnItemMessageDecoder extends MessageDecoder<MagicOnItemMessage> {
+public final class MagicOnItemMessageDecoder extends MessageDecoder<MagicOnItemMessage> {
 
 	@Override
 	public MagicOnItemMessage decode(GamePacket packet) {

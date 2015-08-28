@@ -11,7 +11,7 @@ import java.util.OptionalInt;
  *
  * @author Chris Fletcher
  */
-public abstract class ItemActionMessage extends InventoryItemMessage {
+public final class ItemActionMessage extends InventoryItemMessage {
 
 	/**
 	 * Creates the ItemActionMessage.

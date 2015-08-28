@@ -12,7 +12,7 @@ import org.apollo.net.release.MessageEncoder;
  *
  * @author Chris Fletcher
  */
-final class DisplayTabInterfaceMessageEncoder extends MessageEncoder<DisplayTabInterfaceMessage> {
+public final class DisplayTabInterfaceMessageEncoder extends MessageEncoder<DisplayTabInterfaceMessage> {
 
 	@Override
 	public GamePacket encode(DisplayTabInterfaceMessage message) {

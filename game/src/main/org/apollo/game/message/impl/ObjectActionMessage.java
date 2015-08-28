@@ -5,12 +5,13 @@ import org.apollo.net.message.Message;
 
 /**
  * A {@link Message} sent by the client that represents some sort of action on an object. Note that the actual message
- * sent by the client is one of the five object action messages, but this is the message that should be intercepted (and
+ * sent by the client is one of the five object action messages, but this is the message that should be intercepted
+ * (and
  * the option verified).
  *
  * @author Graham
  */
-public abstract class ObjectActionMessage extends Message {
+public final class ObjectActionMessage extends Message {
 
 	/**
 	 * The object's id.
