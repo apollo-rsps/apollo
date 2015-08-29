@@ -192,7 +192,7 @@ public final class GameService extends Service {
      */
     private void finalizeRegistrations() {
         for (int count = 0; count < REGISTERS_PER_CYCLE; count++) {
-            Player player = oldPlayers.poll();
+            Player player = newPlayers.poll();
             if (player == null) {
                 break;
             }
