@@ -7,7 +7,8 @@ BANK_BOOTH_ID = 2213
 BANK_BOOTH_SIZE = 1
 
 # The npcs with a 'bank' menu action.
-BANKER_NPCS = [ 166, 494, 495, 496, 497, 498, 499, 1036, 1360, 1702, 2163, 2164, 2354, 2355, 2568, 2569, 2570 ]
+BANKER_NPCS = [166, 494, 495, 496, 497, 498, 499, 1036, 1360, 1702, 2163, 2164, 2354, 2355, 2568,
+               2569, 2570]
 
 # A distanced action to open a new bank.
 class BankAction < DistancedAction
@@ -25,7 +26,7 @@ class BankAction < DistancedAction
   end
 
   def equals(other)
-    return (get_class == other.get_class and @position == other.position)
+    get_class == other.get_class && @position == other.position
   end
 end
 

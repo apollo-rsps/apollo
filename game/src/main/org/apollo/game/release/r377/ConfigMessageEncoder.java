@@ -14,7 +14,7 @@ import org.apollo.net.release.MessageEncoder;
  * @author Chris Fletcher
  * @author Major
  */
-final class ConfigMessageEncoder extends MessageEncoder<ConfigMessage> {
+public final class ConfigMessageEncoder extends MessageEncoder<ConfigMessage> {
 
 	@Override
 	public GamePacket encode(ConfigMessage message) {

@@ -11,7 +11,7 @@ import org.apollo.net.release.MessageEncoder;
  *
  * @author Chris Fletcher
  */
-final class SetWidgetVisibilityMessageEncoder extends MessageEncoder<SetWidgetVisibilityMessage> {
+public final class SetWidgetVisibilityMessageEncoder extends MessageEncoder<SetWidgetVisibilityMessage> {
 
 	@Override
 	public GamePacket encode(SetWidgetVisibilityMessage message) {

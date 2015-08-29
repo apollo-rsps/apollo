@@ -1,5 +1,7 @@
 package org.apollo.cache;
 
+import java.io.File;
+
 /**
  * A class which points to a file in the cache.
  *
@@ -28,6 +30,16 @@ public final class FileDescriptor {
 		this.file = file;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof FileDescriptor) {
+			FileDescriptor other = (FileDescriptor) obj;
+			return type == other.type && file == other.file;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Gets the file id.
 	 *
@@ -44,6 +56,11 @@ public final class FileDescriptor {
 	 */
 	public int getType() {
 		return type;
+	}
+
+	@Override
+	public int hashCode() {
+		return file * FileSystemConstants.ARCHIVE_COUNT + type;
 	}
 
 }

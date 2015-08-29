@@ -36,7 +36,7 @@ public final class ItemDefinitionDecoder {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public ItemDefinition[] decode() throws IOException {
-		Archive config = Archive.decode(fs.getFile(0, 2));
+		Archive config = fs.getArchive(0, 2);
 		ByteBuffer data = config.getEntry("obj.dat").getBuffer();
 		ByteBuffer idx = config.getEntry("obj.idx").getBuffer();
 
@@ -63,7 +63,7 @@ public final class ItemDefinitionDecoder {
 	 * @param buffer The buffer.
 	 * @return The {@link ItemDefinition}.
 	 */
-	private static ItemDefinition decode(int id, ByteBuffer buffer) {
+	private ItemDefinition decode(int id, ByteBuffer buffer) {
 		ItemDefinition definition = new ItemDefinition(id);
 		while (true) {
 			int opcode = buffer.get() & 0xFF;

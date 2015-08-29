@@ -14,8 +14,8 @@ import com.google.common.base.Preconditions;
  * An type that is contained in the snapshot of a {@link Region}, which consists of an {@link Entity} being added,
  * removed, or moved.
  *
- * @author Major
  * @param <E> The type of {@link Entity} in this type.
+ * @author Major
  */
 public abstract class UpdateOperation<E extends Entity> {
 
@@ -45,6 +45,24 @@ public abstract class UpdateOperation<E extends Entity> {
 		this.region = region;
 		this.type = type;
 		this.entity = entity;
+	}
+
+	/**
+	 * Gets a {@link RegionUpdateMessage} that would counteract the effect of this UpdateOperation.
+	 *
+	 * @return The RegionUpdateMessage.
+	 */
+	public final RegionUpdateMessage inverse() {
+		int offset = getPositionOffset(entity.getPosition());
+
+		switch (type) {
+			case ADD:
+				return remove(offset);
+			case REMOVE:
+				return add(offset);
+			default:
+				throw new IllegalStateException("Unsupported EntityUpdateType " + type + ".");
+		}
 	}
 
 	/**

@@ -16,27 +16,27 @@ class FishingAction < DistancedAction
     @tool = spot.tools[option - 1]
 
     @options = (option == 1) ? spot.first_fish : spot.second_fish
-    @minimum_level = @options.map { |fish| fish.level }.min
+    @minimum_level = @options.map(&:level).min
   end
 
   # Returns whether or not a catch is successful.
   def successful_catch(level, requirement)
-    return [level - requirement + 5, 30].min > rand(40)
+    [level - requirement + 5, 30].min > rand(40)
   end
 
   # Starts the fishing process.
-  def start_fishing()
+  def start_fishing
     @started = true
     mob.send_message(tool.message, true)
   end
 
   # Executes the action.
-  def executeAction()
+  def executeAction
     skills = mob.skill_set
     fishing_level = skills.get_skill(Skill::FISHING).current_level
     mob.turn_to(position)
-    
-    if (@minimum_level > fishing_level)
+
+    if @minimum_level > fishing_level
       mob.send_message("You need a fishing level of #{@minimum_level} to fish at this spot.")
       stop
       return
@@ -62,12 +62,10 @@ class FishingAction < DistancedAction
       return
     end
 
-    unless @started
-      start_fishing
-    else
+    if @started
       options = @options.reject { |fish| fish.level > fishing_level }
       # Player may level up mid-action so reject here, not at initialisation.
-      fish = options.sample # TODO it's a ~70/30 chance, not 50/50
+      fish = options.sample # TODO: it's a ~70/30 chance, not 50/50
 
       if successful_catch(fishing_level, fish.level)
         inventory.remove(bait) unless bait.nil?
@@ -77,12 +75,14 @@ class FishingAction < DistancedAction
         mob.send_message("You catch #{name.end_with?('s') ? 'some' : 'a'} #{name.downcase}.", true)
         skills.add_experience(Skill::FISHING, fish.experience)
 
-        if (find_bait == -1)
+        if find_bait == -1
           mob.send_message("You need more #{name_of(:item, bait).downcase}s to fish at this spot.")
           stop
           return
         end
       end
+    else
+      start_fishing
     end
 
     mob.play_animation(@tool.animation)
@@ -90,14 +90,13 @@ class FishingAction < DistancedAction
 
   # Finds the id of the first piece of bait in the player's inventory, or nil if no bait is
   # required, or -1 if the player's inventory does not contain any valid bait.
-  def find_bait()
+  def find_bait
     baits = @tool.bait
-    if baits.empty? then nil else baits.find(-1) { |bait| mob.inventory.contains(bait) } end
+    baits.empty? ? nil : baits.find(-1) { |bait| mob.inventory.contains(bait) }
   end
 
-
   # Stops this action.
-  def stop()
+  def stop
     super
     mob.stop_animation
   end

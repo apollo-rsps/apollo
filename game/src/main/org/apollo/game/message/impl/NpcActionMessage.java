@@ -9,7 +9,7 @@ import org.apollo.net.message.Message;
  *
  * @author Major
  */
-public abstract class NpcActionMessage extends Message {
+public final class NpcActionMessage extends Message {
 
 	/**
 	 * The option number.

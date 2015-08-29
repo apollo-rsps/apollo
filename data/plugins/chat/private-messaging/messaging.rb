@@ -6,14 +6,18 @@ java_import 'org.apollo.game.model.entity.setting.PrivacyState'
 
 on :message, :private_chat do |player, message|
   friend = $world.get_player(message.username)
-  friend.send(ForwardPrivateChatMessage.new(player.username, player.privilege_level, message.compressed_chat)) if interaction_permitted(player, friend)
+
+  if interaction_permitted(player, friend)
+    chat = message.compressed_chat
+    friend.send(ForwardPrivateChatMessage.new(player.username, player.privilege_level, chat))
+  end
 end
 
 # Checks if the sender is permitted to interact with the friend they have added:
 def interaction_permitted(sender, friend)
-  if friend.nil? || friend.has_ignored(sender.username)
-    return false
-  end
-  
-  return friend.friends_with(sender.username) ? (friend.friend_privacy != PrivacyState::OFF) : (friend.friend_privacy == PrivacyState::ON)
+  username = sender.username
+  return false if friend.nil? || friend.has_ignored(username)
+
+  privacy = friend.friend_privacy
+  friend.friends_with(username) ? (privacy != PrivacyState::OFF) : (privacy == PrivacyState::ON)
 end

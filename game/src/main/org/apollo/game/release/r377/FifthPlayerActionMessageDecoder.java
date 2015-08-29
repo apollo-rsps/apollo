@@ -1,6 +1,6 @@
 package org.apollo.game.release.r377;
 
-import org.apollo.game.message.impl.FifthPlayerActionMessage;
+import org.apollo.game.message.impl.PlayerActionMessage;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
@@ -8,17 +8,17 @@ import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;
 
 /**
- * A {@link MessageDecoder} for the {@link FifthPlayerActionMessage}.
+ * A {@link MessageDecoder} for the fifth {@link PlayerActionMessage}.
  *
  * @author Major
  */
-public final class FifthPlayerActionMessageDecoder extends MessageDecoder<FifthPlayerActionMessage> {
+public final class FifthPlayerActionMessageDecoder extends MessageDecoder<PlayerActionMessage> {
 
 	@Override
-	public FifthPlayerActionMessage decode(GamePacket packet) {
+	public PlayerActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 		int index = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
-		return new FifthPlayerActionMessage(index);
+		return new PlayerActionMessage(5, index);
 	}
 
 }

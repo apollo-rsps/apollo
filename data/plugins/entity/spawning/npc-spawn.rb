@@ -10,22 +10,29 @@ java_import 'org.apollo.game.model.entity.Npc'
 
 # Information about npc spawning
 #
-# Npcs are passed to spawn npc as a hash. Every key and every non-integer value must be a Symbol. Every hash must implement the following:
-#   :name - the name of the npc. If this npc shares its name with another, append the specific id after the name (e.g. :woman_4)
+# Npcs are passed to spawn npc as a hash. Every key and every non-integer value must be a Symbol.
+# Every hash must implement the following:
+#   :name - the name of the npc. If this npc shares its name with another, append the specific id
+#           after the name (e.g. :woman_4)
 #   :x - the x coordinate where the npc will spawn.
 #   :y - the y coordinate where the npc will spawn.
 # Optional arguments are as follows:
-#   :face - the direction the npc should face when it spawns. Supported options are :north, :north_east, :east, :south_east, :south, :south_west, :west, and :north_west
-#   :bounds - the rectangular bound that the npc can wander about in. Order is [bottom-left x-coordinate, bottom-left y-coordinate, top-right x-coordinate, top-right y-coordinate]
-#   :delta_bounds - the rectangular bound that the npc can wander about in, as a difference from the spawn point. Order is [x-delta, y-delta]. Should not be used with :bounds.
+#   :face - the direction the npc should face when it spawns. Supported options are :north,
+#           :north_east, :east, :south_east, :south, :south_west, :west, and :north_west
+#   :bounds - the rectangular bound that the npc can wander about in. Order is
+#             [bottom-left x-coordinate, bottom-left y-coordinate, top-right x-coordinate,
+#             top-right y-coordinate]
+#   :delta_bounds - the rectangular bound that the npc can wander about in, as a difference from
+#                   the spawn point. Order is [x-delta, y-delta]. Should not be used with :bounds.
 #   :spawn_animation - the animation that will be played when the npc spawns.
 #   :spawn_graphic - the graphic that will be played when the npc spawns.
 
-
-
 # Spawns an npc with the properties specified in the hash.
 def spawn_npc(hash)
-  raise 'A name (or id), x coordinate, and y coordinate must be specified to spawn an npc.' unless (hash.has_key?(:name) || hash.has_key?(:id)) && hash.has_keys?(:x, :y)
+  unless (hash.key?(:name) || hash.key?(:id)) && hash.has_keys?(:x, :y)
+    fail 'A name (or id), x coordinate, and y coordinate must be specified to spawn an npc.'
+  end
+
   npc = get_npc(hash)
   spawn(npc, hash)
   npc
@@ -46,8 +53,8 @@ def get_npc(hash)
   id = lookup_npc(hash.delete(:name))
 
   z = hash.delete(:z)
-  position = Position.new(hash.delete(:x), hash.delete(:y), z == nil ? 0 : z)
-  return Npc.new($world, id, position)
+  position = Position.new(hash.delete(:x), hash.delete(:y), z.nil? ? 0 : z)
+  Npc.new($world, id, position)
 end
 
 # Applies a decoded hash (one aquired using parse_hash) to the specified npc.
@@ -58,7 +65,7 @@ def apply_decoded_hash(npc, hash)
       when :boundary        then npc.boundaries = value
       when :spawn_animation then npc.play_animation(Animation.new(value))
       when :spawn_graphic   then npc.play_graphic(Graphic.new(value))
-      else raise "Unrecognised key #{key} - value #{value}."
+      else fail "Unrecognised key #{key} - value #{value}."
     end
   end
 end
@@ -72,27 +79,27 @@ def decode_hash(position, hash)
       when :face
         decoded[:face] = direction_to_position(value, position)
       when :delta_bounds
-        raise ':delta_bounds must have two values.' unless value.length == 2
+        fail ':delta_bounds must have two values.' unless value.length == 2
         dx, dy, x, y, z = value[0], value[1], position.x, position.y, position.height
-        raise 'Delta values cannot be less than 0.' if (dx < 0 || dy < 0)
+        fail 'Delta values cannot be less than 0.' if dx < 0 || dy < 0
 
-        decoded[:boundary] = [ Position.new(x - dx, y - dy, z), Position.new(x + dx, y + dy, z) ]
+        decoded[:boundary] = [Position.new(x - dx, y - dy, z), Position.new(x + dx, y + dy, z)]
       when :bounds
-        raise ':bounds must have four values.' unless value.length == 4
+        fail ':bounds must have four values.' unless value.length == 4
         min_x, min_y, max_x, max_y = value[0], value[1], value[2], value[3]
 
-        decoded[:boundary] = [ Position.new(min_x, min_y), Position.new(max_x, max_y) ]
+        decoded[:boundary] = [Position.new(min_x, min_y), Position.new(max_x, max_y)]
       when :spawn_animation then decoded[:spawn_animation] = Animation.new(value)
-      when :spawn_graphic   then decoded[:spawn_graphic  ] = Graphic.new(value)
-      else raise "Unrecognised key #{key} - value #{value}."
+      when :spawn_graphic then decoded[:spawn_graphic] = Graphic.new(value)
+      else fail "Unrecognised key #{key} - value #{value}."
     end
   end
 
-  return decoded
+  decoded
 end
 
-
-# Returns a position that an entity at the specified position should be facing towards if they are looking in the specified direction.
+# Returns a position that an entity at the specified position should be facing towards if they are
+# looking in the specified direction.
 def direction_to_position(direction, position)
   x, y, z = position.x, position.y, position.height
 
@@ -121,13 +128,14 @@ class TemporaryNpcAction < Action
   end
 
   def execute
-    if executions == 0
+    if @executions == 0
       spawn(mob, @hash)
       execute_spawn_action
     else
       execute_action
     end
-    executions += 1
+
+    @executions += 1
   end
 
   def execute_action
@@ -168,17 +176,19 @@ RANDOM_EVENTS = []
 # Spawns a random event for the specified player.
 def send_random_event(player)
   position = player.position
-  npc_position = Position.new(position.x + 1, position.y, position.height) # TODO Find an unoccupied tile instead of the assumption that (x + 1) is traversable!!
+  npc_position = Position.new(position.x + 1, position.y, position.height)
+  # TODO: Find an unoccupied tile instead of the assumption that (x + 1) is traversable!!
 
   spawn_random_event(npc_position, false)
 end
 
 # Spawns a random event in the specified position.
 # If 'combat' is false, only non-combat events will be spawned.
-def spawn_random_event(position, combat)
+def spawn_random_event(_position, _combat)
   event = RANDOM_EVENTS[rand(RANDOM_EVENTS.size)]
   attempts = 0
-  while (event.combative && attempts < 5)
+
+  while event.combative && attempts < 5
     event = RANDOM_EVENTS[rand(RANDOM_EVENTS.size)]
     attempts += 1
   end

@@ -7,10 +7,10 @@ FISHING_TOOLS = {}
 
 # A fishing tool.
 class Tool
-  attr_reader :id, :bait, :animation, :message, :name
+  attr_reader :animation, :bait, :id, :message, :name
 
   # Creates the tool.
-  def initialize(id, bait=[], animation, message)
+  def initialize(id, animation, message, bait)
     @id = id
     @bait = bait
     @animation = Animation.new(animation)
@@ -21,27 +21,40 @@ class Tool
 
 end
 
-
 private
 
 # Appends a tool with the specified name to the hash.
-def append_tool(name, tool)
-  FISHING_TOOLS[name] = tool
+def tool(name, hash)
+  unless hash.has_keys?(:id, :animation, :message)
+    fail 'Hash must contain an id, animation, and message.'
+  end
+
+  bait = hash[:bait] || []
+  FISHING_TOOLS[name] = Tool.new(hash[:id], hash[:animation], hash[:message], bait)
 end
 
-HARPOON_ANIMATION_ID = 618
-CAGE_ANIMATION_ID = 619
-NET_ANIMATION_ID = 620
-ROD_ANIMATION_ID = 622
+# The harpoon fishing animation id.
+HARPOON_ANIMATION = 618
 
-# TODO The other feathers that can be used
-FISHING_ROD_BAIT = [ 313 ] 
-FLY_FISHING_ROD_BAIT = [ 314 ] 
+# The cage fishing animation id.
+CAGE_ANIMATION = 619
 
-append_tool(:lobster_cage, Tool.new(301, CAGE_ANIMATION_ID,    'You attempt to catch a lobster...'))
-append_tool(:small_net,    Tool.new(303, NET_ANIMATION_ID,     'You cast out your net...'))
-append_tool(:big_net,      Tool.new(305, NET_ANIMATION_ID,     'You cast out your net...'))
-append_tool(:harpoon,      Tool.new(311, HARPOON_ANIMATION_ID, 'You start harpooning fish...'))
+# The net fishing animation id.
+NET_ANIMATION = 620
 
-append_tool(:fishing_rod,     Tool.new(307, FISHING_ROD_BAIT,     ROD_ANIMATION_ID, 'You attempt to catch a fish...'))
-append_tool(:fly_fishing_rod, Tool.new(309, FLY_FISHING_ROD_BAIT, ROD_ANIMATION_ID, 'You attempt to catch a fish...'))
+# The rod fishing animation id.
+ROD_ANIMATION = 622
+
+# TODO: The other feathers that can be used
+FISHING_ROD_BAIT = [313] 
+FLY_FISHING_ROD_BAIT = [314] 
+
+tool :lobster_cage, id: 301, animation: CAGE_ANIMATION, message: 'You attempt to catch a lobster...'
+tool :small_net, id: 303, animation: NET_ANIMATION, message: 'You cast out your net...'
+tool :big_net, id: 305, animation: NET_ANIMATION, message: 'You cast out your net...'
+tool :harpoon, id: 311, animation: HARPOON_ANIMATION, message: 'You start harpooning fish...'
+
+tool :fishing_rod, id: 307, animation: ROD_ANIMATION, message: 'You attempt to catch a fish...',
+     bait: FISHING_ROD_BAIT
+tool :fly_fishing_rod, id: 309, animation: ROD_ANIMATION, message: 'You attempt to catch a fish...',
+     bait: FLY_FISHING_ROD_BAIT

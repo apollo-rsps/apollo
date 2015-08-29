@@ -13,7 +13,7 @@ import org.apollo.net.release.MessageEncoder;
  *
  * @author Chris Fletcher
  */
-final class SetUpdatedRegionMessageEncoder extends MessageEncoder<SetUpdatedRegionMessage> {
+public final class SetUpdatedRegionMessageEncoder extends MessageEncoder<SetUpdatedRegionMessage> {
 
 	@Override
 	public GamePacket encode(SetUpdatedRegionMessage message) {

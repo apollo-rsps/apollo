@@ -1,0 +1,9 @@
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Performance/ParallelAssignment:
+  Enabled: false

@@ -37,7 +37,7 @@ public final class NpcDefinitionDecoder {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public NpcDefinition[] decode() throws IOException {
-		Archive config = Archive.decode(fs.getFile(0, 2));
+		Archive config = fs.getArchive(0, 2);
 		ByteBuffer data = config.getEntry("npc.dat").getBuffer();
 		ByteBuffer idx = config.getEntry("npc.idx").getBuffer();
 
@@ -64,7 +64,7 @@ public final class NpcDefinitionDecoder {
 	 * @param buffer The buffer.
 	 * @return The {@link NpcDefinition}.
 	 */
-	private static NpcDefinition decode(int id, ByteBuffer buffer) {
+	private NpcDefinition decode(int id, ByteBuffer buffer) {
 		NpcDefinition definition = new NpcDefinition(id);
 
 		while (true) {
@@ -139,7 +139,7 @@ public final class NpcDefinitionDecoder {
 	 * @param value The value.
 	 * @return -1 if {@code value} is 65,535, otherwise {@code value}.
 	 */
-	private static int wrap(int value) {
+	private int wrap(int value) {
 		return value == 65_535 ? -1 : value;
 	}
 

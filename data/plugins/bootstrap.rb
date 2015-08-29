@@ -1,7 +1,5 @@
-# A script to 'bootstrap' all of the other plugins, wrapping Apollo's verbose
-# Java-style API in a Ruby-style API.
-#
-# Written by Graham.
+# A script bootstrapper for the rest of the plugins, which wraps Apollo's
+# verbose Java-style API in a Ruby-style API.
 
 # ********************************** WARNING **********************************
 # * If you do not really understand what this is for, do not edit it without  *
@@ -34,7 +32,7 @@ RIGHTS_STANDARD = PrivilegeLevel::STANDARD
 class String
 
   # Converts a ruby snake_case string to camel-case.
-  def camelize()
+  def camelize
     gsub(/(?:^|_)(.)/) { $1.upcase }
   end
 
@@ -53,7 +51,7 @@ class ProcCommandListener < CommandListener
   def execute(player, command)
     @block.call(player, command)
   end
-  
+
 end
 
 # A LogoutListener that executes a Proc object with the player argument.
@@ -68,8 +66,8 @@ class ProcEventListener
 
   # Executes the block handling the Event.
   def handle(event)
-    args = [ event ]
-    args << event.player if event.kind_of?(PlayerEvent)
+    args = [event]
+    args << event.player if event.is_a?(PlayerEvent)
     @block.call(*args)
   end
 
@@ -87,7 +85,7 @@ class ProcMessageHandler < MessageHandler
 
   # Handles the message.
   def handle(player, message)
-    @block.call(player, message) if (@option == 0 || @option == message.option)
+    @block.call(player, message) if @option == 0 || @option == message.option
   end
 
 end
@@ -119,14 +117,15 @@ end
 # behaviour is undefined (and most likely it'll be bad).
 def schedule(*args, &block)
   if block_given?
-    raise 'Invalid combination of arguments.' unless (1..2).include?(args.length)
+    fail 'Invalid combination of arguments.' unless (1..2).include?(args.length)
     delay = args[0]
+
     immediate = args.length == 2 ? args[1] : false
     $world.schedule(ProcScheduledTask.new(delay, immediate, block))
   elsif args.length == 1
     $world.schedule(args[0])
   else
-    raise 'Invalid combination of arguments.'
+    fail 'Invalid combination of arguments.'
   end
 end
 
@@ -153,15 +152,15 @@ def on(type, *args, &block)
     when :message then on_message(args, block)
     when :button  then on_button(args, block)
     else
-        class_name = type.to_s.camelize.concat('Event')
-        type = Java::JavaClass.for_name("org.apollo.game.model.event.impl.#{class_name}")
-        $world.listen_for(type, ProcEventListener.new(block))
+      class_name = type.to_s.camelize.concat('Event')
+      type = Java::JavaClass.for_name("org.apollo.game.model.event.impl.#{class_name}")
+      $world.listen_for(type, ProcEventListener.new(block))
   end
 end
 
 # Defines an action to be taken upon a button press.
 def on_button(args, proc)
-  raise 'Button must have one argument.' unless args.length == 1
+  fail 'Button must have one argument.' unless args.length == 1
 
   id = args[0].to_i
 
@@ -171,24 +170,25 @@ def on_button(args, proc)
 end
 
 # Defines an action to be taken upon a message.
-# The message can either be a symbol with the lower-case underscored class name, or the class itself.
+# The message can either be a symbol with the lowercase underscored class name, or the class itself.
 def on_message(args, proc)
-  raise 'Message must have one or two arguments.' unless (1..2).include?(args.length)
-  numbers = [ 'first', 'second', 'third', 'fourth', 'fifth' ]
-  message = args[0]; option = 0
+  fail 'Message must have one or two arguments.' unless (1..2).include?(args.length)
 
-  numbers.each_index do |index|
+  numbers = %w(first second third fourth fifth)
+  message = args[0].to_s
+  option = 0
+
+  (0...numbers.length).each do |index|
     number = numbers[index]
-  
-    if message.to_s.start_with?(number)
+
+    if message.start_with?(number)
       option = index + 1
-      message = message[number.length + 1, message.length].to_sym
+      message = message[number.length + 1, message.length]
       break
     end
   end
 
-  
-  class_name = message.to_s.camelize.concat('Message')
+  class_name = message.camelize.concat('Message')
   message = Java::JavaClass.for_name("org.apollo.game.message.impl.#{class_name}")
 
   $ctx.add_message_handler(message, ProcMessageHandler.new(proc, option))
@@ -196,7 +196,7 @@ end
 
 # Defines an action to be taken upon a command.
 def on_command(args, proc)
-  raise 'Command message must have one or two arguments.' unless (1..2).include?(args.length)
+  fail 'Command message must have one or two arguments.' unless (1..2).include?(args.length)
 
   rights = args.length == 2 ? args[1] : RIGHTS_STANDARD
   $world.command_dispatcher.register(args[0].to_s, ProcCommandListener.new(rights, proc))

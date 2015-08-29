@@ -13,7 +13,7 @@ import org.apollo.net.release.MessageEncoder;
  *
  * @author Chris Fletcher
  */
-final class SetWidgetPlayerModelMessageEncoder extends MessageEncoder<SetWidgetPlayerModelMessage> {
+public final class SetWidgetPlayerModelMessageEncoder extends MessageEncoder<SetWidgetPlayerModelMessage> {
 
 	@Override
 	public GamePacket encode(SetWidgetPlayerModelMessage message) {

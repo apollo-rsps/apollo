@@ -4,13 +4,18 @@ import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.zip.CRC32;
 
 import com.google.common.base.Preconditions;
+import org.apollo.cache.archive.Archive;
 
 /**
  * A file system based on top of the operating system's file system. It consists of a data file and index files. Index
@@ -19,6 +24,21 @@ import com.google.common.base.Preconditions;
  * @author Graham
  */
 public final class IndexedFileSystem implements Closeable {
+
+	/**
+	 * The Map that caches already-decoded Archives.
+	 */
+	private final Map<FileDescriptor, Archive> cache = new HashMap<>(FileSystemConstants.ARCHIVE_COUNT);
+
+	/**
+	 * The index files.
+	 */
+	private final RandomAccessFile[] indices = new RandomAccessFile[256];
+
+	/**
+	 * Read only flag.
+	 */
+	private final boolean readOnly;
 
 	/**
 	 * The cached CRC table.
@@ -34,16 +54,6 @@ public final class IndexedFileSystem implements Closeable {
 	 * The data file.
 	 */
 	private RandomAccessFile data;
-
-	/**
-	 * The index files.
-	 */
-	private final RandomAccessFile[] indices = new RandomAccessFile[256];
-
-	/**
-	 * Read only flag.
-	 */
-	private final boolean readOnly;
 
 	/**
 	 * Creates the file system with the specified base directory.
@@ -75,30 +85,26 @@ public final class IndexedFileSystem implements Closeable {
 	}
 
 	/**
-	 * Automatically detect the layout of the specified directory.
+	 * Gets the {@link Archive} pointed to by the specified {@link FileDescriptor}.
 	 *
-	 * @param base The base directory.
-	 * @throws FileNotFoundException If the data files could not be found.
+	 * @param type The file type.
+	 * @param file The file id.
+	 * @return The Archive.
+	 * @throws IOException If there is an error decoding the Archive.
 	 */
-	private void detectLayout(Path base) throws FileNotFoundException {
-		int indexCount = 0;
-		for (int index = 0; index < indices.length; index++) {
-			Path idx = base.resolve("main_file_cache.idx" + index);
-			if (Files.exists(idx) && !Files.isDirectory(idx)) {
-				indexCount++;
-				indices[index] = new RandomAccessFile(idx.toFile(), readOnly ? "r" : "rw");
+	public Archive getArchive(int type, int file) throws IOException {
+		FileDescriptor descriptor = new FileDescriptor(type, file);
+		Archive cached = cache.get(descriptor);
+		
+		if (cached == null) {
+			cached = Archive.decode(getFile(descriptor));
+
+			synchronized (this) {
+				cache.put(descriptor, cached);
 			}
 		}
-		if (indexCount <= 0) {
-			throw new FileNotFoundException("No index file(s) present.");
-		}
 
-		Path resources = base.resolve("main_file_cache.dat");
-		if (Files.exists(resources) && !Files.isDirectory(resources)) {
-			data = new RandomAccessFile(resources.toFile(), readOnly ? "r" : "rw");
-		} else {
-			throw new FileNotFoundException("No data file present.");
-		}
+		return cached;
 	}
 
 	/**
@@ -146,6 +152,7 @@ public final class IndexedFileSystem implements Closeable {
 				return crcTable.duplicate();
 			}
 		}
+
 		throw new IllegalStateException("Cannot get CRC table from a writable file system.");
 	}
 
@@ -245,13 +252,49 @@ public final class IndexedFileSystem implements Closeable {
 	}
 
 	/**
+	 * Checks if this {@link IndexedFileSystem} is read only.
+	 *
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	/**
+	 * Automatically detect the layout of the specified directory.
+	 *
+	 * @param base The base directory.
+	 * @throws FileNotFoundException If the data files could not be found.
+	 */
+	private void detectLayout(Path base) throws FileNotFoundException {
+		int indexCount = 0;
+		for (int index = 0; index < indices.length; index++) {
+			Path idx = base.resolve("main_file_cache.idx" + index);
+			if (Files.exists(idx) && !Files.isDirectory(idx)) {
+				indexCount++;
+				indices[index] = new RandomAccessFile(idx.toFile(), readOnly ? "r" : "rw");
+			}
+		}
+		if (indexCount <= 0) {
+			throw new FileNotFoundException("No index file(s) present.");
+		}
+
+		Path resources = base.resolve("main_file_cache.dat");
+		if (Files.exists(resources) && !Files.isDirectory(resources)) {
+			data = new RandomAccessFile(resources.toFile(), readOnly ? "r" : "rw");
+		} else {
+			throw new FileNotFoundException("No data file present.");
+		}
+	}
+
+	/**
 	 * Gets the number of files with the specified type.
 	 *
 	 * @param type The type.
 	 * @return The number of files.
 	 * @throws IOException If there is an error getting the length of the specified index file.
 	 * @throws IndexOutOfBoundsException If {@code type} is less than 0, or greater than or equal to the amount of
-	 *             indices.
+	 * indices.
 	 */
 	private int getFileCount(int type) throws IOException {
 		Preconditions.checkElementIndex(type, indices.length, "File type out of bounds.");
@@ -269,7 +312,7 @@ public final class IndexedFileSystem implements Closeable {
 	 * @return The {@link Index}.
 	 * @throws IOException If there is an error reading from the index file.
 	 * @throws IndexOutOfBoundsException If the descriptor type is less than 0, or greater than or equal to the amount
-	 *             of indices.
+	 * of indices.
 	 */
 	private Index getIndex(FileDescriptor descriptor) throws IOException {
 		int index = descriptor.getType();
@@ -288,15 +331,6 @@ public final class IndexedFileSystem implements Closeable {
 		}
 
 		return Index.decode(buffer);
-	}
-
-	/**
-	 * Checks if this {@link IndexedFileSystem} is read only.
-	 *
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public boolean isReadOnly() {
-		return readOnly;
 	}
 
 }

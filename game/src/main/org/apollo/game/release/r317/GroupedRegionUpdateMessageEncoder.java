@@ -26,8 +26,7 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 	/**
 	 * Creates the GroupedRegionUpdateMessageEncoder.
 	 *
-	 * @param release The {@link Release} containing the {@link MessageEncoder}s for the {@link RegionUpdateMessage}
-	 *                s.
+	 * @param release The {@link Release} containing the {@link MessageEncoder}s for the {@link RegionUpdateMessage}s.
 	 */
 	public GroupedRegionUpdateMessageEncoder(Release release) {
 		this.release = release;

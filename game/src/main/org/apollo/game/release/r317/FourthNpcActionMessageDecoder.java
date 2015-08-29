@@ -1,24 +1,24 @@
 package org.apollo.game.release.r317;
 
-import org.apollo.game.message.impl.FourthNpcActionMessage;
+import org.apollo.game.message.impl.NpcActionMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;
 
 /**
- * A {@link MessageDecoder} for the {@link FourthNpcActionMessage}.
+ * A {@link MessageDecoder} for the fourth {@link NpcActionMessage}.
  *
  * @author Stuart
  * @author Major
  */
-public final class FourthNpcActionMessageDecoder extends MessageDecoder<FourthNpcActionMessage> {
+public final class FourthNpcActionMessageDecoder extends MessageDecoder<NpcActionMessage> {
 
 	@Override
-	public FourthNpcActionMessage decode(GamePacket packet) {
+	public NpcActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 		int index = (int) reader.getUnsigned(DataType.SHORT);
-		return new FourthNpcActionMessage(index);
+		return new NpcActionMessage(4, index);
 	}
 
 }

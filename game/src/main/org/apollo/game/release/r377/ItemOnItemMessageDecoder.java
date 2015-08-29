@@ -13,7 +13,7 @@ import org.apollo.net.release.MessageDecoder;
  *
  * @author Chris Fletcher
  */
-final class ItemOnItemMessageDecoder extends MessageDecoder<ItemOnItemMessage> {
+public final class ItemOnItemMessageDecoder extends MessageDecoder<ItemOnItemMessage> {
 
 	@Override
 	public ItemOnItemMessage decode(GamePacket packet) {

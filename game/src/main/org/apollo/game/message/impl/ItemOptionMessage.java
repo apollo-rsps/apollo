@@ -9,7 +9,7 @@ import java.util.OptionalInt;
  *
  * @author Chris Fletcher
  */
-public abstract class ItemOptionMessage extends InventoryItemMessage {
+public final class ItemOptionMessage extends InventoryItemMessage {
 
 	/**
 	 * Creates the ItemOptionMessage.

@@ -73,7 +73,7 @@ public final class LoginService extends Service {
 	public void submitLoadRequest(LoginSession session, LoginRequest request) throws IOException {
 		int response = LoginConstants.STATUS_OK;
 
-		if (requiresUpdate(session, request)) {
+		if (requiresUpdate(request)) {
 			response = LoginConstants.STATUS_GAME_UPDATED;
 		}
 
@@ -125,12 +125,11 @@ public final class LoginService extends Service {
 	/**
 	 * Checks if an update is required whenever a {@link Player} submits a login request.
 	 *
-	 * @param session The login session.
 	 * @param request The login request.
 	 * @return {@code true} if an update is required, otherwise return {@code false}.
 	 * @throws IOException If some I/O exception occurs.
 	 */
-	private boolean requiresUpdate(LoginSession session, LoginRequest request) throws IOException {
+	private boolean requiresUpdate(LoginRequest request) throws IOException {
 		Release release = context.getRelease();
 		if (release.getReleaseNumber() != request.getReleaseNumber()) {
 			return true;
@@ -139,11 +138,7 @@ public final class LoginService extends Service {
 		int[] clientCrcs = request.getArchiveCrcs();
 		int[] serverCrcs = context.getFileSystem().getCrcs();
 
-		if (Arrays.equals(clientCrcs, serverCrcs)) {
-			return false;
-		}
-
-		return true;
+		return !Arrays.equals(clientCrcs, serverCrcs);
 	}
 
 }

@@ -3,10 +3,11 @@ require 'java'
 # A map of item ids to consumables.
 CONSUMABLES = {}
 
+# The id of the food consumption animation.
 CONSUME_ANIMATION_ID = 829
 
 # An item that can be consumed to produce a skill effect.
-class Consumable    
+class Consumable
   attr_reader :name, :id, :sound
 
   def initialize(name, id, sound)
@@ -15,8 +16,8 @@ class Consumable
     @sound = sound
   end
 
-  def consume(player)
-  # Override to provide specific functionality.
+  def consume(_player)
+    # Override to provide specific functionality.
   end
 
 end
@@ -26,6 +27,7 @@ def append_consumable(consumable)
   CONSUMABLES[consumable.id] = consumable
 end
 
+# An Action used for food consumption.
 class ConsumeAction < Action
   attr_reader :consumable
 
@@ -36,10 +38,11 @@ class ConsumeAction < Action
     @executions = 0
   end
 
-  def execute()
+  def execute
     if @executions == 0
       mob.inventory.reset(@slot)
       @consumable.consume(mob)
+
       mob.play_animation(Animation.new(CONSUME_ANIMATION_ID))
       @executions += 1
     else
@@ -48,9 +51,9 @@ class ConsumeAction < Action
   end
 
   def equals(other)
-    return (mob == other.mob && @consumable.id == other.consumable.id)
+    mob == other.mob && @consumable.id == other.consumable.id
   end
-  
+
 end
 
 # Intercepts the first item option message and consumes the consumable, if necessary.

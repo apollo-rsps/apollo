@@ -15,20 +15,18 @@ module DoorUtil
   # Translates a door's position in the direction of its orientation.
   def self.translate_door_position(door)
     position = door.position
-    orientation = door.orientation
 
-    case orientation
+    case door.orientation
       when Orientation::WEST
-        return Position.new(position.x - 1, position.y, position.height)
+        Position.new(position.x - 1, position.y, position.height)
       when Orientation::EAST
-        return Position.new(position.x + 1, position.y, position.height)
+        Position.new(position.x + 1, position.y, position.height)
       when Orientation::NORTH
-        return Position.new(position.x, position.y + 1, position.height)
+        Position.new(position.x, position.y + 1, position.height)
       when Orientation::SOUTH
-        return Position.new(position.x, position.y - 1, position.height)
+        Position.new(position.x, position.y - 1, position.height)
+      else fail "Unsupported orientation #{door.orientation}."
     end
-
-    raise 'Invalid orientation for door!'
   end
 
   # Translates the orientation of a door to a toggled position.
@@ -42,13 +40,12 @@ module DoorUtil
       return ORIENTATIONS[:left_side_hinge][orientation]
     end
 
-    raise 'Given object was not registered as a door.'
+    fail 'Given object was not registered as a door.'
   end
 
   # Toggles the given door.
   def self.toggle(door)
-    position = door.position
-    region = $world.region_repository.from_position(position)
+    region = $world.region_repository.from_position(door.position)
     region.remove_entity(door)
 
     if TOGGLED_DOORS.include?(door)
@@ -57,11 +54,13 @@ module DoorUtil
       original_region = $world.region_repository.from_position(original_door.position)
       original_region.add_entity(original_door)
     else
-      toggled_position = translate_door_position(door)
-      toggled_orientation = translate_door_orientation(door)
-      toggled_door = DynamicGameObject.create_public($world, door.id, toggled_position, door.type, toggled_orientation)
+      position = translate_door_position(door)
+      orientation = translate_door_orientation(door)
+      type = door.type
 
-      toggled_region = $world.region_repository.from_position(toggled_position)
+      toggled_door = DynamicGameObject.create_public($world, door.id, position, type, orientation)
+
+      toggled_region = $world.region_repository.from_position(position)
       toggled_region.add_entity(toggled_door)
 
       TOGGLED_DOORS[toggled_door] = door
@@ -70,13 +69,14 @@ module DoorUtil
 
   # Gets the door object at the given position, if it exists.
   def self.get_door_object(position, object_id)
-    game_objects = $world.region_repository.from_position(position).get_entities(position, EntityType::DYNAMIC_OBJECT, EntityType::STATIC_OBJECT)
-    game_objects.each { |game_object| return game_object if game_object.id == object_id }
-    return nil
+    region = $world.region_repository.from_position(position)
+    objects = region.get_entities(position, EntityType::DYNAMIC_OBJECT, EntityType::STATIC_OBJECT)
+    objects.each { |game_object| return game_object if game_object.id == object_id }
+    nil
   end
 
   # Checks if the given game object id is a door.
-  def self.is_door?(object_id)
+  def self.door?(object_id)
     RIGHT_HINGE_DOORS.include?(object_id) || LEFT_HINGE_DOORS.include?(object_id)
   end
 

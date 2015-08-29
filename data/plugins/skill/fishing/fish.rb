@@ -11,7 +11,6 @@ class Fish
     @id = id
     @level = level
     @experience = experience
-
     @name = name_of(:item, id)
   end
 
@@ -19,7 +18,9 @@ end
 
 # Appends a Fish to the hash.
 def append_fish(name, hash)
-  fail 'Hash must contain an id, level, and experience.' unless hash.has_keys?(:id, :level, :experience)
+  unless hash.has_keys?(:id, :level, :experience)
+    fail 'Hash must contain an id, level, and experience.'
+  end
 
   CATCHABLE_FISH[name] = Fish.new(hash[:id], hash[:level], hash[:experience])
 end

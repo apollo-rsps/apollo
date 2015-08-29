@@ -10,13 +10,13 @@ class Herb < Ingredient
 
   def initialize(item_id, unidentified, level, experience)
     super item_id
-    
+
     @unidentified = unidentified
     @level = level
     @experience = experience
   end
-  
-  def invoke(player, id, slot)
+
+  def invoke(player, _id, slot)
     item = player.inventory.get(slot)
     player.start_action(HerbIdentificationAction.new(player, self, slot, item))
   end
@@ -25,51 +25,54 @@ end
 # An action that makes a player identify a herb.
 class HerbIdentificationAction < Action
   attr_reader :herb, :slot, :item, :pulses
-  
+
   def initialize(player, herb, slot, item)
     super(0, true, player)
-    
+
     @herb = herb
     @slot = slot
     @item = item
     @pulses = 0
   end
-  
+
   def execute
     if @pulses == 0
-      unless check_skill(mob, @herb.level, "identify this herb")
+      unless check_skill(mob, @herb.level, 'identify this herb')
         stop
         return
       end
     end
+
     execute_action
     @pulses += 1
   end
-  
+
   def execute_action
     player = mob
     inventory = player.inventory
 
     if inventory.remove_slot(@slot, 1) == 1
       identified = @herb.item
-        
+
       inventory.add(identified)
       player.skill_set.add_experience(HERBLORE_ID, @herb.experience)
       player.send_message("You identify the herb as a #{identified.definition.name}.", true)
+      # TODO: 'as an' in some cases
     end
+
     stop
   end
-  
+
   def equals(other)
-    return (get_class == other.get_class and slot == other.slot and herb == other.herb)
+    get_class == other.get_class && slot == other.slot && herb == other.herb
   end
 end
 
 # Appends a herb to the InventoryItemMessage interception.
 def append_herb(item_id, unidentified, level, experience)
   herb = Herb.new(item_id, unidentified, level, experience)
-  append_herblore_item(herb, unidentified) 
-  return herb
+  append_herblore_item(herb, unidentified)
+  herb
 end
 
 # Herbs
