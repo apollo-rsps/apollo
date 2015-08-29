@@ -94,7 +94,7 @@ public final class GameService extends Service {
 		Region region = world.getRegionRepository().fromPosition(player.getPosition());
 		region.addEntity(player);
 
-		if (player.getSession().isReconnecting()) {
+		if (!player.getSession().isReconnecting()) {
 			player.sendInitialMessages();
 		}
 	}
