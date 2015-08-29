@@ -21,8 +21,13 @@ import org.apollo.game.sync.seg.SynchronizationSegment;
 public final class NpcSynchronizationTask extends SynchronizationTask {
 
 	/**
-	 * The maximum number of npcs to load per cycle. This prevents the update packet from becoming too large (the client
-	 * uses a 5000 byte buffer) and also stops old spec PCs from crashing when they login or teleport.
+	 * The maximum amount of local npcs.
+	 */
+	private static final int MAXIMUM_LOCAL_NPCS = 255;
+
+	/**
+	 * The maximum number of npcs to load per cycle. This prevents the update packet from becoming too large (the
+	 * client uses a 5000 byte buffer) and also stops old spec PCs from crashing when they login or teleport.
 	 */
 	private static final int NEW_NPCS_PER_CYCLE = 20;
 
@@ -42,41 +47,49 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 
 	@Override
 	public void run() {
-		List<Npc> localNpcs = player.getLocalNpcList();
+		List<Npc> locals = player.getLocalNpcList();
 		List<SynchronizationSegment> segments = new ArrayList<>();
-		int oldLocalNpcs = localNpcs.size();
+
+		int originalCount = locals.size();
 		final Position playerPosition = player.getPosition();
 
-		for (Iterator<Npc> it = localNpcs.iterator(); it.hasNext();) {
-			Npc npc = it.next();
-			if (!npc.isActive() || npc.isTeleporting() || npc.getPosition().getLongestDelta(playerPosition) > player.getViewingDistance() || !npc.getPosition().isWithinDistance(playerPosition, player.getViewingDistance())) {
-				it.remove();
+		int distance = player.getViewingDistance();
+		for (Iterator<Npc> iterator = locals.iterator(); iterator.hasNext(); ) {
+			Npc npc = iterator.next();
+			Position position = npc.getPosition();
+
+			if (!npc.isActive() || npc.isTeleporting() || position.getLongestDelta(playerPosition) > distance
+					|| !position.isWithinDistance(playerPosition, distance)) {
+				iterator.remove();
+
 				segments.add(new RemoveMobSegment());
 			} else {
 				segments.add(new MovementSegment(npc.getBlockSet(), npc.getDirections()));
 			}
 		}
 
-		int added = 0;
+		int added = 0, count = locals.size();
 
 		for (Npc npc : player.getWorld().getNpcRepository()) {
-			if (localNpcs.size() >= 255) {
+			if (count >= MAXIMUM_LOCAL_NPCS) {
 				player.flagExcessiveNpcs();
 				break;
 			} else if (added >= NEW_NPCS_PER_CYCLE) {
 				break;
 			}
 
-			Position npcPosition = npc.getPosition();
-			if (npcPosition.isWithinDistance(playerPosition, player.getViewingDistance()) && !localNpcs.contains(npc)) {
-				localNpcs.add(npc);
+			Position position = npc.getPosition();
+			if (position.isWithinDistance(playerPosition, distance) && !locals.contains(npc)) {
+				locals.add(npc);
+				count++;
 				added++;
+
 				npc.turnTo(npc.getFacingPosition());
-				segments.add(new AddNpcSegment(npc.getBlockSet(), npc.getIndex(), npcPosition, npc.getId()));
+				segments.add(new AddNpcSegment(npc.getBlockSet(), npc.getIndex(), position, npc.getId()));
 			}
 		}
 
-		player.send(new NpcSynchronizationMessage(playerPosition, segments, oldLocalNpcs));
+		player.send(new NpcSynchronizationMessage(playerPosition, segments, originalCount));
 	}
 
 }

@@ -27,20 +27,20 @@ public final class ThreadUtil {
 	private static final Logger LOGGER = Logger.getLogger(ThreadUtil.class.getSimpleName());
 
 	/**
-	 * The default {@link UncaughtExceptionHandler} which raises an error from the logger with the exception and name of
+	 * The default {@link UncaughtExceptionHandler} which raises an error from the logger with the exception and name
+	 * of
 	 * the specified thread the exception occurred in.
 	 */
-	private static final UncaughtExceptionHandler DEFAULT_EXCEPTION_HANDLER = (thread, exception) -> LOGGER.log(Level.SEVERE,
-			"Exception occured in thread " + thread.getName(), exception);
+	private static final UncaughtExceptionHandler DEFAULT_EXCEPTION_HANDLER =
+			(thread, exception) -> LOGGER.log(Level.SEVERE, "Exception in thread " + thread.getName(), exception);
 
 	/**
 	 * Builds a {@link ThreadFactory} using the specified {@code String} name-format, normal thread priority and the
 	 * default {@link UncaughtExceptionHandler}.
-	 * 
-	 * @see #DEFAULT_EXCEPTION_HANDLER
 	 *
-	 * @param name The name-format used when creating threads, may not be {@code null}.
-	 * @return A new {@link ThreadFactory} from the specified parameters, never {@code null}.
+	 * @param name The name-format used when creating threads. Must not be {@code null}.
+	 * @return The {@link ThreadFactory}. Will never be {@code null}.
+	 * @see #DEFAULT_EXCEPTION_HANDLER
 	 */
 	public static ThreadFactory create(String name) {
 		return create(name, Thread.NORM_PRIORITY, DEFAULT_EXCEPTION_HANDLER);
@@ -50,9 +50,9 @@ public final class ThreadUtil {
 	 * Builds a {@link ThreadFactory} using the specified {@code String} name-format, priority and the
 	 * {@link #DEFAULT_EXCEPTION_HANDLER}.
 	 *
-	 * @param name The name-format used when creating threads, may not be {@code null}.
+	 * @param name The name-format used when creating threads. Must not be {@code null}.
 	 * @param priority The priority used when creating threads.
-	 * @return A new {@link ThreadFactory} from the specified parameters, never {@code null}.
+	 * @return The {@link ThreadFactory}. Will never be {@code null}.
 	 */
 	public static ThreadFactory create(String name, int priority) {
 		return create(name, priority, DEFAULT_EXCEPTION_HANDLER);
@@ -65,10 +65,11 @@ public final class ThreadUtil {
 	 * @param name The name-format used when creating threads. Must not be {@code null}.
 	 * @param priority The priority used when creating threads.
 	 * @param handler The {@link UncaughtExceptionHandler} used when creating threads. Must not be {@code null}.
-	 * @return A new {@link ThreadFactory} using the specified parameters.
+	 * @return The {@link ThreadFactory}. Will never be {@code null}.
 	 */
 	public static ThreadFactory create(String name, int priority, UncaughtExceptionHandler handler) {
-		Objects.requireNonNull(priority);
+		Objects.requireNonNull(name, "ThreadFactory name must not be null.");
+		Objects.requireNonNull(handler, "UncaughtExceptionHandler must not be null.");
 
 		ThreadFactoryBuilder builder = new ThreadFactoryBuilder();
 		builder.setNameFormat(name);

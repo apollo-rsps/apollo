@@ -1,10 +1,12 @@
 package org.apollo.cache.decoder;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.archive.Archive;
+import org.apollo.cache.def.ItemDefinition;
 import org.apollo.cache.def.ObjectDefinition;
 import org.apollo.util.BufferUtil;
 
@@ -13,20 +15,46 @@ import org.apollo.util.BufferUtil;
  *
  * @author Major
  */
-public final class ObjectDefinitionDecoder {
+public final class ObjectDefinitionDecoder implements Runnable {
 
 	/**
-	 * The {@link IndexedFileSystem}.
+	 * The IndexedFileSystem.
 	 */
 	private final IndexedFileSystem fs;
 
 	/**
-	 * Creates the decoder.
+	 * Creates the ObjectDefinitionDecoder.
 	 *
 	 * @param fs The {@link IndexedFileSystem}.
 	 */
 	public ObjectDefinitionDecoder(IndexedFileSystem fs) {
 		this.fs = fs;
+	}
+
+	@Override
+	public void run() {
+		try {
+			Archive config = fs.getArchive(0, 2);
+			ByteBuffer data = config.getEntry("loc.dat").getBuffer();
+			ByteBuffer idx = config.getEntry("loc.idx").getBuffer();
+
+			int count = idx.getShort(), index = 2;
+			int[] indices = new int[count];
+			for (int i = 0; i < count; i++) {
+				indices[i] = index;
+				index += idx.getShort();
+			}
+
+			ObjectDefinition[] definitions = new ObjectDefinition[count];
+			for (int i = 0; i < count; i++) {
+				data.position(indices[i]);
+				definitions[i] = decode(i, data);
+			}
+
+			ObjectDefinition.init(definitions);
+		} catch (IOException e) {
+			throw new UncheckedIOException("Error decoding ObjectDefinitions.", e);
+		}
 	}
 
 	/**
@@ -36,7 +64,7 @@ public final class ObjectDefinitionDecoder {
 	 * @param data The {@link ByteBuffer} containing the data.
 	 * @return The object definition.
 	 */
-	public ObjectDefinition decode(int id, ByteBuffer data) {
+	private ObjectDefinition decode(int id, ByteBuffer data) {
 		ObjectDefinition definition = new ObjectDefinition(id);
 		while (true) {
 			int opcode = data.get() & 0xFF;
@@ -109,32 +137,6 @@ public final class ObjectDefinitionDecoder {
 				continue;
 			}
 		}
-	}
-
-	/**
-	 * Decodes all of the data into {@link ObjectDefinition}s.
-	 *
-	 * @return The definitions.
-	 * @throws IOException If an error occurs when decoding the archive or finding an entry.
-	 */
-	public ObjectDefinition[] decode() throws IOException {
-		Archive config = fs.getArchive(0, 2);
-		ByteBuffer data = config.getEntry("loc.dat").getBuffer();
-		ByteBuffer idx = config.getEntry("loc.idx").getBuffer();
-
-		int count = idx.getShort(), index = 2;
-		int[] indices = new int[count];
-		for (int i = 0; i < count; i++) {
-			indices[i] = index;
-			index += idx.getShort();
-		}
-
-		ObjectDefinition[] defs = new ObjectDefinition[count];
-		for (int i = 0; i < count; i++) {
-			data.position(indices[i]);
-			defs[i] = decode(i, data);
-		}
-		return defs;
 	}
 
 }

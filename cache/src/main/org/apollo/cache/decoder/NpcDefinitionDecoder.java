@@ -1,6 +1,7 @@
 package org.apollo.cache.decoder;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -14,47 +15,47 @@ import org.apollo.util.BufferUtil;
  *
  * @author Major
  */
-public final class NpcDefinitionDecoder {
+public final class NpcDefinitionDecoder implements Runnable {
 
 	/**
-	 * The {@link IndexedFileSystem}.
+	 * The IndexedFileSystem.
 	 */
 	private final IndexedFileSystem fs;
 
 	/**
-	 * Creates the npc definition decoder.
+	 * Creates the NpcDefinitionDecoder.
 	 *
-	 * @param fs The indexed file system.
+	 * @param fs The {@link IndexedFileSystem}.
 	 */
 	public NpcDefinitionDecoder(IndexedFileSystem fs) {
 		this.fs = fs;
 	}
 
-	/**
-	 * Decodes the npc definitions.
-	 *
-	 * @return An array of all parsed npc definitions.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	public NpcDefinition[] decode() throws IOException {
-		Archive config = fs.getArchive(0, 2);
-		ByteBuffer data = config.getEntry("npc.dat").getBuffer();
-		ByteBuffer idx = config.getEntry("npc.idx").getBuffer();
+	@Override
+	public void run() {
+		try {
+			Archive config = fs.getArchive(0, 2);
+			ByteBuffer data = config.getEntry("npc.dat").getBuffer();
+			ByteBuffer idx = config.getEntry("npc.idx").getBuffer();
 
-		int count = idx.getShort(), index = 2;
-		int[] indices = new int[count];
-		for (int i = 0; i < count; i++) {
-			indices[i] = index;
-			index += idx.getShort();
+			int count = idx.getShort(), index = 2;
+			int[] indices = new int[count];
+
+			for (int i = 0; i < count; i++) {
+				indices[i] = index;
+				index += idx.getShort();
+			}
+
+			NpcDefinition[] definitions = new NpcDefinition[count];
+			for (int i = 0; i < count; i++) {
+				data.position(indices[i]);
+				definitions[i] = decode(i, data);
+			}
+
+			NpcDefinition.init(definitions);
+		} catch (IOException e) {
+			throw new UncheckedIOException("Error decoding NpcDefinitions.", e);
 		}
-
-		NpcDefinition[] defs = new NpcDefinition[count];
-		for (int i = 0; i < count; i++) {
-			data.position(indices[i]);
-			defs[i] = decode(i, data);
-		}
-
-		return defs;
 	}
 
 	/**
@@ -75,8 +76,8 @@ public final class NpcDefinitionDecoder {
 			} else if (opcode == 1) {
 				int length = buffer.get() & 0xFF;
 				int[] models = new int[length];
-				for (int i = 0; i < length; i++) {
-					models[i] = buffer.getShort();
+				for (int index = 0; index < length; index++) {
+					models[index] = buffer.getShort();
 				}
 			} else if (opcode == 2) {
 				definition.setName(BufferUtil.readString(buffer));
@@ -92,24 +93,27 @@ public final class NpcDefinitionDecoder {
 				definition
 						.setWalkAnimations(buffer.getShort(), buffer.getShort(), buffer.getShort(), buffer.getShort());
 			} else if (opcode >= 30 && opcode < 40) {
-				String str = BufferUtil.readString(buffer);
-				if (str.equals("hidden")) {
-					str = null;
+				String action = BufferUtil.readString(buffer);
+				if (action.equals("hidden")) {
+					action = null;
 				}
-				definition.setInteraction(opcode - 30, str);
+
+				definition.setInteraction(opcode - 30, action);
 			} else if (opcode == 40) {
 				int length = buffer.get() & 0xFF;
 				int[] originalColours = new int[length];
 				int[] replacementColours = new int[length];
-				for (int i = 0; i < length; i++) {
-					originalColours[i] = buffer.getShort();
-					replacementColours[i] = buffer.getShort();
+
+				for (int index = 0; index < length; index++) {
+					originalColours[index] = buffer.getShort();
+					replacementColours[index] = buffer.getShort();
 				}
 			} else if (opcode == 60) {
 				int length = buffer.get() & 0xFF;
 				int[] additionalModels = new int[length];
-				for (int i = 0; i < length; i++) {
-					additionalModels[i] = buffer.getShort();
+
+				for (int index = 0; index < length; index++) {
+					additionalModels[index] = buffer.getShort();
 				}
 			} else if (opcode >= 90 && opcode <= 92) {
 				buffer.getShort(); // Dummy

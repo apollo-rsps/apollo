@@ -121,12 +121,12 @@ public final class MapFileDecoder {
 		int count = buffer.capacity() / (3 * Short.BYTES + Byte.BYTES);
 
 		for (int times = 0; times < count; times++) {
-			int packed = buffer.getShort() & 0xFFFF;
+			int id = buffer.getShort() & 0xFFFF;
 			int terrain = buffer.getShort() & 0xFFFF;
 			int objects = buffer.getShort() & 0xFFFF;
 			boolean members = buffer.get() == 1;
 
-			definitions.put(packed, new MapDefinition(packed, terrain, objects, members));
+			definitions.put(id, new MapDefinition(id, terrain, objects, members));
 		}
 
 		return definitions;

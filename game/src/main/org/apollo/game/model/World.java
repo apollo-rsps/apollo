@@ -1,24 +1,18 @@
 package org.apollo.game.model;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.apollo.Server;
 import org.apollo.Service;
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.decoder.ItemDefinitionDecoder;
 import org.apollo.cache.decoder.NpcDefinitionDecoder;
 import org.apollo.cache.decoder.ObjectDefinitionDecoder;
-import org.apollo.cache.def.EquipmentDefinition;
-import org.apollo.cache.def.ItemDefinition;
-import org.apollo.cache.def.NpcDefinition;
-import org.apollo.cache.def.ObjectDefinition;
 import org.apollo.game.command.CommandDispatcher;
 import org.apollo.game.fs.decoder.GameObjectDecoder;
+import org.apollo.game.fs.decoder.SynchronousDecoder;
 import org.apollo.game.io.EquipmentDefinitionParser;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
@@ -27,7 +21,6 @@ import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.entity.obj.GameObject;
 import org.apollo.game.model.event.Event;
 import org.apollo.game.model.event.EventListener;
 import org.apollo.game.model.event.EventListenerChainSet;
@@ -88,11 +81,6 @@ public final class World {
 	private final EventListenerChainSet events = new EventListenerChainSet();
 
 	/**
-	 * The ScheduledTask that moves Npcs.
-	 */
-	private NpcMovementTask npcMovement;
-
-	/**
 	 * The {@link MobRepository} of {@link Npc}s.
 	 */
 	private final MobRepository<Npc> npcRepository = new MobRepository<>(WorldConstants.MAXIMUM_NPCS);
@@ -108,19 +96,9 @@ public final class World {
 	private final Map<Long, Player> players = new HashMap<>();
 
 	/**
-	 * The {@link PluginManager}.
-	 */
-	private PluginManager pluginManager;
-
-	/**
 	 * This world's {@link RegionRepository}.
 	 */
 	private final RegionRepository regions = RegionRepository.immutable();
-
-	/**
-	 * The release number (i.e. version) of this world.
-	 */
-	private int releaseNumber;
 
 	/**
 	 * The scheduler.
@@ -128,11 +106,19 @@ public final class World {
 	private final Scheduler scheduler = new Scheduler();
 
 	/**
-	 * Creates the world.
+	 * The ScheduledTask that moves Npcs.
 	 */
-	public World() {
+	private NpcMovementTask npcMovement;
 
-	}
+	/**
+	 * The {@link PluginManager}.
+	 */
+	private PluginManager pluginManager;
+
+	/**
+	 * The release number (i.e. version) of this world.
+	 */
+	private int releaseNumber;
 
 	/**
 	 * Gets the command dispatcher.
@@ -210,32 +196,11 @@ public final class World {
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
 		releaseNumber = release;
 
-		ItemDefinitionDecoder itemDecoder = new ItemDefinitionDecoder(fs);
-		ItemDefinition[] items = itemDecoder.decode();
-		ItemDefinition.init(items);
-		logger.fine("Loaded " + items.length + " item definitions.");
+		SynchronousDecoder decoder = new SynchronousDecoder(new ItemDefinitionDecoder(fs),
+				new NpcDefinitionDecoder(fs), new GameObjectDecoder(fs, this),
+				EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat"));
 
-		try (InputStream is = new BufferedInputStream(new FileInputStream("data/equipment-" + release + ".dat"))) {
-			EquipmentDefinitionParser parser = new EquipmentDefinitionParser(is);
-			EquipmentDefinition[] defs = parser.parse();
-			EquipmentDefinition.init(defs);
-			logger.fine("Loaded " + defs.length + " equipment definitions.");
-		}
-
-		NpcDefinitionDecoder npcDecoder = new NpcDefinitionDecoder(fs);
-		NpcDefinition[] npcs = npcDecoder.decode();
-		NpcDefinition.init(npcs);
-		logger.fine("Loaded " + npcs.length + " npc definitions.");
-
-		ObjectDefinitionDecoder objectDecoder = new ObjectDefinitionDecoder(fs);
-		ObjectDefinition[] objectDefs = objectDecoder.decode();
-		ObjectDefinition.init(objectDefs);
-		logger.fine("Loaded " + objectDefs.length + " object definitions.");
-
-		GameObjectDecoder staticDecoder = new GameObjectDecoder(fs, regions);
-		GameObject[] objects = staticDecoder.decode(this);
-		placeEntities(objects);
-		logger.fine("Loaded " + objects.length + " static objects.");
+		decoder.block();
 
 		npcMovement = new NpcMovementTask(regions); // Must be exactly here because of ordering issues.
 		scheduler.schedule(npcMovement);
@@ -291,6 +256,7 @@ public final class World {
 		} else {
 			logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
 		}
+
 		return success;
 	}
 
@@ -382,15 +348,6 @@ public final class World {
 		} else {
 			logger.warning("Could not find player " + player + " to unregister!");
 		}
-	}
-
-	/**
-	 * Adds entities to regions in the {@link RegionRepository}. By default, we do not notify listeners.
-	 *
-	 * @param entities The entities.
-	 */
-	private void placeEntities(Entity... entities) {
-		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity, false));
 	}
 
 }

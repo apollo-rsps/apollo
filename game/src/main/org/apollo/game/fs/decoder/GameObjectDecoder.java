@@ -1,6 +1,7 @@
 package org.apollo.game.fs.decoder;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.function.Predicate;
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.decoder.MapFileDecoder;
 import org.apollo.cache.decoder.MapFileDecoder.MapDefinition;
+import org.apollo.cache.decoder.ObjectDefinitionDecoder;
 import org.apollo.cache.def.ObjectDefinition;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -31,7 +33,7 @@ import com.google.common.collect.Iterables;
  * @author Ryley
  * @author Major
  */
-public final class GameObjectDecoder {
+public final class GameObjectDecoder implements Runnable {
 
 	/**
 	 * A bit flag that indicates that the tile at the current Position is blocked.
@@ -59,43 +61,50 @@ public final class GameObjectDecoder {
 	private final RegionRepository regions;
 
 	/**
+	 * The World to place the objects in.
+	 */
+	private final World world;
+
+	/**
 	 * Creates the GameObjectDecoder.
 	 *
 	 * @param fs The {@link IndexedFileSystem}.
-	 * @param regions The {@link RegionRepository}.
+	 * @param world The {@link World} to place the objects in.
 	 */
-	public GameObjectDecoder(IndexedFileSystem fs, RegionRepository regions) {
+	public GameObjectDecoder(IndexedFileSystem fs, World world) {
 		this.fs = fs;
-		this.regions = regions;
+		this.world = world;
+		regions = world.getRegionRepository();
 	}
 
-	/**
-	 * Decodes the GameObjects from their MapDefinitions.
-	 *
-	 * @param world The {@link World} containing the StaticGameObjects.
-	 * @return The decoded objects.
-	 * @throws IOException If there is an error decoding the {@link MapDefinition}s.
-	 */
-	public GameObject[] decode(World world) throws IOException {
-		Map<Integer, MapDefinition> definitions = MapFileDecoder.decode(fs);
+	@Override
+	public void run() {
+		ObjectDefinitionDecoder decoder = new ObjectDefinitionDecoder(fs);
+		decoder.run();
 
-		for (Entry<Integer, MapDefinition> entry : definitions.entrySet()) {
-			MapDefinition definition = entry.getValue();
+		try {
+			Map<Integer, MapDefinition> definitions = MapFileDecoder.decode(fs);
 
-			int packed = definition.getPackedCoordinates();
-			int x = (packed >> 8 & 0xFF) * 64;
-			int y = (packed & 0xFF) * 64;
+			for (Entry<Integer, MapDefinition> entry : definitions.entrySet()) {
+				MapDefinition definition = entry.getValue();
 
-			ByteBuffer objects = fs.getFile(4, definition.getObjectFile());
-			ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(objects));
-			decodeObjects(world, decompressed, x, y);
+				int packed = definition.getPackedCoordinates();
+				int x = (packed >> 8 & 0xFF) * 64;
+				int y = (packed & 0xFF) * 64;
 
-			ByteBuffer terrain = fs.getFile(4, definition.getTerrainFile());
-			decompressed = ByteBuffer.wrap(CompressionUtil.degzip(terrain));
-			decodeTerrain(decompressed, x, y);
+				ByteBuffer objects = fs.getFile(4, definition.getObjectFile());
+				ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(objects));
+				decodeObjects(world, decompressed, x, y);
+
+				ByteBuffer terrain = fs.getFile(4, definition.getTerrainFile());
+				decompressed = ByteBuffer.wrap(CompressionUtil.degzip(terrain));
+				decodeTerrain(decompressed, x, y);
+			}
+		} catch (IOException e) {
+			throw new UncheckedIOException("Error decoding StaticGameObjects.", e);
 		}
 
-		return Iterables.toArray(objects, GameObject.class);
+		objects.forEach(object -> regions.fromPosition(object.getPosition()).addEntity(object, false));
 	}
 
 	/**
@@ -112,24 +121,21 @@ public final class GameObjectDecoder {
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
 
 		CollisionMatrix matrix = region.getMatrix(height);
-
 		boolean block = false;
 
 		if (type == ObjectType.FLOOR_DECORATION.getValue() && definition.isInteractive()) {
 			block = true;
 		}
 
-		Predicate<Integer> walls = (value) -> value >= ObjectType.LENGTHWISE_WALL.getValue()
+		// TODO figure out the other ObjectTypes and get rid of all the getValue() calls
+
+		Predicate<Integer> walls = value -> value >= ObjectType.LENGTHWISE_WALL.getValue()
 				&& value <= ObjectType.RECTANGULAR_CORNER.getValue() || value == ObjectType.DIAGONAL_WALL.getValue();
 
-		Predicate<Integer> roofs = (value) -> value > ObjectType.DIAGONAL_INTERACTABLE.getValue()
+		Predicate<Integer> roofs = value -> value > ObjectType.DIAGONAL_INTERACTABLE.getValue()
 				&& value < ObjectType.FLOOR_DECORATION.getValue();
 
-		if (walls.test(type) || roofs.test(type)) {
-			block = true;
-		}
-
-		if (type == 10 && definition.isSolid()) {
+		if (walls.test(type) || roofs.test(type) || type == ObjectType.INTERACTABLE.getValue() && definition.isSolid()) {
 			block = true;
 		}
 
@@ -144,11 +150,13 @@ public final class GameObjectDecoder {
 						Position nextPosition = new Position(nextLocalX, nextLocalY);
 						Region next = regions.fromPosition(nextPosition);
 
-						int nextX = nextPosition.getX() % Region.SIZE + dx, nextY = nextPosition.getY() % Region.SIZE
-								+ dy;
+						int nextX = nextPosition.getX() % Region.SIZE + dx;
+						int nextY = nextPosition.getY() % Region.SIZE + dy;
+
 						if (nextX > 7) {
 							nextX -= 7;
 						}
+
 						if (nextY > 7) {
 							nextY -= 7;
 						}
@@ -173,12 +181,11 @@ public final class GameObjectDecoder {
 		Region region = regions.fromPosition(position);
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
 
-		CollisionMatrix current = region.getMatrix(height);
-
 		boolean block = false;
 		if ((attributes & BLOCKED_TILE) != 0) {
 			block = true;
 		}
+
 		if ((attributes & BRIDGE_TILE) != 0) {
 			if (height > 0) {
 				block = true;
@@ -188,7 +195,7 @@ public final class GameObjectDecoder {
 
 		if (block) {
 			int localX = x % Region.SIZE, localY = y % Region.SIZE;
-			current.block(localX, localY);
+			region.getMatrix(height).block(localX, localY);
 		}
 	}
 
@@ -249,6 +256,7 @@ public final class GameObjectDecoder {
 					int attributes = 0;
 					while (true) {
 						int attributeId = buffer.get() & 0xFF;
+
 						if (attributeId == 0) {
 							decodeAttributes(attributes, position);
 							break;

@@ -29,6 +29,7 @@ public final class CompressionUtil {
 	 */
 	public static byte[] bzip2(byte[] uncompressed) throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
 		try (BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(bout, 1)) {
 			os.write(uncompressed);
 			os.finish();
@@ -37,22 +38,6 @@ public final class CompressionUtil {
 			byte[] newCompressed = new byte[compressed.length - 4]; // Strip the header
 			System.arraycopy(compressed, 4, newCompressed, 0, newCompressed.length);
 			return newCompressed;
-		}
-	}
-
-	/**
-	 * Gzips the specified array.
-	 *
-	 * @param uncompressed The uncompressed array.
-	 * @return The compressed array.
-	 * @throws IOException If there is an error compressing the array.
-	 */
-	public static byte[] gzip(byte[] uncompressed) throws IOException {
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		try (DeflaterOutputStream os = new GZIPOutputStream(bout)) {
-			os.write(uncompressed);
-			os.finish();
-			return bout.toByteArray();
 		}
 	}
 
@@ -90,27 +75,44 @@ public final class CompressionUtil {
 	}
 
 	/**
-	 * Degzips the compressed {@link ByteBuffer} and returns the result as a byte array.
+	 * Degzips <strong>all</strong> of the datain the specified {@link ByteBuffer}.
 	 *
 	 * @param compressed The compressed buffer.
 	 * @return The decompressed array.
 	 * @throws IOException If there is an error decompressing the buffer.
 	 */
 	public static byte[] degzip(ByteBuffer compressed) throws IOException {
-		byte[] data = new byte[compressed.remaining()];
-		compressed.get(data);
+		try (InputStream is = new GZIPInputStream(new ByteArrayInputStream(compressed.array()));
+		     ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+			byte[] buffer = new byte[1024];
 
-		try (InputStream is = new GZIPInputStream(new ByteArrayInputStream(data)); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			while (true) {
-				byte[] buf = new byte[1024];
-				int read = is.read(buf, 0, buf.length);
+				int read = is.read(buffer, 0, buffer.length);
 				if (read == -1) {
 					break;
 				}
-				os.write(buf, 0, read);
+
+				out.write(buffer, 0, read);
 			}
 
-			return os.toByteArray();
+			return out.toByteArray();
+		}
+	}
+
+	/**
+	 * Gzips the specified array.
+	 *
+	 * @param uncompressed The uncompressed array.
+	 * @return The compressed array.
+	 * @throws IOException If there is an error compressing the array.
+	 */
+	public static byte[] gzip(byte[] uncompressed) throws IOException {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+		try (DeflaterOutputStream os = new GZIPOutputStream(bout)) {
+			os.write(uncompressed);
+			os.finish();
+			return bout.toByteArray();
 		}
 	}
 

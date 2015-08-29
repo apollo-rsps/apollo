@@ -1,6 +1,7 @@
 package org.apollo.cache.decoder;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 
 import org.apollo.cache.IndexedFileSystem;
@@ -13,47 +14,46 @@ import org.apollo.util.BufferUtil;
  *
  * @author Graham
  */
-public final class ItemDefinitionDecoder {
+public final class ItemDefinitionDecoder implements Runnable {
 
 	/**
-	 * The {@link IndexedFileSystem}.
+	 * The  IndexedFileSystem.
 	 */
 	private final IndexedFileSystem fs;
 
 	/**
-	 * Creates the item definition decoder.
+	 * Creates the ItemDefinitionDecoder.
 	 *
-	 * @param fs The indexed file system.
+	 * @param fs The {@link IndexedFileSystem}.
 	 */
 	public ItemDefinitionDecoder(IndexedFileSystem fs) {
 		this.fs = fs;
 	}
 
-	/**
-	 * Decodes the item definitions.
-	 *
-	 * @return The item definitions.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	public ItemDefinition[] decode() throws IOException {
-		Archive config = fs.getArchive(0, 2);
-		ByteBuffer data = config.getEntry("obj.dat").getBuffer();
-		ByteBuffer idx = config.getEntry("obj.idx").getBuffer();
+	@Override
+	public void run() {
+		try {
+			Archive config = fs.getArchive(0, 2);
+			ByteBuffer data = config.getEntry("obj.dat").getBuffer();
+			ByteBuffer idx = config.getEntry("obj.idx").getBuffer();
 
-		int count = idx.getShort(), index = 2;
-		int[] indices = new int[count];
-		for (int i = 0; i < count; i++) {
-			indices[i] = index;
-			index += idx.getShort();
+			int count = idx.getShort(), index = 2;
+			int[] indices = new int[count];
+			for (int i = 0; i < count; i++) {
+				indices[i] = index;
+				index += idx.getShort();
+			}
+
+			ItemDefinition[] definitions = new ItemDefinition[count];
+			for (int i = 0; i < count; i++) {
+				data.position(indices[i]);
+				definitions[i] = decode(i, data);
+			}
+
+			ItemDefinition.init(definitions);
+		} catch (IOException e) {
+			throw new UncheckedIOException("Error decoding ItemDefinitions.", e);
 		}
-
-		ItemDefinition[] defs = new ItemDefinition[count];
-		for (int i = 0; i < count; i++) {
-			data.position(indices[i]);
-			defs[i] = decode(i, data);
-		}
-
-		return defs;
 	}
 
 	/**
