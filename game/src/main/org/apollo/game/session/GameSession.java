@@ -44,16 +44,23 @@ public final class GameSession extends Session {
 	private final Player player;
 
 	/**
+	 * If the player was reconnecting.
+	 */
+	private final boolean reconnecting;
+
+	/**
 	 * Creates a login session for the specified channel.
 	 *
 	 * @param channel The channel.
 	 * @param context The server context.
 	 * @param player The player.
+	 * @param reconnecting If the player was reconnecting.
 	 */
-	public GameSession(Channel channel, ServerContext context, Player player) {
+	public GameSession(Channel channel, ServerContext context, Player player, boolean reconnecting) {
 		super(channel);
 		this.context = context;
 		this.player = player;
+		this.reconnecting = reconnecting;
 	}
 
 	@Override
@@ -109,6 +116,15 @@ public final class GameSession extends Session {
 		} else {
 			messages.add((Message) message);
 		}
+	}
+
+	/**
+	 * Determines if this player is reconnecting.
+	 * 
+	 * @return {@code true} if reconnecting, {@code false} otherwise.
+	 */
+	public boolean isReconnecting() {
+		return reconnecting;
 	}
 
 }

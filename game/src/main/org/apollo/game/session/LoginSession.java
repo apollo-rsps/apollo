@@ -80,14 +80,18 @@ public final class LoginSession extends Session {
 			Player player = optional.get();
 			rights = player.getPrivilegeLevel().toInteger();
 
-			GameSession session = new GameSession(channel, context, player);
-			RegistrationStatus registration = service.registerPlayer(player, session);
+			RegistrationStatus registration = player.getRegistrationStatus();
 
 			if (registration != RegistrationStatus.OK) {
 				optional = Optional.empty();
 				rights = 0;
 
-				status = registration == RegistrationStatus.ALREADY_ONLINE ? LoginConstants.STATUS_ACCOUNT_ONLINE : LoginConstants.STATUS_SERVER_FULL;
+				status = registration == RegistrationStatus.ALREADY_ONLINE ? LoginConstants.STATUS_ACCOUNT_ONLINE
+					: LoginConstants.STATUS_SERVER_FULL;
+			} else {
+				GameSession session = new GameSession(channel, context, player, request.isReconnecting());
+				channel.attr(ApolloHandler.SESSION_KEY).set(session);
+				player.setSession(session);
 			}
 		}
 
@@ -102,19 +106,15 @@ public final class LoginSession extends Session {
 			channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
 			channel.pipeline().addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
 
-			channel.pipeline().addBefore("handler", "gameDecoder", new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
+			channel.pipeline().addBefore("handler", "gameDecoder",
+				new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
 			channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
 
 			channel.pipeline().remove("loginDecoder");
 			channel.pipeline().remove("loginEncoder");
-
-			channel.attr(ApolloHandler.SESSION_KEY).set(optional.get().getSession());
+			service.registerPlayer(optional.get());
 		} else {
 			future.addListener(ChannelFutureListener.CLOSE);
-		}
-
-		if (optional.isPresent() && !request.isReconnecting()) {
-			optional.get().sendInitialMessages();
 		}
 	}
 
@@ -124,5 +124,4 @@ public final class LoginSession extends Session {
 			handleLoginRequest((LoginRequest) message);
 		}
 	}
-
 }
