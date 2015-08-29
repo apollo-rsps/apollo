@@ -15,7 +15,6 @@ import org.apollo.game.GamePulseHandler;
 import org.apollo.game.io.MessageHandlerChainSetParser;
 import org.apollo.game.message.handler.MessageHandlerChainSet;
 import org.apollo.game.model.World;
-import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Player;
@@ -38,6 +37,11 @@ public final class GameService extends Service {
 	 * requests and slow everything down.
 	 */
 	private static final int UNREGISTERS_PER_CYCLE = 50;
+	
+	/**
+     * The number of times to register players per cycle.
+     */
+    private static final int REGISTERS_PER_CYCLE = 25;
 
 	/**
 	 * The World this Service is for.
@@ -48,6 +52,11 @@ public final class GameService extends Service {
 	 * A queue of players to remove.
 	 */
 	private final Queue<Player> oldPlayers = new ConcurrentLinkedQueue<>();
+	
+    /**
+     * A queue of players to add.
+     */
+    private final Queue<Player> newPlayers = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * The scheduled executor service.
@@ -84,6 +93,21 @@ public final class GameService extends Service {
 	public synchronized void finalizePlayerUnregistration(Player player) {
 		world.unregister(player);
 	}
+	
+	/**
+     * Finalizes the registration of a player.
+     *
+     * @param player The player.
+     */
+	public void finalizePlayerRegistration(Player player) {
+        world.register(player);
+        Region region = world.getRegionRepository().fromPosition(player.getPosition());
+        region.addEntity(player);
+
+        if (player.getSession().isReconnecting()) {
+            player.sendInitialMessages();
+        }
+	}
 
 	/**
 	 * Gets the MessageHandlerChainSet
@@ -97,7 +121,8 @@ public final class GameService extends Service {
 	/**
 	 * Called every pulse.
 	 */
-	public synchronized void pulse() {
+    public void pulse() {
+	    finalizeRegistrations();
 		finalizeUnregistrations();
 
 		MobRepository<Player> players = world.getPlayerRepository();
@@ -110,25 +135,6 @@ public final class GameService extends Service {
 
 		world.pulse();
 		synchronizer.synchronize(players, world.getNpcRepository());
-	}
-
-	/**
-	 * Registers a {@link Player} (may block!).
-	 *
-	 * @param player The Player.
-	 * @param session The {@link GameSession} of the Player.
-	 * @return A {@link RegistrationStatus}.
-	 */
-	public synchronized RegistrationStatus registerPlayer(Player player, GameSession session) {
-		RegistrationStatus status = world.register(player);
-		if (status == RegistrationStatus.OK) {
-			player.setSession(session);
-
-			Region region = world.getRegionRepository().fromPosition(player.getPosition());
-			region.addEntity(player);
-		}
-
-		return status;
 	}
 
 	/**
@@ -155,6 +161,15 @@ public final class GameService extends Service {
 	public void unregisterPlayer(Player player) {
 		oldPlayers.add(player);
 	}
+	
+	/**
+     * Registers a player. Returns immediately. The player is registered at the start of the next cycle.
+     *
+     * @param player The player.
+     */
+    public void registerPlayer(Player player) {
+        newPlayers.add(player);
+    }
 
 	/**
 	 * Finalizes the unregistration of Player's queued to be unregistered.
@@ -171,6 +186,20 @@ public final class GameService extends Service {
 			loginService.submitSaveRequest(player.getSession(), player);
 		}
 	}
+	
+	/**
+     * Finalizes the registration of Player's queued to be registered.
+     */
+    private void finalizeRegistrations() {
+        for (int count = 0; count < REGISTERS_PER_CYCLE; count++) {
+            Player player = oldPlayers.poll();
+            if (player == null) {
+                break;
+            }
+
+            finalizePlayerRegistration(player);
+        }
+    }
 
 	/**
 	 * Initializes the game service.

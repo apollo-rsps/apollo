@@ -298,24 +298,14 @@ public final class World {
 	 * Registers the specified player.
 	 *
 	 * @param player The player.
-	 * @return A {@link RegistrationStatus}.
 	 */
-	public RegistrationStatus register(Player player) {
+    public void register(Player player) {
 		String username = player.getUsername();
-		if (isPlayerOnline(username)) {
-			return RegistrationStatus.ALREADY_ONLINE;
-		}
 
-		boolean success = playerRepository.add(player);
-		if (success) {
-			players.put(NameUtil.encodeBase37(username), player);
+        playerRepository.add(player);
+        players.put(NameUtil.encodeBase37(username), player);
 
-			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
-			return RegistrationStatus.OK;
-		}
-
-		logger.warning("Failed to register player: " + player + " [count=" + playerRepository.size() + "]");
-		return RegistrationStatus.WORLD_FULL;
+        logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 	}
 
 	/**

@@ -19,6 +19,7 @@ import org.apollo.game.message.impl.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
@@ -601,6 +602,24 @@ public final class Player extends Mob {
 	public boolean isWithdrawingNotes() {
 		return withdrawingNotes;
 	}
+
+    /**
+     * Determines the {@link RegistrationStatus} for this player. This method
+     * can remain lock-free since writes to the player {@link MobRepository} are
+     * only happening on the game thread.
+     * 
+     * @return The status.
+     */
+    public RegistrationStatus getRegistrationStatus() {
+        MobRepository<Player> repository = world.getPlayerRepository();
+
+        if (world.isPlayerOnline(getUsername())) {
+            return RegistrationStatus.ALREADY_ONLINE;
+        } else if (repository.capacity() == repository.size()) {
+            return RegistrationStatus.WORLD_FULL;
+        }
+        return RegistrationStatus.OK;
+    }
 
 	/**
 	 * Logs the player out, if possible.
