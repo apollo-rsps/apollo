@@ -21,6 +21,7 @@ import org.apollo.game.model.entity.EntityType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
+import org.apollo.game.model.entity.obj.DynamicGameObject;
 
 /**
  * An 8x8 area of the map.
@@ -169,7 +170,8 @@ public final class Region {
 	 */
 	public Set<RegionUpdateMessage> encode(int height) {
 		Set<RegionUpdateMessage> additions = entities.values().stream()
-				.flatMap(Set::stream).filter(entity -> entity instanceof GroupableEntity)
+				.flatMap(Set::stream) // TODO fix this to work for ground items + projectiles
+				.filter(entity -> entity instanceof DynamicGameObject && entity.getPosition().getHeight() == height)
 				.map(entity -> ((GroupableEntity) entity).toUpdateOperation(this, EntityUpdateType.ADD).toMessage())
 				.collect(Collectors.toSet());
 
@@ -241,7 +243,11 @@ public final class Region {
 	 * @return The Set of RegionUpdateMessages.
 	 */
 	public Set<RegionUpdateMessage> getUpdates(int height) {
-		return ImmutableSet.copyOf(updates.get(height));
+		Set<RegionUpdateMessage> updates = this.updates.get(height);
+		Set<RegionUpdateMessage> copy = ImmutableSet.copyOf(updates);
+
+		updates.clear();
+		return copy;
 	}
 
 	/**
@@ -309,20 +315,26 @@ public final class Region {
 	 * Records the specified {@link GroupableEntity} as being updated this pulse.
 	 *
 	 * @param entity The GroupableEntity.
-	 * @param type The {@link EntityUpdateType}.
+	 * @param update The {@link EntityUpdateType}.
 	 * @throws UnsupportedOperationException If the specified Entity cannot be operated on in this manner.
 	 */
-	private <T extends Entity & GroupableEntity> void record(T entity, EntityUpdateType type) {
-		UpdateOperation<?> operation = entity.toUpdateOperation(this, type);
+	private <T extends Entity & GroupableEntity> void record(T entity, EntityUpdateType update) {
+		UpdateOperation<?> operation = entity.toUpdateOperation(this, update);
 		RegionUpdateMessage message = operation.toMessage(), inverse = operation.inverse();
 
 		int height = entity.getPosition().getHeight();
 		Set<RegionUpdateMessage> updates = this.updates.get(height);
 
-		if (entity.getEntityType() == EntityType.STATIC_OBJECT && type == EntityUpdateType.REMOVE) {
-			removedObjects.get(height).add(message);
+		EntityType type = entity.getEntityType();
+
+		if (type == EntityType.STATIC_OBJECT) {
+			if (update == EntityUpdateType.REMOVE) {
+				removedObjects.get(height).add(message);
+			} else { // TODO should this really be possible?
+				removedObjects.get(height).remove(inverse);
+			}
+
 			updates.add(message);
-			updates.remove(inverse);
 		} else {
 			updates.add(message);
 			updates.remove(inverse);

@@ -2,6 +2,7 @@ package org.apollo.game.sync.task;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apollo.game.message.impl.ClearRegionMessage;
@@ -140,20 +141,24 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		RegionRepository repository = player.getWorld().getRegionRepository();
 		int height = position.getHeight();
 
-		differences.stream().map(coordinates -> {
+		for (RegionCoordinates coordinates : differences) {
 			Set<RegionUpdateMessage> messages = updates.computeIfAbsent(coordinates,
 					coords -> repository.get(coords).getUpdates(height));
 
-			return new GroupedRegionUpdateMessage(position, coordinates, messages);
-		}).forEach(player::send);
+			if (!messages.isEmpty()) {
+				player.send(new GroupedRegionUpdateMessage(position, coordinates, messages));
+			}
+		}
 
-		full.stream().map(coordinates -> {
+		for (RegionCoordinates coordinates : full) {
 			Set<RegionUpdateMessage> messages = encodes.computeIfAbsent(coordinates,
 					coords -> repository.get(coords).encode(height));
 
-			player.send(new ClearRegionMessage(position, coordinates));
-			return new GroupedRegionUpdateMessage(position, coordinates, messages);
-		}).forEach(player::send);
+			if (!messages.isEmpty()) {
+				player.send(new ClearRegionMessage(position, coordinates));
+				player.send(new GroupedRegionUpdateMessage(position, coordinates, messages));
+			}
+		}
 	}
 
 }
