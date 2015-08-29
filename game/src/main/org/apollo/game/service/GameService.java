@@ -26,24 +26,22 @@ import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
 
 /**
- * The {@link GameService} class schedules and manages the execution of the
- * {@link GamePulseHandler} class.
+ * The {@link GameService} class schedules and manages the execution of the {@link GamePulseHandler} class.
  *
  * @author Graham
  */
 public final class GameService extends Service {
 
 	/**
-	 * The number of times to unregister players per cycle. This is to ensure
-	 * the saving threads don't get swamped with requests and slow everything
-	 * down.
+	 * The amount of players to deregister per cycle. This is to ensure the saving threads don't get swamped with
+	 * requests and slow everything down.
 	 */
-	private static final int UNREGISTERS_PER_CYCLE = 50;
+	private static final int DEREGISTRATIONS_PER_CYCLE = 50;
 
 	/**
-	 * The number of times to register players per cycle.
+	 * The amount of players to register per cycle.
 	 */
-	private static final int REGISTERS_PER_CYCLE = 25;
+	private static final int REGISTRATIONS_PER_CYCLE = 25;
 
 	/**
 	 * The World this Service is for.
@@ -51,9 +49,9 @@ public final class GameService extends Service {
 	protected final World world;
 
 	/**
-	 * A queue of players to remove.
+	 * The scheduled executor service.
 	 */
-	private final Queue<Player> oldPlayers = new ConcurrentLinkedQueue<>();
+	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.create("GameService"));
 
 	/**
 	 * A queue of players to add.
@@ -61,9 +59,9 @@ public final class GameService extends Service {
 	private final Queue<Player> newPlayers = new ConcurrentLinkedQueue<>();
 
 	/**
-	 * The scheduled executor service.
+	 * A queue of players to remove.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.create("GameService"));
+	private final Queue<Player> oldPlayers = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * The {@link MessageHandlerChainSet}.
@@ -87,15 +85,6 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Finalizes the unregistration of a player.
-	 *
-	 * @param player The player.
-	 */
-	public synchronized void finalizePlayerUnregistration(Player player) {
-		world.unregister(player);
-	}
-
-	/**
 	 * Finalizes the registration of a player.
 	 *
 	 * @param player The player.
@@ -108,6 +97,15 @@ public final class GameService extends Service {
 		if (player.getSession().isReconnecting()) {
 			player.sendInitialMessages();
 		}
+	}
+
+	/**
+	 * Finalizes the unregistration of a player.
+	 *
+	 * @param player The player.
+	 */
+	public synchronized void finalizePlayerUnregistration(Player player) {
+		world.unregister(player);
 	}
 
 	/**
@@ -129,6 +127,7 @@ public final class GameService extends Service {
 		MobRepository<Player> players = world.getPlayerRepository();
 		for (Player player : players) {
 			GameSession session = player.getSession();
+
 			if (session != null) {
 				session.handlePendingMessages(handlers);
 			}
@@ -136,33 +135,6 @@ public final class GameService extends Service {
 
 		world.pulse();
 		synchronizer.synchronize(players, world.getNpcRepository());
-	}
-
-	/**
-	 * Shuts down this game service.
-	 *
-	 * @param natural Whether or not the shutdown was expected.
-	 */
-	public void shutdown(boolean natural) {
-		scheduledExecutor.shutdownNow();
-		// TODO: Other events that should happen upon natural or unexpected
-		// shutdown.
-	}
-
-	@Override
-	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
-			TimeUnit.MILLISECONDS);
-	}
-
-	/**
-	 * Unregisters a player. Returns immediately. The player is unregistered at
-	 * the start of the next cycle.
-	 *
-	 * @param player The player.
-	 */
-	public void unregisterPlayer(Player player) {
-		oldPlayers.add(player);
 	}
 
 	/**
@@ -176,26 +148,35 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Finalizes the unregistration of Player's queued to be unregistered.
+	 * Shuts down this game service.
+	 *
+	 * @param natural Whether or not the shutdown was expected.
 	 */
-	private void finalizeUnregistrations() {
-		LoginService loginService = context.getLoginService();
+	public void shutdown(boolean natural) {
+		executor.shutdownNow();
+		// TODO: Other events that should happen upon natural or unexpected shutdown.
+	}
 
-		for (int count = 0; count < UNREGISTERS_PER_CYCLE; count++) {
-			Player player = oldPlayers.poll();
-			if (player == null) {
-				break;
-			}
+	@Override
+	public void start() {
+		executor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
+				TimeUnit.MILLISECONDS);
+	}
 
-			loginService.submitSaveRequest(player.getSession(), player);
-		}
+	/**
+	 * Unregisters a player. Returns immediately. The player is unregistered at the start of the next cycle.
+	 *
+	 * @param player The player.
+	 */
+	public void unregisterPlayer(Player player) {
+		oldPlayers.add(player);
 	}
 
 	/**
 	 * Finalizes the registration of Player's queued to be registered.
 	 */
 	private void finalizeRegistrations() {
-		for (int count = 0; count < REGISTERS_PER_CYCLE; count++) {
+		for (int count = 0; count < REGISTRATIONS_PER_CYCLE; count++) {
 			Player player = newPlayers.poll();
 			if (player == null) {
 				break;
@@ -206,12 +187,27 @@ public final class GameService extends Service {
 	}
 
 	/**
+	 * Finalizes the unregistration of Player's queued to be unregistered.
+	 */
+	private void finalizeUnregistrations() {
+		LoginService loginService = context.getLoginService();
+
+		for (int count = 0; count < DEREGISTRATIONS_PER_CYCLE; count++) {
+			Player player = oldPlayers.poll();
+			if (player == null) {
+				break;
+			}
+
+			loginService.submitSaveRequest(player.getSession(), player);
+		}
+	}
+
+	/**
 	 * Initializes the game service.
 	 *
 	 * @throws IOException If there is an error accessing the file.
 	 * @throws SAXException If there is an error parsing the file.
-	 * @throws ReflectiveOperationException If a MessageHandler could not be
-	 *         created.
+	 * @throws ReflectiveOperationException If a MessageHandler could not be created.
 	 */
 	private void init() throws IOException, SAXException, ReflectiveOperationException {
 		try (InputStream input = new FileInputStream("data/messages.xml")) {

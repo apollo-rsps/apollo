@@ -1,15 +1,14 @@
 package org.apollo.game.model;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.apollo.Server;
 import org.apollo.Service;
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.decoder.ItemDefinitionDecoder;
 import org.apollo.cache.decoder.NpcDefinitionDecoder;
-import org.apollo.cache.decoder.ObjectDefinitionDecoder;
 import org.apollo.game.command.CommandDispatcher;
 import org.apollo.game.fs.decoder.GameObjectDecoder;
 import org.apollo.game.fs.decoder.SynchronousDecoder;
@@ -33,11 +32,9 @@ import org.apollo.util.NameUtil;
 import com.google.common.base.Preconditions;
 
 /**
- * The world class is a singleton which contains objects like the
- * {@link MobRepository} for players and NPCs. It should only contain things
- * relevant to the in-game world and not classes which deal with I/O and such
- * (these may be better off inside some custom {@link Service} or other code,
- * however, the circumstances are rare).
+ * The world class is a singleton which contains objects like the {@link MobRepository} for players and NPCs. It should
+ * only contain things relevant to the in-game world and not classes which deal with I/O and such (these may be better
+ * off inside some custom {@link Service} or other code, however, the circumstances are rare).
  *
  * @author Graham
  */
@@ -194,8 +191,7 @@ public final class World {
 	 * @param release The release number.
 	 * @param fs The file system.
 	 * @param manager The plugin manager. TODO move this.
-	 * @throws Exception If any definitions could not be loaded or there was a
-	 *         failure when loading plugins.
+	 * @throws Exception If there was a failure when loading plugins.
 	 */
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
 		releaseNumber = release;
@@ -206,9 +202,7 @@ public final class World {
 
 		decoder.block();
 
-		npcMovement = new NpcMovementTask(regions); // Must be exactly here
-													// because of ordering
-													// issues.
+		npcMovement = new NpcMovementTask(regions); // Must be exactly here because of ordering issues.
 		scheduler.schedule(npcMovement);
 
 		manager.start();
@@ -249,7 +243,7 @@ public final class World {
 	 *
 	 * @param npc The npc.
 	 * @return {@code true} if the npc registered successfully, otherwise
-	 *         {@code false}.
+	 * {@code false}.
 	 */
 	public boolean register(Npc npc) {
 		boolean success = npcRepository.add(npc);
@@ -348,8 +342,6 @@ public final class World {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	/**
 	 * Adds entities to regions in the {@link RegionRepository}. By default, we
 	 * do not notify listeners.
@@ -359,5 +351,4 @@ public final class World {
 	private void placeEntities(Entity... entities) {
 		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity, false));
 	}
->>>>>>> c3443521f43dde6310e77de16637503af54805c2
 }

@@ -52,17 +52,6 @@ public final class LoginSession extends Session {
 	}
 
 	/**
-	 * Handles a login request.
-	 *
-	 * @param request The login request.
-	 * @throws IOException If some I/O exception occurs.
-	 */
-	private void handleLoginRequest(LoginRequest request) throws IOException {
-		LoginService service = context.getLoginService();
-		service.submitLoadRequest(this, request);
-	}
-
-	/**
 	 * Handles a response from the login service.
 	 *
 	 * @param request The request this response corresponds to.
@@ -87,7 +76,7 @@ public final class LoginSession extends Session {
 				rights = 0;
 
 				status = registration == RegistrationStatus.ALREADY_ONLINE ? LoginConstants.STATUS_ACCOUNT_ONLINE
-					: LoginConstants.STATUS_SERVER_FULL;
+						: LoginConstants.STATUS_SERVER_FULL;
 			} else {
 				GameSession session = new GameSession(channel, context, player, request.isReconnecting());
 				channel.attr(ApolloHandler.SESSION_KEY).set(session);
@@ -107,7 +96,7 @@ public final class LoginSession extends Session {
 			channel.pipeline().addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
 
 			channel.pipeline().addBefore("handler", "gameDecoder",
-				new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
+					new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
 			channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
 
 			channel.pipeline().remove("loginDecoder");
@@ -123,5 +112,16 @@ public final class LoginSession extends Session {
 		if (message.getClass() == LoginRequest.class) {
 			handleLoginRequest((LoginRequest) message);
 		}
+	}
+
+	/**
+	 * Handles a login request.
+	 *
+	 * @param request The login request.
+	 * @throws IOException If some I/O exception occurs.
+	 */
+	private void handleLoginRequest(LoginRequest request) throws IOException {
+		LoginService service = context.getLoginService();
+		service.submitLoadRequest(this, request);
 	}
 }

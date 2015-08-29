@@ -57,7 +57,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * A {@link Player} is a {@link Mob} that a user is controlling.
+ * A {@link Mob} that a user is controlling.
  *
  * @author Graham
  * @author Major
@@ -296,7 +296,7 @@ public final class Player extends Mob {
 	 *
 	 * @param username The username of the other player.
 	 * @return {@code true} if the specified username is on this player's friend
-	 *         list, otherwise {@code false}.
+	 * list, otherwise {@code false}.
 	 */
 	public boolean friendsWith(String username) {
 		return friends.contains(username.toLowerCase());
@@ -415,7 +415,7 @@ public final class Player extends Mob {
 	 * Gets the last known region.
 	 *
 	 * @return The last known region, or {@code null} if the player has never
-	 *         known a region.
+	 * known a region.
 	 */
 	public Position getLastKnownRegion() {
 		return lastKnownRegion;
@@ -446,6 +446,24 @@ public final class Player extends Mob {
 	 */
 	public PrivilegeLevel getPrivilegeLevel() {
 		return privilegeLevel;
+	}
+
+	/**
+	 * Determines the {@link RegistrationStatus} for this player. This method
+	 * can remain lock-free since writes to the player {@link MobRepository} are
+	 * only happening on the game thread.
+	 *
+	 * @return The status.
+	 */
+	public RegistrationStatus getRegistrationStatus() {
+		MobRepository<Player> repository = world.getPlayerRepository();
+
+		if (world.isPlayerOnline(getUsername())) {
+			return RegistrationStatus.ALREADY_ONLINE;
+		} else if (repository.capacity() == repository.size()) {
+			return RegistrationStatus.WORLD_FULL;
+		}
+		return RegistrationStatus.OK;
 	}
 
 	/**
@@ -605,28 +623,10 @@ public final class Player extends Mob {
 	 * Checks if this player is withdrawing noted items.
 	 *
 	 * @return {@code true} if the player is currently withdrawing notes,
-	 *         otherwise {@code false}.
+	 * otherwise {@code false}.
 	 */
 	public boolean isWithdrawingNotes() {
 		return withdrawingNotes;
-	}
-
-	/**
-	 * Determines the {@link RegistrationStatus} for this player. This method
-	 * can remain lock-free since writes to the player {@link MobRepository} are
-	 * only happening on the game thread.
-	 * 
-	 * @return The status.
-	 */
-	public RegistrationStatus getRegistrationStatus() {
-		MobRepository<Player> repository = world.getPlayerRepository();
-
-		if (world.isPlayerOnline(getUsername())) {
-			return RegistrationStatus.ALREADY_ONLINE;
-		} else if (repository.capacity() == repository.size()) {
-			return RegistrationStatus.WORLD_FULL;
-		}
-		return RegistrationStatus.OK;
 	}
 
 	/**
@@ -670,7 +670,7 @@ public final class Player extends Mob {
 	 *
 	 * @param username The username.
 	 * @return {@code true} if the player's friend list contained the specified
-	 *         user, {@code false} if not.
+	 * user, {@code false} if not.
 	 */
 	public boolean removeFriend(String username) {
 		return friends.remove(username.toLowerCase());
@@ -681,7 +681,7 @@ public final class Player extends Mob {
 	 *
 	 * @param username The username.
 	 * @return {@code true} if the player's ignore list contained the specified
-	 *         user, {@code false} if not.
+	 * user, {@code false} if not.
 	 */
 	public boolean removeIgnore(String username) {
 		return ignores.remove(username.toLowerCase());
@@ -942,7 +942,7 @@ public final class Player extends Mob {
 	 * Sets whether or not the player is withdrawing notes from the bank.
 	 *
 	 * @param withdrawingNotes Whether or not the player is withdrawing noted
-	 *        items.
+	 * items.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
 		this.withdrawingNotes = withdrawingNotes;

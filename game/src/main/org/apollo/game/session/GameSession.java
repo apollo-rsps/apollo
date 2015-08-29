@@ -109,6 +109,15 @@ public final class GameSession extends Session {
 		context.getGameService().finalizePlayerUnregistration(player);
 	}
 
+	/**
+	 * Determines if this player is reconnecting.
+	 *
+	 * @return {@code true} if reconnecting, {@code false} otherwise.
+	 */
+	public boolean isReconnecting() {
+		return reconnecting;
+	}
+
 	@Override
 	public void messageReceived(Object message) {
 		if (messages.size() >= GameConstants.MESSAGES_PER_PULSE) {
@@ -116,15 +125,6 @@ public final class GameSession extends Session {
 		} else {
 			messages.add((Message) message);
 		}
-	}
-
-	/**
-	 * Determines if this player is reconnecting.
-	 * 
-	 * @return {@code true} if reconnecting, {@code false} otherwise.
-	 */
-	public boolean isReconnecting() {
-		return reconnecting;
 	}
 
 }
