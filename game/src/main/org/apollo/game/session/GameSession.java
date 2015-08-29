@@ -42,7 +42,7 @@ public final class GameSession extends Session {
 	 * The player.
 	 */
 	private final Player player;
-	
+
 	/**
 	 * If the player was reconnecting.
 	 */
@@ -56,11 +56,11 @@ public final class GameSession extends Session {
 	 * @param player The player.
 	 * @param reconnecting If the player was reconnecting.
 	 */
-    public GameSession(Channel channel, ServerContext context, Player player, boolean reconnecting) {
+	public GameSession(Channel channel, ServerContext context, Player player, boolean reconnecting) {
 		super(channel);
 		this.context = context;
 		this.player = player;
-        this.reconnecting = reconnecting;
+		this.reconnecting = reconnecting;
 	}
 
 	@Override
@@ -118,13 +118,13 @@ public final class GameSession extends Session {
 		}
 	}
 
-    /**
-     * Determines if this player is reconnecting.
-     * 
-     * @return {@code true} if reconnecting, {@code false} otherwise.
-     */
-    public boolean isReconnecting() {
-        return reconnecting;
-    }
+	/**
+	 * Determines if this player is reconnecting.
+	 * 
+	 * @return {@code true} if reconnecting, {@code false} otherwise.
+	 */
+	public boolean isReconnecting() {
+		return reconnecting;
+	}
 
 }

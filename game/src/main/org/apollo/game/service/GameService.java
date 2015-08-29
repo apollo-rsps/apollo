@@ -26,22 +26,24 @@ import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
 
 /**
- * The {@link GameService} class schedules and manages the execution of the {@link GamePulseHandler} class.
+ * The {@link GameService} class schedules and manages the execution of the
+ * {@link GamePulseHandler} class.
  *
  * @author Graham
  */
 public final class GameService extends Service {
 
 	/**
-	 * The number of times to unregister players per cycle. This is to ensure the saving threads don't get swamped with
-	 * requests and slow everything down.
+	 * The number of times to unregister players per cycle. This is to ensure
+	 * the saving threads don't get swamped with requests and slow everything
+	 * down.
 	 */
 	private static final int UNREGISTERS_PER_CYCLE = 50;
-	
+
 	/**
-     * The number of times to register players per cycle.
-     */
-    private static final int REGISTERS_PER_CYCLE = 25;
+	 * The number of times to register players per cycle.
+	 */
+	private static final int REGISTERS_PER_CYCLE = 25;
 
 	/**
 	 * The World this Service is for.
@@ -52,17 +54,16 @@ public final class GameService extends Service {
 	 * A queue of players to remove.
 	 */
 	private final Queue<Player> oldPlayers = new ConcurrentLinkedQueue<>();
-	
-    /**
-     * A queue of players to add.
-     */
-    private final Queue<Player> newPlayers = new ConcurrentLinkedQueue<>();
+
+	/**
+	 * A queue of players to add.
+	 */
+	private final Queue<Player> newPlayers = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(ThreadUtil
-			.create("GameService"));
+	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.create("GameService"));
 
 	/**
 	 * The {@link MessageHandlerChainSet}.
@@ -93,20 +94,20 @@ public final class GameService extends Service {
 	public synchronized void finalizePlayerUnregistration(Player player) {
 		world.unregister(player);
 	}
-	
-	/**
-     * Finalizes the registration of a player.
-     *
-     * @param player The player.
-     */
-	public void finalizePlayerRegistration(Player player) {
-        world.register(player);
-        Region region = world.getRegionRepository().fromPosition(player.getPosition());
-        region.addEntity(player);
 
-        if (player.getSession().isReconnecting()) {
-            player.sendInitialMessages();
-        }
+	/**
+	 * Finalizes the registration of a player.
+	 *
+	 * @param player The player.
+	 */
+	public void finalizePlayerRegistration(Player player) {
+		world.register(player);
+		Region region = world.getRegionRepository().fromPosition(player.getPosition());
+		region.addEntity(player);
+
+		if (player.getSession().isReconnecting()) {
+			player.sendInitialMessages();
+		}
 	}
 
 	/**
@@ -121,8 +122,8 @@ public final class GameService extends Service {
 	/**
 	 * Called every pulse.
 	 */
-    public void pulse() {
-	    finalizeRegistrations();
+	public void pulse() {
+		finalizeRegistrations();
 		finalizeUnregistrations();
 
 		MobRepository<Player> players = world.getPlayerRepository();
@@ -144,32 +145,35 @@ public final class GameService extends Service {
 	 */
 	public void shutdown(boolean natural) {
 		scheduledExecutor.shutdownNow();
-		// TODO: Other events that should happen upon natural or unexpected shutdown.
+		// TODO: Other events that should happen upon natural or unexpected
+		// shutdown.
 	}
 
 	@Override
 	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY,
-				GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
+		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
+			TimeUnit.MILLISECONDS);
 	}
 
 	/**
-	 * Unregisters a player. Returns immediately. The player is unregistered at the start of the next cycle.
+	 * Unregisters a player. Returns immediately. The player is unregistered at
+	 * the start of the next cycle.
 	 *
 	 * @param player The player.
 	 */
 	public void unregisterPlayer(Player player) {
 		oldPlayers.add(player);
 	}
-	
+
 	/**
-     * Registers a player. Returns immediately. The player is registered at the start of the next cycle.
-     *
-     * @param player The player.
-     */
-    public void registerPlayer(Player player) {
-        newPlayers.add(player);
-    }
+	 * Registers a player. Returns immediately. The player is registered at the
+	 * start of the next cycle.
+	 *
+	 * @param player The player.
+	 */
+	public void registerPlayer(Player player) {
+		newPlayers.add(player);
+	}
 
 	/**
 	 * Finalizes the unregistration of Player's queued to be unregistered.
@@ -186,27 +190,28 @@ public final class GameService extends Service {
 			loginService.submitSaveRequest(player.getSession(), player);
 		}
 	}
-	
-	/**
-     * Finalizes the registration of Player's queued to be registered.
-     */
-    private void finalizeRegistrations() {
-        for (int count = 0; count < REGISTERS_PER_CYCLE; count++) {
-            Player player = newPlayers.poll();
-            if (player == null) {
-                break;
-            }
 
-            finalizePlayerRegistration(player);
-        }
-    }
+	/**
+	 * Finalizes the registration of Player's queued to be registered.
+	 */
+	private void finalizeRegistrations() {
+		for (int count = 0; count < REGISTERS_PER_CYCLE; count++) {
+			Player player = newPlayers.poll();
+			if (player == null) {
+				break;
+			}
+
+			finalizePlayerRegistration(player);
+		}
+	}
 
 	/**
 	 * Initializes the game service.
 	 *
 	 * @throws IOException If there is an error accessing the file.
 	 * @throws SAXException If there is an error parsing the file.
-	 * @throws ReflectiveOperationException If a MessageHandler could not be created.
+	 * @throws ReflectiveOperationException If a MessageHandler could not be
+	 *         created.
 	 */
 	private void init() throws IOException, SAXException, ReflectiveOperationException {
 		try (InputStream input = new FileInputStream("data/messages.xml")) {

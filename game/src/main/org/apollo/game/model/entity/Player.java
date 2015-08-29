@@ -218,7 +218,8 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Adds a click, represented by a {@link Point}, to the {@link List} of clicks.
+	 * Adds a click, represented by a {@link Point}, to the {@link List} of
+	 * clicks.
 	 *
 	 * @param point The point.
 	 * @return {@code true} if the point was added successfully.
@@ -246,7 +247,8 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Adds the specified {@link DynamicGameObject} to this Player's {@link Set} of visible objects.
+	 * Adds the specified {@link DynamicGameObject} to this Player's {@link Set}
+	 * of visible objects.
 	 *
 	 * @param object The DynamicGameObject.
 	 */
@@ -289,10 +291,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Indicates whether this player is friends with the player with the specified username or not.
+	 * Indicates whether this player is friends with the player with the
+	 * specified username or not.
 	 *
 	 * @param username The username of the other player.
-	 * @return {@code true} if the specified username is on this player's friend list, otherwise {@code false}.
+	 * @return {@code true} if the specified username is on this player's friend
+	 *         list, otherwise {@code false}.
 	 */
 	public boolean friendsWith(String username) {
 		return friends.contains(username.toLowerCase());
@@ -410,7 +414,8 @@ public final class Player extends Mob {
 	/**
 	 * Gets the last known region.
 	 *
-	 * @return The last known region, or {@code null} if the player has never known a region.
+	 * @return The last known region, or {@code null} if the player has never
+	 *         known a region.
 	 */
 	public Position getLastKnownRegion() {
 		return lastKnownRegion;
@@ -508,7 +513,8 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Indicates whether or not the player with the specified username is on this player's ignore list.
+	 * Indicates whether or not the player with the specified username is on
+	 * this player's ignore list.
 	 *
 	 * @param username The username of the player.
 	 * @return {@code true} if the player is ignored, {@code false} if not.
@@ -541,7 +547,8 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Increments this player's viewing distance if it is less than the maximum viewing distance.
+	 * Increments this player's viewing distance if it is less than the maximum
+	 * viewing distance.
 	 */
 	public void incrementViewingDistance() {
 		if (viewingDistance < Position.MAX_DISTANCE) {
@@ -597,29 +604,30 @@ public final class Player extends Mob {
 	/**
 	 * Checks if this player is withdrawing noted items.
 	 *
-	 * @return {@code true} if the player is currently withdrawing notes, otherwise {@code false}.
+	 * @return {@code true} if the player is currently withdrawing notes,
+	 *         otherwise {@code false}.
 	 */
 	public boolean isWithdrawingNotes() {
 		return withdrawingNotes;
 	}
 
-    /**
-     * Determines the {@link RegistrationStatus} for this player. This method
-     * can remain lock-free since writes to the player {@link MobRepository} are
-     * only happening on the game thread.
-     * 
-     * @return The status.
-     */
-    public RegistrationStatus getRegistrationStatus() {
-        MobRepository<Player> repository = world.getPlayerRepository();
+	/**
+	 * Determines the {@link RegistrationStatus} for this player. This method
+	 * can remain lock-free since writes to the player {@link MobRepository} are
+	 * only happening on the game thread.
+	 * 
+	 * @return The status.
+	 */
+	public RegistrationStatus getRegistrationStatus() {
+		MobRepository<Player> repository = world.getPlayerRepository();
 
-        if (world.isPlayerOnline(getUsername())) {
-            return RegistrationStatus.ALREADY_ONLINE;
-        } else if (repository.capacity() == repository.size()) {
-            return RegistrationStatus.WORLD_FULL;
-        }
-        return RegistrationStatus.OK;
-    }
+		if (world.isPlayerOnline(getUsername())) {
+			return RegistrationStatus.ALREADY_ONLINE;
+		} else if (repository.capacity() == repository.size()) {
+			return RegistrationStatus.WORLD_FULL;
+		}
+		return RegistrationStatus.OK;
+	}
 
 	/**
 	 * Logs the player out, if possible.
@@ -661,7 +669,8 @@ public final class Player extends Mob {
 	 * Removes the specified username from this player's friend list.
 	 *
 	 * @param username The username.
-	 * @return {@code true} if the player's friend list contained the specified user, {@code false} if not.
+	 * @return {@code true} if the player's friend list contained the specified
+	 *         user, {@code false} if not.
 	 */
 	public boolean removeFriend(String username) {
 		return friends.remove(username.toLowerCase());
@@ -671,14 +680,16 @@ public final class Player extends Mob {
 	 * Removes the specified username from this player's ignore list.
 	 *
 	 * @param username The username.
-	 * @return {@code true} if the player's ignore list contained the specified user, {@code false} if not.
+	 * @return {@code true} if the player's ignore list contained the specified
+	 *         user, {@code false} if not.
 	 */
 	public boolean removeIgnore(String username) {
 		return ignores.remove(username.toLowerCase());
 	}
 
 	/**
-	 * Removes the specified {@link DynamicGameObject} from this Player's {@link Set} of visible objects.
+	 * Removes the specified {@link DynamicGameObject} from this Player's
+	 * {@link Set} of visible objects.
 	 *
 	 * @param object The DynamicGameObject.
 	 */
@@ -930,7 +941,8 @@ public final class Player extends Mob {
 	/**
 	 * Sets whether or not the player is withdrawing notes from the bank.
 	 *
-	 * @param withdrawingNotes Whether or not the player is withdrawing noted items.
+	 * @param withdrawingNotes Whether or not the player is withdrawing noted
+	 *        items.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
 		this.withdrawingNotes = withdrawingNotes;
@@ -951,8 +963,7 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
-				.toString();
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel).toString();
 	}
 
 	/**
@@ -985,16 +996,13 @@ public final class Player extends Mob {
 	 * Initialises the player's inventories.
 	 */
 	private void initInventories() {
-		InventoryListener fullInventoryListener = new FullInventoryListener(this,
-				FullInventoryListener.FULL_INVENTORY_MESSAGE);
+		InventoryListener fullInventoryListener = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 
-		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.INVENTORY_ID);
+		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.INVENTORY_ID);
 		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
-		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.EQUIPMENT_ID);
+		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.EQUIPMENT_ID);
 
 		inventory.addListener(syncInventoryListener);
 		inventory.addListener(fullInventoryListener);
