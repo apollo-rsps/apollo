@@ -40,9 +40,11 @@ import org.apollo.util.NameUtil;
 import com.google.common.base.Preconditions;
 
 /**
- * The world class is a singleton which contains objects like the {@link MobRepository} for players and NPCs. It should
- * only contain things relevant to the in-game world and not classes which deal with I/O and such (these may be better
- * off inside some custom {@link Service} or other code, however, the circumstances are rare).
+ * The world class is a singleton which contains objects like the
+ * {@link MobRepository} for players and NPCs. It should only contain things
+ * relevant to the in-game world and not classes which deal with I/O and such
+ * (these may be better off inside some custom {@link Service} or other code,
+ * however, the circumstances are rare).
  *
  * @author Graham
  */
@@ -153,8 +155,8 @@ public final class World {
 	}
 
 	/**
-	 * Gets the {@link Player} with the specified username. Note that this will return {@code null} if the player is
-	 * offline.
+	 * Gets the {@link Player} with the specified username. Note that this will
+	 * return {@code null} if the player is offline.
 	 *
 	 * @param username The username.
 	 * @return The player.
@@ -200,12 +202,14 @@ public final class World {
 	}
 
 	/**
-	 * Initialises the world by loading definitions from the specified file system.
+	 * Initialises the world by loading definitions from the specified file
+	 * system.
 	 *
 	 * @param release The release number.
 	 * @param fs The file system.
 	 * @param manager The plugin manager. TODO move this.
-	 * @throws Exception If any definitions could not be loaded or there was a failure when loading plugins.
+	 * @throws Exception If any definitions could not be loaded or there was a
+	 *         failure when loading plugins.
 	 */
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
 		releaseNumber = release;
@@ -237,7 +241,9 @@ public final class World {
 		placeEntities(objects);
 		logger.fine("Loaded " + objects.length + " static objects.");
 
-		npcMovement = new NpcMovementTask(regions); // Must be exactly here because of ordering issues.
+		npcMovement = new NpcMovementTask(regions); // Must be exactly here
+													// because of ordering
+													// issues.
 		scheduler.schedule(npcMovement);
 
 		manager.start();
@@ -256,7 +262,8 @@ public final class World {
 	}
 
 	/**
-	 * Adds an {@link EventListener}, listening for an {@link Event} of the specified type.
+	 * Adds an {@link EventListener}, listening for an {@link Event} of the
+	 * specified type.
 	 *
 	 * @param type The type of the Event.
 	 * @param listener The EventListener.
@@ -276,7 +283,8 @@ public final class World {
 	 * Registers the specified npc.
 	 *
 	 * @param npc The npc.
-	 * @return {@code true} if the npc registered successfully, otherwise {@code false}.
+	 * @return {@code true} if the npc registered successfully, otherwise
+	 *         {@code false}.
 	 */
 	public boolean register(Npc npc) {
 		boolean success = npcRepository.add(npc);
@@ -298,24 +306,14 @@ public final class World {
 	 * Registers the specified player.
 	 *
 	 * @param player The player.
-	 * @return A {@link RegistrationStatus}.
 	 */
-	public RegistrationStatus register(Player player) {
+	public void register(Player player) {
 		String username = player.getUsername();
-		if (isPlayerOnline(username)) {
-			return RegistrationStatus.ALREADY_ONLINE;
-		}
 
-		boolean success = playerRepository.add(player);
-		if (success) {
-			players.put(NameUtil.encodeBase37(username), player);
+		playerRepository.add(player);
+		players.put(NameUtil.encodeBase37(username), player);
 
-			logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
-			return RegistrationStatus.OK;
-		}
-
-		logger.warning("Failed to register player: " + player + " [count=" + playerRepository.size() + "]");
-		return RegistrationStatus.WORLD_FULL;
+		logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 	}
 
 	/**
@@ -329,8 +327,8 @@ public final class World {
 	}
 
 	/**
-	 * Spawns the specified {@link Entity}, which must not be a {@link Player} or an {@link Npc}, which have their own
-	 * register methods.
+	 * Spawns the specified {@link Entity}, which must not be a {@link Player}
+	 * or an {@link Npc}, which have their own register methods.
 	 *
 	 * @param entity The Entity.
 	 */
@@ -385,12 +383,12 @@ public final class World {
 	}
 
 	/**
-	 * Adds entities to regions in the {@link RegionRepository}. By default, we do not notify listeners.
+	 * Adds entities to regions in the {@link RegionRepository}. By default, we
+	 * do not notify listeners.
 	 *
 	 * @param entities The entities.
 	 */
 	private void placeEntities(Entity... entities) {
 		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity, false));
 	}
-
 }
