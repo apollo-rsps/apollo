@@ -3,6 +3,8 @@ package org.apollo.game.model;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 import org.apollo.Service;
@@ -93,6 +95,11 @@ public final class World {
 	 * A {@link Map} of player usernames and the player objects.
 	 */
 	private final Map<Long, Player> players = new HashMap<>();
+
+	/**
+	 * The Queue of Npcs that have yet to be added to the repository.
+	 */
+	private final Queue<Npc> queuedNpcs = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * This world's {@link RegionRepository}.
@@ -232,40 +239,26 @@ public final class World {
 	}
 
 	/**
-	 * Pulses the world.
+	 * Pulses this World.
 	 */
 	public void pulse() {
+		registerNpcs();
 		scheduler.pulse();
 	}
 
 	/**
-	 * Registers the specified npc.
+	 * Registers the specified {@link Npc}.
 	 *
-	 * @param npc The npc.
-	 * @return {@code true} if the npc registered successfully, otherwise
-	 * {@code false}.
+	 * @param npc The Npc.
 	 */
-	public boolean register(Npc npc) {
-		boolean success = npcRepository.add(npc);
-
-		if (success) {
-			Region region = regions.fromPosition(npc.getPosition());
-			region.addEntity(npc);
-
-			if (npc.hasBoundaries()) {
-				npcMovement.addNpc(npc);
-			}
-		} else {
-			logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
-		}
-
-		return success;
+	public void register(Npc npc) {
+		queuedNpcs.add(npc);
 	}
 
 	/**
-	 * Registers the specified player.
+	 * Registers the specified {@link Player}.
 	 *
-	 * @param player The player.
+	 * @param player The Player.
 	 */
 	public void register(Player player) {
 		String username = player.getUsername();
@@ -350,5 +343,26 @@ public final class World {
 	 */
 	private void placeEntities(Entity... entities) {
 		Arrays.stream(entities).forEach(entity -> regions.fromPosition(entity.getPosition()).addEntity(entity, false));
+	}
+
+	/**
+	 * Registers all of the {@link Npc}s in the {@link #queuedNpcs queue}.
+	 */
+	private void registerNpcs() {
+		while (!queuedNpcs.isEmpty()) {
+			Npc npc = queuedNpcs.poll();
+			boolean success = npcRepository.add(npc);
+
+			if (success) {
+				Region region = regions.fromPosition(npc.getPosition());
+				region.addEntity(npc);
+
+				if (npc.hasBoundaries()) {
+					npcMovement.addNpc(npc);
+				}
+			} else {
+				logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
+			}
+		}
 	}
 }
