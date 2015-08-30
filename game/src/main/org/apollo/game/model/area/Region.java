@@ -103,7 +103,7 @@ public final class Region {
 	/**
 	 * Creates a new Region with the specified {@link RegionCoordinates}.
 	 *
-	 * @param coordinates The coordinates.
+	 * @param coordinates The RegionCoordinates.
 	 */
 	public Region(RegionCoordinates coordinates) {
 		this.coordinates = coordinates;
@@ -120,7 +120,7 @@ public final class Region {
 	 * register it to this Region.
 	 *
 	 * @param entity The Entity.
-	 * @param notify A flag indicating whether the {@link RegionListener}s for this Region should be notified.
+	 * @param notify Whether or not the {@link RegionListener}s for this Region should be notified.
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region.
 	 */
 	public void addEntity(Entity entity, boolean notify) {
@@ -138,7 +138,7 @@ public final class Region {
 	/**
 	 * Adds a {@link Entity} to the Region. Note that this does not spawn the Entity, or do any other action other than
 	 * register it to this Region.
-	 * <p/>
+	 *
 	 * By default, this method notifies RegionListeners for this region of the addition.
 	 *
 	 * @param entity The Entity.
@@ -150,7 +150,7 @@ public final class Region {
 
 	/**
 	 * Checks if this Region contains the specified Entity.
-	 * <p/>
+	 *
 	 * This method operates in constant time.
 	 *
 	 * @param entity The Entity.
@@ -193,7 +193,7 @@ public final class Region {
 	/**
 	 * Gets this Region's {@link RegionCoordinates}.
 	 *
-	 * @return The Region coordinates.
+	 * @return The RegionCoordinates.
 	 */
 	public RegionCoordinates getCoordinates() {
 		return coordinates;
@@ -203,8 +203,8 @@ public final class Region {
 	 * Gets a shallow copy of the {@link Set} of {@link Entity} objects at the specified {@link Position}. The returned
 	 * type will be immutable.
 	 *
-	 * @param position The position containing the entities.
-	 * @return The list.
+	 * @param position The Position containing the entities.
+	 * @return The Set. Will be immutable.
 	 */
 	public Set<Entity> getEntities(Position position) {
 		Set<Entity> set = entities.get(position);
@@ -218,7 +218,7 @@ public final class Region {
 	 *
 	 * @param position The {@link Position} containing the entities.
 	 * @param types The {@link EntityType}s.
-	 * @return The set of entities.
+	 * @return The Set of Entity objects.
 	 */
 	public <T extends Entity> Set<T> getEntities(Position position, EntityType... types) {
 		Set<Entity> local = entities.get(position);
@@ -271,12 +271,12 @@ public final class Region {
 	}
 
 	/**
-	 * Removes a {@link Entity} from this Region.
+	 * Removes an {@link Entity} from this Region.
 	 *
 	 * @param entity The Entity.
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region, or if it was never added.
 	 */
-	public void removeEntity(Entity entity) { // TODO entity update stuff
+	public void removeEntity(Entity entity) {
 		Position position = entity.getPosition();
 		checkPosition(position);
 

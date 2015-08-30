@@ -206,7 +206,7 @@ public final class GameObjectDecoder implements Runnable {
 			Position position = new Position(x, y, height);
 
 			if (!previous.contains(position)) {
-				previous = regions.fromPosition(new Position(x, y, height));
+				previous = regions.fromPosition(position);
 			}
 
 			previous.getMatrix(height).block(localX, localY);
@@ -270,9 +270,11 @@ public final class GameObjectDecoder implements Runnable {
 					while (true) {
 						int attributeId = buffer.get() & 0xFF;
 
-						if (attributeId == 1) {
+						if (attributeId == 0) {
+							decodeAttributes(attributes, x + localX, y + localY, height);
+							break;
+						} else if (attributeId == 1) {
 							buffer.get();
-						} else if (attributeId == 0) {
 							decodeAttributes(attributes, x + localX, y + localY, height);
 							break;
 						} else if (attributeId <= 49) {
