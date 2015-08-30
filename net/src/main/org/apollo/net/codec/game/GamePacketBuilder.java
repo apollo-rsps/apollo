@@ -223,7 +223,7 @@ public final class GamePacketBuilder {
 	 * @throws IllegalArgumentException If the number of bits is not between 1 and 31 inclusive.
 	 */
 	public void putBits(int numBits, int value) {
-		Preconditions.checkArgument(numBits >= 0 && numBits <= 32, "Number of bits must be between 1 and 32 inclusive.");
+		Preconditions.checkArgument(numBits >= 1 && numBits <= 32, "Number of bits must be between 1 and 32 inclusive.");
 
 		checkBitAccess();
 
