@@ -164,6 +164,16 @@ public final class Region {
 	}
 
 	/**
+	 * Returns whether or not the specified {@link Position} is inside this Region.
+	 *
+	 * @param position The Position.
+	 * @return {@code true} iff the specified Position is inside this Region.
+	 */
+	public boolean contains(Position position) {
+		return coordinates.equals(position.getRegionCoordinates());
+	}
+
+	/**
 	 * Encodes the contents of this Region into a {@link Set} of {@link RegionUpdateMessage}s, to be sent to a client.
 	 *
 	 * @return The Set of RegionUpdateMessages.
