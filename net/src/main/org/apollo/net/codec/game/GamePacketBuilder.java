@@ -6,6 +6,8 @@ import io.netty.buffer.Unpooled;
 import org.apollo.net.meta.PacketType;
 import org.apollo.util.BufferUtil;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A class which assists in creating a {@link GamePacket}.
  *
@@ -72,9 +74,7 @@ public final class GamePacketBuilder {
 	 * @throws IllegalStateException If the builder is not in bit access mode.
 	 */
 	private void checkBitAccess() {
-		if (mode != AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("For bit-based calls to work, the mode must be bit access.");
-		}
+		Preconditions.checkState(mode == AccessMode.BIT_ACCESS, "For bit-based calls to work, the mode must be bit access.");
 	}
 
 	/**
@@ -83,9 +83,7 @@ public final class GamePacketBuilder {
 	 * @throws IllegalStateException If the builder is not in byte access mode.
 	 */
 	private void checkByteAccess() {
-		if (mode != AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("For byte-based calls to work, the mode must be byte access.");
-		}
+		Preconditions.checkState(mode == AccessMode.BYTE_ACCESS, "For byte-based calls to work, the mode must be byte access.");
 	}
 
 	/**
@@ -144,23 +142,19 @@ public final class GamePacketBuilder {
 				}
 			}
 		} else if (order == DataOrder.MIDDLE) {
-			if (transformation != DataTransformation.NONE) {
-				throw new IllegalArgumentException("Middle endian cannot be transformed.");
-			}
-			if (type != DataType.INT) {
-				throw new IllegalArgumentException("Middle endian can only be used with an integer,");
-			}
+			Preconditions.checkArgument(transformation == DataTransformation.NONE, "Middle endian cannot be transformed.");
+
+			Preconditions.checkArgument(type == DataType.INT, "Middle endian can only be used with an integer.");
+
 			buffer.writeByte((byte) (longValue >> 8));
 			buffer.writeByte((byte) longValue);
 			buffer.writeByte((byte) (longValue >> 24));
 			buffer.writeByte((byte) (longValue >> 16));
 		} else if (order == DataOrder.INVERSED_MIDDLE) {
-			if (transformation != DataTransformation.NONE) {
-				throw new IllegalArgumentException("Inversed middle endian cannot be transformed,");
-			}
-			if (type != DataType.INT) {
-				throw new IllegalArgumentException("Inversed middle endian can only be used with an integer,");
-			}
+			Preconditions.checkArgument(transformation == DataTransformation.NONE, "Inversed middle endian cannot be transformed.");
+
+			Preconditions.checkArgument(type == DataType.INT, "Inversed middle endian can only be used with an integer.");
+
 			buffer.writeByte((byte) (longValue >> 16));
 			buffer.writeByte((byte) (longValue >> 24));
 			buffer.writeByte((byte) longValue);
@@ -229,9 +223,7 @@ public final class GamePacketBuilder {
 	 * @throws IllegalArgumentException If the number of bits is not between 1 and 31 inclusive.
 	 */
 	public void putBits(int numBits, int value) {
-		if (numBits < 0 || numBits > 32) {
-			throw new IllegalArgumentException("Number of bits must be between 1 and 32 inclusive.");
-		}
+		Preconditions.checkArgument(numBits >= 1 && numBits <= 32, "Number of bits must be between 1 and 32 inclusive.");
 
 		checkBitAccess();
 
@@ -371,9 +363,9 @@ public final class GamePacketBuilder {
 	 */
 	public void putRawBuilderReverse(GamePacketBuilder builder) {
 		checkByteAccess();
-		if (builder.type != PacketType.RAW) {
-			throw new IllegalArgumentException("Builder must be raw.");
-		}
+
+		Preconditions.checkArgument(builder.type == PacketType.RAW, "Builder must be raw.");
+
 		builder.checkByteAccess();
 		putBytesReverse(builder.buffer);
 	}
@@ -412,9 +404,8 @@ public final class GamePacketBuilder {
 	 * @throws IllegalStateException If the builder is already in bit access mode.
 	 */
 	public void switchToBitAccess() {
-		if (mode == AccessMode.BIT_ACCESS) {
-			throw new IllegalStateException("Already in bit access mode.");
-		}
+		Preconditions.checkState(mode != AccessMode.BIT_ACCESS, "Already in bit access mode.");
+
 		mode = AccessMode.BIT_ACCESS;
 		bitIndex = buffer.writerIndex() * 8;
 	}
@@ -425,9 +416,8 @@ public final class GamePacketBuilder {
 	 * @throws IllegalStateException If the builder is already in byte access mode.
 	 */
 	public void switchToByteAccess() {
-		if (mode == AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("Already in byte access mode.");
-		}
+		Preconditions.checkState(mode != AccessMode.BYTE_ACCESS, "Already in bit access mode.");
+
 		mode = AccessMode.BYTE_ACCESS;
 		buffer.writerIndex((bitIndex + 7) / 8);
 	}
@@ -439,12 +429,10 @@ public final class GamePacketBuilder {
 	 * @throws IllegalStateException If the builder is not in byte access mode, or if the packet is raw.
 	 */
 	public GamePacket toGamePacket() {
-		if (type == PacketType.RAW) {
-			throw new IllegalStateException("Raw packets cannot be converted to a game packet.");
-		}
-		if (mode != AccessMode.BYTE_ACCESS) {
-			throw new IllegalStateException("Must be in byte access mode to convert to a packet.");
-		}
+		Preconditions.checkState(type != PacketType.RAW, "Raw packets cannot be converted to a game packet.");
+
+		Preconditions.checkState(mode == AccessMode.BYTE_ACCESS, "Must be in byte access mode to convert to a packet.");
+
 		return new GamePacket(opcode, type, buffer);
 	}
 
