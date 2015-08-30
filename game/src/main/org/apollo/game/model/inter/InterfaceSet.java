@@ -24,7 +24,8 @@ import org.apollo.game.model.inv.InventoryListener;
  * This class manages all six distinct types of interface (the last two are not present on 317 servers).
  * <p>
  * <ul>
- * <li><strong>Windows:</strong> Interfaces such as the bank, the wilderness warning screen, the trade screen, etc.</li>
+ * <li><strong>Windows:</strong> Interfaces such as the bank, the wilderness warning screen, the trade screen,
+ * etc.</li>
  * <li><strong>Overlays:</strong> Displayed in the same place as windows, but don't prevent a player from moving e.g.
  * the wilderness level indicator.</li>
  * <li><strong>Dialogues:</strong> Interfaces displayed over the chat box.</li>
@@ -39,6 +40,16 @@ import org.apollo.game.model.inv.InventoryListener;
 public final class InterfaceSet {
 
 	/**
+	 * A map of open interfaces.
+	 */
+	private final Map<InterfaceType, Integer> interfaces = new HashMap<>();
+
+	/**
+	 * The player whose interfaces are being managed.
+	 */
+	private final Player player;
+
+	/**
 	 * The current enter amount listener.
 	 */
 	private Optional<EnterAmountListener> amountListener = Optional.empty();
@@ -49,19 +60,9 @@ public final class InterfaceSet {
 	private Optional<DialogueListener> dialogueListener = Optional.empty();
 
 	/**
-	 * A map of open interfaces.
-	 */
-	private final Map<InterfaceType, Integer> interfaces = new HashMap<>();
-
-	/**
 	 * The current listener.
 	 */
 	private Optional<InterfaceListener> listener = Optional.empty();
-
-	/**
-	 * The player whose interfaces are being managed.
-	 */
-	private final Player player;
 
 	/**
 	 * Creates an interface set.
@@ -86,10 +87,13 @@ public final class InterfaceSet {
 	 * Closes the current open interface(s).
 	 */
 	public void close() {
-		CloseInterfacesEvent event = new CloseInterfacesEvent(player);
-		if (player.getWorld().submit(event)) {
-			closeAndNotify();
-			player.send(new CloseInterfaceMessage());
+		if (interfaces.size() != 0) {
+			CloseInterfacesEvent event = new CloseInterfacesEvent(player);
+
+			if (player.getWorld().submit(event)) {
+				closeAndNotify();
+				player.send(new CloseInterfaceMessage());
+			}
 		}
 	}
 
