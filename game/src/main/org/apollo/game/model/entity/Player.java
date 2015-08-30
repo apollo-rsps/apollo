@@ -447,25 +447,6 @@ public final class Player extends Mob {
 	public PrivilegeLevel getPrivilegeLevel() {
 		return privilegeLevel;
 	}
-
-	/**
-	 * Determines the {@link RegistrationStatus} for this player. This method
-	 * can remain lock-free since writes to the player {@link MobRepository} are
-	 * only happening on the game thread.
-	 *
-	 * @return The status.
-	 */
-	public RegistrationStatus getRegistrationStatus() {
-		MobRepository<Player> repository = world.getPlayerRepository();
-
-		if (world.isPlayerOnline(getUsername())) {
-			return RegistrationStatus.ALREADY_ONLINE;
-		} else if (repository.capacity() == repository.size()) {
-			return RegistrationStatus.WORLD_FULL;
-		}
-		return RegistrationStatus.OK;
-	}
-
 	/**
 	 * Gets the player's run energy.
 	 *

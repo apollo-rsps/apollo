@@ -213,8 +213,6 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	private void writeResponseCode(ChannelHandlerContext ctx, int response) {
 		ByteBuf buffer = ctx.alloc().buffer(Byte.BYTES);
 		buffer.writeByte(response);
-		System.out.println("Sending response: " + response);
-
 		ctx.writeAndFlush(buffer).addListener(ChannelFutureListener.CLOSE);
 	}
 

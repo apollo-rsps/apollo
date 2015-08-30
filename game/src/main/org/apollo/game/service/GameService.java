@@ -19,7 +19,9 @@ import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.session.GameSession;
+import org.apollo.game.session.LoginSession;
 import org.apollo.game.sync.ClientSynchronizer;
+import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.util.ThreadUtil;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
@@ -31,6 +33,34 @@ import org.xml.sax.SAXException;
  * @author Graham
  */
 public final class GameService extends Service {
+
+	/**
+	 * A utility class wrapping a {@link Player} and their corresponding {@link LoginSession}.
+	 */
+	private static final class LoginPlayerRequest {
+
+		/**
+		 * The Player.
+		 */
+		private final Player player;
+
+		/**
+		 * The LoginSession.
+		 */
+		private final LoginSession session;
+
+		/**
+		 * Creates the LoginPlayerRequest.
+		 *
+		 * @param player The {@link Player} logging in.
+		 * @param session The {@link LoginSession} of the Player.
+		 */
+		public LoginPlayerRequest(Player player, LoginSession session) {
+			this.player = player;
+			this.session = session;
+		}
+
+	}
 
 	/**
 	 * The amount of players to deregister per cycle. This is to ensure the saving threads don't get swamped with
@@ -54,12 +84,12 @@ public final class GameService extends Service {
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.create("GameService"));
 
 	/**
-	 * A queue of players to add.
+	 * The Queue of LoginPlayers to add.
 	 */
-	private final Queue<Player> newPlayers = new ConcurrentLinkedQueue<>();
+	private final Queue<LoginPlayerRequest> newPlayers = new ConcurrentLinkedQueue<>();
 
 	/**
-	 * A queue of players to remove.
+	 * The Queue of Players to remove.
 	 */
 	private final Queue<Player> oldPlayers = new ConcurrentLinkedQueue<>();
 
@@ -138,13 +168,13 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Registers a player. Returns immediately. The player is registered at the
-	 * start of the next cycle.
+	 * Registers a {@link Player} at the end of the next cycle.
 	 *
-	 * @param player The player.
+	 * @param player The Player to register.
+	 * @param session the {@link LoginSession} of the Player.
 	 */
-	public void registerPlayer(Player player) {
-		newPlayers.add(player);
+	public void registerPlayer(Player player, LoginSession session) {
+		newPlayers.add(new LoginPlayerRequest(player, session));
 	}
 
 	/**
@@ -177,9 +207,18 @@ public final class GameService extends Service {
 	 */
 	private void finalizeRegistrations() {
 		for (int count = 0; count < REGISTRATIONS_PER_CYCLE; count++) {
-			Player player = newPlayers.poll();
-			if (player == null) {
+			LoginPlayerRequest request = newPlayers.poll();
+			if (request == null) {
 				break;
+			}
+
+			Player player = request.player;
+			if (world.isPlayerOnline(player.getUsername())) {
+				request.session.sendLoginFailure(LoginConstants.STATUS_ACCOUNT_ONLINE);
+			} else if (world.getPlayerRepository().full()) {
+				request.session.sendLoginFailure(LoginConstants.STATUS_SERVER_FULL);
+			} else {
+				request.session.sendLoginSuccess(player);
 			}
 
 			finalizePlayerRegistration(player);

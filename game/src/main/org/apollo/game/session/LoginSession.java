@@ -31,9 +31,14 @@ import org.apollo.util.security.IsaacRandomPair;
 public final class LoginSession extends Session {
 
 	/**
-	 * The server context.
+	 * The ServerContext.
 	 */
 	private final ServerContext context;
+
+	/**
+	 * The LoginRequest for this LoginSession.
+	 */
+	private LoginRequest request;
 
 	/**
 	 * Creates a login session for the specified channel.
@@ -58,52 +63,14 @@ public final class LoginSession extends Session {
 	 * @param response The response.
 	 */
 	public void handlePlayerLoaderResponse(LoginRequest request, PlayerLoaderResponse response) {
+		this.request = request;
 		GameService service = context.getGameService();
-		Channel channel = getChannel();
-
 		Optional<Player> optional = response.getPlayer();
-		int status = response.getStatus(), rights = 0;
-		boolean flagged = false;
 
 		if (optional.isPresent()) {
-			Player player = optional.get();
-			rights = player.getPrivilegeLevel().toInteger();
-
-			RegistrationStatus registration = player.getRegistrationStatus();
-
-			if (registration != RegistrationStatus.OK) {
-				optional = Optional.empty();
-				rights = 0;
-
-				status = registration == RegistrationStatus.ALREADY_ONLINE ? LoginConstants.STATUS_ACCOUNT_ONLINE
-						: LoginConstants.STATUS_SERVER_FULL;
-			} else {
-				GameSession session = new GameSession(channel, context, player, request.isReconnecting());
-				channel.attr(ApolloHandler.SESSION_KEY).set(session);
-				player.setSession(session);
-			}
-		}
-
-		ChannelFuture future = channel.write(new LoginResponse(status, rights, flagged));
-
-		destroy();
-
-		if (optional.isPresent()) {
-			IsaacRandomPair randomPair = request.getRandomPair();
-			Release release = context.getRelease();
-
-			channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
-			channel.pipeline().addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
-
-			channel.pipeline().addBefore("handler", "gameDecoder",
-					new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
-			channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
-
-			channel.pipeline().remove("loginDecoder");
-			channel.pipeline().remove("loginEncoder");
-			service.registerPlayer(optional.get());
+			service.registerPlayer(optional.get(), this);
 		} else {
-			future.addListener(ChannelFutureListener.CLOSE);
+			sendLoginFailure(response.getStatus());
 		}
 	}
 
@@ -112,6 +79,46 @@ public final class LoginSession extends Session {
 		if (message.getClass() == LoginRequest.class) {
 			handleLoginRequest((LoginRequest) message);
 		}
+	}
+
+	/**
+	 * Sends a failed {@link LoginResponse} to the client.
+	 *
+	 * @param status The failure status.
+	 */
+	public void sendLoginFailure(int status) {
+		boolean flagged = false;
+		LoginResponse response = new LoginResponse(status, 0, flagged);
+		channel.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+	}
+
+	/**
+	 * Sends a succesfull {@link LoginResponse} to the client.
+	 *
+	 * @param player The {@link Player} that successfully logged in.
+	 */
+	public void sendLoginSuccess(Player player) {
+		IsaacRandomPair randomPair = request.getRandomPair();
+		boolean flagged = false;
+
+		GameSession session = new GameSession(channel, context, player, request.isReconnecting());
+		channel.attr(ApolloHandler.SESSION_KEY).set(session);
+		player.setSession(session);
+
+		int rights = player.getPrivilegeLevel().toInteger();
+		channel.writeAndFlush(new LoginResponse(LoginConstants.STATUS_OK, rights, flagged));
+
+		Release release = context.getRelease();
+
+		channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
+		channel.pipeline().addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
+
+		channel.pipeline().addBefore("handler", "gameDecoder",
+				new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
+		channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
+
+		channel.pipeline().remove("loginDecoder");
+		channel.pipeline().remove("loginEncoder");
 	}
 
 	/**
