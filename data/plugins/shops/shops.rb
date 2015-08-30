@@ -13,11 +13,11 @@ SHOPS = {}
 
 # Creates the Shop from the specified Hash.
 def create_shop(hash)
-  unless hash.has_keys?(:items, :name, :npc_id)
-    fail 'Shop name, npc, and items must be specified to create a shop.'
+  unless hash.has_keys?(:items, :name, :npcs)
+    fail 'Shop name, npcs, and items must be specified to create a shop.'
   end
 
-  npc_id, name = hash[:npc_id], hash[:name]
+  npcs, name = hash[:npcs], hash[:name]
   currency = hash[:currency] || DEFAULT_CURRENCY
 
   options = hash[:npc_options] || [1]
@@ -26,7 +26,7 @@ def create_shop(hash)
   items = hash.delete(:items).collect { |data| ShopItem.new(*data) }
   shop = Shop.new(name, items, currency, options, buys)
 
-  SHOPS[npc_id] = shop
+  npcs.each { |npc| SHOPS[npc] = shop }
 end
 
 private
