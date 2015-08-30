@@ -6,6 +6,8 @@ import java.util.Queue;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionRepository;
 
 /**
  * A queue of {@link Direction}s which a {@link Mob} will follow.
@@ -175,6 +177,10 @@ public final class WalkingQueue {
 
 		int max = Math.max(Math.abs(deltaX), Math.abs(deltaY));
 
+		RegionRepository repository = mob.getWorld().getRegionRepository();
+		Region region = repository.fromPosition(current);
+		Position previous = current;
+
 		for (int count = 0; count < max; count++) {
 			if (deltaX < 0) {
 				deltaX++;
@@ -188,7 +194,18 @@ public final class WalkingQueue {
 				deltaY--;
 			}
 
-			points.add(new Position(nextX - deltaX, nextY - deltaY, height));
+			Position step = new Position(nextX - deltaX, nextY - deltaY, height);
+			if (!region.contains(step)) {
+				region = repository.fromPosition(step);
+			}
+
+			Direction direction = Direction.between(previous, step);
+			if (!region.traversable(step, EntityType.PLAYER, direction)) {
+				break;
+			}
+
+			points.add(step);
+			previous = step;
 		}
 	}
 
