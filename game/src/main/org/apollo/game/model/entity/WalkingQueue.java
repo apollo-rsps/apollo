@@ -179,7 +179,6 @@ public final class WalkingQueue {
 
 		RegionRepository repository = mob.getWorld().getRegionRepository();
 		Region region = repository.fromPosition(current);
-		Position previous = current;
 
 		for (int count = 0; count < max; count++) {
 			if (deltaX < 0) {
@@ -199,13 +198,7 @@ public final class WalkingQueue {
 				region = repository.fromPosition(step);
 			}
 
-			Direction direction = Direction.between(previous, step);
-			if (!region.traversable(step, EntityType.PLAYER, direction)) {
-				break;
-			}
-
 			points.add(step);
-			previous = step;
 		}
 	}
 

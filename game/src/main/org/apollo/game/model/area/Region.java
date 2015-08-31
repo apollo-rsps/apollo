@@ -337,7 +337,7 @@ public final class Region {
 
 		EntityType type = entity.getEntityType();
 
-		if (type == EntityType.STATIC_OBJECT) {
+		if (type == EntityType.STATIC_OBJECT) { // TODO set/clear collision matrix values
 			if (update == EntityUpdateType.REMOVE) {
 				removedObjects.get(height).add(message);
 			} else { // TODO should this really be possible?
