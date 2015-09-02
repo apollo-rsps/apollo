@@ -19,7 +19,6 @@ import org.apollo.game.message.impl.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
@@ -65,8 +64,13 @@ import com.google.common.base.Preconditions;
 public final class Player extends Mob {
 
 	static {
+		// TODO this should be a time rather than a flag
+		AttributeMap.define("muted", AttributeDefinition.forBoolean(false, AttributePersistence.PERSISTENT));
+
+		AttributeMap.define("banned", AttributeDefinition.forBoolean(false, AttributePersistence.PERSISTENT));
 		AttributeMap.define("run_energy", AttributeDefinition.forInt(100, AttributePersistence.PERSISTENT));
 	}
+
 
 	/**
 	 * This player's bank.
@@ -458,6 +462,22 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Returns if this player is banned or not.
+	 */
+	public boolean isBanned() {
+		Attribute<Boolean> banned = attributes.get("banned");
+		return banned.getValue();
+	}
+
+	/**
+	 * Returns if this player is muted or not.
+	 */
+	public boolean isMuted() {
+		Attribute<Boolean> muted = attributes.get("muted");
+		return muted.getValue();
+	}
+
+	/**
 	 * Gets this player's {@link ScreenBrightness}.
 	 *
 	 * @return The screen brightness.
@@ -718,6 +738,10 @@ public final class Player extends Mob {
 		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 		send(new IdAssignmentMessage(index, members));
 		sendMessage("Welcome to RuneScape.");
+
+		if (isMuted()) {
+			sendMessage("You are currently muted. Other players will not see your chat messages.");
+		}
 
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
 		for (int tab = 0; tab < tabs.length; tab++) {
