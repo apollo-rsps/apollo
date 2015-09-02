@@ -23,6 +23,10 @@ public final class ChatMessageHandler extends MessageHandler<ChatMessage> {
 
 	@Override
 	public void handle(Player player, ChatMessage message) {
+		if (player.isMuted()) {
+			message.terminate();
+			return;
+		}
 		player.getBlockSet().add(SynchronizationBlock.createChatBlock(player, message));
 	}
 

@@ -162,6 +162,10 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 
 			Map<String, Attribute<?>> attributes = readAttributes(in);
 			attributes.forEach(player::setAttribute);
+			
+			if (player.isBanned()) {
+				return new PlayerLoaderResponse(LoginConstants.STATUS_ACCOUNT_DISABLED);
+			}
 
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
 		}
