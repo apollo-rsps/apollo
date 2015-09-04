@@ -1,6 +1,8 @@
 package org.apollo.game.model.entity.setting;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 /**
  * An enumeration with the different privilege levels a player can have. This enumeration relies on the ordering of the
@@ -24,6 +26,11 @@ public enum PrivilegeLevel {
 	 * An administrator (rights 2) account.
 	 */
 	ADMINISTRATOR;
+
+	/**
+	 * An {@link ImmutableSet} containing the privilege levels of staff members.
+	 */
+	public static final ImmutableSet<PrivilegeLevel> STAFF = Sets.immutableEnumSet(MODERATOR, ADMINISTRATOR);
 
 	/**
 	 * Gets the privilege level for the specified numerical value.

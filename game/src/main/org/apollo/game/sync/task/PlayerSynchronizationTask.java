@@ -3,9 +3,11 @@ package org.apollo.game.sync.task;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.ChatBlock;
@@ -85,7 +87,10 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 		int added = 0, count = localPlayers.size();
 
-		for (Player other : player.getWorld().getPlayerRepository()) {
+		RegionRepository repository = player.getWorld().getRegionRepository();
+		Set<Player> players = repository.fromPosition(player.getPosition()).getSortedPlayers(player);
+
+		for (Player other : players) {
 			if (count >= MAXIMUM_LOCAL_PLAYERS) {
 				player.flagExcessivePlayers();
 				break;
