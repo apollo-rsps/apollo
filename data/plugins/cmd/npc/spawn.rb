@@ -28,7 +28,7 @@ on :command, :spawn, RIGHTS_ADMIN do |player, command|
     position = Position.new(args[1].to_i, args[2].to_i, height)
   end
 
-  $world.register(Npc.new(id, position))
+  $world.register(Npc.new($world, id, position))
 end
 
 # Mass spawns npcs around the player.

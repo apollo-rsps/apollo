@@ -7,9 +7,9 @@ import com.google.common.base.Preconditions;
 /**
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.
  *
+ * @param <T> The type of Mob.
  * @author Graham
  * @author Ryley
- * @param <T> The type of Mob.
  */
 public final class MobRepository<T extends Mob> implements Iterable<T> {
 
@@ -95,10 +95,10 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 * Adds a Mob to the repository.
 	 *
 	 * @param mob The Mob to add.
-	 * @return {@code true} if the Mob was added, {@code false} if the size has reached the capacity of this repository.
+	 * @return {@code true} if the Mob was added, {@code false} if this MobRepository is at maximum capacity.
 	 */
 	public boolean add(T mob) {
-		if (size == capacity()) {
+		if (full()) {
 			return false;
 		}
 
@@ -124,6 +124,15 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 */
 	public int capacity() {
 		return mobs.length;
+	}
+
+	/**
+	 * Returns whether or not this MobRepository has reached its maxmimum capacity.
+	 *
+	 * @return {@code true} iff this MobRepository is full.
+	 */
+	public boolean full() {
+		return size == mobs.length;
 	}
 
 	/**

@@ -21,6 +21,44 @@ import com.google.common.base.Preconditions;
 public final class EquipmentUpdater {
 
 	/**
+	 * The entry point of the application.
+	 *
+	 * @param args The command line arguments.
+	 * @throws Exception If an error occurs.
+	 */
+	public static void main(String[] args) throws Exception {
+		Preconditions.checkArgument(args.length == 1, "Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release].");
+		String release = args[0];
+
+		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release + ".dat")));
+		     IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
+			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
+			decoder.run();
+
+			int count = ItemDefinition.count();
+			os.writeShort(count);
+
+			for (int id = 0; id < count; id++) {
+				ItemDefinition definition = ItemDefinition.lookup(id);
+				int type = getWeaponType(definition);
+				os.writeByte(type);
+
+				if (type != -1) {
+					os.writeBoolean(isTwoHanded(definition));
+					os.writeBoolean(isFullBody(definition));
+					os.writeBoolean(isFullHat(definition));
+					os.writeBoolean(isFullMask(definition));
+					os.writeByte(getAttackRequirement(definition));
+					os.writeByte(getStrengthRequirement(definition));
+					os.writeByte(getDefenceRequirement(definition));
+					os.writeByte(getRangedRequirement(definition));
+					os.writeByte(getMagicRequirement(definition));
+				}
+			}
+		}
+	}
+
+	/**
 	 * Gets the attack requirement.
 	 *
 	 * @param definition The item definition.
@@ -31,201 +69,139 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		if (name.equals("Black sword")) {
 			return 10;
-		}
-		if (name.equals("Black dagger")) {
+		} else if (name.equals("Black dagger")) {
 			return 10;
-		}
-		if (name.equals("Black spear")) {
+		} else if (name.equals("Black spear")) {
 			return 10;
-		}
-		if (name.equals("Black longsword")) {
+		} else if (name.equals("Black longsword")) {
 			return 10;
-		}
-		if (name.equals("Black scimitar")) {
+		} else if (name.equals("Black scimitar")) {
 			return 10;
-		}
-		if (name.equals("Black axe")) {
+		} else if (name.equals("Black axe")) {
 			return 10;
-		}
-		if (name.equals("Black battleaxe")) {
+		} else if (name.equals("Black battleaxe")) {
 			return 10;
-		}
-		if (name.equals("Black mace")) {
+		} else if (name.equals("Black mace")) {
 			return 10;
-		}
-		if (name.equals("Black halberd")) {
+		} else if (name.equals("Black halberd")) {
 			return 10;
-		}
-		if (name.equals("Mithril sword")) {
+		} else if (name.equals("Mithril sword")) {
 			return 20;
-		}
-		if (name.equals("Mithril dagger")) {
+		} else if (name.equals("Mithril dagger")) {
 			return 20;
-		}
-		if (name.equals("Mithril spear")) {
+		} else if (name.equals("Mithril spear")) {
 			return 20;
-		}
-		if (name.equals("Mihril longsword")) {
+		} else if (name.equals("Mihril longsword")) {
 			return 20;
-		}
-		if (name.equals("Mithril scimitar")) {
+		} else if (name.equals("Mithril scimitar")) {
 			return 20;
-		}
-		if (name.equals("Mithril axe")) {
+		} else if (name.equals("Mithril axe")) {
 			return 20;
-		}
-		if (name.equals("Mithril battleaxe")) {
+		} else if (name.equals("Mithril battleaxe")) {
 			return 20;
-		}
-		if (name.equals("Mithril mace")) {
+		} else if (name.equals("Mithril mace")) {
 			return 20;
-		}
-		if (name.equals("Mithril halberd")) {
+		} else if (name.equals("Mithril halberd")) {
 			return 20;
-		}
-		if (name.equals("Adamant sword")) {
+		} else if (name.equals("Adamant sword")) {
 			return 30;
-		}
-		if (name.equals("Adamant dagger")) {
+		} else if (name.equals("Adamant dagger")) {
 			return 30;
-		}
-		if (name.equals("Adamant spear")) {
+		} else if (name.equals("Adamant spear")) {
 			return 30;
-		}
-		if (name.equals("Adamant longsword")) {
+		} else if (name.equals("Adamant longsword")) {
 			return 30;
-		}
-		if (name.equals("Adamant scimitar")) {
+		} else if (name.equals("Adamant scimitar")) {
 			return 30;
-		}
-		if (name.equals("Adamant axe")) {
+		} else if (name.equals("Adamant axe")) {
 			return 30;
-		}
-		if (name.equals("Adamant battleaxe")) {
+		} else if (name.equals("Adamant battleaxe")) {
 			return 30;
-		}
-		if (name.equals("Adamant mace")) {
+		} else if (name.equals("Adamant mace")) {
 			return 30;
-		}
-		if (name.equals("Adamant halberd")) {
+		} else if (name.equals("Adamant halberd")) {
 			return 30;
-		}
-		if (name.equals("Rune sword")) {
+		} else if (name.equals("Rune sword")) {
 			return 40;
-		}
-		if (name.equals("Rune dagger")) {
+		} else if (name.equals("Rune dagger")) {
 			return 40;
-		}
-		if (name.equals("Rune spear")) {
+		} else if (name.equals("Rune spear")) {
 			return 40;
-		}
-		if (name.equals("Rune longsword")) {
+		} else if (name.equals("Rune longsword")) {
 			return 40;
-		}
-		if (name.equals("Rune scimitar")) {
+		} else if (name.equals("Rune scimitar")) {
 			return 40;
-		}
-		if (name.equals("Rune axe")) {
+		} else if (name.equals("Rune axe")) {
 			return 40;
-		}
-		if (name.equals("Rune battleaxe")) {
+		} else if (name.equals("Rune battleaxe")) {
 			return 40;
-		}
-		if (name.equals("Rune mace")) {
+		} else if (name.equals("Rune mace")) {
 			return 40;
-		}
-		if (name.equals("Rune halberd")) {
+		} else if (name.equals("Rune halberd")) {
 			return 40;
-		}
-		if (name.equals("Dragon sword")) {
+		} else if (name.equals("Dragon sword")) {
 			return 60;
-		}
-		if (name.equals("Dragon dagger(s)")) {
+		} else if (name.equals("Dragon dagger(s)")) {
 			return 60;
-		}
-		if (name.equals("Dragon dagger")) {
+		} else if (name.equals("Dragon dagger")) {
 			return 60;
-		}
-		if (name.startsWith("Dragon spear")) {
+		} else if (name.startsWith("Dragon spear")) {
 			return 60;
-		}
-		if (name.equals("Dragon longsword")) {
+		} else if (name.equals("Dragon longsword")) {
 			return 60;
-		}
-		if (name.equals("Dragon scimitar")) {
+		} else if (name.equals("Dragon scimitar")) {
 			return 60;
-		}
-		if (name.equals("Dragon axe")) {
+		} else if (name.equals("Dragon axe")) {
 			return 60;
-		}
-		if (name.equals("Dragon battleaxe")) {
+		} else if (name.equals("Dragon battleaxe")) {
 			return 60;
-		}
-		if (name.equals("Dragon mace")) {
+		} else if (name.equals("Dragon mace")) {
 			return 60;
-		}
-		if (name.equals("Dragon halberd")) {
+		} else if (name.equals("Dragon halberd")) {
 			return 60;
-		}
-		if (name.equals("Abyssal whip")) {
+		} else if (name.equals("Abyssal whip")) {
 			return 70;
-		}
-		if (name.equals("Veracs flail")) {
+		} else if (name.equals("Veracs flail")) {
 			return 70;
-		}
-		if (name.equals("Torags hammers")) {
+		} else if (name.equals("Torags hammers")) {
 			return 70;
-		}
-		if (name.equals("Dharoks greataxe")) {
+		} else if (name.equals("Dharoks greataxe")) {
 			return 70;
-		}
-		if (name.equals("Guthans warspear")) {
+		} else if (name.equals("Guthans warspear")) {
 			return 70;
-		}
-		if (name.equals("Ahrims staff")) {
+		} else if (name.equals("Ahrims staff")) {
 			return 70;
-		}
-		if (name.equals("Granite maul")) {
+		} else if (name.equals("Granite maul")) {
 			return 50;
-		}
-		if (name.equals("Toktz-xil-ak")) {
+		} else if (name.equals("Toktz-xil-ak")) {
 			return 60;
-		}
-		if (name.equals("Tzhaar-ket-em")) {
+		} else if (name.equals("Tzhaar-ket-em")) {
 			return 60;
-		}
-		if (name.equals("Toktz-xil-ek")) {
+		} else if (name.equals("Toktz-xil-ek")) {
 			return 60;
-		}
-		if (name.equals("Granite legs")) {
+		} else if (name.equals("Granite legs")) {
 			return 99;
-		}
-		if (name.equals("Mud staff")) {
+		} else if (name.equals("Mud staff")) {
 			return 30;
-		}
-		if (name.equals("Armadyl godsword")) {
+		} else if (name.equals("Armadyl godsword")) {
 			return 75;
-		}
-		if (name.equals("Bandos godsword")) {
+		} else if (name.equals("Bandos godsword")) {
 			return 75;
-		}
-		if (name.equals("Saradomin godsword")) {
+		} else if (name.equals("Saradomin godsword")) {
 			return 75;
-		}
-		if (name.equals("Zamorak godsword")) {
+		} else if (name.equals("Zamorak godsword")) {
 			return 75;
-		}
-		if (name.equals("Lava battlestaff")) {
+		} else if (name.equals("Lava battlestaff")) {
 			return 30;
-		}
-		if (name.equals("Toktz-mej-tal")) {
+		} else if (name.equals("Toktz-mej-tal")) {
 			return 60;
-		}
-		if (name.equals("Ancient staff")) {
+		} else if (name.equals("Ancient staff")) {
 			return 50;
 		}
+
 		return 1;
 	}
 
@@ -241,441 +217,299 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		if (name.equals("Rune boots")) {
 			return 40;
-		}
-		if (id == 2499) {
+		} else if (id == 2499) {
 			return 40;
-		}
-		if (id == 4123) {
+		} else if (id == 4123) {
 			return 5;
-		}
-		if (id == 4125) {
+		} else if (id == 4125) {
 			return 10;
-		}
-		if (id == 4127) {
+		} else if (id == 4127) {
 			return 20;
-		}
-		if (id == 4129) {
+		} else if (id == 4129) {
 			return 30;
-		}
-		if (id == 7990) {
+		} else if (id == 7990) {
 			return 60;
-		}
-		if (id == 2501) {
+		} else if (id == 2501) {
 			return 40;
-		}
-		if (id == 1131) {
+		} else if (id == 1131) {
 			return 10;
-		}
-		if (id == 2503) {
+		} else if (id == 2503) {
 			return 40;
-		}
-		if (id == 1135) {
+		} else if (id == 1135) {
 			return 40;
-		}
-		if (id == 7462) {
+		} else if (id == 7462) {
 			return 42;
-		}
-		if (id == 7461) {
+		} else if (id == 7461) {
 			return 42;
-		}
-		if (id == 7460) {
+		} else if (id == 7460) {
 			return 42;
-		}
-		if (id == 7459) {
+		} else if (id == 7459) {
 			return 20;
-		}
-		if (id == 7458) {
+		} else if (id == 7458) {
 			return 1;
-		}
-		if (id == 7457) {
+		} else if (id == 7457) {
 			return 1;
-		}
-		if (id == 7456) {
+		} else if (id == 7456) {
 			return 1;
-		}
-		if (name.equals("White med helm")) {
+		} else if (name.equals("White med helm")) {
 			return 10;
-		}
-		if (name.equals("White chainbody")) {
+		} else if (name.equals("White chainbody")) {
 			return 10;
-		}
-		if (name.startsWith("White full helm")) {
+		} else if (name.startsWith("White full helm")) {
 			return 10;
-		}
-		if (name.startsWith("White platebody")) {
+		} else if (name.startsWith("White platebody")) {
 			return 10;
-		}
-		if (name.startsWith("White plateskirt")) {
+		} else if (name.startsWith("White plateskirt")) {
 			return 10;
-		}
-		if (name.startsWith("White platelegs")) {
+		} else if (name.startsWith("White platelegs")) {
 			return 10;
-		}
-		if (name.startsWith("White kiteshield")) {
+		} else if (name.startsWith("White kiteshield")) {
 			return 10;
-		}
-		if (name.startsWith("White sq shield")) {
+		} else if (name.startsWith("White sq shield")) {
 			return 10;
-		}
-		if (name.startsWith("Studded chaps")) {
+		} else if (name.startsWith("Studded chaps")) {
 			return 1;
-		}
-		if (name.startsWith("Studded")) {
+		} else if (name.startsWith("Studded")) {
 			return 20;
-		}
-		if (name.startsWith("Black kiteshield(h)")) {
+		} else if (name.startsWith("Black kiteshield(h)")) {
 			return 10;
-		}
-		if (name.startsWith("Rune kiteshield(h)")) {
+		} else if (name.startsWith("Rune kiteshield(h)")) {
 			return 40;
-		}
-		if (name.equals("Black med helm")) {
+		} else if (name.equals("Black med helm")) {
 			return 10;
-		}
-		if (name.equals("Black chainbody")) {
+		} else if (name.equals("Black chainbody")) {
 			return 10;
-		}
-		if (name.startsWith("Black full helm")) {
+		} else if (name.startsWith("Black full helm")) {
 			return 10;
-		}
-		if (name.startsWith("Black platebody")) {
+		} else if (name.startsWith("Black platebody")) {
 			return 10;
-		}
-		if (name.startsWith("Black plateskirt")) {
+		} else if (name.startsWith("Black plateskirt")) {
 			return 10;
-		}
-		if (name.startsWith("Black platelegs")) {
+		} else if (name.startsWith("Black platelegs")) {
 			return 10;
-		}
-		if (name.startsWith("Black kiteshield")) {
+		} else if (name.startsWith("Black kiteshield")) {
 			return 10;
-		}
-		if (name.startsWith("Black sq shield")) {
+		} else if (name.startsWith("Black sq shield")) {
 			return 10;
-		}
-		if (name.equals("Mithril med helm")) {
+		} else if (name.equals("Mithril med helm")) {
 			return 20;
-		}
-		if (name.equals("Mithril chainbody")) {
+		} else if (name.equals("Mithril chainbody")) {
 			return 20;
-		}
-		if (name.startsWith("Mithril full helm")) {
+		} else if (name.startsWith("Mithril full helm")) {
 			return 20;
-		}
-		if (name.startsWith("Mithril platebody")) {
+		} else if (name.startsWith("Mithril platebody")) {
 			return 20;
-		}
-		if (name.startsWith("Mithril plateskirt")) {
+		} else if (name.startsWith("Mithril plateskirt")) {
 			return 20;
-		}
-		if (name.startsWith("Mithril platelegs")) {
+		} else if (name.startsWith("Mithril platelegs")) {
 			return 20;
-		}
-		if (name.startsWith("Mithril kiteshield")) {
+		} else if (name.startsWith("Mithril kiteshield")) {
 			return 20;
-		}
-		if (name.startsWith("Mithril sq shield")) {
+		} else if (name.startsWith("Mithril sq shield")) {
 			return 20;
-		}
-		if (name.equals("Adamant med helm")) {
+		} else if (name.equals("Adamant med helm")) {
 			return 30;
-		}
-		if (name.equals("Adamant chainbody")) {
+		} else if (name.equals("Adamant chainbody")) {
 			return 30;
-		}
-		if (name.startsWith("Adamant full helm")) {
+		} else if (name.startsWith("Adamant full helm")) {
 			return 30;
-		}
-		if (name.startsWith("Adamant platebody")) {
+		} else if (name.startsWith("Adamant platebody")) {
 			return 30;
-		}
-		if (name.startsWith("Adamant plateskirt")) {
+		} else if (name.startsWith("Adamant plateskirt")) {
 			return 30;
-		}
-		if (name.startsWith("Adamant platelegs")) {
+		} else if (name.startsWith("Adamant platelegs")) {
 			return 30;
-		}
-		if (name.startsWith("Adamant kiteshield")) {
+		} else if (name.startsWith("Adamant kiteshield")) {
 			return 30;
-		}
-		if (name.startsWith("Adamant sq shield")) {
+		} else if (name.startsWith("Adamant sq shield")) {
 			return 30;
-		}
-		if (name.startsWith("Adam full helm")) {
+		} else if (name.startsWith("Adam full helm")) {
 			return 30;
-		}
-		if (name.startsWith("Adam platebody")) {
+		} else if (name.startsWith("Adam platebody")) {
 			return 30;
-		}
-		if (name.startsWith("Adam plateskirt")) {
+		} else if (name.startsWith("Adam plateskirt")) {
 			return 30;
-		}
-		if (name.startsWith("Adam platelegs")) {
+		} else if (name.startsWith("Adam platelegs")) {
 			return 30;
-		}
-		if (name.startsWith("Adam kiteshield")) {
+		} else if (name.startsWith("Adam kiteshield")) {
 			return 30;
-		}
-		if (name.startsWith("Adam kiteshield(h)")) {
+		} else if (name.startsWith("Adam kiteshield(h)")) {
 			return 30;
-		}
-		if (name.startsWith("D-hide body(g)")) {
+		} else if (name.startsWith("D-hide body(g)")) {
 			return 40;
-		}
-		if (name.startsWith("D-hide body(t)")) {
+		} else if (name.startsWith("D-hide body(t)")) {
 			return 40;
-		}
-		if (name.equals("Dragon sq shield")) {
+		} else if (name.equals("Dragon sq shield")) {
 			return 60;
-		}
-		if (name.equals("Dragon med helm")) {
+		} else if (name.equals("Dragon med helm")) {
 			return 60;
-		}
-		if (name.equals("Dragon chainbody")) {
+		} else if (name.equals("Dragon chainbody")) {
 			return 60;
-		}
-		if (name.equals("Dragon plateskirt")) {
+		} else if (name.equals("Dragon plateskirt")) {
 			return 60;
-		}
-		if (name.equals("Dragon platelegs")) {
+		} else if (name.equals("Dragon platelegs")) {
 			return 60;
-		}
-		if (name.equals("Dragon sq shield")) {
+		} else if (name.equals("Dragon sq shield")) {
 			return 60;
-		}
-		if (name.equals("Rune med helm")) {
+		} else if (name.equals("Rune med helm")) {
 			return 40;
-		}
-		if (name.equals("Rune chainbody")) {
+		} else if (name.equals("Rune chainbody")) {
 			return 40;
-		}
-		if (name.startsWith("Rune full helm")) {
+		} else if (name.startsWith("Rune full helm")) {
 			return 40;
-		}
-		if (name.startsWith("Rune platebody")) {
+		} else if (name.startsWith("Rune platebody")) {
 			return 40;
-		}
-		if (name.startsWith("Rune plateskirt")) {
+		} else if (name.startsWith("Rune plateskirt")) {
 			return 40;
-		}
-		if (name.startsWith("Rune platelegs")) {
+		} else if (name.startsWith("Rune platelegs")) {
 			return 40;
-		}
-		if (name.startsWith("Rune kiteshield")) {
+		} else if (name.startsWith("Rune kiteshield")) {
 			return 40;
-		}
-		if (name.startsWith("Zamorak full helm")) {
+		} else if (name.startsWith("Zamorak full helm")) {
 			return 40;
-		}
-		if (name.startsWith("Zamorak platebody")) {
+		} else if (name.startsWith("Zamorak platebody")) {
 			return 40;
-		}
-		if (name.startsWith("Zamorak plateskirt")) {
+		} else if (name.startsWith("Zamorak plateskirt")) {
 			return 40;
-		}
-		if (name.startsWith("Zamorak platelegs")) {
+		} else if (name.startsWith("Zamorak platelegs")) {
 			return 40;
-		}
-		if (name.startsWith("Zamorak kiteshield")) {
+		} else if (name.startsWith("Zamorak kiteshield")) {
 			return 40;
-		}
-		if (name.startsWith("Guthix full helm")) {
+		} else if (name.startsWith("Guthix full helm")) {
 			return 40;
-		}
-		if (name.startsWith("Guthix platebody")) {
+		} else if (name.startsWith("Guthix platebody")) {
 			return 40;
-		}
-		if (name.startsWith("Guthix plateskirt")) {
+		} else if (name.startsWith("Guthix plateskirt")) {
 			return 40;
-		}
-		if (name.startsWith("Guthix platelegs")) {
+		} else if (name.startsWith("Guthix platelegs")) {
 			return 40;
-		}
-		if (name.startsWith("Guthix kiteshield")) {
+		} else if (name.startsWith("Guthix kiteshield")) {
 			return 40;
-		}
-		if (name.startsWith("Saradomin full")) {
+		} else if (name.startsWith("Saradomin full")) {
 			return 40;
-		}
-		if (name.startsWith("Saradomrangedin plate")) {
+		} else if (name.startsWith("Saradomrangedin plate")) {
 			return 40;
-		}
-		if (name.startsWith("Saradomin plateskirt")) {
+		} else if (name.startsWith("Saradomin plateskirt")) {
 			return 40;
-		}
-		if (name.startsWith("Saradomin legs")) {
+		} else if (name.startsWith("Saradomin legs")) {
 			return 40;
-		}
-		if (name.startsWith("Zamorak kiteshield")) {
+		} else if (name.startsWith("Zamorak kiteshield")) {
 			return 40;
-		}
-		if (name.startsWith("Rune sq shield")) {
+		} else if (name.startsWith("Rune sq shield")) {
 			return 40;
-		}
-		if (name.equals("Gilded full helm")) {
+		} else if (name.equals("Gilded full helm")) {
 			return 40;
-		}
-		if (name.equals("Gilded platebody")) {
+		} else if (name.equals("Gilded platebody")) {
 			return 40;
-		}
-		if (name.equals("Gilded plateskirt")) {
+		} else if (name.equals("Gilded plateskirt")) {
 			return 40;
-		}
-		if (name.equals("Gilded platelegs")) {
+		} else if (name.equals("Gilded platelegs")) {
 			return 40;
-		}
-		if (name.equals("Gilded kiteshield")) {
+		} else if (name.equals("Gilded kiteshield")) {
 			return 40;
-		}
-		if (name.equals("Fighter torso")) {
+		} else if (name.equals("Fighter torso")) {
 			return 40;
-		}
-		if (name.equals("Granite legs")) {
+		} else if (name.equals("Granite legs")) {
 			return 99;
-		}
-		if (name.equals("Toktz-ket-xil")) {
+		} else if (name.equals("Toktz-ket-xil")) {
 			return 60;
-		}
-		if (name.equals("Dharoks helm")) {
+		} else if (name.equals("Dharoks helm")) {
 			return 70;
-		}
-		if (name.equals("Dharoks platebody")) {
+		} else if (name.equals("Dharoks platebody")) {
 			return 70;
-		}
-		if (name.equals("Dharoks platelegs")) {
+		} else if (name.equals("Dharoks platelegs")) {
 			return 70;
-		}
-		if (name.equals("Guthans helm")) {
+		} else if (name.equals("Guthans helm")) {
 			return 70;
-		}
-		if (name.equals("Guthans platebody")) {
+		} else if (name.equals("Guthans platebody")) {
 			return 70;
-		}
-		if (name.equals("Guthans chainskirt")) {
+		} else if (name.equals("Guthans chainskirt")) {
 			return 70;
-		}
-		if (name.equals("Torags helm")) {
+		} else if (name.equals("Torags helm")) {
 			return 70;
-		}
-		if (name.equals("Torags platebody")) {
+		} else if (name.equals("Torags platebody")) {
 			return 70;
-		}
-		if (name.equals("Torags platelegs")) {
+		} else if (name.equals("Torags platelegs")) {
 			return 70;
-		}
-		if (name.equals("Veracs helm")) {
+		} else if (name.equals("Veracs helm")) {
 			return 70;
-		}
-		if (name.equals("Veracs brassard")) {
+		} else if (name.equals("Veracs brassard")) {
 			return 70;
-		}
-		if (name.equals("Veracs plateskirt")) {
+		} else if (name.equals("Veracs plateskirt")) {
 			return 70;
-		}
-		if (name.equals("Ahrims hood")) {
+		} else if (name.equals("Ahrims hood")) {
 			return 70;
-		}
-		if (name.equals("Ahrims robetop")) {
+		} else if (name.equals("Ahrims robetop")) {
 			return 70;
-		}
-		if (name.equals("Ahrims robeskirt")) {
+		} else if (name.equals("Ahrims robeskirt")) {
 			return 70;
-		}
-		if (name.equals("Karils coif")) {
+		} else if (name.equals("Karils coif")) {
 			return 70;
-		}
-		if (name.equals("Karils leathertop")) {
+		} else if (name.equals("Karils leathertop")) {
 			return 70;
-		}
-		if (name.equals("Karils leatherskirt")) {
+		} else if (name.equals("Karils leatherskirt")) {
 			return 70;
-		}
-		if (name.equals("Granite shield")) {
+		} else if (name.equals("Granite shield")) {
 			return 50;
-		}
-		if (name.equals("New crystal shield")) {
+		} else if (name.equals("New crystal shield")) {
 			return 70;
-		}
-		if (name.equals("Archer helm")) {
+		} else if (name.equals("Archer helm")) {
 			return 45;
-		}
-		if (name.equals("Berserker helm")) {
+		} else if (name.equals("Berserker helm")) {
 			return 45;
-		}
-		if (name.equals("Warrior helm")) {
+		} else if (name.equals("Warrior helm")) {
 			return 45;
-		}
-		if (name.equals("Farseer helm")) {
+		} else if (name.equals("Farseer helm")) {
 			return 45;
-		}
-		if (name.equals("Initiate helm")) {
+		} else if (name.equals("Initiate helm")) {
 			return 20;
-		}
-		if (name.equals("Initiate platemail")) {
+		} else if (name.equals("Initiate platemail")) {
 			return 20;
-		}
-		if (name.equals("Initiate platelegs")) {
+		} else if (name.equals("Initiate platelegs")) {
 			return 20;
-		}
-		if (name.equals("Dragonhide body")) {
+		} else if (name.equals("Dragonhide body")) {
 			return 40;
-		}
-		if (name.equals("Mystic hat")) {
+		} else if (name.equals("Mystic hat")) {
 			return 20;
-		}
-		if (name.equals("Mystic robe top")) {
+		} else if (name.equals("Mystic robe top")) {
 			return 20;
-		}
-		if (name.equals("Mystic robe bottom")) {
+		} else if (name.equals("Mystic robe bottom")) {
 			return 20;
-		}
-		if (name.equals("Mystic gloves")) {
+		} else if (name.equals("Mystic gloves")) {
 			return 20;
-		}
-		if (name.equals("Mystic boots")) {
+		} else if (name.equals("Mystic boots")) {
 			return 20;
-		}
-		if (name.equals("Enchanted hat")) {
+		} else if (name.equals("Enchanted hat")) {
 			return 20;
-		}
-		if (name.equals("Enchanted top")) {
+		} else if (name.equals("Enchanted top")) {
 			return 20;
-		}
-		if (name.equals("Enchanted robe")) {
+		} else if (name.equals("Enchanted robe")) {
 			return 20;
-		}
-		if (name.equals("Splitbark helm")) {
+		} else if (name.equals("Splitbark helm")) {
 			return 40;
-		}
-		if (name.equals("Splitbark body")) {
+		} else if (name.equals("Splitbark body")) {
 			return 40;
-		}
-		if (name.equals("Splitbark gauntlets")) {
+		} else if (name.equals("Splitbark gauntlets")) {
 			return 40;
-		}
-		if (name.equals("Splitbark legs")) {
+		} else if (name.equals("Splitbark legs")) {
 			return 40;
-		}
-		if (name.equals("Splitbark greaves")) {
+		} else if (name.equals("Splitbark greaves")) {
 			return 40;
-		}
-		if (name.equals("Infinity gloves")) {
+		} else if (name.equals("Infinity gloves")) {
+			return 25;
+		} else if (name.equals("Infinity hat")) {
+			return 25;
+		} else if (name.equals("Infinity top")) {
+			return 25;
+		} else if (name.equals("Infinity bottoms")) {
+			return 25;
+		} else if (name.equals("Infinity boots")) {
 			return 25;
 		}
-		if (name.equals("Infinity hat")) {
-			return 25;
-		}
-		if (name.equals("Infinity top")) {
-			return 25;
-		}
-		if (name.equals("Infinity bottoms")) {
-			return 25;
-		}
-		if (name.equals("Infinity boots")) {
-			return 25;
-		}
+
 		return 1;
 	}
 
@@ -690,99 +524,71 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		if (name.equals("Mystic hat")) {
 			return 40;
-		}
-		if (name.equals("Mystic robe top")) {
+		} else if (name.equals("Mystic robe top")) {
 			return 40;
-		}
-		if (name.equals("Mystic robe bottom")) {
+		} else if (name.equals("Mystic robe bottom")) {
 			return 40;
-		}
-		if (name.equals("Mystic gloves")) {
+		} else if (name.equals("Mystic gloves")) {
 			return 40;
-		}
-		if (name.equals("Mystic boots")) {
+		} else if (name.equals("Mystic boots")) {
 			return 40;
-		}
-		if (name.equals("Slayer's staff")) {
+		} else if (name.equals("Slayer's staff")) {
 			return 50;
-		}
-		if (name.equals("Enchanted hat")) {
+		} else if (name.equals("Enchanted hat")) {
 			return 40;
-		}
-		if (name.equals("Enchanted top")) {
+		} else if (name.equals("Enchanted top")) {
 			return 40;
-		}
-		if (name.equals("Enchanted robe")) {
+		} else if (name.equals("Enchanted robe")) {
 			return 40;
-		}
-		if (name.equals("Splitbark helm")) {
+		} else if (name.equals("Splitbark helm")) {
 			return 40;
-		}
-		if (name.equals("Splitbark body")) {
+		} else if (name.equals("Splitbark body")) {
 			return 40;
-		}
-		if (name.equals("Splitbark gauntlets")) {
+		} else if (name.equals("Splitbark gauntlets")) {
 			return 40;
-		}
-		if (name.equals("Splitbark legs")) {
+		} else if (name.equals("Splitbark legs")) {
 			return 40;
-		}
-		if (name.equals("Splitbark greaves")) {
+		} else if (name.equals("Splitbark greaves")) {
 			return 40;
-		}
-		if (name.equals("Infinity gloves")) {
+		} else if (name.equals("Infinity gloves")) {
 			return 50;
-		}
-		if (name.equals("Infinity hat")) {
+		} else if (name.equals("Infinity hat")) {
 			return 50;
-		}
-		if (name.equals("Infinity top")) {
+		} else if (name.equals("Infinity top")) {
 			return 50;
-		}
-		if (name.equals("Infinity bottoms")) {
+		} else if (name.equals("Infinity bottoms")) {
 			return 50;
-		}
-		if (name.equals("Infinity boots")) {
+		} else if (name.equals("Infinity boots")) {
 			return 50;
-		}
-		if (name.equals("Ahrims hood")) {
+		} else if (name.equals("Ahrims hood")) {
 			return 70;
-		}
-		if (name.equals("Ahrims robetop")) {
+		} else if (name.equals("Ahrims robetop")) {
 			return 70;
-		}
-		if (name.equals("Ahrims robeskirt")) {
+		} else if (name.equals("Ahrims robeskirt")) {
 			return 70;
-		}
-		if (name.equals("Ahrims staff")) {
+		} else if (name.equals("Ahrims staff")) {
 			return 70;
-		}
-		if (name.equals("Saradomin cape")) {
+		} else if (name.equals("Saradomin cape")) {
 			return 60;
-		}
-		if (name.equals("Saradomin staff")) {
+		} else if (name.equals("Saradomin staff")) {
 			return 60;
-		}
-		if (name.equals("Zamorak cape")) {
+		} else if (name.equals("Zamorak cape")) {
 			return 60;
-		}
-		if (name.equals("Zamorak staff")) {
+		} else if (name.equals("Zamorak staff")) {
 			return 60;
-		}
-		if (name.equals("Guthix cape")) {
+		} else if (name.equals("Guthix cape")) {
 			return 60;
-		}
-		if (name.equals("Guthix staff")) {
+		} else if (name.equals("Guthix staff")) {
 			return 60;
-		}
-		if (name.equals("mud staff")) {
+		} else if (name.equals("mud staff")) {
+			return 30;
+		} else if (name.equals("Fire battlestaff")) {
 			return 30;
 		}
-		if (name.equals("Fire battlestaff")) {
-			return 30;
-		}
+
 		return 1;
 	}
 
@@ -798,153 +604,107 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		if (id == 2499) {
 			return 50;
-		}
-		if (id == 1135) {
+		} else if (id == 1135) {
 			return 40;
-		}
-		if (id == 1099) {
+		} else if (id == 1099) {
 			return 40;
-		}
-		if (id == 1065) {
+		} else if (id == 1065) {
 			return 40;
-		}
-		if (id == 2501) {
+		} else if (id == 2501) {
 			return 60;
-		}
-		if (id == 2503) {
+		} else if (id == 2503) {
 			return 70;
-		}
-		if (id == 2487) {
+		} else if (id == 2487) {
 			return 50;
-		}
-		if (id == 2489) {
+		} else if (id == 2489) {
 			return 60;
-		}
-		if (id == 2495) {
+		} else if (id == 2495) {
 			return 60;
-		}
-		if (id == 2491) {
+		} else if (id == 2491) {
 			return 70;
-		}
-		if (id == 2493) {
+		} else if (id == 2493) {
 			return 50;
-		}
-		if (id == 2505) {
+		} else if (id == 2505) {
 			return 60;
-		}
-		if (id == 2507) {
+		} else if (id == 2507) {
 			return 70;
-		}
-		if (id == 859) {
+		} else if (id == 859) {
 			return 40;
-		}
-		if (id == 861) {
+		} else if (id == 861) {
 			return 40;
-		}
-		if (id == 7370) {
+		} else if (id == 7370) {
 			return 40;
-		}
-		if (id == 7372) {
+		} else if (id == 7372) {
 			return 40;
-		}
-		if (id == 7378) {
+		} else if (id == 7378) {
 			return 40;
-		}
-		if (id == 7380) {
+		} else if (id == 7380) {
 			return 40;
-		}
-		if (id == 7374) {
+		} else if (id == 7374) {
 			return 50;
-		}
-		if (id == 7376) {
+		} else if (id == 7376) {
 			return 50;
-		}
-		if (id == 7382) {
+		} else if (id == 7382) {
 			return 50;
-		}
-		if (id == 7384) {
+		} else if (id == 7384) {
 			return 50;
-		}
-		if (name.equals("Coif")) {
+		} else if (name.equals("Coif")) {
 			return 20;
-		}
-		if (name.startsWith("Studded chaps")) {
+		} else if (name.startsWith("Studded chaps")) {
 			return 20;
-		}
-		if (name.startsWith("Studded")) {
+		} else if (name.startsWith("Studded")) {
 			return 20;
-		}
-		if (name.equals("Karils coif")) {
+		} else if (name.equals("Karils coif")) {
 			return 70;
-		}
-		if (name.equals("Karils leathertop")) {
+		} else if (name.equals("Karils leathertop")) {
 			return 70;
-		}
-		if (name.equals("Karils leatherskirt")) {
+		} else if (name.equals("Karils leatherskirt")) {
 			return 70;
-		}
-		if (name.equals("Robin hood hat")) {
+		} else if (name.equals("Robin hood hat")) {
 			return 40;
-		}
-		if (name.equals("Ranger boots")) {
+		} else if (name.equals("Ranger boots")) {
 			return 40;
-		}
-		if (name.equals("Crystal bow full")) {
+		} else if (name.equals("Crystal bow full")) {
 			return 70;
-		}
-		if (name.equals("New crystal bow")) {
+		} else if (name.equals("New crystal bow")) {
 			return 70;
-		}
-		if (name.equals("Karils crossbow")) {
+		} else if (name.equals("Karils crossbow")) {
 			return 70;
-		}
-		if (id == 2497) {
+		} else if (id == 2497) {
 			return 70;
-		}
-		if (name.equals("Rune thrownaxe")) {
+		} else if (name.equals("Rune thrownaxe")) {
 			return 40;
-		}
-		if (name.equals("Rune dart")) {
+		} else if (name.equals("Rune dart")) {
 			return 40;
-		}
-		if (name.equals("Rune javelin")) {
+		} else if (name.equals("Rune javelin")) {
 			return 40;
-		}
-		if (name.equals("Rune knife")) {
+		} else if (name.equals("Rune knife")) {
 			return 40;
-		}
-		if (name.equals("Adamant thrownaxe")) {
+		} else if (name.equals("Adamant thrownaxe")) {
 			return 30;
-		}
-		if (name.equals("Adamant dart")) {
+		} else if (name.equals("Adamant dart")) {
 			return 30;
-		}
-		if (name.equals("Adamant javelin")) {
+		} else if (name.equals("Adamant javelin")) {
 			return 30;
-		}
-		if (name.equals("Adamant knife")) {
+		} else if (name.equals("Adamant knife")) {
 			return 30;
-		}
-		if (name.equals("Toktz-xil-ul")) {
+		} else if (name.equals("Toktz-xil-ul")) {
 			return 60;
-		}
-		if (name.equals("Seercull")) {
+		} else if (name.equals("Seercull")) {
 			return 50;
-		}
-		if (name.equals("Bolt rack")) {
+		} else if (name.equals("Bolt rack")) {
 			return 70;
-		}
-		if (name.equals("Rune arrow")) {
+		} else if (name.equals("Rune arrow")) {
 			return 40;
-		}
-		if (name.equals("Adamant arrow")) {
+		} else if (name.equals("Adamant arrow")) {
 			return 30;
-		}
-		if (name.equals("Mithril arrow")) {
+		} else if (name.equals("Mithril arrow")) {
 			return 1;
 		}
+
 		return 1;
 	}
 
@@ -959,24 +719,21 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		if (name.equals("Torags hammers")) {
 			return 70;
-		}
-		if (name.equals("Dharoks greataxe")) {
+		} else if (name.equals("Dharoks greataxe")) {
 			return 70;
-		}
-		if (name.equals("Granite maul")) {
+		} else if (name.equals("Granite maul")) {
 			return 50;
-		}
-		if (name.equals("Granite legs")) {
+		} else if (name.equals("Granite legs")) {
 			return 99;
-		}
-		if (name.equals("Tzhaar-ket-om")) {
+		} else if (name.equals("Tzhaar-ket-om")) {
 			return 60;
-		}
-		if (name.equals("Granite shield")) {
+		} else if (name.equals("Granite shield")) {
 			return 50;
 		}
+
 		return 1;
 	}
 
@@ -1060,11 +817,13 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		for (String element : EquipmentConstants.FULL_BODIES) {
 			if (name.contains(element)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -1079,11 +838,13 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		for (String element : EquipmentConstants.FULL_HATS) {
 			if (name.endsWith(element)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -1098,11 +859,13 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		for (String element : EquipmentConstants.FULL_MASKS) {
 			if (name.endsWith(element)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -1118,6 +881,7 @@ public final class EquipmentUpdater {
 		if (name == null) {
 			name = "null";
 		}
+
 		if (id == 4212) {
 			return true;
 		} else if (id == 4214) {
@@ -1157,42 +921,8 @@ public final class EquipmentUpdater {
 		} else if (name.equals("Saradomin sword")) {
 			return true;
 		}
+
 		return false;
-	}
-
-	/**
-	 * The entry point of the application.
-	 *
-	 * @param args The command line arguments.
-	 * @throws Exception If an error occurs.
-	 */
-	public static void main(String[] args) throws Exception {
-		Preconditions.checkArgument(args.length == 1, "Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release].");
-		String release = args[0];
-
-		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release + ".dat"))); IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
-			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
-			ItemDefinition[] definitions = decoder.decode();
-			ItemDefinition.init(definitions);
-
-			os.writeShort(definitions.length);
-			for (int id = 0; id < definitions.length; id++) {
-				ItemDefinition def = ItemDefinition.lookup(id);
-				int type = getWeaponType(def);
-				os.writeByte(type);
-				if (type != -1) {
-					os.writeBoolean(isTwoHanded(def));
-					os.writeBoolean(isFullBody(def));
-					os.writeBoolean(isFullHat(def));
-					os.writeBoolean(isFullMask(def));
-					os.writeByte(getAttackRequirement(def));
-					os.writeByte(getStrengthRequirement(def));
-					os.writeByte(getDefenceRequirement(def));
-					os.writeByte(getRangedRequirement(def));
-					os.writeByte(getMagicRequirement(def));
-				}
-			}
-		}
 	}
 
 	/**

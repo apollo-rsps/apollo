@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.ChatBlock;
@@ -26,20 +25,25 @@ import org.apollo.game.sync.seg.TeleportSegment;
 public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 	/**
+	 * The maximum amount of local players.
+	 */
+	private static final int MAXIMUM_LOCAL_PLAYERS = 255;
+
+	/**
 	 * The maximum number of players to load per cycle. This prevents the update packet from becoming too large (the
 	 * client uses a 5000 byte buffer) and also stops old spec PCs from crashing when they login or teleport.
 	 */
 	private static final int NEW_PLAYERS_PER_CYCLE = 20;
 
 	/**
-	 * The player.
+	 * The Player.
 	 */
 	private final Player player;
 
 	/**
-	 * Creates the {@link PlayerSynchronizationTask} for the specified player.
+	 * Creates the {@link PlayerSynchronizationTask} for the specified {@link Player}.
 	 *
-	 * @param player The player.
+	 * @param player The Player.
 	 */
 	public PlayerSynchronizationTask(Player player) {
 		this.player = player;
@@ -50,80 +54,80 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		Position lastKnownRegion = player.getLastKnownRegion();
 		boolean regionChanged = player.hasRegionChanged();
 
-		SynchronizationSegment segment;
 		SynchronizationBlockSet blockSet = player.getBlockSet();
+
 		if (blockSet.contains(ChatBlock.class)) {
 			blockSet = blockSet.clone();
 			blockSet.remove(ChatBlock.class);
 		}
 
-		if (player.isTeleporting() || player.hasRegionChanged()) {
-			segment = new TeleportSegment(blockSet, player.getPosition());
-		} else {
-			segment = new MovementSegment(blockSet, player.getDirections());
-		}
+		Position position = player.getPosition();
+
+		SynchronizationSegment segment = (player.isTeleporting() || player.hasRegionChanged()) ?
+				new TeleportSegment(blockSet, position) : new MovementSegment(blockSet, player.getDirections());
 
 		List<Player> localPlayers = player.getLocalPlayerList();
-		int oldLocalPlayers = localPlayers.size();
+		int oldCount = localPlayers.size();
+
 		List<SynchronizationSegment> segments = new ArrayList<>();
+		int distance = player.getViewingDistance();
 
-		for (Iterator<Player> it = localPlayers.iterator(); it.hasNext(); ) {
-			Player other = it.next();
+		for (Iterator<Player> iterator = localPlayers.iterator(); iterator.hasNext(); ) {
+			Player other = iterator.next();
 
-			if (removePlayer(other)) {
-				it.remove();
+			if (removeable(position, distance, other)) {
+				iterator.remove();
 				segments.add(new RemoveMobSegment());
 			} else {
 				segments.add(new MovementSegment(other.getBlockSet(), other.getDirections()));
 			}
 		}
 
-		int added = 0;
+		int added = 0, count = localPlayers.size();
 
-		MobRepository<Player> repository = player.getWorld().getPlayerRepository();
-		for (Player other : repository) {
-			if (localPlayers.size() >= 255) {
+		for (Player other : player.getWorld().getPlayerRepository()) {
+			if (count >= MAXIMUM_LOCAL_PLAYERS) {
 				player.flagExcessivePlayers();
 				break;
 			} else if (added >= NEW_PLAYERS_PER_CYCLE) {
 				break;
 			}
 
-			if (other != player && other.getPosition().isWithinDistance(player.getPosition(), player.getViewingDistance()) && !localPlayers.contains(other)) {
+			Position local = other.getPosition();
+
+			if (other != player && local.isWithinDistance(position, distance) && !localPlayers.contains(other)) {
 				localPlayers.add(other);
+				count++;
 				added++;
 
 				blockSet = other.getBlockSet();
-				if (!blockSet.contains(AppearanceBlock.class)) {
-					// TODO check if client has cached appearance
+				if (!blockSet.contains(AppearanceBlock.class)) { // TODO check if client has cached appearance
 					blockSet = blockSet.clone();
 					blockSet.add(SynchronizationBlock.createAppearanceBlock(other));
 				}
 
-				segments.add(new AddPlayerSegment(blockSet, other.getIndex(), other.getPosition()));
+				segments.add(new AddPlayerSegment(blockSet, other.getIndex(), local));
 			}
 		}
 
-		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownRegion, player.getPosition(),
-				regionChanged, segment, oldLocalPlayers, segments);
+		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownRegion, position,
+				regionChanged, segment, oldCount, segments);
 		player.send(message);
 	}
 
 	/**
 	 * Returns whether or not the specified {@link Player} should be removed.
 	 *
+	 * @param position The {@link Position} of the Player being updated.
 	 * @param other The Player being tested.
 	 * @return {@code true} iff the specified Player should be removed.
 	 */
-	private boolean removePlayer(Player other) {
+	private boolean removeable(Position position, int distance, Player other) {
 		if (other.isTeleporting() || !other.isActive()) {
 			return true;
 		}
 
-		Position position = player.getPosition();
 		Position otherPosition = other.getPosition();
-		int distance = player.getViewingDistance();
-
 		return otherPosition.getLongestDelta(position) > distance || !otherPosition.isWithinDistance(position, distance);
 	}
 

@@ -36,14 +36,14 @@ public final class NpcDefinition {
 	 * Initialises the class with the specified set of definitions.
 	 *
 	 * @param definitions The definitions.
-	 * @throws RuntimeException If there is an id mismatch.
+	 * @throws IllegalStateException If there is an id mismatch.
 	 */
 	public static void init(NpcDefinition[] definitions) {
 		NpcDefinition.definitions = definitions;
 		for (int id = 0; id < definitions.length; id++) {
 			NpcDefinition def = definitions[id];
 			if (def.getId() != id) {
-				throw new RuntimeException("Npc definition id mismatch.");
+				throw new IllegalStateException("Npc definition id mismatch.");
 			}
 		}
 	}

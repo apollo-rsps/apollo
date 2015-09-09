@@ -56,7 +56,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * A {@link Player} is a {@link Mob} that a user is controlling.
+ * A {@link Mob} that a user is controlling.
  *
  * @author Graham
  * @author Major
@@ -64,8 +64,13 @@ import com.google.common.base.Preconditions;
 public final class Player extends Mob {
 
 	static {
+		// TODO this should be a time rather than a flag
+		AttributeMap.define("muted", AttributeDefinition.forBoolean(false, AttributePersistence.PERSISTENT));
+
+		AttributeMap.define("banned", AttributeDefinition.forBoolean(false, AttributePersistence.PERSISTENT));
 		AttributeMap.define("run_energy", AttributeDefinition.forInt(100, AttributePersistence.PERSISTENT));
 	}
+
 
 	/**
 	 * This player's bank.
@@ -217,7 +222,8 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Adds a click, represented by a {@link Point}, to the {@link List} of clicks.
+	 * Adds a click, represented by a {@link Point}, to the {@link List} of
+	 * clicks.
 	 *
 	 * @param point The point.
 	 * @return {@code true} if the point was added successfully.
@@ -245,7 +251,8 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Adds the specified {@link DynamicGameObject} to this Player's {@link Set} of visible objects.
+	 * Adds the specified {@link DynamicGameObject} to this Player's {@link Set}
+	 * of visible objects.
 	 *
 	 * @param object The DynamicGameObject.
 	 */
@@ -288,10 +295,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Indicates whether this player is friends with the player with the specified username or not.
+	 * Indicates whether this player is friends with the player with the
+	 * specified username or not.
 	 *
 	 * @param username The username of the other player.
-	 * @return {@code true} if the specified username is on this player's friend list, otherwise {@code false}.
+	 * @return {@code true} if the specified username is on this player's friend
+	 * list, otherwise {@code false}.
 	 */
 	public boolean friendsWith(String username) {
 		return friends.contains(username.toLowerCase());
@@ -409,7 +418,8 @@ public final class Player extends Mob {
 	/**
 	 * Gets the last known region.
 	 *
-	 * @return The last known region, or {@code null} if the player has never known a region.
+	 * @return The last known region, or {@code null} if the player has never
+	 * known a region.
 	 */
 	public Position getLastKnownRegion() {
 		return lastKnownRegion;
@@ -441,7 +451,6 @@ public final class Player extends Mob {
 	public PrivilegeLevel getPrivilegeLevel() {
 		return privilegeLevel;
 	}
-
 	/**
 	 * Gets the player's run energy.
 	 *
@@ -450,6 +459,22 @@ public final class Player extends Mob {
 	public int getRunEnergy() {
 		Attribute<Integer> energy = attributes.get("run_energy");
 		return energy.getValue();
+	}
+
+	/**
+	 * Returns if this player is banned or not.
+	 */
+	public boolean isBanned() {
+		Attribute<Boolean> banned = attributes.get("banned");
+		return banned.getValue();
+	}
+
+	/**
+	 * Returns if this player is muted or not.
+	 */
+	public boolean isMuted() {
+		Attribute<Boolean> muted = attributes.get("muted");
+		return muted.getValue();
 	}
 
 	/**
@@ -507,7 +532,8 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Indicates whether or not the player with the specified username is on this player's ignore list.
+	 * Indicates whether or not the player with the specified username is on
+	 * this player's ignore list.
 	 *
 	 * @param username The username of the player.
 	 * @return {@code true} if the player is ignored, {@code false} if not.
@@ -540,7 +566,8 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Increments this player's viewing distance if it is less than the maximum viewing distance.
+	 * Increments this player's viewing distance if it is less than the maximum
+	 * viewing distance.
 	 */
 	public void incrementViewingDistance() {
 		if (viewingDistance < Position.MAX_DISTANCE) {
@@ -596,7 +623,8 @@ public final class Player extends Mob {
 	/**
 	 * Checks if this player is withdrawing noted items.
 	 *
-	 * @return {@code true} if the player is currently withdrawing notes, otherwise {@code false}.
+	 * @return {@code true} if the player is currently withdrawing notes,
+	 * otherwise {@code false}.
 	 */
 	public boolean isWithdrawingNotes() {
 		return withdrawingNotes;
@@ -642,7 +670,8 @@ public final class Player extends Mob {
 	 * Removes the specified username from this player's friend list.
 	 *
 	 * @param username The username.
-	 * @return {@code true} if the player's friend list contained the specified user, {@code false} if not.
+	 * @return {@code true} if the player's friend list contained the specified
+	 * user, {@code false} if not.
 	 */
 	public boolean removeFriend(String username) {
 		return friends.remove(username.toLowerCase());
@@ -652,14 +681,16 @@ public final class Player extends Mob {
 	 * Removes the specified username from this player's ignore list.
 	 *
 	 * @param username The username.
-	 * @return {@code true} if the player's ignore list contained the specified user, {@code false} if not.
+	 * @return {@code true} if the player's ignore list contained the specified
+	 * user, {@code false} if not.
 	 */
 	public boolean removeIgnore(String username) {
 		return ignores.remove(username.toLowerCase());
 	}
 
 	/**
-	 * Removes the specified {@link DynamicGameObject} from this Player's {@link Set} of visible objects.
+	 * Removes the specified {@link DynamicGameObject} from this Player's
+	 * {@link Set} of visible objects.
 	 *
 	 * @param object The DynamicGameObject.
 	 */
@@ -707,6 +738,10 @@ public final class Player extends Mob {
 		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 		send(new IdAssignmentMessage(index, members));
 		sendMessage("Welcome to RuneScape.");
+
+		if (isMuted()) {
+			sendMessage("You are currently muted. Other players will not see your chat messages.");
+		}
 
 		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
 		for (int tab = 0; tab < tabs.length; tab++) {
@@ -911,7 +946,8 @@ public final class Player extends Mob {
 	/**
 	 * Sets whether or not the player is withdrawing notes from the bank.
 	 *
-	 * @param withdrawingNotes Whether or not the player is withdrawing noted items.
+	 * @param withdrawingNotes Whether or not the player is withdrawing noted
+	 * items.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
 		this.withdrawingNotes = withdrawingNotes;
@@ -932,8 +968,7 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
-				.toString();
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel).toString();
 	}
 
 	/**
@@ -966,16 +1001,13 @@ public final class Player extends Mob {
 	 * Initialises the player's inventories.
 	 */
 	private void initInventories() {
-		InventoryListener fullInventoryListener = new FullInventoryListener(this,
-				FullInventoryListener.FULL_INVENTORY_MESSAGE);
+		InventoryListener fullInventoryListener = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
 		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
 
-		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.INVENTORY_ID);
+		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.INVENTORY_ID);
 		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
-		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.EQUIPMENT_ID);
+		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.EQUIPMENT_ID);
 
 		inventory.addListener(syncInventoryListener);
 		inventory.addListener(fullInventoryListener);

@@ -15,12 +15,13 @@ import org.apollo.game.GamePulseHandler;
 import org.apollo.game.io.MessageHandlerChainSetParser;
 import org.apollo.game.message.handler.MessageHandlerChainSet;
 import org.apollo.game.model.World;
-import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.session.GameSession;
+import org.apollo.game.session.LoginSession;
 import org.apollo.game.sync.ClientSynchronizer;
+import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.util.ThreadUtil;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
@@ -34,10 +35,43 @@ import org.xml.sax.SAXException;
 public final class GameService extends Service {
 
 	/**
-	 * The number of times to unregister players per cycle. This is to ensure the saving threads don't get swamped with
+	 * A utility class wrapping a {@link Player} and their corresponding {@link LoginSession}.
+	 */
+	private static final class LoginPlayerRequest {
+
+		/**
+		 * The Player.
+		 */
+		private final Player player;
+
+		/**
+		 * The LoginSession.
+		 */
+		private final LoginSession session;
+
+		/**
+		 * Creates the LoginPlayerRequest.
+		 *
+		 * @param player The {@link Player} logging in.
+		 * @param session The {@link LoginSession} of the Player.
+		 */
+		public LoginPlayerRequest(Player player, LoginSession session) {
+			this.player = player;
+			this.session = session;
+		}
+
+	}
+
+	/**
+	 * The amount of players to deregister per cycle. This is to ensure the saving threads don't get swamped with
 	 * requests and slow everything down.
 	 */
-	private static final int UNREGISTERS_PER_CYCLE = 50;
+	private static final int DEREGISTRATIONS_PER_CYCLE = 50;
+
+	/**
+	 * The amount of players to register per cycle.
+	 */
+	private static final int REGISTRATIONS_PER_CYCLE = 25;
 
 	/**
 	 * The World this Service is for.
@@ -45,15 +79,19 @@ public final class GameService extends Service {
 	protected final World world;
 
 	/**
-	 * A queue of players to remove.
-	 */
-	private final Queue<Player> oldPlayers = new ConcurrentLinkedQueue<>();
-
-	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor(ThreadUtil
-			.create("GameService"));
+	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.create("GameService"));
+
+	/**
+	 * The Queue of LoginPlayers to add.
+	 */
+	private final Queue<LoginPlayerRequest> newPlayers = new ConcurrentLinkedQueue<>();
+
+	/**
+	 * The Queue of Players to remove.
+	 */
+	private final Queue<Player> oldPlayers = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * The {@link MessageHandlerChainSet}.
@@ -77,6 +115,21 @@ public final class GameService extends Service {
 	}
 
 	/**
+	 * Finalizes the registration of a player.
+	 *
+	 * @param player The player.
+	 */
+	public void finalizePlayerRegistration(Player player) {
+		world.register(player);
+		Region region = world.getRegionRepository().fromPosition(player.getPosition());
+		region.addEntity(player);
+
+		if (!player.getSession().isReconnecting()) {
+			player.sendInitialMessages();
+		}
+	}
+
+	/**
 	 * Finalizes the unregistration of a player.
 	 *
 	 * @param player The player.
@@ -97,12 +150,14 @@ public final class GameService extends Service {
 	/**
 	 * Called every pulse.
 	 */
-	public synchronized void pulse() {
+	public void pulse() {
+		finalizeRegistrations();
 		finalizeUnregistrations();
 
 		MobRepository<Player> players = world.getPlayerRepository();
 		for (Player player : players) {
 			GameSession session = player.getSession();
+
 			if (session != null) {
 				session.handlePendingMessages(handlers);
 			}
@@ -113,22 +168,13 @@ public final class GameService extends Service {
 	}
 
 	/**
-	 * Registers a {@link Player} (may block!).
+	 * Registers a {@link Player} at the end of the next cycle.
 	 *
-	 * @param player The Player.
-	 * @param session The {@link GameSession} of the Player.
-	 * @return A {@link RegistrationStatus}.
+	 * @param player The Player to register.
+	 * @param session the {@link LoginSession} of the Player.
 	 */
-	public synchronized RegistrationStatus registerPlayer(Player player, GameSession session) {
-		RegistrationStatus status = world.register(player);
-		if (status == RegistrationStatus.OK) {
-			player.setSession(session);
-
-			Region region = world.getRegionRepository().fromPosition(player.getPosition());
-			region.addEntity(player);
-		}
-
-		return status;
+	public void registerPlayer(Player player, LoginSession session) {
+		newPlayers.add(new LoginPlayerRequest(player, session));
 	}
 
 	/**
@@ -137,14 +183,14 @@ public final class GameService extends Service {
 	 * @param natural Whether or not the shutdown was expected.
 	 */
 	public void shutdown(boolean natural) {
-		scheduledExecutor.shutdownNow();
+		executor.shutdownNow();
 		// TODO: Other events that should happen upon natural or unexpected shutdown.
 	}
 
 	@Override
 	public void start() {
-		scheduledExecutor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY,
-				GameConstants.PULSE_DELAY, TimeUnit.MILLISECONDS);
+		executor.scheduleAtFixedRate(new GamePulseHandler(this), GameConstants.PULSE_DELAY, GameConstants.PULSE_DELAY,
+				TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -157,12 +203,35 @@ public final class GameService extends Service {
 	}
 
 	/**
+	 * Finalizes the registration of Player's queued to be registered.
+	 */
+	private void finalizeRegistrations() {
+		for (int count = 0; count < REGISTRATIONS_PER_CYCLE; count++) {
+			LoginPlayerRequest request = newPlayers.poll();
+			if (request == null) {
+				break;
+			}
+
+			Player player = request.player;
+			if (world.isPlayerOnline(player.getUsername())) {
+				request.session.sendLoginFailure(LoginConstants.STATUS_ACCOUNT_ONLINE);
+			} else if (world.getPlayerRepository().full()) {
+				request.session.sendLoginFailure(LoginConstants.STATUS_SERVER_FULL);
+			} else {
+				request.session.sendLoginSuccess(player);
+			}
+
+			finalizePlayerRegistration(player);
+		}
+	}
+
+	/**
 	 * Finalizes the unregistration of Player's queued to be unregistered.
 	 */
 	private void finalizeUnregistrations() {
 		LoginService loginService = context.getLoginService();
 
-		for (int count = 0; count < UNREGISTERS_PER_CYCLE; count++) {
+		for (int count = 0; count < DEREGISTRATIONS_PER_CYCLE; count++) {
 			Player player = oldPlayers.poll();
 			if (player == null) {
 				break;

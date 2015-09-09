@@ -25,7 +25,7 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 	 * @author Major
 	 */
 	@FunctionalInterface
-	public static interface InventorySupplier {
+	public interface InventorySupplier {
 
 		/**
 		 * Gets the appropriate {@link Inventory}.
@@ -33,7 +33,7 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 		 * @param player The {@link Player} who prompted the verification call.
 		 * @return The inventory. Must not be {@code null}.
 		 */
-		public Inventory getInventory(Player player);
+		Inventory getInventory(Player player);
 
 	}
 
@@ -80,7 +80,7 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 		Inventory inventory = supplier.getInventory(player);
 
 		int slot = message.getSlot();
-		if (slot < 0 || slot >= inventory.capacity()) {
+		if (inventory == null || slot < 0 || slot >= inventory.capacity()) {
 			message.terminate();
 			return;
 		}

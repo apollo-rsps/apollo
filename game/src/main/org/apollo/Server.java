@@ -63,7 +63,7 @@ public final class Server {
 			System.exit(0);
 		}
 
-		logger.fine("Starting apollo took " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
+		logger.info("Starting apollo took " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
 	}
 
 	/**

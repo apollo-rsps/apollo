@@ -73,7 +73,7 @@ public final class CollisionMatrix {
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param flags The CollisionFlags.
-	 * @return {@code true} if all of the CollisionFlags are set, otherwise {@code false}.
+	 * @return {@code true} iff all of the CollisionFlags are set.
 	 */
 	public boolean all(int x, int y, CollisionFlag... flags) {
 		for (CollisionFlag flag : flags) {
@@ -92,7 +92,7 @@ public final class CollisionMatrix {
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param flags The CollisionFlags.
-	 * @return {@code true} if any of the CollisionFlags are set, otherwise {@code false}.
+	 * @return {@code true} iff any of the CollisionFlags are set.
 	 */
 	public boolean any(int x, int y, CollisionFlag... flags) {
 		for (CollisionFlag flag : flags) {
@@ -115,8 +115,8 @@ public final class CollisionMatrix {
 	}
 
 	/**
-	 * Clears (i.e. sets to {@code false}) the value of the specified {@link CollisionFlag} for the specified coordinate
-	 * pair.
+	 * Clears (i.e. sets to {@code false}) the value of the specified {@link CollisionFlag} for the specified
+	 * coordinate pair.
 	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
@@ -132,7 +132,7 @@ public final class CollisionMatrix {
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 * @param flag The CollisionFlag.
-	 * @return {@code true} if the CollisionFlag is set, {@code false} if not.
+	 * @return {@code true} iff the CollisionFlag is set.
 	 */
 	public boolean flagged(int x, int y, CollisionFlag flag) {
 		return (get(x, y) & flag.asByte()) != 0;
@@ -160,17 +160,6 @@ public final class CollisionMatrix {
 	}
 
 	/**
-	 * Sets the appropriate index for the specified coordinate pair to the specified value.
-	 *
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
-	 * @param value The value.
-	 */
-	private void set(int x, int y, byte value) {
-		matrix[indexOf(x, y)] = value;
-	}
-
-	/**
 	 * Sets (i.e. sets to {@code true}) the value of the specified {@link CollisionFlag} for the specified coordinate
 	 * pair.
 	 *
@@ -184,7 +173,8 @@ public final class CollisionMatrix {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("width", width).add("length", length).add("matrix", Arrays.toString(matrix)).toString();
+		return MoreObjects.toStringHelper(this).add("width", width).add("length", length)
+				.add("matrix", Arrays.toString(matrix)).toString();
 	}
 
 	/**
@@ -195,7 +185,7 @@ public final class CollisionMatrix {
 	 * @param y The y coordinate.
 	 * @param entity The {@link EntityType}.
 	 * @param direction The {@link Direction} the Entity is approaching from.
-	 * @return {@code true} if the tile at the specified coordinate pair is not traversable, {@code false} if not.
+	 * @return {@code true} iff the tile at the specified coordinate pair is not traversable.
 	 */
 	public boolean untraversable(int x, int y, EntityType entity, Direction direction) {
 		CollisionFlag[] flags = CollisionFlag.forType(entity);
@@ -203,19 +193,19 @@ public final class CollisionMatrix {
 
 		switch (direction) {
 			case NORTH_WEST:
-				return any(x, y, flags[south], flags[east]);
+				return flagged(x, y, flags[south]) || flagged(x, y, flags[east]);
 			case NORTH:
 				return flagged(x, y, flags[south]);
 			case NORTH_EAST:
-				return any(x, y, flags[south], flags[west]);
+				return flagged(x, y, flags[south]) || flagged(x, y, flags[west]);
 			case EAST:
 				return flagged(x, y, flags[west]);
 			case SOUTH_EAST:
-				return any(x, y, flags[north], flags[west]);
+				return flagged(x, y, flags[north]) || flagged(x, y, flags[west]);
 			case SOUTH:
 				return flagged(x, y, flags[north]);
 			case SOUTH_WEST:
-				return any(x, y, flags[north], flags[east]);
+				return flagged(x, y, flags[north]) || flagged(x, y, flags[east]);
 			case WEST:
 				return flagged(x, y, flags[east]);
 			default:
@@ -234,8 +224,18 @@ public final class CollisionMatrix {
 	private int indexOf(int x, int y) {
 		Preconditions.checkElementIndex(x, width, "X coordinate must be [0, " + width + "), received " + x + ".");
 		Preconditions.checkElementIndex(y, length, "Y coordinate must be [0, " + length + "), received " + y + ".");
-		int index = y * width + x;
-		return index;
+		return y * width + x;
+	}
+
+	/**
+	 * Sets the appropriate index for the specified coordinate pair to the specified value.
+	 *
+	 * @param x The x coordinate.
+	 * @param y The y coordinate.
+	 * @param value The value.
+	 */
+	private void set(int x, int y, byte value) {
+		matrix[indexOf(x, y)] = value;
 	}
 
 }

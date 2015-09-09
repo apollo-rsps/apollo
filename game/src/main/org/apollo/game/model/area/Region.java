@@ -21,6 +21,7 @@ import org.apollo.game.model.entity.EntityType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
+import org.apollo.game.model.entity.obj.DynamicGameObject;
 
 /**
  * An 8x8 area of the map.
@@ -102,7 +103,7 @@ public final class Region {
 	/**
 	 * Creates a new Region with the specified {@link RegionCoordinates}.
 	 *
-	 * @param coordinates The coordinates.
+	 * @param coordinates The RegionCoordinates.
 	 */
 	public Region(RegionCoordinates coordinates) {
 		this.coordinates = coordinates;
@@ -119,7 +120,7 @@ public final class Region {
 	 * register it to this Region.
 	 *
 	 * @param entity The Entity.
-	 * @param notify A flag indicating whether the {@link RegionListener}s for this Region should be notified.
+	 * @param notify Whether or not the {@link RegionListener}s for this Region should be notified.
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region.
 	 */
 	public void addEntity(Entity entity, boolean notify) {
@@ -137,7 +138,7 @@ public final class Region {
 	/**
 	 * Adds a {@link Entity} to the Region. Note that this does not spawn the Entity, or do any other action other than
 	 * register it to this Region.
-	 * <p/>
+	 *
 	 * By default, this method notifies RegionListeners for this region of the addition.
 	 *
 	 * @param entity The Entity.
@@ -149,7 +150,7 @@ public final class Region {
 
 	/**
 	 * Checks if this Region contains the specified Entity.
-	 * <p/>
+	 *
 	 * This method operates in constant time.
 	 *
 	 * @param entity The Entity.
@@ -163,13 +164,24 @@ public final class Region {
 	}
 
 	/**
+	 * Returns whether or not the specified {@link Position} is inside this Region.
+	 *
+	 * @param position The Position.
+	 * @return {@code true} iff the specified Position is inside this Region.
+	 */
+	public boolean contains(Position position) {
+		return coordinates.equals(position.getRegionCoordinates());
+	}
+
+	/**
 	 * Encodes the contents of this Region into a {@link Set} of {@link RegionUpdateMessage}s, to be sent to a client.
 	 *
 	 * @return The Set of RegionUpdateMessages.
 	 */
 	public Set<RegionUpdateMessage> encode(int height) {
 		Set<RegionUpdateMessage> additions = entities.values().stream()
-				.flatMap(Set::stream).filter(entity -> entity instanceof GroupableEntity)
+				.flatMap(Set::stream) // TODO fix this to work for ground items + projectiles
+				.filter(entity -> entity instanceof DynamicGameObject && entity.getPosition().getHeight() == height)
 				.map(entity -> ((GroupableEntity) entity).toUpdateOperation(this, EntityUpdateType.ADD).toMessage())
 				.collect(Collectors.toSet());
 
@@ -181,7 +193,7 @@ public final class Region {
 	/**
 	 * Gets this Region's {@link RegionCoordinates}.
 	 *
-	 * @return The Region coordinates.
+	 * @return The RegionCoordinates.
 	 */
 	public RegionCoordinates getCoordinates() {
 		return coordinates;
@@ -191,8 +203,8 @@ public final class Region {
 	 * Gets a shallow copy of the {@link Set} of {@link Entity} objects at the specified {@link Position}. The returned
 	 * type will be immutable.
 	 *
-	 * @param position The position containing the entities.
-	 * @return The list.
+	 * @param position The Position containing the entities.
+	 * @return The Set. Will be immutable.
 	 */
 	public Set<Entity> getEntities(Position position) {
 		Set<Entity> set = entities.get(position);
@@ -206,7 +218,7 @@ public final class Region {
 	 *
 	 * @param position The {@link Position} containing the entities.
 	 * @param types The {@link EntityType}s.
-	 * @return The set of entities.
+	 * @return The Set of Entity objects.
 	 */
 	public <T extends Entity> Set<T> getEntities(Position position, EntityType... types) {
 		Set<Entity> local = entities.get(position);
@@ -241,7 +253,11 @@ public final class Region {
 	 * @return The Set of RegionUpdateMessages.
 	 */
 	public Set<RegionUpdateMessage> getUpdates(int height) {
-		return ImmutableSet.copyOf(updates.get(height));
+		Set<RegionUpdateMessage> updates = this.updates.get(height);
+		Set<RegionUpdateMessage> copy = ImmutableSet.copyOf(updates);
+
+		updates.clear();
+		return copy;
 	}
 
 	/**
@@ -255,12 +271,12 @@ public final class Region {
 	}
 
 	/**
-	 * Removes a {@link Entity} from this Region.
+	 * Removes an {@link Entity} from this Region.
 	 *
 	 * @param entity The Entity.
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region, or if it was never added.
 	 */
-	public void removeEntity(Entity entity) { // TODO entity update stuff
+	public void removeEntity(Entity entity) {
 		Position position = entity.getPosition();
 		checkPosition(position);
 
@@ -309,20 +325,26 @@ public final class Region {
 	 * Records the specified {@link GroupableEntity} as being updated this pulse.
 	 *
 	 * @param entity The GroupableEntity.
-	 * @param type The {@link EntityUpdateType}.
+	 * @param update The {@link EntityUpdateType}.
 	 * @throws UnsupportedOperationException If the specified Entity cannot be operated on in this manner.
 	 */
-	private <T extends Entity & GroupableEntity> void record(T entity, EntityUpdateType type) {
-		UpdateOperation<?> operation = entity.toUpdateOperation(this, type);
+	private <T extends Entity & GroupableEntity> void record(T entity, EntityUpdateType update) {
+		UpdateOperation<?> operation = entity.toUpdateOperation(this, update);
 		RegionUpdateMessage message = operation.toMessage(), inverse = operation.inverse();
 
 		int height = entity.getPosition().getHeight();
 		Set<RegionUpdateMessage> updates = this.updates.get(height);
 
-		if (entity.getEntityType() == EntityType.STATIC_OBJECT && type == EntityUpdateType.REMOVE) {
-			removedObjects.get(height).add(message);
+		EntityType type = entity.getEntityType();
+
+		if (type == EntityType.STATIC_OBJECT) { // TODO set/clear collision matrix values
+			if (update == EntityUpdateType.REMOVE) {
+				removedObjects.get(height).add(message);
+			} else { // TODO should this really be possible?
+				removedObjects.get(height).remove(inverse);
+			}
+
 			updates.add(message);
-			updates.remove(inverse);
 		} else {
 			updates.add(message);
 			updates.remove(inverse);

@@ -30,6 +30,14 @@ public abstract class Session {
 	public abstract void destroy();
 
 	/**
+	 * Processes a message received from the channel.
+	 *
+	 * @param message The message.
+	 * @throws Exception If some error occurs.
+	 */
+	public abstract void messageReceived(Object message) throws Exception;
+
+	/**
 	 * Gets the channel.
 	 *
 	 * @return The channel.
@@ -37,13 +45,5 @@ public abstract class Session {
 	protected final Channel getChannel() {
 		return channel;
 	}
-
-	/**
-	 * Processes a message received from the channel.
-	 *
-	 * @param message The message.
-	 * @throws Exception If some error occurs.
-	 */
-	public abstract void messageReceived(Object message) throws Exception;
 
 }
