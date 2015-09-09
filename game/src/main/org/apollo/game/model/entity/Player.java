@@ -394,7 +394,7 @@ public final class Player extends Mob {
 
 	@Override
 	public int getInteractionIndex() {
-		return getIndex() | 0x8000;
+		return getIndex() | 0x8000; // TODO: Change this to normal addition / make the magic number a constant
 	}
 
 	/**
@@ -462,7 +462,9 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Returns if this player is banned or not.
+	 * Gets whether or not this Player is banned.
+	 * 
+	 * @return {@code true} iff this Player is banned otherwise {@code false}.
 	 */
 	public boolean isBanned() {
 		Attribute<Boolean> banned = attributes.get("banned");
@@ -470,7 +472,9 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Returns if this player is muted or not.
+	 * Gets whether or not this Player is muted.
+	 * 
+	 * @return {@code true} iff this Player is muted otherwise {@code false}.
 	 */
 	public boolean isMuted() {
 		Attribute<Boolean> muted = attributes.get("muted");
