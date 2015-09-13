@@ -11,6 +11,7 @@ import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.obj.StaticGameObject;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,8 +30,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest({World.class, Player.class, ObjectDefinition.class, RegionRepository.class, Region.class})
 public class ObjectActionVerificationHandlerTest {
 
-	@BeforeClass
-	public static void setupTestObjectDefinitions() {
+	@Before
+	public void setupTestObjectDefinitions() {
 		mockStatic(ObjectDefinition.class);
 		when(ObjectDefinition.count()).thenReturn(4152);
 	}

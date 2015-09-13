@@ -7,6 +7,7 @@ import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.Inventory;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +26,8 @@ public class ItemOnItemVerificationHandlerTest {
 	private ItemOnItemVerificationHandler itemOnItemVerificationHandler = new ItemOnItemVerificationHandler(world);
 	private ItemVerificationHandler itemVerificationHandler = new ItemVerificationHandler(world);
 
-	@BeforeClass
-	public static void setupTestItemDefinitions() {
+	@Before
+	public void setupTestItemDefinitions() {
 		mockStatic(ItemDefinition.class);
 		when(ItemDefinition.lookup(4151)).thenReturn(new ItemDefinition(4151));
 	}
