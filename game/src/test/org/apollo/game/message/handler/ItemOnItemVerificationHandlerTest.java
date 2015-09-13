@@ -21,7 +21,10 @@ import static org.junit.Assert.assertTrue;
 @PrepareForTest({Player.class, ItemDefinition.class})
 public class ItemOnItemVerificationHandlerTest {
 
-	private ItemOnItemVerificationHandler verificationHandler = new ItemOnItemVerificationHandler(new World());
+	private World world = new World();
+
+	private ItemOnItemVerificationHandler itemOnItemVerificationHandler = new ItemOnItemVerificationHandler(world);
+	private ItemVerificationHandler itemVerificationHandler = new ItemVerificationHandler(world);
 
 	@BeforeClass
 	public static void setupTestItemDefinitions() {
@@ -40,7 +43,8 @@ public class ItemOnItemVerificationHandlerTest {
 		ItemOnItemMessage itemOnItemMessage = new ItemOnItemMessage(BankConstants.SIDEBAR_INVENTORY_ID, 500, 1,
 				BankConstants.SIDEBAR_INVENTORY_ID, 4151, 1);
 
-		verificationHandler.handle(player, itemOnItemMessage);
+		itemVerificationHandler.handle(player, itemOnItemMessage);
+		itemOnItemVerificationHandler.handle(player, itemOnItemMessage);
 
 		assertTrue("ItemOnItemVerificationHandler: failed checking source item / slot exists", itemOnItemMessage.terminated());
 	}
