@@ -46,6 +46,23 @@ public class ItemOnItemVerificationHandlerTest {
 		itemVerificationHandler.handle(player, itemOnItemMessage);
 		itemOnItemVerificationHandler.handle(player, itemOnItemMessage);
 
-		assertTrue("ItemOnItemVerificationHandler: failed checking source item / slot exists", itemOnItemMessage.terminated());
+		assertTrue("ItemOnItemVerificationHandler: failed terminating message with invalid source item", itemOnItemMessage.terminated());
+	}
+
+	@Test
+	public void testTerminateWithNoTargetItem() throws Exception {
+		Player player = PowerMockito.mock(Player.class);
+		Inventory inventory = new Inventory(28);
+		inventory.set(1, new Item(4151, 1));
+
+		Mockito.when(player.getInventory()).thenReturn(inventory);
+
+		ItemOnItemMessage itemOnItemMessage = new ItemOnItemMessage(BankConstants.SIDEBAR_INVENTORY_ID, 4151, 1,
+				BankConstants.SIDEBAR_INVENTORY_ID, 4152, 2);
+
+		itemVerificationHandler.handle(player, itemOnItemMessage);
+		itemOnItemVerificationHandler.handle(player, itemOnItemMessage);
+
+		assertTrue("ItemOnItemVerificationHandler: failed terminating message with invalid target item", itemOnItemMessage.terminated());
 	}
 }
