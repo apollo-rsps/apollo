@@ -26,7 +26,7 @@ public final class ObjectActionVerificationHandler extends MessageHandler<Object
 	 * @param objects The list of objects.
 	 * @return {@code true} if the list does contain the object with the specified id, otherwise {@code false}.
 	 */
-	private static boolean containsObject(int id, Set<GameObject> objects) {
+	public static boolean containsObject(int id, Set<GameObject> objects) {
 		return objects.stream().anyMatch(object -> object.getId() == id);
 	}
 

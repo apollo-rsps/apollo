@@ -1,12 +1,19 @@
 package org.apollo.game.message.handler;
 
+import org.apollo.cache.def.ObjectDefinition;
 import org.apollo.game.message.impl.ItemOnObjectMessage;
 import org.apollo.game.model.Item;
+import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.obj.GameObject;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
+
+import java.util.Set;
 
 /**
  * A {@link MessageHandler} that verifies {@link ItemOnObjectMessage}s.
@@ -41,6 +48,21 @@ public final class ItemOnObjectVerificationHandler extends MessageHandler<ItemOn
 
 		Item item = inventory.get(slot);
 		if (item == null || item.getId() != message.getId()) {
+			message.terminate();
+			return;
+		}
+
+		int objectId = message.getObjectId();
+		if (objectId < 0 || objectId >= ObjectDefinition.count()) {
+			message.terminate();
+			return;
+		}
+
+		Position position = message.getPosition();
+		Region region = world.getRegionRepository().fromPosition(position);
+		Set<GameObject> objects = region.getEntities(position, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT);
+
+		if (!player.getPosition().isWithinDistance(position, 15) || !ObjectActionVerificationHandler.containsObject(objectId, objects)) {
 			message.terminate();
 			return;
 		}
