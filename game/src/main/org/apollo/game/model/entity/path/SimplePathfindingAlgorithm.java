@@ -35,7 +35,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 		int approximation = (int) (origin.getLongestDelta(target) * 1.5);
 		Deque<Position> positions = new ArrayDeque<>(approximation);
 
-		return addHorizontal(origin, target, positions);
+		return addDiagonal(origin, target, positions);
 	}
 
 	/**
@@ -49,6 +49,59 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 	public Deque<Position> find(Position origin, Position target, Position[] boundaries) {
 		this.boundaries = Optional.of(boundaries);
 		return find(origin, target);
+	}
+
+	/**
+	 * Adds the necessary and possible diagonal {@link Position}s to the existing {@link Deque}.
+	 * <p>
+	 * This method:
+	 * <ul>
+	 * <li>Adds positions diagonally for max diagonal length or until something is hit.
+	 * <li>If you can still move, but not diagonally, this method will continue to those next.
+	 * </ul>
+	 *
+	 * @param start The current position.
+	 * @param target The target position.
+	 * @param positions The deque of positions.
+	 * @return The deque of positions containing the path.
+	 */
+	private Deque<Position> addDiagonal(Position start, Position target, Dequeue<Position> positions) {
+		int x = start.getX(), y = start.getY(), height = start.getHeight();
+		int dx = target.getX() - x, dy = target.getY() - y;
+		int diagonalOffset = Math.min(dx, dy);
+
+		Direction direction;
+
+		if (dy > 0) {
+			direction = dx > 0 ? Direction.NORTH_EAST : Direction.NORTH_WEST;
+		} else {
+			direction = dx > 0 ? Direction.SOUTH_EAST : Direction.SOUTH_WEST;
+		}
+
+		int moveX = dx > 0 ? 1 : -1;
+		int moveY = dy > 0 ? 1 : -1;
+
+		for (; diagonalOffset > 0; --diagonalOffset) {
+			if (traversable(current, boundaries, direction)) {
+				x += moveX;
+				y += moveY;
+				start = new Position(x, y, height);
+				positions.addLast(start);
+			} else {
+				// You could also return positions here if you don't want this
+				// method to try to move horizontally & vertically if trapped
+				// behind a diagonal obstacle.
+				break;
+			}
+		}
+
+		if (dx - moveX*diagonalOffset != 0) {
+			addHorizontal(start, target, positions);
+		} else if (dy - moveY*diagonalOffset != 0) {
+			addVertical(start, target, positions);
+		}
+
+		return positions;
 	}
 
 	/**
