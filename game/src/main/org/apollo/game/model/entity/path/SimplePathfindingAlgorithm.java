@@ -65,7 +65,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 	 * @param positions The deque of positions.
 	 * @return The deque of positions containing the path.
 	 */
-	private Deque<Position> addDiagonal(Position start, Position target, Dequeue<Position> positions) {
+	private Deque<Position> addDiagonal(Position start, Position target, Deque<Position> positions) {
 		int x = start.getX(), y = start.getY(), height = start.getHeight();
 		int dx = target.getX() - x, dy = target.getY() - y;
 		int diagonalOffset = Math.min(dx, dy);
@@ -82,7 +82,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 		int moveY = dy > 0 ? 1 : -1;
 
 		for (; diagonalOffset > 0; --diagonalOffset) {
-			if (traversable(current, boundaries, direction)) {
+			if (traversable(start, boundaries, direction)) {
 				x += moveX;
 				y += moveY;
 				start = new Position(x, y, height);
