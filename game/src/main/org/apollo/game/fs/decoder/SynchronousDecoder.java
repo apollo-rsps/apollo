@@ -51,6 +51,7 @@ public final class SynchronousDecoder {
 			.map(executor::submit)
 			.collect(toList());
 
+		executor.shutdown();
 		executor.awaitTermination(TIMEOUT, TimeUnit.MILLISECONDS);
 
 		for (Future future : futureList) {
