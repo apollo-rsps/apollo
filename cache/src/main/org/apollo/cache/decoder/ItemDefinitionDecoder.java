@@ -108,7 +108,7 @@ public final class ItemDefinitionDecoder implements Runnable {
 					buffer.getShort();
 					buffer.getShort();
 				}
-			} else if (opcode == 78 || opcode == 79 || opcode >= 90 || opcode <= 93 || opcode == 95) {
+			} else if (opcode == 78 || opcode == 79 || (opcode >= 90 && opcode <= 93) || opcode == 95) {
 				buffer.getShort();
 			} else if (opcode == 97) {
 				definition.setNoteInfoId(buffer.getShort() & 0xFFFF);
