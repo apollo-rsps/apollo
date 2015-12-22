@@ -122,6 +122,7 @@ public final class WalkingQueue {
 	 */
 	public void pulse() {
 		Position position = mob.getPosition();
+		int height = position.getHeight();
 
 		Direction firstDirection = Direction.NONE;
 		Direction secondDirection = Direction.NONE;
@@ -130,14 +131,14 @@ public final class WalkingQueue {
 		if (next != null) {
 			previousPoints.add(next);
 			firstDirection = Direction.between(position, next);
-			position = next;
+			position = new Position(next.getX(), next.getY(), height);
 
 			if (running) {
 				next = points.poll();
 				if (next != null) {
 					previousPoints.add(next);
 					secondDirection = Direction.between(position, next);
-					position = next;
+					position = new Position(next.getX(), next.getY(), height);
 				}
 			}
 		}
