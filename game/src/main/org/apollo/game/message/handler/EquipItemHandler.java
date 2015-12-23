@@ -94,6 +94,8 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 			if (weapon != null) {
 				inventory.add(weapon);
 			}
+
+			player.stopAction();
 			return;
 		}
 
