@@ -24,11 +24,19 @@ class SpecialEnergyRequirement < AttackRequirement
   end
 
   def validate!(player)
-    throw AttackRequirementException.new('Not enough special attack energy.') unless player.special_energy >= @amount
+    if player.special_energy < @amount
+      player.using_special = false
+      
+      update_special_bar(player)
+      raise AttackRequirementException.new('Not enough special attack energy.')       
+    end
   end
 
   def apply(player)
     player.special_energy = player.special_energy - @amount
+    player.using_special = false
+    
+    update_special_bar player
   end
 end
 
