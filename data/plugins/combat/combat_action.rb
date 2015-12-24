@@ -100,7 +100,5 @@ class CombatAction < Action
 
     @combat_state.reset
     mob.attacking = false
-    
-    puts 'stopped combat action'
   end
 end

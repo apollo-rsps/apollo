@@ -1,4 +1,4 @@
-create_weapon_class :unarmed, widget: -1 do
+create_weapon_class :no_weapon, widget: 92 do
   default_speed 4
 
   add_style :accurate, animation: 422, block_animation: 424
@@ -6,6 +6,6 @@ create_weapon_class :unarmed, widget: -1 do
   add_style :defensive, animation: 422, block_animation: 424
 end
 
-create_weapon :no_weapon, :unarmed, named: true do
+create_weapon :unarmed, :no_weapon, named: true do
   # Todo factor out empty blocks
 end

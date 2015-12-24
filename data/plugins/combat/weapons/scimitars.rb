@@ -1,17 +1,18 @@
-SCIMITAR_WIDGET_ID      = 81
-SCIMITAR_SPECIAL_BAR_ID = 21
+SCIMITAR_WIDGET_ID             = 81
+SCIMITAR_SPECIAL_BAR_CONFIG_ID = 21
+SCIMITAR_SPECIAL_BAR_BUTTON_ID = 21
 
 create_weapon_class :scimitar, widget: SCIMITAR_WIDGET_ID do
   default_speed 4
-  special_bar SCIMITAR_SPECIAL_BAR_ID
+  special_bar SCIMITAR_SPECIAL_BAR_CONFIG_ID, SCIMITAR_SPECIAL_BAR_BUTTON_ID
 
   attack_bonuses crush: -2
   defence_bonuses slash: -1
 
-  add_style :accurate, attack_type: :slash, animation: 390
-  add_style :aggressive, attack_type: :slash, animation: 390
-  add_style :alt_aggressive, attack_type: :stab, animation: 391
-  add_style :defensive, attack_type: :slash, animation: 390
+  add_style :accurate, attack_type: :slash, animation: 390, button: 2
+  add_style :aggressive, attack_type: :slash, animation: 390, button: 3
+  add_style :alt_aggressive, attack_type: :stab, animation: 391, button: 4
+  add_style :defensive, attack_type: :slash, animation: 390, button: 5
 end
 
 create_weapon :iron_scimitar do

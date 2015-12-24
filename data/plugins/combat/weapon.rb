@@ -8,14 +8,6 @@ java_import 'org.apollo.game.model.inv.SynchronizationInventoryListener'
 WEAPONS       = {}
 NAMED_WEAPONS = {}
 
-COMBAT_STYLES = [
-  :accurate,
-  :aggressive,
-  :defensive,
-  :controlled,
-  :alt_aggressive
-]
-
 def create_weapon(identifier, class_name = nil, named: false, &block)
   if named
     create_named_weapon(identifier, class_name, &block)
@@ -28,11 +20,11 @@ end
 private
 
 def create_normal_weapon(item_matcher, class_name = nil, &block)
-  items = find_entities :item, item_matcher.to_s.gsub(/_/, ' '), -1
+  items = find_entities :item, item_matcher, -1
   items.each do |item_id|
     definition      = ItemDefinition.lookup(item_id)
     definition_name = definition.name.downcase.to_s
-
+    
     if class_name.nil?
       class_name =
         case definition_name
@@ -40,18 +32,20 @@ def create_normal_weapon(item_matcher, class_name = nil, &block)
             :two_handed_sword
           when /[a-zA-Z]+ scimitar/
             :scimitar
+          when /[a-zA-Z]+ dagger/
+            :dagger
           else
             raise "Couldn't find a suitable weapon class for the given weapon."
         end
     end
 
-    WEAPONS[item_id] = Weapon.new(WEAPON_CLASSES[class_name])
+    WEAPONS[item_id] = Weapon.new(definition.name, WEAPON_CLASSES[class_name])
     WEAPONS[item_id].instance_eval &block
   end
 end
 
 def create_named_weapon(name, class_name, &block)
-  NAMED_WEAPONS[name] = Weapon.new WEAPON_CLASSES[class_name]
+  NAMED_WEAPONS[name] = Weapon.new name.to_s.capitalize, WEAPON_CLASSES[class_name]
   NAMED_WEAPONS[name].instance_eval &block
 end
 
@@ -60,11 +54,12 @@ end
 # * has an optional special_attack
 # * belongs to a certain WeaponClass, and inherits bonuses from it.
 class Weapon
-  attr_reader :weapon_class, :special_attack
+  attr_reader :name, :weapon_class, :special_attack
 
   include Combat::BonusContainer
 
-  def initialize(weapon_class)
+  def initialize(name, weapon_class)
+    @name           = name
     @weapon_class   = weapon_class
     @special_attack = nil
   end
@@ -74,7 +69,10 @@ class Weapon
   end
 
   def set_special_attack(energy_requirement:, animation:, graphic: nil, &block)
+    # todo figure out if ranged or melee
 
+    requirements    = [SpecialEnergyRequirement.new(energy_requirement)]
+    @special_attack = ProcAttack.new(block, animation: animation, graphic: graphic, requirements: requirements)
   end
 end
 
@@ -96,9 +94,7 @@ def update_weapon_animations(player)
 
   [:stand, :walk, :run, :idle_turn, :turn_around, :turn_left, :turn_right].each do |key|
     animation = weapon_class.other_animation(key)
-    puts animation
 
-    puts key
     unless animation.nil?
       case key
         when :stand

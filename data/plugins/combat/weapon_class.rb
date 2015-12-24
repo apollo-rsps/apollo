@@ -24,7 +24,7 @@ RANGE_COMBAT_STYLES = [
 ]
 
 class WeaponClass
-  attr_reader :widget, :name
+  attr_reader :widget, :name, :special_bar_button, :special_bar_config
 
   include Combat::BonusContainer
 
@@ -37,7 +37,7 @@ class WeaponClass
     @animations    = {}
   end
 
-  def add_style(style, attack_type: nil, speed: nil, animation: nil, block_animation: nil, range: 1)
+  def add_style(style, button: nil, attack_type: nil, speed: nil, animation: nil, block_animation: nil, range: 1)
     raise 'Invalid combat style given' unless COMBAT_STYLES.include? style
 
     @styles[style] = {
@@ -45,11 +45,12 @@ class WeaponClass
       :speed           => speed,
       :animation       => animation,
       :block_animation => block_animation,
-      :range           => range
+      :range           => range,
+      :button          => button == nil ? @styles.size + 1 : button
     }
-
+    
     @style_offsets.push style
-
+    
     if MELEE_COMBAT_STYLES.include? style
       @style_attacks[style] = Attack.new(animation: animation)
     end
@@ -67,16 +68,30 @@ class WeaponClass
     @styles[style][:block_animation]
   end
 
+  def button(style)
+    @styles[style][:button]
+  end
+  
+  def config(style)
+    @style_offsets.find_index {|v| v == style }
+  end
+  
   def other_animation(type)
     @animations[type]
   end
-  
+
   def speed(style)
     @styles[style][:speed] || default_speed
   end
 
-  def style_at(offset)
-    @style_offsets[offset]
+  def style_at(button)
+    selected_style = @styles.select { |key, hash| hash[:button] == button }.keys[0]
+
+    if selected_style == nil
+      selected_style = @styles.min_by { |key, hash| hash[:button] }.first
+    end
+    
+    selected_style
   end
 
   def default_speed(speed = nil)
@@ -87,12 +102,13 @@ class WeaponClass
     @default_speed
   end
 
-  def special_bar(id = nil)
-    unless id.nil?
-      @special_bar = id
-    end
+  def special_bar(config, button)
+    @special_bar_config = config
+    @special_bar_button = button
+  end
 
-    @special_bar
+  def special_bar?
+    !@special_bar_button.nil? and !@special_bar_config.nil?
   end
 
   def animations(stand: nil, walk: nil, run: nil, idle_turn: nil, turn_around: nil, turn_left: nil, turn_right: nil)
