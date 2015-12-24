@@ -58,7 +58,7 @@ class EquipmentUtil
     item = source.equipment.get(EquipmentConstants::WEAPON)
 
     if item.nil?
-      return NAMED_WEAPONS[:no_weapon]
+      return NAMED_WEAPONS[:unarmed]
     end
 
     WEAPONS[item.id]
