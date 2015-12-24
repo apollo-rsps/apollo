@@ -9,8 +9,9 @@
     </authors>
     <scripts>
         <script>attack.rb</script>
-        <script>attribute.rb</script>
-        <script>bonus_container.rb</script>
+        <script>attack_requirements.rb</script>
+        <script>attributes.rb</script>
+        <script>bonuses.rb</script>
         <script>combat.rb</script>
         <script>combat_action.rb</script>
         <script>combat_state.rb</script>
@@ -20,11 +21,13 @@
         <script>weapon.rb</script>
         <script>weapon_class.rb</script>
         <script>weapons/bows.rb</script>
+        <script>weapons/daggers.rb</script>
         <script>weapons/scimitars.rb</script>
         <script>weapons/swords.rb</script>
         <script>weapons/two_handed_swords.rb</script>
         <script>weapons/unarmed.rb</script>
         <script>widgets/combat_tab.rb</script>
+        <script>widgets/special_bar.rb</script>
         <script>widgets/ancient_magics_tab.rb</script>
         <script>widgets/regular_magics_tab.rb</script>
         <script>widgets/lunar_magics_tab.rb</script>
