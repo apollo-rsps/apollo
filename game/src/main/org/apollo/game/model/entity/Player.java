@@ -650,6 +650,7 @@ public final class Player extends Mob {
 		}
 
 		localObjects.forEach(object -> object.removeFrom(this));
+		stopAction();
 	}
 
 	/**
