@@ -3,9 +3,11 @@ package org.apollo.game.sync.task;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apollo.game.message.impl.NpcSynchronizationMessage;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.seg.AddNpcSegment;
@@ -70,7 +72,10 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 
 		int added = 0, count = locals.size();
 
-		for (Npc npc : player.getWorld().getNpcRepository()) {
+		RegionRepository repository = player.getWorld().getRegionRepository();
+		Set<Npc> npcs = repository.fromPosition(player.getPosition()).getSortedNpcs(player);
+
+		for (Npc npc : npcs) {
 			if (count >= MAXIMUM_LOCAL_NPCS) {
 				player.flagExcessiveNpcs();
 				break;

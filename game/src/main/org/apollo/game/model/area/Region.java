@@ -2,26 +2,36 @@ package org.apollo.game.model.area;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.collision.CollisionMatrix;
+import org.apollo.game.model.area.priority.NpcUpdateComparator;
+import org.apollo.game.model.area.priority.PlayerUpdateComparator;
 import org.apollo.game.model.area.update.GroupableEntity;
 import org.apollo.game.model.area.update.UpdateOperation;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.EntityType;
+import org.apollo.game.model.entity.Npc;
+import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.obj.DynamicGameObject;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import org.apollo.game.model.entity.obj.DynamicGameObject;
 
 /**
  * An 8x8 area of the map.
@@ -212,6 +222,44 @@ public final class Region {
 	}
 
 	/**
+	 * Returns a {@link Set} containing all of the {@link Player}s in this
+	 * region sorted according to the specifications of the {@link PlayerUpdateComparator}.
+	 * 
+	 * @param player The player that is being updated.
+	 * @return A set containing the sorted {@code Player}s.
+	 */
+	public Set<Player> getSortedPlayers(Player player) {
+		SortedSet<Player> players = new TreeSet<>(new PlayerUpdateComparator(player));
+		Stream<Set<Entity>> localStream = entities.values().stream();
+
+		Predicate<Entity> filter = it -> it.getEntityType() == EntityType.PLAYER;
+		Consumer<Entity> apply = it -> players.add((Player) it);
+
+		localStream.forEach(set -> set.stream().filter(filter).forEach(apply));
+
+		return players;
+	}
+
+	/**
+	 * Returns a {@link Set} containing all of the {@link Npc}s in this
+	 * region sorted according to the specifications of the {@link NpcUpdateComparator}.
+	 * 
+	 * @param player The player that is being updated.
+	 * @return A set containing the sorted {@code Npc}s.
+	 */
+	public Set<Npc> getSortedNpcs(Player player) {
+		SortedSet<Npc> npcs = new TreeSet<>(new NpcUpdateComparator(player));
+		Stream<Set<Entity>> localStream = entities.values().stream();
+
+		Predicate<Entity> filter = it -> it.getEntityType() == EntityType.NPC;
+		Consumer<Entity> apply = it -> npcs.add((Npc) it);
+
+		localStream.forEach(set -> set.stream().filter(filter).forEach(apply));
+
+		return npcs;
+	}
+
+	/**
 	 * Gets a shallow copy of the {@link Set} of {@link Entity}s with the specified {@link EntityType}(s). The returned
 	 * type will be immutable. Type will be inferred from the call, so ensure that the Entity type and the reference
 	 * correspond, or this method will fail at runtime.
@@ -226,7 +274,7 @@ public final class Region {
 			return ImmutableSet.of();
 		}
 
-		Set<EntityType> set = new HashSet<>(Arrays.asList(types));
+		Set<EntityType> set = EnumSet.copyOf(Arrays.asList(types));
 		@SuppressWarnings("unchecked")
 		Set<T> filtered = (Set<T>) local.stream().filter(entity -> set.contains(entity.getEntityType()))
 				.collect(Collectors.toSet());
