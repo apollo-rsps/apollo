@@ -40,7 +40,7 @@ end
 
 # Hides a context menu action for the specified player
 def hide_action(player, action)
-  show_action(player, PlayerAction.new(action.slot, action.primary, 'null'))
+  player.send(SetPlayerActionMessage.new('null', action.slot, action.primary))
 end
 
 # Monkey-patch Player to provide action utility methods.
