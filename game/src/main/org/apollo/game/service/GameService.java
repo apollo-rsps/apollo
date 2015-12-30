@@ -219,9 +219,8 @@ public final class GameService extends Service {
 				request.session.sendLoginFailure(LoginConstants.STATUS_SERVER_FULL);
 			} else {
 				request.session.sendLoginSuccess(player);
+				finalizePlayerRegistration(player);
 			}
-
-			finalizePlayerRegistration(player);
 		}
 	}
 
