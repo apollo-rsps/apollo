@@ -19,7 +19,7 @@ end
 
 # Determines the wilderness level for the specified player's position
 def wilderness_level(player)
-  ((player.position.y - 3520) / 8).ceil
+  ((player.position.y - 3520) / 8).ceil + 1
 end
 
 area_action :wilderness_level do
