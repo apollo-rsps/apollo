@@ -57,7 +57,6 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 	@Override
 	public void synchronize(MobRepository<Player> players, MobRepository<Npc> npcs) {
 		
-		//Cheap hax since scu/cube complain like little bitches and need it fixed apparently
 		//This should be for a permanent fix the issue happens from players not fully unregistering 
 		List<Player> players = new LinkedList<Player>();
 		Iterator<Player> itz = players_old.iterator();
