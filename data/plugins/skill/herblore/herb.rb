@@ -55,7 +55,7 @@ class HerbIdentificationAction < Action
       identified = @herb.item
 
       inventory.add(identified)
-      player.skill_set.add_experience(HERBLORE_ID, @herb.experience)
+      player.skill_set.add_experience(Skill::HERBLORE, @herb.experience)
       player.send_message("You identify the herb as a #{identified.definition.name}.", true)
       # TODO: 'as an' in some cases
     end
