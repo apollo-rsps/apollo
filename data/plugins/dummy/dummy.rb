@@ -25,10 +25,10 @@ class DummyAction < DistancedAction
     if @started
       skills = mob.skill_set
 
-      if (skills.skill(ATTACK_SKILL_ID).maximum_level >= LEVEL_THRESHOLD)
+      if (skills.skill(Skill::ATTACK).maximum_level >= LEVEL_THRESHOLD)
         mob.send_message('There is nothing more you can learn from hitting a dummy.')
       else
-        skills.add_experience(ATTACK_SKILL_ID, EXP_PER_HIT)
+        skills.add_experience(Skill::ATTACK, EXP_PER_HIT)
       end
 
       stop
