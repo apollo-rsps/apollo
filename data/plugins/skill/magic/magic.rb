@@ -130,7 +130,6 @@ on :message, :magic_on_item do |player, message|
     item = player.inventory.get(slot)
     player.start_action(AlchemyAction.new(player, alch, slot, item))
     message.terminate
-    return
   end
 
   ench = ENCHANT_SPELLS[message.id]
@@ -150,7 +149,6 @@ on :message, :button do |player, message|
   unless tele.nil?
     player.start_action(TeleportingAction.new(player, tele))
     message.terminate
-    return
   end
 
   conv = CONVERT_SPELLS[button]
