@@ -6,8 +6,12 @@
     <description>Adds fully functioning melee, ranged and magic combat.</description>
     <authors>
         <author>garyttierney</author>
+        <author>Shiver</author>
+        <author>Major</author>
     </authors>
     <scripts>
+        <!-- Include the BonusContainer mixin first, as its used throughout -->
+        <script>ammo.rb</script>
         <script>attack.rb</script>
         <script>attack_requirements.rb</script>
         <script>attributes.rb</script>
@@ -15,9 +19,10 @@
         <script>combat.rb</script>
         <script>combat_action.rb</script>
         <script>combat_state.rb</script>
+        <script>combat_style.rb</script>
         <script>equipment.rb</script>
-        <script>projectile.rb</script>
         <script>util.rb</script>
+        <script>projectile_type.rb</script>
         <script>weapon.rb</script>
         <script>weapon_class.rb</script>
         <script>weapons/bows.rb</script>
@@ -25,12 +30,18 @@
         <script>weapons/scimitars.rb</script>
         <script>weapons/swords.rb</script>
         <script>weapons/two_handed_swords.rb</script>
+        <script>ammo/arrows.rb</script>
+        <script>ammo/bolts.rb</script>
+        <script>weapons/ranged/bows.rb</script>
+        <script>weapons/ranged/magic_bows.rb</script>
+        <script>weapons/ranged/crossbows.rb</script>
+        <script>weapons/melee/daggers.rb</script>
+        <script>weapons/melee/scimitars.rb</script>
+        <script>weapons/melee/swords.rb</script>
+        <script>weapons/melee/two_handed_swords.rb</script>
         <script>weapons/unarmed.rb</script>
         <script>widgets/combat_tab.rb</script>
         <script>widgets/special_bar.rb</script>
-        <script>widgets/ancient_magics_tab.rb</script>
-        <script>widgets/regular_magics_tab.rb</script>
-        <script>widgets/lunar_magics_tab.rb</script>
     </scripts>
     <dependencies>
         <dependency>attributes</dependency>

@@ -1,9 +1,9 @@
-TWO_HANDED_SWORD_WIDGET_ID  = 82
+TWO_HANDED_SWORD_WIDGET_ID         = 82
 TWO_HANDED_SWORD_SPECIAL_CONFIG_ID = 12
 TWO_HANDED_SWORD_SPECIAL_BUTTON_ID = 10
 
 create_weapon_class :two_handed_sword, widget: TWO_HANDED_SWORD_WIDGET_ID do
-  default_speed 7
+  defaults speed: 7, animation: 7041, attack_type: :slash
   special_bar TWO_HANDED_SWORD_SPECIAL_CONFIG_ID, TWO_HANDED_SWORD_SPECIAL_BUTTON_ID
 
   animations stand: 7047, walk: 7046, run: 7039, idle_turn: 7044, turn_around: 7044, turn_left: 7043, turn_right: 7044
@@ -11,10 +11,10 @@ create_weapon_class :two_handed_sword, widget: TWO_HANDED_SWORD_WIDGET_ID do
   attack_bonuses stab: -4, magic: -4
   defence_bonuses range: -1
 
-  add_style :accurate, attack_type: :slash, animation: 7041, button: 2
-  add_style :aggressive, attack_type: :crush, animation: 7041, button: 3
-  add_style :alt_aggressive, attack_type: :crush, animation: 7048, button: 4
-  add_style :defensive, attack_type: :slash, animation: 7049, button: 5
+  style :accurate, button: 2
+  style :aggressive, attack_type: :crush, button: 3
+  style :alt_aggressive, attack_type: :crush, animation: 7048, button: 4
+  style :defensive, animation: 7049, button: 5
 end
 
 create_weapon :iron_2h_sword do
@@ -51,7 +51,7 @@ create_weapon :dragon_2h_sword do
   attack_bonuses slash: 92, crush: 80
   other_bonuses melee_strength: 70
 
-  set_special_attack energy_requirement: 60, animation: 3157, graphic: 1225 do |source, target|
-    damage! source, target, 5
+  set_special_attack speed: 7, energy_requirement: 60, animation: 3157, graphic: 1225 do |_source, _target|
+    damage!
   end
 end

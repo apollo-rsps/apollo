@@ -6,7 +6,7 @@ def create_equipment(item, &block)
   equipment = Equipment.new
   equipment.instance_eval block
 
-  find_entities :item, item do |equipment_item|
+  find_entities :item, item do |_equipment_item|
     EQUIPMENT[id] = equipment
   end
 end

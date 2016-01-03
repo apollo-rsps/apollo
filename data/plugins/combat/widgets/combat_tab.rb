@@ -5,9 +5,8 @@ java_import 'org.apollo.game.message.impl.SetInterfaceConfigMessage'
 java_import 'org.apollo.game.message.impl.ConfigMessage'
 java_import 'org.apollo.game.model.inv.SynchronizationInventoryListener'
 
-
 on :message, :item_option do |player, message|
-  update_combat_tab(player) if message.option == 2 and message.interface_id == SynchronizationInventoryListener::INVENTORY_ID
+  update_combat_tab(player) if message.option == 2 && message.interface_id == SynchronizationInventoryListener::INVENTORY_ID
 end
 
 on :login do |event|
@@ -15,9 +14,8 @@ on :login do |event|
 end
 
 on :message, :item_action do |player, message|
-  update_combat_tab(player) if message.interface_id == SynchronizationInventoryListener::EQUIPMENT_ID and message.slot == EquipmentConstants::WEAPON
+  update_combat_tab(player) if message.interface_id == SynchronizationInventoryListener::EQUIPMENT_ID && message.slot == EquipmentConstants::WEAPON
 end
-
 
 on :message, :button do |player, msg|
   weapon              = EquipmentUtil.equipped_weapon player
@@ -26,7 +24,7 @@ on :message, :button do |player, msg|
 
   next unless weapon_class_widget == msg.interface_id
 
-  if weapon_class.special_bar? and msg.button == weapon_class.special_bar_button
+  if weapon_class.special_bar? && msg.button == weapon_class.special_bar_button
     player.using_special = !player.using_special
     update_special_bar(player)
   else
@@ -57,14 +55,11 @@ def update_combat_tab(player)
 end
 
 def update_combat_style(player)
-  weapon         = EquipmentUtil.equipped_weapon player
-  weapon_class   = weapon.weapon_class
+  weapon              = EquipmentUtil.equipped_weapon player
+  combat_style        = weapon.weapon_class.selected_style player
 
-  # Update the combat style in case we had an invalid style selected, 
+  # Update the combat style in case we had an invalid style selected,
   # and therefore reverted to the first combat style
-  selected_style = weapon_class.style_at(player.combat_style)
-
-  player.combat_style = weapon_class.button selected_style
-  player.send ConfigMessage.new(43, weapon_class.config(selected_style)) 
+  player.combat_style = combat_style.button
+  player.send ConfigMessage.new(43, combat_style.config)
 end
-

@@ -1,6 +1,6 @@
 ##
-# The delay a <i>Mob</i> must wait before attacking again.
-declare_attribute(:attack_delay, 0)
+# The number of ticks since a <i>Mob<i>s last attack.
+declare_attribute(:attack_timer, 100)
 
 ##
 # A flag indicating whether this <i>Mob</i> is currently in combat.
@@ -21,6 +21,10 @@ declare_attribute(:combat_style, 0, :persistent)
 ##
 # A flag indicating whether the special bar is flagged for the next attack.
 declare_attribute(:using_special, false, :persistent)
+
+##
+# A flag indicating whether auto retaliation is enabled.
+declare_attribute(:auto_retaliate, true, :persistent)
 
 ##
 # An integer between 0 and 100 indicating the amount of special energy a <i>Player</i> has.

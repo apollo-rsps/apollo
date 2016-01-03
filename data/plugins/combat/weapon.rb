@@ -1,4 +1,5 @@
 java_import 'org.apollo.cache.def.ItemDefinition'
+java_import 'org.apollo.cache.def.EquipmentDefinition'
 java_import 'org.apollo.game.model.inv.InventoryAdapter'
 java_import 'org.apollo.game.model.entity.EquipmentConstants'
 java_import 'org.apollo.game.model.entity.AnimationSet'
@@ -16,41 +17,52 @@ def create_weapon(identifier, class_name = nil, named: false, &block)
   end
 end
 
-
 private
 
 def create_normal_weapon(item_matcher, class_name = nil, &block)
   items = find_entities :item, item_matcher, -1
+  fail "Unable to find weapon matching #{item_matcher}" if items.empty?
+
   items.each do |item_id|
+    equipment_def = EquipmentDefinition.lookup(item_id)
+
+    next if equipment_def.nil? || equipment_def.slot != EquipmentConstants::WEAPON
+
     definition      = ItemDefinition.lookup(item_id)
     definition_name = definition.name.downcase.to_s
-    
+
     if class_name.nil?
       class_name =
         case definition_name
-          when /[a-zA-Z]+ 2h sword/
-            :two_handed_sword
-          when /[a-zA-Z]+ scimitar/
-            :scimitar
-          when /[a-zA-Z]+ dagger/
-            :dagger
-          else
-            raise "Couldn't find a suitable weapon class for the given weapon."
+        when /[a-zA-Z]+ 2h sword/
+          :two_handed_sword
+        when /[a-zA-Z]+ scimitar/
+          :scimitar
+        when /[a-zA-Z]+ dagger/
+          :dagger
+        when /[a-z\s]*longbow/
+          :longbow
+        when /[a-z\s]*shortbow/
+          :shortbow
+        when /[a-z]+ c'bow/
+          :crossbow
+        else
+          fail "Couldn't find a suitable weapon class for the given weapon."
         end
     end
 
     WEAPONS[item_id] = Weapon.new(definition.name, WEAPON_CLASSES[class_name])
-    WEAPONS[item_id].instance_eval &block
+    WEAPONS[item_id].instance_eval &block if block_given?
   end
 end
 
 def create_named_weapon(name, class_name, &block)
   NAMED_WEAPONS[name] = Weapon.new name.to_s.capitalize, WEAPON_CLASSES[class_name]
-  NAMED_WEAPONS[name].instance_eval &block
+  NAMED_WEAPONS[name].instance_eval &block if block_given?
 end
 
 # Represents an equippable weapon, and the class it belongs to.
-# 
+#
 # * has an optional special_attack
 # * belongs to a certain WeaponClass, and inherits bonuses from it.
 class Weapon
@@ -65,17 +77,21 @@ class Weapon
   end
 
   def special_attack?
-    not special_attack.nil?
+    !special_attack.nil?
   end
 
-  def set_special_attack(energy_requirement:, animation:, graphic: nil, &block)
-    # todo figure out if ranged or melee
+  def set_special_attack(speed:, range: 1, energy_requirement:, animation:, graphic: nil, &block)
+    attack_dsl = AttackDSL.new
+    attack_dsl.speed = speed
+    attack_dsl.range = range
+    attack_dsl.animation = animation
+    attack_dsl.graphic = graphic
+    attack_dsl.add_requirement SpecialEnergyRequirement.new(energy_requirement)
+    attack_dsl.instance_eval &block
 
-    requirements    = [SpecialEnergyRequirement.new(energy_requirement)]
-    @special_attack = ProcAttack.new(block, animation: animation, graphic: graphic, requirements: requirements)
+    @special_attack = attack_dsl.to_attack
   end
 end
-
 
 def update_weapon_animations(player)
   default_animations = AnimationSet::DEFAULT_ANIMATION_SET
@@ -93,33 +109,33 @@ def update_weapon_animations(player)
   weapon_class = weapon.weapon_class
 
   [:stand, :walk, :run, :idle_turn, :turn_around, :turn_left, :turn_right].each do |key|
-    animation = weapon_class.other_animation(key)
+    animation = weapon_class.animation(key)
 
-    unless animation.nil?
-      case key
-        when :stand
-          player_animations.stand = animation
-        when :walk
-          player_animations.walking = animation
-        when :run
-          player_animations.running = animation
-        when :idle_turn
-          player_animations.idle_turn = animation
-        when :turn_around
-          player_animations.turn_around = animation
-        when :turn_left
-          player_animations.turn_left = animation
-        when :turn_right
-          player_animations.turn_right = animation
-        else
-          # type code here
-      end
+    next if animation.nil?
+    case key
+    when :stand
+      player_animations.stand = animation
+    when :walk
+      player_animations.walking = animation
+    when :run
+      player_animations.running = animation
+    when :idle_turn
+      player_animations.idle_turn = animation
+    when :turn_around
+      player_animations.turn_around = animation
+    when :turn_left
+      player_animations.turn_left = animation
+    when :turn_right
+      player_animations.turn_right = animation
     end
   end
 end
 
 on :message, :item_option do |player, message|
-  update_weapon_animations(player) if message.option == 2 and message.interface_id == SynchronizationInventoryListener::INVENTORY_ID
+  next unless message.interface_id == SynchronizationInventoryListener::INVENTORY_ID &&
+              message.option == 2
+
+  update_weapon_animations(player)
 end
 
 on :login do |event|
@@ -127,5 +143,8 @@ on :login do |event|
 end
 
 on :message, :item_action do |player, message|
-  update_weapon_animations(player) if message.interface_id == SynchronizationInventoryListener::EQUIPMENT_ID and message.slot == EquipmentConstants::WEAPON
+  next unless message.interface_id == SynchronizationInventoryListener::EQUIPMENT_ID &&
+              message.slot == EquipmentConstants::WEAPON
+
+  update_weapon_animations(player)
 end

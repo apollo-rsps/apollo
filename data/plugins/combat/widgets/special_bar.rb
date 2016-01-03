@@ -20,4 +20,3 @@ on :login do |event|
     update_special_bar player
   end
 end
-

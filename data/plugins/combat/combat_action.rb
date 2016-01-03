@@ -1,122 +1,66 @@
 java_import 'org.apollo.game.action.Action'
-
-# Represents a one off {@code Attack}, which will not continue a combat session
-# upon completion.
-class AttackAction < Action
-
-  def initialize(source, target, delay, attack)
-    @source = source
-    @target = target
-    @delay  = delay
-    @attack = attack
-  end
-
-  def execute
-    begin
-      @attack.do(mob, @target)
-
-      stop
-    rescue AttackRequirementException => e
-      player.send_message e.message
-      stop
-    end
-  end
-end
+java_import 'org.apollo.game.model.entity.EntityType'
 
 class CombatAction < Action
-  def initialize(source, attack = nil)
+  def initialize(source, once = false)
     super(0, true, source)
 
+    mob.attacking = true
+
     @combat_state = get_combat_state(source)
-    @attack       = attack
+    @attack_timer = 100
+    @once         = once
+  end
+
+  def can_attack?
+    next_attack           = @combat_state.next_attack true
+    target                = @combat_state.target
+    current_distance      = mob.position.get_distance target.position
+    attack_collision_type = next_attack.range > 1 ? EntityType::PROJECTILE : EntityType::NPC
+
+    in_range = current_distance <= next_attack.range && !$world.intersects(mob.position, target.position, attack_collision_type)
+
+    unless in_range
+      mob.follow @combat_state.target, next_attack.range
+
+      return false
+    end
+
+    mob.attack_timer >= next_attack.speed
+  end
+
+  def try_attack
+    next_attack = @combat_state.next_attack false
+
+    if mob.is_a? Player
+      next_attack.requirements.each { |requirement| requirement.validate mob }
+      next_attack.requirements.each { |requirement| requirement.apply! mob }
+    end
+
+    next_attack.do(mob, @combat_state.target)
+  rescue AttackRequirementException => e
+    mob.send_message e.message
+  ensure
+    mob.attack_timer = 0
   end
 
   def execute
-    if @combat_state.target.nil? and @combat_state.queued_attacks.empty?
-      @combat_state.reset
+    if @combat_state.target.nil? || !@combat_state.target.is_active || @combat_state.next_attack(true).nil?
       stop
-    end
-
-    case @combat_state.state
-      when :idle
-        update_idle
-      when :attacking
-        update_attacking
-      when :chasing
-        update_chasing
-      else
-        throw ArgumentError.new('invalid combat state')
-    end
-  end
-
-  def update_idle
-    next_attack      = @combat_state.next_attack true
-    current_distance = mob.position.get_distance @combat_state.target.position
-
-    if current_distance > next_attack.range
-      @combat_state.state = :chasing
-
-      mob.follow @combat_state.target, next_attack.range
-      set_delay 0
-
       return
     end
 
-    if @combat_state.supports_weapon
-      weapon       = EquipmentUtil.equipped_weapon mob
-      weapon_class = weapon.weapon_class
-      combat_style = weapon_class.style_at mob.combat_style
+    return unless can_attack?
 
-      if mob.attacking
-        set_delay weapon_class.speed(combat_style) - 1
-      else
-        set_delay 0
-        mob.attacking = true
-      end
-
-      @combat_state.state = :attacking
-    else
-      stop
-      @combat_state.reset
-    end
-  end
-
-  def update_attacking
-    begin
-      next_attack = @combat_state.next_attack
-      next_attack.requirements.each do |requirement|
-        requirement.validate! mob
-      end
-
-      next_attack.requirements.each do |requirement|
-        requirement.apply mob
-      end
-
-      next_attack.do(mob, @combat_state.target)
-    rescue AttackRequirementException => e
-      mob.send_message e.message
-    ensure
-      @combat_state.state = :idle
-      set_delay 0
-    end
-  end
-
-  def update_chasing
-    next_attack      = @combat_state.next_attack true
-    current_distance = mob.position.get_distance @combat_state.target.position
-
-    if current_distance <= next_attack.range
-      @combat_state.state = :attacking
-
-      mob.following = -1
-      set_delay 0
-    end
+    try_attack
+    stop if @once
   end
 
   def stop
     super
 
-    @combat_state.reset
     mob.attacking = false
+    mob.following = -1
+    @combat_state.reset
   end
 end
