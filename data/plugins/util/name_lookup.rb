@@ -35,13 +35,18 @@ end
 # Finds entities with the specified type (e.g. npc) and name, returning possible ids as an array.
 def find_entities(type, name, limit = 5)
   ids = []
-  name.downcase!
 
   Kernel.const_get("#{type.capitalize}Definition").definitions.each do |definition|
     break if (ids.length == limit)
-    ids << definition.id.to_i if definition.name.to_s.downcase == name
+    if name.is_a? Regexp
+      ids << definition.id.to_i if definition.name.to_s.downcase =~ name
+    elsif name.is_a? Symbol
+      ids << definition.id.to_i if definition.name.to_s.downcase == name.to_s.downcase.gsub(/_/, ' ')
+    else
+      ids << definition.id.to_i if definition.name.to_s.downcase == name.downcase
+    end
   end
-
+  
   ids
 end
 
