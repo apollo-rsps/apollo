@@ -93,9 +93,9 @@ class AttackDSL
   ##
   # Deal melee damage.
 
-  def damage!(damage_modifier: 1, delay: 0)
+  def damage!(damage_modifier: 1, delay: 0, secondary: false)
     @subattacks.push lambda { |source, target|
-      do_damage! source, target, 1, delay
+      do_damage! source, target, 1, delay, secondary
     }
   end
 
@@ -124,7 +124,7 @@ def do_damage!(source, target, amount, delay = 0, secondary = false, &_block)
   schedule delay do |task|
     task.stop && return if source.dead || target.dead
 
-    target_combat_state = get_combat_state target
+    target_combat_state = target.get_combat_state
     target_hitpoints    = target.skill_set.get_skill(Skill::HITPOINTS).get_current_level
     amount              = target_hitpoints if target_hitpoints < amount
 

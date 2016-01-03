@@ -10,7 +10,7 @@ on :message, :npc_action do |player, message|
   #   target.start_action CombatAction.new(target)
   # end
 
-  player_combat_state        = get_combat_state player
+  player_combat_state        = player.get_combat_state
   player_combat_state.target = target
 
   player.send HintIconMessage.for_npc(target.index)

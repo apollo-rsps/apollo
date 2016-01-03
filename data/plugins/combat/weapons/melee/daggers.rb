@@ -31,7 +31,7 @@ end
 
 create_weapon /(?:drag|dragon) dagger.*/, :dragon_dagger do
   set_special_attack speed: 4, energy_requirement: 25, animation: 1062, graphic: { id: 252, height: 100 } do
-    damage! delay: 0
-    damage! delay: 1
+    damage! 
+    damage! secondary: true
   end
 end

@@ -1,12 +1,16 @@
-def get_combat_state(mob)
-  mob.is_a?(Player) ? type = :player : type = :npc
+java_import 'org.apollo.game.model.entity.Mob'
 
-  unless MOB_COMBAT_STATE_CACHE[type].key? mob.index
-    MOB_COMBAT_STATE_CACHE[type][mob.index] = CombatState.new(mob)
+module MobCombatState
+  def get_combat_state
+    if @combat_state.nil?
+      @combat_state = CombatState.new(self, true)
+    end
+
+    @combat_state
   end
-
-  MOB_COMBAT_STATE_CACHE[type][mob.index]
 end
+
+Mob.include MobCombatState
 
 private
 
@@ -57,13 +61,4 @@ class CombatState
       end
     end
   end
-end
-
-MOB_COMBAT_STATE_CACHE = {
-  player: {},
-  npc:    {}
-}
-
-on :logout do |event|
-  MOB_COMBAT_STATE_CACHE[:player].delete event.player.index
 end

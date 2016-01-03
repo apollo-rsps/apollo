@@ -7,7 +7,7 @@ class CombatAction < Action
 
     mob.attacking = true
 
-    @combat_state = get_combat_state(source)
+    @combat_state = source.get_combat_state
     @attack_timer = 100
     @once         = once
   end
