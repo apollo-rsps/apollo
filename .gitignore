@@ -1,7 +1,9 @@
+.*
+
 !.gitignore
 !.rubocop.yml
+!.editorconfig
 
-.*
 *~
 *.class
 *.iml
@@ -10,3 +12,4 @@
 /data/savedGames
 /lib/
 */target/
+

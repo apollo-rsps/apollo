@@ -124,21 +124,21 @@ end
 on :message, :magic_on_item do |player, message|
   spell = message.spell_id
 
-  alch = ALCHEMY_SPELLS[spell]
-  unless alch.nil?
+  alchemy = ALCHEMY_SPELLS[spell]
+  unless alchemy.nil?
     slot = message.slot
     item = player.inventory.get(slot)
-    player.start_action(AlchemyAction.new(player, alch, slot, item))
+    player.start_action(AlchemyAction.new(player, alchemy, slot, item))
     message.terminate
-    return
-  end
-
-  ench = ENCHANT_SPELLS[message.id]
-  if !ench.nil? && ench.button == spell
-    slot = message.slot
-    item = player.inventory.get(slot)
-    player.start_action(EnchantAction.new(player, ench, slot, item, ENCHANT_ITEMS[item.id]))
-    message.terminate
+  else
+    enchant = ENCHANT_SPELLS[message.id]
+    
+    if !enchant.nil? && enchant.button == spell
+      slot = message.slot
+      item = player.inventory.get(slot)
+      player.start_action(EnchantAction.new(player, enchant, slot, item, ENCHANT_ITEMS[item.id]))
+      message.terminate
+    end
   end
 end
 

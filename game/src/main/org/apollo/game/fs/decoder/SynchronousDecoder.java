@@ -4,9 +4,9 @@ import org.apollo.util.ThreadUtil;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * A composite decoder that executes each child in parallel.
@@ -44,11 +44,22 @@ public final class SynchronousDecoder {
 	 * Starts this SynchronousDecoder.
 	 *
 	 * @throws InterruptedException If a decoder is still running after {@link #TIMEOUT} ms.
+	 * @throws SynchronousDecoderException If a decoder failed to complete successfully.
 	 */
-	public void block() throws InterruptedException {
-		runnables.forEach(executor::submit);
+	public void block() throws InterruptedException, SynchronousDecoderException {
+		List<Future> futureList = runnables.stream()
+			.map(executor::submit)
+			.collect(toList());
+
 		executor.shutdown();
 		executor.awaitTermination(TIMEOUT, TimeUnit.MILLISECONDS);
-	}
 
+		for (Future future : futureList) {
+			try {
+				future.get();
+			} catch (ExecutionException e) {
+				throw new SynchronousDecoderException("Unable to run all decoder tasks", e.getCause());
+			}
+		}
+	}
 }

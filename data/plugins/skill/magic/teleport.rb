@@ -52,7 +52,7 @@ class TeleportingAction < SpellAction
       mob.stop_graphic
       mob.play_animation(MODERN_TELE_END_ANIM)
       mob.teleport(@spell.destination)
-      mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)
+      mob.skill_set.add_experience(Skill::MAGIC, @spell.experience)
       stop
     end
   end
