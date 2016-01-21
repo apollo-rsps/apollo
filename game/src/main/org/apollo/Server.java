@@ -99,7 +99,7 @@ public final class Server {
 	 * @param service The service address to bind to.
 	 * @param http The HTTP address to bind to.
 	 * @param jaggrab The JAGGRAB address to bind to.
-	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress.
+	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress for any reason.
 	 */
 	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) throws BindException {
 		logger.fine("Binding service listener to address: " + service + "...");
@@ -116,6 +116,21 @@ public final class Server {
 		bind(jaggrabBootstrap, jaggrab);
 
 		logger.info("Ready for connections.");
+	}
+
+	/**
+	 * Attempts to bind the specified ServerBootstrap to the specified SocketAddress.
+	 * 
+	 * @param bootstrap The ServerBootstrap.
+	 * @param address The SocketAddress.
+	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress for any reason.
+	 */
+	private void bind(ServerBootstrap bootstrap, SocketAddress address) throws BindException {
+		try {
+			bootstrap.bind(address).sync();
+		} catch (Exception cause) {
+			throw new BindException("Failed to bind to: " + address);
+		}
 	}
 
 	/**
@@ -157,21 +172,6 @@ public final class Server {
 		services.startAll();
 
 		world.init(version, fs, manager);
-	}
-
-	/**
-	 * Attempts to bind the specified ServerBootstrap to the specified SocketAddress.
-	 *
-	 * @param bootstrap The ServerBootstrap.
-	 * @param address The SocketAddress.
-	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress.
-	 */
-	private void bind(ServerBootstrap bootstrap, SocketAddress address) throws BindException {
-		try {
-			bootstrap.bind(address).sync();
-		} catch (Exception cause) {
-			throw new BindException("Failed to bind to: " + address);
-		}
 	}
 
 }
