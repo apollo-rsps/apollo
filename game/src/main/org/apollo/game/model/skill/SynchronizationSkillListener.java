@@ -32,7 +32,7 @@ public final class SynchronizationSkillListener extends SkillAdapter {
 	@Override
 	public void levelledUp(SkillSet set, int id, Skill skill) {
 		if (Skill.isCombatSkill(id)) {
-			player.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(player));
+			player.updateAppearance();
 		}
 	}
 
