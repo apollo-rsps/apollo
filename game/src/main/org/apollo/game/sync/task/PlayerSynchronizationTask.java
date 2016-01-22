@@ -102,12 +102,15 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 				added++;
 
 				blockSet = other.getBlockSet();
-				if (!blockSet.contains(AppearanceBlock.class) && !hasCachedAppearance(appearanceTickets, other)) {
+
+				int index = other.getIndex();
+
+				if (!blockSet.contains(AppearanceBlock.class) && !hasCachedAppearance(appearanceTickets, index - 1, other.getAppearanceTicket())) {
 					blockSet = blockSet.clone();
 					blockSet.add(SynchronizationBlock.createAppearanceBlock(other));
 				}
 
-				segments.add(new AddPlayerSegment(blockSet, other.getIndex(), local));
+				segments.add(new AddPlayerSegment(blockSet, index, local));
 			}
 		}
 
@@ -120,27 +123,19 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	 * Tests whether or not the specified Player has a cached appearance within
 	 * the specified appearance ticket array.
 	 * 
-	 * @param tickets The appearance tickets.
-	 * @param player The Player.
+	 * @param appearanceTickets The appearance tickets.
+	 * @param index The index of the Player.
+	 * @param appearanceTicket The current appearance ticket for the Player.
 	 * @return {@code true} if the specified Player has a cached appearance
 	 *         otherwise {@code false}.
 	 */
-	private boolean hasCachedAppearance(int[] tickets, Player player) {
-
-		// If the Player is not active they cannot have a cached appearance
-		if (!player.isActive()) {
+	private boolean hasCachedAppearance(int[] appearanceTickets, int index, int appearanceTicket) {
+		if (appearanceTickets[index] != appearanceTicket) {
+			appearanceTickets[index] = appearanceTicket;
 			return false;
 		}
 
-		int index = player.getIndex() - 1;
-		int ticket = player.getAppearanceTicket();
-
-		if (tickets[index] == ticket) {
-			return true;
-		}
-
-		tickets[index] = ticket;
-		return false;
+		return true;
 	}
 
 	/**
