@@ -66,7 +66,6 @@ public final class MobRepositoryTest {
 
 		players.add(player);
 
-		// Ensure validity of added Player otherwise this test cannot continue
 		assertEquals(1, players.size());
 		assertEquals(player, players.get(player.getIndex()));
 
@@ -81,7 +80,6 @@ public final class MobRepositoryTest {
 	public void testCapacityExceeded() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
-		// Fill up the repository
 		for (int index = 0; index < CAPACITY; index++) {
 			Player player = mock(Player.class);
 			when(player.getIndex()).thenReturn(index + 1);
@@ -89,7 +87,6 @@ public final class MobRepositoryTest {
 			assertTrue(players.add(player));
 		}
 
-		// Try to add one more Player.
 		Player player = mock(Player.class);
 		when(player.getIndex()).thenReturn(CAPACITY);
 
@@ -186,7 +183,6 @@ public final class MobRepositoryTest {
 		iterator.next();
 		iterator.next();
 
-		// There should only be two elements in the iterator, this is invalid.
 		iterator.next();
 	}
 
@@ -206,8 +202,6 @@ public final class MobRepositoryTest {
 
 		Iterator<Player> iterator = players.iterator();
 
-		// remove() may only be called once per call to next(), we have not
-		// called next()
 		iterator.remove();
 	}
 

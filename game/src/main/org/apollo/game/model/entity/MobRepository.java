@@ -52,7 +52,6 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		public boolean hasNext() {
 			int index = current;
 
-			// return true iff there is a non-null element within the repository
 			while (index <= repository.size()) {
 				Mob mob = repository.mobs[index++];
 				if (mob != null) {
