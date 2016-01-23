@@ -43,7 +43,15 @@ public final class NpcActionVerificationHandler extends MessageHandler<NpcAction
 		}
 
 		NpcDefinition definition = npc.getDefinition();
-		if (message.getOption() >= definition.getInteractions().length) {
+		String[] actions = definition.getInteractions();
+		int option = message.getOption();
+
+		if (option < 0 || option >= actions.length) {
+			message.terminate();
+			return;
+		}
+
+		if ("null".equals(actions[option])) {
 			message.terminate();
 			return;
 		}
