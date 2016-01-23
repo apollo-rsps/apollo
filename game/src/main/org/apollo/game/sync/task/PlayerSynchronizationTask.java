@@ -53,6 +53,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	public void run() {
 		Position lastKnownRegion = player.getLastKnownRegion();
 		boolean regionChanged = player.hasRegionChanged();
+		int[] appearanceTickets = player.getAppearanceTickets();
 
 		SynchronizationBlockSet blockSet = player.getBlockSet();
 
@@ -101,18 +102,40 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 				added++;
 
 				blockSet = other.getBlockSet();
-				if (!blockSet.contains(AppearanceBlock.class)) { // TODO check if client has cached appearance
+
+				int index = other.getIndex();
+
+				if (!blockSet.contains(AppearanceBlock.class) && !hasCachedAppearance(appearanceTickets, index - 1, other.getAppearanceTicket())) {
 					blockSet = blockSet.clone();
 					blockSet.add(SynchronizationBlock.createAppearanceBlock(other));
 				}
 
-				segments.add(new AddPlayerSegment(blockSet, other.getIndex(), local));
+				segments.add(new AddPlayerSegment(blockSet, index, local));
 			}
 		}
 
 		PlayerSynchronizationMessage message = new PlayerSynchronizationMessage(lastKnownRegion, position,
 				regionChanged, segment, oldCount, segments);
 		player.send(message);
+	}
+
+	/**
+	 * Tests whether or not the specified Player has a cached appearance within
+	 * the specified appearance ticket array.
+	 * 
+	 * @param appearanceTickets The appearance tickets.
+	 * @param index The index of the Player.
+	 * @param appearanceTicket The current appearance ticket for the Player.
+	 * @return {@code true} if the specified Player has a cached appearance
+	 *         otherwise {@code false}.
+	 */
+	private boolean hasCachedAppearance(int[] appearanceTickets, int index, int appearanceTicket) {
+		if (appearanceTickets[index] != appearanceTicket) {
+			appearanceTickets[index] = appearanceTicket;
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.game.message.impl.IdAssignmentMessage;
@@ -19,6 +20,7 @@ import org.apollo.game.message.impl.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
+import org.apollo.game.model.WorldConstants;
 import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
@@ -47,6 +49,7 @@ import org.apollo.game.model.skill.LevelUpSkillListener;
 import org.apollo.game.model.skill.SynchronizationSkillListener;
 import org.apollo.game.session.GameSession;
 import org.apollo.game.sync.block.SynchronizationBlock;
+import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.net.message.Message;
 import org.apollo.util.CollectionUtil;
 import org.apollo.util.Point;
@@ -71,6 +74,15 @@ public final class Player extends Mob {
 		AttributeMap.define("run_energy", AttributeDefinition.forInt(100, AttributePersistence.PERSISTENT));
 	}
 
+	/**
+	 * The current amount of appearance tickets.
+	 */
+	private static final AtomicInteger appearanceTicketCounter = new AtomicInteger(0);
+
+	/**
+	 * This appearance tickets for this Player.
+	 */
+	private final int[] appearanceTickets = new int[WorldConstants.MAXIMUM_PLAYERS];
 
 	/**
 	 * This player's bank.
@@ -206,6 +218,11 @@ public final class Player extends Mob {
 	 * The id of the world this player is in.
 	 */
 	private int worldId = 1;
+
+	/**
+	 * This Players appearance ticket.
+	 */
+	private int appearanceTicket = nextAppearanceTicket();
 
 	/**
 	 * Creates the Player.
@@ -642,6 +659,36 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Generates the next appearance ticket.
+	 * 
+	 * @return The next available appearance ticket.
+	 */
+	private static int nextAppearanceTicket() {
+		if (appearanceTicketCounter.incrementAndGet() == 0) {
+			appearanceTicketCounter.set(1);
+		}
+		return appearanceTicketCounter.get();
+	}
+
+	/**
+	 * Gets all of this Players appearance tickets.
+	 * 
+	 * @return All of this Players appearance tickets.
+	 */
+	public int[] getAppearanceTickets() {
+		return appearanceTickets;
+	}
+
+	/**
+	 * Gets this Players appearance ticket.
+	 * 
+	 * @return This Players appearance ticket.
+	 */
+	public int getAppearanceTicket() {
+		return appearanceTicket;
+	}
+
+	/**
 	 * Indicates whether the message filter is enabled.
 	 *
 	 * @return {@code true} if the filter is enabled, otherwise {@code false}.
@@ -735,7 +782,7 @@ public final class Player extends Mob {
 	 * Sends the initial messages.
 	 */
 	public void sendInitialMessages() {
-		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
+		updateAppearance();
 		send(new IdAssignmentMessage(index, members));
 		sendMessage("Welcome to RuneScape.");
 
@@ -813,7 +860,7 @@ public final class Player extends Mob {
 	 */
 	public void setAppearance(Appearance appearance) {
 		this.appearance = appearance;
-		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
+		updateAppearance();
 	}
 
 	/**
@@ -1023,6 +1070,14 @@ public final class Player extends Mob {
 	private void initSkills() {
 		skillSet.addListener(new SynchronizationSkillListener(this));
 		skillSet.addListener(new LevelUpSkillListener(this));
+	}
+
+	/**
+	 * Updates the appearance for this Player.
+	 */
+	public void updateAppearance() {
+		appearanceTicket = nextAppearanceTicket();
+		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 	}
 
 }

@@ -39,7 +39,7 @@ public final class AppearanceInventoryListener extends InventoryAdapter {
 	 * Updates the player's appearance.
 	 */
 	private void update() {
-		player.getBlockSet().add(SynchronizationBlock.createAppearanceBlock(player));
+		player.updateAppearance();
 	}
 
 }
