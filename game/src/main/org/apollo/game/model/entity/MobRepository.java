@@ -1,6 +1,7 @@
 package org.apollo.game.model.entity;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import com.google.common.base.Preconditions;
 
@@ -22,24 +23,26 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	private final class MobRepositoryIterator implements Iterator<T> {
 
 		/**
+		 * The current index of this Iterator.
+		 */
+		private int current;
+
+		/**
+		 * The last index found.
+		 */
+		private int last = -1;
+
+		/**
 		 * The repository of {@link Mob}s this {@link Iterator} iterates over.
 		 */
 		private final MobRepository<T> repository;
 
 		/**
-		 * The current index of this iterator.
-		 */
-		private int currentIndex;
-
-		/**
-		 * The amount of indexes found.
-		 */
-		private int foundIndex;
-
-		/**
-		 * Constructs a new {@link MobRepositoryIterator} with the specified MobRepository.
-		 *
-		 * @param repository The repository of Mob's this Iterator iterates over.
+		 * Constructs a new {@link MobRepositoryIterator} with the specified
+		 * MobRepository.
+		 * 
+		 * @param repository
+		 *            The MobRepository we're iterating over.
 		 */
 		private MobRepositoryIterator(MobRepository<T> repository) {
 			this.repository = repository;
@@ -47,27 +50,40 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 
 		@Override
 		public boolean hasNext() {
-			if (foundIndex == size()) {
-				return false;
-			}
+			int index = current;
 
-			while (currentIndex < capacity()) {
-				if (mobs[currentIndex++] != null) {
-					foundIndex++;
+			while (index <= repository.size()) {
+				Mob mob = repository.mobs[index++];
+				if (mob != null) {
 					return true;
 				}
 			}
+
 			return false;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public T next() {
-			return get(currentIndex);
+			while (current <= repository.size()) {
+				Mob mob = repository.mobs[current++];
+				if (mob != null) {
+					last = current;
+					return (T) mob;
+				}
+			}
+
+			throw new NoSuchElementException("There are no more elements!");
 		}
 
 		@Override
 		public void remove() {
-			repository.remove(currentIndex + 1);
+			if (last == -1) {
+				throw new IllegalStateException("remove() may only be called once per call to next()");
+			}
+
+			repository.remove(last);
+			last = -1;
 		}
 
 	}
