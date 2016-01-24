@@ -1,15 +1,12 @@
 package org.apollo.net.codec.game;
 
-import static org.junit.Assert.assertEquals;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apollo.net.meta.PacketType;
 import org.apollo.util.security.IsaacRandom;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Contains tests for {@link GamePacketEncoder}.
@@ -32,45 +29,42 @@ public class TestGamePacketEncoder {
 		ByteBuf payload = Unpooled.wrappedBuffer("Hello".getBytes());
 		GamePacket packet = new GamePacket(10, PacketType.FIXED, payload.copy());
 
-		List<Object> out = new ArrayList<>();
+		ByteBuf out = Unpooled.buffer();
 		encoder.encode(null, packet, out);
 
-		ByteBuf buf = (ByteBuf) out.get(0);
-		assertEquals(6, buf.readableBytes());
-		assertEquals(253, buf.readUnsignedByte());
-		assertEquals('H', buf.readUnsignedByte());
-		assertEquals('e', buf.readUnsignedByte());
-		assertEquals('l', buf.readUnsignedByte());
-		assertEquals('l', buf.readUnsignedByte());
-		assertEquals('o', buf.readUnsignedByte());
+		assertEquals(6, out.readableBytes());
+		assertEquals(253, out.readUnsignedByte());
+		assertEquals('H', out.readUnsignedByte());
+		assertEquals('e', out.readUnsignedByte());
+		assertEquals('l', out.readUnsignedByte());
+		assertEquals('l', out.readUnsignedByte());
+		assertEquals('o', out.readUnsignedByte());
 
 		packet = new GamePacket(9, PacketType.VARIABLE_BYTE, payload.copy());
 		out.clear();
 		encoder.encode(null, packet, out);
-		buf = (ByteBuf) out.get(0);
 
-		assertEquals(7, buf.readableBytes());
-		assertEquals(150, buf.readUnsignedByte());
-		assertEquals(5, buf.readUnsignedByte());
-		assertEquals('H', buf.readUnsignedByte());
-		assertEquals('e', buf.readUnsignedByte());
-		assertEquals('l', buf.readUnsignedByte());
-		assertEquals('l', buf.readUnsignedByte());
-		assertEquals('o', buf.readUnsignedByte());
+		assertEquals(7, out.readableBytes());
+		assertEquals(150, out.readUnsignedByte());
+		assertEquals(5, out.readUnsignedByte());
+		assertEquals('H', out.readUnsignedByte());
+		assertEquals('e', out.readUnsignedByte());
+		assertEquals('l', out.readUnsignedByte());
+		assertEquals('l', out.readUnsignedByte());
+		assertEquals('o', out.readUnsignedByte());
 
 		packet = new GamePacket(0, PacketType.VARIABLE_SHORT, payload.copy());
 		out.clear();
 		encoder.encode(null, packet, out);
-		buf = (ByteBuf) out.get(0);
 
-		assertEquals(8, buf.readableBytes());
-		assertEquals(34, buf.readUnsignedByte());
-		assertEquals(5, buf.readUnsignedShort());
-		assertEquals('H', buf.readUnsignedByte());
-		assertEquals('e', buf.readUnsignedByte());
-		assertEquals('l', buf.readUnsignedByte());
-		assertEquals('l', buf.readUnsignedByte());
-		assertEquals('o', buf.readUnsignedByte());
+		assertEquals(8, out.readableBytes());
+		assertEquals(34, out.readUnsignedByte());
+		assertEquals(5, out.readUnsignedShort());
+		assertEquals('H', out.readUnsignedByte());
+		assertEquals('e', out.readUnsignedByte());
+		assertEquals('l', out.readUnsignedByte());
+		assertEquals('l', out.readUnsignedByte());
+		assertEquals('o', out.readUnsignedByte());
 	}
 
 }
