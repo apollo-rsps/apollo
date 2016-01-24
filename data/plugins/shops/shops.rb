@@ -163,11 +163,14 @@ end
 on :message, :item_action do |player, message|
   interface = message.interface_id
 
-  if interface == INVENTORY_CONTAINER || interface == SHOP_CONTAINER
-    if player.open_shop == -1 || !SHOPS.key?(player.open_shop)
-      message.terminate
-      next
-    end
+  if player.open_shop == -1 || !SHOPS.key?(player.open_shop)
+    message.terminate
+    next
+  end
+
+  if interface != INVENTORY_CONTAINER && interface != SHOP_CONTAINER
+    message.terminate
+    next
   end
 
   shop = SHOPS[player.open_shop]
