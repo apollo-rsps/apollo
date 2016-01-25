@@ -3,6 +3,7 @@
 !.gitignore
 !.rubocop.yml
 !.editorconfig
+!.travis.yml
 
 *~
 *.class
