@@ -23,6 +23,13 @@
         <script>equipment.rb</script>
         <script>util.rb</script>
         <script>projectile_type.rb</script>
+
+        <script>spellbook.rb</script>
+        <script>spellbooks.rb</script>
+
+        <script>combat_spell.rb</script>
+        <script>spells/bolts.rb</script>
+        
         <script>weapon.rb</script>
         <script>weapon_class.rb</script>
         <script>weapons/bows.rb</script>

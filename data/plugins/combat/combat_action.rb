@@ -18,7 +18,7 @@ class CombatAction < Action
     current_distance      = mob.position.get_distance target.position
     attack_collision_type = next_attack.range > 1 ? EntityType::PROJECTILE : EntityType::NPC
 
-    in_range = current_distance <= next_attack.range && !$world.intersects(mob.position, target.position, attack_collision_type)
+    in_range = current_distance <= next_attack.range# && !$world.intersects(mob.position, target.position, attack_collision_type)
 
     unless in_range
       mob.follow @combat_state.target, next_attack.range

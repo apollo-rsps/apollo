@@ -19,6 +19,10 @@ declare_attribute(:logout_timer, Time.now.to_i)
 declare_attribute(:combat_style, 0, :persistent)
 
 ##
+# The <i>CombatSpell</i> offset that a <i>Mob</i> is currently using.
+declare_attribute(:combat_spell, :none, :persistent)
+
+##
 # A flag indicating whether the special bar is flagged for the next attack.
 declare_attribute(:using_special, false, :persistent)
 

@@ -9,10 +9,10 @@ class BaseAttack
     fail 'Attack speed must be a non-negative number' if speed < 0
     fail 'Attack range must be a non-negative number' if range < 0
 
-    @speed        = speed
-    @animation    = animation
-    @graphic      = graphic
-    @range        = range
+    @speed = speed
+    @animation = animation
+    @graphic = graphic
+    @range = range
     @requirements = requirements
   end
 
@@ -49,12 +49,57 @@ end
 
 ##
 # A simple ranged attack, which sends a projectile based on the currently equipped ammo and weapon
-# and deals damaged delayed by the speed and travel distance of the projectile.
+# and deals damage delayed by the speed and travel distance of the projectile.
 
 class RangedAttack < BaseAttack
   def apply(source, target)
     do_ranged_damage! source, target
   end
+end
+
+##
+# A simple magic attack, which sends a projectile based on the current spell that the player is casting and deals 
+# damage delayed by the speed and travel distance of the projectile.
+
+class MagicAttack < BaseAttack
+
+  ##
+  # The maximum distance that a magic attack can be performed from.
+  MAX_DISTANCE = 8
+
+  ##
+  # The speed that magic attacks can be casted at.
+  SPEED = 5
+
+  def initialize(spell)
+    super(animation: spell.animation, graphic: spell.graphic, speed: SPEED, range: MAX_DISTANCE)
+
+    @damage = spell.damage
+    @hit_graphic = spell.hit_graphic
+    @projectile = spell.projectile
+    @projectile_type = PROJECTILE_TYPES[spell.projectile_type]
+  end
+
+  def apply(source, target)
+
+    projectile!(source, target, @projectile, @projectile_type)
+
+    distance = source.position.get_distance(target.position)
+    damage_delay = (@projectile_type.delay + @projectile_type.speed + distance * 5) * 0.02857
+    
+    schedule_damage!(source, target, rand(@damage), damage_delay) do
+      
+      unless @hit_graphic.nil?
+        if @hit_graphic.is_a?(Hash)
+          target.play_graphic(Graphic.new(@hit_graphic[:id], @hit_graphic[:delay] || 0, @hit_graphic[:height] || 0))
+        else
+          target.play_graphic(Graphic.new(@hit_graphic))
+        end
+      end
+      
+    end
+  end
+  
 end
 
 ##
@@ -74,7 +119,7 @@ class AttackDSL
 
   def initialize()
     @requirements = []
-    @subattacks   = []
+    @subattacks = []
   end
 
   def add_requirement(requirement)
@@ -95,7 +140,7 @@ class AttackDSL
 
   def damage!(damage_modifier: 1, delay: 0, secondary: false)
     @subattacks.push lambda { |source, target|
-      do_damage! source, target, 1, delay, secondary
+      schedule_damage! source, target, 1, delay, secondary
     }
   end
 
@@ -118,33 +163,41 @@ end
 
 private
 
-##
-# TODO: refactor
-def do_damage!(source, target, amount, delay = 0, secondary = false, &_block)
+def schedule_damage!(source, target, amount, delay, secondary = false, &callback)
   schedule delay do |task|
-    task.stop && return if source.dead || target.dead
 
-    target_combat_state = target.get_combat_state
-    target_hitpoints    = target.skill_set.get_skill(Skill::HITPOINTS).get_current_level
-    amount              = target_hitpoints if target_hitpoints < amount
-
-    type = amount > 0 ? 1 : 0
-    target.play_animation(Animation.new(424)) unless target_combat_state.will_attack?
-    target.damage(amount, type, secondary)
-
-    if target.auto_retaliate && !target_combat_state.is_attacking?
-      target_combat_state.target = source
-      target.start_action CombatAction.new(target)
-    end
+    do_damage!(source, target, amount, secondary)
+    callback.call if block_given?
 
     task.stop
+  end
+end
+
+def do_damage!(source, target, amount, secondary = false)
+  return if source.dead || target.dead
+
+  target_hitpoints = target.skill_set.get_skill(Skill::HITPOINTS).get_current_level
+  amount = target_hitpoints if target_hitpoints < amount
+
+  type = (amount > 0) ? 1 : 0
+  target.damage(amount, type, secondary)
+
+  auto_retaliate!(source, target)
+end
+
+def auto_retaliate!(source, target)
+  target_combat_state = target.get_combat_state
+
+  if target.auto_retaliate && !target_combat_state.is_attacking?
+    target_combat_state.target = source
+    target.start_action(CombatAction.new(target))
   end
 end
 
 ##
 # TODO: refactor
 
-def do_ranged_damage!(source, target, _damage_modifier = 1, speed_modifier = 1, projectile = nil, projectile_type = nil, projectile_graphic = nil, 
+def do_ranged_damage!(source, target, _damage_modifier = 1, speed_modifier = 1, projectile = nil, projectile_type = nil, projectile_graphic = nil,
                       delay = 0, secondary = false)
   apply = lambda do
     distance = source.position.get_distance(target.position)
@@ -152,19 +205,19 @@ def do_ranged_damage!(source, target, _damage_modifier = 1, speed_modifier = 1, 
     ammo = EquipmentUtil.equipped_ammo source
 
     if projectile.nil? && projectile_type.nil?
-      projectile         = ammo.projectile
-      projectile_type    = ammo.projectile_type
+      projectile = ammo.projectile
+      projectile_type = ammo.projectile_type
       projectile_graphic = ammo.graphic
     end
 
     projectile! source, target, projectile, projectile_type, speed_modifier
-    do_damage! source, target, rand(1...50), (projectile_type.delay + projectile_type.speed + distance * 5) * 0.02857, secondary
+    schedule_damage! source, target, rand(1...50), (projectile_type.delay + projectile_type.speed + distance * 5) * 0.02857, secondary
 
     unless projectile_graphic.nil?
       source.play_graphic Graphic.new(projectile_graphic, 0, 100)
     end
   end
-  
+
   if delay == 0
     apply.call
   else
@@ -183,13 +236,13 @@ def projectile!(source, target, projectile_id, projectile_type, speed_modifier =
   distance = source.position.get_distance(target.position)
 
   projectile_parameters = {
-    angle:        -1,
+    angle: -1,
     start_height: projectile_type.start_height,
-    end_height:   projectile_type.end_height,
-    delay:        projectile_type.delay * (2 - speed_modifier),
-    speed:        (projectile_type.delay + projectile_type.speed + distance * 5) * speed_modifier,
-    slope:        projectile_type.slope,
-    radius:       projectile_type.radius
+    end_height: projectile_type.end_height,
+    delay: projectile_type.delay * (2 - speed_modifier),
+    speed: (projectile_type.delay + projectile_type.speed + distance * 5) * speed_modifier,
+    slope: projectile_type.slope,
+    radius: projectile_type.radius
   }
 
   ProjectileModule.fire_projectile(source.position, target.position, projectile_id, projectile_parameters, target)
