@@ -37,6 +37,7 @@ conversation :tutorial_runescape_guide do
   dialogue :greetings do
     type :npc_speech
     npc :runescape_guide
+    emote :calm
 
     precondition { |player| player.tutorial_island_progress == :not_started }
 
@@ -53,6 +54,7 @@ conversation :tutorial_runescape_guide do
   dialogue :welcome_back do
     type :npc_speech
     npc :runescape_guide
+    emote :calm
 
     precondition { |player| player.tutorial_island_progress != :not_started }
 
@@ -65,6 +67,7 @@ conversation :tutorial_runescape_guide do
   dialogue :talk_to_people do
     type :npc_speech
     npc :runescape_guide
+    emote :calm
 
     text 'You have already learned the first thing you need to succeed in this world: talking to '\
            'people!',
@@ -81,6 +84,7 @@ conversation :tutorial_runescape_guide do
   dialogue :go_through_door do
     type :npc_speech
     npc :runescape_guide
+    emote :calm
 
     text 'To continue the tutorial go through that door over there, and speak to your first '\
            'instructor.'

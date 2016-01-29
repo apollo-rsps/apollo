@@ -5,12 +5,12 @@ java_import 'org.apollo.game.message.impl.CloseInterfaceMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetItemModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetNpcModelMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetPlayerModelMessage'
+java_import 'org.apollo.game.message.impl.SetWidgetModelAnimationMessage'
 java_import 'org.apollo.game.message.impl.SetWidgetTextMessage'
 java_import 'org.apollo.game.action.DistancedAction'
 
 # The map of conversation names to Conversations.
 CONVERSATIONS = {}
-
 
 # Declares a conversation.
 def conversation(name, &block)
@@ -419,23 +419,32 @@ end
 
 # Sends a dialogue displaying the player's head.
 def send_player_dialogue(player, dialogue)
-  send_generic_dialogue(player, dialogue, player.username, PLAYER_DIALOGUE_IDS, ->(id) { SetWidgetPlayerModelMessage.new(id + 1) })
+  emote = dialogue.emote
+
+  send_generic_dialogue player, dialogue, player.username, PLAYER_DIALOGUE_IDS do |id|
+    player.send(SetWidgetPlayerModelMessage.new(id + 1))
+    player.send(SetWidgetModelAnimationMessage.new(id + 1, emote)) unless emote.nil?
+  end
 end
 
 # Sends a dialogue displaying the head of an npc.
 def send_npc_dialogue(player, dialogue)
   npc = dialogue.npc
+  emote = dialogue.emote
   name = NpcDefinition.lookup(npc).name.to_s
   name = "" if (name.nil? || name == "null")
 
-  send_generic_dialogue(player, dialogue, name, NPC_DIALOGUE_IDS, ->(id) { SetWidgetNpcModelMessage.new(id + 1, npc)})
+  send_generic_dialogue player, dialogue, name, NPC_DIALOGUE_IDS do |id|
+    player.send(SetWidgetNpcModelMessage.new(id + 1, npc))
+    player.send(SetWidgetModelAnimationMessage.new(id + 1, emote)) unless emote.nil?
+  end
 end
 
 # Sends a dialogue displaying an event.
-def send_generic_dialogue(player, dialogue, title, ids, event=nil)
+def send_generic_dialogue(player, dialogue, title, ids, &event)
   text = dialogue.text
   dialogue_id = ids[text.size - 1]
-  player.send(event.call(dialogue_id)) unless event.nil?
+  event.call(dialogue_id) if block_given?
 
   set_text(player, dialogue_title_id(dialogue_id), title)
 

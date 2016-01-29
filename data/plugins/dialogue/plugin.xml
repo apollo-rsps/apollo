@@ -9,6 +9,7 @@
   </authors>
   <scripts>
     <script>dialogue.rb</script>
+    <script>emotes.rb</script>
   </scripts>
   <dependencies>
     <dependency>util</dependency>
