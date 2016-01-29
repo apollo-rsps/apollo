@@ -72,7 +72,7 @@ class MagicAttack < BaseAttack
   SPEED = 5
 
   def initialize(spell)
-    super(animation: spell.animation, graphic: spell.graphic, speed: SPEED, range: MAX_DISTANCE)
+    super(animation: spell.animation, graphic: spell.graphic, requirements: spell.requirements, speed: SPEED, range: MAX_DISTANCE)
 
     @damage = spell.damage
     @hit_graphic = spell.hit_graphic

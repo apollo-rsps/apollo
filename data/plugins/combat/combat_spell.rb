@@ -3,12 +3,10 @@ class CombatSpell
   attr_reader :button
 
   attr_reader :spellbook
-
-  attr_reader :level
+  
+  attr_reader :requirements
 
   attr_reader :damage
-
-  attr_reader :runes
 
   attr_reader :animation
 
@@ -20,12 +18,11 @@ class CombatSpell
 
   attr_reader :projectile_type
 
-  def initialize(button, spellbook, level, damage, runes, animation, graphic, hit_graphic, projectile, projectile_type)
+  def initialize(button, spellbook, requirements, damage, animation, graphic, hit_graphic, projectile, projectile_type)
     @spellbook = spellbook
     @button = button
-    @level = level
+    @requirements = requirements
     @damage = damage
-    @runes = runes
     @animation = animation
     @graphic = graphic
     @hit_graphic = hit_graphic
@@ -41,7 +38,7 @@ class CombatSpellDSL
     instance_eval(&block)
   end
 
-  def interface(spellbook:, button:)
+  def spellbook(spellbook, button:)
     @spellbook = spellbook
     @button = button
   end
@@ -52,9 +49,15 @@ class CombatSpellDSL
     @hit_graphic = hit_graphic
   end
 
-  def projectile(projectile:, projectile_type:)
-    @projectile = projectile
-    @projectile_type = projectile_type
+  def projectile(id:, type:)
+    @projectile = id
+    @projectile_type = type
+  end
+  
+  def requirements(&block)
+    fail 'Block not given' unless block_given?
+    
+    @requirements = AttackRequirementDSL.new(&block).requirements
   end
 
   def level_requirement(level)
@@ -70,7 +73,7 @@ class CombatSpellDSL
   end
 
   def to_combat_spell
-    return CombatSpell.new(@button, @spellbook, @level, @damage, @runes, @animation, @graphic, @hit_graphic, @projectile, @projectile_type)
+    return CombatSpell.new(@button, @spellbook, @requirements, @damage, @animation, @graphic, @hit_graphic, @projectile, @projectile_type)
   end
 
 end
