@@ -2,9 +2,40 @@ java_import 'org.apollo.cache.def.ItemDefinition'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Graphic'
 
+##
+# The {@code BaseAttack} which all other {@code Attack}s derive from.
+#
+# Supports most general attacks by playing an {@code Animation} and an optional {@code Graphic}.
+# Default options are:
+#   * a range of 1
+#   * no requirements
+#   * no graphic
 class BaseAttack
-  attr_reader :requirements, :range, :speed
+  ##
+  # The {@code AttackRequirement}s a {@code Player} must meet to use this attack.
+  
+  attr_reader :requirements
 
+  ##
+  # The maximum range this {@code Attack} can be executed from.
+  
+  attr_reader :range
+
+  ##
+  # How often this {@code Attack} can be executed in ticks.
+  
+  attr_reader :speed
+
+  ##
+  # Create a new {@code Attack} with the given properties.
+  #
+  # @param [Number] speed        The minimum number of ticks to wait before this attack can be executed after 
+  #                              a previous {@code Attack}.
+  # @param [Number] animation    The {@code Animation} to play on the player when executing this {@code Attack}.
+  # @param [Hash]   graphic      The {@code Graphic} to play on the player when executing this {@code Attack}.
+  # @param [Number] range        The maximum distance this {@code Attack} can be executed from.
+  # @param [Array]  requirements The requirements that must be met to execute this {@code Attack}.
+  
   def initialize(speed:, animation:, graphic: nil, range: 1, requirements: [])
     fail 'Attack speed must be a non-negative number' if speed < 0
     fail 'Attack range must be a non-negative number' if range < 0
@@ -16,6 +47,12 @@ class BaseAttack
     @requirements = requirements
   end
 
+  ##
+  # Execute this {@code Attack} and apply its effect.
+  # 
+  # @param [Mob] source The attacker.
+  # @param [Mob] target The target.
+  
   def do(source, target)
     source.play_animation(Animation.new(@animation))
 
@@ -86,9 +123,9 @@ class MagicAttack < BaseAttack
 
     distance = source.position.get_distance(target.position)
     damage_delay = (@projectile_type.delay + @projectile_type.speed + distance * 5) * 0.02857
-    
+
     schedule_damage!(source, target, rand(@damage), damage_delay) do
-      
+
       unless @hit_graphic.nil?
         if @hit_graphic.is_a?(Hash)
           target.play_graphic(Graphic.new(@hit_graphic[:id], @hit_graphic[:delay] || 0, @hit_graphic[:height] || 0))
@@ -96,10 +133,10 @@ class MagicAttack < BaseAttack
           target.play_graphic(Graphic.new(@hit_graphic))
         end
       end
-      
+
     end
   end
-  
+
 end
 
 ##

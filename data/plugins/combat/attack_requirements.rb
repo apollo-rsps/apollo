@@ -3,6 +3,8 @@ java_import 'org.apollo.game.model.entity.EquipmentConstants'
 java_import 'org.apollo.game.model.entity.Skill'
 java_import 'org.apollo.cache.def.EquipmentDefinition'
 
+##
+# An {@code Exception} thrown by an {@code AttackRequirement} if a player doesn't atch its requirements.
 class AttackRequirementException < Exception
   attr_reader :message
 
@@ -11,11 +13,18 @@ class AttackRequirementException < Exception
   end
 end
 
+##
+# A requirement which is checked before an {@code Attack} is executed.
 class AttackRequirement
+  ##
+  # Verify that {@code _player} meets the requirements, throwing an AttackRequirementException with an appropriate
+  # message if not.
   def validate(_player)
     throw RuntimeError.new('validate! not implemented')
   end
 
+  ##
+  # Do any destructive actions (e.g., remove items) after all requirements for an {@code Attack} have been met.
   def apply!(_player)
     throw RuntimeError.new('apply not implemented')
   end
@@ -44,7 +53,6 @@ class AttackRequirementDSL
   def skill(skill, level:)
     requirements << LevelRequirement.new(skill, level)
   end
-
 end
 
 class SpecialEnergyRequirement < AttackRequirement
@@ -70,7 +78,6 @@ class SpecialEnergyRequirement < AttackRequirement
 end
 
 class LevelRequirement < AttackRequirement
-
   SKILLS = {
     :magic => Skill::MAGIC
   }
