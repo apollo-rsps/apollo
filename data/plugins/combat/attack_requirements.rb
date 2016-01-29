@@ -22,6 +22,11 @@ class AttackRequirement
 end
 
 class AttackRequirementDSL
+  RUNES = {
+    :air => 556, :water => 555, :earth => 557, :fire => 554,
+    :mind => 558, :chaos => 562, :death => 560, :blood => 565,
+    :cosmic => 564, :law => 563, :nature => 561, :soul => 566
+  }
 
   attr_reader :requirements
 
@@ -31,14 +36,15 @@ class AttackRequirementDSL
     instance_eval(&block)
   end
 
-  def rune(type, amount:)
-    requirements << RuneRequirement.new(type, amount)
+  def rune(type, amount: 1)
+    fail 'Invalid rune type' unless RUNES.key? type
+    requirements << ItemRequirement.new(RUNES[type], amount)
   end
 
   def skill(skill, level:)
     requirements << LevelRequirement.new(skill, level)
   end
-  
+
 end
 
 class SpecialEnergyRequirement < AttackRequirement
@@ -89,38 +95,6 @@ class LevelRequirement < AttackRequirement
 
   def skill_requirement_message
     "TODO"
-  end
-end
-
-class RuneRequirement < AttackRequirement
-
-  RUNES = {
-    :air => 556, :water => 555, :earth => 557, :fire => 554,
-    :mind => 558, :chaos => 562, :death => 560, :blood => 565,
-    :cosmic => 564, :law => 563, :nature => 561, :soul => 566
-  }
-
-  def initialize(type, amount)
-    fail "Could not find '#{type}' rune." unless RUNES.has_key?(type)
-
-    @rune = RUNES[type]
-    @amount = amount
-  end
-
-  def validate(player)
-    throw AttackRequirementException.new(item_missing_message) unless player.inventory.get_amount(@rune) >= @amount
-  end
-
-  def apply!(player)
-    player.inventory.remove(@rune, @amount)
-  end
-
-  private
-
-  def item_missing_message
-    definition = ItemDefinition.lookup(@rune)
-    
-    "You don't have enough #{definition.name}s"
   end
 end
 
