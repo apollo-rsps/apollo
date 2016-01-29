@@ -8,7 +8,7 @@ class CombatUtil
     strength      = source.skill_set.get_skill(Skill::STRENGTH)
     strength_stat = 5 # source.bonus_stat(:other, :strength)
 
-    effective_strength_damage = (strength.current_level) # * prayer_multiplier
+    effective_strength_damage = strength.current_level # * prayer_multiplier
 
     if [:aggressive, :alt_aggressive].include? source.combat_style
       effective_strength_damage += 3

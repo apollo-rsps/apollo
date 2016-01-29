@@ -88,12 +88,12 @@ class WeaponClass
   def style(style, properties = {}, &block)
     fail 'Invalid combat style given' unless COMBAT_STYLES.include? style
 
-    properties          = @defaults.merge properties
+    properties = @defaults.merge properties
 
     ## The config ID used to set the active combat style, typically 0-3. TODO: does this always work?
     config = @styles.size
     button, attack_type, block_animation = properties[:button], properties[:attack_type], properties[:block_animation]
-   
+
     @styles[style] = CombatStyle.new(button, config, attack_type, block_animation)
 
     if block_given?
@@ -102,7 +102,7 @@ class WeaponClass
       attack_dsl.graphic      = properties[:graphic]
       attack_dsl.animation    = properties[:animation]
       attack_dsl.range        = properties[:range]
-      properties[:requirements].each {|requirement| attack_dsl.add_requirement requirement }
+      properties[:requirements].each { |requirement| attack_dsl.add_requirement requirement }
       attack_dsl.instance_eval &block
 
       @styles[style].attack = attack_dsl.to_attack
@@ -111,7 +111,7 @@ class WeaponClass
     return unless @styles[style].attack.nil?
 
     ## Get rid of any properties which aren't included in the keyword argument list
-    properties.delete_if {|key| ![:speed, :animation, :range, :requirements, :graphic].include? key } 
+    properties.delete_if { |key| ![:speed, :animation, :range, :requirements, :graphic].include? key }
 
     if @type == :melee
       @styles[style].attack = Attack.new(properties)
@@ -157,7 +157,8 @@ class WeaponClass
   end
 
   ##
-
+  # Set the character animations associated with this weapon class.
+  
   def animations(stand: nil, walk: nil, run: nil, idle_turn: nil, turn_around: nil, turn_left: nil, turn_right: nil)
     @animations = {
       stand:       stand,

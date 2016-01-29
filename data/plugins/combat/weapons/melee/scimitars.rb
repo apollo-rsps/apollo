@@ -25,7 +25,7 @@ create_weapon :steel_scimitar do
   other_bonuses melee_strength: 14
 end
 
-create_weapon /(black|white) scimitar/ do
+create_weapon(/(black|white) scimitar/) do
   attack_bonuses stab: 4, slash: 19
   other_bonuses melee_strength: 14
 end

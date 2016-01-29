@@ -11,7 +11,7 @@ def create_ammo(item_matcher, properties, &block)
 
   items.each do |item_id|
     AMMO[item_id] = Ammo.new(item_id, properties)
-    AMMO[item_id].instance_eval &block if block_given?
+    AMMO[item_id].instance_eval(&block) if block_given?
   end
 end
 

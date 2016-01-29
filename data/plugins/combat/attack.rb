@@ -13,29 +13,29 @@ java_import 'org.apollo.game.model.Graphic'
 class BaseAttack
   ##
   # The {@code AttackRequirement}s a {@code Player} must meet to use this attack.
-  
+
   attr_reader :requirements
 
   ##
   # The maximum range this {@code Attack} can be executed from.
-  
+
   attr_reader :range
 
   ##
   # How often this {@code Attack} can be executed in ticks.
-  
+
   attr_reader :speed
 
   ##
   # Create a new {@code Attack} with the given properties.
   #
-  # @param [Number] speed        The minimum number of ticks to wait before this attack can be executed after 
+  # @param [Number] speed        The minimum number of ticks to wait before this attack can be executed after
   #                              a previous {@code Attack}.
   # @param [Number] animation    The {@code Animation} to play on the player when executing this {@code Attack}.
   # @param [Hash]   graphic      The {@code Graphic} to play on the player when executing this {@code Attack}.
   # @param [Number] range        The maximum distance this {@code Attack} can be executed from.
   # @param [Array]  requirements The requirements that must be met to execute this {@code Attack}.
-  
+
   def initialize(speed:, animation:, graphic: nil, range: 1, requirements: [])
     fail 'Attack speed must be a non-negative number' if speed < 0
     fail 'Attack range must be a non-negative number' if range < 0
@@ -49,10 +49,10 @@ class BaseAttack
 
   ##
   # Execute this {@code Attack} and apply its effect.
-  # 
+  #
   # @param [Mob] source The attacker.
   # @param [Mob] target The target.
-  
+
   def do(source, target)
     source.play_animation(Animation.new(@animation))
 
@@ -95,11 +95,10 @@ class RangedAttack < BaseAttack
 end
 
 ##
-# A simple magic attack, which sends a projectile based on the current spell that the player is casting and deals 
+# A simple magic attack, which sends a projectile based on the current spell that the player is casting and deals
 # damage delayed by the speed and travel distance of the projectile.
 
 class MagicAttack < BaseAttack
-
   ##
   # The maximum distance that a magic attack can be performed from.
   MAX_DISTANCE = 8
@@ -118,7 +117,6 @@ class MagicAttack < BaseAttack
   end
 
   def apply(source, target)
-
     projectile!(source, target, @projectile, @projectile_type)
 
     distance = source.position.get_distance(target.position)
@@ -136,7 +134,6 @@ class MagicAttack < BaseAttack
 
     end
   end
-
 end
 
 ##
@@ -154,7 +151,7 @@ end
 class AttackDSL
   attr_accessor :animation, :speed, :range, :graphic
 
-  def initialize()
+  def initialize
     @requirements = []
     @subattacks = []
   end
@@ -200,11 +197,11 @@ end
 
 private
 
-def schedule_damage!(source, target, amount, delay, secondary = false, &callback)
+def schedule_damage!(source, target, amount, delay, secondary = false, &_callback)
   schedule delay do |task|
 
     do_damage!(source, target, amount, secondary)
-    callback.call if block_given?
+    yield if block_given?
 
     task.stop
   end
@@ -225,7 +222,7 @@ end
 def auto_retaliate!(source, target)
   target_combat_state = target.get_combat_state
 
-  if target.auto_retaliate && !target_combat_state.is_attacking?
+  if target.auto_retaliate && !target_combat_state.attacking?
     target_combat_state.target = source
     target.start_action(CombatAction.new(target))
   end

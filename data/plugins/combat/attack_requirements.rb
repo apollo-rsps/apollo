@@ -32,9 +32,9 @@ end
 
 class AttackRequirementDSL
   RUNES = {
-    :air => 556, :water => 555, :earth => 557, :fire => 554,
-    :mind => 558, :chaos => 562, :death => 560, :blood => 565,
-    :cosmic => 564, :law => 563, :nature => 561, :soul => 566
+    air: 556, water: 555, earth: 557, fire: 554,
+    mind: 558, chaos: 562, death: 560, blood: 565,
+    cosmic: 564, law: 563, nature: 561, soul: 566
   }
 
   attr_reader :requirements
@@ -65,7 +65,7 @@ class SpecialEnergyRequirement < AttackRequirement
       player.using_special = false
 
       update_special_bar(player)
-      fail AttackRequirementException.new('Not enough special attack energy.')
+      fail AttackRequirementException, 'Not enough special attack energy.'
     end
   end
 
@@ -79,11 +79,11 @@ end
 
 class LevelRequirement < AttackRequirement
   SKILLS = {
-    :magic => Skill::MAGIC
+    magic: Skill::MAGIC
   }
 
   def initialize(type, level)
-    fail "Could not find '#{type}' skill." unless SKILLS.has_key?(type)
+    fail "Could not find '#{type}' skill." unless SKILLS.key?(type)
 
     @skill = SKILLS[type]
     @level = level
@@ -91,8 +91,8 @@ class LevelRequirement < AttackRequirement
 
   def validate(player)
     current_level = player.skill_set.current_level(@skill)
-
-    throw AttackRequirementException.new(skill_requirement_message) unless current_level >= @level
+    
+    fail AttackRequirementException, skill_requirement_message unless current_level >= @level
   end
 
   def apply!(player)
@@ -101,7 +101,7 @@ class LevelRequirement < AttackRequirement
   private
 
   def skill_requirement_message
-    "TODO"
+    'TODO'
   end
 end
 
@@ -112,7 +112,7 @@ class ItemRequirement < AttackRequirement
   end
 
   def validate(player)
-    throw AttackRequirementException.new(item_missing_message) unless player.inventory.get_amount(@item) >= @amount
+    fail AttackRequirementException, item_missing_message unless player.inventory.get_amount(@item) >= @amount
   end
 
   def apply!(player)
@@ -122,8 +122,6 @@ class ItemRequirement < AttackRequirement
   private
 
   def item_missing_message
-    definition = ItemDefinition.lookup(@item)
-
     "You don't have enough #{lookup_item(@item).name}s"
   end
 end
@@ -141,22 +139,22 @@ class AmmoRequirement < AttackRequirement
     equipped_ammo_amt = player.equipment.get(EquipmentConstants::AMMO).amount
 
     if equipped_ammo.nil?
-      fail AttackRequirementException.new('You have no ammo left in your quiver!')
+      fail AttackRequirementException, 'You have no ammo left in your quiver!'
     end
 
     if @amount > 1 && equipped_ammo_amt < @amount
-      fail AttackRequirementException.new('You don\'t have enough ammo left in your quiver!')
+      fail AttackRequirementException, 'You don\'t have enough ammo left in your quiver!'
     end
 
     unless equipped_ammo.weapon_classes.include? equipped_weapon.weapon_class.name
-      fail AttackRequirementException.new('You can\'t use this ammo with this weapon.')
+      fail AttackRequirementException, 'You can\'t use this ammo with this weapon.'
     end
 
     if equipped_ammo.level_requirement > equipped_weapon_def.ranged_level
-      fail AttackRequirementException.new('You can\'t use this ammo with this weapon.')
+      fail AttackRequirementException, 'You can\'t use this ammo with this weapon.'
     end
   end
-
+  
   def apply!(player)
     equipped_ammo = EquipmentUtil.equipped_ammo player
 

@@ -2,9 +2,7 @@ java_import 'org.apollo.game.model.entity.Mob'
 
 module MobCombatState
   def get_combat_state
-    if @combat_state.nil?
-      @combat_state = CombatState.new(self, true)
-    end
+    @combat_state = CombatState.new(self, true) if @combat_state.nil?
 
     @combat_state
   end
@@ -30,10 +28,10 @@ class CombatState
   end
 
   def will_attack?
-    is_attacking? && next_attack(true).speed >= @mob.attack_timer
+    attacking? && next_attack(true).speed >= @mob.attack_timer
   end
 
-  def is_attacking?
+  def attacking?
     !target.nil? && @mob.attacking
   end
 

@@ -20,8 +20,8 @@ end
 
 on :message, :magic_on_mob do |player, message|
   target = $world.npc_repository.get(message.index)
-  
-  next unless SPELLBOOKS.has_key? message.interface_id
+
+  next unless SPELLBOOKS.key? message.interface_id
 
   player_combat_state = player.get_combat_state
   player_combat_state.target = target
@@ -29,7 +29,7 @@ on :message, :magic_on_mob do |player, message|
   spellbook = SPELLBOOKS[message.interface_id]
   spell = spell_for(spellbook, message.spell_id)
   player_combat_state.queue_attack(spell.attack)
-  
+
   player.walking_queue.clear
   player.start_action CombatAction.new(player, true)
 end

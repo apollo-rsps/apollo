@@ -29,9 +29,9 @@ create_weapon_class :dragon_dagger, widget: DAGGER_WIDGET_ID do
   style :defensive, button: 5
 end
 
-create_weapon /(?:drag|dragon) dagger.*/, :dragon_dagger do
+create_weapon(/(?:drag|dragon) dagger.*/, :dragon_dagger) do
   set_special_attack speed: 4, energy_requirement: 25, animation: 1062, graphic: { id: 252, height: 100 } do
-    damage! 
+    damage!
     damage! secondary: true
   end
 end

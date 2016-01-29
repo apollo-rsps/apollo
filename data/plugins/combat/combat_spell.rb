@@ -1,9 +1,8 @@
 class CombatSpell
-
   attr_reader :button
 
   attr_reader :spellbook
-  
+
   attr_reader :requirements
 
   attr_reader :damage
@@ -29,11 +28,9 @@ class CombatSpell
     @projectile = projectile
     @projectile_type = projectile_type
   end
-
 end
 
 class CombatSpellDSL
-
   def initialize(&block)
     instance_eval(&block)
   end
@@ -53,10 +50,10 @@ class CombatSpellDSL
     @projectile = id
     @projectile_type = type
   end
-  
+
   def requirements(&block)
     fail 'Block not given' unless block_given?
-    
+
     @requirements = AttackRequirementDSL.new(&block).requirements
   end
 
@@ -73,9 +70,8 @@ class CombatSpellDSL
   end
 
   def to_combat_spell
-    return CombatSpell.new(@button, @spellbook, @requirements, @damage, @animation, @graphic, @hit_graphic, @projectile, @projectile_type)
+    CombatSpell.new(@button, @spellbook, @requirements, @damage, @animation, @graphic, @hit_graphic, @projectile, @projectile_type)
   end
-
 end
 
 COMBAT_SPELLS = {}
@@ -89,8 +85,7 @@ def create_combat_spell(name, &block)
 end
 
 def spell_for(spellbook, button)
-
-  COMBAT_SPELLS.each do |name, spell|
+  COMBAT_SPELLS.each do |_name, spell|
     return spell if spell.spellbook == spellbook && spell.button == button
   end
 

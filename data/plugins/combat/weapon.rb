@@ -8,6 +8,13 @@ java_import 'org.apollo.game.model.inv.SynchronizationInventoryListener'
 
 WEAPONS       = {}
 NAMED_WEAPONS = {}
+## 
+# Create a new {@code Weapon} and configure it with the Weapon DSL.
+#
+# @param [Symbol] identifier A unique identifier for the weapon if {@code named} is true, otherwise the item name
+#                            of the weapon
+# @param [Symbol] class_name A symbol representing the {@code WeaponClass} this weapon belongs to.
+# @param [Boolean]           True if this is a uniquely identified weapon, false if it belongs to an item.
 
 def create_weapon(identifier, class_name = nil, named: false, &block)
   if named
@@ -52,13 +59,13 @@ def create_normal_weapon(item_matcher, class_name = nil, &block)
     end
 
     WEAPONS[item_id] = Weapon.new(definition.name, WEAPON_CLASSES[class_name])
-    WEAPONS[item_id].instance_eval &block if block_given?
+    WEAPONS[item_id].instance_eval(&block) if block_given?
   end
 end
 
 def create_named_weapon(name, class_name, &block)
   NAMED_WEAPONS[name] = Weapon.new name.to_s.capitalize, WEAPON_CLASSES[class_name]
-  NAMED_WEAPONS[name].instance_eval &block if block_given?
+  NAMED_WEAPONS[name].instance_eval(&block) if block_given?
 end
 
 # Represents an equippable weapon, and the class it belongs to.
@@ -87,7 +94,7 @@ class Weapon
     attack_dsl.animation = animation
     attack_dsl.graphic = graphic
     attack_dsl.add_requirement SpecialEnergyRequirement.new(energy_requirement)
-    attack_dsl.instance_eval &block
+    attack_dsl.instance_eval(&block)
 
     @special_attack = attack_dsl.to_attack
   end

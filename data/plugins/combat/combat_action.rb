@@ -4,22 +4,21 @@ java_import 'org.apollo.game.model.entity.EntityType'
 class CombatAction < Action
   def initialize(source, once = false)
     super(0, true, source)
-
-    mob.attacking = true
-
     @combat_state = source.get_combat_state
     @attack_timer = 100
     @once         = once
+    mob.attacking = true
   end
 
   def can_attack?
     next_attack           = @combat_state.next_attack true
     target                = @combat_state.target
     current_distance      = mob.position.get_distance target.position
-    attack_collision_type = next_attack.range > 1 ? EntityType::PROJECTILE : EntityType::NPC
 
-    in_range = current_distance <= next_attack.range# && !$world.intersects(mob.position, target.position, attack_collision_type)
-
+    in_range = current_distance <= next_attack.range
+    in_range = in_range && !$world.intersects(mob.position, target.position, 
+                                     next_attack.range > 1 ? EntityType::PROJECTILE : EntityType::NPC)
+    
     unless in_range
       mob.follow @combat_state.target, next_attack.range
 

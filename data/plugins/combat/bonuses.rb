@@ -1,4 +1,5 @@
 module Combat
+  ##
   # A module for units which can have their own bonuses. E.G., weapons, equipment, ammo.
   module BonusContainer
     def attack_bonus(type)

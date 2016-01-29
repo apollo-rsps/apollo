@@ -6,7 +6,8 @@ create_weapon_class :two_handed_sword, widget: TWO_HANDED_SWORD_WIDGET_ID do
   defaults speed: 7, animation: 7041, attack_type: :slash
   special_bar TWO_HANDED_SWORD_SPECIAL_CONFIG_ID, TWO_HANDED_SWORD_SPECIAL_BUTTON_ID
 
-  animations stand: 7047, walk: 7046, run: 7039, idle_turn: 7044, turn_around: 7044, turn_left: 7043, turn_right: 7044
+  animations stand: 7047, walk: 7046, run: 7039, idle_turn: 7044, turn_around: 7044,
+             turn_left: 7043, turn_right: 7044
 
   attack_bonuses stab: -4, magic: -4
   defence_bonuses range: -1
@@ -27,7 +28,7 @@ create_weapon :steel_2h_sword do
   other_bonuses melee_strength: 22
 end
 
-create_weapon /(?:black|white) 2h sword/ do
+create_weapon(/(?:black|white) 2h sword/) do
   attack_bonuses slash: 27, crush: 21
   other_bonuses melee_strength: 26
 end

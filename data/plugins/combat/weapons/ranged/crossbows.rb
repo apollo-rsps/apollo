@@ -8,4 +8,4 @@ create_weapon_class :crossbow, widget: CROSSBOW_WIDGET_ID, type: :ranged do
   style :long_range, range: 9, button: 4
 end
 
-create_weapon /rune c'bow/, :crossbow
+create_weapon(/rune c'bow/, :crossbow)
