@@ -92,7 +92,7 @@ class ItemSpellAction < SpellAction
       if illegal_item?
         mob.send_message('You cannot use that spell on this item!')
         stop
-        next
+        return false
       end
 
       id = @item.id
@@ -132,7 +132,7 @@ on :message, :magic_on_item do |player, message|
     message.terminate
   else
     enchant = ENCHANT_SPELLS[message.id]
-    
+
     if !enchant.nil? && enchant.button == spell
       slot = message.slot
       item = player.inventory.get(slot)

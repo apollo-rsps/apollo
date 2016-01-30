@@ -32,7 +32,7 @@ class AlchemyAction < ItemSpellAction
     ILLEGAL_ALCH_ITEMS.include?(@item.id)
   end
 
-  def executeAction
+  def execute_action
     if @pulses == 0
       mob.play_animation(@spell.animation)
       mob.play_graphic(@spell.graphic)
@@ -70,16 +70,14 @@ def alchemy(_name, hash)
   end
 
   id, multiplier = hash[:button], hash[:multiplier]
-  level, runes, experience = hash[:level], hash[:runes], hash[:experience]
+  level, experience = hash[:level], hash[:experience]
 
+  runes = { FIRE => hash[:fires], NATURE => 1 }
   animation = Animation.new(hash[:animation])
   graphic = Graphic.new(hash[:graphic], 0, GRAPHIC_HEIGHT)
 
   ALCHEMY_SPELLS[id] = AlchemySpell.new(level, runes, experience, animation, graphic, multiplier)
 end
 
-alchemy :low_level, button: 1_162, level: 21, runes: { FIRE => 3, NATURE => 1 }, animation: 712,
-                    graphic: 112, multiplier: 0.48, experience: 31
-
-alchemy :high_level, button: 1_178, level: 55, runes: { FIRE => 5, NATURE => 1 }, animation: 713,
-                     graphic: 113, multiplier: 0.72, experience: 65
+alchemy :low_level, button: 1_162, level: 21, fires: 3, animation: 712, graphic: 112, multiplier: 0.48, experience: 31
+alchemy :high_level, button: 1_178, level: 55, fires: 5, animation: 713, graphic: 113, multiplier: 0.72, experience: 65

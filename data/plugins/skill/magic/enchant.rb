@@ -48,7 +48,7 @@ class EnchantAction < ItemSpellAction
     ENCHANT_ITEMS[@item.id].nil?
   end
 
-  def executeAction
+  def execute_action
     if @pulses == 0
       mob.play_animation(@spell.animation)
       mob.play_graphic(@spell.graphic)
