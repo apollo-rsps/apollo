@@ -65,8 +65,8 @@ GRAPHIC_HEIGHT = 100
 
 # Inserts an `AlchemySpell` into the hash of available alchemy spells.
 def alchemy(_name, hash)
-  unless hash.has_keys?(:button, :level, :runes, :animation, :graphic, :multiplier, :experience)
-    fail 'Hash must have button, level, runes, animation, graphic, multiplier, experience keys.'
+  unless hash.has_keys?(:button, :level, :fires, :animation, :graphic, :multiplier, :experience)
+    fail 'Hash must have button, level, fires, animation, graphic, multiplier, experience keys.'
   end
 
   id, multiplier = hash[:button], hash[:multiplier]
