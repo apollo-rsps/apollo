@@ -1,15 +1,15 @@
 package org.apollo.util;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
- * Contains tests for {@link LanguageUtil}.
+ * Contains unit tests for {@link LanguageUtil}s.
  *
  * @author Graham
  */
-public class TestLanguageUtil {
+public class LanguageUtilTests {
 
 	/**
 	 * Tests the {@link LanguageUtil#getIndefiniteArticle} method.

@@ -1,9 +1,7 @@
 package org.apollo.util.xml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,15 +10,17 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Set;
 
-import org.junit.Test;
-import org.xml.sax.SAXException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
- * A test for the {@link XmlParser} class.
+ * Contains unit tests for {@link XmlParser}s.
  *
  * @author Graham
  */
-public final class TestXmlParser {
+public final class XmlParserTests {
 
 	/**
 	 * A test for the {@link XmlParser#parse} method.
@@ -34,9 +34,9 @@ public final class TestXmlParser {
 		InputStream input = new ByteArrayInputStream("<root a='1' b='2' c='3'><z><y><x></x></y></z></root>".getBytes());
 		XmlNode root = parser.parse(input);
 
-		assertEquals(root.getName(), "root");
-		assertEquals(root.getAttributeCount(), 3);
-		assertEquals(root.getChildCount(), 1);
+		assertEquals("root", root.getName());
+		assertEquals(3, root.getAttributeCount());
+		assertEquals(1, root.getChildCount());
 		assertFalse(root.hasValue());
 
 		Set<String> names = root.getAttributeNames();
@@ -81,24 +81,24 @@ public final class TestXmlParser {
 		Reader reader = new StringReader("<alphabet><a>1</a><b>2</b><c>3</c></alphabet>");
 		XmlNode root = parser.parse(reader);
 
-		assertEquals(root.getName(), "alphabet");
-		assertEquals(root.getAttributeCount(), 0);
-		assertEquals(root.getChildCount(), 3);
+		assertEquals("alphabet", root.getName());
+		assertEquals(0, root.getAttributeCount());
+		assertEquals(3, root.getChildCount());
 		assertFalse(root.hasValue());
 
 		XmlNode[] children = root.getChildren().toArray(new XmlNode[3]);
 
-		assertEquals(children[0].getName(), "a");
-		assertEquals(children[1].getName(), "b");
-		assertEquals(children[2].getName(), "c");
+		assertEquals("a", children[0].getName());
+		assertEquals("b", children[1].getName());
+		assertEquals("c", children[2].getName());
 
-		assertEquals(children[0].getValue(), "1");
-		assertEquals(children[1].getValue(), "2");
-		assertEquals(children[2].getValue(), "3");
+		assertEquals("1", children[0].getValue());
+		assertEquals("2", children[1].getValue());
+		assertEquals("3", children[2].getValue());
 
 		for (int index = 0; index < 3; index++) {
 			assertTrue(children[index].hasValue());
-			assertEquals(children[index].getAttributeCount(), 0);
+			assertEquals(0, children[index].getAttributeCount());
 		}
 	}
 

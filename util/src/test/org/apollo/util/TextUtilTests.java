@@ -1,15 +1,15 @@
 package org.apollo.util;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
- * A test for the {@link TextUtil} class.
+ * Contains unit tests for {@link TextUtil}s.
  *
  * @author Graham
  */
-public class TestTextUtil {
+public class TextUtilTests {
 
 	/**
 	 * Tests the {@link TextUtil#capitalize} method.

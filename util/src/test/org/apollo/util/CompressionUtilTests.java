@@ -1,17 +1,17 @@
 package org.apollo.util;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Contains tests for {@link CompressionUtil}.
+ * Contains unit tests for {@link CompressionUtil}s.
  *
  * @author Graham
  */
-public class TestCompressionUtil {
+public class CompressionUtilTests {
 
 	/**
 	 * Tests the {@link CompressionUtil#bzip2(byte[])} and {@link CompressionUtil#debzip2} methods.
