@@ -4,6 +4,7 @@ java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.message.impl.DisplayTabInterfaceMessage'
 java_import 'org.apollo.game.model.entity.EquipmentConstants'
 java_import 'org.apollo.game.model.entity.Skill'
+java_import 'org.apollo.cache.def.ItemDefinition'
 
 # A `Message` to display the magic spellbook.
 DISPLAY_SPELLBOOK = DisplayTabInterfaceMessage.new(6)
@@ -32,9 +33,14 @@ class SpellAction < Action
 
   def execute
     if @pulses == 0
-      unless check_skill && process_elements
+      unless process_elements && check_skill
         stop
         return
+      end
+      if illegal_item?
+        mob.send_message('You cannot use that spell on this item!')
+        stop
+        return false
       end
     end
 
@@ -61,7 +67,7 @@ class SpellAction < Action
 
     elements.each do |element, amount|
       unless element.check_remove(mob, amount, false)
-        mob.send_message("You do not have enough #{element.name}s to cast this spell.")
+        mob.send_message("You do not have enough #{element.name.split.map(&:capitalize)*' '}s to cast this spell.")
         return false
       end
     end
@@ -89,19 +95,13 @@ class ItemSpellAction < SpellAction
   # We override SpellAction#execute to implement an illegal item check (e.g. coins for alchemy)
   def execute
     if @pulses == 0
-      if illegal_item?
-        mob.send_message('You cannot use that spell on this item!')
-        stop
-        return false
-      end
-
       id = @item.id
 
       # TODO: There has to be a better way to do this.
       @spell.elements.each do |element, amount|
         element.runes.each do |rune|
           if id == rune && !element.check_remove(mob, amount + 1, false)
-            mob.send_message("You do not have enough #{element.name}s to cast this spell.")
+            mob.send_message("You do not have enough #{element.name.split.map(&:capitalize)*' '}s to cast this spell.")
             stop
             return false
           end
@@ -114,7 +114,6 @@ class ItemSpellAction < SpellAction
   end
 
   def illegal_item?
-    # Override this method if necessary
     false
   end
 
