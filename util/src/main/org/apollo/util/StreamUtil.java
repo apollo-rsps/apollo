@@ -5,40 +5,43 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * A class which contains {@link InputStream}- and {@link OutputStream}-related utility methods.
+ * Contains utility methods for {@link InputStream}s and {@link OutputStream}s.
  *
  * @author Graham
  */
 public final class StreamUtil {
 
 	/**
-	 * Reads a string from the specified input stream.
+	 * Reads a String from the specified {@link InputStream}.
 	 *
-	 * @param is The input stream.
-	 * @return The string.
-	 * @throws IOException If an I/O error occurs.
+	 * @param input The {@link InputStream}. Must not be {@code null}.
+	 * @return The String. Will never be {@code null}. May be empty.
+	 * @throws IOException If an error occurs when reading from the {@link InputStream}.
 	 */
-	public static String readString(InputStream is) throws IOException {
+	public static String readString(InputStream input) throws IOException {
 		StringBuilder builder = new StringBuilder();
-		char character;
-		while ((character = (char) is.read()) != -1 && character != '\0') {
-			builder.append(character);
+		int character;
+
+		while ((character = input.read()) != -1 && character != '\0') {
+			builder.append((char) character);
 		}
+
 		return builder.toString();
 	}
 
 	/**
-	 * Writes a string to the specified output stream.
+	 * Writes an ASCII String to the specified {@link OutputStream}.
 	 *
-	 * @param os The output stream.
-	 * @param str The string.
-	 * @throws IOException If an I/O error occurs.
+	 * @param output The {@link OutputStream}. Must not be {@code null}.
+	 * @param string The String. Must be ASCII. Must not be {@code null}.
+	 * @throws IOException If an error occurs when writing to the {@link OutputStream}.
 	 */
-	public static void writeString(OutputStream os, String str) throws IOException {
-		for (char c : str.toCharArray()) {
-			os.write(c);
+	public static void writeString(OutputStream output, String string) throws IOException {
+		for (char character : string.toCharArray()) {
+			output.write(character);
 		}
-		os.write('\0');
+
+		output.write('\0');
 	}
 
 	/**

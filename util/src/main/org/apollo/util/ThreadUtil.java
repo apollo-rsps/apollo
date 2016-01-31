@@ -1,12 +1,12 @@
 package org.apollo.util;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Objects;
 import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * A static utility class which provides ease of use functionality for {@link Thread}s
@@ -24,7 +24,7 @@ public final class ThreadUtil {
 	/**
 	 * A {@link Logger} used to debug messages to the console.
 	 */
-	private static final Logger LOGGER = Logger.getLogger(ThreadUtil.class.getSimpleName());
+	private static final Logger logger = Logger.getLogger(ThreadUtil.class.getSimpleName());
 
 	/**
 	 * The default {@link UncaughtExceptionHandler} which raises an error from the logger with the exception and name
@@ -32,15 +32,14 @@ public final class ThreadUtil {
 	 * the specified thread the exception occurred in.
 	 */
 	private static final UncaughtExceptionHandler DEFAULT_EXCEPTION_HANDLER =
-			(thread, exception) -> LOGGER.log(Level.SEVERE, "Exception in thread " + thread.getName(), exception);
+		(thread, exception) -> logger.log(Level.SEVERE, "Exception in thread " + thread.getName(), exception);
 
 	/**
 	 * Builds a {@link ThreadFactory} using the specified {@code String} name-format, normal thread priority and the
-	 * default {@link UncaughtExceptionHandler}.
+	 * default {@link UncaughtExceptionHandler}, which simply logs exception messages.
 	 *
 	 * @param name The name-format used when creating threads. Must not be {@code null}.
 	 * @return The {@link ThreadFactory}. Will never be {@code null}.
-	 * @see #DEFAULT_EXCEPTION_HANDLER
 	 */
 	public static ThreadFactory create(String name) {
 		return create(name, Thread.NORM_PRIORITY, DEFAULT_EXCEPTION_HANDLER);
@@ -51,7 +50,7 @@ public final class ThreadUtil {
 	 * {@link #DEFAULT_EXCEPTION_HANDLER}.
 	 *
 	 * @param name The name-format used when creating threads. Must not be {@code null}.
-	 * @param priority The priority used when creating threads.
+	 * @param priority The priority used when creating threads. Must be {@code 1 <= priority <= 10}.
 	 * @return The {@link ThreadFactory}. Will never be {@code null}.
 	 */
 	public static ThreadFactory create(String name, int priority) {
@@ -59,11 +58,11 @@ public final class ThreadUtil {
 	}
 
 	/**
-	 * Builds a {@link ThreadFactory} using the specified {@code String} name-format, priority and
+	 * Creates a {@link ThreadFactory} using the specified {@code String} name-format, priority and
 	 * {@link UncaughtExceptionHandler}.
 	 *
 	 * @param name The name-format used when creating threads. Must not be {@code null}.
-	 * @param priority The priority used when creating threads.
+	 * @param priority The priority used when creating threads. Must be {@code 1 <= priority <= 10}.
 	 * @param handler The {@link UncaughtExceptionHandler} used when creating threads. Must not be {@code null}.
 	 * @return The {@link ThreadFactory}. Will never be {@code null}.
 	 */
@@ -75,6 +74,7 @@ public final class ThreadUtil {
 		builder.setNameFormat(name);
 		builder.setPriority(priority);
 		builder.setUncaughtExceptionHandler(handler);
+
 		return builder.build();
 	}
 

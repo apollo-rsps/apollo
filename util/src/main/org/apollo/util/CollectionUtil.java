@@ -1,10 +1,10 @@
 package org.apollo.util;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Collection;
 import java.util.Queue;
 import java.util.function.Consumer;
-
-import com.google.common.base.Preconditions;
 
 /**
  * A utility class containing helper methods for various {@link Collection} objects.
@@ -14,11 +14,11 @@ import com.google.common.base.Preconditions;
 public final class CollectionUtil {
 
 	/**
-	 * Polls every element within the specified {@link Queue} and performs the specified {@link Consumer} event for each
-	 * element.
+	 * Polls every element within the specified {@link Queue} and performs the specified {@link Consumer} event for
+	 * each element.
 	 *
-	 * @param queue The Queue to poll each element for, may not be {@code null}.
-	 * @param consumer The Consumer event to execute for each polled element, may not be {@code null}.
+	 * @param queue The {@link Queue} to poll elements from. Must not be {@code null}.
+	 * @param consumer The {@link Consumer} to execute for each polled element. Must not be {@code null}.
 	 */
 	public static <T> void pollAll(Queue<T> queue, Consumer<T> consumer) {
 		Preconditions.checkNotNull(queue, "Queue may not be null");

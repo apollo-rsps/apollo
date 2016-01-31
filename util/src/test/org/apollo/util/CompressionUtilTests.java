@@ -3,6 +3,7 @@ package org.apollo.util;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,35 +11,34 @@ import static org.junit.Assert.assertEquals;
  * Contains unit tests for {@link CompressionUtil}s.
  *
  * @author Graham
+ * @author Major
  */
-public class CompressionUtilTests {
+public final class CompressionUtilTests {
 
 	/**
-	 * Tests the {@link CompressionUtil#bzip2(byte[])} and {@link CompressionUtil#debzip2} methods.
-	 *
-	 * @throws IOException If an I/O error occurs.
+	 * Tests the {@link CompressionUtil#bzip2} and {@link CompressionUtil#debzip2} methods.
 	 */
 	@Test
-	public void testBzip2() throws IOException {
-		String str = "Hello, World!";
-		byte[] data = str.getBytes();
-		byte[] compressed = CompressionUtil.bzip2(data);
-		CompressionUtil.debzip2(compressed, data);
-		assertEquals(str, new String(data));
+	public void bzip2() throws IOException {
+		String string = "Hello, world!";
+
+		byte[] data = string.getBytes(StandardCharsets.UTF_8);
+		CompressionUtil.debzip2(CompressionUtil.bzip2(data), data);
+
+		assertEquals(string, new String(data, StandardCharsets.UTF_8));
 	}
 
 	/**
-	 * Tests the {@link CompressionUtil#gzip(byte[])} and {@link CompressionUtil#degzip} methods.
-	 *
-	 * @throws IOException If an I/O error occurs.
+	 * Tests the {@link CompressionUtil#gzip} and {@link CompressionUtil#degzip} methods.
 	 */
 	@Test
-	public void testGzip() throws IOException {
-		String str = "Hello, World!";
-		byte[] data = str.getBytes();
-		byte[] compressed = CompressionUtil.gzip(data);
-		CompressionUtil.degzip(compressed, data);
-		assertEquals(str, new String(data));
+	public void gzip() throws IOException {
+		String string = "Hello, world!";
+
+		byte[] data = string.getBytes(StandardCharsets.UTF_8);
+		CompressionUtil.degzip(CompressionUtil.gzip(data), data);
+
+		assertEquals(string, new String(data, StandardCharsets.UTF_8));
 	}
 
 }
