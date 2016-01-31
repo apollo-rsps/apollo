@@ -401,6 +401,7 @@ public final class ItemDefinition {
 			}
 
 			description = "Swap this note at any bank for " + prefix + " " + name + ".";
+			value = infoDef.value;
 			stackable = true;
 		} else {
 			throw new IllegalStateException("Item cannot be noted.");
