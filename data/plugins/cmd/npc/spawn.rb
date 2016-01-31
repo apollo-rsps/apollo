@@ -54,7 +54,7 @@ on :command, :mass, RIGHTS_ADMIN do |player, command|
 
   (min_x..max_x).each do |x|
     (min_y..max_y).each do |y|
-      $world.register(Npc.new(id, Position.new(x, y, z)))
+      $world.register(Npc.new($world, id, Position.new(x, y, z)))
     end
   end
 
