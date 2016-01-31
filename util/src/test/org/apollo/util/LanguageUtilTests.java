@@ -9,17 +9,20 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Graham
  */
-public class LanguageUtilTests {
+public final class LanguageUtilTests {
 
 	/**
 	 * Tests the {@link LanguageUtil#getIndefiniteArticle} method.
 	 */
 	@Test
-	public void testIndefiniteArticle() {
+	public void indefiniteArticle() {
 		assertEquals("an", LanguageUtil.getIndefiniteArticle("apple"));
 		assertEquals("an", LanguageUtil.getIndefiniteArticle("urn"));
 		assertEquals("a", LanguageUtil.getIndefiniteArticle("nose"));
 		assertEquals("a", LanguageUtil.getIndefiniteArticle("foot"));
+
+		assertEquals("an", LanguageUtil.getIndefiniteArticle("NPC"));
+		assertEquals("an", LanguageUtil.getIndefiniteArticle("FC"));
 	}
 
 }

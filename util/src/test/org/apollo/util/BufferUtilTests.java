@@ -19,60 +19,46 @@ public final class BufferUtilTests {
 	 * Test the {@link BufferUtil#readString(ByteBuf)} method.
 	 */
 	@Test
-	public void readByteBufString() {
-		ByteBuf buf = Unpooled.buffer(6);
-		buf.writeBytes(new byte[]{ 'H', 'e', 'l', 'l', 'o', 10 });
-		String str = BufferUtil.readString(buf);
-		assertEquals("Hello", str);
+	public void byteBufString() {
+		ByteBuf buffer = Unpooled.buffer(6 * Byte.BYTES);
 
-		buf = Unpooled.buffer(5);
-		buf.writeBytes(new byte[]{ 'W', 'o', 'r', 'l', 'd' });
-		str = BufferUtil.readString(buf);
-		assertEquals("World", str);
+		buffer.writeBytes(new byte[]{ 'H', 'e', 'l', 'l', 'o', 10 });
+		assertEquals("Hello", BufferUtil.readString(buffer));
 
-		buf = Unpooled.buffer(3);
-		buf.writeByte('!');
-		buf.writeByte(10);
-		buf.writeByte('.');
+		buffer = Unpooled.buffer(2 * Byte.BYTES);
+		buffer.writeByte('!');
+		buffer.writeByte(BufferUtil.STRING_TERMINATOR);
 
-		str = BufferUtil.readString(buf);
-		assertEquals("!", str);
-
-		str = BufferUtil.readString(buf);
-		assertEquals(".", str);
+		assertEquals("!", BufferUtil.readString(buffer));
 	}
 
 	/**
 	 * Tests the {@link BufferUtil#readString(ByteBuffer)} method.
 	 */
 	@Test
-	public void readByteBufferString() {
-		ByteBuffer buf = ByteBuffer.allocate(8);
-		buf.put((byte) 'h');
-		buf.put((byte) 'e');
-		buf.put((byte) 'l');
-		buf.put((byte) 'l');
-		buf.put((byte) 'o');
-		buf.put((byte) BufferUtil.STRING_TERMINATOR);
-		buf.put((byte) 66);
-		buf.put((byte) 6);
-		buf.flip();
+	public void byteBufferString() {
+		ByteBuffer buffer = ByteBuffer.allocate(4 * Byte.BYTES);
+		buffer.put((byte) 'h');
+		buffer.put((byte) 'i');
+		buffer.put((byte) BufferUtil.STRING_TERMINATOR);
+		buffer.put((byte) '!');
+		buffer.flip();
 
-		assertEquals("hello", BufferUtil.readString(buf));
+		assertEquals("hi", BufferUtil.readString(buffer));
 	}
 
 	/**
 	 * Tests the {@link BufferUtil#readUnsignedMedium} method.
 	 */
 	@Test
-	public void testReadUnsignedTriByte() {
-		ByteBuffer buf = ByteBuffer.allocate(3);
+	public void medium() {
+		ByteBuffer buf = ByteBuffer.allocate(3 * Byte.BYTES);
 		buf.put((byte) 123);
 		buf.put((byte) 45);
 		buf.put((byte) 67);
 		buf.flip();
 
-		assertEquals(8072515, BufferUtil.readUnsignedMedium(buf));
+		assertEquals(123 << 16 | 45 << 8 | 67, BufferUtil.readUnsignedMedium(buf));
 	}
 
 }
