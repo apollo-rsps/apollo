@@ -67,7 +67,7 @@ class SpellAction < Action
 
     elements.each do |element, amount|
       unless element.check_remove(mob, amount, false)
-        mob.send_message("You do not have enough #{element.name.split.map(&:capitalize)*' '}s to cast this spell.")
+        mob.send_message("You do not have enough #{element.name.split.map(&:capitalize) * ' '}s to cast this spell.")
         return false
       end
     end
@@ -101,7 +101,7 @@ class ItemSpellAction < SpellAction
       @spell.elements.each do |element, amount|
         element.runes.each do |rune|
           if id == rune && !element.check_remove(mob, amount + 1, false)
-            mob.send_message("You do not have enough #{element.name.split.map(&:capitalize)*' '}s to cast this spell.")
+            mob.send_message("You do not have enough #{element.name.split.map(&:capitalize) * ' '}s to cast this spell.")
             stop
             return false
           end
