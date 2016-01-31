@@ -6,17 +6,18 @@ java_import 'org.apollo.game.model.entity.Skill'
 
 ALCHEMY_SPELLS = {}
 
-ILLEGAL_ALCH_ITEMS = [995, 6529, 6306, 6307, 6308, 6309, 6310]
+ILLEGAL_ALCH_ITEMS = [995]
 
 # A spell that alchemises an item.
 class AlchemySpell < Spell
-  attr_reader :animation, :graphic, :multiplier, :experience
+  attr_reader :animation, :graphic, :multiplier, :experience, :delay
 
-  def initialize(level, elements, experience, animation, graphic, multiplier)
+  def initialize(level, elements, experience, animation, graphic, multiplier, delay)
     super(level, elements, experience)
     @animation = animation
     @graphic = graphic
     @multiplier = multiplier
+    @delay = delay
   end
 
 end
@@ -39,13 +40,13 @@ class AlchemyAction < ItemSpellAction
       mob.send(DISPLAY_SPELLBOOK)
 
       inventory = mob.inventory
-      gold = (item.definition.value * @spell.multiplier) + 1
+      gold = (item.definition.value * @spell.multiplier)
 
       inventory.remove(inventory.get(@slot).id, 1)
       inventory.add(995, gold)
 
       mob.skill_set.add_experience(Skill::MAGIC, @spell.experience)
-      set_delay(ALCHEMY_DELAY)
+      set_delay(@spell.delay)
     elsif @pulses == 1
       mob.stop_animation
       mob.stop_graphic
@@ -57,27 +58,25 @@ end
 
 private
 
-# The delay of an alchemy spell.
-ALCHEMY_DELAY = 4
-
 # The height of the graphic.
 GRAPHIC_HEIGHT = 100
 
 # Inserts an `AlchemySpell` into the hash of available alchemy spells.
 def alchemy(_name, hash)
-  unless hash.has_keys?(:button, :level, :fires, :animation, :graphic, :multiplier, :experience)
-    fail 'Hash must have button, level, fires, animation, graphic, multiplier, experience keys.'
+  unless hash.has_keys?(:button, :level, :fires, :animation, :graphic, :multiplier, :experience, :delay)
+    fail 'Hash must have button, level, fires, animation, graphic, multiplier, experience, delay keys.'
   end
 
   id, multiplier = hash[:button], hash[:multiplier]
   level, experience = hash[:level], hash[:experience]
 
-  runes = { FIRE => hash[:fires], NATURE => 1 }
+  runes = { NATURE => 1, FIRE => hash[:fires] }
   animation = Animation.new(hash[:animation])
   graphic = Graphic.new(hash[:graphic], 0, GRAPHIC_HEIGHT)
+  delay = hash[:delay]
 
-  ALCHEMY_SPELLS[id] = AlchemySpell.new(level, runes, experience, animation, graphic, multiplier)
+  ALCHEMY_SPELLS[id] = AlchemySpell.new(level, runes, experience, animation, graphic, multiplier, delay)
 end
 
-alchemy :low_level, button: 1_162, level: 21, fires: 3, animation: 712, graphic: 112, multiplier: 0.48, experience: 31
-alchemy :high_level, button: 1_178, level: 55, fires: 5, animation: 713, graphic: 113, multiplier: 0.72, experience: 65
+alchemy :low_level, button: 1_162, level: 21, fires: 3, animation: 712, graphic: 112, multiplier: 0.4, experience: 31, delay: 2
+alchemy :high_level, button: 1_178, level: 55, fires: 5, animation: 713, graphic: 113, multiplier: 0.6, experience: 65, delay: 3
