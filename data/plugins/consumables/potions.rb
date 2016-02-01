@@ -13,13 +13,15 @@ module Constants
   # The id of an empty vial.
   EMPTY_VIAL_ID = 229
 
+  # The delay between drinking potions
+  POTION_DELAY = 2
 end
 
 # A drinkable potion.
 class Potion < Consumable
 
   def initialize(id, name, doses)
-    super(name, id, Constants::DRINK_POTION_SOUND)
+    super(name, id, Constants::DRINK_POTION_SOUND, Constants::POTION_DELAY)
     @doses = doses
   end
 

@@ -8,12 +8,13 @@ CONSUME_ANIMATION_ID = 829
 
 # An item that can be consumed to produce a skill effect.
 class Consumable
-  attr_reader :name, :id, :sound
+  attr_reader :name, :id, :sound, :delay
 
-  def initialize(name, id, sound)
+  def initialize(name, id, sound, delay)
     @name = name.to_s.gsub(/_/, ' ')
     @id = id
     @sound = sound
+    @delay = delay
   end
 
   def consume(_player)
@@ -44,8 +45,11 @@ class ConsumeAction < Action
       @consumable.consume(mob)
 
       mob.play_animation(Animation.new(CONSUME_ANIMATION_ID))
-      @executions += 1
-    else
+    end
+
+    @executions += 1
+
+    if @executions >= @consumable.delay
       stop
     end
   end
