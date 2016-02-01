@@ -19,7 +19,7 @@ class Food < Consumable
     @replace = replace
   end
 
- # Restore the appropriate amount of hitpoints when consumed.
+# Restore the appropriate amount of hitpoints when consumed.
   def consume(player)
     hitpoints = player.skill_set.skill(Skill::HITPOINTS)
     hitpoints_current = player.skill_set.get_current_level(Skill::HITPOINTS)
