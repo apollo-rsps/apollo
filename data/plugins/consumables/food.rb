@@ -13,8 +13,8 @@ EAT_FOOD_SOUND = 317
 # TODO: delay eating times
 class Food < Consumable
 
-  def initialize(name, id, restoration, replace)
-    super(name, id, EAT_FOOD_SOUND)
+  def initialize(name, id, restoration, replace, delay)
+    super(name, id, EAT_FOOD_SOUND, delay)
     @restoration = restoration
     @replace = replace
   end
@@ -48,7 +48,7 @@ def food(hash)
   replace = hash[:replace] || -1
   delay = hash[:delay] || DEFAULT_DELAY # TODO: ??
 
-  append_consumable(Food.new(name, id, restoration, replace))
+  append_consumable(Food.new(name, id, restoration, replace, delay))
 end
 
 # TODO: special effects
@@ -88,7 +88,7 @@ food name: :bass,             id: 365,  restoration: 13
 food name: :swordfish,        id: 373,  restoration: 14
 food name: :cooked_jubbly,    id: 7568, restoration: 15
 food name: :monkfish,         id: 7946, restoration: 16
-food name: :cooked_karambwan, id: 3144, restoration: 18
+food name: :cooked_karambwan, id: 3144, restoration: 18, delay: 0
 food name: :shark,            id: 385,  restoration: 20
 food name: :sea_turtle,       id: 397,  restoration: 21
 food name: :manta_ray,        id: 391,  restoration: 22
