@@ -32,7 +32,7 @@ class ConsumeAction < Action
   attr_reader :consumable
 
   def initialize(player, slot, consumable)
-    super(0, true, player)
+    super(2, true, player)
     @consumable = consumable
     @slot = slot
     @executions = 0
@@ -51,7 +51,7 @@ class ConsumeAction < Action
   end
 
   def equals(other)
-    mob == other.mob && @consumable.id == other.consumable.id
+    mob == other.mob
   end
 
 end
