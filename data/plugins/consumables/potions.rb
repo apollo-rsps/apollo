@@ -21,7 +21,7 @@ end
 class Potion < Consumable
 
   def initialize(id, name, doses)
-    super(name, id, Constants::DRINK_POTION_SOUND, Constants::POTION_DELAY)
+    super(name, id, Constants::DRINK_POTION_SOUND, Constants::POTION_DELAY, ConsumableType::POTION)
     @doses = doses
   end
 

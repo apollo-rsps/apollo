@@ -14,7 +14,7 @@ EAT_FOOD_SOUND = 317
 class Food < Consumable
 
   def initialize(name, id, restoration, replace, delay)
-    super(name, id, EAT_FOOD_SOUND, delay)
+    super(name, id, EAT_FOOD_SOUND, delay, ConsumableType::FOOD)
     @restoration = restoration
     @replace = replace
   end
