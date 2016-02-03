@@ -6,15 +6,22 @@ CONSUMABLES = {}
 # The id of the food consumption animation.
 CONSUME_ANIMATION_ID = 829
 
+# Contains the different types of consumables
+module ConsumableType
+  FOOD = 1
+  POTION = 2
+end
+
 # An item that can be consumed to produce a skill effect.
 class Consumable
-  attr_reader :name, :id, :sound, :delay
+  attr_reader :name, :id, :sound, :delay, :type
 
-  def initialize(name, id, sound, delay)
+  def initialize(name, id, sound, delay, type)
     @name = name.to_s.gsub(/_/, ' ')
     @id = id
     @sound = sound
     @delay = delay
+    @type = type
   end
 
   def consume(_player)
@@ -55,7 +62,7 @@ class ConsumeAction < Action
   end
 
   def equals(other)
-    mob == other.mob
+    mob == other.mob && @consumable.type == other.consumable.type
   end
 
 end
