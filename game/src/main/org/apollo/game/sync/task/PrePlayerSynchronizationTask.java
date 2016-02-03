@@ -2,7 +2,6 @@ package org.apollo.game.sync.task;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.apollo.game.message.impl.ClearRegionMessage;
@@ -22,16 +21,6 @@ import org.apollo.game.model.entity.Player;
  * @author Major
  */
 public final class PrePlayerSynchronizationTask extends SynchronizationTask {
-
-	/**
-	 * The radius of viewable regions.
-	 */
-	private static final int VIEWABLE_REGION_RADIUS = 3;
-
-	/**
-	 * The width of the viewport of every Player, in tiles.
-	 */
-	private static final int VIEWPORT_WIDTH = Region.SIZE * 13;
 
 	/**
 	 * The Map of RegionCoordinates to Sets of RegionUpdateMessages, which contain all of the Entity information for a
@@ -81,7 +70,9 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 			player.send(new RegionChangeMessage(position));
 		}
 
-		Set<RegionCoordinates> oldViewable = getViewableRegions(old), newViewable = getViewableRegions(position);
+		RegionRepository repository = player.getWorld().getRegionRepository();
+		Set<RegionCoordinates> oldViewable = repository.fromPosition(old).getSurrounding();
+		Set<RegionCoordinates> newViewable = repository.fromPosition(position).getSurrounding();
 
 		Set<RegionCoordinates> differences = new HashSet<>(newViewable);
 		differences.retainAll(oldViewable);
@@ -90,28 +81,6 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		full.removeAll(oldViewable);
 
 		sendUpdates(player.getLastKnownRegion(), differences, full);
-	}
-
-	/**
-	 * Gets the {@link Set} of {@link RegionCoordinates} of Regions that are viewable from the specified {@link
-	 * Position}.
-	 *
-	 * @param position The Position.
-	 * @return The Set of RegionCoordinates.
-	 */
-	private Set<RegionCoordinates> getViewableRegions(Position position) { // TODO possibly more complicated than this
-		RegionCoordinates local = position.getRegionCoordinates();
-		int localX = local.getX(), localY = local.getY();
-		int maxX = localX + VIEWABLE_REGION_RADIUS, maxY = localY + VIEWABLE_REGION_RADIUS;
-
-		Set<RegionCoordinates> viewable = new HashSet<>();
-		for (int x = localX - VIEWABLE_REGION_RADIUS; x < maxX; x++) {
-			for (int y = localY - VIEWABLE_REGION_RADIUS; y < maxY; y++) {
-				viewable.add(new RegionCoordinates(x, y));
-			}
-		}
-
-		return viewable;
 	}
 
 	/**
@@ -126,8 +95,8 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		int deltaX = current.getLocalX(last);
 		int deltaY = current.getLocalY(last);
 
-		return deltaX <= Position.MAX_DISTANCE || deltaX >= VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1
-				|| deltaY <= Position.MAX_DISTANCE || deltaY >= VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
+		return deltaX <= Position.MAX_DISTANCE || deltaX >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1
+				|| deltaY <= Position.MAX_DISTANCE || deltaY >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
 	}
 
 	/**
