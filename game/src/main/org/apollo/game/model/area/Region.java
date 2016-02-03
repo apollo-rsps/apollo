@@ -1,13 +1,14 @@
 package org.apollo.game.model.area;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.Direction;
@@ -17,11 +18,11 @@ import org.apollo.game.model.area.update.GroupableEntity;
 import org.apollo.game.model.area.update.UpdateOperation;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.EntityType;
+import org.apollo.game.model.entity.obj.DynamicGameObject;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import org.apollo.game.model.entity.obj.DynamicGameObject;
 
 /**
  * An 8x8 area of the map.
@@ -51,6 +52,16 @@ public final class Region {
 	 * The width and length of a Region, in tiles.
 	 */
 	public static final int SIZE = 8;
+
+	/**
+	 * The radius of viewable regions.
+	 */
+	public static final int VIEWABLE_REGION_RADIUS = 3;
+
+	/**
+	 * The width of the viewport of every Player, in tiles.
+	 */
+	public static final int VIEWPORT_WIDTH = SIZE * 13;
 
 	/**
 	 * The default size of newly-created Lists, to reduce memory usage.
@@ -200,6 +211,22 @@ public final class Region {
 	}
 
 	/**
+	 * Gets an intermediate {@link Stream} from the {@link Set} of
+	 * {@link Entity}s with the specified {@link EntityType} (s). Type will be
+	 * inferred from the call, so ensure that the Entity type and the reference
+	 * correspond, or this method will fail at runtime.
+	 *
+	 * @param types The {@link EntityType}s.
+	 * @return The Stream of Entity objects.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> Stream<T> getEntities(EntityType... types) {
+		Set<EntityType> set = ImmutableSet.copyOf(types);
+		return (Stream<T>) entities.values().stream().flatMap(Collection::stream)
+				.filter(entity -> set.contains(entity.getEntityType()));
+	}
+
+	/**
 	 * Gets a shallow copy of the {@link Set} of {@link Entity} objects at the specified {@link Position}. The returned
 	 * type will be immutable.
 	 *
@@ -226,11 +253,31 @@ public final class Region {
 			return ImmutableSet.of();
 		}
 
-		Set<EntityType> set = new HashSet<>(Arrays.asList(types));
+		Set<EntityType> set = ImmutableSet.copyOf(types);
 		@SuppressWarnings("unchecked")
 		Set<T> filtered = (Set<T>) local.stream().filter(entity -> set.contains(entity.getEntityType()))
 				.collect(Collectors.toSet());
 		return ImmutableSet.copyOf(filtered);
+	}
+
+	/**
+	 * Gets the {@link Set} of {@link RegionCoordinates} of Regions that are
+	 * viewable from the specified {@link Position}.
+	 *
+	 * @return The Set of RegionCoordinates.
+	 */
+	public Set<RegionCoordinates> getSurrounding() {
+		int localX = coordinates.getX(), localY = coordinates.getY();
+		int maxX = localX + VIEWABLE_REGION_RADIUS, maxY = localY + VIEWABLE_REGION_RADIUS;
+
+		Set<RegionCoordinates> viewable = new HashSet<>();
+		for (int x = localX - VIEWABLE_REGION_RADIUS; x < maxX; x++) {
+			for (int y = localY - VIEWABLE_REGION_RADIUS; y < maxY; y++) {
+				viewable.add(new RegionCoordinates(x, y));
+			}
+		}
+
+		return viewable;
 	}
 
 	/**
