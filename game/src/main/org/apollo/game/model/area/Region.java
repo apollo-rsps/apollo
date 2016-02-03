@@ -2,11 +2,11 @@ package org.apollo.game.model.area;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -76,7 +76,7 @@ public final class Region {
 	/**
 	 * The Map of Positions to Entities in that Position.
 	 */
-	private final Map<Position, Set<Entity>> entities = new HashMap<>();
+	private final Map<Position, Set<Entity>> entities = new ConcurrentHashMap<>();
 
 	/**
 	 * A List of RegionListeners registered to this Region.
