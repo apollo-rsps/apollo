@@ -119,7 +119,7 @@ public final class GameService extends Service {
 	 *
 	 * @param player The player.
 	 */
-	public void finalizePlayerRegistration(Player player) {
+	public synchronized void finalizePlayerRegistration(Player player) {
 		world.register(player);
 		Region region = world.getRegionRepository().fromPosition(player.getPosition());
 		region.addEntity(player);
@@ -150,7 +150,7 @@ public final class GameService extends Service {
 	/**
 	 * Called every pulse.
 	 */
-	public void pulse() {
+	public synchronized void pulse() {
 		finalizeRegistrations();
 		finalizeUnregistrations();
 
