@@ -175,30 +175,27 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 * Removes a Mob from the repository.
 	 *
 	 * @param mob The Mob to remove.
-	 * @return {@code true} if the Mob was removed, {@code false} if not.
 	 */
-	public boolean remove(T mob) {
-		Preconditions.checkNotNull(mob);
-		return remove(mob.getIndex());
+	public void remove(T mob) {
+		Preconditions.checkNotNull(mob, "Mob may not be null.");
+		remove(mob.getIndex());
 	}
 
 	/**
 	 * Removes a Mob from the repository by the specified index.
 	 *
 	 * @param index The index of the Mob to remove.
-	 * @return {@code true} if the Mob at the specified index was removed otherwise {@code false}.
 	 */
-	public boolean remove(int index) {
+	private void remove(int index) {
 		Mob mob = get(index);
 
 		if (mob.getIndex() != index) {
-			return false;
+			throw new IllegalArgumentException("MobRepository index mismatch, cannot remove Mob.");
 		}
 
 		mobs[index - 1] = null;
 		mob.setIndex(-1);
 		size--;
-		return true;
 	}
 
 	/**
