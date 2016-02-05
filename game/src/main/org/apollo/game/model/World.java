@@ -309,13 +309,12 @@ public final class World {
 	 * @param npc The npc.
 	 */
 	public void unregister(final Npc npc) {
-		if (npcRepository.remove(npc)) {
-			Region region = regions.fromPosition(npc.getPosition());
+		Preconditions.checkNotNull(npc, "Npc may not be null.");
 
-			region.removeEntity(npc);
-		} else {
-			logger.warning("Could not find npc " + npc + " to unregister!");
-		}
+		Region region = regions.fromPosition(npc.getPosition());
+		region.removeEntity(npc);
+
+		npcRepository.remove(npc);
 	}
 
 	/**
@@ -324,15 +323,14 @@ public final class World {
 	 * @param player The player.
 	 */
 	public void unregister(final Player player) {
-		if (playerRepository.remove(player)) {
-			players.remove(NameUtil.encodeBase37(player.getUsername()));
-			logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
+		Preconditions.checkNotNull(player, "Player may not be null.");
+		players.remove(NameUtil.encodeBase37(player.getUsername()));
 
-			Region region = regions.fromPosition(player.getPosition());
-			region.removeEntity(player);
-		} else {
-			logger.warning("Could not find player " + player + " to unregister!");
-		}
+		Region region = regions.fromPosition(player.getPosition());
+		region.removeEntity(player);
+
+		playerRepository.remove(player);
+		logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
 	}
 
 	/**

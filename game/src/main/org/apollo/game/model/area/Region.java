@@ -18,6 +18,7 @@ import org.apollo.game.model.area.update.GroupableEntity;
 import org.apollo.game.model.area.update.UpdateOperation;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.EntityType;
+import org.apollo.game.model.entity.Mob;
 import org.apollo.game.model.entity.obj.DynamicGameObject;
 
 import com.google.common.base.MoreObjects;

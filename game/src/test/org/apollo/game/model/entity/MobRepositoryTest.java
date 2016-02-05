@@ -74,6 +74,15 @@ public final class MobRepositoryTest {
 	}
 
 	/**
+	 * Tests failing of {@link MobRepository#remove(Mob)}
+	 */
+	@Test(expected = NullPointerException.class)
+	public void testRemoveNull() {
+		MobRepository<Player> players = new MobRepository<>(CAPACITY);
+		players.remove(null);
+	}
+
+	/**
 	 * Ensures that a MobRepository maintains a fixed capacity.
 	 */
 	@Test
