@@ -3,9 +3,15 @@ package org.apollo.game.sync.task;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.apollo.game.message.impl.NpcSynchronizationMessage;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionCoordinates;
+import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.seg.AddNpcSegment;
@@ -70,7 +76,18 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 
 		int added = 0, count = locals.size();
 
-		for (Npc npc : player.getWorld().getNpcRepository()) {
+		RegionRepository repository = player.getWorld().getRegionRepository();
+		Region current = repository.fromPosition(playerPosition);
+
+		Set<RegionCoordinates> regions = current.getSurrounding();
+		regions.add(current.getCoordinates());
+
+		Stream<Npc> npcs = regions.stream().map(repository::get)
+				.flatMap(region -> region.getEntities(EntityType.NPC));
+
+		Iterator<Npc> iterator = npcs.iterator();
+
+		while (iterator.hasNext()) {
 			if (count >= MAXIMUM_LOCAL_NPCS) {
 				player.flagExcessiveNpcs();
 				break;
@@ -78,6 +95,7 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 				break;
 			}
 
+			Npc npc = iterator.next();
 			Position position = npc.getPosition();
 			if (position.isWithinDistance(playerPosition, distance) && !locals.contains(npc)) {
 				locals.add(npc);

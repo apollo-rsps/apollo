@@ -3,9 +3,15 @@ package org.apollo.game.sync.task;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionCoordinates;
+import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.ChatBlock;
@@ -86,7 +92,18 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 
 		int added = 0, count = localPlayers.size();
 
-		for (Player other : player.getWorld().getPlayerRepository()) {
+		RegionRepository repository = player.getWorld().getRegionRepository();
+		Region current = repository.fromPosition(position);
+
+		Set<RegionCoordinates> regions = current.getSurrounding();
+		regions.add(current.getCoordinates());
+
+		Stream<Player> players = regions.stream().map(repository::get)
+				.flatMap(region -> region.getEntities(EntityType.PLAYER));
+
+		Iterator<Player> iterator = players.iterator();
+
+		while (iterator.hasNext()) {
 			if (count >= MAXIMUM_LOCAL_PLAYERS) {
 				player.flagExcessivePlayers();
 				break;
@@ -94,6 +111,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 				break;
 			}
 
+			Player other = iterator.next();
 			Position local = other.getPosition();
 
 			if (other != player && local.isWithinDistance(position, distance) && !localPlayers.contains(other)) {
