@@ -3,6 +3,10 @@ Apollo
 
 Apollo is a high-performance, modular RuneScape emulator with a collection of utilities for managing data files and plugins.
 
+### Developer information
+
+Most discussion related to the development of Apollo happens on the IRC channel _#apollorsps_ on _irc.freenode.net_. If you have a problem and can't get in touch with anyone, create a GitHub issue. If making a pull request, please make sure all tests are still passing after making your changes, and that your code style is consistent with the rest of Apollo.
+
 ### Private server development today
 
 How are most servers private servers developed today? Typically, a user might download a server, read through tutorials, and apply their modifications or write their own code on top of it. Eventually, this server gets released and the process repeats, resulting in a complete mess of servers, all created from cobbled-together code.
