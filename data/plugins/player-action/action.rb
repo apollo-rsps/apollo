@@ -18,10 +18,10 @@ class PlayerAction
 
 end
 
-ATTACK_ACTION = PlayerAction.new(:third, true, 'Attack')
-CHALLENGE_ACTION = PlayerAction.new(:third, true, 'Challenge')
-TRADE_ACTION = PlayerAction.new(:fourth, true, 'Trade with')
-FOLLOW_ACTION = PlayerAction.new(:fifth, true, 'Follow')
+ATTACK_ACTION = PlayerAction.new(:second, true, 'Attack')
+CHALLENGE_ACTION = PlayerAction.new(:second, true, 'Challenge')
+FOLLOW_ACTION = PlayerAction.new(:fourth, true, 'Follow')
+TRADE_ACTION = PlayerAction.new(:fifth, true, 'Trade with')
 
 # Shows multiple context menu action for the specified player
 def show_actions(player, *actions)
