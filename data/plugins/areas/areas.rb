@@ -67,6 +67,14 @@ class Area
 
 end
 
+on :login do |event|
+  player = event.player
+
+  @areas.each do |area|
+    area.entered(player) if player.position.inside(area)
+  end
+end
+
 # Listen for the MobPositionUpdateEvent and update the area listeners if appropriate.
 on :mob_position_update do |event|
   mob = event.mob
