@@ -32,18 +32,18 @@ class AreaAction
   end
 
   # Called when the player has entered an area this action is registered to.
-  def entered(player)
-    @on_enter.call(player) unless @on_enter.nil?
+  def entered(player, position)
+    @on_enter.call(player, position) unless @on_enter.nil?
   end
 
   # Called while the player is in area this action is registered to.
-  def inside(player)
-    @while_in.call(player) unless @while_in.nil?
+  def inside(player, position)
+    @while_in.call(player, position) unless @while_in.nil?
   end
 
   # Called when the player has exited an area this action is registered to.
-  def exited(player)
-    @on_exit.call(player) unless @on_exit.nil?
+  def exited(player, position)
+    @on_exit.call(player, position) unless @on_exit.nil?
   end
 
 end
