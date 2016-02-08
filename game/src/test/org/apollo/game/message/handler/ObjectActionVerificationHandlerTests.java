@@ -28,7 +28,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({World.class, Player.class, ObjectDefinition.class, RegionRepository.class, Region.class})
-public class ObjectActionVerificationHandlerTest {
+public final class ObjectActionVerificationHandlerTests {
 
 	@Before
 	public void setupTestObjectDefinitions() {
@@ -37,7 +37,7 @@ public class ObjectActionVerificationHandlerTest {
 	}
 
 	@Test
-	public void testTerminateIfOutOfRange() throws Exception {
+	public void terminateIfOutOfRange() throws Exception {
 		Position playerPosition = new Position(3200, 3200);
 		Position objectPosition = new Position(3200, 3216);
 
@@ -64,8 +64,7 @@ public class ObjectActionVerificationHandlerTest {
 	}
 
 	@Test
-
-	public void testTerminateIfNoObject() throws Exception {
+	public void terminateIfNoObject() throws Exception {
 		Position playerPosition = new Position(3200, 3200);
 		Position objectPosition = new Position(3200, 3201);
 

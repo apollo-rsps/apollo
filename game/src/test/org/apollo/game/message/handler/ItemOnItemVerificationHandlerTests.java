@@ -19,11 +19,11 @@ import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Player.class, ItemDefinition.class})
-public class ItemOnItemVerificationHandlerTest {
+public final class ItemOnItemVerificationHandlerTests {
 
-	private World world = new World();
+	private final World world = new World();
 
-	private ItemOnItemVerificationHandler itemOnItemVerificationHandler = new ItemOnItemVerificationHandler(world);
+	private final ItemOnItemVerificationHandler itemOnItemVerificationHandler = new ItemOnItemVerificationHandler(world);
 
 	@Before
 	public void setupTestItemDefinitions() {
@@ -32,7 +32,7 @@ public class ItemOnItemVerificationHandlerTest {
 	}
 
 	@Test
-	public void testTerminateWithNoTargetItem() throws Exception {
+	public void terminateWithNoTargetItem() throws Exception {
 		Player player = mock(Player.class);
 		Inventory inventory = new Inventory(28);
 		inventory.set(1, new Item(4151, 1));

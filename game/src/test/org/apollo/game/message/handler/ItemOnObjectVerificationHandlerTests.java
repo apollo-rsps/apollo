@@ -30,7 +30,7 @@ import static org.powermock.api.mockito.PowerMockito.*;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Player.class, World.class, Region.class, RegionRepository.class, ObjectDefinition.class,
 		ItemDefinition.class})
-public class ItemOnObjectVerificationHandlerTest {
+public final class ItemOnObjectVerificationHandlerTests {
 
 	@Before
 	public void setupTestItemDefinitions() {
@@ -43,7 +43,7 @@ public class ItemOnObjectVerificationHandlerTest {
 
 
 	@Test
-	public void testTerminateIfInvalidItem() throws Exception {
+	public void terminateIfInvalidItem() throws Exception {
 		Position playerPosition = new Position(3200, 3200);
 		Position objectPosition = new Position(3200, 3216);
 
@@ -73,7 +73,7 @@ public class ItemOnObjectVerificationHandlerTest {
 	}
 
 	@Test
-	public void testTerminateIfInvalidSlot() throws Exception {
+	public void terminateIfInvalidSlot() throws Exception {
 		Position playerPosition = new Position(3200, 3200);
 		Position objectPosition = new Position(3200, 3200);
 
@@ -103,7 +103,7 @@ public class ItemOnObjectVerificationHandlerTest {
 	}
 
 	@Test
-	public void testTerminateIfObjectOutOfRange() throws Exception {
+	public void terminateIfObjectOutOfRange() throws Exception {
 		Position playerPosition = new Position(3200, 3200);
 		Position objectPosition = new Position(3200, 3200);
 

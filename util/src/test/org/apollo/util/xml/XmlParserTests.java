@@ -29,7 +29,7 @@ public final class XmlParserTests {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	@Test
-	public void testParseInputStream() throws SAXException, IOException {
+	public void parseInputStream() throws SAXException, IOException {
 		XmlParser parser = new XmlParser();
 		InputStream input = new ByteArrayInputStream("<root a='1' b='2' c='3'><z><y><x></x></y></z></root>".getBytes());
 		XmlNode root = parser.parse(input);
@@ -76,7 +76,7 @@ public final class XmlParserTests {
 	 * @throws IOException If an I/O error occurs.
 	 */
 	@Test
-	public void testParseReader() throws SAXException, IOException {
+	public void parseReader() throws SAXException, IOException {
 		XmlParser parser = new XmlParser();
 		Reader reader = new StringReader("<alphabet><a>1</a><b>2</b><c>3</c></alphabet>");
 		XmlNode root = parser.parse(reader);
