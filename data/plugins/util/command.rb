@@ -32,7 +32,7 @@ class Hash
 
 end
 
-# Monkey-patches Player to add a hash_level? method.
+# Monkey-patches Player to add a level? method.
 class Player
 
   # Returns whether or not the player's current level is greater than or equal to the specified
