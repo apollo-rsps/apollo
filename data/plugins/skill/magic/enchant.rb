@@ -8,7 +8,7 @@ ENCHANT_SPELLS = {}
 ENCHANT_ITEMS = {}
 
 RING_GFX = Graphic.new(238, 0, 100)
-RING_ANIM = Animation.new(713) # TODO: an alchemy animation for enchanting?
+RING_ANIM = Animation.new(931) 
 
 LOW_NECK_GFX = Graphic.new(114, 0, 100)
 LOW_NECK_ANIM = Animation.new(719)
