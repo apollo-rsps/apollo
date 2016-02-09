@@ -43,6 +43,17 @@ public final class AttributeDefinition<T> {
 	}
 
 	/**
+	 * Creates an AttributeDefinition for a {@code long}.
+	 *
+	 * @param defaultValue The default value of the definition.
+	 * @param persistence The {@link AttributePersistence} of the definition.
+	 * @return The AttributeDefinition.
+	 */
+	public static AttributeDefinition<Long> forLong(long defaultValue, AttributePersistence persistence) {
+		return new AttributeDefinition<>(defaultValue, persistence, AttributeType.LONG);
+	}
+
+	/**
 	 * Creates an AttributeDefinition for a String.
 	 *
 	 * @param defaultValue The default value of the definition.

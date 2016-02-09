@@ -1,6 +1,6 @@
 package org.apollo.game.model.entity.attr;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -31,11 +31,11 @@ public final class StringAttribute extends Attribute<String> {
 
 	@Override
 	public byte[] encode() {
-		byte[] bytes = value.getBytes(Charset.forName("UTF-8"));
+		byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
 		int length = bytes.length;
 
 		bytes = Arrays.copyOf(bytes, length + 1);
-		bytes[length - 1] = 0;
+		bytes[length] = 0;
 		return bytes;
 	}
 

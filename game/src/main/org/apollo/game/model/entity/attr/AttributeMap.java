@@ -113,7 +113,7 @@ public final class AttributeMap {
 	private <T> Attribute<?> createAttribute(T value, AttributeType type) {
 		switch (type) {
 			case LONG:
-				return new NumericalAttribute((Long) value);
+				return new NumericalAttribute(((Number) value).longValue());
 			case DOUBLE:
 				return new NumericalAttribute((Double) value);
 			case STRING:
