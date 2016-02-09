@@ -51,18 +51,18 @@ class Area
   end
 
   # Called when the player has entered the area.
-  def entered(player)
-    @actions.each { |action| action.entered(player) }
+  def entered(player, position)
+    @actions.each { |action| action.entered(player, position) }
   end
 
   # Called when the player has moved, but is still inside the area (and was in the area before).
-  def inside(player)
-    @actions.each { |action| action.inside(player) }
+  def inside(player, position)
+    @actions.each { |action| action.inside(player, position) }
   end
 
   # Called when the player has exited the area.
-  def exited(player)
-    @actions.each { |action| action.exited(player) }
+  def exited(player, position)
+    @actions.each { |action| action.exited(player, position) }
   end
 
 end
@@ -81,14 +81,15 @@ on :mob_position_update do |event|
   next unless mob.entity_type == EntityType::PLAYER
 
   old = mob.position
+  updated = event.next
   @areas.each do |area|
     was_inside = old.inside(area)
-    next_inside = event.next.inside(area)
+    next_inside = updated.inside(area)
 
     if was_inside
-      next_inside ? area.inside(mob) : area.exited(mob)
+      next_inside ? area.inside(mob, updated) : area.exited(mob, updated)
     else
-      area.entered(mob) if next_inside
+      area.entered(mob, updated) if next_inside
     end
   end
 end

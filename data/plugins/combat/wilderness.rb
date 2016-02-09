@@ -17,14 +17,14 @@ module WildernessConstants
 
 end
 
-# Determines the wilderness level for the specified player's position
-def wilderness_level(player)
-  ((player.position.y - 3520) / 8).ceil + 1
+# Determines the wilderness level for the specified position
+def wilderness_level(position)
+  ((position.y - 3520) / 8).ceil + 1
 end
 
 area_action :wilderness_level do
-  on_entry do |player|
-    player.wilderness_level = wilderness_level(player)
+  on_entry do |player, position|
+    player.wilderness_level = wilderness_level(position)
     player.interface_set.open_overlay(WildernessConstants::OVERLAY_INTERFACE_ID)
 
     id = WildernessConstants::LEVEL_STRING_ID
@@ -32,9 +32,9 @@ area_action :wilderness_level do
     show_action(player, ATTACK_ACTION)
   end
 
-  while_in do |player|
+  while_in do |player, position|
     current = player.wilderness_level
-    updated = wilderness_level(player)
+    updated = wilderness_level(position)
 
     if current != updated
       player.wilderness_level = updated
@@ -44,7 +44,7 @@ area_action :wilderness_level do
     end
   end
 
-  on_exit do |player|
+  on_exit do |player, position|
     player.wilderness_level = 0
     player.interface_set.close
 
