@@ -1,10 +1,10 @@
 package org.apollo.game.model;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 import org.apollo.Service;
@@ -99,7 +99,12 @@ public final class World {
 	/**
 	 * The Queue of Npcs that have yet to be added to the repository.
 	 */
-	private final Queue<Npc> queuedNpcs = new ConcurrentLinkedQueue<>();
+	private final Queue<Npc> queuedNpcs = new ArrayDeque<>();
+	
+	/**
+	 * The Queue of Npcs that have yet to be removed from the repository.
+	 */
+	private final Queue<Npc> oldNpcs = new ArrayDeque<>();
 
 	/**
 	 * This world's {@link RegionRepository}.
@@ -242,6 +247,7 @@ public final class World {
 	 * Pulses this World.
 	 */
 	public void pulse() {
+		unregisterNpcs();
 		registerNpcs();
 		scheduler.pulse();
 	}
@@ -311,10 +317,7 @@ public final class World {
 	public void unregister(final Npc npc) {
 		Preconditions.checkNotNull(npc, "Npc may not be null.");
 
-		Region region = regions.fromPosition(npc.getPosition());
-		region.removeEntity(npc);
-
-		npcRepository.remove(npc);
+		oldNpcs.add(npc);
 	}
 
 	/**
@@ -363,4 +366,19 @@ public final class World {
 			}
 		}
 	}
+
+	/**
+	 * Unregisters all of the {@link Npc}s in the {@link #oldNpcs queue}.
+	 */
+	private void unregisterNpcs() {
+		while (!oldNpcs.isEmpty()) {
+			Npc npc = oldNpcs.poll();
+			
+			Region region = regions.fromPosition(npc.getPosition());
+			region.removeEntity(npc);
+
+			npcRepository.remove(npc);
+		}
+	}
+
 }
