@@ -21,7 +21,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Player.class)
-public final class MobRepositoryTest {
+public final class MobRepositoryTests {
 
 	/**
 	 * The capacity of the MobRepository.
@@ -32,7 +32,7 @@ public final class MobRepositoryTest {
 	 * Tests {@link MobRepository#capacity()}.
 	 */
 	@Test
-	public void testCapacity() {
+	public void capacity() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		assertEquals(CAPACITY, players.capacity());
@@ -42,7 +42,7 @@ public final class MobRepositoryTest {
 	 * Tests {@link MobRepository#add(Mob)}.
 	 */
 	@Test
-	public void testAdd() {
+	public void add() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		Player player = mock(Player.class);
@@ -58,7 +58,7 @@ public final class MobRepositoryTest {
 	 * Tests {@link MobRepository#remove(Mob)}.
 	 */
 	@Test
-	public void testRemove() {
+	public void remove() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		Player player = mock(Player.class);
@@ -77,7 +77,7 @@ public final class MobRepositoryTest {
 	 * Tests failing of {@link MobRepository#remove(Mob)}
 	 */
 	@Test(expected = NullPointerException.class)
-	public void testRemoveNull() {
+	public void removeNull() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 		players.remove(null);
 	}
@@ -86,7 +86,7 @@ public final class MobRepositoryTest {
 	 * Ensures that a MobRepository maintains a fixed capacity.
 	 */
 	@Test
-	public void testCapacityExceeded() {
+	public void capacityExceeded() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		for (int index = 0; index < CAPACITY; index++) {
@@ -107,7 +107,7 @@ public final class MobRepositoryTest {
 	 * Tests {@link Iterator#hasNext()} for a MobRepository.
 	 */
 	@Test
-	public void testIteratorHasNext() {
+	public void iteratorHasNext() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		Player player = mock(Player.class);
@@ -123,7 +123,7 @@ public final class MobRepositoryTest {
 	 * Tests {@link Iterator#next()} for a MobRepository.
 	 */
 	@Test
-	public void testIteratorNext() {
+	public void iteratorNext() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		Player first = mock(Player.class);
@@ -148,7 +148,7 @@ public final class MobRepositoryTest {
 	 * Tests {@link Iterator#remove()} for a MobRepository.
 	 */
 	@Test
-	public void testIteratorRemove() {
+	public void iteratorRemove() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		Player first = mock(Player.class);
@@ -175,7 +175,7 @@ public final class MobRepositoryTest {
 	 * {@link NoSuchElementException} if the iterator contains no more elements.
 	 */
 	@Test(expected = NoSuchElementException.class)
-	public void testIteratorNextOverflow() {
+	public void iteratorNextOverflow() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		Player first = mock(Player.class);
@@ -201,7 +201,7 @@ public final class MobRepositoryTest {
 	 * next().
 	 */
 	@Test(expected = IllegalStateException.class)
-	public void testIteratorRemoveIllegalState() {
+	public void iteratorRemoveIllegalState() {
 		MobRepository<Player> players = new MobRepository<>(CAPACITY);
 
 		Player player = mock(Player.class);

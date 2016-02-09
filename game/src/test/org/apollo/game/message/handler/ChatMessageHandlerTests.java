@@ -15,13 +15,13 @@ import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Player.class})
-public class ChatMessageHandlerTest {
+public final class ChatMessageHandlerTests {
 
 	private final World world = new World();
 	private final ChatMessageHandler chatMessageHandler = new ChatMessageHandler(world);
 
 	@Test
-	public void testTerminatedIfMuted() throws Exception {
+	public void terminateIfMuted() throws Exception {
 		Player player = PowerMockito.mock(Player.class);
 
 		when(player.isMuted()).thenReturn(true);

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Graham
  */
-public class TestGamePacketEncoder {
+public class GamePacketEncoderTests {
 
 	/**
 	 * Tests the {@link GamePacketEncoder#encode} method.
@@ -21,7 +21,7 @@ public class TestGamePacketEncoder {
 	 * @throws Exception If an error occurs.
 	 */
 	@Test
-	public void testEncode() throws Exception {
+	public void encode() throws Exception {
 		// generates 243, 141, 34, -223, 121...
 		IsaacRandom random = new IsaacRandom(new int[] { 0, 0, 0, 0 });
 		GamePacketEncoder encoder = new GamePacketEncoder(random);
