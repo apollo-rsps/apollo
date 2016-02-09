@@ -1,6 +1,7 @@
 require 'java'
 
 java_import 'org.apollo.game.action.Action'
+java_import 'org.apollo.util.LanguageUtil'
 
 # A herb is an ingredient that requires identification before being used.
 class Herb < Ingredient
@@ -55,9 +56,10 @@ class HerbIdentificationAction < Action
       identified = @herb.item
 
       inventory.add(identified)
+      
+      article = LanguageUtil.getIndefiniteArticle(identified.definition.name)
       player.skill_set.add_experience(Skill::HERBLORE, @herb.experience)
-      player.send_message("You identify the herb as a #{identified.definition.name}.", true)
-      # TODO: 'as an' in some cases
+      player.send_message("This herb is #{article} #{identified.definition.name}.", true)
     end
 
     stop
@@ -77,7 +79,7 @@ end
 
 # Herbs
 
-GUAM_LEAF   = append_herb(249,  199,  1,  2.5) # 3,  2.5
+GUAM_LEAF   = append_herb(249,  199,  1,  2.5)
 MARRENTILL  = append_herb(251,  201,  5,  3.8)
 TARROMIN    = append_herb(253,  203,  11, 5)
 HARRALANDER = append_herb(255,  205,  20, 6.3)
