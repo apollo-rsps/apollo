@@ -11,8 +11,8 @@ java_import 'org.apollo.game.model.entity.Skill'
 TELEPORT_SPELLS = {}
 
 MODERN_TELE_ANIM = Animation.new(714)
-MODERN_TELE_END_ANIM = Animation.new(715)
-MODERN_TELE_GRAPHIC = Graphic.new(308, 15, 100)
+MODERN_TELE_END_ANIM = Animation.new(-1)
+MODERN_TELE_GRAPHIC = Graphic.new(111, 8, 100)
 
 ANCIENT_TELE_END_GRAPHIC = Graphic.new(455)
 ANCIENT_TELE_ANIM = Animation.new(1979)
@@ -45,10 +45,8 @@ class TeleportingAction < SpellAction
   def execute_modern
     if @pulses == 0
       mob.play_animation(MODERN_TELE_ANIM)
-    elsif @pulses == 1
       mob.play_graphic(MODERN_TELE_GRAPHIC)
-      set_delay(1)
-    elsif @pulses == 2
+    elsif @pulses == 3
       mob.stop_graphic
       mob.play_animation(MODERN_TELE_END_ANIM)
       mob.teleport(@spell.destination)
