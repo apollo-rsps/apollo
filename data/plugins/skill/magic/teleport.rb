@@ -11,8 +11,7 @@ java_import 'org.apollo.game.model.entity.Skill'
 TELEPORT_SPELLS = {}
 
 MODERN_TELE_ANIM = Animation.new(714)
-MODERN_TELE_END_ANIM = Animation.new(-1)
-MODERN_TELE_GRAPHIC = Graphic.new(111, 8, 100)
+MODERN_TELE_GRAPHIC = Graphic.new(111, 5, 100)
 
 ANCIENT_TELE_END_GRAPHIC = Graphic.new(455)
 ANCIENT_TELE_ANIM = Animation.new(1979)
@@ -48,7 +47,7 @@ class TeleportingAction < SpellAction
       mob.play_graphic(MODERN_TELE_GRAPHIC)
     elsif @pulses == 3
       mob.stop_graphic
-      mob.play_animation(MODERN_TELE_END_ANIM)
+      mob.stopAnimation()
       mob.teleport(@spell.destination)
       mob.skill_set.add_experience(Skill::MAGIC, @spell.experience)
       stop
