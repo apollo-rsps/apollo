@@ -1,7 +1,5 @@
 package org.apollo.game.release.r377;
 
-import java.util.Map;
-
 import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
 import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.Position;
@@ -11,9 +9,7 @@ import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;
 import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.MessageEncoder;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
+import org.apollo.net.release.Release;
 
 /**
  * A {@link MessageEncoder} for the {@link GroupedRegionUpdateMessage}.
@@ -23,17 +19,17 @@ import com.google.common.collect.ImmutableMap;
 public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<GroupedRegionUpdateMessage> {
 
 	/**
-	 * The Map of RegionUpdateMessages to MessageEncoders.
+	 * The Release containing the MessageEncoders for the RegionUpdateMessages.
 	 */
-	private final Map<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> encoders;
+	private final Release release;
 
 	/**
 	 * Creates the GroupedRegionUpdateMessageEncoder.
 	 *
-	 * @param encoders The Map of RegionUpdateMessages to MessageEncoders.
+	 * @param release The {@link Release} containing the {@link MessageEncoder}s for the {@link RegionUpdateMessage}s.
 	 */
-	public GroupedRegionUpdateMessageEncoder(Map<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> encoders) {
-		this.encoders = ImmutableMap.copyOf(encoders);
+	public GroupedRegionUpdateMessageEncoder(Release release) {
+		this.release = release;
 	}
 
 	@Override
@@ -46,9 +42,8 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 
 		for (RegionUpdateMessage update : message.getMessages()) {
 			@SuppressWarnings("unchecked")
-			MessageEncoder<RegionUpdateMessage> encoder = (MessageEncoder<RegionUpdateMessage>) encoders.get(update);
-
-			Preconditions.checkState(encoder != null, update.getClass() + " does not have a registered encoder in GroupedRegionUpdateMessageEncoder.");
+			MessageEncoder<RegionUpdateMessage> encoder = (MessageEncoder<RegionUpdateMessage>) release
+				.getMessageEncoder(update.getClass());
 
 			GamePacket packet = encoder.encode(update);
 			builder.put(DataType.BYTE, packet.getOpcode());

@@ -1,8 +1,5 @@
 package org.apollo.game.release.r377;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apollo.game.message.impl.ClearRegionMessage;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.ConfigMessage;
@@ -27,7 +24,6 @@ import org.apollo.game.message.impl.OpenSidebarMessage;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.message.impl.PrivacyOptionMessage;
 import org.apollo.game.message.impl.RegionChangeMessage;
-import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.message.impl.RemoveObjectMessage;
 import org.apollo.game.message.impl.RemoveTileItemMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
@@ -51,7 +47,6 @@ import org.apollo.game.message.impl.UpdateSlottedItemsMessage;
 import org.apollo.game.message.impl.UpdateTileItemMessage;
 import org.apollo.game.message.impl.UpdateWeightMessage;
 import org.apollo.net.meta.PacketMetaDataGroup;
-import org.apollo.net.release.MessageEncoder;
 import org.apollo.net.release.Release;
 
 /**
@@ -104,7 +99,6 @@ public final class Release377 extends Release {
 	 * Initialises this release by registering encoders and decoders.
 	 */
 	private void init() {
-		// register decoders
 		WalkMessageDecoder walkMessageDecoder = new WalkMessageDecoder();
 		register(213, walkMessageDecoder);
 		register(28, walkMessageDecoder);
@@ -174,7 +168,6 @@ public final class Release377 extends Release {
 		register(160, new RemoveIgnoreMessageDecoder());
 		register(227, new PrivateChatMessageDecoder());
 
-		// register encoders
 		register(IdAssignmentMessage.class, new IdAssignmentMessageEncoder());
 		register(RegionChangeMessage.class, new RegionChangeMessageEncoder());
 		register(ServerChatMessage.class, new ServerMessageMessageEncoder());
@@ -212,25 +205,7 @@ public final class Release377 extends Release {
 		register(SendObjectMessage.class, new SendObjectMessageEncoder());
 		register(RemoveObjectMessage.class, new RemoveObjectMessageEncoder());
 
-		Map<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> regionUpdates = new HashMap<>();
-
-		regionUpdates.put(SendPublicTileItemMessage.class, new AddGlobalTileItemMessageEncoder());
-		regionUpdates.put(SendTileItemMessage.class, new AddTileItemMessageEncoder());
-		regionUpdates.put(UpdateTileItemMessage.class, new UpdateTileItemMessageEncoder());
-		regionUpdates.put(RemoveTileItemMessage.class, new RemoveTileItemMessageEncoder());
-		regionUpdates.put(SendObjectMessage.class, new SendObjectMessageEncoder());
-		regionUpdates.put(RemoveObjectMessage.class, new RemoveObjectMessageEncoder());
-
-		for (Map.Entry<Class<? extends RegionUpdateMessage>, MessageEncoder<? extends RegionUpdateMessage>> entry : regionUpdates.entrySet()) {
-			@SuppressWarnings("unchecked")
-			Class<RegionUpdateMessage> clazz = (Class<RegionUpdateMessage>) entry.getKey();
-			@SuppressWarnings("unchecked")
-			MessageEncoder<RegionUpdateMessage> encoder = (MessageEncoder<RegionUpdateMessage>) entry.getValue();
-
-			register(clazz, encoder);
-		}
-
-		register(GroupedRegionUpdateMessage.class, new GroupedRegionUpdateMessageEncoder(regionUpdates));
+		register(GroupedRegionUpdateMessage.class, new GroupedRegionUpdateMessageEncoder(this));
 		register(ClearRegionMessage.class, new ClearRegionMessageEncoder());
 
 		register(ForwardPrivateChatMessage.class, new ForwardPrivateChatMessageEncoder());
