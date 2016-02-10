@@ -26,7 +26,7 @@ class SpellAction < Action
   attr_reader :spell, :pulses
 
   def initialize(mob, spell)
-    super(0, true, mob)
+    super(1, true, mob)
     @spell = spell
     @pulses = 0
   end
