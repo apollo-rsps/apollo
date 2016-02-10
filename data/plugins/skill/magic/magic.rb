@@ -31,9 +31,13 @@ class SpellAction < Action
     @pulses = 0
   end
 
+  def illegal_item?
+    false
+  end
+
   def execute
     if @pulses == 0
-      unless process_elements && check_skill
+      unless check_skill
         stop
         return
       end
@@ -42,8 +46,8 @@ class SpellAction < Action
         stop
         return false
       end
+      process_elements
     end
-
     execute_action
     @pulses += 1
   end
@@ -113,10 +117,6 @@ class ItemSpellAction < SpellAction
     super
   end
 
-  def illegal_item?
-    false
-  end
-
 end
 
 # Intercepts the magic on item message.
@@ -149,7 +149,6 @@ on :message, :button do |player, message|
   unless tele.nil?
     player.start_action(TeleportingAction.new(player, tele))
     message.terminate
-    return
   end
 
   conv = CONVERT_SPELLS[button]
