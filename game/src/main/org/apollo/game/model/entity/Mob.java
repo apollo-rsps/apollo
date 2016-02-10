@@ -1,10 +1,5 @@
 package org.apollo.game.model.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.apollo.cache.def.NpcDefinition;
 import org.apollo.game.action.Action;
 import org.apollo.game.model.Animation;
@@ -25,8 +20,13 @@ import org.apollo.game.sync.block.InteractingMobBlock;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 /**
- * A {@link Mob} is a living entity in the world, such as a player or npc.
+ * A living entity in the world, such as a player or npc.
  *
  * @author Graham
  * @author Major
@@ -39,30 +39,9 @@ public abstract class Mob extends Entity {
 	protected final AttributeMap attributes = new AttributeMap();
 
 	/**
-	 * This mob's set of synchronization blocks.
-	 */
-	protected transient SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
-
-	/**
-	 * This mob's npc definition. A player only uses this if they are appearing as an npc.
-	 */
-	protected Optional<NpcDefinition> definition;
-
-	/**
 	 * This mob's equipment.
 	 */
-	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY,
-			StackMode.STACK_ALWAYS);
-
-	/**
-	 * The index of this mob.
-	 */
-	protected int index = -1;
-
-	/**
-	 * The mob this mob is interacting with.
-	 */
-	protected Mob interactingMob;
+	protected final Inventory equipment = new Inventory(InventoryConstants.EQUIPMENT_CAPACITY, StackMode.STACK_ALWAYS);
 
 	/**
 	 * This mob's inventory.
@@ -77,52 +56,62 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's walking queue.
 	 */
-	protected final transient WalkingQueue walkingQueue = new WalkingQueue(this);
-
-	/**
-	 * This mob's current action.
-	 */
-	private transient Action<?> action;
-
-	/**
-	 * The position this mob is facing towards.
-	 */
-	private transient Position facingPosition = position;
-
-	/**
-	 * This mob's first movement direction.
-	 */
-	private transient Direction firstDirection = Direction.NONE;
+	protected final WalkingQueue walkingQueue = new WalkingQueue(this);
 
 	/**
 	 * This mob's list of local npcs.
 	 */
-	private final transient List<Npc> localNpcs = new ArrayList<>();
+	private final List<Npc> localNpcs = new ArrayList<>();
 
 	/**
 	 * This mob's list of local players.
 	 */
-	private final transient List<Player> localPlayers = new ArrayList<>();
+	private final List<Player> localPlayers = new ArrayList<>();
+
+	/**
+	 * This mob's set of synchronization blocks.
+	 */
+	protected SynchronizationBlockSet blockSet = new SynchronizationBlockSet();
+
+	/**
+	 * This mob's npc definition. A player only uses this if they are appearing as an npc.
+	 */
+	protected Optional<NpcDefinition> definition;
+
+	/**
+	 * The index of this mob.
+	 */
+	protected int index = -1;
+
+	/**
+	 * The mob this mob is interacting with.
+	 */
+	protected Mob interactingMob;
+
+	/**
+	 * This mob's current action.
+	 */
+	private Action<?> action;
+
+	/**
+	 * The position this mob is facing towards.
+	 */
+	private Position facingPosition = position;
+
+	/**
+	 * This mob's first movement direction.
+	 */
+	private Direction firstDirection = Direction.NONE;
 
 	/**
 	 * This mob's second movement direction.
 	 */
-	private transient Direction secondDirection = Direction.NONE;
+	private Direction secondDirection = Direction.NONE;
 
 	/**
 	 * Indicates whether this mob is currently teleporting or not.
 	 */
-	private transient boolean teleporting = false;
-
-	/**
-	 * Creates the Mob.
-	 *
-	 * @param world The {@link World} containing the Mob
-	 * @param position The {@link Position} of the Mob.
-	 */
-	public Mob(World world, Position position) {
-		this(world, position, null);
-	}
+	private boolean teleporting;
 
 	/**
 	 * Creates the Mob.
@@ -131,11 +120,21 @@ public abstract class Mob extends Entity {
 	 * @param position The {@link Position} of the Mob.
 	 * @param definition The {@link NpcDefinition} of the Mob.
 	 */
-	public Mob(World world, Position position, NpcDefinition definition) {
+	protected Mob(World world, Position position, NpcDefinition definition) {
 		super(world, position);
 		this.definition = Optional.ofNullable(definition);
 
 		init();
+	}
+
+	/**
+	 * Creates the Mob.
+	 *
+	 * @param world The {@link World} containing the Mob
+	 * @param position The {@link Position} of the Mob.
+	 */
+	protected Mob(World world, Position position) {
+		this(world, position, null);
 	}
 
 	/**
@@ -197,8 +196,8 @@ public abstract class Mob extends Entity {
 	 */
 	public final Direction[] getDirections() {
 		if (firstDirection != Direction.NONE) {
-			return secondDirection == Direction.NONE ? new Direction[] { firstDirection }
-					: new Direction[] { firstDirection, secondDirection };
+			return secondDirection == Direction.NONE ? new Direction[]{ firstDirection }
+				: new Direction[]{ firstDirection, secondDirection };
 		}
 
 		return Direction.EMPTY_DIRECTION_ARRAY;
