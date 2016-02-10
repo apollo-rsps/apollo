@@ -81,7 +81,7 @@ class SpellAction < Action
   end
 
   def equals(other)
-    get_class == other.get_class && @spell == other.spell
+    get_class == other.get_class
   end
 
 end
