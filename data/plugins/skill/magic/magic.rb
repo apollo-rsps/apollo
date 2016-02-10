@@ -31,9 +31,13 @@ class SpellAction < Action
     @pulses = 0
   end
 
+  def illegal_item?
+    false
+  end
+
   def execute
     if @pulses == 0
-      unless process_elements && check_skill
+      unless check_skill
         stop
         return
       end
@@ -43,7 +47,7 @@ class SpellAction < Action
         return false
       end
     end
-
+    process_elements
     execute_action
     @pulses += 1
   end
@@ -58,7 +62,7 @@ class SpellAction < Action
       mob.send_message("You need a Magic level of at least #{required} to cast this spell.")
       return false
     end
-
+    
     true
   end
 
@@ -79,7 +83,6 @@ class SpellAction < Action
   def equals(other)
     get_class == other.get_class && @spell == other.spell
   end
-
 end
 
 # A `SpellAction` that verifies an input `Item` is legal.
@@ -107,14 +110,9 @@ class ItemSpellAction < SpellAction
           end
         end
       end
-
     end
 
     super
-  end
-
-  def illegal_item?
-    false
   end
 
 end
@@ -149,7 +147,6 @@ on :message, :button do |player, message|
   unless tele.nil?
     player.start_action(TeleportingAction.new(player, tele))
     message.terminate
-    return
   end
 
   conv = CONVERT_SPELLS[button]
