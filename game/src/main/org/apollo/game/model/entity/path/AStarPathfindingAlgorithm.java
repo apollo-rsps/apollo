@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.RegionRepository;
 
@@ -73,7 +74,8 @@ public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 					}
 
 					Position adjacent = new Position(nextX, nextY);
-					if (traversable(adjacent)) {
+					Direction direction = Direction.between(adjacent, position);
+					if (traversable(adjacent, direction)) {
 						Node node = nodes.computeIfAbsent(adjacent, Node::new);
 						compare(active, node, open, sorted, heuristic);
 					}
