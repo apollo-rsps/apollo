@@ -183,11 +183,13 @@ public final class Release377 extends Release {
 		register(EnterAmountMessage.class, new EnterAmountMessageEncoder());
 		register(SetWidgetTextMessage.class, new SetWidgetTextMessageEncoder());
 		register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
+
 		register(SetWidgetVisibilityMessage.class, new SetWidgetVisibilityMessageEncoder());
 		register(SetWidgetItemModelMessage.class, new SetWidgetItemModelMessageEncoder());
 		register(SetWidgetNpcModelMessage.class, new SetWidgetNpcModelMessageEncoder());
 		register(SetWidgetPlayerModelMessage.class, new SetWidgetPlayerModelMessageEncoder());
 		register(SetWidgetModelAnimationMessage.class, new SetWidgetModelAnimationMessageEncoder());
+
 		register(ConfigMessage.class, new ConfigMessageEncoder());
 		register(DisplayTabInterfaceMessage.class, new DisplayTabInterfaceMessageEncoder());
 		register(SetUpdatedRegionMessage.class, new SetUpdatedRegionMessageEncoder());

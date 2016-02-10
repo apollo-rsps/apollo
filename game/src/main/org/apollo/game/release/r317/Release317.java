@@ -35,6 +35,7 @@ import org.apollo.game.message.impl.SetPlayerActionMessage;
 import org.apollo.game.message.impl.SetUpdatedRegionMessage;
 import org.apollo.game.message.impl.SetWidgetItemModelMessage;
 import org.apollo.game.message.impl.SetWidgetModelAnimationMessage;
+import org.apollo.game.message.impl.SetWidgetModelMessage;
 import org.apollo.game.message.impl.SetWidgetNpcModelMessage;
 import org.apollo.game.message.impl.SetWidgetPlayerModelMessage;
 import org.apollo.game.message.impl.SetWidgetTextMessage;
@@ -189,11 +190,14 @@ public final class Release317 extends Release {
 		register(EnterAmountMessage.class, new EnterAmountMessageEncoder());
 		register(SetWidgetTextMessage.class, new SetWidgetTextMessageEncoder());
 		register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
+
 		register(SetWidgetVisibilityMessage.class, new SetWidgetVisibilityMessageEncoder());
 		register(SetWidgetItemModelMessage.class, new SetWidgetItemModelMessageEncoder());
 		register(SetWidgetNpcModelMessage.class, new SetWidgetNpcModelMessageEncoder());
 		register(SetWidgetPlayerModelMessage.class, new SetWidgetPlayerModelMessageEncoder());
 		register(SetWidgetModelAnimationMessage.class, new SetWidgetModelAnimationMessageEncoder());
+		register(SetWidgetModelMessage.class, new SetWidgetModelMessageEncoder());
+
 		register(ConfigMessage.class, new ConfigMessageEncoder());
 		register(DisplayTabInterfaceMessage.class, new DisplayTabInterfaceMessageEncoder());
 		register(SetUpdatedRegionMessage.class, new SetUpdatedRegionMessageEncoder());
