@@ -107,7 +107,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 			return "text/plain";
 		}
 
-		return "application/octect-stream";
+		return "application/octet-stream";
 	}
 
 	@Override
