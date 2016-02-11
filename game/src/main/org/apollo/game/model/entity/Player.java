@@ -144,11 +144,6 @@ public final class Player extends Mob {
 	private boolean excessivePlayers;
 
 	/**
-	 * Indicates whether this player has the message filter enabled.
-	 */
-	private boolean filteringMessages;
-
-	/**
 	 * The privacy state of this player's private chat.
 	 */
 	private PrivacyState friendPrivacy = PrivacyState.ON;
@@ -653,15 +648,6 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Indicates whether the message filter is enabled.
-	 *
-	 * @return {@code true} if the filter is enabled, otherwise {@code false}.
-	 */
-	public boolean messageFilterEnabled() {
-		return filteringMessages;
-	}
-
-	/**
 	 * Opens this player's bank.
 	 */
 	public void openBank() {
@@ -768,24 +754,12 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sends a message to the player.
+	 * Sends the specified chat message to the player.
 	 *
-	 * @param message The message.
+	 * @param message The message to send.
 	 */
 	public void sendMessage(String message) {
-		sendMessage(message, false);
-	}
-
-	/**
-	 * Sends a message to the player.
-	 *
-	 * @param message The message.
-	 * @param filterable Whether or not the message can be filtered.
-	 */
-	public void sendMessage(String message, boolean filterable) {
-		if (!filterable || !filteringMessages) {
-			send(new ServerChatMessage(message));
-		}
+		send(new ServerChatMessage(message));
 	}
 
 	/**
@@ -982,15 +956,6 @@ public final class Player extends Mob {
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
 			.toString();
-	}
-
-	/**
-	 * Toggles the message filter.
-	 *
-	 * @return The new value of the filter.
-	 */
-	public boolean toggleMessageFilter() {
-		return filteringMessages = !filteringMessages;
 	}
 
 	/**

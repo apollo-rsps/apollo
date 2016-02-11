@@ -33,7 +33,7 @@ class MiningAction < DistancedAction
   # the ore
   def start_mine(pickaxe)
     @started = true
-    mob.send_message('You swing your pick at the rock.', true)
+    mob.send_message('You swing your pick at the rock.')
     mob.play_animation(pickaxe.animation)
     @counter = pickaxe.pulses
   end
@@ -67,7 +67,7 @@ class MiningAction < DistancedAction
         if mob.inventory.add(ore.id)
           name = name_of(@ore.id).sub(/ ore$/, '').downcase
 
-          mob.send_message("You manage to mine some #{name}.", true)
+          mob.send_message("You manage to mine some #{name}.")
           skills.add_experience(Skill::MINING, ore.exp)
           # TODO: expire the rock
         end

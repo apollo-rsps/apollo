@@ -27,7 +27,7 @@ class FishingAction < DistancedAction
   # Starts the fishing process.
   def start_fishing
     @started = true
-    mob.send_message(tool.message, true)
+    mob.send_message(tool.message)
   end
 
   # Executes the action.
@@ -72,7 +72,7 @@ class FishingAction < DistancedAction
         inventory.add(fish.id)
 
         name = fish.name
-        mob.send_message("You catch #{name.end_with?('s') ? 'some' : 'a'} #{name.downcase}.", true)
+        mob.send_message("You catch #{name.end_with?('s') ? 'some' : 'a'} #{name.downcase}.")
         skills.add_experience(Skill::FISHING, fish.experience)
 
         if find_bait == -1

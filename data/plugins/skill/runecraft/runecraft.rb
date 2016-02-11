@@ -44,7 +44,7 @@ class RunecraftingAction < DistancedAction
       inventory.add(@rune.id, added)
 
       name = added > 1 ? 'some ' + @rune.name + 's' : 'an ' + @rune.name
-      @player.send_message("Your craft the rune essence into #{name}.", true)
+      @player.send_message("You craft the rune essence into #{name}.")
 
       @player.skill_set.add_experience(Skill::RUNECRAFT, removed * @rune.experience)
       stop

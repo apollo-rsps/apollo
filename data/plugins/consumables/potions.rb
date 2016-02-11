@@ -30,12 +30,12 @@ class Potion < Consumable
 
     if index != @doses.length # Consumable removes the old potion for us, so don't do it here.
       player.inventory.add(@doses[index])
-      player.send_message("You drink some of your #{name} potion.", true)
+      player.send_message("You drink some of your #{name} potion.")
 
       remaining = "You have #{@doses.length - index} dose#{'s' unless index == 3} of potion left."
-      player.send_message(remaining, true)
+      player.send_message(remaining)
     else
-      player.send_message('You drink the last of your potion.', true)
+      player.send_message('You drink the last of your potion.')
       player.inventory.add(Constants::EMPTY_VIAL_ID)
     end
 

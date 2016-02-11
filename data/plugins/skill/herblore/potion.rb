@@ -227,7 +227,7 @@ class UnfinishedMixingAction < MixingAction
 
     created = name.sub(/ leaf$/, '')
     message = "You put the #{name} in the water to make an unfinished #{created} potion."
-    player.send_message(message, true)
+    player.send_message(message)
 
     @slots.each do |slot, amount|
       unless inventory.remove_slot(slot, amount)
@@ -279,7 +279,7 @@ class FinishedMixingAction < MixingAction
     ingredient = name_of(@ingredient).downcase
     name = @potion.item.definition.name.sub('(3)', '')
 
-    player.send_message("You add the #{ingredient} to the mixture to make an #{name}.", true)
+    player.send_message("You add the #{ingredient} to the mixture to make an #{name}.")
     player.skill_set.add_experience(HERBLORE_SKILL_ID, @potion.experience)
 
     inventory = player.inventory

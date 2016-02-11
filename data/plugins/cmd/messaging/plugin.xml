@@ -9,7 +9,6 @@
     <author>xEliqa</author>
   </authors>
   <scripts>
-    <script>filter.rb</script>
     <script>broadcast.rb</script>
   </scripts>
   <dependencies />

@@ -56,10 +56,10 @@ class HerbIdentificationAction < Action
       identified = @herb.item
 
       inventory.add(identified)
-      
+
       article = LanguageUtil.getIndefiniteArticle(identified.definition.name)
       player.skill_set.add_experience(Skill::HERBLORE, @herb.experience)
-      player.send_message("This herb is #{article} #{identified.definition.name}.", true)
+      player.send_message("This herb is #{article} #{identified.definition.name}.")
     end
 
     stop

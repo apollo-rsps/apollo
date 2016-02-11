@@ -27,8 +27,8 @@ class Food < Consumable
 
     player.inventory.add(@replace) unless @replace == -1
 
-    player.send_message("You eat the #{name}.", true)
-    player.send_message('It heals some health.', true) if new_curr > hitpoints_current
+    player.send_message("You eat the #{name}.")
+    player.send_message('It heals some health.') if new_curr > hitpoints_current
 
     skill = Skill.new(hitpoints.experience, new_curr, hitpoints.maximum_level)
     player.skill_set.set_skill(Skill::HITPOINTS, skill)

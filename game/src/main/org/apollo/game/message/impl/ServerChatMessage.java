@@ -10,31 +10,21 @@ import org.apollo.net.message.Message;
 public final class ServerChatMessage extends Message {
 
 	/**
-	 * The chat message.
+	 * The message to send.
 	 */
 	private final String message;
 
 	/**
-	 * Creates a server chat message.
+	 * Creates the ServerChatMessage.
 	 *
-	 * @param message The chat message.
+	 * @param message The chat message to send.
 	 */
 	public ServerChatMessage(String message) {
-		this(message, false);
+		this.message = message;
 	}
 
 	/**
-	 * Creates a server chat message.
-	 *
-	 * @param message The chat message.
-	 * @param filterable Whether or not the message can be filtered.
-	 */
-	public ServerChatMessage(String message, boolean filterable) {
-		this.message = message + (filterable ? ":filterable:" : "");
-	}
-
-	/**
-	 * Gets the chat message.
+	 * Gets the chat message to send.
 	 *
 	 * @return The chat message.
 	 */

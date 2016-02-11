@@ -153,7 +153,7 @@ class GrindingAction < Action
       item = inventory.get(@slot)
 
       name = item.definition.name.downcase
-      player.send_message("You grind the #{name} to dust.", true)
+      player.send_message("You grind the #{name} to dust.")
 
       inventory.reset(@slot)
       inventory.add(@ingredient.item)

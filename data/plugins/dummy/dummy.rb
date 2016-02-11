@@ -35,7 +35,7 @@ class DummyAction < DistancedAction
     else
       @started = true
 
-      mob.send_message('You hit the dummy.', true)
+      mob.send_message('You hit the dummy.')
       mob.turn_to(position)
       mob.play_animation(PUNCH_ANIMATION)
     end
