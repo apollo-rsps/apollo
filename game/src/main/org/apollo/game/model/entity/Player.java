@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.game.message.impl.IdAssignmentMessage;
 import org.apollo.game.message.impl.IgnoreListMessage;
@@ -49,14 +51,9 @@ import org.apollo.game.model.skill.LevelUpSkillListener;
 import org.apollo.game.model.skill.SynchronizationSkillListener;
 import org.apollo.game.session.GameSession;
 import org.apollo.game.sync.block.SynchronizationBlock;
-import org.apollo.game.sync.block.SynchronizationBlockSet;
 import org.apollo.net.message.Message;
 import org.apollo.util.CollectionUtil;
-import org.apollo.util.Point;
 import org.apollo.util.security.PlayerCredentials;
-
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 
 /**
  * A {@link Mob} that a user is controlling.
@@ -65,6 +62,11 @@ import com.google.common.base.Preconditions;
  * @author Major
  */
 public final class Player extends Mob {
+
+	/**
+	 * The current amount of appearance tickets.
+	 */
+	private static final AtomicInteger appearanceTicketCounter = new AtomicInteger(0);
 
 	static {
 		// TODO this should be a time rather than a flag
@@ -75,9 +77,16 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * The current amount of appearance tickets.
+	 * Generates the next appearance ticket.
+	 *
+	 * @return The next available appearance ticket.
 	 */
-	private static final AtomicInteger appearanceTicketCounter = new AtomicInteger(0);
+	private static int nextAppearanceTicket() {
+		if (appearanceTicketCounter.incrementAndGet() == 0) {
+			appearanceTicketCounter.set(1);
+		}
+		return appearanceTicketCounter.get();
+	}
 
 	/**
 	 * This appearance tickets for this Player.
@@ -115,29 +124,29 @@ public final class Player extends Mob {
 	private Appearance appearance = Appearance.DEFAULT_APPEARANCE;
 
 	/**
+	 * This Players appearance ticket.
+	 */
+	private int appearanceTicket = nextAppearanceTicket();
+
+	/**
 	 * The privacy state of this player's public chat.
 	 */
 	private PrivacyState chatPrivacy = PrivacyState.ON;
 
 	/**
-	 * A deque of this player's mouse clicks.
-	 */
-	private Deque<Point> clicks = new ArrayDeque<>();
-
-	/**
 	 * A flag which indicates there are npcs that couldn't be added.
 	 */
-	private boolean excessiveNpcs = false;
+	private boolean excessiveNpcs;
 
 	/**
 	 * A flag which indicates there are players that couldn't be added.
 	 */
-	private boolean excessivePlayers = false;
+	private boolean excessivePlayers;
 
 	/**
 	 * Indicates whether this player has the message filter enabled.
 	 */
-	private boolean filteringMessages = false;
+	private boolean filteringMessages;
 
 	/**
 	 * The privacy state of this player's private chat.
@@ -157,7 +166,7 @@ public final class Player extends Mob {
 	/**
 	 * Whether or not the player is skulled.
 	 */
-	private boolean isSkulled = false;
+	private boolean isSkulled;
 
 	/**
 	 * The centre of the last region the client has loaded.
@@ -182,12 +191,12 @@ public final class Player extends Mob {
 	/**
 	 * A flag indicating if the region changed in the last cycle.
 	 */
-	private boolean regionChanged = false;
+	private boolean regionChanged;
 
 	/**
 	 * A flag indicating if this player is running.
 	 */
-	private boolean running = false;
+	private boolean running;
 
 	/**
 	 * The brightness of this player's screen.
@@ -195,7 +204,7 @@ public final class Player extends Mob {
 	private ScreenBrightness screenBrightness = ScreenBrightness.NORMAL;
 
 	/**
-	 * The {@link GameSession} currently attached to this {@link Player}.
+	 * The {@link GameSession} currently attached to this Player.
 	 */
 	private GameSession session;
 
@@ -205,24 +214,19 @@ public final class Player extends Mob {
 	private PrivacyState tradePrivacy = PrivacyState.ON;
 
 	/**
-	 * The current maximum viewing distance of this player.
+	 * The current maximum viewing distance of this Player.
 	 */
 	private int viewingDistance = 1;
 
 	/**
 	 * A flag indicating if the player is withdrawing items as notes.
 	 */
-	private boolean withdrawingNotes = false;
+	private boolean withdrawingNotes;
 
 	/**
-	 * The id of the world this player is in.
+	 * The world id of this Player.
 	 */
 	private int worldId = 1;
-
-	/**
-	 * This Players appearance ticket.
-	 */
-	private int appearanceTicket = nextAppearanceTicket();
 
 	/**
 	 * Creates the Player.
@@ -236,17 +240,6 @@ public final class Player extends Mob {
 		this.credentials = credentials;
 
 		init();
-	}
-
-	/**
-	 * Adds a click, represented by a {@link Point}, to the {@link List} of
-	 * clicks.
-	 *
-	 * @param point The point.
-	 * @return {@code true} if the point was added successfully.
-	 */
-	public boolean addClick(Point point) {
-		return clicks.add(point);
 	}
 
 	/**
@@ -333,6 +326,24 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Gets this Players appearance ticket.
+	 *
+	 * @return This Players appearance ticket.
+	 */
+	public int getAppearanceTicket() {
+		return appearanceTicket;
+	}
+
+	/**
+	 * Gets all of this Players appearance tickets.
+	 *
+	 * @return All of this Players appearance tickets.
+	 */
+	public int[] getAppearanceTickets() {
+		return appearanceTickets;
+	}
+
+	/**
 	 * Gets the mob's bank.
 	 *
 	 * @return The bank.
@@ -348,15 +359,6 @@ public final class Player extends Mob {
 	 */
 	public PrivacyState getChatPrivacy() {
 		return chatPrivacy;
-	}
-
-	/**
-	 * Gets the {@link Deque} of clicks.
-	 *
-	 * @return The deque.
-	 */
-	public Deque<Point> getClicks() {
-		return clicks;
 	}
 
 	/**
@@ -411,7 +413,7 @@ public final class Player extends Mob {
 
 	@Override
 	public int getInteractionIndex() {
-		return getIndex() | 0x8000;
+		return getIndex() | 0x8000; // TODO magic constant
 	}
 
 	/**
@@ -421,15 +423,6 @@ public final class Player extends Mob {
 	 */
 	public InterfaceSet getInterfaceSet() {
 		return interfaceSet;
-	}
-
-	/**
-	 * Gets this player's last click, represented by a {@link Point}.
-	 *
-	 * @return The click.
-	 */
-	public Point getLastClick() {
-		return clicks.pollLast();
 	}
 
 	/**
@@ -468,6 +461,7 @@ public final class Player extends Mob {
 	public PrivilegeLevel getPrivilegeLevel() {
 		return privilegeLevel;
 	}
+
 	/**
 	 * Gets the player's run energy.
 	 *
@@ -476,22 +470,6 @@ public final class Player extends Mob {
 	public int getRunEnergy() {
 		Attribute<Integer> energy = attributes.get("run_energy");
 		return energy.getValue();
-	}
-
-	/**
-	 * Returns if this player is banned or not.
-	 */
-	public boolean isBanned() {
-		Attribute<Boolean> banned = attributes.get("banned");
-		return banned.getValue();
-	}
-
-	/**
-	 * Returns if this player is muted or not.
-	 */
-	public boolean isMuted() {
-		Attribute<Boolean> muted = attributes.get("muted");
-		return muted.getValue();
 	}
 
 	/**
@@ -593,6 +571,14 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Returns if this player is banned or not.
+	 */
+	public boolean isBanned() {
+		Attribute<Boolean> banned = attributes.get("banned");
+		return banned.getValue();
+	}
+
+	/**
 	 * Checks if there are excessive npcs.
 	 *
 	 * @return {@code true} if so, {@code false} if not.
@@ -617,6 +603,14 @@ public final class Player extends Mob {
 	 */
 	public boolean isMembers() {
 		return members == MembershipStatus.PAID;
+	}
+
+	/**
+	 * Returns if this player is muted or not.
+	 */
+	public boolean isMuted() {
+		Attribute<Boolean> muted = attributes.get("muted");
+		return muted.getValue();
 	}
 
 	/**
@@ -656,36 +650,6 @@ public final class Player extends Mob {
 		}
 
 		localObjects.forEach(object -> object.removeFrom(this));
-	}
-
-	/**
-	 * Generates the next appearance ticket.
-	 * 
-	 * @return The next available appearance ticket.
-	 */
-	private static int nextAppearanceTicket() {
-		if (appearanceTicketCounter.incrementAndGet() == 0) {
-			appearanceTicketCounter.set(1);
-		}
-		return appearanceTicketCounter.get();
-	}
-
-	/**
-	 * Gets all of this Players appearance tickets.
-	 * 
-	 * @return All of this Players appearance tickets.
-	 */
-	public int[] getAppearanceTickets() {
-		return appearanceTickets;
-	}
-
-	/**
-	 * Gets this Players appearance ticket.
-	 * 
-	 * @return This Players appearance ticket.
-	 */
-	public int getAppearanceTicket() {
-		return appearanceTicket;
 	}
 
 	/**
@@ -843,7 +807,7 @@ public final class Player extends Mob {
 	 * Sends the friend and ignore user lists.
 	 */
 	public void sendUserLists() {
-		if (ignores.size() > 0) {
+		if (!ignores.isEmpty()) {
 			send(new IgnoreListMessage(ignores));
 		}
 
@@ -938,7 +902,7 @@ public final class Player extends Mob {
 	/**
 	 * Sets the region changed flag.
 	 *
-	 * @param regionChanged A flag indicating if the region has changed.
+	 * @param regionChanged Whether or not the region has changed.
 	 */
 	public void setRegionChanged(boolean regionChanged) {
 		this.regionChanged = regionChanged;
@@ -1008,6 +972,7 @@ public final class Player extends Mob {
 	@Override
 	public void teleport(Position position) {
 		super.teleport(position);
+
 		if (interfaceSet.size() > 0) {
 			interfaceSet.close();
 		}
@@ -1015,7 +980,8 @@ public final class Player extends Mob {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel).toString();
+		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
+			.toString();
 	}
 
 	/**
@@ -1037,6 +1003,14 @@ public final class Player extends Mob {
 	}
 
 	/**
+	 * Updates the appearance for this Player.
+	 */
+	public void updateAppearance() {
+		appearanceTicket = nextAppearanceTicket();
+		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
+	}
+
+	/**
 	 * Initialises this player.
 	 */
 	private void init() {
@@ -1048,20 +1022,22 @@ public final class Player extends Mob {
 	 * Initialises the player's inventories.
 	 */
 	private void initInventories() {
-		InventoryListener fullInventoryListener = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
-		InventoryListener fullBankListener = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
-		InventoryListener appearanceListener = new AppearanceInventoryListener(this);
+		InventoryListener fullInventory = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
+		InventoryListener fullBank = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
+		InventoryListener appearance = new AppearanceInventoryListener(this);
 
-		InventoryListener syncInventoryListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.INVENTORY_ID);
-		InventoryListener syncBankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
-		InventoryListener syncEquipmentListener = new SynchronizationInventoryListener(this, SynchronizationInventoryListener.EQUIPMENT_ID);
+		InventoryListener syncInventory = new SynchronizationInventoryListener(this,
+			SynchronizationInventoryListener.INVENTORY_ID);
+		InventoryListener syncBank = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
+		InventoryListener syncEquipment = new SynchronizationInventoryListener(this,
+			SynchronizationInventoryListener.EQUIPMENT_ID);
 
-		inventory.addListener(syncInventoryListener);
-		inventory.addListener(fullInventoryListener);
-		bank.addListener(syncBankListener);
-		bank.addListener(fullBankListener);
-		equipment.addListener(syncEquipmentListener);
-		equipment.addListener(appearanceListener);
+		inventory.addListener(syncInventory);
+		inventory.addListener(fullInventory);
+		bank.addListener(syncBank);
+		bank.addListener(fullBank);
+		equipment.addListener(syncEquipment);
+		equipment.addListener(appearance);
 	}
 
 	/**
@@ -1070,14 +1046,6 @@ public final class Player extends Mob {
 	private void initSkills() {
 		skillSet.addListener(new SynchronizationSkillListener(this));
 		skillSet.addListener(new LevelUpSkillListener(this));
-	}
-
-	/**
-	 * Updates the appearance for this Player.
-	 */
-	public void updateAppearance() {
-		appearanceTicket = nextAppearanceTicket();
-		blockSet.add(SynchronizationBlock.createAppearanceBlock(this));
 	}
 
 }
