@@ -1,5 +1,6 @@
 package org.apollo;
 
+import java.io.IOException;
 import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -8,6 +9,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.common.base.Stopwatch;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.game.model.World;
 import org.apollo.game.plugin.PluginContext;
@@ -19,15 +27,6 @@ import org.apollo.net.JagGrabChannelInitializer;
 import org.apollo.net.NetworkConstants;
 import org.apollo.net.ServiceChannelInitializer;
 import org.apollo.net.release.Release;
-
-import com.google.common.base.Stopwatch;
-
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
  * The core class of the Apollo server.
@@ -101,15 +100,15 @@ public final class Server {
 	 * @param jaggrab The JAGGRAB address to bind to.
 	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress.
 	 */
-	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) throws BindException {
+	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) throws IOException {
 		logger.fine("Binding service listener to address: " + service + "...");
 		bind(serviceBootstrap, service);
 
 		try {
 			logger.fine("Binding HTTP listener to address: " + http + "...");
 			bind(httpBootstrap, http);
-		} catch (Exception cause) {
-			logger.warning("Unable to bind to HTTP, JAGGRAB will be used as a fallback however this is not recommended.");
+		} catch (IOException cause) {
+			logger.log(Level.WARNING, "Unable to bind to HTTP - JAGGRAB will be used as a fallback.", cause);
 		}
 
 		logger.fine("Binding JAGGRAB listener to address: " + jaggrab + "...");
@@ -164,13 +163,13 @@ public final class Server {
 	 *
 	 * @param bootstrap The ServerBootstrap.
 	 * @param address The SocketAddress.
-	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress.
+	 * @throws IOException If the ServerBootstrap fails to bind to the SocketAddress.
 	 */
-	private void bind(ServerBootstrap bootstrap, SocketAddress address) throws BindException {
+	private void bind(ServerBootstrap bootstrap, SocketAddress address) throws IOException {
 		try {
 			bootstrap.bind(address).sync();
 		} catch (Exception cause) {
-			throw new BindException("Failed to bind to: " + address);
+			throw new IOException("Failed to bind to " + address, cause);
 		}
 	}
 
