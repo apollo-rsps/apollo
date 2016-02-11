@@ -58,13 +58,18 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		Position old = player.getPosition();
 		player.getWalkingQueue().pulse();
 
+		boolean local = true;
+
 		if (player.isTeleporting()) {
 			player.resetViewingDistance();
+			local = false;
 		}
 
 		Position position = player.getPosition();
+
 		if (!player.hasLastKnownRegion() || isRegionUpdateRequired()) {
 			player.setRegionChanged(true);
+			local = false;
 
 			player.setLastKnownRegion(position);
 			player.send(new RegionChangeMessage(position));
@@ -78,7 +83,9 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		differences.retainAll(oldViewable);
 
 		Set<RegionCoordinates> full = new HashSet<>(newViewable);
-		full.removeAll(oldViewable);
+		if (local) {
+			full.removeAll(oldViewable);
+		}
 
 		sendUpdates(player.getLastKnownRegion(), differences, full);
 	}
@@ -96,7 +103,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		int deltaY = current.getLocalY(last);
 
 		return deltaX <= Position.MAX_DISTANCE || deltaX >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1
-				|| deltaY <= Position.MAX_DISTANCE || deltaY >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
+			|| deltaY <= Position.MAX_DISTANCE || deltaY >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
 	}
 
 	/**
@@ -112,7 +119,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 		for (RegionCoordinates coordinates : differences) {
 			Set<RegionUpdateMessage> messages = updates.computeIfAbsent(coordinates,
-					coords -> repository.get(coords).getUpdates(height));
+				coords -> repository.get(coords).getUpdates(height));
 
 			if (!messages.isEmpty()) {
 				player.send(new GroupedRegionUpdateMessage(position, coordinates, messages));
@@ -121,7 +128,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 		for (RegionCoordinates coordinates : full) {
 			Set<RegionUpdateMessage> messages = encodes.computeIfAbsent(coordinates,
-					coords -> repository.get(coords).encode(height));
+				coords -> repository.get(coords).encode(height));
 
 			if (!messages.isEmpty()) {
 				player.send(new ClearRegionMessage(position, coordinates));
