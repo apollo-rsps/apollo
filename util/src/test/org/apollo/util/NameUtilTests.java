@@ -54,6 +54,7 @@ public final class NameUtilTests {
 	public void test() {
 		assertEquals("a_b_c", NameUtil.decodeBase37(NameUtil.encodeBase37("a_b_c")));
 		assertEquals("01234_56789", NameUtil.decodeBase37(NameUtil.encodeBase37("01234_56789")));
+		assertEquals("a_b_c", NameUtil.decodeBase37(NameUtil.encodeBase37("A_B_C")));
 	}
 
 }
