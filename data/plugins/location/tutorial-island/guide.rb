@@ -1,7 +1,11 @@
 require 'java'
 
 java_import 'org.apollo.game.message.impl.HintIconMessage'
+java_import 'org.apollo.game.message.impl.MobHintIconMessage'
+java_import 'org.apollo.game.message.impl.PositionHintIconMessage'
 java_import 'org.apollo.game.message.impl.SwitchTabInterfaceMessage'
+java_import 'org.apollo.game.model.entity.EntityType'
+java_import 'org.apollo.game.model.Position'
 
 private
 
@@ -92,7 +96,8 @@ conversation :tutorial_runescape_guide do
     close do |player|
       if player.tutorial_island_progress < :runescape_guide_finished
         reset_hint_icon(player)
-        # TODO: door hint icon
+        # TODO: Maybe move this, define a constant for the Position and height
+        player.send(PositionHintIconMessage.new(HintIconMessage::Type::SOUTH, Position.new(3097, 3107), 120))
         player.tutorial_island_progress = :runescape_guide_finished
       end
 
@@ -103,10 +108,10 @@ end
 
 # Enables the hint icon above the Runescape guide.
 def show_hint_icon(player)
-  player.send(HintIconMessage.for_npc(@runescape_guide.index))
+  player.send(MobHintIconMessage.create(@runescape_guide))
 end
 
 # Resets the hint icon.
 def reset_hint_icon(player)
-  player.send(HintIconMessage.reset_npc)
+  player.send(MobHintIconMessage.reset(EntityType::NPC))
 end
