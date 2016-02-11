@@ -26,7 +26,7 @@ class SpellAction < Action
   attr_reader :spell, :pulses
 
   def initialize(mob, spell)
-    super(0, true, mob)
+    super(1, true, mob)
     @spell = spell
     @pulses = 0
   end
@@ -81,7 +81,7 @@ class SpellAction < Action
   end
 
   def equals(other)
-    get_class == other.get_class && @spell == other.spell
+    get_class == other.get_class
   end
 
 end
