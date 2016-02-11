@@ -6,8 +6,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Predicate;
 
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.decoder.MapFileDecoder;
@@ -25,8 +23,6 @@ import org.apollo.game.model.entity.obj.ObjectType;
 import org.apollo.game.model.entity.obj.StaticGameObject;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
-
-import com.google.common.collect.Iterables;
 
 /**
  * Parses static object definitions, which include map tiles and landscapes.
@@ -94,12 +90,12 @@ public final class GameObjectDecoder implements Runnable {
 
 			for (MapDefinition definition : definitions.values()) {
 				int packed = definition.getPackedCoordinates();
-				int x = (packed >> 8 & 0xFF) * 64;
-				int y = (packed & 0xFF) * 64;
+				int x = (packed >> 8 & 0xFF) * (Region.SIZE * Region.SIZE);
+				int y = (packed & 0xFF) * (Region.SIZE * Region.SIZE);
 
 				ByteBuffer objects = fs.getFile(4, definition.getObjectFile());
 				ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(objects));
-				decodeObjects(world, decompressed, x, y);
+				decodeObjects(decompressed, x, y);
 
 				ByteBuffer terrain = fs.getFile(4, definition.getTerrainFile());
 				decompressed = ByteBuffer.wrap(CompressionUtil.degzip(terrain));
@@ -129,25 +125,7 @@ public final class GameObjectDecoder implements Runnable {
 		}
 
 		CollisionMatrix matrix = previous.getMatrix(height);
-		boolean block = false;
-
-		if (type == ObjectType.FLOOR_DECORATION.getValue() && definition.isInteractive()) {
-			block = true;
-		}
-
-		// TODO figure out the other ObjectTypes and get rid of all the getValue() calls
-
-		Predicate<Integer> walls = value -> value >= ObjectType.LENGTHWISE_WALL.getValue()
-				&& value <= ObjectType.RECTANGULAR_CORNER.getValue() || value == ObjectType.DIAGONAL_WALL.getValue();
-
-		Predicate<Integer> roofs = value -> value > ObjectType.DIAGONAL_INTERACTABLE.getValue()
-				&& value < ObjectType.FLOOR_DECORATION.getValue();
-
-		if (walls.test(type) || roofs.test(type) || type == ObjectType.INTERACTABLE.getValue() && definition.isSolid()) {
-			block = true;
-		}
-
-		if (block) {
+		if (unwalkable(definition, type)) {
 			int width = definition.getWidth(), length = definition.getLength();
 
 			for (int dx = 0; dx < width; dx++) {
@@ -216,12 +194,11 @@ public final class GameObjectDecoder implements Runnable {
 	/**
 	 * Decodes object data stored in the specified {@link ByteBuffer}.
 	 *
-	 * @param world The {@link World} containing the StaticGameObjects.
-	 * @param buffer The ByteBuffer.
+	 * @param buffer The ByteBuffer to decode data from.
 	 * @param x The x coordinate of the top left tile of the map file.
 	 * @param y The y coordinate of the top left tile of the map file.
 	 */
-	private void decodeObjects(World world, ByteBuffer buffer, int x, int y) {
+	private void decodeObjects(ByteBuffer buffer, int x, int y) {
 		int id = -1;
 		int idOffset = BufferUtil.readSmart(buffer);
 
@@ -286,6 +263,23 @@ public final class GameObjectDecoder implements Runnable {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns whether or not an object with the specified {@link ObjectDefinition} and {@code type} should result in
+	 * the tile(s) it is located on being blocked.
+	 *
+	 * @param definition The {@link ObjectDefinition} of the object.
+	 * @param type The type of the object.
+	 * @return {@code true} iff the tile(s) the object is on should be blocked.
+	 */
+	private boolean unwalkable(ObjectDefinition definition, int type) {
+		// TODO figure out the other ObjectTypes and get rid of all the getValue() calls
+		return (type == ObjectType.FLOOR_DECORATION.getValue() && definition.isInteractive()) ||
+			(type >= ObjectType.LENGTHWISE_WALL.getValue() && type <= ObjectType.RECTANGULAR_CORNER.getValue()) ||
+			(type > ObjectType.DIAGONAL_INTERACTABLE.getValue() && type < ObjectType.FLOOR_DECORATION.getValue()) ||
+			(type == ObjectType.INTERACTABLE.getValue() && definition.isSolid()) ||
+			type == ObjectType.DIAGONAL_WALL.getValue();
 	}
 
 }

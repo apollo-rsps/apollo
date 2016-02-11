@@ -1,6 +1,7 @@
 package org.apollo.game.model.entity.obj;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * The group of an object, which indicates its general class (e.g. if it's a wall, or a floor decoration).
@@ -21,7 +22,7 @@ public enum ObjectGroup {
 	WALL_DECORATION(1),
 
 	/**
-	 * The interactable object group, for objects that can be clicked and interacted with. TODO rename
+	 * The interactable object group, for objects that can be clicked and interacted with.
 	 */
 	INTERACTABLE_OBJECT(2),
 
@@ -31,14 +32,13 @@ public enum ObjectGroup {
 	GROUND_DECORATION(3);
 
 	/**
-	 * Gets the ObjectGroup with the specified integer value.
+	 * Attempts to find the ObjectGroup with the specified integer value.
 	 *
 	 * @param value The integer value of the ObjectGroup.
-	 * @return The ObjectGroup.
-	 * @throws IllegalArgumentException If there is no ObjectGroup with the specified value.
+	 * @return The {@link Optional} possibly containing the ObjectGroup, if found.
 	 */
-	public static ObjectGroup valueOf(int value) {
-		return Arrays.stream(values()).filter(group -> group.value == value).findAny().orElseThrow(() -> new IllegalArgumentException("No ObjectGroup with a value of " + value + " exists."));
+	public static Optional<ObjectGroup> valueOf(int value) {
+		return Arrays.stream(values()).filter(group -> group.value == value).findAny();
 	}
 
 	/**
@@ -49,9 +49,9 @@ public enum ObjectGroup {
 	/**
 	 * Creates the ObjectGroup.
 	 *
-	 * @param value The integer value of the group.
+	 * @param value The integer value of the group. Must be unique.
 	 */
-	private ObjectGroup(int value) {
+	ObjectGroup(int value) {
 		this.value = value;
 	}
 

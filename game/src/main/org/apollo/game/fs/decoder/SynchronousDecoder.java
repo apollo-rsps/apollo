@@ -1,12 +1,15 @@
 package org.apollo.game.fs.decoder;
 
-import org.apollo.util.ThreadUtil;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
+import org.apollo.util.ThreadUtil;
 
 /**
  * A composite decoder that executes each child in parallel.
@@ -16,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 public final class SynchronousDecoder {
 
 	/**
-	 * The time to wait before cancelling the decoding.
+	 * The time to wait before cancelling the decoding, in milliseconds.
 	 */
 	private static final int TIMEOUT = 15_000;
 
@@ -24,7 +27,7 @@ public final class SynchronousDecoder {
 	 * The Executor used to execute the Runnable(s).
 	 */
 	private final ExecutorService executor = Executors.newFixedThreadPool(ThreadUtil.AVAILABLE_PROCESSORS,
-			ThreadUtil.create("SynchronousDecoder"));
+		ThreadUtil.create("SynchronousDecoder"));
 
 	/**
 	 * The List of Runnables.
@@ -47,19 +50,18 @@ public final class SynchronousDecoder {
 	 * @throws SynchronousDecoderException If a decoder failed to complete successfully.
 	 */
 	public void block() throws InterruptedException, SynchronousDecoderException {
-		List<Future> futureList = runnables.stream()
-			.map(executor::submit)
-			.collect(toList());
+		List<Future> futures = runnables.stream().map(executor::submit).collect(Collectors.toList());
 
 		executor.shutdown();
 		executor.awaitTermination(TIMEOUT, TimeUnit.MILLISECONDS);
 
-		for (Future future : futureList) {
+		for (Future future : futures) {
 			try {
 				future.get();
-			} catch (ExecutionException e) {
-				throw new SynchronousDecoderException("Unable to run all decoder tasks", e.getCause());
+			} catch (ExecutionException cause) {
+				throw new SynchronousDecoderException("Unable to run all decoder tasks.", cause);
 			}
 		}
 	}
+
 }

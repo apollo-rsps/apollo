@@ -65,7 +65,7 @@ public enum ObjectType {
 	 * @param value The integer value of this ObjectType.
 	 * @param group The ObjectGroup of this type.
 	 */
-	private ObjectType(int value, ObjectGroup group) {
+	ObjectType(int value, ObjectGroup group) {
 		this.value = value;
 		this.group = group;
 	}
