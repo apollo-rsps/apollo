@@ -132,7 +132,6 @@ public final class NpcDefinitionDecoder implements Runnable {
 				int count = buffer.get() & 0xFF;
 				int[] morphisms = new int[count + 1];
 				Arrays.setAll(morphisms, index -> wrap(buffer.getShort()));
-			} else if (opcode == 107) {
 			}
 		}
 	}
