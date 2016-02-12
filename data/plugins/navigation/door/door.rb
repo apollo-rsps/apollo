@@ -16,8 +16,11 @@ class OpenDoorAction < DistancedAction
   end
 
   def executeAction
-    mob.turn_to(@door.position)
-    DoorUtil.toggle(@door)
+    if $world.submit(OpenDoorEvent.new(mob, @door))
+      mob.turn_to(@door.position)
+      DoorUtil.toggle(@door)
+    end
+
     stop
   end
 
@@ -44,12 +47,8 @@ on :message, :first_object_action do |player, message|
   id = message.id
 
   if DoorUtil.door?(id)
-    position = message.position
-    door = DoorUtil.get_door_object(position, id)
-
-    if !door.nil? && $world.submit(OpenDoorEvent.new(player, door))
-      player.start_action(OpenDoorAction.new(player, door))
-    end
+    door = DoorUtil.get_door_object(message.position, id)
+    player.start_action(OpenDoorAction.new(player, door)) unless door.nil?
   end
 end
 
