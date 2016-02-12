@@ -64,12 +64,12 @@ public final class EquipmentDefinition {
 	/**
 	 * Initialises the equipment definitions.
 	 *
-	 * @param definitions The definitions.
+	 * @param definitionsArray The definitions.
 	 * @throws RuntimeException If there is an id mismatch.
 	 */
-	public static void init(EquipmentDefinition[] definitions) {
-		for (int id = 0; id < definitions.length; id++) {
-			EquipmentDefinition def = definitions[id];
+	public static void init(EquipmentDefinition[] definitionsArray) {
+		for (int id = 0; id < definitionsArray.length; id++) {
+			EquipmentDefinition def = definitionsArray[id];
 			if (def != null) {
 				if (def.getId() != id) {
 					throw new RuntimeException("Equipment definition id mismatch.");
