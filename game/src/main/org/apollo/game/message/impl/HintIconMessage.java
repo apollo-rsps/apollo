@@ -25,24 +25,24 @@ public abstract class HintIconMessage extends Message {
 		CENTER(2),
 
 		/**
-		 * A HintIcon that hovers north over a Position.
+		 * A HintIcon that hovers west over a Position.
 		 */
-		NORTH(3),
-
-		/**
-		 * A HintIcon that hovers south over a Position.
-		 */
-		SOUTH(4),
+		WEST(3),
 
 		/**
 		 * A HintIcon that hovers east over a Position.
 		 */
-		EAST(5),
+		EAST(4),
 
 		/**
-		 * A HintIcon that hovers west over a Position.
+		 * A HintIcon that hovers south over a Position.
 		 */
-		WEST(6),
+		SOUTH(5),
+
+		/**
+		 * A HintIcon that hovers north over a Position.
+		 */
+		NORTH(6),
 
 		/**
 		 * A HintIcon that hovers over a Player.
