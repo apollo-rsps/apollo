@@ -118,7 +118,6 @@ spawn_npc name: :monk_of_zamorak_189, x: 3213, y: 3476
 spawn_npc name: :warrior_woman, x: 3203, y: 3490
 spawn_npc name: :warrior_woman, x: 3205, y: 3493
 
-
 # Varrock/Lumbridge Pen
 
 spawn_npc name: :swan, x: 3261, y: 3354
@@ -248,7 +247,6 @@ spawn_npc name: :gertrude, x: 3153, y: 3413
 spawn_npc name: :kanel, x: 3155, y: 3405, face: :east
 
 spawn_npc name: :philop, x: 3150, y: 3405, face: :south
-
 
 # Small Bank
 
