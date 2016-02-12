@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.logging.Logger;
 
+import com.google.common.base.Preconditions;
 import org.apollo.Service;
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.decoder.ItemDefinitionDecoder;
@@ -30,8 +31,6 @@ import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
 import org.apollo.game.scheduling.impl.NpcMovementTask;
 import org.apollo.util.NameUtil;
-
-import com.google.common.base.Preconditions;
 
 /**
  * The world class is a singleton which contains objects like the {@link MobRepository} for players and NPCs. It should
@@ -87,6 +86,11 @@ public final class World {
 	private final MobRepository<Npc> npcRepository = new MobRepository<>(WorldConstants.MAXIMUM_NPCS);
 
 	/**
+	 * The Queue of Npcs that have yet to be removed from the repository.
+	 */
+	private final Queue<Npc> oldNpcs = new ArrayDeque<>();
+
+	/**
 	 * The {@link MobRepository} of {@link Player}s.
 	 */
 	private final MobRepository<Player> playerRepository = new MobRepository<>(WorldConstants.MAXIMUM_PLAYERS);
@@ -100,11 +104,6 @@ public final class World {
 	 * The Queue of Npcs that have yet to be added to the repository.
 	 */
 	private final Queue<Npc> queuedNpcs = new ArrayDeque<>();
-	
-	/**
-	 * The Queue of Npcs that have yet to be removed from the repository.
-	 */
-	private final Queue<Npc> oldNpcs = new ArrayDeque<>();
 
 	/**
 	 * This world's {@link RegionRepository}.
@@ -209,8 +208,8 @@ public final class World {
 		releaseNumber = release;
 
 		SynchronousDecoder decoder = new SynchronousDecoder(new ItemDefinitionDecoder(fs),
-				new NpcDefinitionDecoder(fs), new GameObjectDecoder(fs, this),
-				EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat"));
+			new NpcDefinitionDecoder(fs), new GameObjectDecoder(fs, this),
+			EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat"));
 
 		decoder.block();
 
@@ -315,8 +314,7 @@ public final class World {
 	 * @param npc The npc.
 	 */
 	public void unregister(final Npc npc) {
-		Preconditions.checkNotNull(npc, "Npc may not be null.");
-
+		Preconditions.checkNotNull(npc, "Npc must not be null.");
 		oldNpcs.add(npc);
 	}
 
@@ -362,7 +360,7 @@ public final class World {
 					npcMovement.addNpc(npc);
 				}
 			} else {
-				logger.warning("Failed to register npc, repository capacity reached: [count=" + npcRepository.size() + "]");
+				logger.warning("Failed to register npc (capacity reached): [count=" + npcRepository.size() + "]");
 			}
 		}
 	}
@@ -373,7 +371,7 @@ public final class World {
 	private void unregisterNpcs() {
 		while (!oldNpcs.isEmpty()) {
 			Npc npc = oldNpcs.poll();
-			
+
 			Region region = regions.fromPosition(npc.getPosition());
 			region.removeEntity(npc);
 

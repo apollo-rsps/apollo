@@ -1,5 +1,8 @@
 
 java_import 'org.apollo.game.action.DistancedAction'
+java_import 'org.apollo.game.model.event.Event'
+
+private
 
 # A distanced action which opens a door.
 class OpenDoorAction < DistancedAction
@@ -24,10 +27,29 @@ class OpenDoorAction < DistancedAction
 
 end
 
-# MessageListener for opening and closing doors.
+# A PlayerEvent that is fired when a player attempts to open a door.
+class OpenDoorEvent < PlayerEvent
+  attr_reader :door
+
+  def initialize(player, door)
+    super(player)
+    @door = door
+  end
+
+end
+
+
+# Listens for FirstObjectActions performed on doors.
 on :message, :first_object_action do |player, message|
-  if DoorUtil.door?(message.id)
-    door = DoorUtil.get_door_object(message.position, message.id)
-    player.start_action(OpenDoorAction.new(player, door)) unless door.nil?
+  id = message.id
+
+  if DoorUtil.door?(id)
+    position = message.position
+    door = DoorUtil.get_door_object(position, id)
+
+    if !door.nil? && $world.submit(OpenDoorEvent.new(player, door))
+      player.start_action(OpenDoorAction.new(player, door))
+    end
   end
 end
+
