@@ -254,7 +254,7 @@ class Dialogue
   def options
       @options.dup
   end
-  
+
   # Sets the precondition of this dialogue.
   def precondition(player=nil, &block)
       @precondition = block unless block.nil?
@@ -413,8 +413,11 @@ end
 
 # Sends a dialogue displaying only text.
 def send_text_dialogue(player, dialogue)
-  title = dialogue.title
-  send_generic_dialogue(player, dialogue, title, TEXT_DIALOGUE_IDS)
+  text = dialogue.text
+  dialogue_id = TEXT_DIALOGUE_IDS[text.size - 1]
+
+  text.each_with_index { |line, index| set_text(player, dialogue_id + 1 + index, line) }
+  player.interface_set.open_dialogue(ContinueDialogueAdapter.new(player, dialogue.options[0]), dialogue_id)
 end
 
 # Sends a dialogue displaying the player's head.
