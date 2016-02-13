@@ -46,7 +46,10 @@ class SpellAction < Action
         stop
         return false
       end
-      process_elements
+      unless process_elements
+        stop
+        return
+      end
     end
     execute_action
     @pulses += 1
@@ -81,7 +84,7 @@ class SpellAction < Action
   end
 
   def equals(other)
-    get_class == other.get_class && @spell == other.spell
+    get_class == other.get_class
   end
 
 end
@@ -100,6 +103,8 @@ class ItemSpellAction < SpellAction
   def execute
     if @pulses == 0
       id = @item.id
+
+      mob.send(DISPLAY_SPELLBOOK)
 
       # TODO: There has to be a better way to do this.
       @spell.elements.each do |element, amount|

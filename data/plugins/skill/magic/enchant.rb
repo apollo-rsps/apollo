@@ -8,7 +8,7 @@ ENCHANT_SPELLS = {}
 ENCHANT_ITEMS = {}
 
 RING_GFX = Graphic.new(238, 0, 100)
-RING_ANIM = Animation.new(931) 
+RING_ANIM = Animation.new(931)
 
 LOW_NECK_GFX = Graphic.new(114, 0, 100)
 LOW_NECK_ANIM = Animation.new(719)
@@ -52,10 +52,9 @@ class EnchantAction < ItemSpellAction
     if @pulses == 0
       mob.play_animation(@spell.animation)
       mob.play_graphic(@spell.graphic)
-      mob.send(DISPLAY_SPELLBOOK)
 
       mob.inventory.set(@slot, @reward)
-      mob.skill_set.add_experience(MAGIC_SKILL_ID, @spell.experience)
+      mob.skill_set.add_experience(Skill::MAGIC, @spell.experience)
 
       set_delay(@spell.delay)
     elsif @pulses == 1
@@ -73,12 +72,12 @@ def enchant(button, level, elements, item, animation, graphic, delay, experience
   ENCHANT_ITEMS[item] = reward
 end
 
-SAPPHIRE_ELEMENTS = { WATER => 1, COSMIC => 1 }
-EMERALD_ELEMENTS  = { AIR => 1, COSMIC => 1 }
-RUBY_ELEMENTS     = { FIRE => 5, COSMIC => 1 }
-DIAMOND_ELEMENTS  = { EARTH => 10, COSMIC => 1 }
-DSTONE_ELEMENTS   = { WATER => 15, EARTH => 15, COSMIC => 1 }
-ONYX_ELEMENTS     = { EARTH => 20, FIRE => 20, COSMIC => 1 }
+SAPPHIRE_ELEMENTS = { COSMIC => 1, WATER => 1 }
+EMERALD_ELEMENTS  = { COSMIC => 1, AIR => 1 }
+RUBY_ELEMENTS     = { COSMIC => 1, FIRE => 5 }
+DIAMOND_ELEMENTS  = { COSMIC => 1, EARTH => 10 }
+DSTONE_ELEMENTS   = { COSMIC => 1, EARTH => 15, WATER => 15 }
+ONYX_ELEMENTS     = { COSMIC => 1, FIRE => 20, EARTH => 20 }
 
 # Sapphire
 enchant 1155, 7, SAPPHIRE_ELEMENTS, 1637, RING_ANIM, RING_GFX, 2, 17.5, 2550 # Ring

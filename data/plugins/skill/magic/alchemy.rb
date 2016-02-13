@@ -37,7 +37,6 @@ class AlchemyAction < ItemSpellAction
     if @pulses == 0
       mob.play_animation(@spell.animation)
       mob.play_graphic(@spell.graphic)
-      mob.send(DISPLAY_SPELLBOOK)
 
       inventory = mob.inventory
       gold = (item.definition.value * @spell.multiplier)
