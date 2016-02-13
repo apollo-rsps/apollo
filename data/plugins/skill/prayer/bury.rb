@@ -32,22 +32,20 @@ class BuryBoneAction < Action
   def execute
     if @executions == 0
       mob.send_message('You dig a hole in the ground...')
+      mob.play_animation(BURY_BONE_ANIMATION)
       @executions += 1
     elsif @executions == 1
       if mob.inventory.get(@slot).id == @bone.id
-        mob.play_animation(BURY_BONE_ANIMATION)
         mob.send_message('You bury the bones.')
-
         mob.inventory.reset(@slot)
         mob.skill_set.add_experience(Skill::PRAYER, @bone.experience)
       end
-
       stop
     end
   end
 
   def equals(other)
-    get_class == other.get_class && @bone == other.bone
+    get_class == other.get_class
   end
 
 end

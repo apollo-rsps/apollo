@@ -190,7 +190,7 @@ on :message, :item_action do |player, message|
       next
     end
 
-    if !contains && inventory.free_space == 0
+    if !contains && inventory.free_slots == 0
       player.send_message('The shop is currently full at the moment.')
       message.terminate
       next
@@ -237,7 +237,7 @@ def buy(shop, player, message, currency)
   option = message.option
   if option == 1
     player.send_message("#{shop_item.name}: currently costs #{shop_item.cost} #{currency.name}.")
-    next
+    return
   end
 
   buy_amount = case option
