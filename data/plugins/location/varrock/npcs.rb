@@ -223,8 +223,8 @@ spawn_npc name: :scavvo, x: 3192, y: 3353, z: 1
 spawn_npc name: :shop_keeper_551, x: 3206, y: 3399
 spawn_npc name: :shop_assistant_552, x: 3207, y: 3396
 
-spawn_npc name: :shop_keeper, x: 3216, y: 3414
-spawn_npc name: :shop_assistant, x: 3216, y: 3417
+spawn_npc name: :shop_keeper_522, x: 3216, y: 3414
+spawn_npc name: :shop_assistant_523, x: 3216, y: 3417
 
 spawn_npc name: :tea_seller, x: 3271, y: 3411
 

@@ -22,7 +22,7 @@ end
 private
 
 # The `Currency` used by default.
-DEFAULT_CURRENCY = Currency.new(995, 'money')
+DEFAULT_CURRENCY = Currency.new(995, 'coins')
 
 # The default capacity of a shop.
 DEFAULT_CAPACITY = 30
