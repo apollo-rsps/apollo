@@ -18,7 +18,8 @@ module TutorialInstructions
              when :given_axe then :viewing_items
              when :cut_tree then :cut_tree
              when :cutting_tree then :please_wait
-             else fail 'No dialogue for current stage #{progress} exists.'
+
+             else raise "No dialogue for current stage #{progress} exists."
            end
 
     dialogue = instructions.part(name)

@@ -42,7 +42,7 @@ conversation :tutorial_surivival_expert do
            ' tricks. First off we\'re going to start with the most basic survival skill of all: '\
            'making a fire.'
 
-    close(&:add_survival_items)
+    close { |player| add_survival_items(player) }
   end
 
   dialogue :hello_again do
@@ -54,7 +54,7 @@ conversation :tutorial_surivival_expert do
     text 'Hello again. I\'m here to teach you a few survival tips and tricks. First off we\'re '\
            'going to start with the most basic survival skill of all: making a fire.'
 
-    close(&:add_survival_items)
+    close { |player| add_survival_items(player) }
   end
 
   # The dialogue displayed when the Survival Expert gives the player a bronze axe.
@@ -123,7 +123,7 @@ def add_survival_items(player)
 
   unless inventory.contains(SurvivalConstants::TINDERBOX)
     inventory.add(SurvivalConstants::TINDERBOX)
-    dialogue = (dialogue == :give_bronze_axe) ? :give_axe_and_tinderbox : give_tinderbox
+    dialogue = (dialogue == :give_bronze_axe) ? :give_axe_and_tinderbox : :give_tinderbox
   end
 
   send_dialogue(player, get_dialogue(:tutorial_surivival_expert, dialogue))

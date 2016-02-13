@@ -21,18 +21,13 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 	private final ScriptingContainer container = new ScriptingContainer();
 
 	/**
-	 * The World this RubyPluginEnvironment is for.
-	 */
-	private final World world;
-
-	/**
 	 * Creates and bootstraps the Ruby plugin environment.
 	 *
 	 * @param world The {@link World} this RubyPluginEnvironment is for.
 	 * @throws IOException If an I/O error occurs during bootstrapping.
 	 */
 	public RubyPluginEnvironment(World world) throws IOException {
-		this.world = world;
+		container.put("$world", world);
 		parseBootstrapper();
 	}
 
@@ -42,7 +37,7 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 			container.runScriptlet(is, name);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("Error parsing scriptlet " + name + ".");
+			throw new RuntimeException("Error parsing scriptlet " + name + ".", e);
 		}
 	}
 
@@ -61,7 +56,6 @@ public final class RubyPluginEnvironment implements PluginEnvironment {
 	@Override
 	public void setContext(PluginContext context) {
 		container.put("$ctx", context);
-		container.put("$world", world);
 	}
 
 }

@@ -1,8 +1,7 @@
 package org.apollo.game.message.impl;
 
-import org.apollo.game.model.Position;
-
 import com.google.common.base.Preconditions;
+import org.apollo.game.model.Position;
 
 /**
  * A {@link HintIconMessage} which displays a hint over a Position.
@@ -16,20 +15,20 @@ public final class PositionHintIconMessage extends HintIconMessage {
 
 	/**
 	 * Tests if the specified Type if valid for a Position HintIcon.
-	 * 
+	 *
 	 * @param type The Type to test.
 	 * @return The Type if it was valid.
 	 */
 	private static Type testType(Type type) {
 		Preconditions.checkArgument(type != Type.NPC && type != Type.PLAYER,
-				"Hint icons over a Position may not have a type of Player or Npc.");
+			"Hint icons over a Position may not have a type of Player or Npc.");
 		return type;
 	}
 
 	/**
 	 * Creates a new {@link PositionHintIconMessage} which resets the current
 	 * HintIcon.
-	 * 
+	 *
 	 * @return The new {@link PositionHintIconMessage}, never {@code null}.
 	 */
 	public static PositionHintIconMessage reset() {
@@ -48,7 +47,7 @@ public final class PositionHintIconMessage extends HintIconMessage {
 
 	/**
 	 * Constructs a new {@link PositionHintIconMessage}.
-	 * 
+	 *
 	 * @param type The Type of the HintIcon.
 	 * @param position The Position of the hint icon.
 	 * @param height The display height of the hint icon.
@@ -61,7 +60,7 @@ public final class PositionHintIconMessage extends HintIconMessage {
 
 	/**
 	 * Gets the Position of the HintIcon.
-	 * 
+	 *
 	 * @return The Position of the HintIcon.
 	 */
 	public Position getPosition() {
@@ -70,7 +69,7 @@ public final class PositionHintIconMessage extends HintIconMessage {
 
 	/**
 	 * Gets the display height of the HintIcon.
-	 * 
+	 *
 	 * @return The display height of the HintIcon.
 	 */
 	public int getHeight() {

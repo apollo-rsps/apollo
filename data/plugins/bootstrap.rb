@@ -18,6 +18,9 @@ java_import 'org.apollo.game.model.World'
 java_import 'org.apollo.game.model.entity.Player'
 java_import 'org.apollo.game.model.event.EventListener'
 java_import 'org.apollo.game.model.event.PlayerEvent'
+java_import 'org.apollo.game.model.event.impl.LoginEvent'
+java_import 'org.apollo.game.model.event.ProxyEvent'
+java_import 'org.apollo.game.model.event.ProxyEventListener'
 java_import 'org.apollo.game.model.entity.setting.PrivilegeLevel'
 java_import 'org.apollo.game.scheduling.ScheduledTask'
 java_import 'org.apollo.game.plugin.PluginContext'
@@ -129,23 +132,26 @@ def schedule(*args, &block)
   end
 end
 
-# Defines some sort of action to take upon an message. The following types of
-# message are currently valid:
+@@proxy_listener = ProxyEventListener.new
+$world.listen_for(ProxyEvent.java_class, @@proxy_listener)
+
+# Defines some sort of action to take upon an message. The following types of message are currently
+# valid:
 #
 #   * :command
 #   * :message
 #   * :button
 #   * Any valid Event, as a symbol in ruby snake_case form.
 #
-# A command takes one or two arguments (the command name and optionally the
-# minimum rights level to use it). The minimum rights level defaults to
-# STANDARD. The block should have two arguments: player and command.
+# A command takes one or two arguments (the command name and optionally the minimum rights level to
+# use it). The minimum rights level defaults to STANDARD. The block should have two arguments:
+# player and command.
 #
-# An message takes no arguments. The block should have three arguments: the chain
-# context, the player and the message object.
+# An message takes no arguments. The block should have two arguments: the player and the message
+# object.
 #
-# A button takes one argument (the id). The block should have one argument: the
-# player who clicked the button.
+# A button takes one argument (the id). The block should have one argument: the player who clicked
+# the button.
 def on(type, *args, &block)
   case type
     when :command then on_command(args, block)
@@ -153,10 +159,40 @@ def on(type, *args, &block)
     when :button  then on_button(args, block)
     else
       class_name = type.to_s.camelize.concat('Event')
-      type = Java::JavaClass.for_name("org.apollo.game.model.event.impl.#{class_name}")
+
+      begin
+        type = Java::JavaClass.for_name("org.apollo.game.model.event.impl.#{class_name}")
+      rescue
+        @@proxy_listener.add(class_name, ProcEventListener.new(block))
+        return
+      end
+
       $world.listen_for(type, ProcEventListener.new(block))
   end
 end
+
+# Contains extension methods for World.
+module WorldExtensions
+
+  # Overrides World#submit, providing special-case behaviour for Events defined in Ruby, which
+  # need to be wrapped in a ProxyEvent, until https://github.com/jruby/jruby/issues/2359 is
+  # resolved.
+  def submit(event)
+    if event.java_class.name.end_with?(".Event", ".PlayerEvent")
+      event = ProxyEvent.new(event.class.name, event)
+    end
+
+    super(event)
+  end
+
+end
+
+# Prepend the methods defined in WorldExtensions to World.
+class World
+  prepend WorldExtensions
+end
+
+private
 
 # Defines an action to be taken upon a button press.
 def on_button(args, proc)

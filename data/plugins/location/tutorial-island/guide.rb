@@ -9,27 +9,48 @@ java_import 'org.apollo.game.model.Position'
 
 private
 
-# The ids of tabs that are displayed when the player has yet to start the tutorial.
-INITIAL_TABS = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, 904, -1, -1]
+# Contains constants used during the Runescape Guide part of Tutorial Island.
+module GuideConstants
 
-# The character design interface id.
-CHARACTER_DESIGN = 3559
+  # The Runescape Guide Npc.
+  RUNESCAPE_GUIDE = spawn_npc name: :runescape_guide, x: 3093, y: 3107
 
-# The Runescape guide Npc
-@runescape_guide = spawn_npc name: :runescape_guide, x: 3093, y: 3107
+  # The character design interface id.
+  CHARACTER_DESIGN_INTERFACE = 3559
+
+  # The id of the door of the house new players spawn in.
+  DOOR_ID = 3014
+
+  # The Position of the door of the house new players spawn in.
+  DOOR_POSITION = Position.new(3098, 3107)
+
+  # The HintIconMessage sent to display a hint arrow above the door of the house new players spawn
+  # in.
+  DOOR_HINT = PositionHintIconMessage.new(HintIconMessage::Type::WEST, DOOR_POSITION, 120)
+
+  # The ids of tabs that are displayed when the player has yet to start the tutorial.
+  INITIAL_TABS = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2449, 904, -1, -1].freeze
+
+  # The HintIconMessage sent to remove a hint arrow from above the door.
+  RESET_DOOR_HINT = PositionHintIconMessage.reset
+
+  # The HintIconMessage sent to remove a hint arrow from an Npc.
+  RESET_NPC_HINT = MobHintIconMessage.reset(EntityType::NPC)
+
+end
 
 # Sends the appropriate data to the client when the player logs in to the game.
 on :login do |_event, player|
   if player.in_tutorial_island && player.privilege_level != RIGHTS_ADMIN
     TutorialInstructions.show_instruction(player)
 
-    INITIAL_TABS.each_with_index do |tab, index|
+    GuideConstants::INITIAL_TABS.each_with_index do |tab, index|
       player.send(SwitchTabInterfaceMessage.new(index, tab))
     end
 
     if player.tutorial_island_progress == :not_started
-      show_hint_icon(player)
-      player.interface_set.open_window(CHARACTER_DESIGN)
+      player.interface_set.open_window(GuideConstants::CHARACTER_DESIGN_INTERFACE)
+      player.send(MobHintIconMessage.create(GuideConstants::RUNESCAPE_GUIDE))
     end
   end
 end
@@ -95,23 +116,43 @@ conversation :tutorial_runescape_guide do
 
     close do |player|
       if player.tutorial_island_progress < :runescape_guide_finished
-        reset_hint_icon(player)
-        # TODO: Maybe move this, define a constant for the Position and height
-        player.send(PositionHintIconMessage.new(HintIconMessage::Type::SOUTH, Position.new(3097, 3107), 120))
+        player.send(GuideConstants::RESET_NPC_HINT)
+
+        player.send(GuideConstants::DOOR_HINT)
         player.tutorial_island_progress = :runescape_guide_finished
       end
 
       TutorialInstructions.show_instruction(player)
     end
   end
+
+  # The dialogue displayed if the player attempts to leave the Runescape Guide's house before they
+  # have spoken to him.
+  dialogue :talk_to_guide do
+    type :text
+
+    text 'You need to talk to the Runescape Guide before you are allowed to proceed through this '\
+          'door.'
+
+    close do |player|
+      TutorialInstructions.show_instruction(player)
+    end
+  end
+
 end
 
-# Enables the hint icon above the Runescape guide.
-def show_hint_icon(player)
-  player.send(MobHintIconMessage.create(@runescape_guide))
+on :open_door do |event, player|
+  door = event.door
+
+  if player.in_tutorial_island && door.position.equals(GuideConstants::DOOR_POSITION)
+    if player.tutorial_island_progress < :runescape_guide_finished
+      send_dialogue(player, get_dialogue(:tutorial_runescape_guide, :talk_to_guide))
+      event.terminate
+    elsif player.tutorial_island_progress == :runescape_guide_finished
+      player.tutorial_island_progress = :moving_around
+      player.send(GuideConstants::RESET_DOOR_HINT)
+      TutorialInstructions.show_instruction(player)
+    end
+  end
 end
 
-# Resets the hint icon.
-def reset_hint_icon(player)
-  player.send(MobHintIconMessage.reset(EntityType::NPC))
-end

@@ -15,7 +15,7 @@ public final class FlashTabInterfaceMessageEncoder extends MessageEncoder<FlashT
 
 	@Override
 	public GamePacket encode(FlashTabInterfaceMessage message) {
-		GamePacketBuilder builder = new GamePacketBuilder(283);
+		GamePacketBuilder builder = new GamePacketBuilder(238);
 		builder.put(DataType.BYTE, message.getTab());
 		return builder.toGamePacket();
 	}

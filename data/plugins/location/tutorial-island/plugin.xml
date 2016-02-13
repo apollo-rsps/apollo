@@ -17,6 +17,7 @@
   </scripts>
   <dependencies>
     <dependency>dialogue</dependency>
+    <dependency>door</dependency>
     <dependency>entity-spawning</dependency>
     <dependency>quest</dependency>
   </dependencies>
