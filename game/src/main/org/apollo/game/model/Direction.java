@@ -58,6 +58,17 @@ public enum Direction {
 	public static final Direction[] EMPTY_DIRECTION_ARRAY = new Direction[0];
 
 	/**
+	 * An array of directions without any diagonal directions.
+	 */
+	public static Direction[] NESW = { NORTH, EAST, SOUTH, WEST };
+
+	/**
+	 * An array of directions without any diagonal directions, and one step counter-clockwise, as used by
+	 * the clients collision mapping.
+	 */
+	public static Direction[] WNES = { WEST, NORTH, EAST, SOUTH };
+
+	/**
 	 * Gets the Direction between the two {@link Position}s..
 	 *
 	 * @param current The difference between two X coordinates.
@@ -68,6 +79,17 @@ public enum Direction {
 		int deltaX = next.getX() - current.getX();
 		int deltaY = next.getY() - current.getY();
 
+		return fromDeltas(deltaX, deltaY);
+	}
+
+	/**
+	 * Creates a direction from the differences between X and Y.
+	 *
+	 * @param deltaX The difference between two X coordinates.
+	 * @param deltaY The difference between two Y coordinates.
+	 * @return The direction.
+	 */
+	public static Direction fromDeltas(int deltaX, int deltaY) {
 		if (deltaY == 1) {
 			if (deltaX == 1) {
 				return NORTH_EAST;
@@ -98,6 +120,27 @@ public enum Direction {
 	}
 
 	/**
+	 * Get the 2 directions which make up a diagonal direction (i.e., NORTH and EAST for NORTH_EAST).
+	 *
+	 * @param direction The direction to get the components for.
+	 * @return The components for the given direction.
+	 */
+	public static Direction[] diagonalComponents(Direction direction) {
+		switch (direction) {
+			case NORTH_EAST:
+				return new Direction[] { NORTH, EAST };
+			case NORTH_WEST:
+				return new Direction[] { NORTH, WEST };
+			case SOUTH_EAST:
+				return new Direction[] { SOUTH, EAST };
+			case SOUTH_WEST:
+				return new Direction[] { SOUTH, WEST };
+		}
+
+		throw new IllegalArgumentException("Must provide a diagonal direction.");
+	}
+
+	/**
 	 * The direction as an integer.
 	 */
 	private final int intValue;
@@ -109,6 +152,74 @@ public enum Direction {
 	 */
 	Direction(int intValue) {
 		this.intValue = intValue;
+	}
+
+	/**
+	 * Gets the opposite direction of the this direction.
+	 *
+	 * @return The opposite direction.
+	 */
+	public Direction opposite() {
+		switch (this) {
+			case NORTH:
+				return SOUTH;
+			case SOUTH:
+				return NORTH;
+			case EAST:
+				return WEST;
+			case WEST:
+				return EAST;
+			case NORTH_WEST:
+				return SOUTH_EAST;
+			case NORTH_EAST:
+				return SOUTH_WEST;
+			case SOUTH_EAST:
+				return NORTH_WEST;
+			case SOUTH_WEST:
+				return NORTH_EAST;
+		}
+
+		return NONE;
+	}
+
+	/**
+	 * Gets the X delta from a {@link Position} of (0, 0).
+	 *
+	 * @return The delta of X from (0, 0).
+     */
+	public int deltaX() {
+		switch (this) {
+			case SOUTH_EAST:
+			case NORTH_EAST:
+			case EAST:
+				return 1;
+			case SOUTH_WEST:
+			case NORTH_WEST:
+			case WEST:
+				return -1;
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Gets the Y delta from a {@link Position} of (0, 0).
+	 *
+	 * @return The delta of Y from (0, 0).
+	 */
+	public int deltaY() {
+		switch (this) {
+			case NORTH_WEST:
+			case NORTH_EAST:
+			case NORTH:
+				return 1;
+			case SOUTH_WEST:
+			case SOUTH_EAST:
+			case SOUTH:
+				return -1;
+		}
+
+		return 0;
 	}
 
 	/**

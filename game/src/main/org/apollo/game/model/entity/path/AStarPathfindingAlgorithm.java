@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.RegionRepository;
 
 /**
@@ -35,11 +36,12 @@ public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 	/**
 	 * Creates the A* pathfinding algorithm with the specified {@link Heuristic}.
 	 *
-	 * @param repository The {@link RegionRepository}.
+	 * @param world The {@link World} of the Mob the AStarPathfindingAlgorithm is being applied to. Must not be
+	 * 				{@code null}.
 	 * @param heuristic The Heuristic.
 	 */
-	public AStarPathfindingAlgorithm(RegionRepository repository, Heuristic heuristic) {
-		super(repository);
+	public AStarPathfindingAlgorithm(World world, Heuristic heuristic) {
+		super(world);
 		this.heuristic = heuristic;
 	}
 

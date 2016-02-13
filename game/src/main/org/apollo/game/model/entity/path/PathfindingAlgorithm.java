@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.EntityType;
@@ -18,18 +19,16 @@ import com.google.common.base.Preconditions;
  */
 abstract class PathfindingAlgorithm {
 
-	/**
-	 * The RegionRepository.
-	 */
-	private final RegionRepository repository;
+	private final World world;
 
 	/**
 	 * Creates the PathfindingAlgorithm.
 	 *
-	 * @param repository The {@link RegionRepository}.
+	 * @param world The {@link World} of the Mob the AStarPathfindingAlgorithm is being applied to. Must not be
+	 * 				{@code null}.
 	 */
-	public PathfindingAlgorithm(RegionRepository repository) {
-		this.repository = repository;
+	public PathfindingAlgorithm(World world) {
+		this.world = world;
 	}
 
 	/**
@@ -85,8 +84,7 @@ abstract class PathfindingAlgorithm {
 			}
 
 			Position next = new Position(x, y, height);
-			Region region = repository.get(next.getRegionCoordinates());
-			if (region.traversable(next, EntityType.NPC, direction) && (positions.length == 0 || inside(next, positions))) {
+			if (!world.intersects(current, next, EntityType.NPC) && (positions.length == 0 || inside(next, positions))) {
 				return true;
 			}
 		}

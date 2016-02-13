@@ -1,13 +1,19 @@
 package org.apollo.game.model.entity;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Queue;
-
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.collision.CollisionFlag;
+import org.apollo.game.model.area.collision.CollisionMatrix;
+
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.Queue;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * A queue of {@link Direction}s which a {@link Mob} will follow.
@@ -126,19 +132,32 @@ public final class WalkingQueue {
 
 		Direction firstDirection = Direction.NONE;
 		Direction secondDirection = Direction.NONE;
+		World world = mob.getWorld();
 
 		Position next = points.poll();
 		if (next != null) {
-			previousPoints.add(next);
 			firstDirection = Direction.between(position, next);
-			position = new Position(next.getX(), next.getY(), height);
 
-			if (running) {
-				next = points.poll();
-				if (next != null) {
-					previousPoints.add(next);
-					secondDirection = Direction.between(position, next);
-					position = new Position(next.getX(), next.getY(), height);
+			if (world.intersects(position, next, EntityType.NPC)) {
+				clear();
+				firstDirection = Direction.NONE;
+			} else {
+				previousPoints.add(next);
+				position = new Position(next.getX(), next.getY(), height);
+
+				if (running) {
+					next = points.poll();
+					if (next != null) {
+						secondDirection = Direction.between(position, next);
+
+						if (world.intersects(position, next, EntityType.NPC)) {
+							clear();
+							secondDirection = Direction.NONE;
+						} else {
+							previousPoints.add(next);
+							position = new Position(next.getX(), next.getY(), height);
+						}
+					}
 				}
 			}
 		}

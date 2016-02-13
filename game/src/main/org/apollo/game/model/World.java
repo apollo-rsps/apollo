@@ -213,7 +213,7 @@ public final class World {
 
 		decoder.block();
 
-		npcMovement = new NpcMovementTask(regions); // Must be exactly here because of ordering issues.
+		npcMovement = new NpcMovementTask(this); // Must be exactly here because of ordering issues.
 		scheduler.schedule(npcMovement);
 
 		manager.start();
@@ -258,6 +258,70 @@ public final class World {
 	 */
 	public void register(Npc npc) {
 		queuedNpcs.add(npc);
+	}
+
+	/**
+	 * Check if a line drawn between {@code start} and {@code end} intersects with any non-traversable tiles
+	 * on the map.
+	 *
+	 * @param start The starting point of the line.
+	 * @param end The ending point of the line.
+	 * @return {@code true} if there was a collision.
+	 */
+	public boolean intersects(Position start, Position end, EntityType type) {
+		int x = start.getX(), y = start.getY(), height = start.getHeight();
+		int endX = end.getX(), endY = end.getY();
+
+		int dx = (int) Math.signum(endX - x);
+		int dy = (int) Math.signum(endY - y);
+
+		Direction direction = Direction.fromDeltas(dx, dy);
+		Direction opposite = direction.opposite();
+
+		Region lastRegion = regions.fromPosition(start), region = lastRegion;
+
+		while (x != endX || y != endY) {
+			Position lastPosition = new Position(x, y, height);
+
+			x += dx;
+			y += dy;
+
+			Position position = new Position(x, y, height);
+
+			if (!region.contains(position)) {
+				region = regions.fromPosition(position);
+			}
+
+			if (!region.traversable(position, type, direction)) {
+				return true;
+			}
+
+			if (!region.contains(lastPosition)) {
+				region = regions.fromPosition(lastPosition);
+			}
+
+			if (!region.traversable(lastPosition, type, opposite)) {
+				return true;
+			}
+
+			if (direction == Direction.NORTH_EAST || direction == Direction.NORTH_WEST ||
+				direction == Direction.SOUTH_EAST || direction == Direction.SOUTH_WEST) {
+
+				Direction[] components = Direction.diagonalComponents(direction);
+
+				for (Direction component : components) {
+					if (!region.contains(position)) {
+						region = regions.fromPosition(position);
+					}
+
+					if (!region.traversable(position, type, component)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**

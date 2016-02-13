@@ -1,28 +1,32 @@
 package org.apollo.game.fs.decoder;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.decoder.MapFileDecoder;
 import org.apollo.cache.decoder.MapFileDecoder.MapDefinition;
 import org.apollo.cache.decoder.ObjectDefinitionDecoder;
 import org.apollo.cache.def.ObjectDefinition;
 import org.apollo.game.io.player.PlayerSerializer;
+import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.collision.CollisionFlag;
 import org.apollo.game.model.area.collision.CollisionMatrix;
 import org.apollo.game.model.entity.obj.GameObject;
 import org.apollo.game.model.entity.obj.ObjectType;
 import org.apollo.game.model.entity.obj.StaticGameObject;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.CompressionUtil;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Parses static object definitions, which include map tiles and landscapes.
@@ -68,6 +72,16 @@ public final class GameObjectDecoder implements Runnable {
 	private Region previous;
 
 	/**
+	 * A set of tiles which are marked as BRIDGED.
+	 */
+	private final Set<Position> bridgeTiles = new HashSet<>();
+
+	/**
+	 * A set of tiles which are marked as BLOCKED.
+	 */
+	private final Set<Position> blockedTiles = new HashSet<>();
+
+	/**
 	 * Creates the GameObjectDecoder.
 	 *
 	 * @param fs The {@link IndexedFileSystem}.
@@ -93,16 +107,29 @@ public final class GameObjectDecoder implements Runnable {
 				int x = (packed >> 8 & 0xFF) * (Region.SIZE * Region.SIZE);
 				int y = (packed & 0xFF) * (Region.SIZE * Region.SIZE);
 
-				ByteBuffer objects = fs.getFile(4, definition.getObjectFile());
-				ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(objects));
-				decodeObjects(decompressed, x, y);
-
 				ByteBuffer terrain = fs.getFile(4, definition.getTerrainFile());
-				decompressed = ByteBuffer.wrap(CompressionUtil.degzip(terrain));
+				ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(terrain));
 				decodeTerrain(decompressed, x, y);
+
+				ByteBuffer objects = fs.getFile(4, definition.getObjectFile());
+				decompressed = ByteBuffer.wrap(CompressionUtil.degzip(objects));
+				decodeObjects(decompressed, x, y);
 			}
 		} catch (IOException e) {
 			throw new UncheckedIOException("Error decoding StaticGameObjects.", e);
+		}
+
+		for (Position tile : blockedTiles) {
+			int x = tile.getX(), y = tile.getY();
+			int height = tile.getHeight();
+
+			if (bridgeTiles.contains(new Position(x, y, 1))) {
+				height--;
+			}
+
+			if (height >= 0) {
+				flag(new Position(x, y, height), false, Direction.NESW);
+			}
 		}
 
 		objects.forEach(object -> regions.fromPosition(object.getPosition()).addEntity(object, false));
@@ -117,44 +144,134 @@ public final class GameObjectDecoder implements Runnable {
 	private void block(GameObject object, Position position) {
 		ObjectDefinition definition = ObjectDefinition.lookup(object.getId());
 		int type = object.getType();
-
 		int x = position.getX(), y = position.getY(), height = position.getHeight();
+
+		if (bridgeTiles.contains(new Position(x, y, 1))) {
+			if (height == 0) {
+				return;
+			}
+
+			position = new Position(x, y, --height);
+		}
+
+		boolean impenetrable = definition.isImpenetrable();
+		Direction orientation = Direction.WNES[object.getOrientation()];
 
 		if (!previous.contains(position)) {
 			previous = regions.fromPosition(position);
 		}
 
-		CollisionMatrix matrix = previous.getMatrix(height);
 		if (unwalkable(definition, type)) {
 			int width = definition.getWidth(), length = definition.getLength();
 
-			for (int dx = 0; dx < width; dx++) {
-				for (int dy = 0; dy < length; dy++) {
-					int localX = x % Region.SIZE + dx, localY = y % Region.SIZE + dy;
-
-					if (localX > 7 || localY > 7) {
-						int nextLocalX = localX > 7 ? x + localX - 7 : x + localX;
-						int nextLocalY = localY > 7 ? y + localY - 7 : y - localY;
-						Region next = regions.fromPosition(new Position(nextLocalX, nextLocalY));
-
-						int nextX = nextLocalX % Region.SIZE + dx;
-						int nextY = nextLocalY % Region.SIZE + dy;
-
-						if (nextX > 7) {
-							nextX -= 7;
-						}
-
-						if (nextY > 7) {
-							nextY -= 7;
-						}
-
-						next.getMatrix(height).block(nextX, nextY);
-						continue;
-					}
-
-					matrix.block(localX, localY);
-				}
+			if (orientation == Direction.EAST || orientation == Direction.WEST) {
+				width = definition.getLength();
+				length = definition.getWidth();
 			}
+
+			if (type == ObjectType.FLOOR_DECORATION.getValue()) {
+				if (definition.isInteractive() && definition.isSolid()) {
+					flag(new Position(x, y, height), impenetrable, Direction.NESW);
+				}
+			} else if (type >= ObjectType.DIAGONAL_WALL.getValue() && type < ObjectType.FLOOR_DECORATION.getValue()) {
+				for (int dx = 0; dx < width; dx++) {
+					for (int dy = 0; dy < length; dy++) {
+						flag(new Position(x + dx, y + dy, height), impenetrable, Direction.NESW);
+					}
+				}
+			} else if (type == ObjectType.LENGTHWISE_WALL.getValue()) {
+				flag(position, impenetrable, orientation);
+			} else if (type == ObjectType.TRIANGULAR_CORNER.getValue() || type == ObjectType.RECTANGULAR_CORNER.getValue()) {
+				flagLargeCorner(position, impenetrable, orientation);
+			} else if (type == ObjectType.WALL_CORNER.getValue()) {
+				flagCorner(position, impenetrable, orientation);
+			}
+		}
+	}
+
+	/**
+	 * Flags a the tiles of a corner {@link GameObject} which occupies multiple tiles.
+	 *
+	 * @param position The position of the {@code GameObject}.
+	 * @param impenetrable A flag which indicates if projectiles can pass through the tiles occupied by this object.
+	 * @param orientation The direction the object is facing.
+	 */
+	private void flagLargeCorner(Position position, boolean impenetrable, Direction orientation) {
+		int x = position.getX(), y = position.getY();
+		int height = position.getHeight();
+
+		Direction originDirection;
+
+		if (orientation == Direction.NORTH) {
+			originDirection = Direction.NORTH_EAST;
+		} else if (orientation == Direction.EAST) {
+			originDirection = Direction.SOUTH_EAST;
+		} else if (orientation == Direction.SOUTH) {
+			originDirection = Direction.SOUTH_WEST;
+		} else if (orientation == Direction.WEST) {
+			originDirection = Direction.NORTH_WEST;
+		} else {
+			throw new IllegalStateException("Found a large corner with a diagonal orientation");
+		}
+
+		Position adjacentPosition = new Position(x - originDirection.deltaX(), y - originDirection.deltaY(), height);
+		Direction adjacentDirection = originDirection.opposite();
+
+		flag(position, impenetrable, originDirection);
+		flag(adjacentPosition, impenetrable, adjacentDirection);
+	}
+
+	/**
+	 * Flags the tile occupied by a corner {@link GameObject} which occupies only one tile.
+	 *
+	 * @param position The position of the {@code GameObject}.
+	 * @param impenetrable A flag which indicates if projectiles can pass through the tile occupied by this object.
+	 * @param orientation The direction the object is facing.
+	 */
+	private void flagCorner(Position position, boolean impenetrable, Direction orientation) {
+		if (orientation == Direction.NORTH) {
+			flag(position, impenetrable, Direction.EAST, Direction.NORTH);
+		} else if (orientation == Direction.EAST) {
+			flag(position, impenetrable, Direction.EAST, Direction.SOUTH);
+		} else if (orientation == Direction.SOUTH) {
+			flag(position, impenetrable, Direction.SOUTH, Direction.WEST);
+		} else if (orientation == Direction.WEST) {
+			flag(position, impenetrable, Direction.NORTH, Direction.WEST);
+		} else {
+			throw new IllegalStateException("Found corner with a diagonal orientation");
+		}
+	}
+
+	/**
+	 * Set the flags for all {@code directions} on the tile at {@code position}.
+	 *
+	 * @param position The tile to set collision flags for.
+	 * @param impenetrable Whether projectile collision flags should also be set.
+	 * @param directions The directional flags to set.
+	 */
+	private void flag(Position position, boolean impenetrable, Direction... directions) {
+		Region region = previous;
+		if (!region.contains(position)) {
+			region = world.getRegionRepository().fromPosition(position);
+		}
+
+		int localX = position.getX() % Region.SIZE, localY = position.getY() % Region.SIZE;
+
+		CollisionMatrix matrix = region.getMatrix(position.getHeight());
+		CollisionFlag[] mobs = CollisionFlag.mobs();
+		CollisionFlag[] projectiles = CollisionFlag.projectiles();
+
+		for (Direction direction : directions) {
+			if (direction == Direction.NONE) {
+				continue;
+			}
+
+			int orientation = direction.toInteger();
+			if (impenetrable) {
+				matrix.flag(localX, localY, projectiles[orientation]);
+			}
+
+			matrix.flag(localX, localY, mobs[orientation]);
 		}
 	}
 
@@ -167,25 +284,12 @@ public final class GameObjectDecoder implements Runnable {
 	 * @param height The level level of the tile the attributes belong to.
 	 */
 	private void decodeAttributes(int attributes, int x, int y, int height) {
-		boolean block = false;
 		if ((attributes & BLOCKED_TILE) != 0) {
-			block = true;
+			blockedTiles.add(new Position(x, y, height));
 		}
 
-		if ((attributes & BRIDGE_TILE) != 0 && height >0) {
-				block = true;
-				height--;
-		}
-
-		if (block) {
-			int localX = x % Region.SIZE, localY = y % Region.SIZE;
-			Position position = new Position(x, y, height);
-
-			if (!previous.contains(position)) {
-				previous = regions.fromPosition(position);
-			}
-
-			previous.getMatrix(height).block(localX, localY);
+		if ((attributes & BRIDGE_TILE) != 0) {
+			bridgeTiles.add(new Position(x, y, height));
 		}
 	}
 
@@ -272,12 +376,18 @@ public final class GameObjectDecoder implements Runnable {
 	 * @return {@code true} iff the tile(s) the object is on should be blocked.
 	 */
 	private boolean unwalkable(ObjectDefinition definition, int type) {
-		// TODO figure out the other ObjectTypes and get rid of all the getValue() calls
-		return (type == ObjectType.FLOOR_DECORATION.getValue() && definition.isInteractive()) ||
-			(type >= ObjectType.LENGTHWISE_WALL.getValue() && type <= ObjectType.RECTANGULAR_CORNER.getValue()) ||
-			(type > ObjectType.DIAGONAL_INTERACTABLE.getValue() && type < ObjectType.FLOOR_DECORATION.getValue()) ||
-			(type == ObjectType.INTERACTABLE.getValue() && definition.isSolid()) ||
-			type == ObjectType.DIAGONAL_WALL.getValue();
+		boolean isSolidFloorDecoration = type == ObjectType.FLOOR_DECORATION.getValue() && definition.isInteractive();
+
+		boolean isWall = type >= ObjectType.LENGTHWISE_WALL.getValue()
+			&& type <= ObjectType.RECTANGULAR_CORNER.getValue() || type == ObjectType.DIAGONAL_WALL.getValue();
+
+		boolean isRoof = type > ObjectType.DIAGONAL_INTERACTABLE.getValue()
+			&& type < ObjectType.FLOOR_DECORATION.getValue();
+
+		boolean isSolidInteractable = (type == ObjectType.DIAGONAL_INTERACTABLE.getValue()
+			|| type == ObjectType.INTERACTABLE.getValue()) && definition.isSolid();
+
+		return isWall || isRoof || isSolidInteractable || isSolidFloorDecoration;
 	}
 
 }
