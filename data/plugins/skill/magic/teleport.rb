@@ -47,7 +47,7 @@ class TeleportingAction < SpellAction
       mob.play_graphic(MODERN_TELE_GRAPHIC)
     elsif @pulses == 3
       mob.stop_graphic
-      mob.stopAnimation
+      mob.stop_animation
       mob.teleport(@spell.destination)
       mob.skill_set.add_experience(Skill::MAGIC, @spell.experience)
       stop
