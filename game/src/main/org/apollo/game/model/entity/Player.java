@@ -64,6 +64,11 @@ import org.apollo.util.security.PlayerCredentials;
 public final class Player extends Mob {
 
 	/**
+	 * The default viewing distance, in tiles.
+	 */
+	private static final int DEFAULT_VIEWING_DISTANCE = 15;
+
+	/**
 	 * The current amount of appearance tickets.
 	 */
 	private static final AtomicInteger appearanceTicketCounter = new AtomicInteger(0);
@@ -211,7 +216,7 @@ public final class Player extends Mob {
 	/**
 	 * The current maximum viewing distance of this Player.
 	 */
-	private int viewingDistance = 1;
+	private int viewingDistance = DEFAULT_VIEWING_DISTANCE;
 
 	/**
 	 * A flag indicating if the player is withdrawing items as notes.
@@ -707,7 +712,7 @@ public final class Player extends Mob {
 	 * Resets this player's viewing distance.
 	 */
 	public void resetViewingDistance() {
-		viewingDistance = 1;
+		viewingDistance = DEFAULT_VIEWING_DISTANCE;
 	}
 
 	/**
