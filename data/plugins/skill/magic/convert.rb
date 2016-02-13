@@ -84,5 +84,5 @@ def convert(button, level, elements, experience, reward)
   CONVERT_SPELLS[button] = ConvertSpell.new(level, elements, experience, reward)
 end
 
-convert 1159, 15, { EARTH => 2, WATER => 2, NATURE => 1 }, 25, 1963 # Bones to bananas
+convert 1159, 15, { NATURE => 1, WATER => 2, EARTH => 2 }, 25, 1963 # Bones to bananas
 # convert 15877, 60, { NATURE => 2, WATER => 4, EARTH => 4 }, 35.5, 6883 # Bones to peaches

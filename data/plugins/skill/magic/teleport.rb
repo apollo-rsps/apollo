@@ -11,8 +11,7 @@ java_import 'org.apollo.game.model.entity.Skill'
 TELEPORT_SPELLS = {}
 
 MODERN_TELE_ANIM = Animation.new(714)
-MODERN_TELE_END_ANIM = Animation.new(715)
-MODERN_TELE_GRAPHIC = Graphic.new(308, 15, 100)
+MODERN_TELE_GRAPHIC = Graphic.new(111, 5, 100)
 
 ANCIENT_TELE_END_GRAPHIC = Graphic.new(455)
 ANCIENT_TELE_ANIM = Animation.new(1979)
@@ -45,12 +44,10 @@ class TeleportingAction < SpellAction
   def execute_modern
     if @pulses == 0
       mob.play_animation(MODERN_TELE_ANIM)
-    elsif @pulses == 1
       mob.play_graphic(MODERN_TELE_GRAPHIC)
-      set_delay(1)
-    elsif @pulses == 2
+    elsif @pulses == 3
       mob.stop_graphic
-      mob.play_animation(MODERN_TELE_END_ANIM)
+      mob.stop_animation
       mob.teleport(@spell.destination)
       mob.skill_set.add_experience(Skill::MAGIC, @spell.experience)
       stop
@@ -83,14 +80,14 @@ def ancient_tele(*args)
 end
 
 # Modern teleports
-tele 1_164, 25, { FIRE => 1, AIR => 3, LAW => 1 }, 3213, 3424, 35, 'Varrock'
-tele 1_167, 31, { EARTH => 1, AIR => 3, LAW => 1 }, 3222, 3219, 41, 'Lumbridge'
-tele 1_170, 37, { WATER => 1, AIR => 3, LAW => 1 }, 2965, 3379, 47, 'Falador'
-tele 1_174, 45, { AIR => 5, LAW => 1 }, 2757, 3478, 55.5, 'Camelot'
-tele 1_540, 51, { WATER => 2, LAW => 2 }, 2662, 3306, 61, 'Ardougne'
-tele 1_541, 58, { EARTH => 2, LAW => 2 }, 2549, 3114, 68, 'the Watchtower'
-tele 7_455, 61, { FIRE => 2, LAW => 2 }, 2871, 3590, 68, 'Trollheim'
-tele 18_470, 64, { FIRE => 2, WATER => 2, LAW => 2, Element.new([1963], nil, 'Banana') => 1 },
+tele 1_164, 25, { LAW => 1, AIR => 3, FIRE => 1 }, 3213, 3424, 35, 'Varrock'
+tele 1_167, 31, { LAW => 1, AIR => 3, EARTH => 1 }, 3222, 3219, 41, 'Lumbridge'
+tele 1_170, 37, { LAW => 1, AIR => 3, WATER => 1 }, 2965, 3379, 47, 'Falador'
+tele 1_174, 45, { LAW => 1, AIR => 5 }, 2757, 3478, 55.5, 'Camelot'
+tele 1_540, 51, { LAW => 2, WATER => 2 }, 2662, 3306, 61, 'Ardougne'
+tele 1_541, 58, { LAW => 2, EARTH => 2 }, 2549, 3114, 68, 'the Watchtower'
+tele 7_455, 61, { LAW => 2, FIRE => 2 }, 2871, 3590, 68, 'Trollheim'
+tele 18_470, 64, { Element.new([1963], nil, 'Banana') => 1, LAW => 2, WATER => 2, FIRE => 2 },
      2_754, 2_785, 76, 'Ape Atoll'
 
 # Ancient teleports
