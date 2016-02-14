@@ -28,7 +28,6 @@ spawn_npc name: :giant_rat_87, x: 3267, y: 3381
 spawn_npc name: :guard_368, x: 3263, y: 3407, face: :south
 
 spawn_npc name: :jeremy_clerksin, x: 3253, y: 3477
-
 spawn_npc name: :martina_scorsby, x: 3256, y: 3481
 
 spawn_npc name: :man, x: 3281, y: 3500
@@ -38,7 +37,6 @@ spawn_npc name: :man, x: 3245, y: 3394
 spawn_npc name: :man, x: 3283, y: 3492, z: 1
 
 spawn_npc name: :man_2, x: 3263, y: 3400
-
 spawn_npc name: :man_3, x: 3227, y: 3395, z: 1
 spawn_npc name: :man_3, x: 3231, y: 3399, z: 1
 
@@ -235,18 +233,14 @@ spawn_npc name: :zaff, x: 3203, y: 3434
 # Juliet House
 
 spawn_npc name: :draul_leptoc, x: 3228, y: 3475
-
-spawn_npc name: :juliet, x: 3159, y: 3425, z: 1
-
-spawn_npc name: :phillipa, x: 3160, y: 3429, z: 1
+spawn_npc name: :juliet,       x: 3159, y: 3425, z: 1
+spawn_npc name: :phillipa,     x: 3160, y: 3429, z: 1
 
 # Gertrude House
 
 spawn_npc name: :gertrude, x: 3153, y: 3413
-
-spawn_npc name: :kanel, x: 3155, y: 3405, face: :east
-
-spawn_npc name: :philop, x: 3150, y: 3405, face: :south
+spawn_npc name: :kanel,    x: 3155, y: 3405, face: :east
+spawn_npc name: :philop,   x: 3150, y: 3405, face: :south
 
 # Small Bank
 
