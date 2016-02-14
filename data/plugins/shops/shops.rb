@@ -18,15 +18,16 @@ def create_shop(hash)
   end
 
   npcs, name = hash[:npcs], hash[:name]
+  npcs = [npcs] unless npcs.is_a?(Array)
   currency = hash[:currency] || DEFAULT_CURRENCY
 
   options = hash[:npc_options] || [1]
   buys = hash[:buys] || :own
 
-  items = hash.delete(:items).collect { |data| ShopItem.new(*data) }
+  items = hash.delete(:items).collect { |data| ShopItem.new(lookup_item(data[0]), data[1]) }
   shop = Shop.new(name, items, currency, options, buys)
 
-  npcs.each { |npc| SHOPS[npc] = shop }
+  npcs.map { |name| lookup_npc(name) }.each { |npc| SHOPS[npc] = shop }
 end
 
 private
