@@ -248,4 +248,4 @@ MAGIC_ROOTS        = Ingredient.new(6051)
 UNICORN_HORN_DUST = append_ground(235,  237)
 DRAGON_SCALE_DUST = append_ground(241,  243)
 CHOCOLATE_DUST    = append_ground(1975, 1973)
-# CRUSHED_NEST      = append_ground(6693, 5075) # TODO: only in 377
+CRUSHED_NEST      = append_ground(6693, 5075)
