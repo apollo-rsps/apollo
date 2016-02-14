@@ -4,12 +4,15 @@ import org.apollo.cache.def.EquipmentDefinition;
 import org.apollo.game.message.impl.ItemOptionMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
-import org.apollo.game.model.entity.EquipmentConstants;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
+import org.apollo.game.model.entity.SkillSet;
 import org.apollo.game.model.inv.Inventory;
-import org.apollo.game.model.inv.SynchronizationInventoryListener;
 import org.apollo.util.LanguageUtil;
+
+import static org.apollo.game.model.entity.EquipmentConstants.SHIELD;
+import static org.apollo.game.model.entity.EquipmentConstants.WEAPON;
+import static org.apollo.game.model.inv.SynchronizationInventoryListener.INVENTORY_ID;
 
 /**
  * A {@link MessageHandler} that equips items.
@@ -36,61 +39,45 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 
 	@Override
 	public void handle(Player player, ItemOptionMessage message) {
-		if (message.getOption() != EQUIP_OPTION || message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID) {
+		if (message.getInterfaceId() != INVENTORY_ID || message.getOption() != EQUIP_OPTION) {
 			return;
 		}
 
 		int inventorySlot = message.getSlot();
-		Item equipping = player.getInventory().get(inventorySlot);
+		Inventory inventory = player.getInventory();
+
+		Item equipping = inventory.get(inventorySlot);
 		int equippingId = equipping.getId();
+
 		EquipmentDefinition definition = EquipmentDefinition.lookup(equippingId);
 
 		if (definition == null) {
-			// We don't break the chain here or any item option messages won't work!
+			return;
+		} else if (!hasRequirements(player, definition)) {
+			message.terminate();
 			return;
 		}
 
-		for (int id = 0; id < 5; id++) {
-			int requirement = definition.getLevel(id);
-
-			if (player.getSkillSet().getMaximumLevel(id) < requirement) {
-				String name = Skill.getName(id);
-				String article = LanguageUtil.getIndefiniteArticle(name);
-
-				player.sendMessage("You need " + article + " " + name + " level of " + requirement + " to equip this item.");
-				message.terminate();
-				return;
-			}
-		}
-
-		Inventory inventory = player.getInventory();
 		Inventory equipment = player.getEquipment();
 
-		int equipmentSlot = definition.getSlot();
-
-		Item weapon = equipment.get(EquipmentConstants.WEAPON);
-		Item shield = equipment.get(EquipmentConstants.SHIELD);
-
-		// XXX: This is still pretty ugly in some parts, improve.
+		Item weapon = equipment.get(WEAPON);
+		Item shield = equipment.get(SHIELD);
 
 		if (definition.isTwoHanded()) {
 			int slotsRequired = weapon != null && shield != null ? 1 : 0;
+
 			if (inventory.freeSlots() < slotsRequired) {
 				message.terminate();
 				return;
 			}
 
-			// Reset the weapon and the shield slots.
-			equipment.reset(EquipmentConstants.WEAPON);
-			equipment.reset(EquipmentConstants.SHIELD);
+			equipment.reset(SHIELD);
+			equipment.set(WEAPON, inventory.reset(inventorySlot));
 
-			// Set the two-handed weapon and clear it from the inventory.
-			equipment.set(EquipmentConstants.WEAPON, inventory.reset(inventorySlot));
-
-			// Add previous shield or weapon, if present.
 			if (shield != null) {
 				inventory.add(shield);
 			}
+
 			if (weapon != null) {
 				inventory.add(weapon);
 			}
@@ -99,43 +86,60 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 			return;
 		}
 
-		if (definition.getSlot() == EquipmentConstants.SHIELD && weapon != null && EquipmentDefinition.lookup(weapon.getId()).isTwoHanded()) {
-			equipment.set(EquipmentConstants.SHIELD, inventory.reset(inventorySlot));
-			inventory.add(equipment.reset(EquipmentConstants.WEAPON));
+		int equipmentSlot = definition.getSlot();
+
+		if (equipmentSlot == SHIELD && weapon != null && EquipmentDefinition.lookup(weapon.getId()).isTwoHanded()) {
+			equipment.set(SHIELD, inventory.reset(inventorySlot));
+			inventory.add(equipment.reset(WEAPON));
 			return;
 		}
 
 		Item current = equipment.get(equipmentSlot);
 
-		if (current != null && current.getId() == equipping.getId() && current.getDefinition().isStackable()) {
+		if (current != null && current.getId() == equippingId && current.getDefinition().isStackable()) {
 			long total = (long) current.getAmount() + equipping.getAmount();
 
-			// If the total has not over flown and we can add to the existing stack, do so.
-			if (total <= Integer.MAX_VALUE && !equipment.add(inventory.reset(inventorySlot)).isPresent()) {
-				return;
+			if (total <= Integer.MAX_VALUE) {
+				equipment.set(equipmentSlot, new Item(equippingId, (int) total));
+				inventory.set(inventorySlot, null);
+			} else {
+				equipment.set(equipmentSlot, new Item(equippingId, Integer.MAX_VALUE));
+				inventory.set(inventorySlot, new Item(equippingId, (int) (total - Integer.MAX_VALUE)));
 			}
+		} else {
+			inventory.set(inventorySlot, null);
+			equipment.set(equipmentSlot, equipping);
 
-			int remaining = (int) (total - Integer.MAX_VALUE);
-			int removed = equipping.getAmount() - remaining;
-
-			if (remaining == equipping.getAmount()) {
-				equipment.set(equipmentSlot, equipping);
+			if (current != null) {
 				inventory.set(inventorySlot, current);
-				return;
 			}
+		}
+	}
 
-			inventory.remove(equipping.getId(), removed);
-			equipment.add(equipping.getId(), removed);
-			return;
+	/**
+	 * Returns whether or not the specified {@link Player} has the required levels to equip the item with the specified
+	 * {@link EquipmentDefinition}, sending the {@link Player} a message if not.
+	 *
+	 * @param player The {@link Player} trying to equip the item. Must not be {@code null}.
+	 * @param definition The {@link EquipmentDefinition} of the item being equipped. Must not be {@code null}.
+	 * @return {@code true} iff the {@link Player} meets all of the skill requirements for the item.
+	 */
+	private boolean hasRequirements(Player player, EquipmentDefinition definition) {
+		SkillSet skills = player.getSkillSet();
+
+		for (int id = Skill.ATTACK; id <= Skill.MAGIC; id++) {
+			int requirement = definition.getLevel(id);
+
+			if (skills.getMaximumLevel(id) < requirement) {
+				String name = Skill.getName(id);
+
+				player.sendMessage("You need " + LanguageUtil.getIndefiniteArticle(name) + " " + name + " level of " +
+					requirement + " to equip this item.");
+				return false;
+			}
 		}
 
-		Item previous = equipment.reset(equipmentSlot);
-		inventory.remove(equipping);
-		equipment.set(equipmentSlot, equipping);
-
-		if (previous != null) {
-			inventory.set(inventorySlot, previous);
-		}
+		return true;
 	}
 
 }
