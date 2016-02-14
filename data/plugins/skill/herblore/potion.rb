@@ -3,6 +3,7 @@ require 'java'
 java_import 'org.apollo.game.action.Action'
 java_import 'org.apollo.game.model.Animation'
 java_import 'org.apollo.game.model.Item'
+java_import 'org.apollo.game.model.entity.Skill'
 java_import 'org.apollo.game.model.inter.EnterAmountListener'
 java_import 'org.apollo.game.model.inter.dialogue.DialogueAdapter'
 
@@ -274,15 +275,15 @@ class FinishedMixingAction < MixingAction
     @ingredient = ingredient
   end
 
-  def executeAction
-    player = mob
-    ingredient = name_of(@ingredient).downcase
+  def execute_action
+    ingredient = name_of(:item, @ingredient).downcase
     name = @potion.item.definition.name.sub('(3)', '')
 
-    player.send_message("You add the #{ingredient} to the mixture to make an #{name}.")
-    player.skill_set.add_experience(HERBLORE_SKILL_ID, @potion.experience)
+    name = "#{LanguageUtil.get_indefinite_article(name)} #{name}"
+    mob.send_message("You add the #{ingredient} to the mixture to make #{name}.")
+    mob.skill_set.add_experience(Skill::HERBLORE, @potion.experience)
 
-    inventory = player.inventory
+    inventory = mob.inventory
 
     @slots.each do |slot, amount|
       unless inventory.remove_slot(slot, amount) # TODO: will this remove stuff incorrectly?
