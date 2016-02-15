@@ -21,6 +21,7 @@ import org.apollo.game.model.World;
 import org.apollo.game.plugin.PluginContext;
 import org.apollo.game.plugin.PluginManager;
 import org.apollo.game.release.r317.Release317;
+import org.apollo.game.release.r377.Release377;
 import org.apollo.game.session.ApolloHandler;
 import org.apollo.net.HttpChannelInitializer;
 import org.apollo.net.JagGrabChannelInitializer;
@@ -50,7 +51,7 @@ public final class Server {
 
 		try {
 			Server server = new Server();
-			server.init(args.length == 1 ? args[0] : Release317.class.getName());
+			server.init(args.length == 1 ? args[0] : Release377.class.getName());
 
 			SocketAddress service = new InetSocketAddress(NetworkConstants.SERVICE_PORT);
 			SocketAddress http = new InetSocketAddress(NetworkConstants.HTTP_PORT);
@@ -103,13 +104,6 @@ public final class Server {
 	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) throws IOException {
 		logger.fine("Binding service listener to address: " + service + "...");
 		bind(serviceBootstrap, service);
-
-		try {
-			logger.fine("Binding HTTP listener to address: " + http + "...");
-			bind(httpBootstrap, http);
-		} catch (IOException cause) {
-			logger.log(Level.WARNING, "Unable to bind to HTTP - JAGGRAB will be used as a fallback.", cause);
-		}
 
 		logger.fine("Binding JAGGRAB listener to address: " + jaggrab + "...");
 		bind(jaggrabBootstrap, jaggrab);
