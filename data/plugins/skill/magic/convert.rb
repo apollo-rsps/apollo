@@ -44,7 +44,7 @@ class ConvertingAction < SpellAction
       reward = @spell.reward
       @slots.each { |slot| inventory.set(slot, reward) }
 
-      unless firing # If we waited with firing events, restore it now and force a refresh
+      unless firing
         inventory.start_firing_events
         inventory.force_refresh
       end
@@ -80,9 +80,10 @@ def bone_slots(player)
   slots
 end
 
-def convert(button, level, elements, experience, reward)
+def convert(_name, button, level, elements, experience, reward)
   CONVERT_SPELLS[button] = ConvertSpell.new(level, elements, experience, reward)
 end
 
-convert 1159, 15, { NATURE => 1, WATER => 2, EARTH => 2 }, 25, 1963 # Bones to bananas
-# convert 15877, 60, { NATURE => 2, WATER => 4, EARTH => 4 }, 35.5, 6883 # Bones to peaches
+convert :bones_to_bananas, 1159, 15, { NATURE => 1, WATER => 2, EARTH => 2 }, 25, 1963
+convert :bones_to_peaches, 15877, 60, { NATURE => 2, WATER => 4, EARTH => 4 }, 35.5, 6883
+
