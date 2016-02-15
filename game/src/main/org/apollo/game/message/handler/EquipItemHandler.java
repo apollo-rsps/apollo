@@ -67,6 +67,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 			int slotsRequired = weapon != null && shield != null ? 1 : 0;
 
 			if (inventory.freeSlots() < slotsRequired) {
+				player.sendMessage("You don't have enough free inventory space to do that.");
 				message.terminate();
 				return;
 			}
@@ -133,13 +134,11 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 			if (skills.getMaximumLevel(id) < requirement) {
 				String name = Skill.getName(id);
 
-				player.sendMessage("You need " + LanguageUtil.getIndefiniteArticle(name) + " " + name + " level of " +
-					requirement + " to equip this item.");
+				player.sendMessage("You are not a high enough level to use this item.");
+				player.sendMessage("You need to have " + LanguageUtil.getIndefiniteArticle(name) + " " + name.toLowerCase() + " level of " + requirement + "." );
 				return false;
 			}
 		}
-
 		return true;
 	}
-
 }
