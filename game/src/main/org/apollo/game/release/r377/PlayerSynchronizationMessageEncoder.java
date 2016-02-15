@@ -196,7 +196,7 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 			if (helm != null) {
 				def = EquipmentDefinition.lookup(helm.getId());
 			}
-			if (def != null && (def.isFullHat() || def.isFullMask()) || appearance.getGender() == Gender.FEMALE) {
+			if (def != null && (def.isFullMask()) || appearance.getGender() == Gender.FEMALE) {
 				playerProperties.put(DataType.BYTE, 0);
 			} else {
 				playerProperties.put(DataType.SHORT, 0x100 + style[1]);
