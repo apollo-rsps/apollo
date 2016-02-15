@@ -14,12 +14,12 @@ public final class FullInventoryListener extends InventoryAdapter {
 	/**
 	 * The bank full message.
 	 */
-	public static final String FULL_BANK_MESSAGE = "Not enough bank space.";
+	public static final String FULL_BANK_MESSAGE = "You could not bank all your items.";
 
 	/**
 	 * The inventory full message.
 	 */
-	public static final String FULL_INVENTORY_MESSAGE = "Not enough inventory space.";
+	public static final String FULL_INVENTORY_MESSAGE = "You don't have enough inventory space.";
 
 	/**
 	 * The message to send when the capacity has been exceeded.
