@@ -70,30 +70,21 @@ public final class ItemDefinitionDecoder implements Runnable {
 
 			if (opcode == 0) {
 				return definition;
-			} else if (opcode == 1) {
+			} else if (opcode == 1 || opcode >= 4 && opcode <= 8 || opcode == 10 || opcode == 24 || opcode == 26 || opcode >= 110 && opcode <= 112 || opcode >= 110 && opcode <= 112) {
 				buffer.getShort();
 			} else if (opcode == 2) {
 				definition.setName(BufferUtil.readString(buffer));
 			} else if (opcode == 3) {
 				definition.setDescription(BufferUtil.readString(buffer));
-			} else if (opcode >= 4 && opcode <= 8 || opcode == 10) {
-				buffer.getShort();
 			} else if (opcode == 11) {
 				definition.setStackable(true);
 			} else if (opcode == 12) {
 				definition.setValue(buffer.getInt());
 			} else if (opcode == 16) {
 				definition.setMembersOnly(true);
-			} else if (opcode == 23) {
+			} else if (opcode == 23 || opcode == 25) {
 				buffer.getShort();
 				buffer.get();
-			} else if (opcode == 24) {
-				buffer.getShort();
-			} else if (opcode == 25) {
-				buffer.getShort();
-				buffer.get();
-			} else if (opcode == 26) {
-				buffer.getShort();
 			} else if (opcode >= 30 && opcode < 35) {
 				String str = BufferUtil.readString(buffer);
 				if (str.equalsIgnoreCase("hidden")) {
@@ -108,16 +99,12 @@ public final class ItemDefinitionDecoder implements Runnable {
 					buffer.getShort();
 					buffer.getShort();
 				}
-			} else if (opcode == 78 || opcode == 79 || (opcode >= 90 && opcode <= 93) || opcode == 95) {
-				buffer.getShort();
 			} else if (opcode == 97) {
 				definition.setNoteInfoId(buffer.getShort() & 0xFFFF);
 			} else if (opcode == 98) {
 				definition.setNoteGraphicId(buffer.getShort() & 0xFFFF);
 			} else if (opcode >= 100 && opcode < 110) {
 				buffer.getShort();
-				buffer.getShort();
-			} else if (opcode >= 110 && opcode <= 112) {
 				buffer.getShort();
 			} else if (opcode == 113 || opcode == 114) {
 				buffer.get();
