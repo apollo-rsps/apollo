@@ -31,7 +31,7 @@ public final class EquipmentUpdater {
 		String release = args[0];
 
 		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release + ".dat")));
-		     IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
+			IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
 			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
 			decoder.run();
 
@@ -52,6 +52,7 @@ public final class EquipmentUpdater {
 					os.writeByte(getStrengthRequirement(definition));
 					os.writeByte(getDefenceRequirement(definition));
 					os.writeByte(getRangedRequirement(definition));
+					os.writeByte(getPrayerRequirement(definition));
 					os.writeByte(getMagicRequirement(definition));
 				}
 			}
@@ -254,6 +255,12 @@ public final class EquipmentUpdater {
 			return 1;
 		} else if (id == 7456) {
 			return 1;
+		} else if (id == 2661) {
+			return 40;
+		} else if (id == 2667) {
+			return 40;
+		} else if (id == 3479) {
+			return 40;
 		} else if (name.equals("White med helm")) {
 			return 10;
 		} else if (name.equals("White chainbody")) {
@@ -587,8 +594,29 @@ public final class EquipmentUpdater {
 			return 30;
 		} else if (name.equals("Fire battlestaff")) {
 			return 30;
+		} else if (name.equals("Toktz-mej-tal")) {
+			return 60;
 		}
+		return 1;
+	}
 
+	/**
+	 * Gets the prayer requirement.
+	 *
+	 * @param definition the item.
+	 * @return The required level.
+	 */
+	private static int getPrayerRequirement(ItemDefinition definition) {
+		String name = definition.getName();
+		if (name == null) {
+			name = "null";
+		}
+		if (name.contains("Initiate")) {
+			return 10;
+		}
+		if (name.contains("Proselyte")) {
+			return 20;
+		}
 		return 1;
 	}
 
@@ -885,6 +913,8 @@ public final class EquipmentUpdater {
 		if (id == 4212) {
 			return true;
 		} else if (id == 4214) {
+			return true;
+		} else if (id == 6526) {
 			return true;
 		} else if (name.endsWith("2h sword")) {
 			return true;

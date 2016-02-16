@@ -148,26 +148,6 @@ public final class EquipmentDefinition {
 	}
 
 	/**
-	 * Gets the id.
-	 *
-	 * @return The id.
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Gets the minimum level required to equip this item for a specific skill.
-	 *
-	 * @param skill The skill id.
-	 * @return The level.
-	 */
-	public int getLevel(int skill) {
-		Preconditions.checkArgument(skill >= ATTACK && skill <= MAGIC, "Skill id out of bounds.");
-		return levels[skill];
-	}
-
-	/**
 	 * Gets the minimum magic level required to equip this item.
 	 *
 	 * @return The level.
@@ -195,21 +175,41 @@ public final class EquipmentDefinition {
 	}
 
 	/**
-	 * Gets the target slot.
-	 *
-	 * @return The target slot.
-	 */
-	public int getSlot() {
-		return slot;
-	}
-
-	/**
 	 * Gets the minimum strength level required to equip this item.
 	 *
 	 * @return The level.
 	 */
 	public int getStrengthLevel() {
 		return levels[STRENGTH];
+	}
+
+	/**
+	 * Gets the id.
+	 *
+	 * @return The id.
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * Gets the minimum level required to equip this item for a specific skill.
+	 *
+	 * @param skill The skill id.
+	 * @return The level.
+	 */
+	public int getLevel(int skill) {
+		Preconditions.checkArgument(skill >= ATTACK && skill <= MAGIC, "Skill id out of bounds.");
+		return levels[skill];
+	}
+
+	/**
+	 * Gets the target slot.
+	 *
+	 * @return The target slot.
+	 */
+	public int getSlot() {
+		return slot;
 	}
 
 	/**
@@ -270,10 +270,11 @@ public final class EquipmentDefinition {
 	 * @param strength The required strength level.
 	 * @param defence The required defence level.
 	 * @param ranged The required ranged level.
+	 * @param prayer The required prayer level.
 	 * @param magic The required magic level.
 	 */
-	public void setLevels(int attack, int strength, int defence, int ranged, int magic) {
-		setLevels(attack, strength, defence, 1, ranged, 1, magic);
+	public void setLevels(int attack, int strength, int defence, int ranged, int prayer, int magic) {
+		setLevels(attack, strength, defence, 1, ranged, prayer, magic);
 	}
 
 	/**
