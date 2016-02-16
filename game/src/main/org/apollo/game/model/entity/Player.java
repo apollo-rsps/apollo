@@ -228,6 +228,8 @@ public final class Player extends Mob {
 	 */
 	private int worldId = 1;
 
+	public static final int MAGIC_NUMBER = 0x8000;
+
 	/**
 	 * Creates the Player.
 	 *
@@ -413,7 +415,7 @@ public final class Player extends Mob {
 
 	@Override
 	public int getInteractionIndex() {
-		return getIndex() | 0x8000; // TODO magic constant
+		return getIndex() | Player.MAGIC_NUMBER;
 	}
 
 	/**
