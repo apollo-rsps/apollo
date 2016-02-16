@@ -63,10 +63,11 @@ public final class EquipmentDefinitionParser implements Runnable {
 					int strength = in.readByte() & 0xFF;
 					int defence = in.readByte() & 0xFF;
 					int ranged = in.readByte() & 0xFF;
+					int prayer = in.readByte() & 0xFF;
 					int magic = in.readByte() & 0xFF;
 
 					EquipmentDefinition definition = new EquipmentDefinition(id);
-					definition.setLevels(attack, strength, defence, ranged, magic);
+					definition.setLevels(attack, strength, defence, ranged, prayer, magic);
 					definition.setSlot(slot);
 					definition.setFlags(twoHanded, fullBody, fullHat, fullMask);
 
