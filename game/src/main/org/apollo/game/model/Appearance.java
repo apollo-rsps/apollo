@@ -38,8 +38,10 @@ public final class Appearance {
 	 * @param gender The gender.
 	 * @param style The style.
 	 * @param colors The colors.
+	 * @throws NullPointerException if any argument is null
+	 * @throws IllegalArgumentException if the style array/colors array doesn't have the expected number of elements
 	 */
-	public Appearance(Gender gender, int[] style, int[] colors) {
+	public Appearance(Gender gender, int[] style, int[] colors) throws NullPointerException,IllegalArgumentException{
 		if (gender == null || style == null || colors == null) {
 			throw new NullPointerException("No arguments can be null.");
 		}
