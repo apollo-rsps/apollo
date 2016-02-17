@@ -10,8 +10,8 @@ public final class TransactionBuilder {
 	private final Inventory inventory;
 
 	private TransactionBuilder(Inventory inventory) {
-		transaction.sync(inventory);
 		this.inventory = inventory;
+		transaction.sync(inventory);
 	}
 
 	public TransactionBuilder failureMessage(Player player, String message) {

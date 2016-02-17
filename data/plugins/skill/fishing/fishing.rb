@@ -68,7 +68,7 @@ class FishingAction < DistancedAction
       fish = options.sample # TODO: it's a ~70/30 chance, not 50/50
 
       if successful_catch(fishing_level, fish.level)
-        inventory.remove(bait) unless bait.nil?
+        inventory.remove(bait, 1) unless bait.nil?
         inventory.add(fish.id)
 
         name = fish.name
