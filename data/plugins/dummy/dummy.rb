@@ -14,6 +14,7 @@ EXP_PER_HIT = 5
 class DummyAction < DistancedAction
   attr_reader :position
 
+# Initialize a dummy
   def initialize(mob, position)
     super(ANIMATION_PULSES, true, mob, position, DUMMY_SIZE)
 
@@ -21,6 +22,7 @@ class DummyAction < DistancedAction
     @started = false
   end
 
+# Execute an action by attacking a training dummy
   def executeAction
     if @started
       skills = mob.skill_set
