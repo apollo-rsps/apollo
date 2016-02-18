@@ -421,7 +421,10 @@ public final class Inventory {
 	public Optional<Item> remove(int slot) {
 		Item item = get(slot);
 		if (item != null) {
-			remove(item);
+			int amount = remove(item);
+			if (amount != item.getAmount()) {
+				return Optional.of(new Item(item.getId(), amount));
+			}
 			return Optional.of(item);
 		}
 		return Optional.empty();
