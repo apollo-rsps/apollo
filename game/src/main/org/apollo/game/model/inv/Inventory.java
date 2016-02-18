@@ -413,13 +413,18 @@ public final class Inventory {
 	}
 
 	/**
-	 * Removes one item with the specified id.
+	 * Removes the Item at the specified {@code slot}.
 	 *
-	 * @param id The id.
-	 * @return {@code true} if the item was removed, {@code false} otherwise.
+	 * @param slot The slot of the Item to remove.
+	 * @return The Item removed, wrapped in an Optional.
 	 */
-	public boolean remove(int id) {
-		return remove(id, 1) == 1;
+	public Optional<Item> remove(int slot) {
+		Item item = get(slot);
+		if (item != null) {
+			remove(item);
+			return Optional.of(item);
+		}
+		return Optional.empty();
 	}
 
 	/**
@@ -434,7 +439,7 @@ public final class Inventory {
 	public boolean remove(int... ids) {
 		boolean successful = true;
 		for (int id : ids) {
-			successful &= remove(id);
+			successful &= remove(id, 1) == 1;
 		}
 
 		return successful;
