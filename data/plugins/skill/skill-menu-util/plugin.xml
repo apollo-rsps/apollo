@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<plugin>
+  <id>skill-menu-util</id>
+  <version>1</version>
+  <name>Skill Menu</name>
+  <description>A utility for adding items requirements to the skillmenu</description>
+  <authors>
+    <author>Shamon King</author>
+  </authors>
+  <scripts>
+    <script>skill_menu_constants.rb</script>
+    <script>skill_tab.rb</script>
+    <script>skill_menu.rb</script>
+    <script>skill_menu_event.rb</script>
+    <script>/skill-menus/agility_menu.rb</script>
+    <script>/skill-menus/attack_menu.rb</script>
+    <script>/skill-menus/cooking_menu.rb</script>
+    <script>/skill-menus/crafting_menu.rb</script>
+    <script>/skill-menus/defence_menu.rb</script>
+    <script>/skill-menus/farming_menu.rb</script>
+    <script>/skill-menus/firemaking_menu.rb</script>
+    <script>/skill-menus/fletching_menu.rb</script>
+    <script>/skill-menus/herblore_menu.rb</script>
+    <script>/skill-menus/hitpoints_menu.rb</script>
+    <script>/skill-menus/magic_menu.rb</script>
+    <script>/skill-menus/mining_menu.rb</script>
+    <script>/skill-menus/prayer_menu.rb</script>
+    <script>/skill-menus/ranged_menu.rb</script>
+    <script>/skill-menus/runecraft_menu.rb</script>
+    <script>/skill-menus/slayer_menu.rb</script>
+    <script>/skill-menus/smithing_menu.rb</script>
+    <script>/skill-menus/strength_menu.rb</script>
+    <script>/skill-menus/thieving_menu.rb</script>
+    <script>/skill-menus/woodcutting_menu.rb</script>
+  </scripts>
+  <dependencies>
+    <dependency>util</dependency>
+  </dependencies>
+</plugin>
