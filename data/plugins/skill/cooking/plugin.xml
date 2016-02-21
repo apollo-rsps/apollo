@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
 <plugin>
-  <id>herblore</id>
+  <id>cooking</id>
   <version>1</version>
-  <name>Herblore</name>
-  <description>The herblore skill.</description>
+  <name>Cooking</name>
+  <description>The cooking skill.</description>
   <authors>
     <author>Shamon King</author>
   </authors>
   <scripts>
-    <script>unfinished_potion.rb</script>
-    <script>finished_potion.rb</script>
-    <script>identify_herb.rb</script>
+    <script>cooking.rb</script>
   </scripts>
   <dependencies>
     <dependency>recipe-util</dependency>

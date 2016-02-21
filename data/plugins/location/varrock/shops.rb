@@ -1,44 +1,7 @@
-
-create_shop npcs: :aubury, name: "Aubury's Rune Shop.", items: [
-            [:fire_rune, 5_000], [:water_rune, 5_000], [:air_rune, 5_000], [:earth_rune, 5_000],
-            [:mind_rune, 5_000], [:body_rune, 5_000 ], [:chaos_rune, 250], [:death_rune, 250  ]
-]
-
-create_shop npcs: :lowe, name: "Lowe's Archery Emporium", items: [
-            [:bronze_arrow, 2_000], [:iron_arrow, 1_500], [:steel_arrow, 1_000],
-            [:mithril_arrow, 800], [:adamant_arrow, 600], [:shortbow, 4], [:longbow, 4],
-            [:oak_shortbow, 3], [:oak_longbow, 3], [:willow_shortbow, 2], [:willow_longbow, 2],
-            [:maple_shortbow, 1], [:maple_longbow, 1], [:crossbow, 2]
-]
-
-create_shop npcs: :horvik, buys: :all, name: "Horvik's Armour Shop.", items: [
-            [:bronze_chainbody, 5], [:iron_chainbody, 3], [:steel_chainbody, 3],
-            [:mithril_chainbody, 1], [:bronze_platebody, 3], [:iron_platebody, 1],
-            [:steel_platebody, 1], [:black_platebody, 1], [:mithril_platebody, 1],
-            [:iron_platelegs, 1], [:studded_body, 1], [:studded_chaps, 1]
-]
-
-create_shop npcs: :thessalia, name: "Thessalia's Fine Clothes.", items: [
-            [:white_apron, 3], [:leather_body, 12], [:leather_gloves, 10], [:leather_boots, 10],
-            [:brown_apron, 1], [:pink_skirt, 5], [:black_skirt, 3], [:blue_skirt, 2], [:cape, 4],
-            [:silk, 5], [:priest_gown_428, 3], [:priest_gown_426, 3]
-]
-
-create_shop npcs: [:shop_keeper_522, :shop_assistant_523], buys: :all,
-            name: 'Varrock General Store', items: [
-            [:pot, 5], [:jug, 2], [:shears, 2], [:bucket, 3], [:bowl, 2], [:cake_tin, 2],
-            [:tinderbox, 2], [:chisel, 2], [:hammer, 5], [:newcomer_map, 5]
-]
-
-create_shop npcs: [:shop_keeper_551, :shop_assistant_552], name: 'Varrock Swordshop', items: [
-            [:bronze_sword, 5], [:iron_sword, 4], [:steel_sword, 4], [:black_sword, 3],
-            [:mithril_sword, 3], [:adamant_sword, 2], [:bronze_longsword, 4], [:iron_longsword, 3],
-            [:steel_longsword, 3], [:black_longsword, 2], [:mithril_longsword, 2],
-            [:adamant_longsword, 1], [:bronze_dagger, 10], [:iron_dagger, 6], [:steel_dagger, 5],
-            [:black_dagger, 4], [:mithril_dagger, 3], [:adamant_dagger, 2]
-]
-
-create_shop npcs: :zaff, name: "Zaff's Superior Staffs!", items: [
-            [:battlestaff, 5], [:staff, 5], [:magic_staff, 5], [:staff_of_air, 2],
-            [:staff_of_water, 2], [:staff_of_earth, 2], [:staff_of_fire, 2]
-]
+create_shop :npcs => [553], :name => 'Aubury\'s Rune Shop.', :items => [[554, 5_000], [555, 5_000], [556, 5_000], [557, 5_000], [558, 5_000], [559, 5_000], [562, 250], [560, 250]]
+create_shop :npcs => [550], :name => 'Lowe\'s Archery Emporium', :items => [[882, 2_000], [884, 1_500], [886, 1_000], [888, 800], [890, 600], [841, 4], [839, 4], [843, 3], [845, 3], [849, 2], [847, 2], [853, 1], [851, 1], [837, 2]]
+create_shop :npcs => [549], :buys => :all, :name => 'Horvik\s Armour Shop.', :items => [[1103, 5], [1101, 3], [1105, 3], [1109, 1], [1117, 3], [1115, 1], [1119, 1], [1125, 1], [1121, 1], [1067, 1], [1133, 1], [1097, 1]]
+create_shop :npcs => [548], :name => 'Thessalia\'s Fine Clothes.', :items => [[1005, 3], [1129, 12], [1059, 10], [1061, 10], [1757, 1], [1013, 5], [1015, 3], [1011, 2], [1007, 4], [950, 5], [428, 3], [426, 3]]
+create_shop :npcs => [522, 523], :buys => :all, :name => 'Varrock General Store', :items => [[1931, 5], [1935, 2], [1735, 2], [1925, 3], [1923, 2], [1887, 2], [590, 2], [1755, 2], [2347, 5], [550, 5]]
+create_shop :npcs => [551, 552], :name => 'Varrock Swordshop', :items => [[1277, 5], [1279, 4], [1281, 4], [1283, 3], [1285, 3], [1287, 2], [1291, 4], [1293, 3], [1295, 3], [1297, 2], [1299, 2], [1301, 1], [1205, 10], [1203, 6], [1207, 5], [1217, 4], [1209, 3], [1211, 2]]
+create_shop :npcs => [546], :name => 'Zaff\'s Superior Staffs!', :items => [[1391, 5], [1379, 5], [1389, 5], [1381, 2], [1383, 2], [1385, 2], [1387, 2]]
