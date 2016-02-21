@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <plugin>
-  <id>herblore</id>
-  <version>1</version>
+  <id>skill-herblore</id>
+  <version>0.9</version>
   <name>Herblore</name>
-  <description>The herblore skill.</description>
+  <description>Adds the Herblore skill.</description>
   <authors>
-    <author>Shamon King</author>
+    <author>Chris Fletcher</author>
+    <author>Major</author>
   </authors>
   <scripts>
-    <script>unfinished_potion.rb</script>
-    <script>finished_potion.rb</script>
-    <script>identify_herb.rb</script>
+  <script>herblore.rb</script>
+  <script>ingredient.rb</script>
+  <script>herb.rb</script>
+  <script>potion.rb</script>
   </scripts>
-  <dependencies>
-    <dependency>recipe-util</dependency>
-  </dependencies>
+  <dependencies />
 </plugin>
