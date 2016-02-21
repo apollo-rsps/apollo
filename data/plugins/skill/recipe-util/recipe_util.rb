@@ -3,8 +3,8 @@ OBJECT_RECIPES = {}
 SINGLE_ITEM_RECIPES = {}
 
 # Creates a recipe for ITEM ON ITEM and ITEM ON OBJECT
-def create_recipe(name, &block)
-  recipe = Recipe.new &block
+def create_recipe(name, amount = 1, &block)
+  recipe = Recipe.new(name, amount, &block)
 
   requires_object = recipe.requires_object
 
@@ -37,8 +37,8 @@ def create_recipe(name, &block)
 end
 
 # Creates a recipe for single click items. EX herbs
-def create_single_item_recipe(name, option, &block)
-  recipe = Recipe.new &block
+def create_single_item_recipe(option, name, amount = 1, &block)
+  recipe = Recipe.new(name, amount, &block)
 
   SINGLE_ITEM_RECIPES[(option << 16) | recipe.main_material.id] = recipe
 end

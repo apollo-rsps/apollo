@@ -1,9 +1,8 @@
 FIRST_OPTION = 1
 
-create_single_item_recipe :identify_guam, FIRST_OPTION do
+create_single_item_recipe FIRST_OPTION, :guam_leaf_249 do
   requires :main_material, name: :guam_leaf_199
   requires :skill, id: Skill::HERBLORE, level: 1
-  rewards :product, name: :guam_leaf_249
   set_action_type :selectable
   register_to_skill_menu Skill::HERBLORE, "Herb"
 end

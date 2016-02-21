@@ -2,7 +2,7 @@ java_import 'org.apollo.game.model.entity.Skill'
 
 # Couple of Example usages
 # Combines multiple items into one product
-create_recipe :cake_recipe_combine do
+create_recipe :uncooked_cake do
   set_action_type :repeatable
   
   requires :skill, id: Skill::COOKING, level: 40
@@ -11,8 +11,6 @@ create_recipe :cake_recipe_combine do
   requires :material, name: :egg
   requires :material, name: :bucket_of_milk
   requires :material, name: :cake_tin
-
-  rewards :product, name: :uncooked_cake
 
   set_fail_chance lambda { | player, skill_requirements, primary, secondary | # primary and secondary refer to object/item/option keys
      60
@@ -44,7 +42,7 @@ end
 
 # Recipe for cooking a cake on a stove.
 # If it has an object requirement it's automatically a item on object packet.
-create_recipe :cake_recipe_cook do
+create_recipe :cake do
   set_fail_chance 50
 
   requires :skill, id: Skill::COOKING, level: 40
@@ -56,7 +54,6 @@ create_recipe :cake_recipe_cook do
   message :success, "Yay You did it."
   message :failure, "Fuck you burnt it."
 
-  rewards :product, name: :cake
   rewards :experience, id: Skill::COOKING, amount: 180
 
   set_action_type :repeatable

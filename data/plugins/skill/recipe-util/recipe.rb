@@ -10,7 +10,7 @@ class Recipe
   attr_reader :skill_requirements, :material_requirements, :object_requirements, :main_material, :tool_requirement,
   :experience_rewards, :item_rewards, :product_reward,
   :fail_chance, :messages, :action_type, :animation
-  def initialize(&block)
+  def initialize(name, amount, &block)
     # Requirements
     @skill_requirements = {}
     @material_requirements = {}
@@ -22,13 +22,16 @@ class Recipe
     # Rewards
     @experience_rewards = {}
     @item_rewards = []
-    @product_reward = nil
     @main_material = nil
+
+    id = lookup_item(name)
+    @product_reward = Item.new(id, amount)
+    puts "#{product_reward} #{id} #{name} #{amount}"
 
     # Other
     @messages = {}
-    @fail_chance = 0
     @skill_menu = nil
+    set_fail_chance(0)
 
     # Evalute the methods inside.
     self.instance_eval(&block)
@@ -107,8 +110,6 @@ class Recipe
 
     if type == :experience
       @experience_rewards.merge!(id => amount)
-    elsif type == :product
-      @product_reward = Item.new(id, amount)
     elsif type == :item
       @item_rewards.push( Item.new(id, amount) )
     end
@@ -178,7 +179,7 @@ class Recipe
   # Reward the player for making the recipe.
   def assign_rewards(player)
     # Add the main product.
-    player.inventory.add(product_reward) unless product_reward.nil?
+    player.inventory.add(product_reward)
 
     # Add additional items.
     item_rewards.each do |item|

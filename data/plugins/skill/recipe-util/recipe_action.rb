@@ -38,7 +38,7 @@ class RecipieAction < Action
 
     recipe.remove_materials(mob)
     
-    if recipe.fail_chance.call(mob, recipe.skill_requirements, primary, secondary) <= chance
+    if chance <= recipe.fail_chance.call(mob, recipe.skill_requirements, primary, secondary)
       recipe.display_failure_message(mob, primary, secondary)
     else
       recipe.display_success_message(mob, primary, secondary)
