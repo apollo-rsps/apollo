@@ -61,4 +61,19 @@ public final class BufferUtilTests {
 		assertEquals(123 << 16 | 45 << 8 | 67, BufferUtil.readUnsignedMedium(buf));
 	}
 
+
+	/**
+	 * Tests the {@link BufferUtil#readSmart} method.
+	 */
+	@Test
+	public void Smart() {
+		ByteBuffer buf = ByteBuffer.allocate(3 * Byte.BYTES);
+		buf.put((byte) 10);
+		buf.put((byte) 11);
+		buf.put((byte) 12);
+		buf.flip();
+
+		assertEquals(10, BufferUtil.readSmart(buf));
+	}
+
 }
