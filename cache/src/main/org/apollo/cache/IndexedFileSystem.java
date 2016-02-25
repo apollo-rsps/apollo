@@ -163,13 +163,11 @@ public final class IndexedFileSystem implements Closeable {
 	 * @throws IOException If there is an error accessing files to create the table.
 	 */
 	public int[] getCrcs() throws IOException {
-		if (crcs != null) {
-			return crcs;
+		if (crcs == null) {
+			ByteBuffer buffer = getCrcTable();
+			crcs = new int[(buffer.remaining() / Integer.BYTES) - 1];
+			Arrays.setAll(crcs, crc -> buffer.getInt());
 		}
-
-		ByteBuffer buffer = getCrcTable();
-		crcs = new int[(buffer.remaining() / Integer.BYTES) - 1];
-		Arrays.setAll(crcs, crc -> buffer.getInt());
 		return crcs;
 	}
 
