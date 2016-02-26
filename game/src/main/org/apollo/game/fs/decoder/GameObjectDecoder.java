@@ -172,11 +172,9 @@ public final class GameObjectDecoder implements Runnable {
 			block = true;
 		}
 
-		if ((attributes & BRIDGE_TILE) != 0) {
-			if (height > 0) {
+		if ((attributes & BRIDGE_TILE) != 0 && height >0) {
 				block = true;
 				height--;
-			}
 		}
 
 		if (block) {
