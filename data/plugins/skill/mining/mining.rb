@@ -20,8 +20,10 @@ class MiningAction < DistancedAction
     @counter = 0
   end
 
-  def find_pickaxe
-    PICKAXES[PICKAXE_IDS.select {|id| PICKAXES[id].level <= mob.skill_set.get_skill(Skill::MINING).current_level && (mob.inventory.contains(id) || mob.equipment.contains(id))  }.max]
+ def find_pickaxe
+    PICKAXES[PICKAXE_IDS.select {|id| 
+      PICKAXES[id].level <= mob.skill_set.get_skill(Skill::MINING).current_level && 
+        (mob.inventory.contains(id) || mob.equipment.contains(id))  }.max]
   end
 
   # starts the mining animation, sets counters/flags and turns the mob to
