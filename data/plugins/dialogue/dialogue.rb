@@ -287,34 +287,17 @@ class Dialogue
   def wrap # TODO redo this
     next if @type == :options
     lines = []
-    maximum_width = (@type == :text) ? MAXIMUM_LINE_WIDTH : MAXIMUM_MEDIA_LINE_WIDTH
     maximum_lines = MAXIMUM_LINE_COUNT
 
     text = @text.first
-    segments = []
-    index = 0; width = 0; space = 0
-
-    while index < text.length
-      char = text[index]
-      space = index if char == ' '
-      width += get_width(char)
-      index += 1
-
-      if (width >= maximum_width)
-        segments << text[0..space]
-        text = text[(space + 1)..-1]
-        width = index = space = 0
-      end
-    end
-
-    segments << text
+    segments = segment_text(text)
 
     if (segments.size <= maximum_lines)
-      lines.concat(segments)
+      lines = segments.clone
       @text = @text[1..-1]
       insert_copy(@text) if @text.size > 0
     else
-      lines.concat(segments.first(maximum_lines))
+      lines = segments.first(maximum_lines).clone
       segments = [ segments.drop(maximum_lines).join() ]
       insert_copy(segments << @text[1..-1].join())
     end
@@ -336,6 +319,29 @@ class Dialogue
   end
 
   private
+
+  def segment_text(text)
+    maximum_width = (@type == :text) ? MAXIMUM_LINE_WIDTH : MAXIMUM_MEDIA_LINE_WIDTH
+
+    segments = []
+    index = 0; width = 0; space = 0
+
+    while index < text.length
+      char = text[index]
+      space = index if char == ' '
+      width += get_width(char)
+      index += 1
+
+      if (width >= maximum_width)
+        segments << text[0..space]
+        text = text[(space + 1)..-1]
+        width = index = space = 0
+      end
+    end
+    segments << text if ! text.empty?
+
+    segments
+  end
 
   # Inserts a copy of this Dialogue into the chain, but with different text.
   def insert_copy(text)
