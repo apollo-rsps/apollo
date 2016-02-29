@@ -11,7 +11,7 @@ end
 private
 
 class CombatState
-  attr_accessor :state, :next_attack
+  attr_accessor :state
   attr_reader :queued_attacks, :supports_weapon
 
   def initialize(mob, supports_weapon = true)
@@ -40,6 +40,23 @@ class CombatState
 
   def queue_attack(attack)
     @queued_attacks.push(attack)
+  end
+
+  def next_attack(peek = false)
+    if @queued_attacks.size > 0
+      peek ? @queued_attacks.first : @queued_attacks.pop
+    else
+      weapon = EquipmentUtil.equipped_weapon @mob
+
+      if @mob.using_special and weapon.special_attack?
+        weapon.special_attack
+      else
+        weapon_class = weapon.weapon_class
+        combat_style = weapon_class.style_at @mob.combat_style
+        
+        weapon_class.attack combat_style
+      end
+    end
   end
 end
 

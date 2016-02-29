@@ -50,7 +50,19 @@ class CombatAction < Action
   end
 
   def update_idle
-    if @combat_state.queued_attacks.empty? and @combat_state.supports_weapon
+    next_attack      = @combat_state.next_attack true
+    current_distance = mob.position.get_distance @combat_state.target.position
+
+    if current_distance > next_attack.range
+      @combat_state.state = :chasing
+
+      mob.follow @combat_state.target, next_attack.range
+      set_delay 0
+
+      return
+    end
+
+    if @combat_state.supports_weapon
       weapon       = EquipmentUtil.equipped_weapon mob
       weapon_class = weapon.weapon_class
       combat_style = weapon_class.style_at mob.combat_style
@@ -62,16 +74,7 @@ class CombatAction < Action
         mob.attacking = true
       end
 
-      if mob.using_special and weapon.special_attack?
-        @combat_state.next_attack = weapon.special_attack
-      else
-        @combat_state.next_attack = weapon_class.attack(combat_style)
-      end
-
       @combat_state.state = :attacking
-    elsif @combat_state.queued_attacks.size > 0
-      @combat_state.next_attack = @combat_state.queued_attacks.pop
-      @combat_state.state       = :attacking
     else
       stop
       @combat_state.reset
@@ -79,20 +82,35 @@ class CombatAction < Action
   end
 
   def update_attacking
-    raise RuntimeError.new('no attack when in :attacking state') if @combat_state.next_attack.nil?
-
     begin
-      @combat_state.next_attack.do(mob, @combat_state.target)
+      next_attack = @combat_state.next_attack
+      next_attack.requirements.each do |requirement|
+        requirement.validate! mob
+      end
 
-      @combat_state.state = :idle
-      set_delay 0
+      next_attack.requirements.each do |requirement|
+        requirement.apply mob
+      end
+
+      next_attack.do(mob, @combat_state.target)
     rescue AttackRequirementException => e
       mob.send_message e.message
+    ensure
+      @combat_state.state = :idle
+      set_delay 0
     end
   end
 
   def update_chasing
+    next_attack      = @combat_state.next_attack true
+    current_distance = mob.position.get_distance @combat_state.target.position
 
+    if current_distance <= next_attack.range
+      @combat_state.state = :attacking
+
+      mob.following = -1
+      set_delay 0
+    end
   end
 
   def stop
