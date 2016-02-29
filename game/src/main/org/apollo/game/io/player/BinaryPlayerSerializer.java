@@ -119,14 +119,8 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 			}
 
 			Player player = new Player(world, credentials, new Position(x, y, height));
-			player.setPrivilegeLevel(privilege);
-			player.setMembers(members);
-			player.setChatPrivacy(chatPrivacy);
-			player.setFriendPrivacy(friendPrivacy);
-			player.setTradePrivacy(tradePrivacy);
-			player.setScreenBrightness(brightness);
 
-			player.setAppearance(new Appearance(gender, style, colors));
+			setPlayer(privilege, members, chatPrivacy, friendPrivacy, tradePrivacy, brightness, gender, style, colors, player);
 
 			readInventory(in, player.getInventory());
 			readInventory(in, player.getEquipment());
@@ -162,13 +156,38 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 
 			Map<String, Attribute<?>> attributes = readAttributes(in);
 			attributes.forEach(player::setAttribute);
-			
+
 			if (player.isBanned()) {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_ACCOUNT_DISABLED);
 			}
 
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
 		}
+	}
+
+	/**
+	 * Set the {@link Player}s
+	 *
+	 * @param privilege
+	 * @param members
+	 * @param chatPrivacy
+	 * @param friendPrivacy
+	 * @param tradePrivacy
+	 * @param brightness
+	 * @param gender
+	 * @param style
+     * @param colors
+     * @param player {@link Player}
+     */
+	private void setPlayer(PrivilegeLevel privilege, MembershipStatus members, PrivacyState chatPrivacy, PrivacyState friendPrivacy, PrivacyState tradePrivacy, ScreenBrightness brightness, Gender gender, int[] style, int[] colors, Player player) {
+		player.setPrivilegeLevel(privilege);
+		player.setMembers(members);
+		player.setChatPrivacy(chatPrivacy);
+		player.setFriendPrivacy(friendPrivacy);
+		player.setTradePrivacy(tradePrivacy);
+		player.setScreenBrightness(brightness);
+
+		player.setAppearance(new Appearance(gender, style, colors));
 	}
 
 	@Override
