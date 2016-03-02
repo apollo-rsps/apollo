@@ -29,6 +29,7 @@ import org.apollo.game.message.impl.RemoveObjectMessage;
 import org.apollo.game.message.impl.RemoveTileItemMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.SendObjectMessage;
+import org.apollo.game.message.impl.SendProjectileMessage;
 import org.apollo.game.message.impl.SendPublicTileItemMessage;
 import org.apollo.game.message.impl.SendTileItemMessage;
 import org.apollo.game.message.impl.ServerChatMessage;
@@ -207,6 +208,7 @@ public final class Release377 extends Release {
 		register(RemoveTileItemMessage.class, new RemoveTileItemMessageEncoder());
 		register(SendObjectMessage.class, new SendObjectMessageEncoder());
 		register(RemoveObjectMessage.class, new RemoveObjectMessageEncoder());
+		register(SendProjectileMessage.class, new SendProjectileMessageEncoder());
 
 		register(GroupedRegionUpdateMessage.class, new GroupedRegionUpdateMessageEncoder(this));
 		register(ClearRegionMessage.class, new ClearRegionMessageEncoder());

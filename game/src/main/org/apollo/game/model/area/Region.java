@@ -136,11 +136,14 @@ public final class Region {
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region.
 	 */
 	public void addEntity(Entity entity, boolean notify) {
+		EntityType type = entity.getEntityType();
 		Position position = entity.getPosition();
 		checkPosition(position);
 
-		Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_LIST_SIZE));
-		local.add(entity);
+		if (!type.isTransient()) {
+			Set<Entity> local = entities.computeIfAbsent(position, key -> new HashSet<>(DEFAULT_LIST_SIZE));
+			local.add(entity);
+		}
 
 		if (notify) {
 			notifyListeners(entity, EntityUpdateType.ADD);
@@ -325,6 +328,12 @@ public final class Region {
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region, or if it was never added.
 	 */
 	public void removeEntity(Entity entity) {
+		EntityType type = entity.getEntityType();
+		if (type.isTransient()) {
+			throw new IllegalArgumentException("Tried to remove a transient Entity (" + entity + ") from " +
+				"(" + this + ").");
+		}
+
 		Position position = entity.getPosition();
 		checkPosition(position);
 
@@ -389,14 +398,13 @@ public final class Region {
 			if (update == EntityUpdateType.REMOVE) {
 				removedObjects.get(height).add(message);
 			} else { // TODO should this really be possible?
-				removedObjects.get(height).remove(inverse);
+				removedObjects.get(height).remove(operation.inverse());
 			}
-
-			updates.add(message);
-		} else {
-			updates.add(message);
-			updates.remove(inverse);
+		} else if (update == EntityUpdateType.REMOVE && !type.isTransient()) {
+			updates.remove(operation.inverse());
 		}
+
+		updates.add(message);
 	}
 
 }
