@@ -324,17 +324,19 @@ class Dialogue
     maximum_width = (@type == :text) ? MAXIMUM_LINE_WIDTH : MAXIMUM_MEDIA_LINE_WIDTH
 
     segments = []
+    n = text.length
     index = 0; width = 0; space = 0
 
-    while index < text.length
+    while index < n
       char = text[index]
       space = index if char == ' '
       width += get_width(char)
       index += 1
 
       if (width >= maximum_width)
-        segments << text[0..space]
+        segments << text[0..(space - 1)]
         text = text[(space + 1)..-1]
+        n = text.length
         width = index = space = 0
       end
     end
