@@ -94,13 +94,13 @@
                      value="Member name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="ParameterName">
-            <property name="format" value="^([a-z][a-z0-9][a-zA-Z0-9]*)|(x|y|z)|(ex|e)$"/>
+            <property name="format" value="^([a-z][a-z0-9][a-zA-Z0-9]*)|(x|y|z|e)$"/>
             <message key="name.invalidPattern"
                      value="Parameter name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="LocalVariableName">
             <property name="tokens" value="VARIABLE_DEF"/>
-            <property name="format" value="^([a-z][a-z0-9][a-zA-Z0-9]*)|(x|y|z)|(ex|e)$"/>
+            <property name="format" value="^([a-z][a-z0-9][a-zA-Z0-9]*)|(x|y|z|e)$"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
             <message key="name.invalidPattern"
                      value="Local variable name ''{0}'' must match pattern ''{1}''."/>
