@@ -1,5 +1,0 @@
-<rsa>
-    <!-- Generate keys with RsaKeyGenerator and place them here -->
-    <modulus></modulus>
-    <private-exponent></private-exponent>
-</rsa>

@@ -82,6 +82,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>1.54</version>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
@@ -101,6 +107,7 @@
       <version>1.6.4</version>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
 </project>

@@ -10,7 +10,7 @@
 *.iml
 
 /data/fs
-/data/rsa.xml
+/data/rsa.pem
 /data/savedGames
 /lib/
 */target/

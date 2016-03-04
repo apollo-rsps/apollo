@@ -1,14 +1,21 @@
 package org.apollo.net;
 
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-
-import org.apollo.util.xml.XmlNode;
-import org.apollo.util.xml.XmlParser;
+import java.security.KeyFactory;
+import java.security.Security;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 
 import com.google.common.base.Preconditions;
+import org.apollo.util.xml.XmlNode;
+import org.apollo.util.xml.XmlParser;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 
 /**
  * Holds various network-related constants such as port numbers.
@@ -68,20 +75,18 @@ public final class NetworkConstants {
 			throw new ExceptionInInitializerError(new IOException("Error parsing net.xml.", exception));
 		}
 
-		try (InputStream is = new FileInputStream("data/rsa.xml")) {
-			XmlNode rsa = new XmlParser().parse(is);
-			if (!rsa.getName().equals("rsa")) {
-				throw new IOException("Root node name is not 'rsa'.");
-			}
+		try (PemReader pemReader = new PemReader(new FileReader("data/rsa.pem"))) {
+			PemObject pem = pemReader.readPemObject();
+			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pem.getContent());
 
-			XmlNode modulus = rsa.getChild("modulus"), exponent = rsa.getChild("private-exponent");
-			Preconditions.checkState(modulus != null && exponent != null, "Rsa node must have two children: 'modulus' and 'private-exponent'.");
+			Security.addProvider(new BouncyCastleProvider());
+			KeyFactory factory = KeyFactory.getInstance("RSA", "BC");
 
-			Preconditions.checkState(modulus.getValue() != null && exponent.getValue() != null, "Value missing for 'modulus' or 'private-exponent'");
-			RSA_MODULUS = new BigInteger(modulus.getValue());
-			RSA_EXPONENT = new BigInteger(exponent.getValue());
+			RSAPrivateKey privateKey = (RSAPrivateKey) factory.generatePrivate(keySpec);
+			RSA_MODULUS = privateKey.getModulus();
+			RSA_EXPONENT = privateKey.getPrivateExponent();
 		} catch (Exception exception) {
-			throw new ExceptionInInitializerError(new IOException("Error parsing rsa.xml", exception));
+			throw new ExceptionInInitializerError(new IOException("Error parsing id_rsa", exception));
 		}
 	}
 
