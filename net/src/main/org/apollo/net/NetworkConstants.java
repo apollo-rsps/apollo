@@ -86,7 +86,7 @@ public final class NetworkConstants {
 			RSA_MODULUS = privateKey.getModulus();
 			RSA_EXPONENT = privateKey.getPrivateExponent();
 		} catch (Exception exception) {
-			throw new ExceptionInInitializerError(new IOException("Error parsing id_rsa", exception));
+			throw new ExceptionInInitializerError(new IOException("Error parsing rsa.pem", exception));
 		}
 	}
 
