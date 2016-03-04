@@ -55,15 +55,6 @@ public final class NetworkConstants {
 				throw new IOException("Root node name is not 'net'.");
 			}
 
-			XmlNode rsa = net.getChild("rsa");
-			Preconditions.checkState(rsa != null, "Root node must have a child named 'rsa'.");
-
-			XmlNode modulus = rsa.getChild("modulus"), exponent = rsa.getChild("private-exponent");
-			Preconditions.checkState(modulus != null && exponent != null, "Rsa node must have two children: 'modulus' and 'private-exponent'.");
-
-			RSA_MODULUS = new BigInteger(modulus.getValue());
-			RSA_EXPONENT = new BigInteger(exponent.getValue());
-
 			XmlNode ports = net.getChild("ports");
 			Preconditions.checkState(ports != null, "Root node must have a child named 'ports'.");
 
@@ -75,6 +66,22 @@ public final class NetworkConstants {
 			JAGGRAB_PORT = Integer.parseInt(jaggrab.getValue());
 		} catch (Exception exception) {
 			throw new ExceptionInInitializerError(new IOException("Error parsing net.xml.", exception));
+		}
+
+		try (InputStream is = new FileInputStream("data/rsa.xml")) {
+			XmlNode rsa = new XmlParser().parse(is);
+			if (!rsa.getName().equals("rsa")) {
+				throw new IOException("Root node name is not 'rsa'.");
+			}
+
+			XmlNode modulus = rsa.getChild("modulus"), exponent = rsa.getChild("private-exponent");
+			Preconditions.checkState(modulus != null && exponent != null, "Rsa node must have two children: 'modulus' and 'private-exponent'.");
+
+			Preconditions.checkState(modulus.getValue() != null && exponent.getValue() != null, "Value missing for 'modulus' or 'private-exponent'");
+			RSA_MODULUS = new BigInteger(modulus.getValue());
+			RSA_EXPONENT = new BigInteger(exponent.getValue());
+		} catch (Exception exception) {
+			throw new ExceptionInInitializerError(new IOException("Error parsing rsa.xml", exception));
 		}
 	}
 
