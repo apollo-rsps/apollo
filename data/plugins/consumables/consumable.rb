@@ -10,6 +10,7 @@ CONSUME_ANIMATION_ID = 829
 module ConsumableType
   FOOD = 1
   POTION = 2
+  DRINK = 3
 end
 
 # An item that can be consumed to produce a skill effect.

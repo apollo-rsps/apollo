@@ -168,15 +168,6 @@ food name: :chocolate_cake, id: 1897, restoration: 5, replace: 1899
 food name: :chocolate_cake, id: 1899, restoration: 5, replace: 1901
 food name: :chocolate_cake, id: 1901, restoration: 5
 
-# Wine
-# TODO: Add to drinks.rb?
-food name: :jug_of_wine, id: 1993, restoration: 11
-
-# Hot Drinks
-# TODO: Add to drinks.rb?
-food name: :nettle_tea, id: 4239, restoration: 3
-food name: :nettle_tea, id: 4240, restoration: 3
-
 # Vegetables
 food name: :potato,             id: 1942, restoration: 1
 food name: :spinach_roll,       id: 1969, restoration: 2
@@ -228,20 +219,3 @@ food name: :vegetable_batta,  id: 2227, restoration: 11
 food name: :vegetable_batta,  id: 2281, restoration: 11
 food name: :cheese_tom_batta, id: 2223, restoration: 11
 food name: :cheese_tom_batta, id: 2259, restoration: 11
-
-# Gnome Cocktails
-# TODO: seperate from food, should say 'You drink' instead of 'You eat'.
-food name: :fruit_blast,        id: 2034, restoration: 9
-food name: :fruit_blast,        id: 2084, restoration: 9
-food name: :pineapple_punch,    id: 2036, restoration: 9
-food name: :pineapple_punch,    id: 2048, restoration: 9
-food name: :wizard_blizzard,    id: 2040, restoration: 5 # -4 attack, +5 strength also
-food name: :wizard_blizzard,    id: 2054, restoration: 5 # -4 attack, +5 strength also
-food name: :short_green_guy,    id: 2038, restoration: 5 # -4 attack, +5 strength also
-food name: :short_green_guy,    id: 2080, restoration: 5 # -4 attack, +5 strength also
-food name: :drunk_dragon,       id: 2032, restoration: 5 # -4 attack, +6 strength also
-food name: :drunk_dragon,       id: 2092, restoration: 5 # -4 attack, +6 strength also
-food name: :chocolate_saturday, id: 2030, restoration: 7 # -4 attack, +6 strength also
-food name: :chocolate_saturday, id: 2074, restoration: 7 # -4 attack, +6 strength also
-food name: :blurberry_special,  id: 2028, restoration: 7 # -4 attack, +6 strength also
-food name: :blurberry_special,  id: 2064, restoration: 7 # -4 attack, +6 strength also
