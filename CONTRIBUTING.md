@@ -1,49 +1,68 @@
+* [Contributing to Apollo](#contributing-to-apollo)
+    * [Getting Apollo](#getting-apollo)
+    * [Contributing A Code Change](#contributing-a-code-change)
+    * [Style Guide](#style-guide)
+    * [Coding Guidelines](#coding-guidelines)
+* [Question / Problem](#question-problem)
+
 # Contributing to Apollo
 
-First off, thanks for taking the time to contribute!   
-Apollo is a high-performance, modular RuneScape emulator with a collection of utilities for managing data files and plugins.  
-The following is a set of guidelines for contributing to Apollo on GitHub.
+We are happy to have contributions whether for small bug fixes or major new
+pieces of functionality. There's always something in the issue tracker to
+take on.
 
-* [Forking](#forking)
-* [Submission Guidelines](#submit)
-    *  [Submitting an Issue](#submit-issue)  
-    *  [Submitting a Pull Request](#submit-pull-request)    
-* [Coding Style](#coding-style)  
-* [Got a Question or Problem](#got-a-question-or-problem)
+The best way to help out would be to look at the issue tracker and check
+what needs done. Code contributions are welcome but they are not the
+only way to make a contribution to Apollo. Quality assurance is a very
+important part of this project, as is documentation. Any help offered
+with those is greatly appreciated.
 
-## Forking 
-You should fork the repository first. This step is needed only once. See complete help in github
-`git clone https://github.com/apollo-rsps/apollo.git`  
-`cd apollo`  
-`git remote add upstream https://github.com/apollo-rsps/apollo.git`  
-`git fetch upstream`  
+## Getting Apollo
 
-Keep your fork up to date, pull in upstream changes:  
-`git fetch upstream`  
-`git merge upstream/master`  
+Apollo uses GitHub pull requests for reviewing and accepting changes,
+and so to contribute a change to Apollo you should first fork the upstream
+repository to your own GitHub account.
 
-## Submission Guidelines
-### Submitting an Issue
+Once you have a copy of your own forked repository locally you should
+add a new remote for `upstream`, so you can rebase any changes
+you make and keep up to date with upstream.
 
-Before you submit your issue search the archive, maybe your question was already answered.
-Related Issues - has a similar issue been reported before?
-Suggest a Fix - if you can't fix the bug yourself, perhaps you can point to what might be causing the problem (line of code or commit)
+```
+git remote add upstream https://github.com/apollo-rsps/apollo.git
+```
 
-### Submitting a Pull Request
-Run all the tests to assure nothing else was accidentally broken. 
+## Contributing A Code Change
 
-- Create a new branch: `git branch <branch-name>`  
-- Switch to the new branch: `git checkout <branch-name>`   
-- Add your change: `git add <file-name>`   
-- Comment your change: `git commit -m "my-PR-comment"`  
-- Push your branch to GitHub: `git push -u origin <branch-name>`    
+* If the change is non-trivial please include some unit tests that cover the new functionality.
+* If you are introducing a completely new feature or API it is a good idea to start a discussion on [IRC](#question-problem) and get consensus on the basic design first.
+* Make sure you have observed the recommendations in the style guide below.
+* It is our job to follow up on patches in a timely fashion. Nag us if we aren't doing our job (sometimes we drop things).
 
-If you need to rebase your branch, The git book has a very good guide on doing this (and some more information about rebasing), which you can find [here](https://git-scm.com/book/en/v2/Git-Branching-Rebasing).
-## Coding Style
+## Style Guide
 
-Please follow the [Java styleguides](http://www.oracle.com/technetwork/java/codeconvtoc-136057.html) or [Ruby styleGuides](http://api.rubyonrails.org).
+The Apollo project uses a coding style based on the [Google
+style guide](https://google.github.io/styleguide/javaguide.html). Please
+use that as a reference for any code changes. Checkstyle rules will be
+coming soon.
 
-## Got a Question or Problem?
+## Coding Guidelines
 
-Most discussion related to the development of Apollo happens on the IRC channel #apollorsps on irc.freenode.net.  
-Please contact us if you need help!
+Additionally to the recommendations above, see the below guidelines
+for code changes:
+
+**Basic Stuff**
+
+* Avoid cryptic abbreviations. Single letter variable names are fine in very short methods with few variables, otherwise make them informative.
+* Clear code is preferable to comments. When possible make your naming so good you don't need comments. When that isn't possible comments should be thought of as mandatory, write them to be read.
+* Logging, configuration, and public APIs are our "UI". Make them pretty, consistent, and usable.
+* Don't be sloppy. Don't check in commented out code: we use version control, it is still there in the history. Don't leave TODOs in the code or FIXMEs if you can help it. Don't leave println statements in the code. Hopefully this is all obvious.
+* We want people to use our stuff, which means we need clear, correct documentation. User documentation should be considered a part of any user-facing the feature, just like unit tests or performance results.
+* Don't duplicate code (duh).
+
+# Question / Problem?
+
+If you want to chat or need any assistance with a problem in Apollo feel free
+to contact us on the IRC channel at #apollorsps on irc.freenode.net.
+
+*most of the above is loosely borrowed from the great [Apache kafka](http://kafka.apache.org/contributing.html)
+project*
