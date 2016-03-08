@@ -64,26 +64,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 		Item shield = equipment.get(SHIELD);
 
 		if (definition.isTwoHanded()) {
-			int slotsRequired = weapon != null && shield != null ? 1 : 0;
-
-			if (inventory.freeSlots() < slotsRequired) {
-				player.sendMessage("You don't have enough free inventory space to do that.");
-				message.terminate();
-				return;
-			}
-
-			equipment.reset(SHIELD);
-			equipment.set(WEAPON, inventory.reset(inventorySlot));
-
-			if (shield != null) {
-				inventory.add(shield);
-			}
-
-			if (weapon != null) {
-				inventory.add(weapon);
-			}
-
-			player.stopAction();
+			handleTwoHanded(inventory, equipment, inventorySlot, weapon, shield, player, message);
 			return;
 		}
 
@@ -116,6 +97,41 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 			}
 		}
 	}
+
+	/**
+	 * Attempts to equip the two-handed item requested by the {@link Player}.
+	 *
+	 * @param inventory The {@link Inventory} of the {@link Player}.
+	 * @param equipment The equipment of the {@link Player}.
+	 * @param inventorySlot The slot of the 2-handed item in the {@link Inventory}.
+	 * @param weapon The weapon the {@link Player} currently has equipped.
+	 * @param shield The shield the {@link Player} currently has equipped.
+	 * @param player The {@link Player} equipping the item.
+	 * @param message The {@link ItemOptionMessage} sent by the client.
+	 */
+	private void handleTwoHanded(Inventory inventory, Inventory equipment, int inventorySlot, Item weapon, Item shield, Player player, ItemOptionMessage message) {
+		int slotsRequired = weapon != null && shield != null ? 1 : 0;
+
+		if (inventory.freeSlots() < slotsRequired) {
+			player.sendMessage("You don't have enough free inventory space to do that.");
+			message.terminate();
+			return;
+		}
+
+		equipment.reset(SHIELD);
+		equipment.set(WEAPON, inventory.reset(inventorySlot));
+		
+		if (shield != null) {
+			inventory.add(shield);
+		}
+
+		if (weapon != null) {
+			inventory.add(weapon);
+		}
+
+		player.stopAction();
+	}
+
 
 	/**
 	 * Returns whether or not the specified {@link Player} has the required levels to equip the item with the specified
