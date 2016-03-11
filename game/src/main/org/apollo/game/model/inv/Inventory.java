@@ -139,36 +139,7 @@ public final class Inventory {
 		boolean stackable = isStackable(item.getDefinition());
 
 		if (stackable) {
-			int slot = slotOf(id);
-
-			if (slot != -1) {
-				Item other = items[slot];
-
-				long total = (long) item.getAmount() + other.getAmount();
-				int amount, remaining;
-
-				if (total > Integer.MAX_VALUE) {
-					amount = (int) (total - Integer.MAX_VALUE);
-					remaining = (int) (total - amount);
-					notifyCapacityExceeded();
-				} else {
-					amount = (int) total;
-					remaining = 0;
-				}
-
-				set(slot, new Item(id, amount));
-				return remaining > 0 ? Optional.of(new Item(id, remaining)) : Optional.empty();
-			}
-
-			for (slot = 0; slot < capacity; slot++) {
-				if (items[slot] == null) {
-					set(slot, item);
-					return Optional.empty();
-				}
-			}
-
-			notifyCapacityExceeded();
-			return Optional.of(item);
+			return addStackable(item, id);
 		}
 
 		int remaining = item.getAmount();
@@ -201,6 +172,46 @@ public final class Inventory {
 		notifyCapacityExceeded();
 
 		return Optional.of(new Item(item.getId(), remaining));
+	}
+
+	/**
+	 * This method adds as much of the specified stackable {@code item} to this inventory as possible
+	 *
+	 * @param item The item to add to this inventory.
+	 * @param id The item's id
+	 * @return The item that may remain, if nothing remains, {@link Optional#empty an empty Optional} is returned.
+	 */
+	private Optional<Item> addStackable(Item item, int id) {
+		int slot = slotOf(id);
+
+		if (slot != -1) {
+            Item other = items[slot];
+
+            long total = (long) item.getAmount() + other.getAmount();
+            int amount, remaining;
+
+            if (total > Integer.MAX_VALUE) {
+                amount = (int) (total - Integer.MAX_VALUE);
+                remaining = (int) (total - amount);
+                notifyCapacityExceeded();
+            } else {
+                amount = (int) total;
+                remaining = 0;
+            }
+
+            set(slot, new Item(id, amount));
+            return remaining > 0 ? Optional.of(new Item(id, remaining)) : Optional.empty();
+        }
+
+		for (slot = 0; slot < capacity; slot++) {
+            if (items[slot] == null) {
+                set(slot, item);
+                return Optional.empty();
+            }
+        }
+
+		notifyCapacityExceeded();
+		return Optional.of(item);
 	}
 
 	/**
