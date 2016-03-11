@@ -19,14 +19,14 @@ public final class ItemOnItemMessageDecoder extends MessageDecoder<ItemOnItemMes
 	public ItemOnItemMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
-		int targetSlot = (int) reader.getUnsigned(DataType.SHORT);
-		int usedSlot = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
+		int targetSlot = Math.toIntExact(reader.getUnsigned(DataType.SHORT));
+		int usedSlot = Math.toIntExact(reader.getUnsigned(DataType.SHORT, DataTransformation.ADD));
 
-		int targetId = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-		int targetInterface = (int) reader.getUnsigned(DataType.SHORT);
+		int targetId = Math.toIntExact(reader.getSigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD));
+		int targetInterface = Math.toIntExact(reader.getUnsigned(DataType.SHORT));
 
-		int usedId = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE);
-		int usedInterface = (int) reader.getUnsigned(DataType.SHORT);
+		int usedId = Math.toIntExact(reader.getSigned(DataType.SHORT, DataOrder.LITTLE));
+		int usedInterface = Math.toIntExact(reader.getUnsigned(DataType.SHORT));
 
 		return new ItemOnItemMessage(usedInterface, usedId, usedSlot, targetInterface, targetId, targetSlot);
 	}
