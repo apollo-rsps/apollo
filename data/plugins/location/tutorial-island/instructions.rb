@@ -126,7 +126,7 @@ module TutorialInstructions
       type :text
 
       title 'Your skill stats.'
-      text '' # TODO: this !!
+      text 'Here is the skill stats of your player.'
     end
   end
 
