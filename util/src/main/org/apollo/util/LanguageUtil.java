@@ -16,10 +16,8 @@ public final class LanguageUtil {
 	 */
 	public static String getIndefiniteArticle(String string) {
 		char first = Character.toLowerCase(string.charAt(0));
-		if (allUpperCase(string)) {
-			if (first == 'f' || first == 'l' | first == 'm' || first == 'n' || first == 's') {
+		if (allUpperCase(string) && (first == 'f' || first == 'l' || first == 'm' || first == 'n' || first == 's')) {
 				return "an";
-			}
 		}
 
 		boolean vowel = first == 'a' || first == 'e' || first == 'i' || first == 'o' || first == 'u';
