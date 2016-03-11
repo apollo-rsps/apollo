@@ -30,7 +30,7 @@ module SurvivalConstants
 end
 
 # The conversation with the Survival Expert, when on tutorial island.
-conversation :tutorial_surivival_expert do
+conversation :tutorial_survival_expert do
 
   dialogue :introduction do
     type :npc_speech
@@ -126,7 +126,7 @@ def add_survival_items(player)
     dialogue = (dialogue == :give_bronze_axe) ? :give_axe_and_tinderbox : :give_tinderbox
   end
 
-  send_dialogue(player, get_dialogue(:tutorial_surivival_expert, dialogue))
+  send_dialogue(player, get_dialogue(:tutorial_survival_expert, dialogue))
 end
 
 # Intercept the FirstObjectActionMessage to send tutorial-only events if the player is chopping
