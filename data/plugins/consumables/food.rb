@@ -53,13 +53,13 @@ def food(hash)
 end
 
 # TODO: special effects
-food name: :cooked_slimy_eel,     id: 3381, restoration: 6 # this has a chance to heal 6 to 10 hp
-food name: :thin_snail_meat,      id: 3369, restoration: 5 # this has a chance to heal 5 to 7 hp
-food name: :fat_snail_meat,       id: 3373, restoration: 2 # this has a chance to heal 7 to 9 hp
+food name: :cooked_slimy_eel,     id: 3381, restoration: rand(6..10)
+food name: :thin_snail_meat,      id: 3369, restoration: rand(5..7)
+food name: :fat_snail_meat,       id: 3373, restoration: rand(7..9)
 food name: :watermelon_slice,     id: 5984, restoration: 0 # this heals 5% of player's life
 food name: :cooked_karambwan,     id: 3146, restoration: 0 # poisons player(50)
-food name: :spider_on_stick,      id: 6297, restoration: 7 # heals between 7 and 10
-food name: :spider_on_shaft,      id: 6299, restoration: 7 # heals between 7 and 10
+food name: :spider_on_stick,      id: 6297, restoration: rand(7..10)
+food name: :spider_on_shaft,      id: 6299, restoration: rand(7..10)
 
 # Meats/Fish
 food name: :anchovies,        id: 319,  restoration: 1
