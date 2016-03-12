@@ -2,7 +2,7 @@ package org.apollo.game.model.entity;
 
 /**
  * Represents a type of {@link Entity}.
- * 
+ *
  * @author Major
  */
 public enum EntityType {
@@ -46,4 +46,13 @@ public enum EntityType {
 		return this == PLAYER || this == NPC;
 	}
 
+	/**
+	 * Returns whether or not this EntityType should be short-lived (i.e. not added to its {@link Region}s
+	 * local objects).
+	 *
+	 * @return {@code true} if this EntityType is short-lived.
+     */
+	public boolean isTransient() {
+		return this == PROJECTILE;
+	}
 }

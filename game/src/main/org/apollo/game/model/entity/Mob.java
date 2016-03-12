@@ -467,6 +467,15 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Gets the number of tiles this mob occupies.
+	 *
+	 * @return The number of tiles this mob occupies.
+     */
+	public int size() {
+		return definition.map(NpcDefinition::getSize).orElse(1);
+	}
+
+	/**
 	 * Starts a new action, stopping the current one if it exists.
 	 *
 	 * @param action The new action.
