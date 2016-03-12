@@ -126,7 +126,10 @@ module TutorialInstructions
       type :text
 
       title 'Your skill stats.'
-      text '' # TODO: this !!
+      text 'Here you will see how good your skills are. As you move your mouse over any of the '\
+           'icons in this panel, the small yellow popup box will show you the exact amount of '\
+           'experience you have and how much is needed to get to the next level. Speak to the '\
+           'Survival Expert to continue.'
     end
   end
 
