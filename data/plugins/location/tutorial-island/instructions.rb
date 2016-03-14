@@ -73,6 +73,14 @@ module TutorialInstructions
              'inventory. Your inventory is a list of everything you have in your backpack.'
     end
 
+    # The instruction displayed if the player tries to cut a tree before having the axe.
+    dialogue :try_cut_tree do
+      type :text
+
+      title 'Follow the guide\'s instructions'
+      text 'You cannot cut down this tree, you must first follow the guide\'s instructions.'
+    end
+
     # The instruction displayed before the player has begun to cut the tree.
     dialogue :cut_tree do
       type :text

@@ -136,7 +136,7 @@ on :message, :first_object_action do |player, message|
     progress = player.tutorial_island_progress
 
     if progress < :cut_tree
-      # TODO: 'You cannot cut down this tree; you must first follow the guide's instructions.'
+      send_dialogue(player, get_dialogue(:tutorial_island_instructions, :try_cut_tree))
     elsif player.tutorial_island_progress == :cut_tree
       # Don't break the chain, so that the Woodcutting event actually happens.
       player.tutorial_island_progress = :cutting_tree
