@@ -63,7 +63,7 @@ class ConsumeAction < Action
   end
 
   def equals(other)
-    mob == other.mob && @consumable.type == other.consumable.type
+    get_class == other.get_class && mob == other.mob && @consumable.type == other.consumable.type
   end
 
 end
