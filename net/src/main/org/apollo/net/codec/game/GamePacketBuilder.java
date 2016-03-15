@@ -242,13 +242,12 @@ public final class GamePacketBuilder {
 			buffer.setByte(bytePos++, tmp);
 			numBits -= bitOffset;
 		}
+		int tmp = buffer.getByte(bytePos);
 		if (numBits == bitOffset) {
-			int tmp = buffer.getByte(bytePos);
 			tmp &= ~DataConstants.BIT_MASK[bitOffset];
 			tmp |= value & DataConstants.BIT_MASK[bitOffset];
 			buffer.setByte(bytePos, tmp);
 		} else {
-			int tmp = buffer.getByte(bytePos);
 			tmp &= ~(DataConstants.BIT_MASK[numBits] << bitOffset - numBits);
 			tmp |= (value & DataConstants.BIT_MASK[numBits]) << bitOffset - numBits;
 			buffer.setByte(bytePos, tmp);
