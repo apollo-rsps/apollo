@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<plugin>
+    <id>entity-interaction</id>
+    <version>0.1</version>
+    <name>Entity Interaction</name>
+    <description>Adds support for generic entity interactions (facing objects when using an action, etc).</description>
+    <authors>
+        <author>garyttierney</author>
+    </authors>
+    <scripts>
+        <script>object.rb</script>
+    </scripts>
+</plugin>
