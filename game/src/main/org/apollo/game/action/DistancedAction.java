@@ -60,7 +60,7 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 			executeAction();
 			// TODO checking the walking queue size is a really cheap fix, and relies on the client not
 			// being edited... this class needs to be completely re-written.
-		} else if (mob.getPosition().getDistance(position) <= distance && mob.getWalkingQueue().size() == 0) {
+		} else if (mob.getPosition().isWithinDistance(position, distance) && mob.getWalkingQueue().size() == 0) {
 			reached = true;
 			setDelay(delay);
 			if (immediate) {
