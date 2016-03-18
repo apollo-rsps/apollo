@@ -861,7 +861,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets the player's prayer icon. TODO make this an attribute?
+	 * Sets the player's prayer icon. 
 	 *
 	 * @param prayerIcon The prayer icon.
 	 */
@@ -916,7 +916,7 @@ public final class Player extends Mob {
 	}
 
 	/**
-	 * Sets whether or not the player is skulled. TODO make this an attribute
+	 * Sets whether or not the player is skulled. 
 	 *
 	 * @param isSkulled Whether or not the player is skulled.
 	 */
