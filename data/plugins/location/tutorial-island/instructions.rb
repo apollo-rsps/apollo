@@ -1,5 +1,4 @@
 
-# TODO: update the status to :moving_around when the door is opened
 
 # Contains members related to the instructions issues during tutorial island.
 module TutorialInstructions
@@ -50,8 +49,6 @@ module TutorialInstructions
            'arrow to go through to the next area and speak with your next instructor.'
     end
 
-    # TODO: The player's tutorial island progress needs to be set to :moving_around when they walk
-    # through the door !!
 
     # The instruction displayed after the player has left the initial building.
     dialogue :moving_around do
