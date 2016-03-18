@@ -172,7 +172,7 @@ class Dialogue
     raise 'Cannot add a continue event on a dialogue with options.' if (@type == :options)
     raise 'Must declare either a type or a block for a continue event.' if (type.nil? && block.nil?)
 
-    action = get_next_dialogue(type) unless type.nil?
+    action = decode_next_dialogue(type) unless type.nil?
     @options[0] = ->(player) { action.call(player) unless type.nil?; block.call(player) unless block.nil? }
   end
 
@@ -246,7 +246,7 @@ class Dialogue
     raise 'Can only display options on an :options dialogue.' unless @type == :options
     raise "Cannot display more than #{MAXIMUM_OPTION_COUNT} options on a dialogue." unless @options.size < MAXIMUM_OPTION_COUNT
 
-    @options[text.size] = get_next_dialogue(type)
+    @options[text.size] = decode_next_dialogue(type)
     @text << message
   end
 
@@ -360,7 +360,7 @@ class Dialogue
   end
 
   # Decodes the next dialogue interface from the hash, returning a proc.
-  def get_next_dialogue(hash) # TODO rename
+  def decode_next_dialogue(hash) 
     hash.each_pair do |key, value|
       case key
         when :disabled then return ->(player) { }
