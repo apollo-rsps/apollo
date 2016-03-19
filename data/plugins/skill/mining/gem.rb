@@ -14,7 +14,7 @@ def gem(gem)
   GEMSTONES[gem.id] = gem
 end
 
-gem(Gemstone.new(1623, 0)) # uncut sapphire
-gem(Gemstone.new(1605, 0)) # uncut emerald
-gem(Gemstone.new(1619, 0)) # uncut ruby
-gem(Gemstone.new(1617, 0)) # uncut diamond
+gem(Gemstone.new(1623, 7)) # uncut sapphire
+gem(Gemstone.new(1605, 5)) # uncut emerald
+gem(Gemstone.new(1619, 3)) # uncut ruby
+gem(Gemstone.new(1617, 1)) # uncut diamond
