@@ -1,6 +1,6 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.ChatMessage;
+import org.apollo.game.message.impl.PublicChatMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.block.SynchronizationBlock;
@@ -10,19 +10,19 @@ import org.apollo.game.sync.block.SynchronizationBlock;
  *
  * @author Graham
  */
-public final class ChatMessageHandler extends MessageHandler<ChatMessage> {
+public final class PublicChatMessageHandler extends MessageHandler<PublicChatMessage> {
 
 	/**
-	 * Creates the ChatMessageHandler.
+	 * Creates the PublicChatMessageHandler.
 	 *
-	 * @param world The {@link World} the {@link ChatMessage} occurred in.
+	 * @param world The {@link World} the {@link PublicChatMessage} occurred in.
 	 */
-	public ChatMessageHandler(World world) {
+	public PublicChatMessageHandler(World world) {
 		super(world);
 	}
 
 	@Override
-	public void handle(Player player, ChatMessage message) {
+	public void handle(Player player, PublicChatMessage message) {
 		if (player.isMuted()) {
 			message.terminate();
 			return;

@@ -3,26 +3,11 @@ package org.apollo.game.message.impl;
 import org.apollo.net.message.Message;
 
 /**
- * A {@link Message} sent by the client to send a public chat message to other players.
+ * A {@link Message} sent by the client to send a chat message to other players.
  *
- * @author Graham
+ * @author AymericDu
  */
-public final class ChatMessage extends Message {
-
-	/**
-	 * The text color.
-	 */
-	private final int color;
-
-	/**
-	 * The compressed message.
-	 */
-	private final byte[] compressedMessage;
-
-	/**
-	 * The text effects.
-	 */
-	private final int effects;
+public abstract class ChatMessage extends Message {
 
 	/**
 	 * The message.
@@ -30,18 +15,19 @@ public final class ChatMessage extends Message {
 	private final String message;
 
 	/**
+	 * The compressed message.
+	 */
+	private final byte[] compressedMessage;
+
+	/**
 	 * Creates a new chat message.
 	 *
 	 * @param message The message.
 	 * @param compressedMessage The compressed message.
-	 * @param color The text color.
-	 * @param effects The text effects.
 	 */
-	public ChatMessage(String message, byte[] compressedMessage, int color, int effects) {
+	public ChatMessage(String message, byte[] compressedMessage) {
 		this.message = message;
-		this.compressedMessage = compressedMessage;
-		this.color = color;
-		this.effects = effects;
+		this.compressedMessage = compressedMessage.clone();
 	}
 
 	/**
@@ -49,8 +35,8 @@ public final class ChatMessage extends Message {
 	 *
 	 * @return The compressed message.
 	 */
-	public byte[] getCompressedMessage() {
-		return compressedMessage;
+	public final byte[] getCompressedMessage() {
+		return compressedMessage.clone();
 	}
 
 	/**
@@ -58,26 +44,7 @@ public final class ChatMessage extends Message {
 	 *
 	 * @return The message.
 	 */
-	public String getMessage() {
+	public final String getMessage() {
 		return message;
 	}
-
-	/**
-	 * Gets the text color.
-	 *
-	 * @return The text color.
-	 */
-	public int getTextColor() {
-		return color;
-	}
-
-	/**
-	 * Gets the text effects.
-	 *
-	 * @return The text effects.
-	 */
-	public int getTextEffects() {
-		return effects;
-	}
-
 }

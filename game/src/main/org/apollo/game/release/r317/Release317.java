@@ -109,7 +109,7 @@ public final class Release317 extends Release {
 
 		register(0, new KeepAliveMessageDecoder());
 		register(101, new PlayerDesignMessageDecoder());
-		register(4, new ChatMessageDecoder());
+		register(4, new PublicChatMessageDecoder());
 		register(103, new CommandMessageDecoder());
 		register(214, new SwitchItemMessageDecoder());
 

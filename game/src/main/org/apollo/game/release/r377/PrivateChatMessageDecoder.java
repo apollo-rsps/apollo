@@ -32,7 +32,7 @@ public final class PrivateChatMessageDecoder extends MessageDecoder<PrivateChatM
 		byte[] recompressed = new byte[length];
 		TextUtil.compress(decompressed, recompressed);
 
-		return new PrivateChatMessage(username, decompressed, recompressed);
+		return new PrivateChatMessage(decompressed, recompressed, username);
 	}
 
 }
