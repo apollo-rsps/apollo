@@ -1,6 +1,6 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.ChatMessage;
+import org.apollo.game.message.impl.PublicChatMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.junit.Test;
@@ -15,10 +15,10 @@ import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Player.class})
-public final class ChatMessageHandlerTests {
+public final class PublicChatMessageHandlerTests {
 
 	private final World world = new World();
-	private final ChatMessageHandler chatMessageHandler = new ChatMessageHandler(world);
+	private final PublicChatMessageHandler handler = new PublicChatMessageHandler(world);
 
 	@Test
 	public void terminateIfMuted() throws Exception {
@@ -26,9 +26,9 @@ public final class ChatMessageHandlerTests {
 
 		when(player.isMuted()).thenReturn(true);
 
-		ChatMessage chatMessage = new ChatMessage("Test", "Test".getBytes(), 0, 0);
-		chatMessageHandler.handle(player, chatMessage);
+		PublicChatMessage publicChatMessage = new PublicChatMessage("Test", "Test".getBytes(), 0, 0);
+		handler.handle(player, publicChatMessage);
 
-		assertTrue("ChatMessageHandler: player can send messages when muted", chatMessage.terminated());
+		assertTrue("PublicChatMessageHandler: player can send messages when muted", publicChatMessage.terminated());
 	}
 }

@@ -108,7 +108,7 @@ public final class Release377 extends Release {
 
 		register(248, new KeepAliveMessageDecoder());
 		register(163, new PlayerDesignMessageDecoder());
-		register(49, new ChatMessageDecoder());
+		register(49, new PublicChatMessageDecoder());
 		register(56, new CommandMessageDecoder());
 		register(123, new SwitchItemMessageDecoder());
 

@@ -1,6 +1,6 @@
 package org.apollo.game.release.r317;
 
-import org.apollo.game.message.impl.ChatMessage;
+import org.apollo.game.message.impl.PublicChatMessage;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
@@ -9,14 +9,14 @@ import org.apollo.net.release.MessageDecoder;
 import org.apollo.util.TextUtil;
 
 /**
- * A {@link MessageDecoder} for the {@link ChatMessage}.
+ * A {@link MessageDecoder} for the {@link PublicChatMessage}.
  *
  * @author Graham
  */
-public final class ChatMessageDecoder extends MessageDecoder<ChatMessage> {
+public final class PublicChatMessageDecoder extends MessageDecoder<PublicChatMessage> {
 
 	@Override
-	public ChatMessage decode(GamePacket packet) {
+	public PublicChatMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
 		int effects = (int) reader.getUnsigned(DataType.BYTE, DataTransformation.SUBTRACT);
@@ -34,7 +34,7 @@ public final class ChatMessageDecoder extends MessageDecoder<ChatMessage> {
 		TextUtil.compress(uncompressed, recompressed);
 		// in case invalid data gets sent, this effectively verifies it
 
-		return new ChatMessage(uncompressed, recompressed, color, effects);
+		return new PublicChatMessage(uncompressed, recompressed, color, effects);
 	}
 
 }

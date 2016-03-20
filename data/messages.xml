@@ -7,10 +7,10 @@
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.ChatMessage</type>
+        <type>org.apollo.game.message.impl.PublicChatMessage</type>
         <chain>
-            <handler>org.apollo.game.message.handler.ChatVerificationHandler</handler>
-            <handler>org.apollo.game.message.handler.ChatMessageHandler</handler>
+            <handler>org.apollo.game.message.handler.PublicChatVerificationHandler</handler>
+            <handler>org.apollo.game.message.handler.PublicChatMessageHandler</handler>
         </chain>
     </message>
     <message>

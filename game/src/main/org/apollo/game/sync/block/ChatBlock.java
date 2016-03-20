@@ -1,6 +1,6 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.message.impl.ChatMessage;
+import org.apollo.game.message.impl.PublicChatMessage;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
 
 /**
@@ -11,9 +11,9 @@ import org.apollo.game.model.entity.setting.PrivilegeLevel;
 public final class ChatBlock extends SynchronizationBlock {
 
 	/**
-	 * The {@link ChatMessage}.
+	 * The {@link PublicChatMessage}.
 	 */
-	private final ChatMessage chatMessage;
+	private final PublicChatMessage chatMessage;
 
 	/**
 	 * The {@link PrivilegeLevel}.
@@ -24,9 +24,9 @@ public final class ChatBlock extends SynchronizationBlock {
 	 * Creates the chat block.
 	 *
 	 * @param privilegeLevel The {@link PrivilegeLevel} of the player who said the message.
-	 * @param chatMessage The {@link ChatMessage}.
+	 * @param chatMessage The {@link PublicChatMessage}.
 	 */
-	ChatBlock(PrivilegeLevel privilegeLevel, ChatMessage chatMessage) {
+	ChatBlock(PrivilegeLevel privilegeLevel, PublicChatMessage chatMessage) {
 		this.privilegeLevel = privilegeLevel;
 		this.chatMessage = chatMessage;
 	}
