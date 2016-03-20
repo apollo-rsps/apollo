@@ -1,6 +1,6 @@
-REWARD_ORES = {}
+ORES = {}
 
-class Ores
+class Ore #originally ores
   attr_reader :id, :level, :experience, :name
 
   # Creates the Ores.
@@ -18,7 +18,7 @@ def append_ore(name, hash)
     fail 'Hash must contain an id, level, and experience.'
   end
 
-  REWARD_ORES[name] = Ores.new(hash[:id], hash[:level], hash[:experience])
+  ORES[name] = Ore.new(hash[:id], hash[:level], hash[:experience])
 end
 
 append_ore :rune_essence,         id: 1436, level: 1,  experience: 5
@@ -41,6 +41,3 @@ append_ore :granite_5kg,          id: 6983, level: 45, experience: 75
 append_ore :mithril_ore,          id: 447,  level: 55, experience: 80
 append_ore :adamant_ore,          id: 449,  level: 70, experience: 95
 append_ore :rune_ore,             id: 451,  level: 85, experience: 125
-
-
-

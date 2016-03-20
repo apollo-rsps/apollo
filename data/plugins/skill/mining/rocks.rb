@@ -1,12 +1,12 @@
-ORES = {}
-EXPIRED_ORES = {}
+ROCK = {}
+EXPIRED_ROCK = {}
 
 # An ore that can be mined.
-class Ore
+class Rock #originall ore
   attr_reader :id, :objects, :level, :respawn, :rate
 
   def initialize(id, objects, level, respawn, rate)
-    @id = id.map { |ores| REWARD_ORES[ores] }
+    @id = id.map { |ores| ORES[ores] }
     @objects = objects
     @level = level
     @respawn = respawn
@@ -16,8 +16,8 @@ end
 
 def append_ore(ore)
   ore.objects.each do |obj, expired_obj|
-    ORES[obj] = ore
-    EXPIRED_ORES[expired_obj] = true
+    ROCK[obj] = ore
+    EXPIRED_ROCK[expired_obj] = true
   end
 end
 
@@ -91,17 +91,17 @@ BLURITE_OBJECTS = {
 }
 
 
-append_ore Ore.new [:rune_essence, :pure_essence],              ESSENCE_OBJECTS, 1,  -1,    0.30
-append_ore Ore.new [:clay],                                     CLAY_OBJECTS,    1,   3,    0.1
-append_ore Ore.new [:copper_ore],                               COPPER_OBJECTS,  1,   6,    0.05
-append_ore Ore.new [:tin_ore],                                  TIN_OBJECTS,     1,   6,    0.05
-append_ore Ore.new [:blurite_ore],                              BLURITE_OBJECTS, 10,  6,    0.05
-append_ore Ore.new [:iron_ore],                                 IRON_OBJECTS,    15,  16,   0.35
-append_ore Ore.new [:silver_ore],                               SILVER_OBJECTS,  20,  200,  0.3
-append_ore Ore.new [:coal_ore],                                 COAL_OBJECTS,    30,  100,  0.6
-append_ore Ore.new [:sand_stone_1kg, :sand_stone_2kg, :sand_stone_5kg, :sand_stone_10kg], SANDSTONE_OBJECTS, 35,  175, 0.2
-append_ore Ore.new [:gold_ore],                                 GOLD_OBJECTS,    40,  200,  0.6
-append_ore Ore.new [:granite_500g, :granite_2kg, :granite_5kg], GRANITE_OBJECTS, 45,  150,    0.1
-append_ore Ore.new [:mithril_ore],                              MITHRIL_OBJECTS, 55,  400,  0.70
-append_ore Ore.new [:adamant_ore],                              ADAMANT_OBJECTS, 70,  800,  0.85
-append_ore Ore.new [:rune_ore],                                 RUNE_OBJECTS,    85,  2500, 0.95
+append_ore Rock.new [:rune_essence, :pure_essence],              ESSENCE_OBJECTS, 1,  -1,    0.30
+append_ore Rock.new [:clay],                                     CLAY_OBJECTS,    1,   3,    0.1
+append_ore Rock.new [:copper_ore],                               COPPER_OBJECTS,  1,   6,    0.05
+append_ore Rock.new [:tin_ore],                                  TIN_OBJECTS,     1,   6,    0.05
+append_ore Rock.new [:blurite_ore],                              BLURITE_OBJECTS, 10,  6,    0.05
+append_ore Rock.new [:iron_ore],                                 IRON_OBJECTS,    15,  16,   0.35
+append_ore Rock.new [:silver_ore],                               SILVER_OBJECTS,  20,  200,  0.3
+append_ore Rock.new [:coal_ore],                                 COAL_OBJECTS,    30,  100,  0.6
+append_ore Rock.new [:sand_stone_1kg, :sand_stone_2kg, :sand_stone_5kg, :sand_stone_10kg], SANDSTONE_OBJECTS, 35,  175, 0.2
+append_ore Rock.new [:gold_ore],                                 GOLD_OBJECTS,    40,  200,  0.6
+append_ore Rock.new [:granite_500g, :granite_2kg, :granite_5kg], GRANITE_OBJECTS, 45,  150,    0.1
+append_ore Rock.new [:mithril_ore],                              MITHRIL_OBJECTS, 55,  400,  0.70
+append_ore Rock.new [:adamant_ore],                              ADAMANT_OBJECTS, 70,  800,  0.85
+append_ore Rock.new [:rune_ore],                                 RUNE_OBJECTS,    85,  2500, 0.95

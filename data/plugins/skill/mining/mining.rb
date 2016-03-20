@@ -1,5 +1,4 @@
 require 'java'
-require 'securerandom'
 
 java_import 'org.apollo.game.action.DistancedAction'
 java_import 'org.apollo.game.model.entity.EquipmentConstants'
@@ -12,15 +11,15 @@ PROSPECT_PULSES = 3
 
 # A `DistancedAction` for mining ore.
 class MiningAction < DistancedAction
-  attr_reader :position, :ore, :counter, :started, :objId
+  attr_reader :position, :ore, :counter, :started, :object_id
 
-  def initialize(mob, position, ore, objId)
-    super(0, true, mob, position, ObjectDefinition.lookup(objId).getLength)
+  def initialize(mob, position, ore, object_id)
+    super(0, true, mob, position, ObjectDefinition.lookup(object_id).length)
     @position = position
     @ore = ore
     @started = false
     @counter = 0
-    @objId = objId
+    @object_id = object_id
   end
 
   def find_pickaxe
@@ -36,8 +35,8 @@ class MiningAction < DistancedAction
 
   def get_mining_rate(pickaxe, level)
     skill = 1 + level
-    hostRatio = SecureRandom.random_number * (100.0 * ore.rate).to_f
-    clientRatio = SecureRandom.random_number * ((skill - ore.level) * (1.0 + pickaxe.ratio)).to_f
+    hostRatio = Random.new.rand * (100.0 * ore.rate).to_f
+    clientRatio = Random.new.rand * ((skill - ore.level) * (1.0 + pickaxe.ratio)).to_f
     return hostRatio < clientRatio
   end
 
@@ -55,7 +54,11 @@ class MiningAction < DistancedAction
     pickaxe = find_pickaxe
 
     ores = @ore.id.reject { |ore| ore.level > level}
-    ore_id = if objId == 2491 then level >= 30 ? ores.last : ores.first else @ore.id.sample end
+    ore_id = if object_id == 2491
+               level >= 30 ? ores.last : ores.first
+             else
+               @ore.id.sample
+             end
     ore_def = ItemDefinition.lookup(ore_id.id)
 
     name = ore_def.name.sub(/ ore$/, '').sub(/ \(.*kg\)/, '').downcase
@@ -64,9 +67,8 @@ class MiningAction < DistancedAction
 
     mob.turn_to(@position)
 
-    # check to see if player has enough room to mine
     if mob.inventory.free_slots.zero?
-      mob.send_message(essence ? 'Your inventory is too full to hold any more rune stones.' : "Your inventory is too full to hold any more #{name}.")
+      mob.send_message("Your inventory is too full to hold any more #{essence ? 'rune stones' : name}.")
       stop
       return
     end
@@ -85,9 +87,8 @@ class MiningAction < DistancedAction
       return
     end
 
-    # checks to see if your pulse is on 0 and restarts the animation & pulse.
     if @counter == 0
-      mob.play_animation pickaxe.animation
+      mob.play_animation(pickaxe.animation)
       @counter = pickaxe.pulses
     end
 
@@ -96,9 +97,9 @@ class MiningAction < DistancedAction
       if get_mining_rate pickaxe, level
         if ore.respawn != 0
           mob.inventory.add(ore_id.id)
-          if objId != 2491 then mob.send_message(granite_or_sandstone ? "You manage to quarry some #{name}." : "You manage to mine some #{name}.") end
+          mob.send_message("You manage to #{granite_or_sandstone ? 'quarry' : 'mine'} some #{name}.") unless object_id == 2491
           mob.skill_set.add_experience(Skill::MINING, ore_id.experience)
-          if ore.respawn != -1 then
+          unless ore.respawn == -1
             expire_ore
             stop
           end
@@ -122,34 +123,34 @@ def expire_ore
   toggled_region = $world.region_repository.from_position(position)
   objects = toggled_region.get_entities(position, EntityType::DYNAMIC_OBJECT, EntityType::STATIC_OBJECT)
 
-  obj = objects.select { |game_object| game_object.id == objId }.first
+  obj = objects.select { |game_object| game_object.id == object_id }.first
 
-  toggled_ore = DynamicGameObject.create_public($world, ore.objects[objId], position, obj.getType, obj.getOrientation)
+  toggled_ore = DynamicGameObject.create_public($world, ore.objects[object_id], position, obj.type, obj.orientation)
   toggled_region.add_entity(toggled_ore)
 
-  $world.schedule ExpireOre.new(players, ore.id, position, ore.respawn, objId, ore.objects[objId])
+  $world.schedule(ExpireOre.new(players, ore.id, position, ore.respawn, object_id, ore.objects[object_id]))
 end
 
 class ExpireOre < ScheduledTask
 
-  attr_reader :ore, :position, :objId, :expiredId
+  attr_reader :ore, :position, :object_id, :expired_id
 
-  def initialize(players, ore, position, tick, objId, expiredId)
-    super respawn_pulses(tick, players), false
+  def initialize(players, ore, position, tick, object_id, expired_id)
+    super(respawn_pulses(tick, players), false)
     @ore = ore
     @position = position
-    @objId = objId
-    @expiredId = expiredId
+    @object_id = object_id
+    @expired_id = expired_id
   end
 
   def execute
     toggled_region = $world.region_repository.from_position(position)
     objects = toggled_region.get_entities(position, EntityType::DYNAMIC_OBJECT, EntityType::STATIC_OBJECT)
 
-    remove_obj = objects.select { |game_object| game_object.id == expiredId }.first
+    remove_obj = objects.select { |game_object| game_object.id == expired_id }.first
     toggled_region.remove_entity(remove_obj)
 
-    obj = DynamicGameObject.create_public($world, objId, position, remove_obj.getType, remove_obj.getOrientation)
+    obj = DynamicGameObject.create_public($world, object_id, position, remove_obj.type, remove_obj.orientation)
     toggled_region.add_entity(obj)
     stop
   end
@@ -157,11 +158,11 @@ end
 
 # A `DistancedAction` for a rock with no available ore.
 class ExpiredProspectingAction < DistancedAction
-  attr_reader :position, :objId
+  attr_reader :position, :object_id
 
   def initialize(mob, position, objId)
-    super(0, true, mob, position, ObjectDefinition.lookup(objId).getLength)
-    @objId = objId
+    super(0, true, mob, position, ObjectDefinition.lookup(object_id).length)
+    @object_id = object_id
   end
 
   def executeAction
@@ -177,13 +178,13 @@ end
 
 # A `DistancedAction` for prospecting a rock.
 class ProspectingAction < DistancedAction
-  attr_reader :position, :ore, :objId
+  attr_reader :position, :ore, :object_id
 
-  def initialize(mob, position, ore, objId)
-    super(PROSPECT_PULSES, true, mob, position, ObjectDefinition.lookup(objId).getLength)
+  def initialize(mob, position, ore, object_id)
+    super(PROSPECT_PULSES, true, mob, position, ObjectDefinition.lookup(object_id).length)
     @position = position
     @ore = ore
-    @objId = objId
+    @object_id = object_id
     @started = false
   end
 
@@ -200,7 +201,7 @@ class ProspectingAction < DistancedAction
       stop
     else
       @started = true
-      mob.send_message(not_ore_rock ? 'You examine the rock....' : 'You examine the rock for ores...')
+      mob.send_message(not_ore_rock ? 'You examine the rock...' : 'You examine the rock for ores...')
       mob.turn_to(@position)
     end
   end
@@ -235,19 +236,19 @@ class ExpiredMiningAction < DistancedAction
 end
 
 on :message, :first_object_action do |mob, message|
-  ore = ORES[message.id]
-  if !ore.nil?
-    mob.start_action(MiningAction.new(mob, message.position, ore, message.id))
-  elsif !EXPIRED_ORES[message.id].nil?
-    mob.start_action(ExpiredMiningAction.new(mob, message.position, ore))
+  rock = ROCK[message.id]
+  if !rock.nil?
+    mob.start_action(MiningAction.new(mob, message.position, rock, message.id))
+  elsif !EXPIRED_ROCK[message.id].nil?
+    mob.start_action(ExpiredMiningAction.new(mob, message.position, rock))
   end
 end
 
 on :message, :second_object_action do |mob, message|
-  ore = ORES[message.id]
-  if !ore.nil?
-    mob.start_action(ProspectingAction.new(mob, message.position, ore, message.id))
-  elsif !EXPIRED_ORES[message.id].nil?
-    mob.start_action(ExpiredProspectingAction.new(mob, message.position, ore))
+  rock = ROCK[message.id]
+  if !rock.nil?
+    mob.start_action(ProspectingAction.new(mob, message.position, rock, message.id))
+  elsif !EXPIRED_ROCK[message.id].nil?
+    mob.start_action(ExpiredProspectingAction.new(mob, message.position, rock))
   end
 end
