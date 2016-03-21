@@ -1,12 +1,9 @@
 package org.apollo.cache.decoder;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import org.apollo.cache.IndexedFileSystem;
-import org.apollo.cache.archive.Archive;
 import org.apollo.cache.def.NpcDefinition;
 import org.apollo.util.BufferUtil;
 
@@ -15,12 +12,7 @@ import org.apollo.util.BufferUtil;
  *
  * @author Major
  */
-public final class NpcDefinitionDecoder implements Runnable {
-
-	/**
-	 * The IndexedFileSystem.
-	 */
-	private final IndexedFileSystem fs;
+public final class NpcDefinitionDecoder extends DefinitionDecoder<NpcDefinition> {
 
 	/**
 	 * Creates the NpcDefinitionDecoder.
@@ -28,34 +20,23 @@ public final class NpcDefinitionDecoder implements Runnable {
 	 * @param fs The {@link IndexedFileSystem}.
 	 */
 	public NpcDefinitionDecoder(IndexedFileSystem fs) {
-		this.fs = fs;
+		super(fs);
 	}
 
 	@Override
-	public void run() {
-		try {
-			Archive config = fs.getArchive(0, 2);
-			ByteBuffer data = config.getEntry("npc.dat").getBuffer();
-			ByteBuffer idx = config.getEntry("npc.idx").getBuffer();
+	protected String getNameFile() {
+		return "npc";
+	}
 
-			int count = idx.getShort(), index = 2;
-			int[] indices = new int[count];
-
-			for (int i = 0; i < count; i++) {
-				indices[i] = index;
-				index += idx.getShort();
-			}
-
-			NpcDefinition[] definitions = new NpcDefinition[count];
-			for (int i = 0; i < count; i++) {
-				data.position(indices[i]);
-				definitions[i] = decode(i, data);
-			}
-
-			NpcDefinition.init(definitions);
-		} catch (IOException e) {
-			throw new UncheckedIOException("Error decoding NpcDefinitions.", e);
+	@Override
+	protected void initDefinition(int count, ByteBuffer data, int[] indices) {
+		NpcDefinition[] definitions = new NpcDefinition[count];
+		for (int i = 0; i < count; i++) {
+			data.position(indices[i]);
+			definitions[i] = decode(i, data);
 		}
+
+		NpcDefinition.init(definitions);
 	}
 
 	/**
@@ -65,7 +46,8 @@ public final class NpcDefinitionDecoder implements Runnable {
 	 * @param buffer The buffer.
 	 * @return The {@link NpcDefinition}.
 	 */
-	private NpcDefinition decode(int id, ByteBuffer buffer) {
+	@Override
+	protected NpcDefinition decode(int id, ByteBuffer buffer) {
 		NpcDefinition definition = new NpcDefinition(id);
 
 		while (true) {

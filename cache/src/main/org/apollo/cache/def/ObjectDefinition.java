@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
  *
  * @author Major
  */
-public final class ObjectDefinition {
+public final class ObjectDefinition implements Definition {
 
 	/**
 	 * The array of game object definitions.

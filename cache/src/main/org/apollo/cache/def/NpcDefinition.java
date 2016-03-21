@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
  *
  * @author Chris Fletcher
  */
-public final class NpcDefinition {
+public final class NpcDefinition implements Definition {
 
 	/**
 	 * The npc definitions.
