@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<plugin>
+  <id>follow</id>
+  <version>1</version>
+  <name>Follow</name>
+  <description>Adds following for mobs.</description>
+  <authors>
+    <author>Steve Soltys</author>
+  </authors>
+  <scripts>
+      <script>attribute.rb</script>
+      <script>util.rb</script>
+      <script>follow.rb</script>
+  </scripts>
+  <dependencies>
+      <dependency>attributes</dependency>
+  </dependencies>
+</plugin>
