@@ -225,63 +225,36 @@ public final class Position {
 	}
 
 	/**
-	 * Gets a position, based upon this position, from the given deltas.
+	 * Adds the given delta values to this position and returns the result.
 	 *
 	 * @param deltaX The delta x.
 	 * @param deltaY The delta y.
 	 * @return The position.
 	 */
-	public Position fromDeltas(int deltaX, int deltaY) {
-		return fromDeltas(deltaX, deltaY, 0);
+	public Position add(int deltaX, int deltaY) {
+		return add(deltaX, deltaY, 0);
 	}
 
 	/**
-	 * Gets a position, based upon this position, from the given deltas.
+	 * Adds the given delta values to this position and returns the result.
 	 *
 	 * @param deltaX The delta x.
 	 * @param deltaY The delta y.
 	 * @param deltaZ The delta z.
 	 * @return The new position.
 	 */
-	public Position fromDeltas(int deltaX, int deltaY, int deltaZ) {
+	public Position add(int deltaX, int deltaY, int deltaZ) {
 		return new Position(getX() + deltaX, getY() + deltaY, getHeight() + deltaZ);
 	}
 
 	/**
 	 * Gets the adjacent position in the given direction.
 	 *
-	 * @param direction the direction
-	 * @return the position
+	 * @param direction The direction.
+	 * @return The position.
 	 */
-	public Position fromDirection(Direction direction) {
-
-		switch (direction) {
-			case NORTH:
-				return fromDeltas(0, 1);
-
-			case SOUTH:
-				return fromDeltas(0, -1);
-
-			case EAST:
-				return fromDeltas(1, 0);
-
-			case WEST:
-				return fromDeltas(-1, 0);
-
-			case NORTH_EAST:
-				return fromDeltas(1, 1);
-
-			case SOUTH_WEST:
-				return fromDeltas(-1, -1);
-
-			case NORTH_WEST:
-				return fromDeltas(-1, 1);
-
-			case SOUTH_EAST:
-				return fromDeltas(1, -1);
-		}
-
-		return fromDeltas(0, 0);
+	public Position add(Direction direction) {
+		return add(direction.deltaX(), direction.deltaY());
 	}
 
 	@Override

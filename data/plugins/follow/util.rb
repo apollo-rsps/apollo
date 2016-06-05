@@ -1,5 +1,5 @@
 java_import 'org.apollo.game.model.entity.path.AStarPathfindingAlgorithm'
-java_import 'org.apollo.game.model.entity.path.ChebyshevHeuristic'
+java_import 'org.apollo.game.model.entity.path.EuclideanHeuristic'
 java_import 'org.apollo.game.model.entity.path.SimplePathfindingAlgorithm'
 java_import 'org.apollo.game.model.entity.Npc'
 java_import 'org.apollo.game.model.Direction'
@@ -16,7 +16,7 @@ module FollowingModule
 
   ##
   # A pathfinder used for precise following (i.e.: A player attacking another player).
-  FOLLOW_PATH_FINDER = AStarPathfindingAlgorithm.new($world, ChebyshevHeuristic.new)
+  FOLLOW_PATH_FINDER = AStarPathfindingAlgorithm.new($world, EuclideanHeuristic.new)
 
   ##
   # Gets the minimum distance that a mob must be at while following another.
@@ -110,7 +110,7 @@ module FollowingModule
         reset(mob) && task.stop && next
       end
 
-      next unless mob.walking_queue.size == 0
+      next unless mob.walking_queue.size <= 1
 
       # the minimum distance that we must keep between us and the mob we're following
       minimum_distance = get_minimum_distance(mob, other_mob)
@@ -123,7 +123,7 @@ module FollowingModule
       end_position = nil
 
       if distance < minimum_distance
-        end_position = other_mob.position.from_direction(HORIZONTAL_DIRECTIONS.sample)
+        end_position = other_mob.position.add(HORIZONTAL_DIRECTIONS.sample)
 
       elsif distance > max_distance
         end_position = other_mob.position
