@@ -99,6 +99,11 @@ public abstract class Mob extends Entity {
 	private Position facingPosition = position;
 
 	/**
+	 * This last direction that this mob moved in.
+	 */
+	private Direction lastDirection = Direction.NORTH;
+
+	/**
 	 * This mob's first movement direction.
 	 */
 	private Direction firstDirection = Direction.NONE;
@@ -269,6 +274,15 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Gets the last direction that this mob moved in.
+	 *
+	 * @return The direction.
+	 */
+	public Direction getLastDirection() {
+		return lastDirection;
+	}
+
+	/**
 	 * Gets this mob's local npc {@link List}.
 	 *
 	 * @return The list.
@@ -426,6 +440,15 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Set the direction that this mob is currently facing.
+	 *
+	 * @param lastDirection The new direction.
+	 */
+	public void setLastDirection(Direction lastDirection) {
+		this.lastDirection = lastDirection;
+	}
+
+	/**
 	 * Sets the {@link Position} of this mob.
 	 * <p>
 	 * This method may be intercepted using a {@link MobPositionUpdateEvent}, which can be terminated like any
@@ -547,5 +570,4 @@ public abstract class Mob extends Entity {
 	private void init() {
 		world.schedule(new SkillNormalizationTask(this));
 	}
-
 }

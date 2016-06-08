@@ -224,6 +224,39 @@ public final class Position {
 		return deltaX <= distance && deltaY <= distance && getHeight() == other.getHeight();
 	}
 
+	/**
+	 * Adds the given delta values to this position and returns the result.
+	 *
+	 * @param deltaX The delta x.
+	 * @param deltaY The delta y.
+	 * @return The position.
+	 */
+	public Position add(int deltaX, int deltaY) {
+		return add(deltaX, deltaY, 0);
+	}
+
+	/**
+	 * Adds the given delta values to this position and returns the result.
+	 *
+	 * @param deltaX The delta x.
+	 * @param deltaY The delta y.
+	 * @param deltaZ The delta z.
+	 * @return The new position.
+	 */
+	public Position add(int deltaX, int deltaY, int deltaZ) {
+		return new Position(getX() + deltaX, getY() + deltaY, getHeight() + deltaZ);
+	}
+
+	/**
+	 * Gets the adjacent position in the given direction.
+	 *
+	 * @param direction The direction.
+	 * @return The position.
+	 */
+	public Position add(Direction direction) {
+		return add(direction.deltaX(), direction.deltaY());
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight()).add("region", getRegionCoordinates()).toString();

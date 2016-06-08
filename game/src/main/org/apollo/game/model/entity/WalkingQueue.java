@@ -5,15 +5,10 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
-import org.apollo.game.model.area.collision.CollisionFlag;
-import org.apollo.game.model.area.collision.CollisionMatrix;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.Queue;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * A queue of {@link Direction}s which a {@link Mob} will follow.
@@ -137,6 +132,7 @@ public final class WalkingQueue {
 		Position next = points.poll();
 		if (next != null) {
 			firstDirection = Direction.between(position, next);
+			mob.setLastDirection(firstDirection);
 
 			if (world.intersects(position, next, EntityType.NPC)) {
 				clear();
@@ -149,6 +145,7 @@ public final class WalkingQueue {
 					next = points.poll();
 					if (next != null) {
 						secondDirection = Direction.between(position, next);
+						mob.setLastDirection(secondDirection);
 
 						if (world.intersects(position, next, EntityType.NPC)) {
 							clear();
