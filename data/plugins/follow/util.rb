@@ -65,7 +65,7 @@ module FollowingModule
 
     path.each do |tile|
       tile_distance = tile.get_distance(other_mob.position)
-      break if tile_distance < minimum_distance
+      # break if tile_distance < minimum_distance
 
       mob.walking_queue.add_step(tile)
 
@@ -100,14 +100,16 @@ module FollowingModule
       # if we're following a different entity, stop this task
       # TODO: Could the indices of NPCs and Players collide since they are in different instances of MobRepository..?
       if mob.following != other_mob.index
-        task.stop && next
+        task.stop
+        next
       end
 
       distance = other_mob.position.get_distance(mob.position)
 
       # check if the mob is too far away
       if distance > 15
-        reset(mob) && task.stop && next
+        reset(mob) && task.stop
+        next
       end
 
       next unless mob.walking_queue.size <= 1
@@ -125,11 +127,12 @@ module FollowingModule
       if distance < minimum_distance
         end_position = other_mob.position.add(HORIZONTAL_DIRECTIONS.sample)
 
-      elsif distance > max_distance
-        end_position = other_mob.position
+      else
+        last_position = other_mob.position.add(other_mob.last_direction.opposite)
+        end_position = last_position unless last_position.eql?(mob.position)
       end
 
-      # TODO: Projectile clipping.
+      # TODO: Projectile clipping, Mobs that are larger than one tile.
 
       walk_to_position(mob, other_mob, minimum_distance, max_distance, end_position, simple) unless end_position.nil?
 
