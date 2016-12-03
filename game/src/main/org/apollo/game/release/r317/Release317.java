@@ -61,12 +61,13 @@ public final class Release317 extends Release {
 	/**
 	 * The incoming packet lengths array.
 	 */
-	public static final int[] PACKET_LENGTHS = { 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, // 0
+	public static final int[] PACKET_LENGTHS = {
+			0, 0, 0, 1, -1, 0, 0, 0, 0, 0, // 0
 			0, 0, 0, 0, 8, 0, 6, 2, 2, 0, // 10
 			0, 2, 0, 6, 0, 12, 0, 0, 0, 0, // 20
 			0, 0, 0, 0, 0, 8, 4, 0, 0, 2, // 30
 			2, 6, 0, 6, 0, -1, 0, 0, 0, 0, // 40
-			0, 0, 0, 12, 0, 0, 0, 0, 8, 0, // 50
+			0, 0, 0, 12, 0, 0, 0, 8, 8, 0, // 50
 			0, 8, 0, 0, 0, 0, 0, 0, 0, 0, // 60
 			6, 0, 2, 2, 8, 6, 0, -1, 0, 6, // 70
 			0, 0, 0, 0, 0, 1, 4, 6, 0, 0, // 80
@@ -136,6 +137,7 @@ public final class Release317 extends Release {
 		register(120, new FlashingTabClickedMessageDecoder());
 
 		register(53, new ItemOnItemMessageDecoder());
+		register(57, new ItemOnNpcMessageDecoder());
 		register(237, new MagicOnItemMessageDecoder());
 		register(249, new MagicOnPlayerMessageDecoder());
 
