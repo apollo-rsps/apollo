@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apollo.cache.IndexedFileSystem;
-import org.apollo.cache.decoder.MapFileDecoder;
-import org.apollo.cache.decoder.MapFileDecoder.MapDefinition;
 import org.apollo.cache.decoder.ObjectDefinitionDecoder;
 import org.apollo.cache.def.ObjectDefinition;
+import org.apollo.cache.map.MapIndex;
+import org.apollo.cache.map.MapIndexDecoder;
 import org.apollo.game.io.player.PlayerSerializer;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -85,10 +85,13 @@ public final class GameObjectDecoder implements Runnable {
 		ObjectDefinitionDecoder decoder = new ObjectDefinitionDecoder(fs);
 		decoder.run();
 
-		try {
-			Map<Integer, MapDefinition> definitions = MapFileDecoder.decode(fs);
+		MapIndexDecoder mapIndexDecoder = new MapIndexDecoder(fs);
+		mapIndexDecoder.run();
 
-			for (MapDefinition definition : definitions.values()) {
+		try {
+			Map<Integer, MapIndex> indices = MapIndex.getIndices();
+
+			for (MapIndex definition : indices.values()) {
 				int packed = definition.getPackedCoordinates();
 				int x = (packed >> 8 & 0xFF) * (Region.SIZE * Region.SIZE);
 				int y = (packed & 0xFF) * (Region.SIZE * Region.SIZE);
@@ -97,7 +100,7 @@ public final class GameObjectDecoder implements Runnable {
 				ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(objects));
 				decodeObjects(decompressed, x, y);
 
-				ByteBuffer terrain = fs.getFile(4, definition.getTerrainFile());
+				ByteBuffer terrain = fs.getFile(4, definition.getMapFile());
 				decompressed = ByteBuffer.wrap(CompressionUtil.degzip(terrain));
 				decodeTerrain(decompressed, x, y);
 			}
