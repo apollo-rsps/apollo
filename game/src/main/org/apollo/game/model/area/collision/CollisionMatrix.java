@@ -105,6 +105,18 @@ public final class CollisionMatrix {
 	}
 
 	/**
+	 * Completely blocks the tile at the specified coordinate pair, while optionally allowing projectiles
+	 * to pass through.
+	 *
+	 * @param x The x coordinate.
+	 * @param y The y coordinate.
+	 * @param impenetrable If projectiles should be permitted to traverse this tile.
+	 */
+	public void block(int x, int y, boolean impenetrable) {
+		set(x, y, impenetrable ? ALL_BLOCKED : ALL_MOBS_BLOCKED);
+	}
+
+	/**
 	 * Completely blocks the tile at the specified coordinate pair.
 	 *
 	 * @param x The x coordinate.
@@ -123,7 +135,7 @@ public final class CollisionMatrix {
 	 * @param flag The CollisionFlag.
 	 */
 	public void clear(int x, int y, CollisionFlag flag) {
-		set(x, y, (byte) ~flag.asByte());
+		set(x, y, (byte) (matrix[indexOf(x, y)] & ~flag.asByte()));
 	}
 
 	/**
