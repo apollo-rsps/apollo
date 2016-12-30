@@ -1,5 +1,6 @@
 package org.apollo.game.model.area;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,11 @@ public final class RegionRepository {
 	private final Map<RegionCoordinates, Region> regions = new HashMap<>();
 
 	/**
+	 * A list of default {@link RegionListener}s which will be added to {@link Region}s upon creation.
+	 */
+	private final List<RegionListener> defaultRegionListeners = new ArrayList<>();
+
+	/**
 	 * Creates a new RegionRepository.
 	 *
 	 * @param permitRemoval If removal (of {@link Region}s) from this repository should be permitted.
@@ -71,7 +77,22 @@ public final class RegionRepository {
 			throw new UnsupportedOperationException("Cannot add a Region with the same coordinates as an existing Region.");
 		}
 
+		defaultRegionListeners.forEach(region::addListener);
 		regions.put(region.getCoordinates(), region);
+	}
+
+	/**
+	 * Adds a {@link RegionListener} to be registered as a default listener with all newly created {@link Region}s and
+	 * associated with any existing instances.
+	 *
+	 * @param listener The listener to add.
+	 */
+	public void addRegionListener(RegionListener listener) {
+		for (Region region : regions.values()) {
+			region.addListener(listener);
+		}
+
+		defaultRegionListeners.add(listener);
 	}
 
 	/**

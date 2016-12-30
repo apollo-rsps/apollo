@@ -163,6 +163,10 @@ public final class Region {
 		addEntity(entity, true);
 	}
 
+	public void addListener(RegionListener listener) {
+		listeners.add(listener);
+	}
+
 	/**
 	 * Checks if this Region contains the specified Entity.
 	 *
