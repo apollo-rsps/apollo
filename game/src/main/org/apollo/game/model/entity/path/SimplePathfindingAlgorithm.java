@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.collision.CollisionManager;
 
 /**
  * A very simple pathfinding algorithm that simply walks in the direction of the target until it either reaches it or is
@@ -19,10 +21,11 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 	/**
 	 * Creates the SimplePathfindingAlgorithm.
 	 *
-	 * @param repository The {@link RegionRepository}.
+	 * @param collisionManager The {@link CollisionManager} used to check if there is a collision
+	 * between two {@link Position}s in a path.
 	 */
-	public SimplePathfindingAlgorithm(RegionRepository repository) {
-		super(repository);
+	public SimplePathfindingAlgorithm(CollisionManager collisionManager) {
+		super(collisionManager);
 	}
 
 	/**
@@ -53,7 +56,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 
 	/**
 	 * Adds the necessary and possible horizontal {@link Position}s to the existing {@link Deque}.
-	 * <p>
+	 * <p/>
 	 * This method:
 	 * <ul>
 	 * <li>Adds positions horizontally until we are either horizontally aligned with the target, or the next step is not
@@ -97,7 +100,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 
 	/**
 	 * Adds the necessary and possible vertical {@link Position}s to the existing {@link Deque}.
-	 * <p>
+	 * <p/>
 	 * This method:
 	 * <ul>
 	 * <li>Adds positions vertically until we are either vertically aligned with the target, or the next step is not
@@ -133,7 +136,7 @@ public final class SimplePathfindingAlgorithm extends PathfindingAlgorithm {
 
 		Position last = new Position(x, y, height);
 		if (!last.equals(target) && dx != 0
-				&& traversable(last, boundaries, dx > 0 ? Direction.WEST : Direction.EAST)) {
+			&& traversable(last, boundaries, dx > 0 ? Direction.WEST : Direction.EAST)) {
 			return addHorizontal(last, target, positions);
 		}
 

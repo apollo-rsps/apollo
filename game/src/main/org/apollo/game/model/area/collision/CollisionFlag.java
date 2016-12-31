@@ -10,44 +10,84 @@ import org.apollo.game.model.entity.EntityType;
 public enum CollisionFlag {
 
 	/**
+	 * The walk north west flag.
+	 */
+	MOB_NORTH_WEST(1),
+
+	/**
 	 * The walk north flag.
 	 */
-	MOB_NORTH(0),
+	MOB_NORTH(2),
+
+	/**
+	 * The walk north east flag.
+	 */
+	MOB_NORTH_EAST(3),
 
 	/**
 	 * The walk east flag.
 	 */
-	MOB_EAST(1),
+	MOB_EAST(4),
+
+	/**
+	 * The walk south east flag.
+	 */
+	MOB_SOUTH_EAST(5),
 
 	/**
 	 * The walk south flag.
 	 */
-	MOB_SOUTH(2),
+	MOB_SOUTH(6),
+
+	/**
+	 * The walk south west flag.
+	 */
+	MOB_SOUTH_WEST(7),
 
 	/**
 	 * The walk west flag.
 	 */
-	MOB_WEST(3),
+	MOB_WEST(8),
+
+	/**
+	 * The projectile north west flag.
+	 */
+	PROJECTILE_NORTH_WEST(9),
 
 	/**
 	 * The projectile north flag.
 	 */
-	PROJECTILE_NORTH(4),
+	PROJECTILE_NORTH(10),
+
+	/**
+	 * The projectile north east flag.
+	 */
+	PROJECTILE_NORTH_EAST(11),
 
 	/**
 	 * The projectile east flag.
 	 */
-	PROJECTILE_EAST(5),
+	PROJECTILE_EAST(12),
+
+	/**
+	 * The projectile south east flag.
+	 */
+	PROJECTILE_SOUTH_EAST(13),
 
 	/**
 	 * The projectile south flag.
 	 */
-	PROJECTILE_SOUTH(6),
+	PROJECTILE_SOUTH(14),
+
+	/**
+	 * The projectile south west flag.
+	 */
+	PROJECTILE_SOUTH_WEST(15),
 
 	/**
 	 * The projectile west flag.
 	 */
-	PROJECTILE_WEST(7);
+	PROJECTILE_WEST(16);
 
 	/**
 	 * Returns an array of CollisionFlags that indicate if the specified {@link EntityType} can be positioned on a tile.
@@ -65,7 +105,16 @@ public enum CollisionFlag {
 	 * @return The array of CollisionFlags.
 	 */
 	public static CollisionFlag[] mobs() {
-		return new CollisionFlag[] { MOB_NORTH, MOB_EAST, MOB_SOUTH, MOB_WEST };
+		return new CollisionFlag[] {
+			MOB_NORTH_WEST,
+			MOB_NORTH,
+			MOB_NORTH_EAST,
+			MOB_WEST,
+			MOB_EAST,
+			MOB_SOUTH_WEST,
+			MOB_SOUTH,
+			MOB_SOUTH_EAST
+		};
 	}
 
 	/**
@@ -74,7 +123,16 @@ public enum CollisionFlag {
 	 * @return The array of CollisionFlags.
 	 */
 	public static CollisionFlag[] projectiles() {
-		return new CollisionFlag[] { PROJECTILE_NORTH, PROJECTILE_EAST, PROJECTILE_SOUTH, PROJECTILE_WEST };
+		return new CollisionFlag[] {
+			PROJECTILE_NORTH_WEST,
+			PROJECTILE_NORTH,
+			PROJECTILE_NORTH_EAST,
+			PROJECTILE_WEST,
+			PROJECTILE_EAST,
+			PROJECTILE_SOUTH_WEST,
+			PROJECTILE_SOUTH,
+			PROJECTILE_SOUTH_EAST
+		};
 	}
 
 	/**
@@ -92,12 +150,12 @@ public enum CollisionFlag {
 	}
 
 	/**
-	 * Gets this CollisionFlag, as a {@code byte}.
+	 * Gets this CollisionFlag, as a {@code short}.
 	 *
-	 * @return The value, as a {@code byte}.
+	 * @return The value, as a {@code short}.
 	 */
-	public byte asByte() {
-		return (byte) (1 << bit);
+	public short asShort() {
+		return (short) (1 << bit);
 	}
 
 	/**

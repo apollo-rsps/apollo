@@ -163,6 +163,10 @@ public final class Region {
 		addEntity(entity, true);
 	}
 
+	public void addListener(RegionListener listener) {
+		listeners.add(listener);
+	}
+
 	/**
 	 * Checks if this Region contains the specified Entity.
 	 *
@@ -294,6 +298,15 @@ public final class Region {
 		Preconditions.checkElementIndex(height, matrices.length, "Matrix height level must be [0, " + matrices.length
 				+ "), received " + height + ".");
 		return matrices[height];
+	}
+
+	/**
+	 * Gets all {@link CollisionMatrix}'s in this {@code Region}.
+	 *
+	 * @return The collision matrices of this region.
+	 */
+	public CollisionMatrix[] getMatrices() {
+		return matrices;
 	}
 
 	/**

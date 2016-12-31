@@ -18,12 +18,17 @@ public final class CollisionMatrix {
 	/**
 	 * Indicates that all types of traversal are allowed.
 	 */
-	private static final byte ALL_ALLOWED = 0b0000_0000;
+	private static final short ALL_ALLOWED = 0b00000000_00000000;
 
 	/**
 	 * Indicates that no types of traversal are allowed.
 	 */
-	private static final byte ALL_BLOCKED = (byte) 0b1111_1111;
+	private static final short ALL_BLOCKED = (short) 0b11111111_11111111;
+
+	/**
+	 * Indicates that projectiles may traverse this tile, but mobs may not.
+	 */
+	private static final short ALL_MOBS_BLOCKED = (short) 0b11111111_00000000;
 
 	/**
 	 * Creates an array of CollisionMatrix objects, all of the specified width and length.
@@ -45,9 +50,9 @@ public final class CollisionMatrix {
 	private final int length;
 
 	/**
-	 * The collision matrix, as a {@code byte} array.
+	 * The collision matrix, as a {@code short} array.
 	 */
-	private final byte[] matrix;
+	private final short[] matrix;
 
 	/**
 	 * The width of the matrix.
@@ -63,7 +68,7 @@ public final class CollisionMatrix {
 	public CollisionMatrix(int width, int length) {
 		this.width = width;
 		this.length = length;
-		matrix = new byte[width * length];
+		matrix = new short[width * length];
 	}
 
 	/**
@@ -105,13 +110,25 @@ public final class CollisionMatrix {
 	}
 
 	/**
+	 * Completely blocks the tile at the specified coordinate pair, while optionally allowing projectiles
+	 * to pass through.
+	 *
+	 * @param x The x coordinate.
+	 * @param y The y coordinate.
+	 * @param impenetrable If projectiles should be permitted to traverse this tile.
+	 */
+	public void block(int x, int y, boolean impenetrable) {
+		set(x, y, impenetrable ? ALL_BLOCKED : ALL_MOBS_BLOCKED);
+	}
+
+	/**
 	 * Completely blocks the tile at the specified coordinate pair.
 	 *
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
 	public void block(int x, int y) {
-		set(x, y, ALL_BLOCKED);
+		block(x, y, true);
 	}
 
 	/**
@@ -123,7 +140,18 @@ public final class CollisionMatrix {
 	 * @param flag The CollisionFlag.
 	 */
 	public void clear(int x, int y, CollisionFlag flag) {
-		set(x, y, (byte) ~flag.asByte());
+		set(x, y, (short) (matrix[indexOf(x, y)] & ~flag.asShort()));
+	}
+
+	/**
+	 * Adds an additional {@link CollisionFlag} for the specified coordinate pair.
+	 *
+	 * @param x The x coordinate.
+	 * @param y The y coordinate.
+	 * @param flag The CollisionFlag.
+	 */
+	public void flag(int x, int y, CollisionFlag flag) {
+		matrix[indexOf(x, y)] |= flag.asShort();
 	}
 
 	/**
@@ -135,7 +163,7 @@ public final class CollisionMatrix {
 	 * @return {@code true} iff the CollisionFlag is set.
 	 */
 	public boolean flagged(int x, int y, CollisionFlag flag) {
-		return (get(x, y) & flag.asByte()) != 0;
+		return (get(x, y) & flag.asShort()) != 0;
 	}
 
 	/**
@@ -146,7 +174,7 @@ public final class CollisionMatrix {
 	 * @return The value.
 	 */
 	public int get(int x, int y) {
-		return matrix[indexOf(x, y)] & 0xFF;
+		return matrix[indexOf(x, y)] & 0xFFFF;
 	}
 
 	/**
@@ -160,6 +188,17 @@ public final class CollisionMatrix {
 	}
 
 	/**
+	 * Resets all cells in this matrix.
+	 */
+	public void reset() {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < width; y++) {
+				reset(x, y);
+			}
+		}
+	}
+
+	/**
 	 * Sets (i.e. sets to {@code true}) the value of the specified {@link CollisionFlag} for the specified coordinate
 	 * pair.
 	 *
@@ -168,13 +207,13 @@ public final class CollisionMatrix {
 	 * @param flag The CollisionFlag.
 	 */
 	public void set(int x, int y, CollisionFlag flag) {
-		set(x, y, flag.asByte());
+		set(x, y, flag.asShort());
 	}
 
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("width", width).add("length", length)
-				.add("matrix", Arrays.toString(matrix)).toString();
+			.add("matrix", Arrays.toString(matrix)).toString();
 	}
 
 	/**
@@ -189,23 +228,23 @@ public final class CollisionMatrix {
 	 */
 	public boolean untraversable(int x, int y, EntityType entity, Direction direction) {
 		CollisionFlag[] flags = CollisionFlag.forType(entity);
-		int north = 0, east = 1, south = 2, west = 3;
+		int northwest = 0, north = 1, northeast = 2, west = 3, east = 4, southwest = 5, south = 6, southeast = 7;
 
 		switch (direction) {
 			case NORTH_WEST:
-				return flagged(x, y, flags[south]) || flagged(x, y, flags[east]);
+				return flagged(x, y, flags[southeast]) || flagged(x, y, flags[south]) || flagged(x, y, flags[east]);
 			case NORTH:
 				return flagged(x, y, flags[south]);
 			case NORTH_EAST:
-				return flagged(x, y, flags[south]) || flagged(x, y, flags[west]);
+				return flagged(x, y, flags[southwest]) || flagged(x, y, flags[south]) || flagged(x, y, flags[west]);
 			case EAST:
 				return flagged(x, y, flags[west]);
 			case SOUTH_EAST:
-				return flagged(x, y, flags[north]) || flagged(x, y, flags[west]);
+				return flagged(x, y, flags[northwest]) || flagged(x, y, flags[north]) || flagged(x, y, flags[west]);
 			case SOUTH:
 				return flagged(x, y, flags[north]);
 			case SOUTH_WEST:
-				return flagged(x, y, flags[north]) || flagged(x, y, flags[east]);
+				return flagged(x, y, flags[northeast]) || flagged(x, y, flags[north]) || flagged(x, y, flags[east]);
 			case WEST:
 				return flagged(x, y, flags[east]);
 			default:
@@ -234,7 +273,7 @@ public final class CollisionMatrix {
 	 * @param y The y coordinate.
 	 * @param value The value.
 	 */
-	private void set(int x, int y, byte value) {
+	private void set(int x, int y, short value) {
 		matrix[indexOf(x, y)] = value;
 	}
 
