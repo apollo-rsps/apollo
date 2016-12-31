@@ -41,6 +41,20 @@ public final class MapObject {
 	}
 
 	/**
+	 * Create a new {@code MapObject}.
+	 *
+	 * @param id The object ID of this map object.
+	 * @param x The local X coordinate of this object.
+	 * @param y The local Y coordinate of this object.
+	 * @param height The height level of this object.
+	 * @param type The type of this object.
+	 * @param orientation The orientation of this object.
+	 */
+	public MapObject(int id, int x, int y, int height, int type, int orientation) {
+		this(id, (height & 0x3f) << 12 | (x & 0x3f) << 6 | (y & 0x3f), type, orientation);
+	}
+
+	/**
 	 * Get the object ID of this map object.
 	 *
 	 * @return The object ID for {@link org.apollo.cache.def.ObjectDefinition} lookups.

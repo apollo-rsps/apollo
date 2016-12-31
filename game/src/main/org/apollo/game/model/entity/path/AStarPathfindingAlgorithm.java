@@ -11,7 +11,9 @@ import java.util.Set;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.collision.CollisionManager;
 
 /**
  * A {@link PathfindingAlgorithm} that utilises the A* algorithm to find a solution.
@@ -35,11 +37,12 @@ public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 	/**
 	 * Creates the A* pathfinding algorithm with the specified {@link Heuristic}.
 	 *
-	 * @param repository The {@link RegionRepository}.
+	 * @param collisionManager The {@link CollisionManager} used to check if there is a collision
+	 * between two {@link Position}s in a path.
 	 * @param heuristic The Heuristic.
 	 */
-	public AStarPathfindingAlgorithm(RegionRepository repository, Heuristic heuristic) {
-		super(repository);
+	public AStarPathfindingAlgorithm(CollisionManager collisionManager, Heuristic heuristic) {
+		super(collisionManager);
 		this.heuristic = heuristic;
 	}
 

@@ -301,6 +301,15 @@ public final class Region {
 	}
 
 	/**
+	 * Gets all {@link CollisionMatrix}'s in this {@code Region}.
+	 *
+	 * @return The collision matrices of this region.
+	 */
+	public CollisionMatrix[] getMatrices() {
+		return matrices;
+	}
+
+	/**
 	 * Gets the {@link Set} of {@link RegionUpdateMessage}s that have occurred in the last pulse. This method can
 	 * only be called <strong>once</strong> per pulse.
 	 *

@@ -224,9 +224,19 @@ public final class Position {
 		return deltaX <= distance && deltaY <= distance && getHeight() == other.getHeight();
 	}
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight()).add("region", getRegionCoordinates()).toString();
+	/**
+	 * Creates a new position {@code num} steps from this position in the given direction.
+	 *
+	 * @param num The number of steps to make.
+	 * @param direction The direction to make steps in.
+	 * @return A new {@code Position} that is {@code num} steps in {@code direction} ahead of this one.
+	 */
+	public Position step(int num, Direction direction) {
+		return new Position(getX() + (num * direction.deltaX()), getY() + (num * direction.deltaY()), getHeight());
 	}
 
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight()).add("map", getRegionCoordinates()).toString();
+	}
 }

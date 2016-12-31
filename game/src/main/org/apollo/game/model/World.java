@@ -1,10 +1,6 @@
 package org.apollo.game.model;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.logging.Logger;
 
 import com.google.common.base.Preconditions;
@@ -12,12 +8,17 @@ import org.apollo.Service;
 import org.apollo.cache.IndexedFileSystem;
 import org.apollo.cache.decoder.ItemDefinitionDecoder;
 import org.apollo.cache.decoder.NpcDefinitionDecoder;
+import org.apollo.cache.decoder.ObjectDefinitionDecoder;
+import org.apollo.cache.map.MapIndexDecoder;
 import org.apollo.game.command.CommandDispatcher;
-import org.apollo.game.fs.decoder.GameObjectDecoder;
 import org.apollo.game.fs.decoder.SynchronousDecoder;
+import org.apollo.game.fs.decoder.WorldMapDecoder;
+import org.apollo.game.fs.decoder.WorldObjectsDecoder;
 import org.apollo.game.io.EquipmentDefinitionParser;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.collision.CollisionManager;
+import org.apollo.game.model.area.collision.GameObjectCollisionUpdateListener;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.MobRepository;
@@ -111,6 +112,11 @@ public final class World {
 	private final RegionRepository regions = RegionRepository.immutable();
 
 	/**
+	 * This world's {@link CollisionManager}.
+	 */
+	private final CollisionManager collisionManager = new CollisionManager(regions);
+
+	/**
 	 * The scheduler.
 	 */
 	private final Scheduler scheduler = new Scheduler();
@@ -129,6 +135,13 @@ public final class World {
 	 * The release number (i.e. version) of this world.
 	 */
 	private int releaseNumber;
+
+	/**
+	 * Gets the collision manager.
+	 *
+	 * @return The collision manager
+	 */
+	public CollisionManager getCollisionManager() { return collisionManager; }
 
 	/**
 	 * Gets the command dispatcher.
@@ -207,13 +220,28 @@ public final class World {
 	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
 		releaseNumber = release;
 
-		SynchronousDecoder decoder = new SynchronousDecoder(new ItemDefinitionDecoder(fs),
-			new NpcDefinitionDecoder(fs), new GameObjectDecoder(fs, this),
-			EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat"));
+		SynchronousDecoder firstStageDecoder = new SynchronousDecoder(
+			new NpcDefinitionDecoder(fs),
+			new ItemDefinitionDecoder(fs),
+			new ObjectDefinitionDecoder(fs),
+			new MapIndexDecoder(fs),
+			EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat")
+		);
 
-		decoder.block();
+		firstStageDecoder.block();
 
-		npcMovement = new NpcMovementTask(regions); // Must be exactly here because of ordering issues.
+		SynchronousDecoder secondStageDecoder = new SynchronousDecoder(
+			new WorldObjectsDecoder(fs, this, regions),
+			new WorldMapDecoder(fs, collisionManager)
+		);
+
+		secondStageDecoder.block();
+
+		// Build collision matrices for the first time
+		collisionManager.build(false);
+		regions.addRegionListener(new GameObjectCollisionUpdateListener(collisionManager));
+
+		npcMovement = new NpcMovementTask(collisionManager); // Must be exactly here because of ordering issues.
 		scheduler.schedule(npcMovement);
 
 		manager.start();

@@ -7,7 +7,9 @@ import java.util.Queue;
 import java.util.Random;
 
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.collision.CollisionManager;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.WalkingQueue;
 import org.apollo.game.model.entity.path.SimplePathfindingAlgorithm;
@@ -50,11 +52,11 @@ public final class NpcMovementTask extends ScheduledTask {
 	/**
 	 * Creates the NpcMovementTask.
 	 *
-	 * @param repository The {@link RegionRepository}.
+	 * @param collisionManager The {@link CollisionManager} used to check if an {@link Npc} movement is valid.
 	 */
-	public NpcMovementTask(RegionRepository repository) {
+	public NpcMovementTask(CollisionManager collisionManager) {
 		super(DELAY, false);
-		algorithm = new SimplePathfindingAlgorithm(repository);
+		algorithm = new SimplePathfindingAlgorithm(collisionManager);
 	}
 
 	/**
