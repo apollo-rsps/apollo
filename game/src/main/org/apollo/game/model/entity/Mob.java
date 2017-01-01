@@ -104,6 +104,11 @@ public abstract class Mob extends Entity {
 	private Direction firstDirection = Direction.NONE;
 
 	/**
+	 * The last facing direction of this mob.
+	 */
+	private Direction lastDirection = Direction.NORTH;
+
+	/**
 	 * This mob's second movement direction.
 	 */
 	private Direction secondDirection = Direction.NONE;
@@ -196,8 +201,8 @@ public abstract class Mob extends Entity {
 	 */
 	public final Direction[] getDirections() {
 		if (firstDirection != Direction.NONE) {
-			return secondDirection == Direction.NONE ? new Direction[]{ firstDirection }
-				: new Direction[]{ firstDirection, secondDirection };
+			return secondDirection == Direction.NONE ? new Direction[]{firstDirection}
+				: new Direction[]{firstDirection, secondDirection};
 		}
 
 		return Direction.EMPTY_DIRECTION_ARRAY;
@@ -266,6 +271,15 @@ public abstract class Mob extends Entity {
 	 */
 	public final Inventory getInventory() {
 		return inventory;
+	}
+
+	/**
+	 * Gets the last facing direction of this mob.
+	 *
+	 * @return The last direction this mob was facing.
+	 */
+	public Direction getLastDirection() {
+		return lastDirection;
 	}
 
 	/**
@@ -426,6 +440,15 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Set the last direction this mob was facing.
+	 *
+	 * @param lastDirection The direction to set.
+	 */
+	public void setLastDirection(Direction lastDirection) {
+		this.lastDirection = lastDirection;
+	}
+
+	/**
 	 * Sets the {@link Position} of this mob.
 	 * <p>
 	 * This method may be intercepted using a {@link MobPositionUpdateEvent}, which can be terminated like any
@@ -470,7 +493,7 @@ public abstract class Mob extends Entity {
 	 * Gets the number of tiles this mob occupies.
 	 *
 	 * @return The number of tiles this mob occupies.
-     */
+	 */
 	public int size() {
 		return definition.map(NpcDefinition::getSize).orElse(1);
 	}
@@ -547,5 +570,6 @@ public abstract class Mob extends Entity {
 	private void init() {
 		world.schedule(new SkillNormalizationTask(this));
 	}
+
 
 }

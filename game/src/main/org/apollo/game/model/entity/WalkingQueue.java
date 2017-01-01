@@ -146,6 +146,7 @@ public final class WalkingQueue {
 			} else {
 				previousPoints.add(next);
 				position = new Position(next.getX(), next.getY(), height);
+				mob.setLastDirection(firstDirection);
 
 				if (running) {
 					next = points.poll();
@@ -158,6 +159,7 @@ public final class WalkingQueue {
 						} else {
 							previousPoints.add(next);
 							position = new Position(next.getX(), next.getY(), height);
+							mob.setLastDirection(secondDirection);
 						}
 					}
 				}
