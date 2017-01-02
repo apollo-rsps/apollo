@@ -1,0 +1,6 @@
+description = 'Apollo Net'
+
+dependencies {
+    compile project(':cache')
+    compile project(':util')
+}

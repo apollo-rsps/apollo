@@ -1,0 +1,51 @@
+allprojects {
+    group = 'apollo'
+    version = '0.0.1'
+    apply plugin: 'java'
+}
+
+subprojects {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.maven.apache.org/maven2" }
+    }
+
+    dependencies {
+        compile group: 'org.apache.commons', name: 'commons-compress', version: '1.10'
+        compile group: 'org.jruby', name: 'jruby-complete', version: '9.0.5.0'
+        compile group: 'com.google.guava', name: 'guava', version: '19.0'
+        compile group: 'io.netty', name: 'netty-all', version: '4.0.34.Final'
+        compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
+        compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
+        compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.54'
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+        testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.4'
+        testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.6.4'
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/main']
+            }
+        }
+
+        test {
+            java {
+                srcDirs = ['src/test']
+            }
+        }
+    }
+}
+
+task(run, dependsOn: classes, type: JavaExec) {
+    def gameSubproject = project(':game')
+    def gameClasspath = gameSubproject.sourceSets.main.runtimeClasspath
+
+    main = 'org.apollo.Server'
+    classpath = gameClasspath
+    jvmArgs = ['-Xmx750M']
+}
