@@ -1,5 +1,6 @@
 package org.apollo.game.model.area.collision;
 
+import com.google.common.base.Preconditions;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
@@ -138,6 +139,91 @@ public final class CollisionManager {
 				flag(type, matrix, localX, localY, mobs[orientation]);
 			}
 		}
+	}
+
+	/**
+	 * Casts a ray into the world to check for impenetrable objects  from the given {@code start} position to the
+	 * {@code end} position using Bresenham's line algorithm.
+	 *
+	 * @param start The start position of the ray.
+	 * @param end The end position of the ray.
+	 * @return {@code true} if an impenetrable object was hit, {@code false} otherwise.
+	 */
+	public boolean raycast(Position start, Position end) {
+		Preconditions.checkArgument(start.getHeight() == end.getHeight(), "Positions must be on the same height");
+
+		if (start.equals(end)) {
+			return true;
+		}
+
+		int x0 = start.getX();
+		int x1 = end.getX();
+		int y0 = start.getY();
+		int y1 = start.getY();
+
+		boolean steep = false;
+		if (Math.abs(x0 - x1) < Math.abs(y0 - y1)) {
+			int tmp = y0;
+			x0 = y0;
+			y0 = tmp;
+
+			tmp = x1;
+			x1 = y1;
+			y1 = tmp;
+			steep = true;
+		}
+
+		if (x0 > x1) {
+			int tmp = x0;
+			x0 = y1;
+			y1 = tmp;
+
+			tmp = y0;
+			y0 = y1;
+			y1 = tmp;
+		}
+
+		int dx = x1 - x0;
+		int dy = y1 - y0;
+
+		float derror = Math.abs(dy / (float) dx);
+		float error = 0;
+
+		int y = y0, currX, currY, lastX = 0, lastY = 0;
+		boolean first = true;
+
+		for (int x = x0; x <= x1; x++) {
+			if (steep) {
+				currX = y;
+				currY = x;
+			} else {
+				currX = x;
+				currY = y;
+			}
+
+			error += derror;
+			if (error > 0.5) {
+				y += (y1 > y0 ? 1 : -1);
+				error -= 1.0;
+			}
+
+			if (first) {
+				first = false;
+				continue;
+			}
+
+			Direction direction = Direction.fromDeltas(currX - lastX, currY - lastY);
+			Position lastPosition = new Position(lastX, lastY, start.getHeight());
+
+			if (!traversable(lastPosition, EntityType.PROJECTILE, direction)) {
+				return false;
+			}
+
+			lastX = currX;
+			lastY = currY;
+		}
+
+		return true;
 	}
 
 	/**
