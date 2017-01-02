@@ -1,0 +1,7 @@
+description = 'Apollo Game'
+
+dependencies {
+    compile project(':cache')
+    compile project(':net')
+    compile project(':util')
+}

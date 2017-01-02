@@ -1,0 +1,5 @@
+rootProject.name = 'org.apollo'
+include ':cache'
+include ':game'
+include ':net'
+include ':util'
