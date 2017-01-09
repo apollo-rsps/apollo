@@ -20,13 +20,10 @@ class MiningAction < DistancedAction
     @counter = 0
   end
 
-  def find_pickaxe
-    weapon = mob.equipment.get(EquipmentConstants::WEAPON)
-    PICKAXE_IDS.each do |id|
-      return PICKAXES[id] if (!weapon.nil? && weapon.id == id) || mob.inventory.contains(id)
-    end
-
-    nil
+ def find_pickaxe
+    PICKAXES[PICKAXE_IDS.select {|id| 
+      PICKAXES[id].level <= mob.skill_set.get_skill(Skill::MINING).current_level && 
+        (mob.inventory.contains(id) || mob.equipment.contains(id))  }.max]
   end
 
   # starts the mining animation, sets counters/flags and turns the mob to
@@ -65,8 +62,8 @@ class MiningAction < DistancedAction
         # TODO: calculate the chance that the player can actually get the rock
 
         if mob.inventory.add(ore.id)
-          name = name_of(@ore.id).sub(/ ore$/, '').downcase
-
+          ore_def = ItemDefinition.lookup(@ore.id)
+          name = ore_def.name.sub(/ ore$/, '').downcase
           mob.send_message("You manage to mine some #{name}.")
           skills.add_experience(Skill::MINING, ore.exp)
           # TODO: expire the rock
