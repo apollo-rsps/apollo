@@ -30,24 +30,24 @@ class Area
     @actions = actions
   end
 
-  def min_x # TODO: better data structure and methods than this
-    @coordinates[0]
+  def min_x
+    @coordinates.getMinX
   end
 
   def min_y
-    @coordinates[1]
+    @coordinates.getMinY
   end
 
   def max_x
-    @coordinates[2]
+    @coordinates.getMaxX
   end
 
   def max_y
-    @coordinates[3]
+    @coordinates.getMaxY
   end
 
   def height
-    @coordinates[4]
+    @coordinates.getHeight
   end
 
   # Called when the player has entered the area.
@@ -103,6 +103,39 @@ class Position
     z = area.height
 
     z.nil? || z == height
+  end
+
+end
+
+# The coordinates of the area
+class Coordinates
+
+  def initialize(min_x, min_y, max_x, max_y, height)
+    @min_x = min_x
+    @min_y = min_y
+    @max_x = max_x
+    @max_y = max_y
+    @height = height
+  end
+
+  def getMinX()
+    @min_x
+  end
+
+  def getMinY()
+    @min_y
+  end
+
+  def getMaxX()
+    @max_x
+  end
+
+  def getMaxY()
+    @max_x
+  end
+
+  def getHeight()
+    @height
   end
 
 end
