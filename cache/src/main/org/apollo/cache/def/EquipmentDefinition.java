@@ -62,6 +62,13 @@ public final class EquipmentDefinition {
 	}
 
 	/**
+	 * Gets the equipment definitions.
+	 *
+	 * @return The definitions.
+	 */
+	public static Map<Integer, EquipmentDefinition> getDefinitions() {return definitions;}
+
+	/**
 	 * Initialises the equipment definitions.
 	 *
 	 * @param definitions The definitions.
