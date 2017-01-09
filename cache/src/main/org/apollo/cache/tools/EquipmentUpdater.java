@@ -26,7 +26,7 @@ public final class EquipmentUpdater {
 	 * @param args The command line arguments.
 	 * @throws Exception If an error occurs.
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		Preconditions.checkArgument(args.length == 1, "Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release].");
 		String release = args[0];
 
@@ -56,6 +56,8 @@ public final class EquipmentUpdater {
 					os.writeByte(getMagicRequirement(definition));
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
