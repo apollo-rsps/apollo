@@ -75,13 +75,13 @@ public final class MessageHandlerChainTest {
 
 	@Test
 	public void notify_whenCalledWithTerminatedMessage_returnsFalse() {
-		FakeMessageHandler mockMessageHandler = makeFakeMessageHandler();
+		FakeMessageHandler stubMessageHandler = makeFakeMessageHandler();
 		Player stubPlayer = makePlayer();
 		FakeMessage stubMessage = makeFakeMessage();
 		MessageHandlerChain<FakeMessage> chain = makeChain();
 
 		stubMessage.terminate();
-		chain.addHandler(mockMessageHandler);
+		chain.addHandler(stubMessageHandler);
 
 		boolean result = chain.notify(stubPlayer, stubMessage);
 		assertFalse(result);
