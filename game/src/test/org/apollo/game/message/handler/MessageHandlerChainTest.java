@@ -20,7 +20,7 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 public final class MessageHandlerChainTest {
 
 	@Test
-	public void notify_whenCalled_notifiesAddedHandlers() {
+	public void notify_byDefault_notifiesAddedHandlers() {
 		FakeMessageHandler mockMessageHandler = makeFakeMessageHandler();
 		Player stubPlayer = makePlayer();
 		FakeMessage stubMessage = makeFakeMessage();
