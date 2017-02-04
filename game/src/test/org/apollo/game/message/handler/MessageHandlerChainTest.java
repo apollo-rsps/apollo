@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
 /**
@@ -39,6 +39,19 @@ public final class MessageHandlerChainTest {
 	}
 
 	@Test
+	public void notify_byDefault_returnsTrue() {
+		FakeMessageHandler stubMessageHandler = makeFakeMessageHandler();
+		Player stubPlayer = makePlayer();
+		FakeMessage stubMessage = makeFakeMessage();
+		MessageHandlerChain<FakeMessage> chain = makeChain();
+
+		chain.addHandler(stubMessageHandler);
+
+		boolean result = chain.notify(stubPlayer, stubMessage);
+		assertTrue(result);
+	}
+
+	@Test
 	public void notify_whenCalledWithTerminatedMessage_doesNotNotifySecondHandlers() {
 		FakeMessageHandler stubMessageHandler = makeFakeMessageHandler();
 		FakeMessageHandler mockMessageHandler = makeFakeMessageHandler();
@@ -58,6 +71,20 @@ public final class MessageHandlerChainTest {
 		FakeMessage expectedMessage = null;
 		FakeMessage actualMessage = mockMessageHandler.lastHandleMessage;
 		assertEquals(expectedMessage, actualMessage);
+	}
+
+	@Test
+	public void notify_whenCalledWithTerminatedMessage_returnsFalse() {
+		FakeMessageHandler mockMessageHandler = makeFakeMessageHandler();
+		Player stubPlayer = makePlayer();
+		FakeMessage stubMessage = makeFakeMessage();
+		MessageHandlerChain<FakeMessage> chain = makeChain();
+
+		stubMessage.terminate();
+		chain.addHandler(mockMessageHandler);
+
+		boolean result = chain.notify(stubPlayer, stubMessage);
+		assertFalse(result);
 	}
 
 	private Player makePlayer() {
