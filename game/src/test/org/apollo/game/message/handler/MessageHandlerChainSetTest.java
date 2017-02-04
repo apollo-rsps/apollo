@@ -40,12 +40,12 @@ public final class MessageHandlerChainSetTest {
 
 	@Test
 	public void notify_byDefault_returnsTrue() {
-		FakeMessageHandler mockMessageHandler = makeFakeMessageHandler();
+		FakeMessageHandler stubMessageHandler = makeFakeMessageHandler();
 		Player stubPlayer = makePlayer();
 		FakeMessage stubMessage = makeFakeMessage();
 		MessageHandlerChainSet chain = makeChainSet();
 
-		chain.putHandler(FakeMessage.class, mockMessageHandler);
+		chain.putHandler(FakeMessage.class, stubMessageHandler);
 
 		boolean result = chain.notify(stubPlayer, stubMessage);
 		assertTrue(result);
@@ -76,14 +76,12 @@ public final class MessageHandlerChainSetTest {
 	@Test
 	public void notify_whenCalledWithTerminatedMessage_returnsFalse() {
 		FakeMessageHandler stubMessageHandler = makeFakeMessageHandler();
-		FakeMessageHandler mockMessageHandler = makeFakeMessageHandler();
 		Player stubPlayer = makePlayer();
 		FakeMessage stubMessage = makeFakeMessage();
 		MessageHandlerChainSet chain = makeChainSet();
 
 		stubMessage.terminate();
 		chain.putHandler(FakeMessage.class, stubMessageHandler);
-		chain.putHandler(FakeMessage.class, mockMessageHandler);
 
 		boolean result = chain.notify(stubPlayer, stubMessage);
 		assertFalse(result);
