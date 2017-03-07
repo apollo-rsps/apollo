@@ -56,6 +56,15 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 
 	@Override
 	public void synchronize(MobRepository<Player> players, MobRepository<Npc> npcs) {
+		
+		//This should be for a permanent fix the issue happens from players not fully unregistering 
+		List<Player> players = new LinkedList<Player>();
+		Iterator<Player> itz = players_old.iterator();
+		while (itz.hasNext()) {
+			Player p = itz.next();
+			players.add(p);
+		}
+		
 		int playerCount = players.size();
 		int npcCount = npcs.size();
 
