@@ -81,7 +81,7 @@ append_prayer :incredible_reflexes, level: 34, button: 5620, setting: 94, drain:
 
 append_prayer :protect_from_magic,    level: 37, button: 5621, setting: 95, drain: 0.15
 append_prayer :protect_from_missiles, level: 40, button: 5622, setting: 96, drain: 0.15
-append_prayer :protect_from_melee,    level: 43, button: 5633, setting: 97, drain: 0.15
+append_prayer :protect_from_melee,    level: 43, button: 5623, setting: 97, drain: 0.15
 
 append_prayer :retribution, level: 46, button: 683, setting: 98,  drain: 0.15
 append_prayer :redemption,  level: 49, button: 684, setting: 99,  drain: 0.15
