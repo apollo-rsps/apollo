@@ -3,6 +3,7 @@
     * [Contributing A Code Change](#contributing-a-code-change)
     * [Style Guide](#style-guide)
     * [Coding Guidelines](#coding-guidelines)
+* [Run the Server with the Client](#run-the-server-with-the-client)
 * [Question / Problem](#question-problem)
 
 # Contributing to Apollo
@@ -58,6 +59,19 @@ for code changes:
 * Don't be sloppy. Don't check in commented out code: we use version control, it is still there in the history. Don't leave TODOs in the code or FIXMEs if you can help it. Don't leave println statements in the code. Hopefully this is all obvious.
 * We want people to use our stuff, which means we need clear, correct documentation. User documentation should be considered a part of any user-facing the feature, just like unit tests or performance results.
 * Don't duplicate code (duh).
+
+# Run the Server with the Client
+
+* Download this [archive](http://www.mediafire.com/download/ew288b69ezlz97q/rs377_cache.7z) and extract it into `data/fs/377` (make the directories if they don't exist).
+* Download this [archive](http://uppit.com/hkfdlo6tw8b3/377_client.tar.gz) and extract it where you want.
+* Run `org.apollo.util.tools.RsaKeyGenerator` and replace the public key and the modulus with the result in `377_client/src/Client.java`.
+```
+private static final BigInteger RSA_EXPONENT = new BigInteger(public key);
+private static final BigInteger RSA_MODULUS = new BigInteger(modulus);
+```
+* In the directory `377_client`, compile : `javac -sourcepath src src/*.java -d bin`.
+* Run `org.apollo.Server`.
+* In the directory `377_client`, execute `run.sh`.
 
 # Question / Problem?
 
