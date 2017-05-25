@@ -1,5 +1,18 @@
 package org.apollo.game.model.area;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+import org.apollo.game.message.impl.RegionUpdateMessage;
+import org.apollo.game.model.Direction;
+import org.apollo.game.model.Position;
+import org.apollo.game.model.area.collision.CollisionMatrix;
+import org.apollo.game.model.area.update.GroupableEntity;
+import org.apollo.game.model.area.update.UpdateOperation;
+import org.apollo.game.model.entity.Entity;
+import org.apollo.game.model.entity.EntityType;
+import org.apollo.game.model.entity.obj.DynamicGameObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,21 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apollo.game.message.impl.RegionUpdateMessage;
-import org.apollo.game.model.Direction;
-import org.apollo.game.model.Position;
-import org.apollo.game.model.area.collision.CollisionMatrix;
-import org.apollo.game.model.area.update.GroupableEntity;
-import org.apollo.game.model.area.update.UpdateOperation;
-import org.apollo.game.model.entity.Entity;
-import org.apollo.game.model.entity.EntityType;
-import org.apollo.game.model.entity.Mob;
-import org.apollo.game.model.entity.obj.DynamicGameObject;
-
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableSet;
-
 /**
  * An 8x8 area of the map.
  *
@@ -34,8 +32,6 @@ public final class Region {
 
 	/**
 	 * A {@link RegionListener} for {@link UpdateOperation}s.
-	 *
-	 * @author Major
 	 */
 	private static final class UpdateRegionListener implements RegionListener {
 
@@ -48,6 +44,11 @@ public final class Region {
 		}
 
 	}
+
+	/**
+	 * The message of the exception thrown when a CollisionMatrix with an illegal height is requested.
+	 */
+	private static final String ILLEGAL_MATRIX_HEIGHT = "Matrix height level must be [0, %d), received %d.";
 
 	/**
 	 * The width and length of a Region, in tiles.
@@ -199,10 +200,10 @@ public final class Region {
 	 */
 	public Set<RegionUpdateMessage> encode(int height) {
 		Set<RegionUpdateMessage> additions = entities.values().stream()
-				.flatMap(Set::stream) // TODO fix this to work for ground items + projectiles
-				.filter(entity -> entity instanceof DynamicGameObject && entity.getPosition().getHeight() == height)
-				.map(entity -> ((GroupableEntity) entity).toUpdateOperation(this, EntityUpdateType.ADD).toMessage())
-				.collect(Collectors.toSet());
+			.flatMap(Set::stream) // TODO fix this to work for ground items + projectiles
+			.filter(entity -> entity instanceof DynamicGameObject && entity.getPosition().getHeight() == height)
+			.map(entity -> ((GroupableEntity) entity).toUpdateOperation(this, EntityUpdateType.ADD).toMessage())
+			.collect(Collectors.toSet());
 
 		ImmutableSet.Builder<RegionUpdateMessage> builder = ImmutableSet.builder();
 		builder.addAll(additions).addAll(updates.get(height)).addAll(removedObjects.get(height));
@@ -231,7 +232,7 @@ public final class Region {
 	public <T extends Entity> Stream<T> getEntities(EntityType... types) {
 		Set<EntityType> set = ImmutableSet.copyOf(types);
 		return (Stream<T>) entities.values().stream().flatMap(Collection::stream)
-				.filter(entity -> set.contains(entity.getEntityType()));
+			.filter(entity -> set.contains(entity.getEntityType()));
 	}
 
 	/**
@@ -264,13 +265,13 @@ public final class Region {
 		Set<EntityType> set = ImmutableSet.copyOf(types);
 		@SuppressWarnings("unchecked")
 		Set<T> filtered = (Set<T>) local.stream().filter(entity -> set.contains(entity.getEntityType()))
-				.collect(Collectors.toSet());
+			.collect(Collectors.toSet());
 		return ImmutableSet.copyOf(filtered);
 	}
 
 	/**
-	 * Gets the {@link Set} of {@link RegionCoordinates} of Regions that are
-	 * viewable from the specified {@link Position}.
+	 * Gets the {@link Set} of {@link RegionCoordinates} of Regions that are viewable from the specified
+	 * {@link Position}.
 	 *
 	 * @return The Set of RegionCoordinates.
 	 */
@@ -295,13 +296,12 @@ public final class Region {
 	 * @return The CollisionMatrix.
 	 */
 	public CollisionMatrix getMatrix(int height) {
-		Preconditions.checkElementIndex(height, matrices.length, "Matrix height level must be [0, " + matrices.length
-				+ "), received " + height + ".");
+		Preconditions.checkElementIndex(height, matrices.length, String.format(ILLEGAL_MATRIX_HEIGHT, matrices.length, height));
 		return matrices[height];
 	}
 
 	/**
-	 * Gets all {@link CollisionMatrix}'s in this {@code Region}.
+	 * Gets all of the {@link CollisionMatrix} objects in this {@code Region}.
 	 *
 	 * @return The collision matrices of this region.
 	 */
@@ -388,7 +388,7 @@ public final class Region {
 	 */
 	private void checkPosition(Position position) {
 		Preconditions.checkArgument(coordinates.equals(RegionCoordinates.fromPosition(position)),
-				"Position is not included in this Region.");
+			"Position is not included in this Region.");
 	}
 
 	/**
@@ -411,10 +411,10 @@ public final class Region {
 			if (update == EntityUpdateType.REMOVE) {
 				removedObjects.get(height).add(message);
 			} else { // TODO should this really be possible?
-				removedObjects.get(height).remove(operation.inverse());
+				removedObjects.get(height).remove(inverse);
 			}
 		} else if (update == EntityUpdateType.REMOVE && !type.isTransient()) {
-			updates.remove(operation.inverse());
+			updates.remove(inverse);
 		}
 
 		updates.add(message);
