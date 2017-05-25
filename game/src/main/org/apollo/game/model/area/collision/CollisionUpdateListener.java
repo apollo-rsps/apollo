@@ -8,21 +8,21 @@ import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.obj.GameObject;
 
 /**
- * A {@link RegionListener} which listens on object addition / removal events and applies
- * the respective {@link CollisionUpdate}.
+ * A {@link RegionListener} that listens to object addition/removals and applies the respective {@link CollisionUpdate}.
  */
-public final class GameObjectCollisionUpdateListener implements RegionListener {
+public final class CollisionUpdateListener implements RegionListener {
+
 	/**
 	 * The {@link CollisionManager} to apply updates to.
 	 */
 	private CollisionManager collisionManager;
 
 	/**
-	 * Create a new {@link GameObjectCollisionUpdateListener}.
+	 * Create a new {@link CollisionUpdateListener}.
 	 *
 	 * @param collisionManager The {@link CollisionManager} that collision updates will be applied to.
 	 */
-	public GameObjectCollisionUpdateListener(CollisionManager collisionManager) {
+	public CollisionUpdateListener(CollisionManager collisionManager) {
 		this.collisionManager = collisionManager;
 	}
 
@@ -34,16 +34,14 @@ public final class GameObjectCollisionUpdateListener implements RegionListener {
 			return;
 		}
 
-		CollisionUpdate.Builder objectUpdateBuilder = new CollisionUpdate.Builder();
+		CollisionUpdate.Builder builder = new CollisionUpdate.Builder();
 		if (type == EntityUpdateType.ADD) {
-			objectUpdateBuilder.type(CollisionUpdateType.ADDING);
+			builder.type(CollisionUpdateType.ADDING);
 		} else {
-			objectUpdateBuilder.type(CollisionUpdateType.REMOVING);
+			builder.type(CollisionUpdateType.REMOVING);
 		}
 
-		objectUpdateBuilder.object((GameObject) entity);
-
-		CollisionUpdate objectUpdate = objectUpdateBuilder.build();
-		collisionManager.apply(objectUpdate);
+		builder.object((GameObject) entity);
+		collisionManager.apply(builder.build());
 	}
 }

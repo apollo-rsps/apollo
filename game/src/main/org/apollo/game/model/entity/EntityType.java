@@ -47,11 +47,10 @@ public enum EntityType {
 	}
 
 	/**
-	 * Returns whether or not this EntityType should be short-lived (i.e. not added to its {@link Region}s
-	 * local objects).
+	 * Returns whether or not this EntityType should be short-lived (i.e. not added to its regions local objects).
 	 *
 	 * @return {@code true} if this EntityType is short-lived.
-     */
+	 */
 	public boolean isTransient() {
 		return this == PROJECTILE;
 	}

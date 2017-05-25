@@ -89,7 +89,7 @@ public final class WorldMapDecoder implements Runnable {
 				Position position = new Position(mapX + x, mapY + y, plane.getLevel());
 
 				if ((tile.getAttributes() & BLOCKED_TILE) == BLOCKED_TILE) {
-					collisionManager.markBlocked(position);
+					collisionManager.block(position);
 				}
 
 				if ((tile.getAttributes() & BRIDGE_TILE) == BRIDGE_TILE) {

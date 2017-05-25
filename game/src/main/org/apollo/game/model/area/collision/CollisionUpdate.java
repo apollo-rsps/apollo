@@ -1,29 +1,40 @@
 package org.apollo.game.model.area.collision;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.*;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.Multimaps;
 import org.apollo.cache.def.ObjectDefinition;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.obj.GameObject;
-import org.apollo.game.model.entity.obj.ObjectType;
 
+import java.util.Objects;
 import java.util.stream.Stream;
+
+import static org.apollo.game.model.entity.obj.ObjectType.*;
 
 /**
  * A global update to the collision matrices.
  */
 public final class CollisionUpdate {
+
 	/**
 	 * The type of this update.
 	 */
 	private final CollisionUpdateType type;
 
 	/**
-	 * A mapping of {@link Position}s to a set of their {@link DirectionFlag}s.
+	 * A mapping of {@link Position}s to their {@link DirectionFlag}s.
 	 */
 	private final Multimap<Position, DirectionFlag> flags;
 
+	/**
+	 * Creates the CollisionUpdate.
+	 *
+	 * @param type The {@link CollisionUpdateType} of this update.
+	 * @param flags A {@link Multimap} of {@link Position}s to their {@link DirectionFlag}s.
+	 */
 	public CollisionUpdate(CollisionUpdateType type, Multimap<Position, DirectionFlag> flags) {
 		this.type = type;
 		this.flags = flags;
@@ -48,10 +59,11 @@ public final class CollisionUpdate {
 	}
 
 	/**
-	 * A directional flag in a {@code CollisionUpdate}.  Consists of a {@code direction} and a flag indicating whether
+	 * A directional flag in a {@code CollisionUpdate}. Consists of a {@code direction} and a flag indicating whether
 	 * that tile is impenetrable as well as untraversable.
 	 */
 	public static final class DirectionFlag {
+
 		private final boolean impenetrable;
 		private final Direction direction;
 
@@ -61,22 +73,19 @@ public final class CollisionUpdate {
 		}
 
 		@Override
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
+		public boolean equals(Object obj) {
+			if (obj instanceof DirectionFlag) {
+				DirectionFlag other = (DirectionFlag) obj;
+				return impenetrable == other.impenetrable && direction == other.direction;
+			}
 
-			DirectionFlag that = (DirectionFlag) o;
-
-			if (impenetrable != that.impenetrable) return false;
-			return direction == that.direction;
+			return false;
 
 		}
 
 		@Override
 		public int hashCode() {
-			int result = (impenetrable ? 1 : 0);
-			result = 31 * result + direction.hashCode();
-			return result;
+			return Objects.hash(impenetrable, direction);
 		}
 
 		/**
@@ -96,9 +105,14 @@ public final class CollisionUpdate {
 		public Direction getDirection() {
 			return direction;
 		}
+
 	}
 
-	public static class Builder {
+	/**
+	 * A builder for CollisionUpdates.
+	 */
+	public static final class Builder {
+
 		private final Multimap<Position, DirectionFlag> flags;
 		private CollisionUpdateType type;
 
@@ -107,7 +121,7 @@ public final class CollisionUpdate {
 		}
 
 		/**
-		 * Set the type of the {@link CollisionUpdate}.  Can only be called once.
+		 * Set the type of the {@link CollisionUpdate}. Can only be called once.
 		 *
 		 * @param type The type of collision update to use.
 		 */
@@ -159,7 +173,6 @@ public final class CollisionUpdate {
 		 */
 		public void largeCornerWall(Position position, boolean impenetrable, Direction orientation) {
 			Direction[] directions = Direction.diagonalComponents(orientation);
-
 			tile(position, impenetrable, directions);
 
 			for (Direction direction : directions) {
@@ -192,22 +205,21 @@ public final class CollisionUpdate {
 				length = definition.getWidth();
 			}
 
-			if (type == ObjectType.FLOOR_DECORATION.getValue()) {
+			if (type == FLOOR_DECORATION.getValue()) {
 				if (definition.isInteractive() && definition.isSolid()) {
 					tile(new Position(x, y, height), impenetrable, Direction.NESW);
 				}
-			} else if (type >= ObjectType.DIAGONAL_WALL.getValue() && type < ObjectType.FLOOR_DECORATION.getValue()) {
+			} else if (type >= DIAGONAL_WALL.getValue() && type < FLOOR_DECORATION.getValue()) {
 				for (int dx = 0; dx < width; dx++) {
 					for (int dy = 0; dy < length; dy++) {
 						tile(new Position(x + dx, y + dy, height), impenetrable, Direction.NESW);
 					}
 				}
-			} else if (type == ObjectType.LENGTHWISE_WALL.getValue()) {
+			} else if (type == LENGTHWISE_WALL.getValue()) {
 				wall(position, impenetrable, Direction.WNES[orientation]);
-			} else if (type == ObjectType.TRIANGULAR_CORNER.getValue()
-				|| type == ObjectType.RECTANGULAR_CORNER.getValue()) {
+			} else if (type == TRIANGULAR_CORNER.getValue() || type == RECTANGULAR_CORNER.getValue()) {
 				wall(position, impenetrable, Direction.WNES_DIAGONAL[orientation]);
-			} else if (type == ObjectType.WALL_CORNER.getValue()) {
+			} else if (type == WALL_CORNER.getValue()) {
 				largeCornerWall(position, impenetrable, Direction.WNES_DIAGONAL[orientation]);
 			}
 		}
@@ -221,6 +233,7 @@ public final class CollisionUpdate {
 			Preconditions.checkNotNull(type, "update type must not be null");
 			return new CollisionUpdate(type, Multimaps.unmodifiableMultimap(flags));
 		}
+
 	}
 
 	/**
@@ -232,17 +245,16 @@ public final class CollisionUpdate {
 	 * @return {@code true} iff the tile(s) the object is on should be blocked.
 	 */
 	private static boolean unwalkable(ObjectDefinition definition, int type) {
-		boolean isSolidFloorDecoration = type == ObjectType.FLOOR_DECORATION.getValue() && definition.isInteractive();
+		boolean isSolidFloorDecoration = type == FLOOR_DECORATION.getValue() && definition.isInteractive();
+		boolean isRoof = type > DIAGONAL_INTERACTABLE.getValue() && type < FLOOR_DECORATION.getValue();
 
-		boolean isWall = type >= ObjectType.LENGTHWISE_WALL.getValue()
-			&& type <= ObjectType.RECTANGULAR_CORNER.getValue() || type == ObjectType.DIAGONAL_WALL.getValue();
+		boolean isWall = type >= LENGTHWISE_WALL.getValue() && type <= RECTANGULAR_CORNER.getValue() ||
+			type == DIAGONAL_WALL.getValue();
 
-		boolean isRoof = type > ObjectType.DIAGONAL_INTERACTABLE.getValue()
-			&& type < ObjectType.FLOOR_DECORATION.getValue();
-
-		boolean isSolidInteractable = (type == ObjectType.DIAGONAL_INTERACTABLE.getValue()
-			|| type == ObjectType.INTERACTABLE.getValue()) && definition.isSolid();
+		boolean isSolidInteractable = (type == DIAGONAL_INTERACTABLE.getValue() ||
+			type == INTERACTABLE.getValue()) && definition.isSolid();
 
 		return isWall || isRoof || isSolidInteractable || isSolidFloorDecoration;
 	}
+
 }

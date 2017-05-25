@@ -18,7 +18,7 @@ import org.apollo.game.io.EquipmentDefinitionParser;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionManager;
-import org.apollo.game.model.area.collision.GameObjectCollisionUpdateListener;
+import org.apollo.game.model.area.collision.CollisionUpdateListener;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.MobRepository;
@@ -239,7 +239,7 @@ public final class World {
 
 		// Build collision matrices for the first time
 		collisionManager.build(false);
-		regions.addRegionListener(new GameObjectCollisionUpdateListener(collisionManager));
+		regions.addRegionListener(new CollisionUpdateListener(collisionManager));
 
 		npcMovement = new NpcMovementTask(collisionManager); // Must be exactly here because of ordering issues.
 		scheduler.schedule(npcMovement);
