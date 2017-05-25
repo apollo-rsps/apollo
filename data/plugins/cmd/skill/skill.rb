@@ -17,10 +17,10 @@ on :command, :level, RIGHTS_ADMIN do |player, command|
   unless (2..3).include?(args.length) && (0..20).include?(skill_id = args[0].to_i) &&
          (1..99).include?(level = args[1].to_i)
     player.send_message('Invalid syntax - ::level [skill-id] [level]')
-    return
+    next
   end
 
-  experience = SkillSet.experience_for_level(level)
+  experience = SkillSet.get_experience_for_level(level)
   current = level
 
   if args.length == 3 && args[2].to_s == 'old'
