@@ -47,5 +47,5 @@ task(run, dependsOn: classes, type: JavaExec) {
 
     main = 'org.apollo.Server'
     classpath = gameClasspath
-    jvmArgs = ['-Xmx750M']
+    jvmArgs = ['-Xmx1750M']
 }
