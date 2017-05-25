@@ -1,7 +1,32 @@
 description = 'Apollo Game'
 
+buildscript {
+    ext.kotlinVersion = '1.1.2-4'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+apply plugin: 'kotlin'
+
 dependencies {
     compile project(':cache')
     compile project(':net')
     compile project(':util')
+
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler', version: $kotlinVersion
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: $kotlinVersion
+}
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/kotlin'
+}
+
+repositories {
+    mavenCentral()
 }

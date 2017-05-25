@@ -146,7 +146,7 @@ public final class PluginManager {
 		Map<String, PluginMetaData> plugins = createMap(findPlugins());
 		Set<PluginMetaData> started = new HashSet<>();
 
-		PluginEnvironment env = new RubyPluginEnvironment(world); // TODO isolate plugins if possible in the future!
+		PluginEnvironment env = new KotlinPluginEnvironment(world); // TODO isolate plugins if possible in the future!
 		env.setContext(context);
 
 		for (PluginMetaData plugin : plugins.values()) {
