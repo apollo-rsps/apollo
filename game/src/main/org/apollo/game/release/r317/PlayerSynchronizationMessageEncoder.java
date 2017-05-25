@@ -367,8 +367,8 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 	private static void putHitUpdateBlock(HitUpdateBlock block, GamePacketBuilder builder) {
 		builder.put(DataType.BYTE, block.getDamage());
 		builder.put(DataType.BYTE, DataTransformation.ADD, block.getType());
-		builder.put(DataType.BYTE, block.getCurrentHealth());
-		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getMaximumHealth());
+		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getCurrentHealth());
+		builder.put(DataType.BYTE, block.getMaximumHealth());
 	}
 
 	/**
