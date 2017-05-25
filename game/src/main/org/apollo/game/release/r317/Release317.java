@@ -140,6 +140,7 @@ public final class Release317 extends Release {
 		register(57, new ItemOnNpcMessageDecoder());
 		register(237, new MagicOnItemMessageDecoder());
 		register(249, new MagicOnPlayerMessageDecoder());
+		register(131, new MagicOnNpcMessageDecoder());
 
 		register(3, new FocusUpdateMessageDecoder());
 		register(45, new FlaggedMouseEventMessageDecoder());
