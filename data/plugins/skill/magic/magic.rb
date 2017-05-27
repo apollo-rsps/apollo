@@ -61,7 +61,7 @@ class SpellAction < Action
 
   def check_skill
     required = @spell.level
-    if required > mob.skill_set.skill(Skill::MAGIC).maximum_level
+    if required > mob.skill_set.skill(Skill::MAGIC).current_level
       mob.send_message("You need a Magic level of at least #{required} to cast this spell.")
       return false
     end
