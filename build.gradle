@@ -1,10 +1,15 @@
 allprojects {
     group = 'apollo'
     version = '0.0.1'
-    apply plugin: 'java'
+}
+
+ext {
+    kotlinVersion = '1.1.2-4'
 }
 
 subprojects {
+    apply plugin: 'java'
+
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
@@ -41,8 +46,9 @@ subprojects {
     }
 }
 
-task(run, dependsOn: classes, type: JavaExec) {
-    def gameSubproject = project(':game')
+def gameSubproject = project(':game')
+
+task(run, dependsOn: gameSubproject.tasks['classes'], type: JavaExec) {
     def gameClasspath = gameSubproject.sourceSets.main.runtimeClasspath
 
     main = 'org.apollo.Server'

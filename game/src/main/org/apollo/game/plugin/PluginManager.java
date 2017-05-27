@@ -72,7 +72,7 @@ public final class PluginManager {
 	 * @throws SAXException If a SAX error occurs.
 	 */
 	private Collection<PluginMetaData> findPlugins() throws IOException, SAXException {
-		return findPlugins(new File("./data/plugins"));
+		return findPlugins(new File("./game/data/plugins"));
 	}
 
 	/**
