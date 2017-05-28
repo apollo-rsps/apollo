@@ -1,6 +1,8 @@
 package org.apollo.game.plugin;
 
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Represents some sort of environment that plugins could be executed in, e.g. {@code javax.script} or Jython.
@@ -10,12 +12,11 @@ import java.io.InputStream;
 public interface PluginEnvironment {
 
 	/**
-	 * Parses the input stream.
+	 * Load all of the plugins defined in the given {@link Set} of {@link PluginMetaData}.
 	 *
-	 * @param is The input stream.
-	 * @param name The name of the file.
+	 * @param plugins The plugins to be loaded.
 	 */
-	public void parse(InputStream is, String name);
+	void load(Collection<PluginMetaData> plugins);
 
 	/**
 	 * Sets the context for this environment.

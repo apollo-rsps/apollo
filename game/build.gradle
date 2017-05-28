@@ -14,9 +14,15 @@ apply plugin: 'kotlin'
 
 sourceSets {
     main.kotlin.srcDirs += 'src/kotlin'
+    main.kotlin.excludes += 'stub.kt'
+    main.kotlin.excludes += '**/*.kts'
 
     plugins {
-        kotlin.srcDirs += 'data/plugins'
+        kotlin {
+            srcDir 'data/plugins'
+            exclude 'stub.kt'
+            exclude '**/*.kts'
+        }
     }
 }
 
@@ -28,6 +34,33 @@ dependencies {
     pluginsCompile(configurations.compile)
     pluginsCompile(sourceSets.main.output)
 
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler', version: "$kotlinVersion"
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler', version: "$kotlinVersion"
+
+    runtime files("$buildDir/plugins")
+    runtime sourceSets.plugins.output
 }
+
+
+task('compilePluginScripts', dependsOn: [classes, pluginsClasses], type: JavaExec) {
+    def compilerClasspath = [
+            configurations.compile.asPath,
+            configurations.runtime.asPath,
+            sourceSets.main.compileClasspath.asPath,
+            sourceSets.main.runtimeClasspath.asPath
+    ]
+
+    def inputDir = "$projectDir/data/plugins"
+    def outputDir = "$buildDir/plugins"
+    def manifestPath = "$buildDir/plugins/manifest.txt"
+
+    inputs.source inputDir
+    outputs.dir outputDir
+
+    println compilerClasspath.join(':')
+    classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
+    main = 'org.apollo.game.plugin.kotlin.KotlinPluginCompiler'
+    args = [inputDir, outputDir, manifestPath, compilerClasspath.join(':')]
+}
+
+assemble.dependsOn(compilePluginScripts)

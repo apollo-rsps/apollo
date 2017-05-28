@@ -149,43 +149,7 @@ public final class PluginManager {
 		PluginEnvironment env = new KotlinPluginEnvironment(world); // TODO isolate plugins if possible in the future!
 		env.setContext(context);
 
-		for (PluginMetaData plugin : plugins.values()) {
-			start(env, plugin, plugins, started);
-		}
-	}
-
-	/**
-	 * Starts a specific plugin.
-	 *
-	 * @param env The environment.
-	 * @param plugin The plugin.
-	 * @param plugins The plugin map.
-	 * @param started A set of started plugins.
-	 * @throws DependencyException If a dependency error occurs.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	private void start(PluginEnvironment env, PluginMetaData plugin, Map<String, PluginMetaData> plugins, Set<PluginMetaData> started) throws DependencyException, IOException {
-		// TODO check for cyclic dependencies! this way just won't cut it, we need an exception
-		if (started.contains(plugin)) {
-			return;
-		}
-		started.add(plugin);
-
-		for (String dependencyId : plugin.getDependencies()) {
-			PluginMetaData dependency = plugins.get(dependencyId);
-			if (dependency == null) {
-				throw new DependencyException("Unresolved dependency: " + dependencyId + ".");
-			}
-			start(env, dependency, plugins, started);
-		}
-
-		String[] scripts = plugin.getScripts();
-
-		for (String script : scripts) {
-			File scriptFile = new File(plugin.getBase(), script);
-			InputStream is = new FileInputStream(scriptFile);
-			env.parse(is, scriptFile.getAbsolutePath());
-		}
+		env.load(plugins.values());
 	}
 
 }

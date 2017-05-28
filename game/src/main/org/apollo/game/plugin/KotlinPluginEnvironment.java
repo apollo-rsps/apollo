@@ -1,5 +1,20 @@
 package org.apollo.game.plugin;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.apollo.game.model.World;
 import org.apollo.game.plugin.kotlin.KotlinPluginCompiler;
 import org.apollo.game.plugin.kotlin.KotlinPluginScript;
@@ -7,17 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity;
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector;
-
-import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class KotlinPluginEnvironment implements PluginEnvironment, MessageCollector {
 
@@ -61,16 +65,55 @@ public class KotlinPluginEnvironment implements PluginEnvironment, MessageCollec
 	}
 
 	@Override
-	public void parse(InputStream is, String name) {
-		//@todo - wait until all plugin classes are loading until running constructors?
-		try {
-			Class<? extends KotlinPluginScript> pluginClass = pluginCompiler.compile(name);
-			Constructor<? extends KotlinPluginScript> pluginConstructor = pluginClass.getConstructor(World.class,
-				PluginContext.class);
+	public void load(Collection<PluginMetaData> plugins) {
+		try (InputStream resource = KotlinPluginEnvironment.class.getResourceAsStream("/manifest.txt")) {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(resource));
+			List<String> pluginClassNames = reader.lines().collect(Collectors.toList());
 
-			pluginConstructor.newInstance(world, context);
+			for (String pluginClassName : pluginClassNames) {
+				Class<? extends KotlinPluginScript> pluginClass =
+					(Class<? extends KotlinPluginScript>) Class.forName(pluginClassName);
+
+				Constructor<? extends KotlinPluginScript> pluginConstructor =
+					pluginClass.getConstructor(World.class, PluginContext.class);
+
+				KotlinPluginScript plugin = pluginConstructor.newInstance(world, context);
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+
+		List<Class<? extends KotlinPluginScript>> pluginClasses = new ArrayList<>();
+		List<String> sourceRoots = new ArrayList<>();
+
+		for (PluginMetaData plugin : plugins) {
+			List<String> pluginSourceRoots = Arrays.stream(plugin.getScripts())
+				.map(script -> plugin.getBase() + "/" + script)
+				.collect(Collectors.toList());
+
+			sourceRoots.addAll(pluginSourceRoots);
+		}
+
+		for (String scriptSource : sourceRoots) {
+//			try {
+			List<String> dependencySourceRoots = new ArrayList<>(sourceRoots);
+			dependencySourceRoots.remove(scriptSource);
+
+//				pluginClasses.add(pluginCompiler.compile(scriptSource));
+//			} catch (KotlinPluginCompilerException e) {
+//				throw new RuntimeException(e);
+//			}
+		}
+
+		for (Class<? extends KotlinPluginScript> pluginClass : pluginClasses) {
+			try {
+				Constructor<? extends KotlinPluginScript> constructor = pluginClass
+					.getConstructor(World.class, PluginContext.class);
+
+				KotlinPluginScript script = constructor.newInstance(world, context);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
@@ -89,7 +132,7 @@ public class KotlinPluginEnvironment implements PluginEnvironment, MessageCollec
 					   @NotNull CompilerMessageLocation location) {
 		if (severity.isError()) {
 			logger.log(Level.SEVERE, String.format("%s:%s-%s: %s", location.getPath(), location.getLine(),
-				location.getColumn(), message));
+												   location.getColumn(), message));
 		}
 	}
 
