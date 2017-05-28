@@ -1,7 +1,7 @@
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.game.model.entity.Npc
 
-start {
+start { world ->
     Spawns.list.forEach {
         val definition = if (it.id != null) NpcDefinition.lookup(it.id) else lookup_npc(it.name)
         if (definition == null) {
@@ -21,7 +21,4 @@ start {
 
         world.register(npc)
     }
-}
-
-stop {
 }

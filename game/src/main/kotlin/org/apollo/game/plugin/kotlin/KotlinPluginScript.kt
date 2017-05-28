@@ -12,28 +12,28 @@ import kotlin.script.templates.ScriptTemplateDefinition
 @ScriptTemplateDefinition(
         scriptFilePattern = ".*\\.plugin\\.kts"
 )
-abstract class KotlinPluginScript(val world: World, val context: PluginContext) {
-    var startListener: () -> Unit = {};
-    var stopListener: () -> Unit = {};
+abstract class KotlinPluginScript(private var world: World, val context: PluginContext) {
+    var startListener: (World) -> Unit = { _ -> };
+    var stopListener: (World) -> Unit = { _ -> };
 
     protected fun <T : Message> on(type: () -> KClass<T>): KotlinMessageHandler<T> {
         return KotlinMessageHandler(world, context, type.invoke())
     }
 
-    protected fun start(callback: () -> Unit) {
+    protected fun start(callback: (World) -> Unit) {
         this.startListener = callback
     }
 
-    protected fun stop(callback: () -> Unit) {
+    protected fun stop(callback: (World) -> Unit) {
         this.stopListener = callback
     }
 
-    fun doStart() {
-        this.startListener.invoke()
+    fun doStart(world: World) {
+        this.startListener.invoke(world)
     }
 
-    fun doStop() {
-        this.stopListener.invoke()
+    fun doStop(world: World) {
+        this.stopListener.invoke(world)
     }
 }
 

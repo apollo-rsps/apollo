@@ -12,17 +12,14 @@ import org.apollo.game.plugin.kotlin.*
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
 
-val world: World = null!!
-var context: PluginContext = null!!
-
 fun <T : Message> on(type: () -> KClass<T>): KotlinMessageHandler<T> {
     null!!
 }
 
-fun start(callback: () -> Unit) {
+fun start(callback: (World) -> Unit) {
 
 }
 
-fun stop(callback: () -> Unit) {
+fun stop(callback: (World) -> Unit) {
 
 }

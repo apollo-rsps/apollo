@@ -55,7 +55,7 @@ public class KotlinPluginEnvironment implements PluginEnvironment {
 			throw new RuntimeException(e);
 		}
 
-		pluginScripts.forEach(KotlinPluginScript::doStart);
+		pluginScripts.forEach(script -> script.doStart(world));
 	}
 
 	@Override

@@ -23,7 +23,7 @@ on { ObjectActionMessage::class }
 on { NpcActionMessage::class }
         .where { option == 2 }
         .then {
-            val npc = world.npcRepository[index]
+            val npc = it.world.npcRepository[index]
 
             if (npc.id in BANKER_NPCS) {
                 BankAction.start(this, it, npc.position)
