@@ -4,6 +4,7 @@ import org.apollo.game.message.handler.MessageHandler
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.PluginContext
+import org.apollo.game.scheduling.ScheduledTask
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
 import kotlin.script.templates.ScriptTemplateDefinition
@@ -12,11 +13,28 @@ import kotlin.script.templates.ScriptTemplateDefinition
         scriptFilePattern = ".*\\.plugin\\.kts"
 )
 abstract class KotlinPluginScript(val world: World, val context: PluginContext) {
+    var startListener: () -> Unit = {};
+    var stopListener: () -> Unit = {};
 
     protected fun <T : Message> on(type: () -> KClass<T>): KotlinMessageHandler<T> {
         return KotlinMessageHandler(world, context, type.invoke())
     }
 
+    protected fun start(callback: () -> Unit) {
+        this.startListener = callback
+    }
+
+    protected fun stop(callback: () -> Unit) {
+        this.stopListener = callback
+    }
+
+    fun doStart() {
+        this.startListener.invoke()
+    }
+
+    fun doStop() {
+        this.stopListener.invoke()
+    }
 }
 
 

@@ -12,14 +12,12 @@ buildscript {
 
 apply plugin: 'kotlin'
 
-sourceSets {
-    main.kotlin.srcDirs += 'src/kotlin'
-    main.kotlin.excludes += 'stub.kt'
-    main.kotlin.excludes += '**/*.kts'
+ext.pluginsDir = "$projectDir/src/plugins"
 
+sourceSets {
     plugins {
         kotlin {
-            srcDir 'data/plugins'
+            srcDir "$pluginsDir"
             exclude 'stub.kt'
             exclude '**/*.kts'
         }
@@ -42,7 +40,10 @@ dependencies {
 }
 
 
-task('compilePluginScripts', dependsOn: [classes, pluginsClasses], type: JavaExec) {
+task compilePluginScripts(type: JavaExec, dependsOn: [classes, pluginsClasses]) {
+    group = LifecycleBasePlugin.BUILD_GROUP
+    description = 'Compile plugin script files (.plugin.kts) to java bytecode'
+
     def compilerClasspath = [
             configurations.compile.asPath,
             configurations.runtime.asPath,
@@ -50,17 +51,15 @@ task('compilePluginScripts', dependsOn: [classes, pluginsClasses], type: JavaExe
             sourceSets.main.runtimeClasspath.asPath
     ]
 
-    def inputDir = "$projectDir/data/plugins"
     def outputDir = "$buildDir/plugins"
     def manifestPath = "$buildDir/plugins/manifest.txt"
 
-    inputs.source inputDir
+    inputs.source "$pluginsDir"
     outputs.dir outputDir
 
-    println compilerClasspath.join(':')
     classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
     main = 'org.apollo.game.plugin.kotlin.KotlinPluginCompiler'
-    args = [inputDir, outputDir, manifestPath, compilerClasspath.join(':')]
+    args = ["$pluginsDir", outputDir, manifestPath, compilerClasspath.join(':')]
 }
 
-assemble.dependsOn(compilePluginScripts)
+assemble.dependsOn compilePluginScripts

@@ -4,14 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -143,8 +136,8 @@ public final class PluginManager {
 	 * @throws DependencyException If a dependency could not be resolved.
 	 */
 	public void start() throws IOException, SAXException, DependencyException {
-		Map<String, PluginMetaData> plugins = createMap(findPlugins());
-		Set<PluginMetaData> started = new HashSet<>();
+		//@todo - load metadata and respective plugins
+		Map<String, PluginMetaData> plugins = new HashMap<>();
 
 		PluginEnvironment env = new KotlinPluginEnvironment(world); // TODO isolate plugins if possible in the future!
 		env.setContext(context);

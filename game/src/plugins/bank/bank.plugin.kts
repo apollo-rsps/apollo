@@ -9,6 +9,7 @@ import org.apollo.net.message.Message
 
 val BANK_BOOTH_ID = 2213
 
+
 /**
  * Hook into the [ObjectActionMessage] and listen for when a bank booth's second action ("Open Bank") is selected.
  */
@@ -22,7 +23,7 @@ on { ObjectActionMessage::class }
 on { NpcActionMessage::class }
         .where { option == 2 }
         .then {
-            val npc: Npc = Any() as Npc // TODO world.npcRepository.get(index)
+            val npc = world.npcRepository[index]
 
             if (npc.id in BANKER_NPCS) {
                 BankAction.start(this, it, npc.position)

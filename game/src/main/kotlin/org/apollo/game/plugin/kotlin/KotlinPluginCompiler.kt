@@ -97,7 +97,11 @@ class KotlinPluginCompiler(val classpath: List<File>, val messageCollector: Mess
             val compiledScriptClasses = mutableListOf<String>()
 
             try {
-                Files.createDirectory(outputDir)
+                try {
+                    Files.createDirectory(outputDir)
+                } catch (e: FileAlreadyExistsException) {
+                    // do nothing...
+                }
 
                 inputScripts.forEach {
                     compiledScriptClasses.add(compiler.compile(it, outputDir).fqName)
