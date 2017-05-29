@@ -19,4 +19,4 @@ Apollo is now ready, and can be started using `gradle run`. You may wish to chan
 
 ### Contributing
 
-Please see [contributing to Apollo](#CONTRIBUTING.md).
+Please see [contributing to Apollo](CONTRIBUTING.md).
