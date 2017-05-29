@@ -36,6 +36,8 @@ public final class GameMessageEncoder extends MessageToMessageEncoder<Message> {
 		MessageEncoder<Message> encoder = (MessageEncoder<Message>) release.getMessageEncoder(message.getClass());
 		if (encoder != null) {
 			out.add(encoder.encode(message));
+		} else {
+			System.out.println("Unidentified message to encode - message: " + message.getClass() + ".");
 		}
 	}
 
