@@ -9,7 +9,7 @@ import com.google.common.collect.HashBiMap;
  *
  * @author Graham
  */
-public final class ItemDefinition {
+public final class ItemDefinition implements Definition {
 
 	/**
 	 * The item definitions.

@@ -1,11 +1,8 @@
 package org.apollo.cache.decoder;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 
 import org.apollo.cache.IndexedFileSystem;
-import org.apollo.cache.archive.Archive;
 import org.apollo.cache.def.ItemDefinition;
 import org.apollo.util.BufferUtil;
 
@@ -14,12 +11,7 @@ import org.apollo.util.BufferUtil;
  *
  * @author Graham
  */
-public final class ItemDefinitionDecoder implements Runnable {
-
-	/**
-	 * The  IndexedFileSystem.
-	 */
-	private final IndexedFileSystem fs;
+public final class ItemDefinitionDecoder extends DefinitionDecoder<ItemDefinition> {
 
 	/**
 	 * Creates the ItemDefinitionDecoder.
@@ -27,33 +19,23 @@ public final class ItemDefinitionDecoder implements Runnable {
 	 * @param fs The {@link IndexedFileSystem}.
 	 */
 	public ItemDefinitionDecoder(IndexedFileSystem fs) {
-		this.fs = fs;
+		super(fs);
 	}
 
 	@Override
-	public void run() {
-		try {
-			Archive config = fs.getArchive(0, 2);
-			ByteBuffer data = config.getEntry("obj.dat").getBuffer();
-			ByteBuffer idx = config.getEntry("obj.idx").getBuffer();
+	protected String getNameFile() {
+		return "obj";
+	}
 
-			int count = idx.getShort(), index = 2;
-			int[] indices = new int[count];
-			for (int i = 0; i < count; i++) {
-				indices[i] = index;
-				index += idx.getShort();
-			}
-
-			ItemDefinition[] definitions = new ItemDefinition[count];
-			for (int i = 0; i < count; i++) {
-				data.position(indices[i]);
-				definitions[i] = decode(i, data);
-			}
-
-			ItemDefinition.init(definitions);
-		} catch (IOException e) {
-			throw new UncheckedIOException("Error decoding ItemDefinitions.", e);
+	@Override
+	protected void initDefinition(int count, ByteBuffer data, int[] indices) {
+		ItemDefinition[] definitions = new ItemDefinition[count];
+		for (int i = 0; i < count; i++) {
+			data.position(indices[i]);
+			definitions[i] = decode(i, data);
 		}
+
+		ItemDefinition.init(definitions);
 	}
 
 	/**
@@ -63,7 +45,8 @@ public final class ItemDefinitionDecoder implements Runnable {
 	 * @param buffer The buffer.
 	 * @return The {@link ItemDefinition}.
 	 */
-	private ItemDefinition decode(int id, ByteBuffer buffer) {
+	@Override
+	protected ItemDefinition decode(int id, ByteBuffer buffer) {
 		ItemDefinition definition = new ItemDefinition(id);
 		while (true) {
 			int opcode = buffer.get() & 0xFF;

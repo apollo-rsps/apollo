@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  *
  * @author Graham
  */
-public final class EquipmentDefinition {
+public final class EquipmentDefinition implements Definition {
 
 	/**
 	 * The attack id.
