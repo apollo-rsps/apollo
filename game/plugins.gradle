@@ -36,6 +36,8 @@ task pluginTests {
     }
 }
 
+check.dependsOn pluginTests
+
 class PluginBuildData {
     PluginBuildData(String normalizedName, SourceSet mainSources, SourceSet testSources,
                     FileCollection scriptFiles, List<String> dependencyNames) {
