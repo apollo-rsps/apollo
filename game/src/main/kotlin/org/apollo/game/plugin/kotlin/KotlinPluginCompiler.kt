@@ -43,8 +43,6 @@ class KotlinPluginCompiler(val classpath: List<File>, val messageCollector: Mess
 
     companion object {
 
-        private val maxSearchDepth = 1024;
-
         fun currentClasspath(): List<File> {
             val classLoader = Thread.currentThread().contextClassLoader as? URLClassLoader ?:
                     throw RuntimeException("Unable to resolve classpath for current ClassLoader")
@@ -66,12 +64,10 @@ class KotlinPluginCompiler(val classpath: List<File>, val messageCollector: Mess
 
         @JvmStatic
         fun main(args: Array<String>) {
-            if (args.size < 4) throw RuntimeException("Usage: <inputDir> <outputDir> <manifestPath> <classpath>")
+            if (args.size < 2) throw RuntimeException("Usage: <outputDirectory> script1.kts script2.kts ...")
 
-            val inputDir = Paths.get(args[0])
-            val outputDir = Paths.get(args[1])
-            val manifestPath = Paths.get(args[2])
-            val classpathEntries = args[3].split(':')
+            val outputDir = Paths.get(args[0])
+            val inputScripts = args.slice(1..args.size - 1).map { Paths.get(it) }
             val classpath = mutableListOf<File>()
 
             val runtimeBean = ManagementFactory.getRuntimeMXBean()
@@ -83,15 +79,11 @@ class KotlinPluginCompiler(val classpath: List<File>, val messageCollector: Mess
             }
 
             /**
-             * Classpath entries on the command line contain the kotlin runtime
-             * and plugin API code.  We use our current classpath to provide
-             * Kotlin with access to the JRE and apollo modules.
+             * Our current classpath should contain all compile time dependencies for the plugin as well as Apollo's
+             * own sources.  We can also achieve this via Gradle but doing it at runtime prevents Gradle from thinking
+             * the build has been modified after evaluation.
              */
             classpath.addAll(currentClasspath())
-            classpath.addAll(classpathEntries.map { File(it) })
-
-            val inputScriptsMatcher = { path: Path, _: BasicFileAttributes -> path.toString().endsWith(".plugin.kts") }
-            val inputScripts = Files.find(inputDir, maxSearchDepth, BiPredicate(inputScriptsMatcher))
 
             val compiler = KotlinPluginCompiler(classpath, MessageCollector.NONE)
             val compiledScriptClasses = mutableListOf<String>()
@@ -106,8 +98,6 @@ class KotlinPluginCompiler(val classpath: List<File>, val messageCollector: Mess
                 inputScripts.forEach {
                     compiledScriptClasses.add(compiler.compile(it, outputDir).fqName)
                 }
-
-                Files.write(manifestPath, compiledScriptClasses, CREATE, TRUNCATE_EXISTING)
             } catch (t: Throwable) {
                 t.printStackTrace()
                 System.exit(1)

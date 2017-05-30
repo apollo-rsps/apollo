@@ -7,59 +7,23 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath group: 'com.moandjiezana.toml', name: 'toml4j', version: '0.7.1'
     }
 }
-
-apply plugin: 'kotlin'
 
 ext.pluginsDir = "$projectDir/src/plugins"
 
-sourceSets {
-    plugins {
-        kotlin {
-            srcDir "$pluginsDir"
-            exclude 'stub.kt'
-            exclude '**/*.kts'
-        }
-    }
-}
+apply plugin: 'kotlin'
+apply from: 'plugins.gradle'
 
 dependencies {
     compile project(':cache')
     compile project(':net')
     compile project(':util')
 
-    pluginsCompile(configurations.compile)
-    pluginsCompile(sourceSets.main.output)
-
+    compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.0.21'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler', version: "$kotlinVersion"
 
-    runtime files("$buildDir/plugins")
-    runtime sourceSets.plugins.output
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 }
-
-
-task compilePluginScripts(type: JavaExec, dependsOn: [classes, pluginsClasses]) {
-    group = LifecycleBasePlugin.BUILD_GROUP
-    description = 'Compile plugin script files (.plugin.kts) to java bytecode'
-
-    def compilerClasspath = [
-            configurations.compile.asPath,
-            configurations.runtime.asPath,
-            sourceSets.main.compileClasspath.asPath,
-            sourceSets.main.runtimeClasspath.asPath
-    ]
-
-    def outputDir = "$buildDir/plugins"
-    def manifestPath = "$buildDir/plugins/manifest.txt"
-
-    inputs.source "$pluginsDir"
-    outputs.dir outputDir
-
-    classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
-    main = 'org.apollo.game.plugin.kotlin.KotlinPluginCompiler'
-    args = ["$pluginsDir", outputDir, manifestPath, compilerClasspath.join(':')]
-}
-
-assemble.dependsOn compilePluginScripts

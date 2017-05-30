@@ -1,0 +1,7 @@
+name = "Banking"
+package = "org.apollo.game.plugin.banking"
+authors = [ "Major" ]
+
+[config]
+srcDir = "src/"
+testDir = "test/"

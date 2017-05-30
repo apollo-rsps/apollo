@@ -1,0 +1,8 @@
+name = "spawning"
+package = "org.apollo.game.plugin.entity"
+authors = [ "Gary Tierney" ]
+dependencies = [ "entity_lookup" ]
+
+[config]
+srcDir = "src/"
+testDir = "test/"

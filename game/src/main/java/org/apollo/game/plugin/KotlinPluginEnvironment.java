@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import org.apollo.game.model.World;
 import org.apollo.game.plugin.kotlin.KotlinPluginCompiler;
 import org.apollo.game.plugin.kotlin.KotlinPluginScript;
@@ -37,15 +40,14 @@ public class KotlinPluginEnvironment implements PluginEnvironment {
 	@Override
 	public void load(Collection<PluginMetaData> plugins) {
 		List<KotlinPluginScript> pluginScripts = new ArrayList<>();
+		List<Class<? extends KotlinPluginScript>> pluginClasses = new ArrayList<>();
 
-		try (InputStream resource = KotlinPluginEnvironment.class.getResourceAsStream("/manifest.txt")) {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(resource));
-			List<String> pluginClassNames = reader.lines().collect(Collectors.toList());
+		new FastClasspathScanner()
+			.matchSubclassesOf(KotlinPluginScript.class, pluginClasses::add)
+			.scan();
 
-			for (String pluginClassName : pluginClassNames) {
-				Class<? extends KotlinPluginScript> pluginClass =
-					(Class<? extends KotlinPluginScript>) Class.forName(pluginClassName);
-
+		try {
+			for (Class<? extends KotlinPluginScript> pluginClass : pluginClasses) {
 				Constructor<? extends KotlinPluginScript> pluginConstructor =
 					pluginClass.getConstructor(World.class, PluginContext.class);
 
@@ -55,7 +57,10 @@ public class KotlinPluginEnvironment implements PluginEnvironment {
 			throw new RuntimeException(e);
 		}
 
-		pluginScripts.forEach(script -> script.doStart(world));
+		pluginScripts.forEach(script -> {
+			logger.info("Starting script: " + script.getClass().getName());
+			script.doStart(world);
+		});
 	}
 
 	@Override

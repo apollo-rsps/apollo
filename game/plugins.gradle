@@ -1,0 +1,161 @@
+import com.moandjiezana.toml.Toml
+
+import java.nio.file.Paths
+
+def PLUGIN_VERIFICATION_GROUP = "plugin-verification"
+def PLUGIN_BUILD_GROUP = "plugin-build"
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath group: 'com.moandjiezana.toml', name: 'toml4j', version: '0.7.1'
+    }
+}
+
+sourceSets {
+    pluginStub {
+        kotlin {
+            srcDir "$pluginsDir/stub"
+            exclude 'stub.kt'
+        }
+    }
+}
+
+dependencies {
+    pluginStubCompile(project(":game"))
+}
+
+task pluginTests {
+    group = "plugin-verification"
+
+    doLast {
+        println("Finished executing plugin tests")
+    }
+}
+
+class PluginBuildData {
+    PluginBuildData(String normalizedName, SourceSet mainSources, SourceSet testSources,
+                    FileCollection scriptFiles, List<String> dependencyNames) {
+        this.normalizedName = normalizedName
+        this.mainSources = mainSources
+        this.testSources = testSources
+        this.scriptFiles = scriptFiles
+        this.dependencyNames = dependencyNames
+    }
+
+    String normalizedName
+    SourceSet mainSources
+    SourceSet testSources
+    FileCollection scriptFiles
+    List<String> dependencyNames
+}
+
+Map<String, PluginBuildData> pluginMap = new HashMap<>()
+
+def configurePluginDependencies(SourceSet mainSources, SourceSet testSources,
+                                List<PluginBuildData> pluginDependencies) {
+
+    def testConfiguration = testSources.compileConfigurationName
+    def mainConfiguration = mainSources.compileConfigurationName
+    def runtimeConfiguration = mainSources.runtimeConfigurationName
+
+    // Add this plugin as a runtime dependency to the main game project
+    dependencies.add(configurations.runtime.name, mainSources.output)
+
+    pluginDependencies.each {
+        dependencies.add(mainConfiguration, it.mainSources.output)
+        dependencies.add(testConfiguration, it.testSources.output)
+    }
+
+    dependencies.add(mainConfiguration, configurations.compile)
+    dependencies.add(mainConfiguration, sourceSets.main.output)
+    dependencies.add(runtimeConfiguration, sourceSets.pluginStub.output)
+
+    dependencies.add(testConfiguration, mainSources.output)
+    dependencies.add(testConfiguration, configurations.testCompile)
+    dependencies.add(testConfiguration, sourceSets.test.output)
+}
+
+def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSources,
+                         FileCollection scriptFiles, List<PluginBuildData> pluginDependencies) {
+
+    task("${name}Tests", type: Test) {
+        group = "plugin-verification"
+
+        testClassesDir = testSources.output.classesDir
+        classpath = testSources.runtimeClasspath + mainSources.runtimeClasspath
+
+        binResultsDir = file("$buildDir/plugin-test-results/binary/$name")
+
+        reports {
+            html.destination = "$buildDir/reports/plugin-tests/$name"
+            junitXml.destination = "$buildDir/plugin-tests/$name"
+        }
+    }
+
+    task("compile${name}Scripts", type: JavaExec) {
+        group = "plugin-compile"
+
+        def outputDir = mainSources.output.classesDir.toString()
+
+        inputs.files scriptFiles
+        outputs.dir outputDir
+
+        classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
+        main = 'org.apollo.game.plugin.kotlin.KotlinPluginCompiler'
+        args = [outputDir] + scriptFiles.collect { it.absoluteFile.toString() }
+    }
+
+    def testsTask = tasks["${name}Tests"]
+    pluginTests.dependsOn testsTask
+}
+
+def pluginTree = fileTree(dir: "$pluginsDir")
+def pluginDefinitions = pluginTree.matching {
+    include '**/meta.toml'
+}
+
+pluginDefinitions.each { file ->
+    def meta = new Toml()
+    meta.read(file.absoluteFile)
+
+    def pluginFolder = Paths.get(file.parentFile.absolutePath)
+    def name = meta.getString("name", pluginFolder.getFileName().toString())
+    def normalizedName = name.replaceAll("[^a-zA-Z0-9_]", '_').toLowerCase()
+    def packageName = meta.getString("package", "org.apollo.game.plugin")
+    def authors = meta.getList("authors", new ArrayList())
+    def dependencies = meta.getList("dependencies", new ArrayList())
+
+    def scripts = fileTree(file.parentFile) {
+        include '**/*.plugin.kts'
+    }
+
+    def srcsDir = meta.getString("config.src", "src/")
+    def testDir = meta.getString("config.test", "test/")
+
+    def mainSources = sourceSets.create("${normalizedName}_main") {
+        kotlin {
+            srcDir pluginFolder.resolve(srcsDir).toString()
+            exclude '*.kts'
+        }
+    }
+
+    def testSources = sourceSets.create("${normalizedName}_test") {
+        kotlin {
+            srcDir pluginFolder.resolve(testDir).toString()
+        }
+    }
+
+    def pluginData = new PluginBuildData(normalizedName, mainSources, testSources, scripts, dependencies)
+    pluginMap.put(normalizedName, pluginData)
+}
+
+pluginMap.values().each {
+    def dependencies = it.dependencyNames.collect { name -> pluginMap.get(name) }
+
+    configurePluginDependencies(it.mainSources, it.testSources, dependencies)
+    configurePluginTasks(it.normalizedName, it.mainSources, it.testSources, it.scriptFiles, dependencies)
+}
