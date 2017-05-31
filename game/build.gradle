@@ -16,6 +16,14 @@ ext.pluginsDir = "$projectDir/src/plugins"
 apply plugin: 'kotlin'
 apply from: 'plugins.gradle'
 
+sourceSets {
+    main {
+        kotlin {
+            exclude 'stub.kt'
+        }
+    }
+}
+
 dependencies {
     compile project(':cache')
     compile project(':net')

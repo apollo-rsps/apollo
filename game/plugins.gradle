@@ -15,19 +15,6 @@ buildscript {
     }
 }
 
-sourceSets {
-    pluginStub {
-        kotlin {
-            srcDir "$pluginsDir/stub"
-            exclude 'stub.kt'
-        }
-    }
-}
-
-dependencies {
-    pluginStubCompile(project(":game"))
-}
-
 task pluginTests {
     group = "plugin-verification"
 
@@ -73,7 +60,6 @@ def configurePluginDependencies(SourceSet mainSources, SourceSet testSources,
 
     dependencies.add(mainConfiguration, configurations.compile)
     dependencies.add(mainConfiguration, sourceSets.main.output)
-    dependencies.add(mainConfiguration, sourceSets.pluginStub.output)
 
     dependencies.add(testConfiguration, mainSources.output)
     dependencies.add(testConfiguration, configurations.testCompile)
