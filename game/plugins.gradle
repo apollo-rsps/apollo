@@ -62,7 +62,6 @@ def configurePluginDependencies(SourceSet mainSources, SourceSet testSources,
 
     def testConfiguration = testSources.compileConfigurationName
     def mainConfiguration = mainSources.compileConfigurationName
-    def runtimeConfiguration = mainSources.runtimeConfigurationName
 
     // Add this plugin as a runtime dependency to the main game project
     dependencies.add(configurations.runtime.name, mainSources.output)
@@ -74,7 +73,7 @@ def configurePluginDependencies(SourceSet mainSources, SourceSet testSources,
 
     dependencies.add(mainConfiguration, configurations.compile)
     dependencies.add(mainConfiguration, sourceSets.main.output)
-    dependencies.add(runtimeConfiguration, sourceSets.pluginStub.output)
+    dependencies.add(mainConfiguration, sourceSets.pluginStub.output)
 
     dependencies.add(testConfiguration, mainSources.output)
     dependencies.add(testConfiguration, configurations.testCompile)
