@@ -23,10 +23,6 @@ task pluginTests {
     }
 }
 
-task pluginClasses {
-    group = "plugin-build"
-}
-
 check.dependsOn pluginTests
 
 class PluginBuildData {
@@ -107,7 +103,10 @@ def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSourc
             args = [outputDir] + scriptFiles.collect { it.absoluteFile.toString() }
         }
 
-        pluginClasses.dependsOn compileScriptsTask
+        tasks[mainSources.classesTaskName].outputs.upToDateWhen { false }
+        tasks[mainSources.classesTaskName].doLast {
+            compileScriptsTask.execute()
+        }
     }
 }
 

@@ -36,11 +36,9 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 }
 
-task run(type: JavaExec, dependsOn: [classes, pluginClasses]) {
-    FileCollection gameClasspath = sourceSets.main.runtimeClasspath + sourceSets.main.compileClasspath
-
+task run(type: JavaExec, dependsOn: classes) {
     main = 'org.apollo.Server'
-    classpath = gameClasspath
+    classpath = sourceSets.main.runtimeClasspath
     jvmArgs = ['-Xmx1750M']
     workingDir = "$rootDir"
 }
