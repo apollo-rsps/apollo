@@ -8,6 +8,6 @@ object Spawns {
     val list = mutableListOf<Spawn>()
 }
 
-fun npc_spawn(name: String, x: Int, y: Int, z: Int = 0, id: Int? = null, facing: Direction? = Direction.NORTH) {
+fun npc_spawn(name: String, x: Int, y: Int, z: Int = 0, id: Int? = -1, facing: Direction? = Direction.NORTH) {
     Spawns.list.add(Spawn(id, name, Position(x, y, z), facing))
 }
