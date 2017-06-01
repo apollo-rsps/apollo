@@ -1,3 +1,4 @@
+import org.apollo.game.model.Direction
 
 npc_spawn("barbarian_woman", x = 3222, y = 3399)
 
@@ -25,7 +26,7 @@ npc_spawn(":giant_rat", id = 87, x = 3292, y = 3375)
 npc_spawn(":giant_rat", id = 87, x = 3265, y = 3384)
 npc_spawn(":giant_rat", id = 87, x = 3267, y = 3381)
 
-npc_spawn(":guard", id = 368, x = 3263, y = 3407) //south
+npc_spawn(":guard", id = 368, x = 3263, y = 3407, facing = Direction.SOUTH)
 
 npc_spawn("jeremy_clerksin", x = 3253, y = 3477)
 npc_spawn("martina_scorsby", x = 3256, y = 3481)
@@ -170,7 +171,7 @@ npc_spawn("father_lawrence", x = 3253, y = 3484)
 
 npc_spawn("guidors_wife", id = 342, x = 3280, y = 3382)
 
-npc_spawn("guidor", x = 3284, y = 3381) //south
+npc_spawn("guidor", x = 3284, y = 3381, facing = Direction.SOUTH)
 
 npc_spawn("guild_master", x = 3189, y = 3360)
 
@@ -198,18 +199,17 @@ npc_spawn("shilop", x = 3211, y = 3435)
 
 npc_spawn("sir_prysin", x = 3204, y = 3472)
 
-npc_spawn("tarquin", x = 3203, y = 3344) //south
+npc_spawn("tarquin", x = 3203, y = 3344, facing = Direction.SOUTH)
 
 npc_spawn("tool_leprechaun", x = 3182, y = 3355)
 
-npc_spawn("tool_leprechaun", x = 3229, y = 3455) //north
+npc_spawn("tool_leprechaun", x = 3229, y = 3455)
 
 npc_spawn("tramp", id = 641, x = 3207, y = 3392)
 
 npc_spawn("wilough", x = 3222, y = 3437)
 
 // Shop Npc
-
 
 npc_spawn("aubury", x = 3253, y = 3401)
 
@@ -248,20 +248,20 @@ npc_spawn("phillipa", x = 3160, y = 3429, z = 1)
 // Gertrude House
 
 npc_spawn("gertrude", x = 3153, y = 3413)
-npc_spawn("kanel", x = 3155, y = 3405) //east
-npc_spawn("philop", x = 3150, y = 3405) //south
+npc_spawn("kanel", x = 3155, y = 3405, facing = Direction.EAST)
+npc_spawn("philop", x = 3150, y = 3405, facing = Direction.SOUTH)
 
 // Small Bank
 
-npc_spawn("banker", id = 495, x = 3252, y = 3418) //north
-npc_spawn("banker", id = 494, x = 3252, y = 3418) //north
-npc_spawn("banker", id = 494, x = 3252, y = 3418) //north
-npc_spawn("banker", id = 494, x = 3252, y = 3418) //north
+npc_spawn("banker", id = 495, x = 3252, y = 3418)
+npc_spawn("banker", id = 494, x = 3252, y = 3418)
+npc_spawn("banker", id = 494, x = 3252, y = 3418)
+npc_spawn("banker", id = 494, x = 3252, y = 3418)
 
 // Big Bank
 
-npc_spawn("banker", id = 494, x = 3187, y = 3436) //west
-npc_spawn("banker", id = 494, x = 3187, y = 3440) //west
-npc_spawn("banker", id = 494, x = 3187, y = 3444) //west
-npc_spawn("banker", id = 495, x = 3187, y = 3438) //west
-npc_spawn("banker", id = 495, x = 3187, y = 3442) //west
+npc_spawn("banker", id = 494, x = 3187, y = 3436, facing = Direction.WEST)
+npc_spawn("banker", id = 494, x = 3187, y = 3440, facing = Direction.WEST)
+npc_spawn("banker", id = 494, x = 3187, y = 3444, facing = Direction.WEST)
+npc_spawn("banker", id = 495, x = 3187, y = 3438, facing = Direction.WEST)
+npc_spawn("banker", id = 495, x = 3187, y = 3442, facing = Direction.WEST)
