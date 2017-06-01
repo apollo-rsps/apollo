@@ -13,3 +13,7 @@ object Spawns {
 fun npc_spawn(name: String, x: Int, y: Int, id: Int? = null) {
     Spawns.list.add(Spawn(id, name, Position(x, y), Direction.NORTH))
 }
+
+fun npc_spawn(name: String, x: Int, y: Int, z: Int, id: Int? = null) {
+    Spawns.list.add(Spawn(id, name, Position(x, y, z), Direction.NORTH))
+}
