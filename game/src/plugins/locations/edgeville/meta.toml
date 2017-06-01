@@ -1,0 +1,8 @@
+name = "edgeville npc spawns"
+package = "org.apollo.game.plugin.locations"
+authors = [ "Jesse W" ]
+dependencies = [ "spawning" ]
+
+[config]
+srcDir = "src/"
+testDir = "test/"
