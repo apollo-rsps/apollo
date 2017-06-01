@@ -44,14 +44,10 @@ subprojects {
             }
         }
     }
-}
 
-def gameSubproject = project(':game')
-
-task(run, dependsOn: gameSubproject.tasks['assemble'], type: JavaExec) {
-    def gameClasspath = gameSubproject.sourceSets.main.runtimeClasspath
-
-    main = 'org.apollo.Server'
-    classpath = gameClasspath
-    jvmArgs = ['-Xmx1750M']
+    test {
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
 }

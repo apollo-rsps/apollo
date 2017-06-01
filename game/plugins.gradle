@@ -23,6 +23,10 @@ task pluginTests {
     }
 }
 
+task pluginClasses {
+    group = "plugin-build"
+}
+
 check.dependsOn pluginTests
 
 class PluginBuildData {
@@ -69,7 +73,7 @@ def configurePluginDependencies(SourceSet mainSources, SourceSet testSources,
 def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSources,
                          FileCollection scriptFiles, List<PluginBuildData> pluginDependencies) {
 
-    task("${name}Tests", type: Test) {
+    def testsTask = task("${name}Tests", type: Test) {
         group = "plugin-verification"
 
         testClassesDir = testSources.output.classesDir
@@ -81,23 +85,30 @@ def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSourc
             html.destination = "$buildDir/reports/plugin-tests/$name"
             junitXml.destination = "$buildDir/plugin-tests/$name"
         }
+
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
     }
 
-    task("compile${name}Scripts", type: JavaExec) {
-        group = "plugin-compile"
-
-        def outputDir = mainSources.output.classesDir.toString()
-
-        inputs.files scriptFiles
-        outputs.dir outputDir
-
-        classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
-        main = 'org.apollo.game.plugin.kotlin.KotlinPluginCompiler'
-        args = [outputDir] + scriptFiles.collect { it.absoluteFile.toString() }
-    }
-
-    def testsTask = tasks["${name}Tests"]
     pluginTests.dependsOn testsTask
+
+    if (!scriptFiles.empty) {
+        def compileScriptsTask = task("compile${name}Scripts", type: JavaExec) {
+            group = "plugin-compile"
+
+            def outputDir = mainSources.output.classesDir.toString()
+
+            inputs.files scriptFiles
+            outputs.dir outputDir
+
+            classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
+            main = 'org.apollo.game.plugin.kotlin.KotlinPluginCompiler'
+            args = [outputDir] + scriptFiles.collect { it.absoluteFile.toString() }
+        }
+
+        pluginClasses.dependsOn compileScriptsTask
+    }
 }
 
 def pluginTree = fileTree(dir: "$pluginsDir")
