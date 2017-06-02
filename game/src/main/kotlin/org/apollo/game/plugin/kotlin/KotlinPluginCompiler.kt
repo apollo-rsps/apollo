@@ -1,12 +1,11 @@
 package org.apollo.game.plugin.kotlin
 
-import com.google.common.base.CaseFormat
-import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.*
 import org.jetbrains.kotlin.cli.jvm.compiler.*
 import org.jetbrains.kotlin.cli.jvm.config.JvmClasspathRoot
 import org.jetbrains.kotlin.codegen.CompilationException
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.script.KotlinScriptDefinitionFromAnnotatedTemplate
 import java.io.File
@@ -15,9 +14,7 @@ import java.net.URISyntaxException
 import java.net.URLClassLoader
 import java.nio.file.*
 import java.nio.file.StandardOpenOption.*
-import java.nio.file.attribute.BasicFileAttributes
 import java.util.*
-import java.util.function.BiPredicate
 
 class KotlinMessageCollector : MessageCollector {
 
@@ -75,7 +72,7 @@ class KotlinPluginCompiler(val classpath: List<File>, val messageCollector: Mess
                 println("Warning!  Boot class path is not supported, must be supplied on the command line")
             } else {
                 val bootClasspath = runtimeBean.bootClassPath
-                classpath.addAll(bootClasspath.split(':').map { File(it) })
+                classpath.addAll(bootClasspath.split(File.pathSeparatorChar).map { File(it) })
             }
 
             /**

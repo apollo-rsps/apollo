@@ -31,7 +31,7 @@ dependencies {
 
     compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.0.21'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler', version: "$kotlinVersion"
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: "$kotlinVersion"
 
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 }
