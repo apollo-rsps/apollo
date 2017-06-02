@@ -1,10 +1,12 @@
 package org.apollo.game.plugin.kotlin
 
+import org.apollo.game.command.Command
+import org.apollo.game.command.CommandListener
 import org.apollo.game.message.handler.MessageHandler
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
+import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.plugin.PluginContext
-import org.apollo.game.scheduling.ScheduledTask
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
 import kotlin.script.templates.ScriptTemplateDefinition
@@ -18,6 +20,10 @@ abstract class KotlinPluginScript(private var world: World, val context: PluginC
 
     protected fun <T : Message> on(type: () -> KClass<T>): KotlinMessageHandler<T> {
         return KotlinMessageHandler(world, context, type.invoke())
+    }
+
+    protected fun on_command(command: String, privileges: PrivilegeLevel): KotlinCommandHandler {
+        return KotlinCommandHandler(world, command, privileges)
     }
 
     protected fun start(callback: (World) -> Unit) {
@@ -36,7 +42,6 @@ abstract class KotlinPluginScript(private var world: World, val context: PluginC
         this.stopListener.invoke(world)
     }
 }
-
 
 class KotlinMessageHandler<T : Message>(val world: World, val context: PluginContext, val type: KClass<T>) : MessageHandler<T>(world) {
 
@@ -58,6 +63,25 @@ class KotlinMessageHandler<T : Message>(val world: World, val context: PluginCon
     fun then(function: T.(Player) -> Unit) {
         this.function = function
         this.context.addMessageHandler(type.java, this)
+    }
+
+}
+
+class KotlinCommandListener(val level: PrivilegeLevel, val function: (Player, Command) -> Unit) : CommandListener(level) {
+
+    override fun execute(player: Player, command: Command) {
+        function.invoke(player, command)
+    }
+
+}
+
+class KotlinCommandHandler(val world : World, val command: String, val privileges: PrivilegeLevel) {
+
+    var function: (Player, Command) -> Unit = { _, _ -> }
+
+    fun then(function: (Player, Command) -> Unit) {
+        this.function = function
+        world.commandDispatcher.register(command, KotlinCommandListener(privileges, function))
     }
 
 }

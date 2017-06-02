@@ -16,6 +16,10 @@ fun <T : Message> on(type: () -> KClass<T>): KotlinMessageHandler<T> {
     null!!
 }
 
+fun on_command(command: String, privileges: PrivilegeLevel): KotlinCommandHandler {
+    null!!
+}
+
 fun start(callback: (World) -> Unit) {
 
 }
