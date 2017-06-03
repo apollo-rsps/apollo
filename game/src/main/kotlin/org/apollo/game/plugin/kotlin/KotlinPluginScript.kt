@@ -67,19 +67,19 @@ class KotlinMessageHandler<T : Message>(val world: World, val context: PluginCon
 
 }
 
-class KotlinCommandListener(val level: PrivilegeLevel, val function: (Player, Command) -> Unit) : CommandListener(level) {
+class KotlinCommandListener(val level: PrivilegeLevel, val function: Command.(Player) -> Unit) : CommandListener(level) {
 
     override fun execute(player: Player, command: Command) {
-        function.invoke(player, command)
+        function.invoke(command, player)
     }
 
 }
 
 class KotlinCommandHandler(val world : World, val command: String, val privileges: PrivilegeLevel) {
 
-    var function: (Player, Command) -> Unit = { _, _ -> }
+    var function: Command.(Player) -> Unit = { _ -> }
 
-    fun then(function: (Player, Command) -> Unit) {
+    fun then(function: Command.(Player) -> Unit) {
         this.function = function
         world.commandDispatcher.register(command, KotlinCommandListener(privileges, function))
     }
