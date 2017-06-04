@@ -28,6 +28,7 @@ import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.entity.attr.AttributePersistence;
 import org.apollo.game.model.entity.attr.NumericalAttribute;
+import org.apollo.game.model.entity.attr.BooleanAttribute;
 import org.apollo.game.model.entity.obj.DynamicGameObject;
 import org.apollo.game.model.entity.setting.MembershipStatus;
 import org.apollo.game.model.entity.setting.PrivacyState;
@@ -941,6 +942,22 @@ public final class Player extends Mob {
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
 		this.withdrawingNotes = withdrawingNotes;
+	}
+
+	/**
+	 * Ban the player.
+	 */
+	public void ban() {
+		attributes.set("banned", new BooleanAttribute(true));
+	}
+
+	/**
+	 * Sets the mute status of a player.
+	 *
+	 * @param muted Whether the player is muted.
+	 */
+	public void setMuted(boolean muted) {
+		attributes.set("muted", new BooleanAttribute(muted));
 	}
 
 	@Override

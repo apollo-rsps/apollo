@@ -4,6 +4,7 @@ dependencies = [ "command_utilities" ]
 authors = [
     "Graham",
     "Major",
+    "lare96",
     "cubeee"
 ]
 
