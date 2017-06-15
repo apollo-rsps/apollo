@@ -1,4 +1,6 @@
 
+import com.google.common.primitives.Doubles
+import com.google.common.primitives.Ints
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.model.entity.SkillSet
 import org.apollo.game.model.entity.setting.PrivilegeLevel
@@ -26,8 +28,17 @@ on_command("level", PrivilegeLevel.ADMINISTRATOR)
                 return@then
             }
 
-            val skillId = arguments[0].toInt()
-            val level = arguments[1].toInt()
+            val skillId = Ints.tryParse(arguments[0])
+            if (skillId == null) {
+                player.sendMessage(invalidSyntax)
+                return@then
+            }
+            val level = Ints.tryParse(arguments[1])
+            if (level == null) {
+                player.sendMessage(invalidSyntax)
+                return@then
+            }
+
             if (skillId !in 0..20 || level !in 1..99) {
                 player.sendMessage(invalidSyntax)
                 return@then
@@ -55,8 +66,17 @@ on_command("xp", PrivilegeLevel.ADMINISTRATOR)
                 return@then
             }
 
-            val skillId = arguments[0].toInt()
-            val experience = arguments[1].toDouble()
+            val skillId = Ints.tryParse(arguments[0])
+            if (skillId == null) {
+                player.sendMessage(invalidSyntax)
+                return@then
+            }
+            val experience = Doubles.tryParse(arguments[1])
+            if (experience == null) {
+                player.sendMessage(invalidSyntax)
+                return@then
+            }
+
             if (skillId !in 0..20 || experience <= 0) {
                 player.sendMessage("Invalid syntax - ::xp [skill-id] [experience]")
                 return@then
