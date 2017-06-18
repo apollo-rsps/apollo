@@ -1,4 +1,5 @@
 import com.moandjiezana.toml.Toml
+import org.apollo.build.tasks.KotlinScriptCompileTask
 
 import java.nio.file.Paths
 
@@ -15,7 +16,7 @@ buildscript {
     }
 }
 
-task pluginTests {
+task testPlugins {
     group = "plugin-verification"
 
     doLast {
@@ -23,7 +24,7 @@ task pluginTests {
     }
 }
 
-check.dependsOn pluginTests
+check.dependsOn testPlugins
 
 class PluginBuildData {
     PluginBuildData(String normalizedName, SourceSet mainSources, SourceSet testSources,
@@ -68,8 +69,9 @@ def configurePluginDependencies(SourceSet mainSources, SourceSet testSources,
 
 def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSources,
                          FileCollection scriptFiles, List<PluginBuildData> pluginDependencies) {
+    def taskName = name.split("_").collect { it.capitalize() }.join("")
 
-    def testsTask = task("${name}Tests", type: Test) {
+    def testsTask = task("test${taskName}", type: Test) {
         group = "plugin-verification"
 
         testClassesDir = testSources.output.classesDir
@@ -87,26 +89,27 @@ def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSourc
         }
     }
 
-    pluginTests.dependsOn testsTask
+    testPlugins.dependsOn testsTask
 
     if (!scriptFiles.empty) {
-        def compileScriptsTask = task("compile${name}Scripts", type: JavaExec) {
+        def compileScriptsTask = task("compile${taskName}Scripts", type: KotlinScriptCompileTask) {
             group = "plugin-compile"
 
-            def outputDir = mainSources.output.classesDir.toString()
+            def outputDir = mainSources.output.classesDir
 
             inputs.files scriptFiles
-            outputs.dir outputDir
+            outputsDir = outputDir
 
-            classpath = sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
-            main = 'org.apollo.game.plugin.kotlin.KotlinPluginCompiler'
-            args = [outputDir] + scriptFiles.collect { it.absoluteFile.toString() }
+            compileClasspath = sourceSets.main.compileClasspath +
+                    sourceSets.main.runtimeClasspath +
+                    mainSources.compileClasspath +
+                    mainSources.runtimeClasspath
+
+            scriptDefinitionClass = "org.apollo.game.plugin.kotlin.KotlinPluginScript"
+            mustRunAfter tasks[mainSources.classesTaskName]
         }
 
-        tasks[mainSources.classesTaskName].outputs.upToDateWhen { false }
-        tasks[mainSources.classesTaskName].doLast {
-            compileScriptsTask.execute()
-        }
+        testPlugins.dependsOn compileScriptsTask
     }
 }
 
@@ -122,25 +125,31 @@ pluginDefinitions.each { file ->
     def pluginFolder = Paths.get(file.parentFile.absolutePath)
     def name = meta.getString("name", pluginFolder.getFileName().toString())
     def normalizedName = name.replaceAll("[^a-zA-Z0-9_]", '_').toLowerCase()
+    def displayNameArray = normalizedName.split("_").collect { it.capitalize() }.join("").toCharArray()
+    displayNameArray[0] = displayNameArray[0].toLowerCase()
+
+    def sourceSetName = new String(displayNameArray)
+
     def packageName = meta.getString("package", "org.apollo.game.plugin")
     def authors = meta.getList("authors", new ArrayList())
     def dependencies = meta.getList("dependencies", new ArrayList())
 
     def scripts = fileTree(file.parentFile) {
         include '**/*.plugin.kts'
+        exclude '*.kt'
     }
 
     def srcsDir = meta.getString("config.src", "src/")
     def testDir = meta.getString("config.test", "test/")
 
-    def mainSources = sourceSets.create("${normalizedName}_main") {
+    def mainSources = sourceSets.create("${sourceSetName}Main") {
         kotlin {
             srcDir pluginFolder.resolve(srcsDir).toString()
             exclude '*.kts'
         }
     }
 
-    def testSources = sourceSets.create("${normalizedName}_test") {
+    def testSources = sourceSets.create("${sourceSetName}Test") {
         kotlin {
             srcDir pluginFolder.resolve(testDir).toString()
         }

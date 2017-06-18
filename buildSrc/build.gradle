@@ -1,0 +1,26 @@
+apply plugin: 'kotlin'
+
+buildscript {
+    ext {
+        kotlinVersion = '1.1.2-4'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven { url "https://repo.maven.apache.org/maven2" }
+}
+
+dependencies {
+    compile gradleApi()
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: "$kotlinVersion"
+}
