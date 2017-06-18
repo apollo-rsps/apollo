@@ -110,6 +110,7 @@ def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSourc
         }
 
         testPlugins.dependsOn compileScriptsTask
+        tasks[mainSources.classesTaskName].finalizedBy compileScriptsTask
     }
 }
 
