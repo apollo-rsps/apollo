@@ -7,12 +7,17 @@
  */
 
 import org.apollo.game.model.World
-import org.apollo.game.plugin.PluginContext
-import org.apollo.game.plugin.kotlin.*
+import org.apollo.game.model.entity.setting.PrivilegeLevel
+import org.apollo.game.plugin.kotlin.KotlinCommandHandler
+import org.apollo.game.plugin.kotlin.KotlinMessageHandler
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
 
 fun <T : Message> on(type: () -> KClass<T>): KotlinMessageHandler<T> {
+    null!!
+}
+
+fun on_command(command: String, privileges: PrivilegeLevel): KotlinCommandHandler {
     null!!
 }
 

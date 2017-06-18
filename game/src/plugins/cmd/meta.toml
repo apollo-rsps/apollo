@@ -1,0 +1,13 @@
+name = "Chat commands"
+package = "org.apollo.game.plugin.cmd"
+dependencies = [ "command_utilities" ]
+authors = [
+    "Graham",
+    "Major",
+    "lare96",
+    "cubeee"
+]
+
+[config]
+srcDir = "src/"
+testDir = "test/"
