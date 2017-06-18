@@ -119,6 +119,18 @@ def pluginDefinitions = pluginTree.matching {
     include '**/meta.toml'
 }
 
+class PluginScriptFile {
+    def scriptFileName
+    def pluginDir
+
+    PluginScriptFile(scriptFileName, pluginDir) {
+        this.scriptFileName = scriptFileName
+        this.pluginDir = pluginDir
+    }
+}
+
+def pluginFiles = new ArrayList<PluginScriptFile>()
+
 pluginDefinitions.each { file ->
     def meta = new Toml()
     meta.read(file.absoluteFile)
@@ -154,6 +166,19 @@ pluginDefinitions.each { file ->
         kotlin {
             srcDir pluginFolder.resolve(testDir).toString()
         }
+    }
+
+    scripts.files.forEach {
+        def scriptFileName = it.getName()
+
+        //@todo - also compare package
+        def existingFile = pluginFiles.find { it.scriptFileName == scriptFileName }
+        if (existingFile != null) {
+            throw new GradleException("Duplicate script file found named ${scriptFileName} in ${pluginFolder}, " +
+                    "also exists in ${existingFile.pluginDir}")
+        }
+
+        pluginFiles.add(new PluginScriptFile(scriptFileName, pluginFolder))
     }
 
     def pluginData = new PluginBuildData(normalizedName, mainSources, testSources, scripts, dependencies)
