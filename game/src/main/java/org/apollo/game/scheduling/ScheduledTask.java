@@ -71,7 +71,7 @@ public abstract class ScheduledTask {
 	/**
 	 * Pulses this task: updates the delay and calls {@link #execute()} if necessary.
 	 */
-	final void pulse() {
+	public final void pulse() {
 		if (running && --pulses <= 0) {
 			execute();
 			pulses = delay;
