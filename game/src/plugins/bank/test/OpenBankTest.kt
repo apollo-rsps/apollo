@@ -14,25 +14,23 @@ class OpenBankTest() : KotlinPluginTest() {
 
     @Test
     fun `Interacting with a bank teller should open the players bank`() {
-        val ctx = context()
-        val bankTeller = ctx.spawnNpc(BANK_TELLER_ID, BANK_POSITION)
+        val bankTeller = spawnNpc(BANK_TELLER_ID, BANK_POSITION)
 
         // @todo - these option numbers only match by coincidence, we should be looking up the correct ones
-        ctx.interactWith(bankTeller, option = 2)
-        ctx.waitForActionCompletion()
+        interactWith(bankTeller, option = 2)
+        waitForActionCompletion()
 
-        verify(ctx.activePlayer).openBank()
+        verify(player).openBank()
     }
 
     @Test
     fun `Interacting with a bank booth object should open the players bank`() {
-        val ctx = context()
-        val bankBooth = ctx.spawnObject(BANK_BOOTH_ID, BANK_POSITION)
+        val bankBooth = spawnObject(BANK_BOOTH_ID, BANK_POSITION)
 
-        ctx.interactWith(bankBooth, option = 2)
-        ctx.waitForActionCompletion()
+        interactWith(bankBooth, option = 2)
+        waitForActionCompletion()
 
-        verify(ctx.activePlayer).openBank()
+        verify(player).openBank()
     }
 
 }

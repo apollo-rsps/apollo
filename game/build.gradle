@@ -33,6 +33,8 @@ dependencies {
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: "$kotlinVersion"
 
+    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-all
+    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 }
 

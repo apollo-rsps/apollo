@@ -17,11 +17,7 @@ buildscript {
 }
 
 task testPlugins {
-    group = "plugin-verification"
 
-    doLast {
-        println("Finished executing plugin tests")
-    }
 }
 
 sourceSets {
@@ -95,7 +91,6 @@ def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSourc
         binResultsDir = file("$buildDir/plugin-test-results/binary/$name")
 
         reports {
-            html.destination = "$buildDir/reports/plugin-tests/$name"
             junitXml.destination = "$buildDir/plugin-tests/$name"
         }
 
@@ -206,3 +201,10 @@ pluginMap.values().each {
     configurePluginDependencies(it.mainSources, it.testSources, dependencies)
     configurePluginTasks(it.normalizedName, it.mainSources, it.testSources, it.scriptFiles, dependencies)
 }
+
+task testPluginsReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/plugin-tests")
+    reportOn tasks.findAll { it.group.equals("plugin-verification"); }
+}
+
+testPlugins.finalizedBy testPluginsReport
