@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import org.apollo.game.model.World;
-import org.apollo.game.plugin.kotlin.KotlinPluginCompiler;
 import org.apollo.game.plugin.kotlin.KotlinPluginScript;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation;

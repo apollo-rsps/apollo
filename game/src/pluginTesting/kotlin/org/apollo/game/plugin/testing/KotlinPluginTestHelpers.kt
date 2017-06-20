@@ -38,6 +38,16 @@ abstract class KotlinPluginTestHelpers {
 
         do {
             action.pulse()
+
+            /**
+             * Introducing an artificial delay is necessary to prevent the timeout being exceeded before
+             * an asynchronous [Action] really starts.  When a job is submitted to a new coroutine context
+             * there may be a delay before it is actually executed.
+             *
+             * This delay is typically sub-millisecond and is only incurred with startup.  Since game actions
+             * have larger delays of their own this isn't a problem in practice.
+             */
+            Thread.sleep(50L)
         } while (action.isRunning && pulses++ < timeout)
 
         Assert.assertFalse("Exceeded timeout waiting for action completion", pulses > timeout)

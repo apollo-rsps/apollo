@@ -1,9 +1,12 @@
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.selects.select
+import org.apollo.game.action.AsyncDistancedAction
 import org.apollo.game.action.DistancedAction
 import org.apollo.game.message.impl.ObjectActionMessage
 import org.apollo.game.model.Animation
 import org.apollo.game.model.Position
-import org.apollo.game.model.entity.Player
-import org.apollo.game.model.entity.Skill
+import org.apollo.game.model.entity.*
 import org.apollo.net.message.Message
 
 /**
@@ -15,7 +18,7 @@ on { ObjectActionMessage::class }
         .where { option == 2 && id in DUMMY_IDS }
         .then { DummyAction.start(this, it, position) }
 
-class DummyAction(val player: Player, position: Position) : DistancedAction<Player>(0, true, player, position, DISTANCE) {
+class DummyAction(val player: Player, position: Position) : AsyncDistancedAction<Player>(0, true, player, position, DISTANCE) {
 
     companion object {
 
@@ -49,25 +52,19 @@ class DummyAction(val player: Player, position: Position) : DistancedAction<Play
 
     }
 
-    var started = false
 
-    override fun executeAction() {
-        if (started) {
-            val skills = player.skillSet
+    override suspend fun executeActionAsync() {
+        mob.sendMessage("You hit the dummy.")
+        mob.turnTo(this.position)
+        mob.playAnimation(PUNCH_ANIMATION)
+        wait()
 
-            if (skills.getSkill(Skill.ATTACK).maximumLevel >= LEVEL_THRESHOLD) {
-                player.sendMessage("There is nothing more you can learn from hitting a dummy.")
-            } else {
-                skills.addExperience(Skill.ATTACK, EXP_PER_HIT)
-            }
+        val skills = player.skillSet
 
-            stop()
+        if (skills.getSkill(Skill.ATTACK).maximumLevel >= LEVEL_THRESHOLD) {
+            player.sendMessage("There is nothing more you can learn from hitting a dummy.")
         } else {
-            mob.sendMessage("You hit the dummy.")
-            mob.turnTo(this.position)
-            mob.playAnimation(PUNCH_ANIMATION)
-
-            started = true
+            skills.addExperience(Skill.ATTACK, EXP_PER_HIT)
         }
     }
 

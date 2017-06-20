@@ -24,6 +24,12 @@ sourceSets {
     }
 }
 
+repositories {
+    maven {
+        url { 'https://dl.bintray.com/kotlin/kotlinx/' }
+    }
+}
+
 dependencies {
     compile project(':cache')
     compile project(':net')
@@ -32,6 +38,8 @@ dependencies {
     compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.0.21'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: "$kotlinVersion"
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: '0.16'
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.16'
 
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
 }
