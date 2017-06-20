@@ -18,7 +18,7 @@ public final class SendFriendMessageEncoder extends MessageEncoder<SendFriendMes
 	public GamePacket encode(SendFriendMessage message) {
 		GamePacketBuilder builder = new GamePacketBuilder(50);
 		builder.put(DataType.LONG, NameUtil.encodeBase37(message.getUsername()));
-		builder.put(DataType.BYTE, message.getWorld());
+		builder.put(DataType.BYTE, message.getEncodedWorld());
 		return builder.toGamePacket();
 	}
 

@@ -27,7 +27,7 @@ public final class SendFriendMessage extends Message {
 	 */
 	public SendFriendMessage(String username, int world) {
 		this.username = username;
-		this.world = world == 0 ? 0 : world + 9;
+		this.world = world;
 	}
 
 	/**
@@ -48,4 +48,12 @@ public final class SendFriendMessage extends Message {
 		return world;
 	}
 
+	/**
+	 * Gets the encoded world id to be sent to the client.
+	 *
+	 * @return The encoded world id.
+	 */
+	public int getEncodedWorld() {
+		return world == 0 ? 0 : world + 9;
+	}
 }
