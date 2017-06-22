@@ -20,7 +20,7 @@ abstract class KotlinPluginTest: KotlinPluginTestHelpers() {
     override lateinit var messageHandlers: MessageHandlerChainSet
 
     @Before
-    fun setup() {
+    open fun setup() {
         messageHandlers = MessageHandlerChainSet()
         world = PowerMockito.spy(World())
 
