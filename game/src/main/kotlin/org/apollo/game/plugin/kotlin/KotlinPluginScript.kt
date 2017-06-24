@@ -6,6 +6,8 @@ import org.apollo.game.message.handler.MessageHandler
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.setting.PrivilegeLevel
+import org.apollo.game.model.event.EventListener
+import org.apollo.game.model.event.PlayerEvent
 import org.apollo.game.plugin.PluginContext
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
@@ -18,19 +20,18 @@ abstract class KotlinPluginScript(private var world: World, val context: PluginC
     var startListener: (World) -> Unit = { _ -> };
     var stopListener: (World) -> Unit = { _ -> };
 
-    protected fun <T : Message> on(type: () -> KClass<T>): KotlinMessageHandler<T> {
-        return KotlinMessageHandler(world, context, type.invoke())
-    }
+    fun <T : Message> on(type: () -> KClass<T>) = KotlinMessageHandler<T>(world, context, type.invoke())
 
-    protected fun on_command(command: String, privileges: PrivilegeLevel): KotlinCommandHandler {
-        return KotlinCommandHandler(world, command, privileges)
-    }
+    fun <T : PlayerEvent> on_player_event(type: () -> KClass<T>) = KotlinPlayerEventHandler(world, type.invoke())
 
-    protected fun start(callback: (World) -> Unit) {
+    fun on_command(command: String, privileges: PrivilegeLevel) = KotlinCommandHandler(world, command, privileges)
+
+
+    fun start(callback: (World) -> Unit) {
         this.startListener = callback
     }
 
-    protected fun stop(callback: (World) -> Unit) {
+    fun stop(callback: (World) -> Unit) {
         this.stopListener = callback
     }
 
@@ -43,45 +44,59 @@ abstract class KotlinPluginScript(private var world: World, val context: PluginC
     }
 }
 
-class KotlinMessageHandler<T : Message>(val world: World, val context: PluginContext, val type: KClass<T>) : MessageHandler<T>(world) {
+interface KotlinPlayerHandlerProxyTrait<S : Any> {
 
-    override fun handle(player: Player, message: T) {
-        if (message.predicate()) {
-            message.function(player)
-        }
-    }
+    var callback: S.(Player) -> Unit
+    var predicate: S.() -> Boolean
 
-    var function: T.(Player) -> Unit = { _ -> }
-
-    var predicate: T.() -> Boolean = { true }
-
-    fun where(predicate: T.() -> Boolean): KotlinMessageHandler<T> {
+    fun where(predicate: S.() -> Boolean): KotlinPlayerHandlerProxyTrait<S> {
         this.predicate = predicate
         return this
     }
 
-    fun then(function: T.(Player) -> Unit) {
-        this.function = function
-        this.context.addMessageHandler(type.java, this)
+    fun then(callback: S.(Player) -> Unit) {
+        this.callback = callback
+        this.register()
     }
+
+    fun register()
+
+    fun handleProxy(player: Player, subject: S) {
+        if (subject.predicate()) {
+            subject.callback(player)
+        }
+    }
+}
+
+class KotlinPlayerEventHandler<T : PlayerEvent>(val world: World, val type: KClass<T>) :
+        KotlinPlayerHandlerProxyTrait<T>, EventListener<T> {
+
+    override var callback: T.(Player) -> Unit = {}
+    override var predicate: T.() -> Boolean = { true }
+
+    override fun handle(event: T) = handleProxy(event.player, event)
+    override fun register() = world.listenFor(type.java, this)
 
 }
 
-class KotlinCommandListener(val level: PrivilegeLevel, val function: Command.(Player) -> Unit) : CommandListener(level) {
+class KotlinMessageHandler<T : Message>(val world: World, val context: PluginContext, val type: KClass<T>) :
+        KotlinPlayerHandlerProxyTrait<T>, MessageHandler<T>(world) {
 
-    override fun execute(player: Player, command: Command) {
-        function.invoke(command, player)
-    }
+    override var callback: T.(Player) -> Unit = {}
+    override var predicate: T.() -> Boolean = { true }
+
+    override fun handle(player: Player, message: T) = handleProxy(player, message)
+    override fun register() = context.addMessageHandler(type.java, this)
 
 }
 
-class KotlinCommandHandler(val world : World, val command: String, val privileges: PrivilegeLevel) {
+class KotlinCommandHandler(val world: World, val command: String, privileges: PrivilegeLevel) :
+        KotlinPlayerHandlerProxyTrait<Command>, CommandListener(privileges) {
 
-    var function: Command.(Player) -> Unit = { _ -> }
+    override var callback: Command.(Player) -> Unit = {}
+    override var predicate: Command.() -> Boolean = { true }
 
-    fun then(function: Command.(Player) -> Unit) {
-        this.function = function
-        world.commandDispatcher.register(command, KotlinCommandListener(privileges, function))
-    }
+    override fun execute(player: Player, command: Command) = handleProxy(player, command)
+    override fun register() = world.commandDispatcher.register(command, this)
 
 }

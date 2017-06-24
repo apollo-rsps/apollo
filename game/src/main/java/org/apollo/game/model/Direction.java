@@ -85,7 +85,7 @@ public enum Direction {
 		int deltaX = next.getX() - current.getX();
 		int deltaY = next.getY() - current.getY();
 
-		return fromDeltas(deltaX, deltaY);
+		return fromDeltas(Integer.signum(deltaX), Integer.signum(deltaY));
 	}
 
 	/**

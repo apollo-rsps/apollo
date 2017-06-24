@@ -6,14 +6,20 @@
  * required to resolve references within plugin code.
  */
 
+import org.apollo.game.message.handler.MessageHandlerChainSet
 import org.apollo.game.model.World
+import org.apollo.game.model.area.RegionRepository
+import org.apollo.game.model.entity.*
 import org.apollo.game.model.entity.setting.PrivilegeLevel
-import org.apollo.game.plugin.kotlin.KotlinCommandHandler
-import org.apollo.game.plugin.kotlin.KotlinMessageHandler
+import org.apollo.game.model.event.PlayerEvent
+import org.apollo.game.plugin.kotlin.*
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
 
 fun <T : Message> on(type: () -> KClass<T>): KotlinMessageHandler<T> {
+    null!!
+}
+fun <T : PlayerEvent> on_player_event(type: () -> KClass<T>): KotlinPlayerEventHandler<T> {
     null!!
 }
 
