@@ -1,0 +1,7 @@
+name = "emote-tab"
+package = "org.apollo.game.plugin.widget"
+authors = [ "Gary Tierney" ]
+
+[config]
+srcDir = "src/"
+testDir = "test/"
