@@ -1,3 +1,5 @@
+package org.apollo.game.plugin.skills.mining
+
 import org.apollo.game.model.Animation;
 
 data class Pickaxe(val id: Int, val level: Int, val animation: Animation, val pulses: Int)
