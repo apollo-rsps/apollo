@@ -5,6 +5,7 @@ import org.apollo.game.model.Position
 import org.apollo.game.model.entity.EquipmentConstants
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
+import org.apollo.game.plugin.skills.mining.*
 import kotlin.properties.Delegates
 
 class MiningAction : DistancedAction<Player> {

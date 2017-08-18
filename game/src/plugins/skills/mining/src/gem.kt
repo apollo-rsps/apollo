@@ -1,4 +1,4 @@
-
+package org.apollo.game.plugin.skills.mining
 
 data class Gem(val id: Int, val chance: Int)
 

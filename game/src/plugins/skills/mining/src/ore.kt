@@ -1,3 +1,5 @@
+package org.apollo.game.plugin.skills.mining
+
 import com.google.common.collect.Maps.asMap
 
 /*
