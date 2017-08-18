@@ -118,7 +118,7 @@ on {ObjectActionMessage::class}
             }
         }
 
-//Init the ore dict when we start the server. Probably better ways to do this, but I do not know them... Sorry.
+//Init the ore dict when we start the server.
 start {
     for (ore in ORE_OBJECTS) {
         for (key in ore.objects.keys) {
