@@ -1,0 +1,14 @@
+name = "Mining Skill"
+package = "org.apollo.game.plugin.skills.mining"
+authors = [
+    "Graham",
+    "Mikey`",
+    "WH:II:DOW",
+    "Requa",
+    "Clifton",
+    "tlf30"
+ ]
+
+[config]
+srcDir = "src/"
+testDir = "test/"
