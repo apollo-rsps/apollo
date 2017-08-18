@@ -1,4 +1,6 @@
+package org.apollo.game.plugin.skills.mining
 
+import com.google.common.collect.Maps.asMap
 
 /*
 Thanks to Mikey` <http://www.rune-server.org/members/mikey%60/> for helping
@@ -7,33 +9,41 @@ Thanks to Clifton <http://www.rune-server.org/members/clifton/> for helping
 to find some of the expired object IDs.
  */
 
-data class Ore(id: Int, objects: Map<Int, Int>, level: Int, exp: Float, respawn: Int)
 
-val ORE_OBJECTS = Array(
-        Ore(434, CLAY_OBJECTS, 1, 5, 3), // clay
-        Ore(436, COPPER_OBJECTS, 1, 17.5, 6), // copper
-        Ore(438, TIN_OBJECTS, 1, 17.5, 6), // tin
-        Ore(440, IRON_OBJECTS, 15, 35, 16), // iron
-        Ore(453, COAL_OBJECTS, 30, 50, 100), // coal
-        Ore(444, GOLD_OBJECTS, 40, 65, 200), // gold
-        Ore(442, SILVER_OBJECTS, 20, 40, 200), // silver
-        Ore(447, MITHRIL_OBJECTS, 55, 80, 400), // mithril
-        Ore(449, ADAMANT_OBJECTS, 70, 95, 800), // adamant
-        Ore(451, RUNITE_OBJECTS, 85, 125, 2500) // runite
-)
+/**
+ * Chance values thanks to: http://runescape.wikia.com/wiki/Talk:Mining#Mining_success_rate_formula
+ * Respawn times and xp thanks to: http://oldschoolrunescape.wikia.com/wiki/
+ */
+enum class Ore(val id: Int, val objects: Map<Int, Int>, val level: Int, val exp: Double, val respawn: Int, val chance: Double, val chanceOffset: Boolean) {
+    CLAY(434, CLAY_OBJECTS, 1, 5.0, 1, 0.0085, true),
+    COPPER(436, COPPER_OBJECTS, 1, 17.5, 4, 0.0085, true),
+    TIN(438, TIN_OBJECTS, 1, 17.5, 4, 0.0085, true),
+    IRON(440, IRON_OBJECTS, 15, 35.0, 9, 0.0085, true),
+    COAL(453, COAL_OBJECTS, 30, 50.0, 50, 0.004, false),
+    GOLD(444, GOLD_OBJECTS, 40, 65.0, 100, 0.003, false),
+    SILVER(442, SILVER_OBJECTS, 20, 40.0, 100, 0.0085, false),
+    MITHRIL(447, MITHRIL_OBJECTS, 55, 80.0, 200, 0.002, false),
+    ADAMANT(449, ADAMANT_OBJECTS, 70, 95.0, 800, 0.001, false),
+    RUNITE(451, RUNITE_OBJECTS, 85, 125.0, 1200, 0.0008, false)
+}
 
-val ORES = asMap()
-val EXPIRED_ORES = asMap()
+val ORES = Ore.values()
 
-for (ore in ORE_OBJECTS) {
-    for (key in ore.objects.keys) {
-        ORES.put(key, ore)
-        EXPIRED_ORES.put(ore.objects.(get), true)
+fun lookupOre(id: Int): Ore? = ORES.find { it.id == id }
+
+fun lookupOreRock(id: Int): Ore? {
+    for (ore in ORES) {
+        for (rock in ore.objects) {
+            if (rock.key == id) {
+                return ore
+            }
+        }
     }
+    return null
 }
 
 val CLAY_OBJECTS = mapOf(
-        2180 to 450,
+        2108 to 450,
         2109 to 451,
         14904 to 14896,
         14905 to 14897
@@ -142,3 +152,4 @@ val RUNITE_OBJECTS = mapOf(
         14860 to 14833,
         14861 to 14834
 )
+
