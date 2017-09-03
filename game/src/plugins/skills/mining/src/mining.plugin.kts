@@ -8,15 +8,10 @@ import org.apollo.game.model.entity.Skill
 import org.apollo.game.plugin.skills.mining.*
 import kotlin.properties.Delegates
 
-class MiningAction : DistancedAction<Player> {
+class MiningAction(val player: Player, val p: Position, val ore: Ore) : DistancedAction<Player>(0, true, player, p, 1 /* ORE SIZE */) {
 
-    var ore: Ore by Delegates.notNull()
     var counter: Int = 0
     var started: Boolean = false
-
-    constructor(player: Player, position: Position, ore: Ore) : super(0, true, player, position, 1 /* ORE SIZE */) {
-        this.ore = ore
-    }
 
     override fun executeAction() {
         val level = mob.skillSet.getSkill(Skill.MINING).currentLevel
@@ -79,17 +74,11 @@ class ExpiredProspectingAction : DistancedAction<Player> {
     override fun executeAction() {
         mob.sendMessage("There is currently no ore available in this rock.")
     }
-
 }
 
-class ProspectingAction : DistancedAction<Player> {
+class ProspectingAction(val m: Player, val p: Position, val ore: Ore) : DistancedAction<Player>(3 /* PROSPECT PULSES */, true, m, p, 1 /* ORE SIZE */) {
 
     var started = false;
-    var ore: Ore by Delegates.notNull()
-
-    constructor(mob: Player, position: Position, ore: Ore) : super(3 /* PROSPECT PULSES */, true, mob, position, 1 /* ORE SIZE */) {
-        this.ore = ore;
-    }
 
     override fun executeAction() {
         if (started) {
