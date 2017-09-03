@@ -37,7 +37,7 @@ class MiningAction(val player: Player, val p: Position, val ore: Ore) : Distance
             if (counter == 0) {
                 //TODO: calculate the chance that the player can actually get the ore
                 if (mob.inventory.add(ore.id)) {
-                    mob.sendMessage("You managed to mine some " + ItemDefinition.lookup(ore.id).name.substring(3).toLowerCase() + ".")
+                    mob.sendMessage("You managed to mine some $(ItemDefinition.lookup(ore.id).name.substring(3).toLowerCase()).")
                     mob.skillSet.addExperience(Skill.MINING, ore.exp)
                     //TODO: Expire ore
                 }
