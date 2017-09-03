@@ -7,12 +7,14 @@ import org.apollo.game.model.entity.EquipmentConstants
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.plugin.skills.mining.*
+import java.util.*
 import kotlin.properties.Delegates
 
 class MiningAction(val player: Player, val p: Position, val ore: Ore) : DistancedAction<Player>(0, true, player, p, 1 /* ORE SIZE */) {
 
     private var counter: Int = 0
     private var started: Boolean = false
+    private val rand: Random = Random()
 
     override fun executeAction() {
         val level = mob.skillSet.getSkill(Skill.MINING).currentLevel
@@ -36,12 +38,20 @@ class MiningAction(val player: Player, val p: Position, val ore: Ore) : Distance
         //start the process of mining
         if (started) {
             if (counter == 0) {
-                //TODO: calculate the chance that the player can actually get the ore
+                if (!miningSuccessful(ore.chance, ore.chanceOffset, level)) {
+                    return //We did not mine the ore...
+                }
+                //Check inv capacity
+                if (mob.inventory.freeSlots() == 0) {
+                    mob.inventory.forceCapacityExceeded()
+                    stop()
+                    return
+                }
                 if (mob.inventory.add(ore.id)) {
-
+                    //TODO: Use lookup from utils once it has a lookup function for IDs
                     mob.sendMessage("You managed to mine some $(ItemDefinition.lookup(ore.id).name.substring(3).toLowerCase()).")
                     mob.skillSet.addExperience(Skill.MINING, ore.exp)
-                    //TODO: Expire ore
+
                 }
             }
             counter -= 1
@@ -50,22 +60,32 @@ class MiningAction(val player: Player, val p: Position, val ore: Ore) : Distance
         }
     }
 
-    fun findPickaxe(): Pickaxe? { // Find the best pick the player has
+    private fun findPickaxe(): Pickaxe? {
         for (id in getPickaxes()) {
+            val pick = lookupPickaxe(id) //Will not return null
+            if (pick!!.level > mob.skillSet.getSkill(Skill.MINING).currentLevel) {
+                continue;
+            }
             if (mob.equipment.get(EquipmentConstants.WEAPON).id == id) {
-                return lookupPickaxe(id);
+                return pick;
             } else if (mob.inventory.contains(id)) {
-                return lookupPickaxe(id);
+                return pick;
             }
         }
         return null;
     }
 
-    fun startMine(pickaxe: Pickaxe) {
+    private fun startMine(pickaxe: Pickaxe) {
         started = true
         mob.sendMessage("You swing your pick at the rock.")
         mob.playAnimation(pickaxe.animation)
         counter = pickaxe.pulses
+    }
+
+    private fun miningSuccessful(oreChance: Double, oreChanceOffset: Boolean, playerLevel: Int): Boolean {
+        val percent = (oreChance * playerLevel + (if (oreChanceOffset) 1 else 0 )) * 100;
+        //See: http://runescape.wikia.com/wiki/Talk:Mining#Mining_success_rate_formula
+        return rand.nextInt(100) < percent;
     }
 }
 
