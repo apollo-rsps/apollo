@@ -1,6 +1,7 @@
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.action.DistancedAction
 import org.apollo.game.message.impl.ObjectActionMessage
+import org.apollo.game.model.Animation
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.EquipmentConstants
 import org.apollo.game.model.entity.Player
@@ -10,8 +11,8 @@ import kotlin.properties.Delegates
 
 class MiningAction(val player: Player, val p: Position, val ore: Ore) : DistancedAction<Player>(0, true, player, p, 1 /* ORE SIZE */) {
 
-    var counter: Int = 0
-    var started: Boolean = false
+    private var counter: Int = 0
+    private var started: Boolean = false
 
     override fun executeAction() {
         val level = mob.skillSet.getSkill(Skill.MINING).currentLevel
@@ -37,6 +38,7 @@ class MiningAction(val player: Player, val p: Position, val ore: Ore) : Distance
             if (counter == 0) {
                 //TODO: calculate the chance that the player can actually get the ore
                 if (mob.inventory.add(ore.id)) {
+
                     mob.sendMessage("You managed to mine some $(ItemDefinition.lookup(ore.id).name.substring(3).toLowerCase()).")
                     mob.skillSet.addExperience(Skill.MINING, ore.exp)
                     //TODO: Expire ore
@@ -49,11 +51,11 @@ class MiningAction(val player: Player, val p: Position, val ore: Ore) : Distance
     }
 
     fun findPickaxe(): Pickaxe? { // Find the best pick the player has
-        for (id in PICKAXE_IDS) {
+        for (id in getPickaxes()) {
             if (mob.equipment.get(EquipmentConstants.WEAPON).id == id) {
-                return PICKAXES[id];
+                return lookupPickaxe(id);
             } else if (mob.inventory.contains(id)) {
-                return PICKAXES[id];
+                return lookupPickaxe(id);
             }
         }
         return null;
@@ -107,8 +109,20 @@ on {ObjectActionMessage::class}
             }
         }
 
-//Init the ore dict when we start the server.
+//Init the ore dict and add pickaxes
 start {
+    addPickaxe(1275, 41, Animation(624), 3)  // rune
+    addPickaxe(1271, 31, Animation(628), 4) // adamant
+    addPickaxe(1273, 21, Animation(629), 5) // mithril
+    addPickaxe(1269, 1, Animation(627), 6)  // steel
+    addPickaxe(1267, 1, Animation(626), 7)  // iron
+    addPickaxe(1265, 1, Animation(625), 8)  // bronze
+
+    addGem(1623, 0) // uncut sapphire
+    addGem(1605, 0) // uncut emerald
+    addGem(1619, 0) // uncut ruby
+    addGem(1617, 0)  // uncut diamond
+
     for (ore in ORE_OBJECTS) {
         for (key in ore.objects.keys) {
             ORES.put(key, ore)

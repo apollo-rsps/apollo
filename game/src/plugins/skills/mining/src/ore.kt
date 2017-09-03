@@ -15,8 +15,6 @@ data class Ore(val id: Int, val objects: Map<Int, Int>, val level: Int, val exp:
 val ORES = mutableMapOf<Int, Ore>()
 val EXPIRED_ORES = mutableMapOf<Int, Boolean>()
 
-
-
 val CLAY_OBJECTS = mapOf(
         2180 to 450,
         2109 to 451,
