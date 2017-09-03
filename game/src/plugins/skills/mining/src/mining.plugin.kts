@@ -31,7 +31,7 @@ class MiningAction : DistancedAction<Player> {
         }
 
         //check that we can mine the ore
-        if (ore.level > level) {
+        if (level < ore.level) {
             mob.sendMessage("You do not have the required level to mine this rock.")
             stop()
             return
@@ -53,8 +53,7 @@ class MiningAction : DistancedAction<Player> {
         }
     }
 
-    fun findPickaxe(): Pickaxe? {
-        var holding = mob.equipment.get(EquipmentConstants.WEAPON)
+    fun findPickaxe(): Pickaxe? { // Find the best pick the player has
         for (id in PICKAXE_IDS) {
             if (mob.equipment.get(EquipmentConstants.WEAPON).id == id) {
                 return PICKAXES[id];
@@ -78,7 +77,7 @@ class ExpiredProspectingAction : DistancedAction<Player> {
     constructor(mob: Player, position: Position) : super(0, true, mob, position, 1 /* ORE SIZE */)
 
     override fun executeAction() {
-        mob.sendMessage("There is currently no ore avalible in this rock.")
+        mob.sendMessage("There is currently no ore available in this rock.")
     }
 
 }
