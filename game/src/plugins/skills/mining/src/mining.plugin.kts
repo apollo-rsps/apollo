@@ -44,7 +44,7 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
         if (started) {
             if (counter == 0) {
                 if (!miningSuccessful(ore.chance, ore.chanceOffset, level)) {
-                    return //We did not mine the ore...
+                    return //We did not mine the ore... Keep going
                 }
                 //Check inv capacity
                 if (mob.inventory.freeSlots() == 0) {
@@ -61,25 +61,34 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                     val region = mob.world.regionRepository.fromPosition(mob.position)
                     val entities = region.getEntities(position)
                     for (entity: Entity in entities) {
-                        if (entity is StaticGameObject && entity.id == objectID) {
-                            rockEntity = entity
+                        if (entity is StaticGameObject) {
+                            System.out.println("Entity at mining location: " + entity.id)
+                            if (entity.id == objectID) {
+                                rockEntity = entity
+                            }
                         }
                     }
                     if (rockEntity == null) {
                         System.out.println("WARNING: Invalid mining condition on rock");
+                        stop()
+                        return
                     }
                     //Get ID of exipred ore
                     val expiredObjectID = ore.objects.get(objectID);
                     val expiredRockEntity = StaticGameObject(mob.world, expiredObjectID!!, position, rockEntity!!.type, rockEntity!!.orientation)
                     //Remove normal ore and replace with expired
+                    System.out.println("Removing " + objectID + " addding " + expiredObjectID)
                     region.removeEntity(rockEntity);
                     region.addEntity(expiredRockEntity)
+                    System.out.println("Adding task")
                     //add task to respawn normal ore
                     mob.world.schedule(object: ScheduledTask(ore.respawn, false) {
                         override fun execute() {
+                            System.out.println("running task")
                             //Replace expired ore with normal ore
                             region.removeEntity(expiredRockEntity)
                             region.addEntity(rockEntity);
+                            this.stop() //Makes task run once
                         }
                     })
                 }
@@ -144,15 +153,20 @@ class ProspectingAction(val m: Player, val p: Position, val ore: Ore) : Distance
 }
 
 on {ObjectActionMessage::class}
-        .where {option == 1 && ORES.contains(id)}
+        .where {option == 1}
         .then {
-            it.startAction(MiningAction(it, id, this.position, ORES.get(id)!!))
+            if (ORES.contains(id)) {
+                it.startAction(MiningAction(it, id, this.position, ORES.get(id)!!))
+            } else {
+                System.out.println("Unknown ore: " + id)
+            }
         }
 
 on {ObjectActionMessage::class}
         .where {option == 2}
         .then {
             if (ORES.contains(id)) {
+                it.startAction(ProspectingAction(it, this.position, ORES.get(id)!!))
             } else if (EXPIRED_ORES.contains(id)) {
                 it.startAction(ExpiredProspectingAction(it, this.position))
             }
