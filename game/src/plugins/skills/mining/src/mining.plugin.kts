@@ -1,16 +1,21 @@
 import org.apollo.cache.def.ItemDefinition
+import org.apollo.cache.def.ObjectDefinition
 import org.apollo.game.action.DistancedAction
 import org.apollo.game.message.impl.ObjectActionMessage
 import org.apollo.game.model.Animation
 import org.apollo.game.model.Position
+import org.apollo.game.model.entity.Entity
 import org.apollo.game.model.entity.EquipmentConstants
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
+import org.apollo.game.model.entity.obj.StaticGameObject
 import org.apollo.game.plugin.skills.mining.*
+import org.apollo.game.scheduling.ScheduledTask
+import org.apollo.game.scheduling.Scheduler
 import java.util.*
 import kotlin.properties.Delegates
 
-class MiningAction(val player: Player, val p: Position, val ore: Ore) : DistancedAction<Player>(0, true, player, p, 1 /* ORE SIZE */) {
+class MiningAction(val player: Player, val objectID: Int, val p: Position, val ore: Ore) : DistancedAction<Player>(0, true, player, p, 1 /* ORE SIZE */) {
 
     private var counter: Int = 0
     private var started: Boolean = false
@@ -51,7 +56,32 @@ class MiningAction(val player: Player, val p: Position, val ore: Ore) : Distance
                     //TODO: Use lookup from utils once it has a lookup function for IDs
                     mob.sendMessage("You managed to mine some $(ItemDefinition.lookup(ore.id).name.substring(3).toLowerCase()).")
                     mob.skillSet.addExperience(Skill.MINING, ore.exp)
-
+                    //Expire ore
+                    var rockEntity: StaticGameObject? = null
+                    val region = mob.world.regionRepository.fromPosition(mob.position)
+                    val entities = region.getEntities(position)
+                    for (entity: Entity in entities) {
+                        if (entity is StaticGameObject && entity.id == objectID) {
+                            rockEntity = entity
+                        }
+                    }
+                    if (rockEntity == null) {
+                        System.out.println("WARNING: Invalid mining condition on rock");
+                    }
+                    //Get ID of exipred ore
+                    val expiredObjectID = ore.objects.get(objectID);
+                    val expiredRockEntity = StaticGameObject(mob.world, expiredObjectID!!, position, rockEntity!!.type, rockEntity!!.orientation)
+                    //Remove normal ore and replace with expired
+                    region.removeEntity(rockEntity);
+                    region.addEntity(expiredRockEntity)
+                    //add task to respawn normal ore
+                    mob.world.schedule(object: ScheduledTask(ore.respawn, false) {
+                        override fun execute() {
+                            //Replace expired ore with normal ore
+                            region.removeEntity(expiredRockEntity)
+                            region.addEntity(rockEntity);
+                        }
+                    })
                 }
             }
             counter -= 1
@@ -116,14 +146,13 @@ class ProspectingAction(val m: Player, val p: Position, val ore: Ore) : Distance
 on {ObjectActionMessage::class}
         .where {option == 1 && ORES.contains(id)}
         .then {
-            it.startAction(MiningAction(it, this.position, ORES.get(id)!!))
+            it.startAction(MiningAction(it, id, this.position, ORES.get(id)!!))
         }
 
 on {ObjectActionMessage::class}
         .where {option == 2}
         .then {
             if (ORES.contains(id)) {
-
             } else if (EXPIRED_ORES.contains(id)) {
                 it.startAction(ExpiredProspectingAction(it, this.position))
             }
