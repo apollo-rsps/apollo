@@ -16,7 +16,7 @@ val ORES = mutableMapOf<Int, Ore>()
 val EXPIRED_ORES = mutableMapOf<Int, Boolean>()
 
 val CLAY_OBJECTS = mapOf(
-        2180 to 450,
+        2108 to 450,
         2109 to 451,
         14904 to 14896,
         14905 to 14897
