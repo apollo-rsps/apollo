@@ -61,11 +61,11 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                     mob.skillSet.addExperience(Skill.MINING, ore.exp)
                     //Expire ore
                     var rockEntity: StaticGameObject? = null
-                    val region = mob.world.regionRepository.fromPosition(mob.position)
+                    val region = mob.world.regionRepository.fromPosition(position)
                     val entities = region.getEntities(position)
                     for (entity: Entity in entities) {
                         if (entity is StaticGameObject) {
-                            System.out.println("Entity at mining location: " + entity.id)
+                            System.out.println("Entity at mining location: " + entity.id + " with type: " + entity.entityType)
                             if (entity.id == objectID) {
                                 rockEntity = entity
                             }
