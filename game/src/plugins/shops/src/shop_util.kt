@@ -84,9 +84,6 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
     val invItem = shop.inv.get(slot)
     val shopItem = shop.sells[slot]
 
-    val id = shopItem.id
-
-    //option = message.option
     if (option == 1) {
         player.sendMessage(ItemDefinition.lookup(shopItem.id).name + ": currently costs " + shopItem.sellValue + ItemDefinition.lookup(shop.currency.id).name)
         return
@@ -100,8 +97,7 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
         noStock = true
     }
 
-    //player_inventory = player.inventory
-    val has_item = player.inventory.getAmount(id) == 0
+    val has_item = player.inventory.getAmount(shopItem.id) == 0
 
     val definition = invItem.definition
     val spaceRequired = if (definition.isStackable && has_item) 0 else if (!definition.isStackable) buyAmount else 1
@@ -126,15 +122,15 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
 
     if (buyAmount > 0) {
         shop.currency.remove(player, buyAmount * shopItem.sellValue)
-        player.inventory.add(id, buyAmount)
+        player.inventory.add(shopItem.id, buyAmount)
 
         val keep = invItem.amount == buyAmount && shop.isBuyingOwn() //Shop does not have quantities on items if buying own
         if (keep) {
-            shop.inv.set(slot, Item(id, 0))
+            shop.inv.set(slot, Item(shopItem.id, 0))
         } else {
-            shop.inv.remove(id, buyAmount)
+
+            shop.inv.remove(shopItem.id, buyAmount)
         }
-        //keep ? inventory.set(slot, Item.new(id, 0)) : inventory.remove(id, buy_Amount)
     }
 
     val warning = if (tooPoor) "You don't have enough #{currency.name}."
