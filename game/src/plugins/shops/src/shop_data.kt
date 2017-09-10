@@ -4,7 +4,7 @@ import org.apollo.game.model.entity.Player
 import org.apollo.game.model.inv.Inventory
 
 val INV_SIDEBAR = 3822 //The sidebar id for the inventory, when a Shop window is open.
-val INV_CONTAINER = 2323 //The container id for the above inventory, when a Shop window is open.
+val INV_CONTAINER = 2823 //The container id for the above inventory, when a Shop window is open.
 val SHOP_UI = 3824
 val SHOP_CONTAINER = 3900
 val SHOP_NAME_WIDGET = 3901
