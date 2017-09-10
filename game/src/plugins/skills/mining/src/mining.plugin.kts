@@ -15,7 +15,12 @@ import org.apollo.game.scheduling.Scheduler
 import java.util.*
 import kotlin.properties.Delegates
 
-class MiningAction(val player: Player, val objectID: Int, val p: Position, val ore: Ore) : DistancedAction<Player>(0, true, player, p, 1 /* ORE SIZE */) {
+class MiningAction(val player: Player, val objectID: Int, val p: Position, val ore: Ore) : DistancedAction<Player>(PULSES, true, player, p, ORE_SIZE) {
+
+    companion object {
+        private val PULSES = 0
+        private val ORE_SIZE = 1;
+    }
 
     private var counter: Int = 0
     private var started: Boolean = false
@@ -57,7 +62,8 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                 }
                 if (mob.inventory.add(ore.id)) {
                     //TODO: Use lookup from utils once it has a lookup function for IDs
-                    mob.sendMessage("You managed to mine some " + ItemDefinition.lookup(ore.id).name.toLowerCase() + ".")
+                    val oreName = ItemDefinition.lookup(ore.id).name.toLowerCase();
+                    mob.sendMessage("You managed to mine some " + oreName + ".")
                     mob.skillSet.addExperience(Skill.MINING, ore.exp)
                     //Expire ore
                     var rockEntity: StaticGameObject? = null
@@ -87,6 +93,7 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                         override fun execute() {
                             System.out.println("running deplete task")
                             //Replace normal ore with expired ore
+                            EXPIRED_ORES[objectID] = true
                             region.removeEntity(rockEntity);
                             region.addEntity(expiredRockEntity)
                             this.stop() //Makes task run once
@@ -97,6 +104,7 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                         override fun execute() {
                             System.out.println("running ore task")
                             //Replace expired ore with normal ore
+                            EXPIRED_ORES[objectID] = false
                             region.removeEntity(expiredRockEntity)
                             region.addEntity(rockEntity);
                             this.stop() //Makes task run once
@@ -116,14 +124,13 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
     }
 
     private fun findPickaxe(): Pickaxe? {
-        for (id in getPickaxes()) {
-            val pick = lookupPickaxe(id) //Will not return null
+        for (pick in getPickaxes()) {
             if (pick!!.level > mob.skillSet.getSkill(Skill.MINING).currentLevel) {
                 continue;
             }
-            if (mob.equipment.get(EquipmentConstants.WEAPON).id == id) {
+            if (mob.equipment.get(EquipmentConstants.WEAPON).id == pick.id) {
                 return pick;
-            } else if (mob.inventory.contains(id)) {
+            } else if (mob.inventory.contains(pick.id)) {
                 return pick;
             }
         }
@@ -137,9 +144,17 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
         mob.turnTo(position)
     }
 
+    /**
+     * Returns the chance of mining being successful.
+     * Algorithm comes from: http://runescape.wikia.com/wiki/Talk:Mining#Mining_success_rate_formula
+     */
     private fun miningSuccessful(oreChance: Double, oreChanceOffset: Boolean, playerLevel: Int): Boolean {
-        val percent = (oreChance * playerLevel + (if (oreChanceOffset) 1 else 0 )) * 100;
-        //See: http://runescape.wikia.com/wiki/Talk:Mining#Mining_success_rate_formula
+        val percent: Double
+        if (oreChanceOffset) {
+            percent = (oreChance * playerLevel + 1) * 100
+        } else {
+            percent = (oreChance * playerLevel) * 100
+        }
         System.out.println("Chance: " + percent)
         return rand.nextInt(100) < percent;
     }
@@ -147,7 +162,12 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
 
 class ExpiredProspectingAction : DistancedAction<Player> {
 
-    constructor(mob: Player, position: Position) : super(0, true, mob, position, 1 /* ORE SIZE */)
+    constructor(mob: Player, position: Position) : super(PROSPECT_PULSES, true, mob, position, ORE_SIZE)
+
+    companion object {
+        private val PROSPECT_PULSES = 0
+        private val ORE_SIZE = 1;
+    }
 
     override fun executeAction() {
         mob.sendMessage("There is currently no ore available in this rock.")
@@ -155,13 +175,19 @@ class ExpiredProspectingAction : DistancedAction<Player> {
     }
 }
 
-class ProspectingAction(val m: Player, val p: Position, val ore: Ore) : DistancedAction<Player>(3 /* PROSPECT PULSES */, true, m, p, 1 /* ORE SIZE */) {
+class ProspectingAction(val m: Player, val p: Position, val ore: Ore) : DistancedAction<Player>(PROSPECT_PULSES, true, m, p, ORE_SIZE) {
+
+    companion object {
+        private val PROSPECT_PULSES = 3
+        private val ORE_SIZE = 1;
+    }
 
     var started = false;
 
     override fun executeAction() {
         if (started) {
-            mob.sendMessage("This rock contains " + ItemDefinition.lookup(ore.id).name.toLowerCase() + ".")
+            val oreName = ItemDefinition.lookup(ore.id).name.toLowerCase()
+            mob.sendMessage("This rock contains " + oreName + ".")
             stop();
         } else {
             started = true
@@ -184,31 +210,19 @@ on {ObjectActionMessage::class}
 on {ObjectActionMessage::class}
         .where {option == 2}
         .then {
-            if (ORES.contains(id)) {
-                it.startAction(ProspectingAction(it, this.position, ORES.get(id)!!))
-            } else if (EXPIRED_ORES.contains(id)) {
+            if (EXPIRED_ORES.contains(id) && EXPIRED_ORES[id] == true) {
                 it.startAction(ExpiredProspectingAction(it, this.position))
+            } else if (ORES.contains(id)) {
+                it.startAction(ProspectingAction(it, this.position, ORES.get(id)!!))
             }
         }
 
 //Init the ore dict and add pickaxes
 start {
-    addPickaxe(1275, 41, Animation(624), 3)  // rune
-    addPickaxe(1271, 31, Animation(628), 4) // adamant
-    addPickaxe(1273, 21, Animation(629), 5) // mithril
-    addPickaxe(1269, 1, Animation(627), 6)  // steel
-    addPickaxe(1267, 1, Animation(626), 7)  // iron
-    addPickaxe(1265, 1, Animation(625), 8)  // bronze
-
-    addGem(1623, 0) // uncut sapphire
-    addGem(1605, 0) // uncut emerald
-    addGem(1619, 0) // uncut ruby
-    addGem(1617, 0)  // uncut diamond
-
     for (ore in ORE_OBJECTS) {
         for (key in ore.objects.keys) {
             ORES.put(key, ore)
-            EXPIRED_ORES.put(ore.objects.get(key)!!, true)
+            EXPIRED_ORES.put(ore.objects.get(key)!!, false)
         }
     }
 }
