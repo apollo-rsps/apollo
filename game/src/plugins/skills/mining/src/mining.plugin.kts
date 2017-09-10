@@ -93,7 +93,6 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                         override fun execute() {
                             System.out.println("running deplete task")
                             //Replace normal ore with expired ore
-                            EXPIRED_ORES[objectID] = true
                             region.removeEntity(rockEntity);
                             region.addEntity(expiredRockEntity)
                             this.stop() //Makes task run once
@@ -104,7 +103,6 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                         override fun execute() {
                             System.out.println("running ore task")
                             //Replace expired ore with normal ore
-                            EXPIRED_ORES[objectID] = false
                             region.removeEntity(expiredRockEntity)
                             region.addEntity(rockEntity);
                             this.stop() //Makes task run once
@@ -210,9 +208,7 @@ on {ObjectActionMessage::class}
 on {ObjectActionMessage::class}
         .where {option == 2}
         .then {
-            if (EXPIRED_ORES.contains(id) && EXPIRED_ORES[id] == true) {
-                it.startAction(ExpiredProspectingAction(it, this.position))
-            } else if (ORES.contains(id)) {
+            if (ORES.contains(id)) {
                 it.startAction(ProspectingAction(it, this.position, ORES.get(id)!!))
             }
         }
@@ -222,7 +218,6 @@ start {
     for (ore in ORE_OBJECTS) {
         for (key in ore.objects.keys) {
             ORES.put(key, ore)
-            EXPIRED_ORES.put(ore.objects.get(key)!!, false)
         }
     }
 }
