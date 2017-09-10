@@ -41,9 +41,7 @@ fun createShop(name: String, selling: Array<ShopItem>, buysAll: Boolean): Shop {
         shop.init()
         return shop
     } else {
-        val shop = Shop(name, selling, arrayOf<ShopItem>(), intArrayOf(1), CURRENCY)
-        shop.init()
-        return shop
+        return createShop(name, selling)
     }
 }
 
@@ -90,7 +88,7 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
 
     //option = message.option
     if (option == 1) {
-        player.sendMessage(ItemDefinition.lookup(shopItem.id).name + ": currently costs " + shopItem.sellValue + ItemDefinition.lookup(shop.currency.id))
+        player.sendMessage(ItemDefinition.lookup(shopItem.id).name + ": currently costs " + shopItem.sellValue + ItemDefinition.lookup(shop.currency.id).name)
         return
     }
 
