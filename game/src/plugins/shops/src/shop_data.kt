@@ -47,6 +47,7 @@ class Shop(val name: String, val sells: Array<ShopItem>, val buying: Array<ShopI
     val inv = Inventory(SHOP_CAPACITY, Inventory.StackMode.STACK_ALWAYS)
 
     fun init() { //Init the shop for sale of the defined items
+        inv.clear()
         for (item: ShopItem in sells) {
             inv.add(item.id, item.amount)
         }
