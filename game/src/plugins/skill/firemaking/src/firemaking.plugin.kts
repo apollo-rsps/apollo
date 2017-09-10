@@ -37,10 +37,17 @@ class FiremakingAction(val player: Player, val log: Log):Action<Player>(DELAY, t
         }
 
         if (!started) {
+            val region = player.world.regionRepository.fromPosition(player.position)
             player.sendMessage("You attempt to light the logs.")
-            player.inventory.remove(log.id)
-            groundLog = GroundItem.dropped(player.world, player.position, Item(log.id), player)
-            player.world.spawn(groundLog)
+            if (region.getEntities<Entity>(player.position, EntityType.DYNAMIC_OBJECT, EntityType.STATIC_OBJECT).isEmpty()) {
+                player.inventory.remove(log.id)
+                groundLog = GroundItem.dropped(player.world, player.position, Item(log.id), player)
+                player.world.spawn(groundLog)
+            } else {
+                player.sendMessage("You cannot light a fire here.")
+                stop()
+                return
+            }
             started = true
         }
 
@@ -55,6 +62,7 @@ class FiremakingAction(val player: Player, val log: Log):Action<Player>(DELAY, t
                     lightFire(Direction.NONE)
                     ) {
                 player.sendMessage("The fire catches and the logs begin to burn.")
+                player.skillSet.addExperience(Skill.FIREMAKING, log.xp)
             } else {
                 player.sendMessage("You cannot light a fire here.")
             }
@@ -104,7 +112,8 @@ class FiremakingAction(val player: Player, val log: Log):Action<Player>(DELAY, t
             val region = player.world.regionRepository.fromPosition(player.position)
             region.removeEntity(groundLog)
             player.world.spawn(fire)
-            //burn time = log level * 5 + rand(30). I think this is right can someone verify?
+
+            //TODO: burn time = log level * 5 + rand(30). I think this is right can someone verify?
 
             val burnTime = (log.level * 5 + rand.nextInt(30) * 1000) / 600 //convert to pulses
             player.world.schedule(object: ScheduledTask(burnTime, false) {
@@ -122,9 +131,6 @@ class FiremakingAction(val player: Player, val log: Log):Action<Player>(DELAY, t
 
     fun canLight(direction: Direction): Boolean {
         val region = player.world.regionRepository.fromPosition(player.position)
-        if (region.getEntities<Entity>(player.position, EntityType.DYNAMIC_OBJECT, EntityType.STATIC_OBJECT).isNotEmpty()) {
-            return false
-        }
         if (direction == Direction.NONE) {
             return true
         }
