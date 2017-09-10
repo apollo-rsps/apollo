@@ -1,4 +1,4 @@
-name = "Mining Skill"
+name = "mining-skill"
 package = "org.apollo.game.plugin.skills.mining"
 authors = [
     "Graham",
