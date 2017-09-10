@@ -77,8 +77,8 @@ val varrock = createShop("Varrock General Store.", arrayOf<ShopItem>(
         createShopItem("hammer", 5),
         createShopItem("newcomer_map", 5)
 ))
-provideShop(551, varrock)
-provideShop(552, varrock)
+provideShop(522, varrock)
+provideShop(523, varrock)
 
 //Varrock Swordshop
 val varrockSwords = createShop("Varrock Swordshop.", arrayOf<ShopItem>(
@@ -101,8 +101,8 @@ val varrockSwords = createShop("Varrock Swordshop.", arrayOf<ShopItem>(
         createShopItem("mithril_dagger", 3),
         createShopItem("adamant_dagger", 2)
 ))
-provideShop(522, varrockSwords)
-provideShop(523, varrockSwords)
+provideShop(551, varrockSwords)
+provideShop(552, varrockSwords)
 
 //Zaff's Superior Staffs!
 val zaffs = createShop("Zaff's Superior Staffs!", arrayOf<ShopItem>(

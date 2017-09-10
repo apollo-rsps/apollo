@@ -85,7 +85,7 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
     val shopItem = shop.sells[slot]
 
     if (option == 1) {
-        player.sendMessage(ItemDefinition.lookup(shopItem.id).name + ": currently costs " + shopItem.sellValue + ItemDefinition.lookup(shop.currency.id).name)
+        player.sendMessage(ItemDefinition.lookup(shopItem.id).name + ": currently costs " + shop.sellValue(shopItem.id) + " " + ItemDefinition.lookup(shop.currency.id).name)
         return
     }
 
@@ -112,16 +112,16 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
 
     val totalCurrency = shop.currency.total(player)
     var tooPoor = false
-    val total_cost = buyAmount * shopItem.sellValue
+    val total_cost = buyAmount * shop.sellValue(shopItem.id)
 
     if (total_cost > totalCurrency) {
-        val tmp = Math.floor(totalCurrency.toDouble() / shopItem.sellValue.toDouble())
+        val tmp = Math.floor(totalCurrency.toDouble() / shop.sellValue(shopItem.id).toDouble())
         buyAmount = tmp.toInt()
         tooPoor = true
     }
 
     if (buyAmount > 0) {
-        shop.currency.remove(player, buyAmount * shopItem.sellValue)
+        shop.currency.remove(player, buyAmount * shop.sellValue(shopItem.id))
         player.inventory.add(shopItem.id, buyAmount)
 
         val keep = invItem.amount == buyAmount && shop.isBuyingOwn() //Shop does not have quantities on items if buying own
@@ -133,7 +133,7 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
         }
     }
 
-    val warning = if (tooPoor) "You don't have enough #{currency.name}."
+    val warning = if (tooPoor) "You don't have enough " + ItemDefinition.lookup(shop.currency.id).name + "."
     else if (noStock) "The shop has run out of stock."
     else if (not_enough_space) "You don\'t have enough inventory space." else ""
 
@@ -171,7 +171,7 @@ fun sell(player: Player, shop: Shop, id: Int, slot: Int, option: Int) {
 
 
     if (option == 1) {
-        player.sendMessage("#{item.definition.name}: shop will buy for #{value} #{currency.name}.")
+        player.sendMessage(ItemDefinition.lookup(item.id).name + ": shop will buy for " + value + " " + ItemDefinition.lookup(shop.currency.id).name + ".")
     }
 
     var sellAmount = if (option == 2) 1 else if (option == 3) 5 else if (option == 4) 10 else 0
