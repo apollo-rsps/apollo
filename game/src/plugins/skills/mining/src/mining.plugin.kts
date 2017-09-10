@@ -126,7 +126,8 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
             if (pick!!.level > mob.skillSet.getSkill(Skill.MINING).currentLevel) {
                 continue;
             }
-            if (mob.equipment.get(EquipmentConstants.WEAPON).id == pick.id) {
+            val weponSlot = mob.equipment.get(EquipmentConstants.WEAPON)
+            if (weponSlot != null && weponSlot.id == pick.id) {
                 return pick;
             } else if (mob.inventory.contains(pick.id)) {
                 return pick;
