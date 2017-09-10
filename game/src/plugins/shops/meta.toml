@@ -1,0 +1,11 @@
+name = "Shops"
+package = "org.apollo.game.plugin.shops"
+authors = [
+    "Stuart",
+    "Major",
+    "tlf30"
+ ]
+
+[config]
+srcDir = "src/"
+testDir = "test/"
