@@ -59,8 +59,8 @@ val thessalias = createShop("Thessalia's Fine Clothes.", arrayOf<ShopItem>(
         createShopItem("blue_skirt", 2),
         createShopItem("cape", 4),
         createShopItem("silk", 5),
-        createShopItem("priest_gown_428", 3),
-        createShopItem("priest_gown_426", 3)
+        createShopItem(428, 3), //priest gown
+        createShopItem(426, 3)
 ))
 provideShop("thessalia", thessalias)
 

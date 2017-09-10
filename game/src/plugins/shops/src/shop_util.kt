@@ -10,7 +10,13 @@ import java.lang.Math.floor
 //functions for creating shops
 
 fun createShopItem(name: String, amount: Int): ShopItem {
+    System.out.println("Lookup item: " + name);
     return ShopItem(lookup_item(name)!!.id, -1, -1, amount)
+}
+
+fun createShopItem(id: Int, amount: Int): ShopItem {
+    System.out.println("Lookup item: " + id);
+    return ShopItem(id, -1, -1, amount)
 }
 
 fun createShopItem(name: String, amount: Int, sellValue: Int, buyValue: Int): ShopItem {
