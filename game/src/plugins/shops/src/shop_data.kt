@@ -16,7 +16,7 @@ val SHOPS = mutableMapOf<Int, Shop>() //Map shops to npcs
 val OPEN_SHOPS = mutableMapOf<String, Shop>() //Map shops to players that have them open
 
 
-data class ShopItem(val id: Int, val purchaseValue: Int, val sellValue: Int, val amount: Int)
+data class ShopItem(val id: Int, val sellValue: Int, val buyValue: Int, val amount: Int)
 
 class Currency(val id: Int) {
     fun add(player: Player, amount: Int) {
@@ -36,6 +36,10 @@ class Currency(val id: Int) {
      */
     fun buyValue(id: Int): Int {
         return Math.floor(ItemDefinition.lookup(id).value* 0.60).toInt()
+    }
+
+    fun sellValue(id: Int): Int {
+        return ItemDefinition.lookup(id).value
     }
 }
 
@@ -69,9 +73,27 @@ class Shop(val name: String, val sells: Array<ShopItem>, val buying: Array<ShopI
         }
         for (item in buying!!) {
             if (item.id == id) {
-                return item.sellValue
+                if (item.buyValue == -1) {
+                    return currency.buyValue(id)
+                }
+                return item.buyValue
             }
         }
         return currency.buyValue(id)
+    }
+
+    fun sellValue(id: Int): Int {
+        if (sells == null) {
+            return currency.buyValue(id)
+        }
+        for (item in sells!!) {
+            if (item.id == id) {
+                if (item.sellValue == -1) {
+                    return currency.sellValue(id)
+                }
+                return item.sellValue
+            }
+        }
+        return currency.sellValue(id)
     }
 }

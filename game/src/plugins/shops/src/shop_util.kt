@@ -9,6 +9,14 @@ import java.lang.Math.floor
 
 //functions for creating shops
 
+fun createShopItem(name: String, amount: Int): ShopItem {
+    return ShopItem(lookup_item(name)!!.id, -1, -1, amount)
+}
+
+fun createShopItem(name: String, amount: Int, sellValue: Int, buyValue: Int): ShopItem {
+    return ShopItem(lookup_item(name)!!.id, sellValue, buyValue, amount)
+}
+
 fun createShop(name: String, selling: Array<ShopItem>, options:IntArray, buying: Array<ShopItem>): Shop {
     val shop = Shop(name, selling, buying, options, CURRENCY)
     shop.init()
@@ -22,7 +30,6 @@ fun createShop(name: String, selling: Array<ShopItem>, buying: Array<ShopItem>):
 }
 
 fun createShop(name: String, selling: Array<ShopItem>, buysAll: Boolean): Shop {
-
     if (buysAll) {
         val shop = Shop(name, selling, null, intArrayOf(1), CURRENCY)
         shop.init()
@@ -32,6 +39,12 @@ fun createShop(name: String, selling: Array<ShopItem>, buysAll: Boolean): Shop {
         shop.init()
         return shop
     }
+}
+
+fun createShop(name: String, selling: Array<ShopItem>): Shop {
+    val shop = Shop(name, selling, arrayOf<ShopItem>(), intArrayOf(1), CURRENCY)
+    shop.init()
+    return shop
 }
 
 fun provideShop(npc: String, shop: Shop) {
