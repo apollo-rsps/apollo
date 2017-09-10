@@ -1,13 +1,18 @@
 package org.apollo.game.plugin.skills.mining
 
-data class Gem(val id: Int, val chance: Int)
-
-private val GEMS = mutableMapOf<Int, Gem>()
+enum class Gem(val id: Int, val chance: Int) {
+    UNCUT_SAPPHIRE(1623, 0), // uncut sapphire
+    UNCUT_EMERALD(1605, 0),// uncut emerald
+    UNCUT_RUBY(1619, 0), // uncut ruby
+    UNCUT_DIAMOND(1617, 0)  // uncut diamond
+}
 
 fun lookupGem(id: Int): Gem? {
-    return GEMS[id]
+    for (gem in Gem.values()) {
+        if (gem.id == id) {
+            return gem;
+        }
+    }
+    return null;
 }
 
-fun addGem(id: Int, chance: Int) {
-    GEMS.put(id, Gem(id, chance))
-}
