@@ -8,7 +8,7 @@ import org.apollo.game.model.entity.Player
 import org.apollo.game.model.inv.Inventory
 
 //Actions
-class OpenShopAction(val player: Player, val shop: Shop, val npc: Mob) : DistancedAction<Player>(1, true, player, npc.position, 1) {
+class OpenShopAction(val player: Player, val shop: Shop, val npc: Mob) : DistancedAction<Player>(0, true, player, npc.position, 1) {
     override fun executeAction() {
         mob.interactingMob = npc
         openShop(player, npc, shop)
