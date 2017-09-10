@@ -9,10 +9,43 @@ Thanks to Clifton <http://www.rune-server.org/members/clifton/> for helping
 to find some of the expired object IDs.
  */
 
-data class Ore(val id: Int, val objects: Map<Int, Int>, val level: Int, val exp: Double, val respawn: Int, val chance: Double, val chanceOffset: Boolean)
 
+/**
+ * Chance values thanks to: http://runescape.wikia.com/wiki/Talk:Mining#Mining_success_rate_formula
+ * Respawn times and xp thanks to: http://oldschoolrunescape.wikia.com/wiki/
+ */
+enum class Ore(val id: Int, val objects: Map<Int, Int>, val level: Int, val exp: Double, val respawn: Int, val chance: Double, val chanceOffset: Boolean) {
+    CLAY(434, CLAY_OBJECTS, 1, 5.0, 1, 0.0085, true), // clay
+    COPPER(436, COPPER_OBJECTS, 1, 17.5, 4, 0.0085, true), // copper
+    TIN(438, TIN_OBJECTS, 1, 17.5, 4, 0.0085, true), // tin
+    IRON(440, IRON_OBJECTS, 15, 35.0, 9, 0.0085, true), // iron
+    COAL(453, COAL_OBJECTS, 30, 50.0, 50, 0.004, false), // coal
+    GOLD(444, GOLD_OBJECTS, 40, 65.0, 100, 0.003, false), // gold
+    SILVER(442, SILVER_OBJECTS, 20, 40.0, 100, 0.0085, false), // silver
+    MITHRIL(447, MITHRIL_OBJECTS, 55, 80.0, 200, 0.002, false), // mithril
+    ADAMANT(449, ADAMANT_OBJECTS, 70, 95.0, 800, 0.001, false), // adamant
+    RUNITE(451, RUNITE_OBJECTS, 85, 125.0, 1200, 0.0008, false) // runite
+}
 
-val ORES = mutableMapOf<Int, Ore>()
+fun lookupOre(id: Int): Ore? {
+    for (ore in Ore.values()) {
+        if (ore.id == id) {
+            return ore
+        }
+    }
+    return null
+}
+
+fun lookupOreRock(id: Int): Ore? {
+    for (ore in Ore.values()) {
+        for (rock in ore.objects) {
+            if (rock.key == id) {
+                return ore
+            }
+        }
+    }
+    return null
+}
 
 val CLAY_OBJECTS = mapOf(
         2108 to 450,
@@ -125,17 +158,3 @@ val RUNITE_OBJECTS = mapOf(
         14861 to 14834
 )
 
-//Chance values thanks to: http://runescape.wikia.com/wiki/Talk:Mining#Mining_success_rate_formula
-//Respawn times and xp thanks to: http://oldschoolrunescape.wikia.com/wiki/
-val ORE_OBJECTS = arrayOf(
-        Ore(434, CLAY_OBJECTS, 1, 5.0, 1, 0.0085, true), // clay
-        Ore(436, COPPER_OBJECTS, 1, 17.5, 4, 0.0085, true), // copper
-        Ore(438, TIN_OBJECTS, 1, 17.5, 4, 0.0085, true), // tin
-        Ore(440, IRON_OBJECTS, 15, 35.0, 9, 0.0085, true), // iron
-        Ore(453, COAL_OBJECTS, 30, 50.0, 50, 0.004, false), // coal
-        Ore(444, GOLD_OBJECTS, 40, 65.0, 100, 0.003, false), // gold
-        Ore(442, SILVER_OBJECTS, 20, 40.0, 100, 0.0085, false), // silver
-        Ore(447, MITHRIL_OBJECTS, 55, 80.0, 200, 0.002, false), // mithril
-        Ore(449, ADAMANT_OBJECTS, 70, 95.0, 800, 0.001, false), // adamant
-        Ore(451, RUNITE_OBJECTS, 85, 125.0, 1200, 0.0008, false) // runite
-)

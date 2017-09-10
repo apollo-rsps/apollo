@@ -198,8 +198,8 @@ class ProspectingAction(val m: Player, val p: Position, val ore: Ore) : Distance
 on {ObjectActionMessage::class}
         .where {option == 1}
         .then {
-            if (ORES.contains(id)) {
-                it.startAction(MiningAction(it, id, this.position, ORES.get(id)!!))
+            if (lookupOreRock(id) != null) {
+                it.startAction(MiningAction(it, id, this.position, lookupOreRock(id)!!))
             } else {
                 System.out.println("Unknown ore: " + id)
             }
@@ -208,16 +208,7 @@ on {ObjectActionMessage::class}
 on {ObjectActionMessage::class}
         .where {option == 2}
         .then {
-            if (ORES.contains(id)) {
-                it.startAction(ProspectingAction(it, this.position, ORES.get(id)!!))
+            if (lookupOreRock(id) != null) {
+                it.startAction(ProspectingAction(it, this.position, lookupOreRock(id)!!))
             }
         }
-
-//Init the ore dict and add pickaxes
-start {
-    for (ore in ORE_OBJECTS) {
-        for (key in ore.objects.keys) {
-            ORES.put(key, ore)
-        }
-    }
-}
