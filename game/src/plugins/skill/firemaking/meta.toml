@@ -1,0 +1,11 @@
+name = "firemaking-skill"
+package = "org.apollo.game.plugin.skill.firemaking"
+authors = [
+        "tlf30",
+        "lare96"
+    ]
+dependencies = [ "entity_lookup" ]
+
+[config]
+srcDir = "src/"
+testDir = "test/"
