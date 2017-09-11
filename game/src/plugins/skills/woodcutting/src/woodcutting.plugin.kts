@@ -14,8 +14,8 @@ import java.util.*
 class WoodcuttingAction(val player: Player, val objectID: Int, val p: Position, val wood: Wood) : DistancedAction<Player>(PULSES, true, player, p, TREE_SIZE) {
 
     companion object {
-        private val PULSES = 0
-        private val TREE_SIZE = 1; //TODO: This is going to very between trees!!
+        private val PULSES = 2
+        private val TREE_SIZE = 1;
     }
 
     private var counter: Int = 0
@@ -45,7 +45,6 @@ class WoodcuttingAction(val player: Player, val objectID: Int, val p: Position, 
         //start the process of cutting
         if (started) {
             if (counter == 0) {
-
                 //Check inv capacity
                 if (mob.inventory.freeSlots() == 0) {
                     mob.inventory.forceCapacityExceeded()
@@ -57,7 +56,19 @@ class WoodcuttingAction(val player: Player, val objectID: Int, val p: Position, 
                     val woodName = ItemDefinition.lookup(wood.id).name.toLowerCase();
                     mob.sendMessage("You managed to cut some " + woodName + ".")
                     mob.skillSet.addExperience(Skill.WOODCUTTING, wood.exp)
-                    //Expire wood
+
+                } else {
+                    System.out.println("Failed to add wood to inv");
+                    stop();
+                    return;
+                }
+
+                if (!cuttingSuccessful(wood.chance)) {
+                    System.out.println("Chopping...")
+                    cut(axe)
+                    return //We did not cut down the tree... Keep going
+                } else {
+                    //We cut down the tree
                     var treeEntity: StaticGameObject? = null
                     val region = mob.world.regionRepository.fromPosition(position)
                     val entities = region.getEntities(position)
@@ -75,7 +86,7 @@ class WoodcuttingAction(val player: Player, val objectID: Int, val p: Position, 
                         return
                     }
                     //Get ID of exipred wood
-                    val expiredObjectID = wood.objects.get(objectID);
+                    val expiredObjectID = wood.stump;
                     val expiredRockEntity = StaticGameObject(mob.world, expiredObjectID!!, position, treeEntity!!.type, treeEntity!!.orientation)
                     //Remove normal wood and replace with expired
                     System.out.println("Removing " + objectID + " addding " + expiredObjectID)
@@ -102,16 +113,8 @@ class WoodcuttingAction(val player: Player, val objectID: Int, val p: Position, 
                             this.stop() //Makes task run once
                         }
                     })
-                } else {
-                    System.out.println("Failed to add wood to inv");
-                    stop();
-                    return;
-                }
-
-                if (!cuttingSuccessful(wood.chance)) {
-                    System.out.println("Chopping...")
-                    cut(axe)
-                    return //We did not cut down the tree... Keep going
+                    stop()
+                    return
                 }
             }
             counter -= 1

@@ -4,7 +4,7 @@ package org.apollo.game.plugin.skills.mining
 /**
  * values thanks to: http://oldschoolrunescape.wikia.com/wiki/Woodcutting
  */
-enum class Wood(val id: Int, val objects: Map<Int, Int>, stump: Int, val level: Int, val exp: Double, val chance: Double) {
+enum class Wood(val id: Int, val objects: IntArray, val stump: Int, val level: Int, val exp: Double, val chance: Double) {
     NORMAL(1511, NORMAL_OBJECTS, NORMAL_STUMP, 1, 25.0, 100.0),
     ACHEY(2862, ACHEY_OBJECTS, ACHEY_STUMP, 1, 25.0, 100.0),
     OAK(1521, OAK_OBJECTS, OAK_STUMP, 15, 37.5, 0.125),
@@ -28,7 +28,7 @@ fun lookupWood(id: Int): Wood? {
 fun lookupTree(id: Int): Wood? {
     for (wood in Wood.values()) {
         for (tree in wood.objects) {
-            if (tree.key == id) {
+            if (tree == id) {
                 return wood
             }
         }
