@@ -91,7 +91,9 @@ class WoodcuttingAction(val player: Player, val objectID: Int, val p: Position, 
                         }
                     })
                     //add task to respawn normal wood
-                    mob.world.schedule(object: ScheduledTask(wood.respawn, false) {
+                    //respawn time: http://runescape.wikia.com/wiki/Trees
+                    val respawn = ((30 * 1000) / 600) + ((rand.nextInt(150) * 1000) / 600) // between 30 sec and 3 min respawm
+                    mob.world.schedule(object: ScheduledTask(respawn, false) {
                         override fun execute() {
                             System.out.println("running wood task")
                             //Replace expired wood with normal wood
