@@ -14,7 +14,7 @@ import java.util.*
 class WoodcuttingAction(val player: Player, val objectID: Int, val p: Position, val wood: Wood) : DistancedAction<Player>(PULSES, true, player, p, TREE_SIZE) {
 
     companion object {
-        private val PULSES = 2
+        private val PULSES = 0
         private val TREE_SIZE = 1;
     }
 
