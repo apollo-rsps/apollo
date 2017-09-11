@@ -2,7 +2,7 @@ package org.apollo.game.plugin.skills.mining
 
 import org.apollo.game.model.Animation;
 
-enum class Pickaxe(val id: Int, val level: Int, val animation: Animation, val pulses: Int) {
+enum class Axe(val id: Int, val level: Int, val animation: Animation, val pulses: Int) {
     RUNE(1275, 41, Animation(624), 3),  // rune
     ADAMANT(1271, 31, Animation(628), 4), // adamant
     MITHRIL(1273, 21, Animation(629), 5), // mithril
@@ -13,14 +13,14 @@ enum class Pickaxe(val id: Int, val level: Int, val animation: Animation, val pu
 
 
 
-fun getPickaxes(): Array<Pickaxe> {
-    return Pickaxe.values()
+fun getAxes(): Array<Axe> {
+    return Axe.values()
 }
 
-fun lookupPickaxe(id: Int): Pickaxe? {
-    for (pick in Pickaxe.values()) {
-        if (pick.id == id) {
-            return pick;
+fun lookupPickaxe(id: Int): Axe? {
+    for (axe in Axe.values()) {
+        if (axe.id == id) {
+            return axe;
         }
     }
     return null

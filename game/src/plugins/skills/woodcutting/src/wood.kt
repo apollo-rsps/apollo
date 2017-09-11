@@ -1,7 +1,5 @@
 package org.apollo.game.plugin.skills.mining
 
-import com.google.common.collect.Maps.asMap
-
 /*
 Thanks to Mikey` <http://www.rune-server.org/members/mikey%60/> for helping
 to find some of the item/object IDs, minimum levels and experiences.
@@ -11,50 +9,51 @@ to find some of the expired object IDs.
 
 
 /**
- * Chance values thanks to: http://runescape.wikia.com/wiki/Talk:Mining#Mining_success_rate_formula
- * Respawn times and xp thanks to: http://oldschoolrunescape.wikia.com/wiki/
+ * values thanks to: http://oldschoolrunescape.wikia.com/wiki/Woodcutting
  */
-enum class Ore(val id: Int, val objects: Map<Int, Int>, val level: Int, val exp: Double, val respawn: Int, val chance: Double, val chanceOffset: Boolean) {
-    CLAY(434, CLAY_OBJECTS, 1, 5.0, 1, 0.0085, true), // clay
-    COPPER(436, COPPER_OBJECTS, 1, 17.5, 4, 0.0085, true), // copper
-    TIN(438, TIN_OBJECTS, 1, 17.5, 4, 0.0085, true), // tin
-    IRON(440, IRON_OBJECTS, 15, 35.0, 9, 0.0085, true), // iron
-    COAL(453, COAL_OBJECTS, 30, 50.0, 50, 0.004, false), // coal
-    GOLD(444, GOLD_OBJECTS, 40, 65.0, 100, 0.003, false), // gold
-    SILVER(442, SILVER_OBJECTS, 20, 40.0, 100, 0.0085, false), // silver
-    MITHRIL(447, MITHRIL_OBJECTS, 55, 80.0, 200, 0.002, false), // mithril
-    ADAMANT(449, ADAMANT_OBJECTS, 70, 95.0, 800, 0.001, false), // adamant
-    RUNITE(451, RUNITE_OBJECTS, 85, 125.0, 1200, 0.0008, false) // runite
+enum class Wood(val id: Int, val objects: Map<Int, Int>, val level: Int, val exp: Double, val respawn: Int, val chance: Double) {
+    NORMAL(434, NOMRAL_OBJECTS, 1, 25.0, 1, 100.0),
+    ACHEY(436, ACHEY_OBJECTS, 1, 25.0, 4, 100.0),
+    OAK(438, OAK_OBJECTS, 15, 37.5, 4, 0.125),
+    WILLOW(440, WILLOW_OBJECTS, 30, 67.5, 9, 0.125),
+    TEAK(453, TEAK_OBJECTS, 35, 85.0, 50, 0.125),
+    MAPLE(444, MAPLE_OBJECTS, 45, 100.0, 100, 0.125),
+    HOLLOW(442, HOLLOW_OBJECTS, 45, 82.5, 100, 0.125),
+    MAHOGANY(447, MAHOGANY_OBJECTS, 50, 125.0, 200,0.125),
+    ARTIC_PINE(449, ARTIC_PIN_OBJECTS, 54, 40.0, 800, 0.125),
+    YEW(451, YEW_OBJECTS, 60, 175.0, 1200, 0.125),
+    MAGIC(451, MAGIC_OBJECTS, 75, 250.0, 1200, 0.125),
+    REDWOOD(451, REDWOOD_OBJECTS, 90, 380.0, 1200, 0.125)
 }
 
-fun lookupOre(id: Int): Ore? {
-    for (ore in Ore.values()) {
-        if (ore.id == id) {
-            return ore
+fun lookupWood(id: Int): Wood? {
+    for (wood in Wood.values()) {
+        if (wood.id == id) {
+            return wood
         }
     }
     return null
 }
 
-fun lookupOreRock(id: Int): Ore? {
-    for (ore in Ore.values()) {
-        for (rock in ore.objects) {
-            if (rock.key == id) {
-                return ore
+fun lookupTree(id: Int): Wood? {
+    for (wood in Wood.values()) {
+        for (tree in wood.objects) {
+            if (tree.key == id) {
+                return wood
             }
         }
     }
     return null
 }
 
-val CLAY_OBJECTS = mapOf(
+val NOMRAL_OBJECTS = mapOf(
         2108 to 450,
         2109 to 451,
         14904 to 14896,
         14905 to 14897
 )
 
-val COPPER_OBJECTS = mapOf(
+val ACHEY_OBJECTS = mapOf(
         11960 to 11555,
         11961 to 11556,
         11962 to 11557,
@@ -70,7 +69,7 @@ val COPPER_OBJECTS = mapOf(
         14858 to 14834
 )
 
-val TIN_OBJECTS = mapOf(
+val OAK_OBJECTS = mapOf(
         11597 to 11555,
         11958 to 11556,
         11959 to 11557,
@@ -83,7 +82,7 @@ val TIN_OBJECTS = mapOf(
         14903 to 14895
 )
 
-val IRON_OBJECTS = mapOf(
+val WILLOW_OBJECTS = mapOf(
         11954 to 11555,
         11955 to 11556,
         11956 to 11557,
@@ -95,7 +94,7 @@ val IRON_OBJECTS = mapOf(
         14914 to 14916
 )
 
-val COAL_OBJECTS = mapOf(
+val TEAK_OBJECTS = mapOf(
         11963 to 11555,
         11964 to 11556,
         11965 to 11557,
@@ -109,7 +108,7 @@ val COAL_OBJECTS = mapOf(
         14852 to 14834
 )
 
-val SILVER_OBJECTS = mapOf (
+val HOLLOW_OBJECTS = mapOf (
         11948 to 11555,
         11949 to 11556,
         11950 to 11557,
@@ -117,7 +116,7 @@ val SILVER_OBJECTS = mapOf (
         2101 to 451
 )
 
-val GOLD_OBJECTS = mapOf(
+val MAPLE_OBJECTS = mapOf(
         11951 to 11555,
         11952 to 11556,
         11953 to 11557,
@@ -125,7 +124,7 @@ val GOLD_OBJECTS = mapOf(
         2099 to 451
 )
 
-val MITHRIL_OBJECTS = mapOf(
+val MAHOGANY_OBJECTS = mapOf(
         11945 to 11555,
         11946 to 11556,
         11947 to 11557,
@@ -139,7 +138,7 @@ val MITHRIL_OBJECTS = mapOf(
         14855 to 14834
 )
 
-val ADAMANT_OBJECTS = mapOf(
+val ARTIC_PIN_OBJECTS = mapOf(
         11939 to 11552,
         11940 to 11553,
         11941 to 11554,
@@ -150,7 +149,23 @@ val ADAMANT_OBJECTS = mapOf(
         14864 to 14834
 )
 
-val RUNITE_OBJECTS = mapOf(
+val YEW_OBJECTS = mapOf(
+        2106 to 450,
+        2107 to 451,
+        14859 to 14832,
+        14860 to 14833,
+        14861 to 14834
+)
+
+val MAGIC_OBJECTS = mapOf(
+        2106 to 450,
+        2107 to 451,
+        14859 to 14832,
+        14860 to 14833,
+        14861 to 14834
+)
+
+val REDWOOD_OBJECTS = mapOf(
         2106 to 450,
         2107 to 451,
         14859 to 14832,
