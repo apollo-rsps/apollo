@@ -1,4 +1,4 @@
-# Calculates the number of pulses it takes for an ore to respawn based on the
+# Calculates the number of pulses it takes for an wood to respawn based on the
 # number of players currently online.
 #
 # The 'base' argument is the number of pulses it takes with no players online.
