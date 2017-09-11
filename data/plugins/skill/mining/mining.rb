@@ -8,14 +8,14 @@ PROSPECT_PULSES = 3
 ORE_SIZE = 1
 
 # TODO: finish implementing this
-# A `DistancedAction` for mining wood.
-class WoodcuttingAction < DistancedAction
-  attr_reader :position, :wood, :counter, :started
+# A `DistancedAction` for mining ore.
+class MiningAction < DistancedAction
+  attr_reader :position, :ore, :counter, :started
 
-  def initialize(mob, position, wood)
+  def initialize(mob, position, ore)
     super(0, true, mob, position, ORE_SIZE)
     @position = position
-    @wood = wood
+    @ore = ore
     @started = false
     @counter = 0
   end
@@ -30,7 +30,7 @@ class WoodcuttingAction < DistancedAction
   end
 
   # starts the mining animation, sets counters/flags and turns the mob to
-  # the wood
+  # the ore
   def start_mine(pickaxe)
     @started = true
     mob.send_message('You swing your pick at the rock.')
@@ -51,8 +51,8 @@ class WoodcuttingAction < DistancedAction
       return
     end
 
-    # verify the mob can mine the wood
-    if wood.level > level
+    # verify the mob can mine the ore
+    if ore.level > level
       mob.send_message('You do not have the required level to mine this rock.')
       stop
       return
@@ -60,15 +60,15 @@ class WoodcuttingAction < DistancedAction
 
     # check if we need to kick start things
     if @started
-      # count down and check if we can have a chance at some wood now
+      # count down and check if we can have a chance at some ore now
       if @counter == 0
         # TODO: calculate the chance that the player can actually get the rock
 
-        if mob.inventory.add(wood.id)
-          name = name_of(@wood.id).sub(/ wood$/, '').downcase
+        if mob.inventory.add(ore.id)
+          name = name_of(@ore.id).sub(/ ore$/, '').downcase
 
           mob.send_message("You manage to mine some #{name}.")
-          skills.add_experience(Skill::MINING, wood.exp)
+          skills.add_experience(Skill::MINING, ore.exp)
           # TODO: expire the rock
         end
 
@@ -82,12 +82,12 @@ class WoodcuttingAction < DistancedAction
   end
 
   def equals(other)
-    get_class == other.get_class && @position == other.position && @wood == other.wood
+    get_class == other.get_class && @position == other.position && @ore == other.ore
   end
 
 end
 
-# A `DistancedAction` for a rock with no available wood.
+# A `DistancedAction` for a rock with no available ore.
 class ExpiredProspectingAction < DistancedAction
   attr_reader :position
 
@@ -96,7 +96,7 @@ class ExpiredProspectingAction < DistancedAction
   end
 
   def executeAction
-    mob.send_message('There is currently no wood available in this rock.')
+    mob.send_message('There is currently no ore available in this rock.')
     stop
   end
 
@@ -108,19 +108,19 @@ end
 
 # A `DistancedAction` for prospecting a rock.
 class ProspectingAction < DistancedAction
-  attr_reader :position, :wood
+  attr_reader :position, :ore
 
-  def initialize(mob, position, wood)
+  def initialize(mob, position, ore)
     super(PROSPECT_PULSES, true, mob, position, ORE_SIZE)
     @position = position
-    @wood = wood
+    @ore = ore
     @started = false
   end
 
   def executeAction
     if @started
-      ore_def = ItemDefinition.lookup(@wood.id)
-      name = ore_def.name.sub(/ wood$/, '').downcase
+      ore_def = ItemDefinition.lookup(@ore.id)
+      name = ore_def.name.sub(/ ore$/, '').downcase
 
       mob.send_message("This rock contains #{name}.")
       stop
@@ -133,22 +133,22 @@ class ProspectingAction < DistancedAction
   end
 
   def equals(other)
-    get_class == other.get_class && @position == other.position && @wood == other.wood
+    get_class == other.get_class && @position == other.position && @ore == other.ore
   end
 
 end
 
 on :message, :first_object_action do |mob, message|
-  wood = ORES[message.id]
+  ore = ORES[message.id]
 
-  mob.start_action(WoodcuttingAction.new(mob, message.position, wood)) unless wood.nil?
+  mob.start_action(MiningAction.new(mob, message.position, ore)) unless ore.nil?
 end
 
 on :message, :second_object_action do |mob, message|
-  wood = ORES[message.id]
+  ore = ORES[message.id]
 
-  if !wood.nil?
-    mob.start_action(ProspectingAction.new(mob, message.position, wood))
+  if !ore.nil?
+    mob.start_action(ProspectingAction.new(mob, message.position, ore))
   elsif !EXPIRED_ORES[message.id].nil?
     mob.start_action(ExpiredProspectingAction.new(mob, message.position))
   end

@@ -13,7 +13,7 @@
   </authors>
   <scripts>
     <script>pickaxe.rb</script>
-    <script>wood.rb</script>
+    <script>ore.rb</script>
     <script>gem.rb</script>
     <script>respawn.rb</script>
     <script>mining.rb</script>
