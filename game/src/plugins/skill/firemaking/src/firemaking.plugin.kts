@@ -86,29 +86,11 @@ class FiremakingAction(val player: Player, val log: Log):Action<Player>(DELAY, t
         }
     }
 
-    fun walkCoords(direction: Direction): Position {
-        if (direction == Direction.NORTH) {
-            return Position(player.position.x, player.position.y + 1, player.position.height)
-        } else if (direction == Direction.SOUTH) {
-            return Position(player.position.x, player.position.y - 1, player.position.height)
-        } else if (direction == Direction.WEST) {
-            return Position(player.position.x - 1, player.position.y, player.position.height)
-        } else if (direction == Direction.EAST) {
-            return Position(player.position.x + 1, player.position.y, player.position.height)
-        }  else if (direction == Direction.NONE) {
-            return Position(player.position.x, player.position.y, player.position.height)
-        } else {
-            return player.position //Should never happen so I just put this
-        }
-    }
 
     fun lightFire(direction: Direction): Boolean {
         if (canLight(direction)) {
             val fire = DynamicGameObject.createPublic(player.world, FIRE_OBJ, player.position, 10, 0)
-            val walkTo = walkCoords(direction)
-            if (walkTo != mob.position) {
-                mob.walkingQueue.addFirstStep(walkTo)
-            }
+            player.walkingQueue.addFirstStep(player.position.step(1, direction))
             val region = player.world.regionRepository.fromPosition(player.position)
             region.removeEntity(groundLog)
             player.world.spawn(fire)
