@@ -15,26 +15,19 @@ to find some of the expired object IDs.
  * Respawn times and xp thanks to: http://oldschoolrunescape.wikia.com/wiki/
  */
 enum class Ore(val id: Int, val objects: Map<Int, Int>, val level: Int, val exp: Double, val respawn: Int, val chance: Double, val chanceOffset: Boolean) {
-    CLAY(434, CLAY_OBJECTS, 1, 5.0, 1, 0.0085, true), // clay
-    COPPER(436, COPPER_OBJECTS, 1, 17.5, 4, 0.0085, true), // copper
-    TIN(438, TIN_OBJECTS, 1, 17.5, 4, 0.0085, true), // tin
-    IRON(440, IRON_OBJECTS, 15, 35.0, 9, 0.0085, true), // iron
-    COAL(453, COAL_OBJECTS, 30, 50.0, 50, 0.004, false), // coal
-    GOLD(444, GOLD_OBJECTS, 40, 65.0, 100, 0.003, false), // gold
-    SILVER(442, SILVER_OBJECTS, 20, 40.0, 100, 0.0085, false), // silver
-    MITHRIL(447, MITHRIL_OBJECTS, 55, 80.0, 200, 0.002, false), // mithril
-    ADAMANT(449, ADAMANT_OBJECTS, 70, 95.0, 800, 0.001, false), // adamant
-    RUNITE(451, RUNITE_OBJECTS, 85, 125.0, 1200, 0.0008, false) // runite
+    CLAY(434, CLAY_OBJECTS, 1, 5.0, 1, 0.0085, true),
+    COPPER(436, COPPER_OBJECTS, 1, 17.5, 4, 0.0085, true),
+    TIN(438, TIN_OBJECTS, 1, 17.5, 4, 0.0085, true),
+    IRON(440, IRON_OBJECTS, 15, 35.0, 9, 0.0085, true),
+    COAL(453, COAL_OBJECTS, 30, 50.0, 50, 0.004, false),
+    GOLD(444, GOLD_OBJECTS, 40, 65.0, 100, 0.003, false),
+    SILVER(442, SILVER_OBJECTS, 20, 40.0, 100, 0.0085, false),
+    MITHRIL(447, MITHRIL_OBJECTS, 55, 80.0, 200, 0.002, false),
+    ADAMANT(449, ADAMANT_OBJECTS, 70, 95.0, 800, 0.001, false),
+    RUNITE(451, RUNITE_OBJECTS, 85, 125.0, 1200, 0.0008, false)
 }
 
-fun lookupOre(id: Int): Ore? {
-    for (ore in Ore.values()) {
-        if (ore.id == id) {
-            return ore
-        }
-    }
-    return null
-}
+fun lookupOre(id: Int): Ore? = Ore.values().find { it.id == id }
 
 fun lookupOreRock(id: Int): Ore? {
     for (ore in Ore.values()) {

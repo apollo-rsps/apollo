@@ -27,7 +27,6 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
     private val rand: Random = Random()
 
     override fun executeAction() {
-        System.out.println("Mining " + ore.id + " @ " + p)
         val level = mob.skillSet.getSkill(Skill.MINING).currentLevel
         val pickaxe = findPickaxe()
 
@@ -50,7 +49,6 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
         if (started) {
             if (counter == 0) {
                 if (!miningSuccessful(ore.chance, ore.chanceOffset, level)) {
-                    System.out.println("Mining...")
                     mine(pickaxe)
                     return //We did not mine the ore... Keep going
                 }
@@ -71,27 +69,21 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                     val entities = region.getEntities(position)
                     for (entity: Entity in entities) {
                         if (entity is StaticGameObject) {
-                            System.out.println("Entity at mining location: " + entity.id + " with type: " + entity.entityType)
                             if (entity.id == objectID) {
                                 rockEntity = entity
                             }
                         }
                     }
                     if (rockEntity == null) { //Mining entity not found at location...
-                        System.out.println("WARNING: Invalid mining condition on rock");
                         stop()
                         return
                     }
                     //Get ID of exipred ore
                     val expiredObjectID = ore.objects.get(objectID);
                     val expiredRockEntity = StaticGameObject(mob.world, expiredObjectID!!, position, rockEntity!!.type, rockEntity!!.orientation)
-                    //Remove normal ore and replace with expired
-                    System.out.println("Removing " + objectID + " addding " + expiredObjectID)
-                    System.out.println("Adding tasks")
                     //add task to remove normal ore and replace with depleted
                     mob.world.schedule(object: ScheduledTask(0, true) {
                         override fun execute() {
-                            System.out.println("running deplete task")
                             //Replace normal ore with expired ore
                             region.removeEntity(rockEntity);
                             region.addEntity(expiredRockEntity)
@@ -101,17 +93,13 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
                     //add task to respawn normal ore
                     mob.world.schedule(object: ScheduledTask(ore.respawn, false) {
                         override fun execute() {
-                            System.out.println("running ore task")
                             //Replace expired ore with normal ore
                             region.removeEntity(expiredRockEntity)
                             region.addEntity(rockEntity);
                             this.stop() //Makes task run once
                         }
                     })
-                } else {
-                    System.out.println("Failed to add ore to inv");
-                }
-                System.out.println("We are done now")
+                } //If we did not add to inv, the action will still stop
                 stop(); //Force this action to stop after we are done
             }
             counter -= 1
@@ -126,8 +114,8 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
             if (pick!!.level > mob.skillSet.getSkill(Skill.MINING).currentLevel) {
                 continue;
             }
-            val weponSlot = mob.equipment.get(EquipmentConstants.WEAPON)
-            if (weponSlot != null && weponSlot.id == pick.id) {
+            val weaponSlot = mob.equipment.get(EquipmentConstants.WEAPON)
+            if (weaponSlot != null && weaponSlot.id == pick.id) {
                 return pick;
             } else if (mob.inventory.contains(pick.id)) {
                 return pick;
@@ -154,7 +142,6 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
         } else {
             percent = (oreChance * playerLevel) * 100
         }
-        System.out.println("Chance: " + percent)
         return rand.nextInt(100) < percent;
     }
 }
@@ -201,8 +188,6 @@ on {ObjectActionMessage::class}
         .then {
             if (lookupOreRock(id) != null) {
                 it.startAction(MiningAction(it, id, this.position, lookupOreRock(id)!!))
-            } else {
-                System.out.println("Unknown ore: " + id)
             }
         }
 
