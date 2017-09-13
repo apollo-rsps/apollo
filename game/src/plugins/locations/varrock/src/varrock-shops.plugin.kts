@@ -76,7 +76,7 @@ val varrock = createShop("Varrock General Store.", arrayOf<ShopItem>(
         createShopItem("chisel", 2),
         createShopItem("hammer", 5),
         createShopItem("newcomer_map", 5)
-))
+), true) //buys all
 provideShop(522, varrock)
 provideShop(523, varrock)
 
