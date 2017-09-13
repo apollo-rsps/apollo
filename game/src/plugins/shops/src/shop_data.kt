@@ -14,6 +14,7 @@ val CURRENCY = Currency(995) //Coins
 //
 val SHOPS = mutableMapOf<Int, Shop>() //Map shops to npcs
 val OPEN_SHOPS = mutableMapOf<String, Shop>() //Map shops to players that have them open
+val RESTOCK_INTERVAL = 30 //Number of ticsk between checking shop for restocking a single item, just made this value up, we need to find the actual
 
 
 data class ShopItem(val id: Int, val sellValue: Int, val buyValue: Int, val amount: Int)
@@ -53,6 +54,22 @@ class Shop(val name: String, val sells: Array<ShopItem>, val buying: Array<ShopI
         }
     }
 
+    fun restock() {
+        System.out.println("Restocking " + name)
+        for (item in sells) {
+            if (inv.getAmount(item.id) < item.amount) {
+                inv.add(item.id)
+            } else if (inv.getAmount(item.id) > item.amount) {
+                inv.remove(item.id)
+            }
+        }
+        for (item in inv.items) {
+            if (item != null && !sells(item.id)) {
+                inv.remove(item.id)
+            }
+        }
+    }
+
     fun isBuyingAll(): Boolean {
         return buying == null
     }
@@ -63,6 +80,15 @@ class Shop(val name: String, val sells: Array<ShopItem>, val buying: Array<ShopI
 
     fun isBuyingCustom(): Boolean {
         return buying != null && buying.isNotEmpty()
+    }
+
+    fun sells(id: Int): Boolean {
+        for (item in sells) {
+            if (item.id == id) {
+                return true
+            }
+        }
+        return false
     }
 
     /**

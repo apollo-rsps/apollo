@@ -6,6 +6,7 @@ import org.apollo.game.model.entity.Mob
 import org.apollo.game.model.entity.Npc
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.inv.Inventory
+import org.apollo.game.scheduling.ScheduledTask
 
 //Actions
 class OpenShopAction(val player: Player, val shop: Shop, val npc: Mob) : DistancedAction<Player>(0, true, player, npc.position, 1) {
@@ -71,4 +72,17 @@ on { ItemActionMessage::class }
 start {
     ItemVerificationHandler.addInventory(SHOP_CONTAINER, ShopInventorySupplier())
     ItemVerificationHandler.addInventory(INV_CONTAINER, PlayerInventorySupplier())
+    //Add restock task
+    it.schedule(object: ScheduledTask(RESTOCK_INTERVAL, false) {
+        override fun execute() {
+            val shopsDone = ArrayList<String>()
+            for (shop in SHOPS.values) {
+                if (!shopsDone.contains(shop.name)) {
+                    shop.restock()
+                    shopsDone.add(shop.name)
+                }
+            }
+        }
+
+    })
 }

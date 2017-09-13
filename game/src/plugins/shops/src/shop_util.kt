@@ -79,13 +79,12 @@ fun openShop(player: Player, npc: Mob, shop: Shop) {
 }
 
 fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
-    //This is really rough. I just ported it 1 to 1 from the ruby.
 
     val invItem = shop.inv.get(slot)
-    val shopItem = shop.sells[slot]
+    //val shopItem = shop.sells[slot]
 
     if (option == 1) {
-        player.sendMessage(ItemDefinition.lookup(shopItem.id).name + ": currently costs " + shop.sellValue(shopItem.id) + " " + ItemDefinition.lookup(shop.currency.id).name)
+        player.sendMessage(ItemDefinition.lookup(invItem.id).name + ": currently costs " + shop.sellValue(invItem.id) + " " + ItemDefinition.lookup(shop.currency.id).name)
         return
     }
 
@@ -97,7 +96,7 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
         noStock = true
     }
 
-    val has_item = player.inventory.getAmount(shopItem.id) == 0
+    val has_item = player.inventory.getAmount(invItem.id) == 0
 
     val definition = invItem.definition
     val spaceRequired = if (definition.isStackable && has_item) 0 else if (!definition.isStackable) buyAmount else 1
@@ -112,24 +111,24 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
 
     val totalCurrency = shop.currency.total(player)
     var tooPoor = false
-    val total_cost = buyAmount * shop.sellValue(shopItem.id)
+    val total_cost = buyAmount * shop.sellValue(invItem.id)
 
     if (total_cost > totalCurrency) {
-        val tmp = Math.floor(totalCurrency.toDouble() / shop.sellValue(shopItem.id).toDouble())
+        val tmp = Math.floor(totalCurrency.toDouble() / shop.sellValue(invItem.id).toDouble())
         buyAmount = tmp.toInt()
         tooPoor = true
     }
 
     if (buyAmount > 0) {
-        shop.currency.remove(player, buyAmount * shop.sellValue(shopItem.id))
-        player.inventory.add(shopItem.id, buyAmount)
+        shop.currency.remove(player, buyAmount * shop.sellValue(invItem.id))
+        player.inventory.add(invItem.id, buyAmount)
 
-        val keep = invItem.amount == buyAmount && shop.isBuyingOwn() //Shop does not have quantities on items if buying own
+        val keep = invItem.amount == buyAmount && shop.sells(invItem.id) //Shop does not have quantities on items if it sells this item from its main stock
         if (keep) {
-            shop.inv.set(slot, Item(shopItem.id, 0))
+            shop.inv.set(slot, Item(invItem.id, 0))
         } else {
 
-            shop.inv.remove(shopItem.id, buyAmount)
+            shop.inv.remove(invItem.id, buyAmount)
         }
     }
 
@@ -143,9 +142,8 @@ fun buy(player: Player, shop: Shop, slot: Int, option: Int) {
 }
 
 fun sell(player: Player, shop: Shop, id: Int, slot: Int, option: Int) {
-    //This is really rough. I just ported it 1 to 1 from the ruby.
 
-    if (shop.isBuyingOwn() && !shop.inv.contains(id)) {
+    if (shop.isBuyingOwn() && !shop.inv.contains(id) || id == shop.currency.id) {
         player.sendMessage("You can\'t sell this item to this shop.")
         return
     } else if (shop.isBuyingCustom()) {
@@ -172,6 +170,7 @@ fun sell(player: Player, shop: Shop, id: Int, slot: Int, option: Int) {
 
     if (option == 1) {
         player.sendMessage(ItemDefinition.lookup(item.id).name + ": shop will buy for " + value + " " + ItemDefinition.lookup(shop.currency.id).name + ".")
+        return
     }
 
     var sellAmount = if (option == 2) 1 else if (option == 3) 5 else if (option == 4) 10 else 0
