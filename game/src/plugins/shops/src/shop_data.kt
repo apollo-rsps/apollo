@@ -59,13 +59,16 @@ class Shop(val name: String, val sells: Array<ShopItem>, val buying: Array<ShopI
         for (item in sells) {
             if (inv.getAmount(item.id) < item.amount) {
                 inv.add(item.id)
+                return
             } else if (inv.getAmount(item.id) > item.amount) {
                 inv.remove(item.id)
+                return
             }
         }
         for (item in inv.items) {
             if (item != null && !sells(item.id)) {
                 inv.remove(item.id)
+                return
             }
         }
     }
