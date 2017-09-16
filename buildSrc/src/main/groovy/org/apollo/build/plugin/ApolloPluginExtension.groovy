@@ -2,6 +2,7 @@ package org.apollo.build.plugin
 
 import org.apollo.build.plugin.tasks.ApolloScriptCompileTask
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.testing.Test
 
@@ -50,6 +51,21 @@ class ApolloPluginExtension {
         init()
     }
 
+    private def addDependencyOn(Project other, String configuration, boolean includeProject) {
+        def compileConfiguration = other.configurations.getByName("compile")
+        def sources = other.sourceSets.main
+        def deps = compileConfiguration.dependencies
+
+        deps.each {
+            project.dependencies.add(configuration, it)
+        }
+
+        project.dependencies.add(configuration, sources.output)
+        if (includeProject) {
+            project.dependencies.add(configuration, other)
+        }
+    }
+
     /**
      * Setup the {@link Project} with the correct dependencies and tasks required to build the plugin
      * and its scripts.
@@ -75,36 +91,29 @@ class ApolloPluginExtension {
         }
 
         def mainSources = project.sourceSets.main
-        def gameCompileConfiguration = gameProject.configurations.getByName("compile")
-        def gameSources = gameProject.sourceSets.main
-        def gameDependencies = gameCompileConfiguration.dependencies
 
-        gameDependencies.each {
-            project.dependencies.add('compile', it)
+        addDependencyOn(gameProject, "compile",  false)
+        addDependencyOn(pluginTestingProject, "testCompile", true)
+
+        def buildTask = project.tasks['classes']
+
+        FileTree scripts = project.fileTree(srcDir).matching {
+            include '*.kts'
         }
-
-        project.dependencies.add('compile', gameSources.output)
-        project.dependencies.add('testCompile', pluginTestingProject)
-        project.dependencies.add('testCompile', project.sourceSets.main.output)
-
-        def kotlinCompileTask = project.tasks['compileKotlin']
 
         project.tasks.create('compileScripts', ApolloScriptCompileTask) {
-            FileTree filtered = project.fileTree(srcDir).matching {
-                include '*.kts'
-            }
+            def outputDir = new File("${project.buildDir}/classes/main")
 
-            inputs.files filtered.files
-            outputsDir = new File("${project.buildDir}/classes/main")
+            inputs.files scripts.files
+            outputsDir = outputDir
 
-            compileClasspath = mainSources.compileClasspath +
-                    mainSources.runtimeClasspath
-
+            compileClasspath = mainSources.compileClasspath + mainSources.runtimeClasspath + mainSources.output
             scriptDefinitionClass = "org.apollo.game.plugin.kotlin.KotlinPluginScript"
-            mustRunAfter kotlinCompileTask
+
+            mustRunAfter buildTask
         }
 
-        kotlinCompileTask.finalizedBy project.tasks['compileScripts']
+        buildTask.finalizedBy(project.tasks['compileScripts'])
     }
 
     def getDependencies() {
