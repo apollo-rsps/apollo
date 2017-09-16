@@ -85,7 +85,7 @@ def configurePluginTasks(String name, SourceSet mainSources, SourceSet testSourc
     def testsTask = task("test${taskName}", type: Test) {
         group = "plugin-verification"
 
-        testClassesDir = testSources.output.classesDir
+        testClassesDirs = testSources.output.classesDirs
         classpath = testSources.runtimeClasspath + mainSources.runtimeClasspath
 
         binResultsDir = file("$buildDir/plugin-test-results/binary/$name")
