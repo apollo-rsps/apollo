@@ -13,9 +13,11 @@ enum class Axe(val id: Int, val level: Int, val animation: Animation, val pulses
     BRONZE(1351, 1, Animation(879), 8)
 }
 
+val AXES = Axe.values()
+
 fun getAxes(): Array<Axe> {
-    return Axe.values()
+    return AXES
 }
 
-fun lookupPickaxe(id: Int): Axe? = Axe.values().find { it.id == id }
+fun lookupPickaxe(id: Int): Axe? = AXES.find { it.id == id }
 

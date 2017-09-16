@@ -16,10 +16,12 @@ enum class Wood(val id: Int, val objects: IntArray, val stump: Int, val level: I
     MAGIC(1513, MAGIC_OBJECTS, MAGIC_STUMP, 75, 250.0, 0.125),
 }
 
-fun lookupWood(id: Int): Wood? = Wood.values().find { it.id == id }
+val WOOD = Wood.values()
+
+fun lookupWood(id: Int): Wood? =WOOD.find { it.id == id }
 
 fun lookupTree(id: Int): Wood? {
-    for (wood in Wood.values()) {
+    for (wood in WOOD) {
         for (tree in wood.objects) {
             if (tree == id) {
                 return wood
