@@ -3,7 +3,7 @@ import org.apollo.game.model.entity.Npc
 
 start { world ->
     Spawns.list.forEach {
-        val definition = if (it.id != null) NpcDefinition.lookup(it.id) else lookup_npc(it.name)
+        val definition = if (it.id != null) NpcDefinition.lookup(it.id!!) else lookup_npc(it.name)
         if (definition == null) {
             throw IllegalArgumentException("Invalid NPC name or ID ${it.name}, ${it.id}")
         }
