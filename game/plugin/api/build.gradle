@@ -1,0 +1,4 @@
+plugin {
+    name = "Apollo Plugin API"
+    description = "Helpers and API for common plugin usecases"
+}

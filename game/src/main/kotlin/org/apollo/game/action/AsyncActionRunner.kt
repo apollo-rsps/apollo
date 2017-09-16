@@ -1,10 +1,10 @@
 package org.apollo.game.action
 
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.selects.select
-import org.apollo.game.model.entity.Mob
-import java.util.function.Supplier
 
 class AsyncActionRunner(val actionSupplier: () -> Action<*>, val callback: suspend () -> Unit) {
     var job: Job? = null
@@ -51,6 +51,17 @@ class AsyncActionRunner(val actionSupplier: () -> Action<*>, val callback: suspe
         while (remainingPulses > 0) {
             val numPulses = pulseChannel.receive()
             remainingPulses -= numPulses
+        }
+    }
+
+    suspend fun await(condition: () -> Boolean, timeout: Int = 15) {
+        var remainingPulsesBeforeTimeout = timeout
+
+        while (!condition.invoke()) {
+            remainingPulsesBeforeTimeout -= pulseChannel.receive()
+            if (remainingPulsesBeforeTimeout <= 0) {
+                break
+            }
         }
     }
 }
