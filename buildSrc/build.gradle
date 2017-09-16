@@ -1,9 +1,7 @@
 apply plugin: 'kotlin'
 
 buildscript {
-    ext {
-        kotlinVersion = '1.1.2-4'
-    }
+    apply from: '../properties.gradle'
 
     repositories {
         mavenCentral()
