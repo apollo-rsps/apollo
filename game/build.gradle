@@ -6,27 +6,17 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath group: 'com.moandjiezana.toml', name: 'toml4j', version: '0.7.1'
+        classpath group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: "$kotlinVersion"
     }
 }
 
-ext.pluginsDir = "$projectDir/src/plugins"
-
 apply plugin: 'kotlin'
-apply from: 'plugins.gradle'
 
 sourceSets {
     main {
         kotlin {
             exclude 'stub.kt'
         }
-    }
-}
-
-repositories {
-    maven {
-        url { 'https://dl.bintray.com/kotlin/kotlinx/' }
     }
 }
 
@@ -40,6 +30,11 @@ dependencies {
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: "$kotlinVersion"
     compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: '0.16'
     compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.16'
+
+    project(":game:plugin").subprojects.each { plugin ->
+        println(plugin)
+        runtime plugin
+    }
 
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
 }

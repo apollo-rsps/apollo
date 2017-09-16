@@ -1,0 +1,7 @@
+apolloPlugin {
+    name = "Banking"
+    packageName = "org.apollo.game.plugin.banking"
+    authors = [
+        "Major",
+    ]
+}

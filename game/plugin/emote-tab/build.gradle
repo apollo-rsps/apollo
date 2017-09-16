@@ -1,0 +1,7 @@
+apolloPlugin {
+    name = "emote-tab"
+    packageName = "org.apollo.game.plugin.widget"
+    authors = [
+        "Gary Tierney",
+    ]
+}

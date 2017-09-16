@@ -1,0 +1,7 @@
+apolloPlugin {
+    name = "training-dummy"
+    packageName = "org.apollo.game.plugin.entity"
+    authors = [
+        "Gary Tierney",
+    ]
+}

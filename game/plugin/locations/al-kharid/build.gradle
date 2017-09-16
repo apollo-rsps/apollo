@@ -1,0 +1,10 @@
+apolloPlugin {
+    name = "al-kharid npc spawns"
+    packageName = "org.apollo.game.plugin.locations"
+    authors = [
+        "Jesse W",
+    ]
+    dependencies = [
+        "spawning",
+    ]
+}

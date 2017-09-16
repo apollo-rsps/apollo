@@ -1,0 +1,7 @@
+apolloPlugin {
+    name = "walkto"
+    packageName = "org.apollo.plugin.entity.walkto"
+    authors = [
+        "Gary Tierney",
+    ]
+}

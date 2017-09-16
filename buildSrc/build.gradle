@@ -1,4 +1,5 @@
 apply plugin: 'kotlin'
+apply plugin: 'groovy'
 
 buildscript {
     apply from: '../properties.gradle'

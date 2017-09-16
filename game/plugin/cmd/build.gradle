@@ -1,0 +1,13 @@
+apolloPlugin {
+    name = "Chat commands"
+    packageName = "org.apollo.game.plugin.cmd"
+    authors = [
+        "Graham",
+        "Major",
+        "lare96",
+        "cubeee",
+    ]
+    dependencies = [
+        "util:command",
+    ]
+}

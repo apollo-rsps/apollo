@@ -23,6 +23,6 @@ fun <T : PlayerEvent> on_player_event(type: () -> KClass<T>): KotlinPlayerHandle
 fun on_command(command: String, privileges: PrivilegeLevel): KotlinPlayerHandlerProxyTrait<Command> = null!!
 fun on_button(button: Int): KotlinPlayerHandlerProxyTrait<ButtonMessage> = null!!
 
-fun start(callback: (World) -> Unit) = {}
+fun start(callback: (World) -> Unit) {}
 fun stop(callback: (World) -> Unit) = {}
 
