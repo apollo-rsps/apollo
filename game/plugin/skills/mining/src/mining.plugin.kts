@@ -41,10 +41,10 @@ class MiningAction(val player: Player, val objectID: Int, val p: Position, val o
         }
 
         //start the process of mining
-        wait(pickaxe.pulses, {
+        wait(pickaxe.pulses) {
             mob.sendMessage("You swing your pick at the rock.")
             mob.playAnimation(pickaxe.animation)
-        })
+        }
 
         if (miningSuccessful()) {
 
