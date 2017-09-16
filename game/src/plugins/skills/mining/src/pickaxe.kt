@@ -11,11 +11,13 @@ enum class Pickaxe(val id: Int, val level: Int, val animation: Animation, val pu
     BRONZE(1265, 1, Animation(625), 8)
 }
 
+val PICKAXES = Pickaxe.values()
+
 
 
 fun getPickaxes(): Array<Pickaxe> {
-    return Pickaxe.values()
+    return PICKAXES
 }
 
-fun lookupPickaxe(id: Int): Pickaxe? = Pickaxe.values().find { it.id == id }
+fun lookupPickaxe(id: Int): Pickaxe? = PICKAXES.find { it.id == id }
 

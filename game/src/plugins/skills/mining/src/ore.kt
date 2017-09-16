@@ -27,10 +27,12 @@ enum class Ore(val id: Int, val objects: Map<Int, Int>, val level: Int, val exp:
     RUNITE(451, RUNITE_OBJECTS, 85, 125.0, 1200, 0.0008, false)
 }
 
-fun lookupOre(id: Int): Ore? = Ore.values().find { it.id == id }
+val ORES = Ore.values()
+
+fun lookupOre(id: Int): Ore? = ORES.find { it.id == id }
 
 fun lookupOreRock(id: Int): Ore? {
-    for (ore in Ore.values()) {
+    for (ore in ORES) {
         for (rock in ore.objects) {
             if (rock.key == id) {
                 return ore

@@ -7,4 +7,6 @@ enum class Gem(val id: Int, val chance: Int) {
     UNCUT_DIAMOND(1617, 0)
 }
 
-fun lookupGem(id: Int): Gem? = Gem.values().find { it.id == id }
+val GEMS = Gem.values()
+
+fun lookupGem(id: Int): Gem? = GEMS.find { it.id == id }
