@@ -102,7 +102,7 @@ class ApolloPluginExtension {
         }
 
         project.tasks.create('compileScripts', ApolloScriptCompileTask) {
-            def outputDir = new File("${project.buildDir}/classes/main")
+            def outputDir = mainSources.output.classesDir
 
             inputs.files scripts.files
             outputsDir = outputDir
