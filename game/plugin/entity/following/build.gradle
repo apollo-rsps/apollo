@@ -1,0 +1,12 @@
+plugin {
+    name = "following"
+    packageName = "org.apollo.game.plugin.entity"
+    authors = [
+        "Gary Tierney",
+    ]
+    dependencies = [
+        "entity:walk-to",
+        "util:command",
+        "entity:player-action",
+    ]
+}

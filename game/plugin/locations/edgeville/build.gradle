@@ -1,0 +1,10 @@
+plugin {
+    name = "edgeville_npc_spawns"
+    packageName = "org.apollo.game.plugin.locations"
+    authors = [
+        "Jesse W",
+    ]
+    dependencies = [
+        "entity:spawn",
+    ]
+}

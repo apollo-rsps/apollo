@@ -1,0 +1,13 @@
+apply plugin: 'kotlin'
+
+dependencies {
+    compileOnly project(':game')
+    compile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
+
+    def gameTestConfiguration = project(':game').configurations.testCompile
+    def gameTestDependencies = gameTestConfiguration.dependencies
+
+    gameTestDependencies.each {
+        compile it
+    }
+}
