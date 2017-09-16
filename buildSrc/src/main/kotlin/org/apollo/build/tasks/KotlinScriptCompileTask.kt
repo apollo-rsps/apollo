@@ -1,11 +1,14 @@
 package org.apollo.build.tasks
 
-import org.apollo.build.compile.KotlinMessageCollector
 import org.apollo.build.compile.KotlinScriptCompiler
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.incremental.IncrementalTaskInputs
+import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
+import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import java.io.File
 
 open class KotlinScriptCompileTask : DefaultTask() {
@@ -29,7 +32,8 @@ open class KotlinScriptCompileTask : DefaultTask() {
         }
 
         val classpath = compileClasspath!!.files
-        val compiler = KotlinScriptCompiler(scriptDefinitionClass!!, classpath, KotlinMessageCollector())
+        val messageCollector = PrintingMessageCollector(System.err, MessageRenderer.PLAIN_RELATIVE_PATHS, true);
+        val compiler = KotlinScriptCompiler(scriptDefinitionClass!!, classpath, messageCollector)
 
         inputs.outOfDate {
             removeBinariesFor(it.file)

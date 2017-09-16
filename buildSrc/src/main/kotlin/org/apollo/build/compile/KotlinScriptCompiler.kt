@@ -1,38 +1,27 @@
 package org.apollo.build.compile
 
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
-import org.jetbrains.kotlin.cli.common.messages.*
-import org.jetbrains.kotlin.cli.jvm.compiler.*
+import org.jetbrains.kotlin.cli.common.messages.MessageCollector
+import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler
 import org.jetbrains.kotlin.cli.jvm.config.JvmClasspathRoot
 import org.jetbrains.kotlin.codegen.CompilationException
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.config.*
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
+import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.addKotlinSourceRoot
 import org.jetbrains.kotlin.script.KotlinScriptDefinitionFromAnnotatedTemplate
 import java.io.File
 import java.lang.management.ManagementFactory
 import java.net.URISyntaxException
 import java.net.URLClassLoader
-import java.nio.file.*
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 import java.util.*
 
-
-class KotlinMessageCollector : MessageCollector {
-
-    override fun clear() {
-    }
-
-    override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageLocation) {
-        if (severity.isError) {
-            println("${location.path}:${location.line}-${location.column}: $message")
-            println(">>> ${location.lineContent}")
-        }
-    }
-
-    override fun hasErrors(): Boolean {
-        return false
-    }
-
-}
 
 data class KotlinCompilerResult(val fqName: String, val outputPath: Path)
 
@@ -87,7 +76,7 @@ class KotlinScriptCompiler {
         configuration.add(JVMConfigurationKeys.SCRIPT_DEFINITIONS, scriptDefinition)
         configuration.put(JVMConfigurationKeys.CONTENT_ROOTS, classpath.map { JvmClasspathRoot(it) })
         configuration.put(JVMConfigurationKeys.RETAIN_OUTPUT_IN_MEMORY, true)
-        configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, KotlinMessageCollector())
+        configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, messageCollector)
         configuration.copy()
 
         return configuration
