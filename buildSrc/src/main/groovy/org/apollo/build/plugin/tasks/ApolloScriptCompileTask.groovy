@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 
 class ApolloScriptCompileTask extends DefaultTask {
+    @Input
     File outputsDir
 
     @Input
@@ -47,12 +48,11 @@ class ApolloScriptCompileTask extends DefaultTask {
         def normalizedPrefix = normalizedFilename.subSequence(0, normalizedFilename.lastIndexOf('.'))
 
         FileFilter filter = {
-            it.name.startsWith(normalizedPrefix)
+            return it.name.startsWith(normalizedPrefix)
         }
 
-        def binaries = outputsDir.listFiles FileFilter { dir, name -> name.startsWith(normalizedPrefix) }
-
-        binaries.forEach {
+        def binaries = outputsDir.listFiles(filter)
+        binaries.each {
             it.delete()
         }
     }

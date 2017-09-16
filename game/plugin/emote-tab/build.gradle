@@ -1,5 +1,5 @@
-apolloPlugin {
-    name = "emote-tab"
+plugin {
+    name = "emote_tab"
     packageName = "org.apollo.game.plugin.widget"
     authors = [
         "Gary Tierney",

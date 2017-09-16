@@ -7,6 +7,6 @@ class ApolloPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.extensions.create('apolloPlugin', ApolloPluginExtension, project)
+        project.extensions.create('plugin', ApolloPluginExtension, project)
     }
 }

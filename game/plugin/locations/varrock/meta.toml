@@ -1,7 +1,7 @@
 name = "varrock npc spawns"
 package = "org.apollo.game.plugin.locations"
 authors = [ "Jesse W" ]
-dependencies = [ "spawning" ]
+dependencies = [ "entity:spawn" ]
 
 [config]
 srcDir = "src/"

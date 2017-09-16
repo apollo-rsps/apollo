@@ -1,4 +1,4 @@
-apolloPlugin {
-    name = "entity lookup"
+plugin {
+    name = "entity_lookup"
     packageName = "org.apollo.game.plugins.util"
 }

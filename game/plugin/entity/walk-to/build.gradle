@@ -1,4 +1,4 @@
-apolloPlugin {
+plugin {
     name = "walkto"
     packageName = "org.apollo.plugin.entity.walkto"
     authors = [

@@ -4,7 +4,6 @@ import org.apollo.game.message.impl.ItemOptionMessage
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.plugin.testing.KotlinPluginTest
 import org.apollo.game.plugin.testing.mockito.KotlinMockitoExtensions.matches
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.never

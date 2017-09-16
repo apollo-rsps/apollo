@@ -1,10 +1,10 @@
-apolloPlugin {
+plugin {
     name = "spawning"
     packageName = "org.apollo.game.plugin.entity"
     authors = [
         "Gary Tierney",
     ]
     dependencies = [
-        "entity_lookup",
+        "util:lookup",
     ]
 }

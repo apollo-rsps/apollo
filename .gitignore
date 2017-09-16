@@ -14,3 +14,4 @@
 /lib/
 */target/
 */build/
+**/build/

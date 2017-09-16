@@ -1,4 +1,4 @@
-apolloPlugin {
+plugin {
     name = "player_action"
     packageName = "org.apollo.game.plugin.entity"
     authors = [

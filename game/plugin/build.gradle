@@ -1,17 +1,3 @@
-import com.moandjiezana.toml.Toml
-
-import java.nio.file.Paths
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath group: 'com.moandjiezana.toml', name: 'toml4j', version: '0.7.1'
-    }
-}
-
 subprojects {
     if (it.buildFile.exists()) {
         apply plugin: 'apollo-plugin'
@@ -21,54 +7,6 @@ subprojects {
             maven {
                 url { 'https://dl.bintray.com/kotlin/kotlinx/' }
             }
-        }
-    }
-}
-
-task("convertPluginTomlToGradle") {
-    def pluginTree = fileTree(dir: "${project.rootDir}/game/src/plugins/")
-    def pluginDefinitions = pluginTree.matching {
-        include "**/*.toml"
-    }
-
-    pluginDefinitions.each { file ->
-        def meta = new Toml()
-        meta.read(file.absoluteFile)
-
-        def pluginFolder = Paths.get(file.parentFile.absolutePath)
-        def name = meta.getString("name", pluginFolder.getFileName().toString())
-        def normalizedName = name.replaceAll("[^a-zA-Z0-9_]", '_').toLowerCase()
-        def description = meta.getString("description", "")
-        def packageName = meta.getString("package", "org.apollo.game.plugin")
-        def authors = meta.getList("authors", new ArrayList())
-        def dependencies = meta.getList("dependencies", new ArrayList())
-
-        def buildFile = new File(pluginFolder.toFile(), 'build.gradle')
-        buildFile.withWriter('UTF-8') { writer ->
-            writer.write("apolloPlugin {\n")
-            writer.write("    name = \"$normalizedName\"\n")
-
-            if (packageName != "org.apollo.game.plugin") {
-                writer.write("    packageName = \"$packageName\"\n")
-            }
-
-            if (description.length() > 0) {
-                writer.write("    description = \"$description\"\n")
-            }
-
-            if (authors.size > 0) {
-                writer.write("    authors = [\n")
-                authors.each { writer.write("        \"$it\",\n") }
-                writer.write("    ]\n")
-            }
-
-            if (dependencies.size > 0) {
-                writer.write("    dependencies = [\n")
-                dependencies.each { writer.write("        \"$it\",\n") }
-                writer.write("    ]\n")
-            }
-
-            writer.write("}")
         }
     }
 }

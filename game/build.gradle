@@ -32,7 +32,6 @@ dependencies {
     compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.16'
 
     project(":game:plugin").subprojects.each { plugin ->
-        println(plugin)
         runtime plugin
     }
 

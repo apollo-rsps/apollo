@@ -1,10 +1,10 @@
-apolloPlugin {
-    name = "lumbridge npc spawns"
+plugin {
+    name = "lumbridge_npc_spawns"
     packageName = "org.apollo.game.plugin.locations"
     authors = [
         "Gary Tierney",
     ]
     dependencies = [
-        "spawning",
+        "entity:spawn",
     ]
 }

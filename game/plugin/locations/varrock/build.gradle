@@ -1,10 +1,10 @@
-apolloPlugin {
-    name = "varrock npc spawns"
+plugin {
+    name = "varrock_npc_spawns"
     packageName = "org.apollo.game.plugin.locations"
     authors = [
         "Jesse W",
     ]
     dependencies = [
-        "spawning",
+        "entity:spawn",
     ]
 }

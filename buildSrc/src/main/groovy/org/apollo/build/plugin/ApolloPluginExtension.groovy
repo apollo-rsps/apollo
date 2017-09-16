@@ -3,9 +3,10 @@ package org.apollo.build.plugin
 import org.apollo.build.plugin.tasks.ApolloScriptCompileTask
 import org.gradle.api.Project
 import org.gradle.api.file.FileTree
+import org.gradle.api.tasks.testing.Test
 
 class ApolloPluginExtension {
-    private Project project
+    final Project project
 
     /**
      * The name of this plugin (defaults to the project name).
@@ -73,29 +74,49 @@ class ApolloPluginExtension {
             }
         }
 
-        project.dependencies.add('compile', gameProject)
-        project.dependencies.add('testCompile', pluginTestingProject.sourceSets.test.output)
+        def mainSources = project.sourceSets.main
+        def gameCompileConfiguration = gameProject.configurations.getByName("compile")
+        def gameSources = gameProject.sourceSets.main
+        def gameDependencies = gameCompileConfiguration.dependencies
 
-        dependencies.each {
-            project.dependencies.add('compile', project.findProject(":game:plugin:$it"))
+        gameDependencies.each {
+            project.dependencies.add('compile', it)
         }
 
-        project.tasks.create('compileScripts', ApolloScriptCompileTask) {
-            def mainSources = project.sourceSets.main
-            def outputDir = mainSources.output.classesDir
+        project.dependencies.add('compile', gameSources.output)
+        project.dependencies.add('testCompile', pluginTestingProject)
+        project.dependencies.add('testCompile', project.sourceSets.main.output)
 
+        def kotlinCompileTask = project.tasks['compileKotlin']
+
+        project.tasks.create('compileScripts', ApolloScriptCompileTask) {
             FileTree filtered = project.fileTree(srcDir).matching {
                 include '*.kts'
             }
 
             inputs.files filtered.files
-            outputsDir = outputDir
+            outputsDir = new File("${project.buildDir}/classes/main")
 
             compileClasspath = mainSources.compileClasspath +
                     mainSources.runtimeClasspath
 
             scriptDefinitionClass = "org.apollo.game.plugin.kotlin.KotlinPluginScript"
-            mustRunAfter project.tasks['classes']
+            mustRunAfter kotlinCompileTask
         }
+
+        kotlinCompileTask.finalizedBy project.tasks['compileScripts']
     }
+
+    def getDependencies() {
+        return dependencies
+    }
+
+    def setDependencies(List<String> dependencies) {
+        dependencies.each {
+            project.dependencies.add('compile', project.findProject(":game:plugin:$it"))
+        }
+
+        this.dependencies = dependencies
+    }
+
 }
