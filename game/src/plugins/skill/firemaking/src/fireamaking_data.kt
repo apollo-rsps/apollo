@@ -17,4 +17,6 @@ val FIRE_OBJ = 2732
 val ASH = 592
 val LIGHT_ANIMATION = Animation(733)
 
-fun lookupLog(id: Int): Log? = Log.values().find { it.id == id }
+val LOGS = Log.values()
+
+fun lookupLog(id: Int): Log? = LOGS.find { it.id == id }
