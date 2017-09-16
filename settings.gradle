@@ -27,7 +27,7 @@ def processPluginDir(Path pluginDir) {
             }
 
             def relativePath = pluginDir.relativize(parentPath)
-            def pluginName = relativePath.toString().replaceAll("/", ":")
+            def pluginName = relativePath.toString().replaceAll(File.separator, ":")
 
             include ":game:plugin:$pluginName"
         }
