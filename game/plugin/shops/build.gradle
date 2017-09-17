@@ -1,4 +1,4 @@
-name = "Shops"
+name = "shops"
 package = "org.apollo.game.plugin.shops"
 dependencies = [ "entity_lookup" ]
 authors = [
