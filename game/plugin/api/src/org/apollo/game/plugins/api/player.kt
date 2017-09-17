@@ -1,8 +1,10 @@
 package org.apollo.game.plugins.api
 
+import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.model.entity.SkillSet
 
+val Player.skills: SkillSet get() = skillSet
 val SkillSet.attack: Skill get() = getSkill(Skill.ATTACK)
 val SkillSet.defence: Skill get() = getSkill(Skill.DEFENCE)
 val SkillSet.strength: Skill get() = getSkill(Skill.STRENGTH)

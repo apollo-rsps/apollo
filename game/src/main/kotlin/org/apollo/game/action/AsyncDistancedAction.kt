@@ -15,12 +15,18 @@ abstract class AsyncDistancedAction<T : Mob> : DistancedAction<T>, AsyncActionTr
 
     abstract suspend fun executeActionAsync()
 
+    open protected fun start() {
+
+    }
+
     override fun stop() {
         super.stop()
         runner.stop()
     }
 
     override fun executeAction() {
+        start()
+
         if (!runner.started()) {
             runner.start()
         }

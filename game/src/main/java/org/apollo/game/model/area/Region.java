@@ -335,12 +335,22 @@ public final class Region {
 	}
 
 	/**
-	 * Removes an {@link Entity} from this Region.
+	 * Removes an {@link Entity} from this Region and notifies listeners.
 	 *
 	 * @param entity The Entity.
 	 * @throws IllegalArgumentException If the Entity does not belong in this Region, or if it was never added.
 	 */
 	public void removeEntity(Entity entity) {
+		removeEntity(entity, true);
+	}
+
+	/**
+	 * Removes an {@link Entity} from this Region.
+	 *
+	 * @param entity The Entity.
+	 * @throws IllegalArgumentException If the Entity does not belong in this Region, or if it was never added.
+	 */
+	public void removeEntity(Entity entity, boolean notifyListeners) {
 		EntityType type = entity.getEntityType();
 		if (type.isTransient()) {
 			throw new IllegalArgumentException("Tried to remove a transient Entity (" + entity + ") from " +
@@ -356,7 +366,9 @@ public final class Region {
 			throw new IllegalArgumentException("Entity (" + entity + ") belongs in (" + this + ") but does not exist.");
 		}
 
-		notifyListeners(entity, EntityUpdateType.REMOVE);
+		if (notifyListeners) {
+			notifyListeners(entity, EntityUpdateType.REMOVE);
+		}
 	}
 
 	@Override

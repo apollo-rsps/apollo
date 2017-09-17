@@ -4,7 +4,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.selects.select
+import kotlinx.coroutines.experimental.runBlocking
 
 class AsyncActionRunner(val actionSupplier: () -> Action<*>, val callback: suspend () -> Unit) {
     var job: Job? = null
@@ -27,10 +27,10 @@ class AsyncActionRunner(val actionSupplier: () -> Action<*>, val callback: suspe
         val action = actionSupplier.invoke()
 
         job = launch(CommonPool) {
-            select {
-                pulseChannel.onReceive {
+            run {
+                while (action.isRunning) {
+                    pulseChannel.receive()
                     callback()
-                    action.stop()
                 }
             }
         }
@@ -45,12 +45,14 @@ class AsyncActionRunner(val actionSupplier: () -> Action<*>, val callback: suspe
         pulseChannel.close()
     }
 
-    suspend fun wait(pulses: Int = 1) {
+    suspend fun wait(pulses: Int = 1, pulseCallback: (() -> Unit)? = null) {
         var remainingPulses = pulses
 
         while (remainingPulses > 0) {
             val numPulses = pulseChannel.receive()
             remainingPulses -= numPulses
+
+            pulseCallback?.invoke()
         }
     }
 
