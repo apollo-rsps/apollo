@@ -66,6 +66,8 @@ class DummyAction(val player: Player, position: Position) : AsyncDistancedAction
         } else {
             skills.addExperience(Skill.ATTACK, EXP_PER_HIT)
         }
+
+        stop()
     }
 
 }

@@ -31,6 +31,7 @@ class ConsumeAction(val consumable: Consumable, player: Player, val slot: Int) :
         consumable.consume(mob, slot)
         mob.playAnimation(Animation(CONSUME_ANIMATION_ID))
         wait(consumable.delay)
+        stop()
     }
 
 }
