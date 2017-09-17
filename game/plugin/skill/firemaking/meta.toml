@@ -1,4 +1,4 @@
-name = "firemaking-skill"
+name = "firemaking_skill"
 package = "org.apollo.game.plugin.skill.firemaking"
 authors = [
         "tlf30",
