@@ -109,7 +109,6 @@ class ApolloPluginExtension {
 
             compileClasspath = mainSources.compileClasspath + mainSources.runtimeClasspath + mainSources.output
             scriptDefinitionClass = "org.apollo.game.plugin.kotlin.KotlinPluginScript"
-
             mustRunAfter buildTask
         }
 

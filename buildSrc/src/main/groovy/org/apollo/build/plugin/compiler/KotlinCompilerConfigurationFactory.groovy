@@ -41,11 +41,10 @@ class KotlinCompilerConfigurationFactory {
             classpath.addAll(bootClasspath.split(File.pathSeparatorChar.toString()).collect { new File(it) })
         }
 
-
-        def classLoader = new URLClassLoader(classpath.collect { it.toURL() }.toArray(new URL[classpath.size()]))
+        def classpathFiles = classpath.findAll { it.exists() }
+        def classLoader = new URLClassLoader(classpathFiles.collect { it.toURL() }.toArray(new URL[classpath.size()]))
         def configuration = new CompilerConfiguration()
         def scriptDefinitionClass = classLoader.loadClass(scriptDefinitionClassName)
-        def classpathFiles = classpath.collect { it }
 
         def scriptDefinition = new KotlinScriptDefinitionFromAnnotatedTemplate(JvmClassMappingKt.getKotlinClass(scriptDefinitionClass),
                 null, null, null, classpathFiles)

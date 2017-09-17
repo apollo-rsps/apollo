@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     compile gradleApi()
+    compile group: 'org.ow2.asm', name: 'asm-all', version: '5.0.3'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-compiler-embeddable', version: "$kotlinVersion"
 }
