@@ -1,0 +1,9 @@
+name = "woodcutting-skill"
+package = "org.apollo.game.plugin.skills.woodcutting"
+authors = [
+    "tlf30"
+ ]
+
+[config]
+srcDir = "src/"
+testDir = "test/"
