@@ -20,6 +20,12 @@ sourceSets {
     }
 }
 
+allprojects {
+    it.plugins.withId('kotlin') {
+        kotlin { experimental { coroutines 'enable' } }
+    }
+}
+
 dependencies {
     compile project(':cache')
     compile project(':net')
