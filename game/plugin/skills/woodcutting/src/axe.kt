@@ -1,4 +1,4 @@
-package org.apollo.game.plugin.skills.mining
+package org.apollo.game.plugin.skills.woodcutting
 
 import org.apollo.game.model.Animation;
 

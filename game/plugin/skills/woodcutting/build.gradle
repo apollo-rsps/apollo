@@ -4,4 +4,5 @@ plugin {
     authors = [
 			"tlf30"
     ]
+    dependencies = ["api"]
 }
