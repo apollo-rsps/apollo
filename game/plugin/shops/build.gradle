@@ -1,12 +1,12 @@
-name = "shops"
-package = "org.apollo.game.plugin.shops"
-dependencies = [ "entity_lookup" ]
-authors = [
-    "Stuart",
-    "Major",
-    "tlf30"
- ]
-
-[config]
-srcDir = "src/"
-testDir = "test/"
+plugin {
+    name = "shops"
+    packageName = "org.apollo.game.plugin.shops"
+    authors = [
+       "Stuart",
+        "Major",
+        "tlf30"
+    ]
+    dependencies = [
+        "entity:lookup",
+    ]
+}
