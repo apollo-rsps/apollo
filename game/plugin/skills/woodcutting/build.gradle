@@ -2,7 +2,7 @@ plugin {
     name = "woodcutting_skill"
     packageName = "org.apollo.game.plugin.skills.woodcutting"
     authors = [
-			"tlf30"
+        "tlf30"
     ]
     dependencies = ["api"]
 }

@@ -1,4 +1,5 @@
 import org.apollo.cache.def.ItemDefinition
+import org.apollo.game.GameConstants
 import org.apollo.game.action.AsyncDistancedAction
 import org.apollo.game.message.impl.ObjectActionMessage
 import org.apollo.game.model.Position
@@ -7,34 +8,41 @@ import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.plugin.skills.woodcutting.*
-import org.apollo.game.plugins.api.Definitions
 import org.apollo.game.plugins.api.woodcutting
 import org.apollo.game.plugins.api.skills
-import org.apollo.game.scheduling.ScheduledTask
 import java.util.*
+import java.util.concurrent.TimeUnit
 
-class WoodcuttingTarget(val objectId: Int, val position: Position, val wood: Wood) {
+class WoodcuttingTarget(val objectId: Int, val position: Position, val tree: Tree) {
 
+    /**
+     * Get the tree object in the world
+     */
     fun getObject(world: World): Optional<GameObject> {
         val region = world.regionRepository.fromPosition(position)
-        val obj = region.findObject(position, objectId)
-
-        return obj
+        return region.findObject(position, objectId)
     }
 
-    fun isSuccessful(mob: Player): Boolean {
-        return rand(100) <= wood.chance * 100
+    /**
+     * Check if the tree was cut down
+     */
+    fun isCutDown(mob: Player): Boolean {
+        return rand(100) <= tree.chance * 100
     }
 }
 
-class WoodcuttingAction(val player: Player, val tool: Axe, val target: WoodcuttingTarget) : AsyncDistancedAction<Player>(PULSES, true, player, target.position, TREE_SIZE) {
+class WoodcuttingAction(val player: Player, val tool: Axe, val target: WoodcuttingTarget) : AsyncDistancedAction<Player>(DELAY, true, player, target.position, TREE_SIZE) {
 
     companion object {
-        private val PULSES = 0
-        private val TREE_SIZE = 1;
+        private val DELAY = 0
+        private val TREE_SIZE = 2
+        private val MINIMUM_RESPAWN_TIME = 30L //In seconds
 
-        fun axeFor(player: Player): Axe? {
-            return AXES
+        /**
+         * Find the highest level axe the player has
+         */
+        private fun axeFor(player: Player): Axe? {
+            return getAxes()
                     .filter { it.level <= player.skills.woodcutting.currentLevel }
                     .filter { player.equipment.contains(it.id) || player.inventory.contains(it.id) }
                     .sortedByDescending { it.level }
@@ -44,27 +52,30 @@ class WoodcuttingAction(val player: Player, val tool: Axe, val target: Woodcutti
         /**
          * Starts a [WoodcuttingAction] for the specified [Player], terminating the [Message] that triggered it.
          */
-        fun start(message: ObjectActionMessage, player: Player, wood: Wood) {
+        fun start(message: ObjectActionMessage, player: Player, wood: Tree) {
             val axe = axeFor(player)
             if (axe != null) {
+                //Check that the player had room in their inventory
+                if (player.inventory.freeSlots() == 0) {
+                    player.inventory.forceCapacityExceeded()
+                    return
+                }
                 val action = WoodcuttingAction(player, axe, WoodcuttingTarget(message.id, message.position, wood))
                 player.startAction(action)
             } else {
-                player.sendMessage("You do not have a axe for which you have the level to use.")
+                player.sendMessage("You do not have an axe for which you have the level to use.")
             }
 
             message.terminate()
         }
     }
 
-
-
     override fun start() {
         mob.turnTo(position)
 
         val level = mob.skills.woodcutting.currentLevel
 
-        if (level < target.wood.level) {
+        if (level < target.tree.level) {
             mob.sendMessage("You do not have the required level to cut down this tree.")
             stop()
         }
@@ -75,39 +86,36 @@ class WoodcuttingAction(val player: Player, val tool: Axe, val target: Woodcutti
         mob.playAnimation(tool.animation)
 
         wait(tool.pulses)
-        //
 
+        //Check that the object exists in the world
         val obj = target.getObject(mob.world)
         if (!obj.isPresent) {
             stop()
             return
         }
 
-        if (mob.inventory.freeSlots() == 0) {
-            mob.inventory.forceCapacityExceeded()
-            stop()
-            return
-        }
-        if (mob.inventory.add(target.wood.id)) {
+        if (mob.inventory.add(target.tree.id)) {
             //TODO: Use lookup from utils once it has a lookup function for IDs
-            val woodName = ItemDefinition.lookup(target.wood.id).name.toLowerCase();
-            mob.sendMessage("You managed to cut some $woodName.")
-            mob.skillSet.addExperience(Skill.WOODCUTTING, target.wood.exp)
+            val logName = ItemDefinition.lookup(target.tree.id).name.toLowerCase();
+            mob.sendMessage("You managed to cut some $logName.")
+            mob.skillSet.addExperience(Skill.WOODCUTTING, target.tree.exp)
         }
 
-        if (target.isSuccessful(mob)) {
+        //Check if the tree was cut down. If it was, we stop the task.
+        if (target.isCutDown(mob)) {
             //respawn time: http://runescape.wikia.com/wiki/Trees
-            val respawn = ((30 * 1000) / 600) + ((rand(150) * 1000) / 600) // between 30 sec and 3 min respawm
-            mob.world.expireObject(obj.get(), target.wood.stump, respawn)
+            val respawn = TimeUnit.SECONDS.toMillis(MINIMUM_RESPAWN_TIME + rand(150)) / GameConstants.PULSE_DELAY
+            mob.world.expireObject(obj.get(), target.tree.stump, respawn.toInt())
+            stop()
         }
     }
 }
 
 on { ObjectActionMessage::class }
-        .where { option == 1 }
-        .then {
-            val wood = lookupTree(id)
-            if (wood != null) {
-                WoodcuttingAction.start(this, it, wood)
-            }
+    .where { option == 1 }
+    .then {
+        val tree = Tree.lookup(id)
+        if (tree != null) {
+            WoodcuttingAction.start(this, it, tree)
         }
+    }
