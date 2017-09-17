@@ -5,6 +5,6 @@ plugin {
         "Jesse W",
     ]
     dependencies = [
-        "entity:spawn",
+        "entity:spawn", "shops"
     ]
 }
