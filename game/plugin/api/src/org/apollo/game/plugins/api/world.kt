@@ -46,7 +46,7 @@ class ExpireObjectTask(
             respawning = true
             setDelay(respawnDelay)
         } else {
-            region.removeEntity(replacement, false)
+            region.removeEntity(replacement)
             world.spawn(obj)
             stop()
         }
