@@ -4,17 +4,23 @@ import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.commons.Remapper
 import org.objectweb.asm.commons.RemappingClassAdapter
+import org.objectweb.asm.tree.ClassNode
 
 class KotlinScriptBinaryArtifactRemapper {
-    String mainClassName
+    final String originalSourceFileName
+    final String mainClassName
 
-    KotlinScriptBinaryArtifactRemapper(String mainClassName) {
+    KotlinScriptBinaryArtifactRemapper(String originalSourceFileName, String mainClassName) {
+        this.originalSourceFileName = originalSourceFileName
         this.mainClassName = mainClassName
     }
 
     KotlinScriptBinaryArtifact remapToPackage(KotlinScriptBinaryArtifact artifact, String packageName) {
-        def reader = new ClassReader(new ByteArrayInputStream(artifact.data))
+        def node = new ClassNode()
         def writer = new ClassWriter(0)
+        def reader = new ClassReader(new ByteArrayInputStream(artifact.data))
+        reader.accept(node, ClassReader.EXPAND_FRAMES)
+
         def normalizedPackageName = packageName.replace('.', '/')
         def oldClassName = reader.getClassName()
         def newClassName = artifact.relativePath.replace(oldClassName, "$normalizedPackageName/$oldClassName")
@@ -31,7 +37,8 @@ class KotlinScriptBinaryArtifactRemapper {
         }
 
         def remappingAdapter = new RemappingClassAdapter(writer, remapper)
-        reader.accept(remappingAdapter, ClassReader.EXPAND_FRAMES)
+        node.accept(remappingAdapter)
+        writer.visitSource(originalSourceFileName, null)
         writer.visitEnd()
 
         return new KotlinScriptBinaryArtifact(newClassName, writer.toByteArray())

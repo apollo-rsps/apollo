@@ -48,7 +48,7 @@ class ApolloScriptCompileTask extends DefaultTask {
             removeBinariesFor(it.file)
 
             def binary = compiler.compile(it.file.toPath())
-            def binaryArtifactRemapper = new KotlinScriptBinaryArtifactRemapper(binary.mainClassName)
+            def binaryArtifactRemapper = new KotlinScriptBinaryArtifactRemapper(it.file.name, binary.mainClassName)
             def artifacts = binary.artifacts.collect { binaryArtifactRemapper.remapToPackage(it, packageName) }
 
             artifacts.each {

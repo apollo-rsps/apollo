@@ -41,17 +41,16 @@ class KotlinCompilerConfigurationFactory {
             classpath.addAll(bootClasspath.split(File.pathSeparatorChar.toString()).collect { new File(it) })
         }
 
-        def classpathFiles = classpath.findAll { it.exists() }
-        def classLoader = new URLClassLoader(classpathFiles.collect { it.toURL() }.toArray(new URL[classpath.size()]))
+        def classLoader = new URLClassLoader(classpath.collect { it.toURL() }.toArray(new URL[classpath.size()]))
         def configuration = new CompilerConfiguration()
         def scriptDefinitionClass = classLoader.loadClass(scriptDefinitionClassName)
 
         def scriptDefinition = new KotlinScriptDefinitionFromAnnotatedTemplate(JvmClassMappingKt.getKotlinClass(scriptDefinitionClass),
-                null, null, null, classpathFiles)
+                null, null, null, classpath.collect())
 
         configuration.add(JVMConfigurationKeys.SCRIPT_DEFINITIONS, scriptDefinition)
         configuration.put(JVMConfigurationKeys.CONTENT_ROOTS, classpath.collect { new JvmClasspathRoot(it) })
-        configuration.put(JVMConfigurationKeys.RETAIN_OUTPUT_IN_MEMORY, true)
+        configuration.put(JVMConfigurationKeys.RETAIN_OUTPUT_IN_MEMORY, false)
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, messageCollector)
         configuration.copy()
 
