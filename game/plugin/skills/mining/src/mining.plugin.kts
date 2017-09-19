@@ -1,3 +1,4 @@
+import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
 import org.apollo.game.action.DistancedAction
 import org.apollo.game.message.impl.ObjectActionMessage
@@ -68,18 +69,15 @@ class MiningAction(player: Player, val tool: Pickaxe, val target: MiningTarget) 
         }
     }
 
-    override fun start() {
+    override fun action() : ActionBlock = {
         mob.turnTo(position)
 
         val level = mob.skills.mining.currentLevel
-
         if (level < target.ore.level) {
             mob.sendMessage("You do not have the required level to mine this rock.")
             stop()
         }
-    }
 
-    override suspend fun executeActionAsync() {
         mob.sendMessage("You swing your pick at the rock.")
         mob.playAnimation(tool.animation)
 
@@ -88,14 +86,12 @@ class MiningAction(player: Player, val tool: Pickaxe, val target: MiningTarget) 
         val obj = target.getObject(mob.world)
         if (!obj.isPresent) {
             stop()
-            return
         }
 
         if (target.isSuccessful(mob)) {
             if (mob.inventory.freeSlots() == 0) {
                 mob.inventory.forceCapacityExceeded()
                 stop()
-                return
             }
 
             if (mob.inventory.add(target.ore.id)) {
@@ -105,7 +101,6 @@ class MiningAction(player: Player, val tool: Pickaxe, val target: MiningTarget) 
                 mob.skills.addExperience(Skill.MINING, target.ore.exp)
                 mob.world.expireObject(obj.get(), target.ore.objects[target.objectId]!!, target.ore.respawn)
                 stop()
-                return
             }
         }
     }
@@ -142,7 +137,7 @@ class ProspectingAction(val m: Player, val p: Position, val ore: Ore) : AsyncDis
         }
     }
 
-    suspend override fun executeActionAsync() {
+    override fun action() : ActionBlock = {
         mob.sendMessage("You examine the rock for ores...")
         mob.turnTo(position)
 

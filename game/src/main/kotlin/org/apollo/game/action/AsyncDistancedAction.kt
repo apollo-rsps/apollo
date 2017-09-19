@@ -3,36 +3,20 @@ package org.apollo.game.action
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Mob
 
+/**
+ * A `DistancedAction` that uses `ActionCoroutine`s to run asynchronously.
+ */
 abstract class AsyncDistancedAction<T : Mob> : DistancedAction<T>, AsyncActionTrait {
 
-    override val runner: AsyncActionRunner
+    override var continuation: ActionCoroutine? = null
 
     constructor(delay: Int, immediate: Boolean, mob: T, position: Position, distance: Int) :
-            super(delay, immediate, mob, position, distance) {
-
-        this.runner = AsyncActionRunner({ this }, { executeActionAsync() })
-    }
-
-    abstract suspend fun executeActionAsync()
-
-    open protected fun start() {
-
-    }
-
-    override fun stop() {
-        super.stop()
-        runner.stop()
-    }
+            super(delay, immediate, mob, position, distance)
 
     override fun executeAction() {
-        start()
-
-        if (!runner.started()) {
-            runner.start()
+        if (update()) {
+            stop()
         }
-
-        runner.pulse()
     }
-
 }
 

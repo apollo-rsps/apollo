@@ -1,3 +1,4 @@
+import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncAction
 import org.apollo.game.message.impl.ItemOptionMessage
 import org.apollo.game.model.Animation
@@ -27,7 +28,7 @@ class ConsumeAction(val consumable: Consumable, player: Player, val slot: Int) :
         }
     }
 
-    suspend override fun executeActionAsync() {
+    override fun action(): ActionBlock = {
         consumable.consume(mob, slot)
         mob.playAnimation(Animation(CONSUME_ANIMATION_ID))
         wait(consumable.delay)

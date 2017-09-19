@@ -3,24 +3,14 @@ package org.apollo.game.action
 import org.apollo.game.model.entity.Mob
 
 abstract class AsyncAction<T : Mob> : Action<T>, AsyncActionTrait {
-    override val runner: AsyncActionRunner
 
-    constructor(delay: Int, immediate: Boolean, mob: T) : super(delay, immediate, mob) {
-        this.runner = AsyncActionRunner({ this }, { executeActionAsync() })
-    }
+    override var continuation: ActionCoroutine? = null
 
-    abstract suspend fun executeActionAsync()
+    constructor(delay: Int, immediate: Boolean, mob: T) : super(delay, immediate, mob)
 
     override fun execute() {
-        if (!runner.started()) {
-            runner.start()
+        if (update()) {
+            stop()
         }
-
-        runner.pulse()
-    }
-
-    override fun stop() {
-        super.stop()
-        runner.stop()
     }
 }
