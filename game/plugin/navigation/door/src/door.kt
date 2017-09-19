@@ -4,12 +4,12 @@ import org.apollo.game.action.DistancedAction
 import org.apollo.game.model.Direction
 import org.apollo.game.model.Position
 import org.apollo.game.model.World
-import org.apollo.game.model.entity.EntityType
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.DynamicGameObject
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.event.PlayerEvent
 import org.apollo.net.message.Message
+import findObject
 
 enum class DoorType {
     LEFT, RIGHT, NOT_SUPPORTED
@@ -46,8 +46,8 @@ class Door(private val gameObject: GameObject) {
          * @param objectId The [GameObject] id of the door
          */
         fun find(world: World, position: Position, objectId: Int): Door? {
-            val objects: Set<GameObject> = world.regionRepository.fromPosition(position).getEntities(position, EntityType.DYNAMIC_OBJECT, EntityType.STATIC_OBJECT)
-            val gameObject: GameObject? = objects.find { it.id == objectId }
+            val region = world.regionRepository.fromPosition(position)
+            val gameObject = region.findObject(position, objectId).orElseGet(null)
             return if (gameObject == null) {
                 null
             } else {

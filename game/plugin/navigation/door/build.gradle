@@ -1,3 +1,5 @@
 plugin {
     name = "door"
+
+    dependencies = ["api"]
 }
