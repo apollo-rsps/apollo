@@ -9,8 +9,8 @@ import org.apollo.plugin.navigation.door.OpenDoorAction
 on { ObjectActionMessage::class }
         .where { option == 1 }
         .then {
-            val door: Door? = Door.find(it.world, position, id)
-            if (door != null && door.supported()) {
+            val door = Door.find(it.world, position, id) ?: return@then
+            if (door.supported()) {
                 OpenDoorAction.start(this, it, door, position)
             }
         }

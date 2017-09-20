@@ -1,5 +1,9 @@
 plugin {
     name = "door"
-
+    packageName = "org.apollo.game.plugin.navigation.door"
     dependencies = ["api"]
+    authors = [
+            "Shiver",
+            "Arin"
+    ]
 }

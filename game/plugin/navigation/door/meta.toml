@@ -1,7 +1,0 @@
-name = "Door"
-package = "org.apollo.game.plugin.navigation.door"
-authors = [ "Arin" ]
-
-[config]
-srcDir = "src/"
-testDir = "test/"

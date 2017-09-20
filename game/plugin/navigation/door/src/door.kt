@@ -9,6 +9,7 @@ import org.apollo.game.model.entity.obj.DynamicGameObject
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.event.PlayerEvent
 import org.apollo.net.message.Message
+import java.util.Objects
 import findObject
 
 enum class DoorType {
@@ -85,26 +86,20 @@ class Door(private val gameObject: GameObject) {
         val world = gameObject.world
         val regionRepository = world.regionRepository
 
-        // Remove current door from region
         regionRepository.fromPosition(gameObject.position).removeEntity(gameObject)
 
-        // Checks if door has been toggled
         val originalDoor: GameObject? = toggledDoors[gameObject]
 
         if (originalDoor == null) {
-            // If not toggled it will change orientation and position of door
             val position = movePosition()
             val orientation: Int = translateDirection()?.toOrientationInteger() ?: gameObject.orientation
 
             val toggledDoor = DynamicGameObject.createPublic(world, gameObject.id, position, gameObject.type, orientation)
 
-            // Renders new door
             regionRepository.fromPosition(position).addEntity(toggledDoor)
             toggledDoors.put(toggledDoor, gameObject)
         } else {
-            // Removes toggled door
             toggledDoors.remove(gameObject)
-            // Renders original door
             regionRepository.fromPosition(originalDoor.position).addEntity(originalDoor)
         }
 
@@ -114,15 +109,7 @@ class Door(private val gameObject: GameObject) {
      * Calculates the position to move the door based on orientation
      */
     private fun movePosition(): Position {
-        val position = gameObject.position
-        return when(Direction.WNES[gameObject.orientation]) {
-            Direction.WEST -> position.step(1, Direction.WEST)
-            Direction.EAST -> position.step(1, Direction.EAST)
-            Direction.NORTH -> position.step(1, Direction.NORTH)
-            Direction.SOUTH -> position.step(1, Direction.SOUTH)
-            else -> return position
-        }
-
+        return gameObject.position.step(1, Direction.WNES[gameObject.orientation])
     }
 
     /**
@@ -168,12 +155,10 @@ class OpenDoorAction(private val player: Player, private val door: Door, positio
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is OpenDoorAction && position == other.position
+        return other is OpenDoorAction && position == other.position && player == other.player
     }
 
-    override fun hashCode(): Int {
-        return position.hashCode()
-    }
+    override fun hashCode(): Int = Objects.hash(position, player)
 
 }
 
