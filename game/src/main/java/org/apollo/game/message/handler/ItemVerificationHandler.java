@@ -31,7 +31,7 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 		 * Gets the appropriate {@link Inventory}.
 		 *
 		 * @param player The {@link Player} who prompted the verification call.
-		 * @return The inventory. Must not be {@code null}.
+		 * @return The inventory, or {@code null} to immediately fail verification.
 		 */
 		Inventory getInventory(Player player);
 
