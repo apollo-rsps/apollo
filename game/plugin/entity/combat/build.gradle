@@ -1,0 +1,10 @@
+plugin {
+    name = "combat"
+    description = "Extensible framework for combat."
+    authors = [
+        "Gary Tierney <gary.tierney@gmx.com>"
+    ]
+    dependencies = [
+        "util:lookup"
+    ]
+}
