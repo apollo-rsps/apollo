@@ -1,0 +1,12 @@
+plugin {
+    name = "fishing_skill"
+    packageName = "org.apollo.game.plugin.skills.fishing"
+    authors = [
+            "Linux",
+            "Major",
+            "tlf30"
+    ]
+    dependencies = [
+            "util:lookup", "entity:spawn", "api"
+    ]
+}
