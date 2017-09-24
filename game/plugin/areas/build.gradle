@@ -1,0 +1,6 @@
+plugin {
+    name = "Area listeners"
+    description = "Enables plugins to listen on mobs entering, moving inside of, or leaving a rectangular area."
+    authors = ["Major"]
+    dependencies = ["api"]
+}
