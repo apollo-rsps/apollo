@@ -1,8 +1,12 @@
-
 import org.apollo.game.message.handler.ItemVerificationHandler
 import org.apollo.game.message.impl.ItemActionMessage
 import org.apollo.game.message.impl.NpcActionMessage
 import org.apollo.game.model.entity.Mob
+import org.apollo.game.plugin.shops.Interfaces
+import org.apollo.game.plugin.shops.OpenShopAction
+import org.apollo.game.plugin.shops.PlayerInventorySupplier
+import org.apollo.game.plugin.shops.SHOPS
+import org.apollo.game.plugin.shops.Shop
 import org.apollo.game.scheduling.ScheduledTask
 
 fun Mob.shop(): Shop? = SHOPS[definition.id]

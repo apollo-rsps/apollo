@@ -1,3 +1,5 @@
+package org.apollo.game.plugin.util.lookup
+
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.cache.def.ObjectDefinition

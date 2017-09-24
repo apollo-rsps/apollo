@@ -1,4 +1,5 @@
 import org.apollo.game.model.Direction
+import org.apollo.game.plugin.entity.spawn.npc_spawn
 
 // Functional npcs
 

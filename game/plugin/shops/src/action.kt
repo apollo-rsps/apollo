@@ -1,3 +1,5 @@
+package org.apollo.game.plugin.shops
+
 import org.apollo.game.action.DistancedAction
 import org.apollo.game.message.handler.ItemVerificationHandler.InventorySupplier
 import org.apollo.game.message.impl.SetWidgetTextMessage

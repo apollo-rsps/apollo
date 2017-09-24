@@ -1,7 +1,9 @@
+package org.apollo.game.plugin.entity.player_action
+
 import org.apollo.game.message.impl.SetPlayerActionMessage
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.event.PlayerEvent
-import java.util.*
+import java.util.EnumSet
 
 enum class PlayerActionType(val displayName: String, val slot: Int, val primary: Boolean = true) {
     ATTACK("Attack", 2),

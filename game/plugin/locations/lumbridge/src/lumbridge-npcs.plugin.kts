@@ -1,3 +1,5 @@
+import org.apollo.game.plugin.entity.spawn.npc_spawn
+
 npc_spawn("woman", id = 4, x = 3232, y = 3207)
 npc_spawn("man", id = 1, x = 3231, y = 3237)
 npc_spawn("man", id = 2, x = 3224, y = 3240)

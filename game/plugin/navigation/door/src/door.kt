@@ -8,9 +8,9 @@ import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.DynamicGameObject
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.event.PlayerEvent
+import org.apollo.game.plugin.api.findObject
 import org.apollo.net.message.Message
 import java.util.Objects
-import findObject
 
 enum class DoorType {
     LEFT, RIGHT, NOT_SUPPORTED
@@ -21,17 +21,17 @@ class Door(private val gameObject: GameObject) {
     companion object {
 
         val LEFT_HINGE_ORIENTATION: HashMap<Direction, Direction> = hashMapOf(
-                Direction.NORTH to Direction.WEST,
-                Direction.SOUTH to Direction.EAST,
-                Direction.WEST to Direction.SOUTH,
-                Direction.EAST to Direction.NORTH
+            Direction.NORTH to Direction.WEST,
+            Direction.SOUTH to Direction.EAST,
+            Direction.WEST to Direction.SOUTH,
+            Direction.EAST to Direction.NORTH
         )
 
         val RIGHT_HINGE_ORIENTATION: HashMap<Direction, Direction> = hashMapOf(
-                Direction.NORTH to Direction.EAST,
-                Direction.SOUTH to Direction.WEST,
-                Direction.WEST to Direction.NORTH,
-                Direction.EAST to Direction.SOUTH
+            Direction.NORTH to Direction.EAST,
+            Direction.SOUTH to Direction.WEST,
+            Direction.WEST to Direction.NORTH,
+            Direction.EAST to Direction.SOUTH
         )
 
         val toggledDoors: HashMap<GameObject, GameObject> = hashMapOf()
@@ -94,7 +94,8 @@ class Door(private val gameObject: GameObject) {
             val position = movePosition()
             val orientation: Int = translateDirection()?.toOrientationInteger() ?: gameObject.orientation
 
-            val toggledDoor = DynamicGameObject.createPublic(world, gameObject.id, position, gameObject.type, orientation)
+            val toggledDoor = DynamicGameObject.createPublic(world, gameObject.id, position, gameObject.type,
+                orientation)
 
             regionRepository.fromPosition(position).addEntity(toggledDoor)
             toggledDoors.put(toggledDoor, gameObject)
@@ -118,7 +119,7 @@ class Door(private val gameObject: GameObject) {
      */
     private fun translateDirection(): Direction? {
         val direction = Direction.WNES[gameObject.orientation]
-        return when(type()) {
+        return when (type()) {
             DoorType.LEFT -> LEFT_HINGE_ORIENTATION[direction]
             DoorType.RIGHT -> RIGHT_HINGE_ORIENTATION[direction]
             DoorType.NOT_SUPPORTED -> null
@@ -127,7 +128,8 @@ class Door(private val gameObject: GameObject) {
 
 }
 
-class OpenDoorAction(private val player: Player, private val door: Door, position: Position) : DistancedAction<Player>(0, true, player, position, DISTANCE) {
+class OpenDoorAction(private val player: Player, private val door: Door, position: Position) : DistancedAction<Player>(
+    0, true, player, position, DISTANCE) {
 
     companion object {
 

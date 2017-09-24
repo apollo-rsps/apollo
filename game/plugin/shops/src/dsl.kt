@@ -1,5 +1,9 @@
-import CategoryWrapper.Affix
+package org.apollo.game.plugin.shops
+
 import org.apollo.cache.def.NpcDefinition
+import org.apollo.game.plugin.shops.CategoryWrapper.Affix
+import org.apollo.game.plugin.util.lookup.lookup_item
+import org.apollo.game.plugin.util.lookup.lookup_npc
 import org.jetbrains.kotlin.utils.keysToMap
 
 /**

@@ -1,13 +1,15 @@
-import Shop.Companion.ExchangeType.BUYING
-import Shop.Companion.ExchangeType.SELLING
-import Shop.PurchasePolicy.ANY
-import Shop.PurchasePolicy.NOTHING
-import Shop.PurchasePolicy.OWNED
+package org.apollo.game.plugin.shops
+
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.model.Item
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.inv.Inventory
 import org.apollo.game.model.inv.Inventory.StackMode.STACK_ALWAYS
+import org.apollo.game.plugin.shops.Shop.Companion.ExchangeType.BUYING
+import org.apollo.game.plugin.shops.Shop.Companion.ExchangeType.SELLING
+import org.apollo.game.plugin.shops.Shop.PurchasePolicy.ANY
+import org.apollo.game.plugin.shops.Shop.PurchasePolicy.NOTHING
+import org.apollo.game.plugin.shops.Shop.PurchasePolicy.OWNED
 
 /**
  * Contains shop-related interface ids.

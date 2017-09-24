@@ -1,3 +1,5 @@
+import org.apollo.game.plugin.shops.shop
+
 shop("Aubury's Rune Shop.") {
     operated by "Aubury"
 

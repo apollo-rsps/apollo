@@ -1,3 +1,5 @@
+package org.apollo.game.plugin.util.command
+
 import org.apollo.game.model.entity.Player
 
 /**
@@ -17,4 +19,4 @@ fun valid_arg_length(args: Array<String>, length: IntRange, player: Player, mess
  * message if not.
  */
 fun valid_arg_length(args: Array<String>, length: Int, player: Player, message: String)
-        = valid_arg_length(args, IntRange(length, length), player, message)
+    = valid_arg_length(args, IntRange(length, length), player, message)

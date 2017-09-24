@@ -1,8 +1,12 @@
-import org.apollo.game.model.*
+package org.apollo.game.plugin.entity.spawn
+
+import org.apollo.game.model.Animation
+import org.apollo.game.model.Direction
+import org.apollo.game.model.Graphic
+import org.apollo.game.model.Position
 
 data class Spawn(val id: Int?, val name: String, val position: Position, val facing: Direction,
-                 val spawnAnimation: Animation? = null,
-                 val spawnGraphic: Graphic? = null)
+                 val spawnAnimation: Animation? = null, val spawnGraphic: Graphic? = null)
 
 object Spawns {
     val list = mutableListOf<Spawn>()

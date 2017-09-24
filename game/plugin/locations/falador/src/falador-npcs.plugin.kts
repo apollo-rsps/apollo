@@ -1,3 +1,4 @@
+import org.apollo.game.plugin.entity.spawn.npc_spawn
 
 // Generic npcs
 

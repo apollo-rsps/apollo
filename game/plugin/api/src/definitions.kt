@@ -1,4 +1,4 @@
-package org.apollo.game.plugins.api
+package org.apollo.game.plugin.api
 
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.cache.def.NpcDefinition

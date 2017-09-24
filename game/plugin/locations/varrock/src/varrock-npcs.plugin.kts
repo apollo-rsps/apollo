@@ -1,4 +1,5 @@
 import org.apollo.game.model.Direction
+import org.apollo.game.plugin.entity.spawn.npc_spawn
 
 npc_spawn("barbarian_woman", x = 3222, y = 3399)
 

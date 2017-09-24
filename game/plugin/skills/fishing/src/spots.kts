@@ -1,6 +1,7 @@
-
 import org.apollo.game.model.Direction
 import org.apollo.game.model.Position
+import org.apollo.game.plugin.entity.spawn.Spawn
+import org.apollo.game.plugin.entity.spawn.Spawns
 import org.apollo.game.plugin.skills.fishing.FishingSpot
 import org.apollo.game.plugin.skills.fishing.FishingSpot.CAGE_HARPOON
 import org.apollo.game.plugin.skills.fishing.FishingSpot.NET_HARPOON
