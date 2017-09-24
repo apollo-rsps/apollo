@@ -1,4 +1,3 @@
-import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.GameConstants
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
@@ -6,14 +5,14 @@ import org.apollo.game.message.impl.ObjectActionMessage
 import org.apollo.game.model.Position
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
-import org.apollo.game.model.entity.Skill
 import org.apollo.game.model.entity.obj.GameObject
-import org.apollo.game.plugin.skills.woodcutting.*
-import org.apollo.game.plugins.api.*
-import java.util.*
+import org.apollo.game.plugin.api.woodcutting
+import org.apollo.game.plugin.skills.woodcutting.Axe
+import org.apollo.game.plugin.skills.woodcutting.Tree
+import java.util.Optional
 import java.util.concurrent.TimeUnit
 
-class WoodcuttingTarget(val objectId: Int, val position: Position, val tree: Tree) {
+class WoodcuttingTarget(private val objectId: Int, val position: Position, val tree: Tree) {
 
     /**
      * Get the tree object in the world
@@ -24,33 +23,37 @@ class WoodcuttingTarget(val objectId: Int, val position: Position, val tree: Tre
     }
 
     /**
-     * Check if the tree was cut down
+     * Returns whether or not the tree was cut down.
      */
-    fun isCutDown(mob: Player): Boolean {
-        return rand(100) <= tree.chance * 100
-    }
+    fun isCutDown(): Boolean = rand(100) <= tree.chance * 100
+
 }
 
-class WoodcuttingAction(val player: Player, val tool: Axe, val target: WoodcuttingTarget) : AsyncDistancedAction<Player>(DELAY, true, player, target.position, TREE_SIZE) {
+class WoodcuttingAction(
+    player: Player,
+    private val tool: Axe,
+    private val target: WoodcuttingTarget
+) : AsyncDistancedAction<Player>(DELAY, true, player, target.position, TREE_SIZE) {
 
     companion object {
-        private val DELAY = 0
-        private val TREE_SIZE = 2
-        private val MINIMUM_RESPAWN_TIME = 30L //In seconds
+        private const val DELAY = 0
+        private const val TREE_SIZE = 2
+        private const val MINIMUM_RESPAWN_TIME = 30L // In seconds
 
         /**
          * Find the highest level axe the player has
          */
         private fun axeFor(player: Player): Axe? {
             return Axe.getAxes()
-                    .filter { it.level <= player.skills.woodcutting.currentLevel }
-                    .filter { player.equipment.contains(it.id) || player.inventory.contains(it.id) }
-                    .sortedByDescending { it.level }
-                    .firstOrNull()
+                .filter { it.level <= player.woodcutting.current }
+                .filter { player.equipment.contains(it.id) || player.inventory.contains(it.id) }
+                .sortedByDescending { it.level }
+                .firstOrNull()
         }
 
         /**
-         * Starts a [WoodcuttingAction] for the specified [Player], terminating the [Message] that triggered it.
+         * Starts a [WoodcuttingAction] for the specified [Player], terminating the [ObjectActionMessage] that triggered
+         * it.
          */
         fun start(message: ObjectActionMessage, player: Player, wood: Tree) {
             val axe = axeFor(player)
@@ -73,7 +76,7 @@ class WoodcuttingAction(val player: Player, val tool: Axe, val target: Woodcutti
     override fun action(): ActionBlock = {
         mob.turnTo(position)
 
-        val level = mob.skills.woodcutting.currentLevel
+        val level = mob.woodcutting.current
         if (level < target.tree.level) {
             mob.sendMessage("You do not have the required level to cut down this tree.")
             stop()
@@ -92,12 +95,12 @@ class WoodcuttingAction(val player: Player, val tool: Axe, val target: Woodcutti
             }
 
             if (mob.inventory.add(target.tree.id)) {
-                val logName = Definitions.item(target.tree.id)?.name?.toLowerCase();
+                val logName = Definitions.item(target.tree.id)?.name?.toLowerCase()
                 mob.sendMessage("You managed to cut some $logName.")
-                mob.skills.addExperience(Skill.WOODCUTTING, target.tree.exp)
+                mob.woodcutting.experience += target.tree.exp
             }
 
-            if (target.isCutDown(mob)) {
+            if (target.isCutDown()) {
                 //respawn time: http://runescape.wikia.com/wiki/Trees
                 val respawn = TimeUnit.SECONDS.toMillis(MINIMUM_RESPAWN_TIME + rand(150)) / GameConstants.PULSE_DELAY
                 mob.world.expireObject(obj.get(), target.tree.stump, respawn.toInt())

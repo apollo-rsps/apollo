@@ -1,14 +1,13 @@
+
 import Fishing_plugin.FishingAction
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
 import org.apollo.game.message.impl.NpcActionMessage
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Player
-import org.apollo.game.model.entity.Skill
+import org.apollo.game.plugin.api.fishing
 import org.apollo.game.plugin.skills.fishing.FishingSpot
 import org.apollo.game.plugin.skills.fishing.FishingTool
-import org.apollo.game.plugins.api.fishing
-import org.apollo.game.plugins.api.skills
 import java.util.Objects
 import java.util.Random
 
@@ -62,7 +61,7 @@ class FishingAction(player: Player, position: Position, val option: FishingSpot.
             mob.playAnimation(tool.animation)
             wait(FISHING_DELAY)
 
-            val level = mob.skills.fishing.currentLevel
+            val level = mob.fishing.current
             val fish = option.sample(level)
 
             if (successfulCatch(level, fish.level)) {
@@ -72,7 +71,7 @@ class FishingAction(player: Player, position: Position, val option: FishingSpot.
 
                 mob.inventory.add(fish.id)
                 mob.sendMessage("You catch a ${fish.formattedName}.")
-                mob.skills.addExperience(Skill.FISHING, fish.experience)
+                mob.fishing.experience += fish.experience
 
                 if (mob.inventory.freeSlots() == 0) {
                     mob.inventory.forceCapacityExceeded()
@@ -91,7 +90,7 @@ class FishingAction(player: Player, position: Position, val option: FishingSpot.
      * Verifies that the player can gather fish from the [FishingSpot] they clicked.
      */
     private fun verify(): Boolean {
-        if (mob.skills.fishing.currentLevel < option.level) {
+        if (mob.fishing.current < option.level) {
             mob.sendMessage("You need a fishing level of ${option.level} to fish at this spot.")
             return false
         } else if (!hasTool(mob, tool)) {
@@ -113,7 +112,6 @@ class FishingAction(player: Player, position: Position, val option: FishingSpot.
         if (javaClass != other?.javaClass) return false
 
         other as FishingAction
-
         return option == other.option && position == other.position && mob == other.mob
     }
 
