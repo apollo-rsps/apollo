@@ -1,8 +1,0 @@
-name = "edgeville npc spawns"
-package = "org.apollo.game.plugin.locations"
-authors = [ "Jesse W" ]
-dependencies = [ "entity:spawn" ]
-
-[config]
-srcDir = "src/"
-testDir = "test/"

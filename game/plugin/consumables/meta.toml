@@ -1,8 +1,0 @@
-name = "consumables"
-package = "org.apollo.game.plugin.consumables"
-authors = [ "Gary Tierney" ]
-dependencies = []
-
-[config]
-srcDir = "src/"
-testDir = "test/"

@@ -1,8 +1,0 @@
-name = "following"
-package = "org.apollo.game.plugin.entity"
-authors = [ "Gary Tierney" ]
-dependencies = [ "walkto", "command_utilities", "player_action"]
-
-[config]
-srcDir = "src/"
-testDir = "test/"

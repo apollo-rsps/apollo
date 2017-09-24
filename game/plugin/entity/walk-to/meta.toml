@@ -1,4 +1,0 @@
-name = "walkto"
-package = "org.apollo.plugin.entity.walkto"
-authors = ["Gary Tierney"]
-dependencies = []

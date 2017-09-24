@@ -1,7 +1,0 @@
-name = "training-dummy"
-package = "org.apollo.game.plugin.entity"
-authors = [ "Gary Tierney" ]
-
-[config]
-srcDir = "src/"
-testDir = "test/"

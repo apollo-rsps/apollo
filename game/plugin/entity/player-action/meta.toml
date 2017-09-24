@@ -1,8 +1,0 @@
-name = "player_action"
-package = "org.apollo.game.plugin.entity"
-authors = [ "Gary Tierney" ]
-dependencies = []
-
-[config]
-srcDir = "src/"
-testDir = "test/"

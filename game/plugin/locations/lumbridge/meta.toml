@@ -1,8 +1,0 @@
-name = "lumbridge npc spawns"
-package = "org.apollo.game.plugin.locations"
-authors = [ "Gary Tierney" ]
-dependencies = [ "entity:spawn" ]
-
-[config]
-srcDir = "src/"
-testDir = "test/"
