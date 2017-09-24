@@ -6,7 +6,11 @@ import org.apollo.game.model.Position
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.GameObject
+import org.apollo.game.plugin.api.Definitions
+import org.apollo.game.plugin.api.expireObject
+import org.apollo.game.plugin.api.findObject
 import org.apollo.game.plugin.api.mining
+import org.apollo.game.plugin.api.rand
 import org.apollo.game.plugin.skills.mining.Ore
 import org.apollo.game.plugin.skills.mining.PICKAXES
 import org.apollo.game.plugin.skills.mining.Pickaxe
