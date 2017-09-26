@@ -7,19 +7,19 @@
  */
 
 import org.apollo.game.command.Command
-import org.apollo.game.message.handler.MessageHandlerChainSet
 import org.apollo.game.message.impl.ButtonMessage
 import org.apollo.game.model.World
-import org.apollo.game.model.area.RegionRepository
-import org.apollo.game.model.entity.*
 import org.apollo.game.model.entity.setting.PrivilegeLevel
+import org.apollo.game.model.event.Event
 import org.apollo.game.model.event.PlayerEvent
-import org.apollo.game.plugin.kotlin.*
+import org.apollo.game.plugin.kotlin.KotlinEventHandler
+import org.apollo.game.plugin.kotlin.KotlinPlayerHandlerProxyTrait
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
 
 fun <T : Message> on(type: () -> KClass<T>): KotlinPlayerHandlerProxyTrait<T> = null!!
 fun <T : PlayerEvent> on_player_event(type: () -> KClass<T>): KotlinPlayerHandlerProxyTrait<T> = null!!
+fun <T : Event> on_event(type: () -> KClass<T>): KotlinEventHandler<T> = null!!
 fun on_command(command: String, privileges: PrivilegeLevel): KotlinPlayerHandlerProxyTrait<Command> = null!!
 fun on_button(button: Int): KotlinPlayerHandlerProxyTrait<ButtonMessage> = null!!
 
