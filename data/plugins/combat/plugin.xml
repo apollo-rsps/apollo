@@ -1,17 +1,57 @@
 <?xml version="1.0"?>
 <plugin>
-  <id>combat</id>
-  <version>1</version>
-  <name>Combat</name>
-  <description>Manages combat between game characters.</description>
-  <authors>
-    <author>Ryley</author>
-  </authors>
-  <scripts>
-    <script>wilderness.rb</script>
-  </scripts>
-  <dependencies>
-    <dependency>attributes</dependency>
-    <dependency>areas</dependency>
-  </dependencies>
+    <id>combat</id>
+    <version>0.1</version>
+    <name>combat</name>
+    <description>Adds fully functioning melee, ranged and magic combat.</description>
+    <authors>
+        <author>garyttierney</author>
+        <author>Shiver</author>
+        <author>Major</author>
+    </authors>
+    <scripts>
+        <!-- Include the BonusContainer mixin first, as its used throughout -->
+        <script>ammo.rb</script>
+        <script>attack.rb</script>
+        <script>attack_requirements.rb</script>
+        <script>attributes.rb</script>
+        <script>bonuses.rb</script>
+        <script>combat.rb</script>
+        <script>combat_action.rb</script>
+        <script>combat_state.rb</script>
+        <script>combat_style.rb</script>
+        <script>equipment.rb</script>
+        <script>util.rb</script>
+        <script>projectile_type.rb</script>
+
+        <script>spellbook.rb</script>
+        <script>spellbooks.rb</script>
+
+        <script>combat_spell.rb</script>
+        <script>spells/bolts.rb</script>
+        
+        <script>weapon.rb</script>
+        <script>weapon_class.rb</script>
+        <script>weapons/bows.rb</script>
+        <script>weapons/daggers.rb</script>
+        <script>weapons/scimitars.rb</script>
+        <script>weapons/swords.rb</script>
+        <script>weapons/two_handed_swords.rb</script>
+        <script>ammo/arrows.rb</script>
+        <script>ammo/bolts.rb</script>
+        <script>weapons/ranged/bows.rb</script>
+        <script>weapons/ranged/magic_bows.rb</script>
+        <script>weapons/ranged/crossbows.rb</script>
+        <script>weapons/melee/daggers.rb</script>
+        <script>weapons/melee/scimitars.rb</script>
+        <script>weapons/melee/swords.rb</script>
+        <script>weapons/melee/two_handed_swords.rb</script>
+        <script>weapons/unarmed.rb</script>
+        <script>widgets/combat_tab.rb</script>
+        <script>widgets/special_bar.rb</script>
+    </scripts>
+    <dependencies>
+        <dependency>attributes</dependency>
+        <dependency>util</dependency>
+    </dependencies>
 </plugin>
