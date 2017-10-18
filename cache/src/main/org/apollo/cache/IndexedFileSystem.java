@@ -1,21 +1,19 @@
 package org.apollo.cache;
 
+import com.google.common.base.Preconditions;
+import org.apollo.cache.archive.Archive;
+
 import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.zip.CRC32;
-
-import com.google.common.base.Preconditions;
-import org.apollo.cache.archive.Archive;
 
 /**
  * A file system based on top of the operating system's file system. It consists of a data file and index files. Index
@@ -95,7 +93,7 @@ public final class IndexedFileSystem implements Closeable {
 	public Archive getArchive(int type, int file) throws IOException {
 		FileDescriptor descriptor = new FileDescriptor(type, file);
 		Archive cached = cache.get(descriptor);
-		
+
 		if (cached == null) {
 			cached = Archive.decode(getFile(descriptor));
 
@@ -274,7 +272,7 @@ public final class IndexedFileSystem implements Closeable {
 			}
 		}
 		if (indexCount <= 0) {
-			throw new FileNotFoundException("No index file(s) present.");
+			throw new FileNotFoundException("No index file(s) present in " + base + ".");
 		}
 
 		Path resources = base.resolve("main_file_cache.dat");

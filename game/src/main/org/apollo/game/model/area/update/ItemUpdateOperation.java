@@ -27,7 +27,7 @@ public final class ItemUpdateOperation extends UpdateOperation<GroundItem> {
 
 	@Override
 	protected RegionUpdateMessage add(int offset) {
-		return new SendPublicTileItemMessage(entity.getItem(), offset, entity.getOwnerIndex());
+		return new SendPublicTileItemMessage(entity.getItem(), entity.getOwnerIndex(), offset);
 	}
 
 	@Override

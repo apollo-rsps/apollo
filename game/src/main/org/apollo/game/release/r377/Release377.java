@@ -135,6 +135,7 @@ public final class Release377 extends Release {
 		register(119, new FlashingTabClickedMessageDecoder());
 
 		register(1, new ItemOnItemMessageDecoder());
+		register(57, new ItemOnNpcMessageDecoder());
 		register(36, new MagicOnItemMessageDecoder());
 		register(31, new MagicOnPlayerMessageDecoder());
 		register(104, new MagicOnNpcMessageDecoder());
@@ -169,6 +170,8 @@ public final class Release377 extends Release {
 		register(141, new RemoveFriendMessageDecoder());
 		register(160, new RemoveIgnoreMessageDecoder());
 		register(227, new PrivateChatMessageDecoder());
+
+		register(184, new ReportAbuseMessageDecoder());
 
 		register(IdAssignmentMessage.class, new IdAssignmentMessageEncoder());
 		register(RegionChangeMessage.class, new RegionChangeMessageEncoder());

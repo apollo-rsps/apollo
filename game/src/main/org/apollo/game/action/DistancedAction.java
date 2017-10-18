@@ -15,27 +15,27 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 	/**
 	 * The delay once the threshold is reached.
 	 */
-	private final int delay;
+	protected final int delay;
 
 	/**
 	 * The minimum distance before the action fires.
 	 */
-	private final int distance;
+	protected final int distance;
 
 	/**
 	 * A flag indicating if this action fires immediately after the threshold is reached.
 	 */
-	private final boolean immediate;
+	protected final boolean immediate;
 
 	/**
 	 * The position to distance check with.
 	 */
-	private final Position position;
+	protected final Position position;
 
 	/**
 	 * A flag indicating if the distance has been reached yet.
 	 */
-	private boolean reached = false;
+	private boolean reached;
 
 	/**
 	 * Creates a new DistancedAction.
