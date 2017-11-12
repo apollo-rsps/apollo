@@ -1,8 +1,5 @@
 package org.apollo.game.model;
 
-import java.util.*;
-import java.util.logging.Logger;
-
 import com.google.common.base.Preconditions;
 import org.apollo.Service;
 import org.apollo.cache.IndexedFileSystem;
@@ -19,11 +16,7 @@ import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionManager;
 import org.apollo.game.model.area.collision.CollisionUpdateListener;
-import org.apollo.game.model.entity.Entity;
-import org.apollo.game.model.entity.EntityType;
-import org.apollo.game.model.entity.MobRepository;
-import org.apollo.game.model.entity.Npc;
-import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.*;
 import org.apollo.game.model.event.Event;
 import org.apollo.game.model.event.EventListener;
 import org.apollo.game.model.event.EventListenerChainSet;
@@ -32,6 +25,9 @@ import org.apollo.game.scheduling.ScheduledTask;
 import org.apollo.game.scheduling.Scheduler;
 import org.apollo.game.scheduling.impl.NpcMovementTask;
 import org.apollo.util.NameUtil;
+
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The world class is a singleton which contains objects like the {@link MobRepository} for players and NPCs. It should
@@ -95,6 +91,11 @@ public final class World {
 	 * The {@link MobRepository} of {@link Player}s.
 	 */
 	private final MobRepository<Player> playerRepository = new MobRepository<>(WorldConstants.MAXIMUM_PLAYERS);
+
+	/**
+	 * A {@link Map} of player usernames to their local {@link Set} of {@link GroundItem}s.
+	 */
+	private final Map<Long, Set<GroundItem>> groundItems = new HashMap<>(WorldConstants.MAXIMUM_PLAYERS);
 
 	/**
 	 * A {@link Map} of player usernames and the player objects.
@@ -179,6 +180,15 @@ public final class World {
 	 */
 	public MobRepository<Player> getPlayerRepository() {
 		return playerRepository;
+	}
+
+	/**
+	 * Gets the {@link Map} of player usernames to their {@link Set} of {@link GroundItem}s
+	 *
+	 * @return The map.
+	 */
+	public Map<Long, Set<GroundItem>> getGroundItems() {
+		return groundItems;
 	}
 
 	/**

@@ -1,0 +1,5 @@
+plugin {
+    name = "ground_item"
+    packageName = "org.apollo.game.plugin.entity"
+    authors = ["Ryley"]
+}

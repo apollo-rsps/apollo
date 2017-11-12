@@ -9,6 +9,8 @@ import org.apollo.game.model.area.update.GroupableEntity;
 import org.apollo.game.model.area.update.ItemUpdateOperation;
 import org.apollo.game.model.area.update.UpdateOperation;
 
+import java.util.Objects;
+
 /**
  * An {@link Item} displayed on the ground.
  *
@@ -17,19 +19,19 @@ import org.apollo.game.model.area.update.UpdateOperation;
 public final class GroundItem extends Entity implements GroupableEntity {
 
 	/**
-	 * Creates a new GroundItem.
+	 * Creates a new <strong>global</strong> GroundItem.
 	 *
 	 * @param world The {@link World} containing the GroundItem.
 	 * @param position The {@link Position} of the Item.
 	 * @param item The Item displayed on the ground.
 	 * @return The GroundItem.
 	 */
-	public static GroundItem create(World world, Position position, Item item) {
-		return new GroundItem(world, position, item, -1);
+	public static GroundItem createGlobal(World world, Position position, Item item) {
+		return new GroundItem(world, position, item, -1, true);
 	}
 
 	/**
-	 * Creates a new dropped GroundItem.
+	 * Creates a new <strong>non-global</strong> dropped GroundItem.
 	 *
 	 * @param world The {@link World} containing the GroundItem.
 	 * @param position The {@link Position} of the Item.
@@ -38,7 +40,7 @@ public final class GroundItem extends Entity implements GroupableEntity {
 	 * @return The GroundItem.
 	 */
 	public static GroundItem dropped(World world, Position position, Item item, Player owner) {
-		return new GroundItem(world, position, item, owner.getIndex());
+		return new GroundItem(world, position, item, owner.getIndex(), false);
 	}
 
 	/**
@@ -52,24 +54,36 @@ public final class GroundItem extends Entity implements GroupableEntity {
 	private final Item item;
 
 	/**
+	 * Represents the global state of this GroundItem.
+	 */
+	private boolean global;
+
+	/**
+	 * Represents the availability state of this GroundItem.
+	 */
+	private boolean available = true;
+
+	/**
 	 * Creates the GroundItem.
 	 *
 	 * @param world The {@link World} containing the GroundItem.
 	 * @param position The {@link Position} of the GroundItem.
 	 * @param item The Item displayed on the ground.
 	 * @param index The index of the {@link Player} who dropped this GroundItem.
+	 * @param global The global state of this GroundItem.
 	 */
-	private GroundItem(World world, Position position, Item item, int index) {
+	private GroundItem(World world, Position position, Item item, int index, boolean global) {
 		super(world, position);
 		this.item = item;
 		this.index = index;
+		this.global = global;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof GroundItem) {
 			GroundItem other = (GroundItem) obj;
-			return position.equals(other.position);
+			return item.equals(other.item) && position.equals(other.position) && global == other.global;
 		}
 
 		return false;
@@ -99,9 +113,48 @@ public final class GroundItem extends Entity implements GroupableEntity {
 		return index;
 	}
 
+	/**
+	 * Gets the global state of this GroundItem.
+	 *
+	 * @return {@code true} iff this GroundItem is global.
+	 */
+	public boolean isGlobal() {
+		return global;
+	}
+
+	/**
+	 * Globalizes this GroundItem.
+	 *
+	 * @throws IllegalStateException If this GroundItem is already global.
+	 */
+	public void globalize() {
+		if (global) {
+			throw new IllegalStateException("Ground item state has already been set to global.");
+		}
+		global = true;
+	}
+
+	/**
+	 * Gets the availability of this GroundItem.
+	 *
+	 * @return {@code true} iff this GroundItem is available to be picked up.
+	 */
+	public boolean isAvailable() {
+		return available;
+	}
+
+	/**
+	 * Sets whether or not this GroundItem is available.
+	 *
+	 * @param available {@code true} if this GroundItem is available to be picked up, otherwise {@code false}.
+	 */
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
+
 	@Override
 	public int hashCode() {
-		return position.hashCode() * 31 + item.hashCode();
+		return Objects.hash(item, position, global);
 	}
 
 	@Override
