@@ -16,11 +16,13 @@ public final class SendPlaySoundMessage extends Message {
 
 	/**
 	 * The delay that the client should use before playing the sound.
+	 * Deplay is measured in milliseconds.
 	 */
 	private final int delay;
 
 	/**
 	 * The type of sound to play.
+	 * Usually 0.
 	 */
 	private final int type;
 
@@ -28,8 +30,8 @@ public final class SendPlaySoundMessage extends Message {
 	 * Creates a new send play sound message.
 	 *
 	 * @param id The id of the sound to play.
-	 * @param type The type of the sound to play.
-	 * @param delay The delay before the client plays the sound
+	 * @param type The type of the sound to play, usually 0.
+	 * @param delay The delay in milliseconds before the client plays the sound
 	 */
 	public SendPlaySoundMessage(int id, int type, int delay) {
 		this.id = id;
@@ -56,9 +58,9 @@ public final class SendPlaySoundMessage extends Message {
 	}
 
 	/**
-	 * Gets the delay of the sound.
+	 * Gets the number of milliseconds for the client to delay before playing the sound.
 	 *
-	 * @return The delay of the sound.
+	 * @return The delay of the sound in milliseconds.
 	 */
 	public int getDelay() {
 		return delay;
