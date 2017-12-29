@@ -1,12 +1,9 @@
 plugin {
-    name = "mining-skill"
-    packageName = "org.apollo.game.plugin.skills.mining"
+    name = "runecrafting-skill"
+    packageName = "org.apollo.game.plugin.skills.runecrafting"
     authors = [
-            "Graham",
-            "Mikey`",
-            "WH:II:DOW",
-            "Requa",
-            "Clifton",
+            "Major",
+            "BugCrusher",
             "tlf30"
     ]
 
