@@ -1,14 +1,13 @@
 package org.apollo.game.model.inv;
 
+import com.google.common.base.Preconditions;
+import org.apollo.cache.def.ItemDefinition;
+import org.apollo.game.model.Item;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import org.apollo.cache.def.ItemDefinition;
-import org.apollo.game.model.Item;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Represents an inventory - a collection of {@link Item}s.
@@ -517,6 +516,15 @@ public final class Inventory {
 	public int remove(Item item) {
 		return remove(item.getId(), item.getAmount());
 	}
+
+	/**
+	 * Remove all items with the given {@code id} and return the number of
+	 * items removed.
+	 *
+	 * @param id The id of items to remove.
+	 * @return The amount that was removed.
+	 */
+	public int removeAll(int id) { return remove(id, getAmount(id)); }
 
 	/**
 	 * Removes all the listeners.

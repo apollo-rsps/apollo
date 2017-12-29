@@ -1,0 +1,11 @@
+plugin {
+    name = "runecrafting-skill"
+    packageName = "org.apollo.game.plugin.skills.runecrafting"
+    authors = [
+            "Major",
+            "BugCrusher",
+            "tlf30"
+    ]
+
+    dependencies = ["util:lookup", "api"]
+}
