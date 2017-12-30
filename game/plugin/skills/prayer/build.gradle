@@ -1,0 +1,12 @@
+plugin {
+    name = "prayer_skill"
+    packageName = "org.apollo.game.plugin.skills.prayer"
+    authors = [
+            "Major",
+            "010253",
+            "tlf30"
+    ]
+    dependencies = [
+            "util:lookup", "api"
+    ]
+}
