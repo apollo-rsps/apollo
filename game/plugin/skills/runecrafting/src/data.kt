@@ -1,7 +1,15 @@
 import javafx.geometry.Pos
+import org.apollo.game.model.Animation
+import org.apollo.game.model.Graphic
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Player
 import java.lang.Math.floor
+
+val CHANGE_ALTER_OBJECT_CONFIG = 491
+val TIARA_ITEM_ID = 5525 //Blank Tiara
+val ANIMATION = Animation(791)
+val GRAPHIC = Graphic(186, 0, 100)
+val RUNE_ESSENCE_ID = 1436
 
 enum class Alter(val entranceId: Int, val craftingId: Int, val portalId: Int, val entrance: Position, val exit: Position, val center: Position) {
     AIR_ALTER(2452, 2478, 2465, Position(2841, 4829), Position(2983, 3292), Position(2844, 4834)),
@@ -14,10 +22,16 @@ enum class Alter(val entranceId: Int, val craftingId: Int, val portalId: Int, va
     LAW_ALTER(2459, 2485, 2472, Position(2464, 4818), Position(2858, 3379), Position(2464, 4832)),
     NATURE_ALTER(2460, 2486, 2473, Position(2400, 4835), Position(2867, 3019), Position(2400, 4841)),
     CHAOS_ALTER(2461, 2487, 2474, Position(2268, 4842), Position(3058, 3591), Position(2271, 4842)),
-    DEATH_ALTER(2462, 2488, 2475, Position(2208, 4830), Position(3222, 3222), Position(2205, 4836))
+    DEATH_ALTER(2462, 2488, 2475, Position(2208, 4830), Position(3222, 3222), Position(2205, 4836));
+
+    companion object {
+        fun findByEntranceId(id: Int): Alter? = Alter.values().find { alter ->  alter.entranceId == id }
+        fun findByPortalId(id: Int): Alter? = Alter.values().find { alter ->  alter.portalId == id }
+        fun findByCraftingId(id: Int): Alter? = Alter.values().find { alter ->  alter.craftingId == id }
+    }
 }
 
-enum class Rune(val id: Int, val alter: Alter, val level: Int, val reward: Double) {
+enum class Rune(val id: Int, val alter: Alter, val level: Int, val xp: Double) {
     AIR_RUNE(556, Alter.AIR_ALTER, 1, 5.0),
     MIND_RUNE(558, Alter.MIND_ALTER, 1, 5.5),
     WATER_RUNE(555, Alter.WATER_ALTER, 5, 6.0),
@@ -30,6 +44,11 @@ enum class Rune(val id: Int, val alter: Alter, val level: Int, val reward: Doubl
     LAW_RUNE(563, Alter.LAW_ALTER, 54, 9.5),
     DEATH_RUNE(560, Alter.DEATH_ALTER, 65, 10.0);
 
+    companion object {
+        fun findById(id: Int): Rune? = Rune.values().find { rune ->  rune.id == id }
+        fun findByAlterId(id: Int): Rune? = Rune.values().find { rune ->  rune.alter.craftingId == id }
+    }
+
     fun getBonus(): Double =
             when(this) {
                 Rune.AIR_RUNE -> (floor((level / 11.0)) + 1)
@@ -41,8 +60,8 @@ enum class Rune(val id: Int, val alter: Alter, val level: Int, val reward: Doubl
                 Rune.COSMIC_RUNE -> (floor((level / 59.0)) + 1)
                 Rune.CHAOS_RUNE -> (floor((level / 74.0)) + 1)
                 Rune.NATURE_RUNE -> (floor((level / 91.0)) + 1)
-                Rune.LAW_RUNE -> 0.0
-                Rune.DEATH_RUNE -> 0.0
+                Rune.LAW_RUNE -> 1.0
+                Rune.DEATH_RUNE -> 1.0
             }
 }
 
@@ -58,6 +77,10 @@ enum class Talisman(val id: Int, val alter: Position) {
     DEATH_TALISMAN(1456, Position(0, 0)),
     LAW_TALISMAN(1458, Position(2858, 3381)),
     NATURE_TALISMAN(1462, Position(2869, 3019));
+
+    companion object {
+        fun findById(id: Int): Talisman? = Talisman.values().find { talisman ->  talisman.id == id }
+    }
 
     fun sendMessage(player: Player) {
         if (alter.isWithinDistance(player.position, 10)) {
@@ -81,5 +104,12 @@ enum class Tiara(val id: Int, val alter: Alter, val talisman: Talisman, val bits
     NATURE_TIARA(5541, Alter.NATURE_ALTER, Talisman.NATURE_TALISMAN, 8, 45.0),
     CHAOS_TIARA(5543, Alter.CHAOS_ALTER, Talisman.CHAOS_TALISMAN, 9, 42.5),
     LAW_TIARA(5545, Alter.LAW_ALTER, Talisman.LAW_TALISMAN, 7, 47.5),
-    DEATH_TIARA(5548, Alter.DEATH_ALTER, Talisman.DEATH_TALISMAN, 10, 50.0)
+    DEATH_TIARA(5548, Alter.DEATH_ALTER, Talisman.DEATH_TALISMAN, 10, 50.0);
+
+    companion object {
+        fun findById(id: Int): Tiara? = Tiara.values().find { tiara ->  tiara.id == id }
+        fun findByAlterId(id: Int): Tiara? = Tiara.values().find { tiara ->  tiara.alter.entranceId == id }
+        fun findByTalismanId(id: Int): Tiara? = Tiara.values().find { tiara ->  tiara.talisman.id == id }
+    }
+
 }
