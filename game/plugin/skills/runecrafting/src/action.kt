@@ -19,6 +19,7 @@ class CreateTiaraAction(val player: Player, val position: Position, val tiara: T
         if (tiara.alter != alter) {
             player.sendMessage("You can't use that talisman on this alter.")
             stop()
+            return
         }
 
         //Check player inventory for blank tiara
@@ -34,17 +35,19 @@ class CreateTiaraAction(val player: Player, val position: Position, val tiara: T
 }
 
 class RunecraftingAction(val player: Player, val rune: Rune, val alter: Alter): AsyncDistancedAction<Player>(0, true, player, alter.center, 3) {
-    override fun action(): ActionBlock = {
+    override fun action(): ActionBlock = action@{
         //Check player runecrafting level
         if (player.runecraft.current < rune.level) {
             val level = rune.level
-            player.sendMessage("You need a rinecrafting level of $level to craft this rune.")
+            player.sendMessage("You need a runecrafting level of $level to craft this rune.")
             stop()
+            return@action
         }
 
         if (!player.inventory.contains(RUNE_ESSENCE_ID)) {
             player.sendMessage("You need rune essence to craft runes.")
             stop()
+            return@action
         }
         //Initial setup for animation
         player.turnTo(position)
