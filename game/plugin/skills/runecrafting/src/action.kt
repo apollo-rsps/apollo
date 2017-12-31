@@ -5,19 +5,20 @@ import org.apollo.game.action.DistancedAction
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.api.runecraft
+import org.apollo.util.LanguageUtil
 
-class TeleportAction(val player: Player, val start: Position, val distance: Int, val end: Position): DistancedAction<Player>(0, true, player, start, distance) {
+class TeleportAction(val player: Player, val start: Position, val distance: Int, val end: Position) : DistancedAction<Player>(0, true, player, start, distance) {
     override fun executeAction() {
         player.teleport(end)
         stop()
     }
 }
 
-class CreateTiaraAction(val player: Player, val position: Position, val tiara: Tiara, val alter: Alter): DistancedAction<Player>(0, true, player, position, 2) {
+class CreateTiaraAction(val player: Player, val position: Position, val tiara: Tiara, val altar: Altar) : DistancedAction<Player>(0, true, player, position, 2) {
     override fun executeAction() {
-        //Check if correct alter
-        if (tiara.alter != alter) {
-            player.sendMessage("You can't use that talisman on this alter.")
+        //Check if correct altar
+        if (tiara.altar != altar) {
+            player.sendMessage("You can't use that talisman on this altar.")
             stop()
             return
         }
@@ -34,8 +35,8 @@ class CreateTiaraAction(val player: Player, val position: Position, val tiara: T
     }
 }
 
-class RunecraftingAction(val player: Player, val rune: Rune, val alter: Alter): AsyncDistancedAction<Player>(0, true, player, alter.center, 3) {
-    override fun action(): ActionBlock = action@{
+class RunecraftingAction(val player: Player, val rune: Rune, val altar: Altar) : AsyncDistancedAction<Player>(0, true, player, altar.center, 3) {
+    override fun action(): ActionBlock = action@ {
         //Check player runecrafting level
         if (player.runecraft.current < rune.level) {
             val level = rune.level
@@ -62,7 +63,7 @@ class RunecraftingAction(val player: Player, val rune: Rune, val alter: Alter): 
         val added = removed * rune.getBonus()
         player.inventory.add(rune.id, added.toInt())
         val name = ItemDefinition.lookup(rune.id).name;
-        val runes = if (added > 1) "some $name" + "s" else "an $name"
+        val runes = if (added > 1) "some $name" + "s" else LanguageUtil.getIndefiniteArticle(name) + " $name"
         player.sendMessage("You craft the rune essence into $runes")
         player.runecraft.experience += rune.xp
         stop()
