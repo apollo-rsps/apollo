@@ -2,9 +2,7 @@ package org.apollo.build.plugin
 
 import org.apollo.build.plugin.tasks.ApolloScriptCompileTask
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.file.FileTree
-import org.gradle.api.tasks.testing.Test
 
 class ApolloPluginExtension {
     final Project project
@@ -79,7 +77,7 @@ class ApolloPluginExtension {
             main {
                 kotlin {
                     srcDir this.srcDir
-                    exclude '*.kts'
+                    exclude '**/*.kts'
                 }
             }
 
@@ -98,7 +96,7 @@ class ApolloPluginExtension {
         def buildTask = project.tasks['classes']
 
         FileTree scripts = project.fileTree(srcDir).matching {
-            include '*.kts'
+            include '**/*.kts'
         }
 
         project.tasks.create('compileScripts', ApolloScriptCompileTask) {
