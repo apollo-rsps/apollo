@@ -1,11 +1,11 @@
-ammo("arrow") {
+object Arrows : AmmoType({
     fired from "shortbows" and "longbows"
 
     projectile {
         startHeight = 41
         endHeight = 37
         delay = 41
-        lifetime = 6
+        lifetime = 60
         pitch = 15
     }
 
@@ -68,4 +68,4 @@ ammo("arrow") {
             attack = 24
         }
     }
-}
+})

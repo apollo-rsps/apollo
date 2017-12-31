@@ -1,0 +1,18 @@
+[x] combat timing
+[x] combat tab ui
+[x] attack requirements
+[x] melee attacks
+[x] projectile attacks
+[x] max hit calculation
+[x] applying damage rolls
+[x] attack vs defence (accuracy) checks for ranged/melee
+[ ] weapon posture animations
+[ ] playing block animations
+[ ] special attacks
+[ ] bonus calculations / attack modifiers + buffs
+[ ] death checks / loot
+[ ] persistent attack timer
+[ ] chasing
+[ ] equipment tab ui
+[ ] magic combat
+[ ] blocking logout

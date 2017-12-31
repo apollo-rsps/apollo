@@ -5,6 +5,7 @@ plugin {
         "Gary Tierney <gary.tierney@gmx.com>"
     ]
     dependencies = [
-        "util:lookup"
+        "util:lookup",
+        "api"
     ]
 }

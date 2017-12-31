@@ -4,55 +4,31 @@ import org.apollo.game.model.World
 import org.apollo.game.model.entity.Mob
 import org.apollo.game.model.entity.Projectile
 
-val AMMO = mutableMapOf<Int, Ammo>()
+open class AmmoType(configurer: AmmoTypeBuilder.() -> Unit) {
+    val items : Map<Int, Ammo>
 
-/**
- * Create and register a new collection of [Ammo] based on the given
- * [AmmoTypeBuilder].
- */
-public fun ammo(name: String, builder: AmmoTypeBuilder.() -> Unit) {
-    val ammoType = AmmoTypeBuilder(name)
-    builder(ammoType)
+    init {
+        val ammo = AmmoTypeBuilder(this.javaClass.simpleName)
+            .also(configurer)
+            .build()
 
-    val ammoList = ammoType.build()
-    ammoList.forEach { (id, ammo) -> AMMO[id] = ammo }
-}
-
-open class Ammo(
-    val requiredLevel: Int,
-    val dropChance: Double,
-    val projectileFactory: AmmoProjectileFactory,
-    val attack: Graphic? = null
-) {
-    fun toEnchanted(
-        enchantment: Graphic,
-        enchantmentEffect: AmmoEnchantmentEffect,
-        enchantmentChanceSupplier: AmmoEnchantmentChanceSupplier
-    ): EnchantedAmmo {
-        return EnchantedAmmo(
-            enchantment,
-            enchantmentEffect,
-            enchantmentChanceSupplier,
-            requiredLevel,
-            dropChance,
-            projectileFactory
-        )
+        items = HashMap(ammo)
     }
 }
 
-class EnchantedAmmo(
-    val enchantment: Graphic,
-    val enchantmentEffect: AmmoEnchantmentEffect,
-    val enchantmentChanceSupplier: AmmoEnchantmentChanceSupplier,
-    requiredLevel: Int,
-    dropChance: Double,
-    projectileFactory: AmmoProjectileFactory,
-    attack: Graphic? = null
-) : Ammo(
-    requiredLevel,
-    dropChance,
-    projectileFactory,
-    attack
+data class AmmoEnchantment(
+    val graphic: Graphic,
+    val effect: AmmoEnchantmentEffect,
+    val chanceSupplier: AmmoEnchantmentChanceSupplier
+)
+
+data class Ammo(
+    val name: String,
+    val requiredLevel: Int,
+    val dropChance: Double,
+    val projectileFactory: AmmoProjectileFactory,
+    val attack: Graphic? = null,
+    val enchantment: AmmoEnchantment? = null
 )
 
 typealias AmmoEnchantmentEffect = Mob.() -> Unit
@@ -80,7 +56,7 @@ class AmmoGraphicsBuilder {
     var attack: Int? = null
 
     /**
-     * The graphic used when a [Mob] is hit with an enchanted ammo effect.
+     * The graphic used when a [Mob] is doAttack with an enchanted ammo effect.
      */
     var enchanted: Int? = null
 
@@ -88,14 +64,14 @@ class AmmoGraphicsBuilder {
 }
 
 @AmmoDslMarker
-class AmmoDropChance()
+class AmmoDropChance
 
 /**
  * A DSL builder for an ammo's ranged level requirements.
  */
 @AmmoDslMarker
 class AmmoRequirementBuilder {
-    internal var level: Int = 1
+    var level: Int = 1
 
     /**
      * Set the ranged level required to use this ammo.
@@ -111,12 +87,12 @@ class AmmoBuilder(val name: String) {
     /**
      * The chance that ammo of this type will be dropped rather than broken.
      */
-    internal var dropChanceValue: Double = 1.0
+    var dropChanceValue: Double = 1.0
 
     /**
-     * Internal value to hold a dummy [AmmoDropChance] field that can be used by the overriden `%` operator.
+     *  value to hold a dummy [AmmoDropChance] field that can be used by the overriden `%` operator.
      */
-    internal val dropChance = AmmoDropChance()
+    val dropChance = AmmoDropChance()
 
     /**
      * `%` operator overload on [Int] for a fluent way to define an [Ammo]'s chance of dropping instead of breaking.
@@ -142,12 +118,12 @@ class AmmoBuilder(val name: String) {
 }
 
 /**
- * A builder for effects applied to [Mob]'s hit with ammo that can be chanted.
+ * A builder for effects applied to [Mob]'s doAttack with ammo that can be chanted.
  */
 @AmmoDslMarker
 class AmmoEnchantmentBuilder {
-    internal var effect: AmmoEnchantmentEffect? = null
-    internal var chance: AmmoEnchantmentChanceSupplier? = null
+    var effect: AmmoEnchantmentEffect? = null
+    var chance: AmmoEnchantmentChanceSupplier? = null
 
     /**
      * Set the effect that will be applied to a [Mob] whenever this enchantment
@@ -231,17 +207,17 @@ class AmmoTypeBuilder(val name: String) {
     /**
      * The constraints on what weapon classes this ammo type can be fired from.
      */
-    internal val fired = AmmoTypeUseabilityBuilder()
+    val fired = AmmoTypeUseabilityBuilder()
 
     /**
      * The base projectile factory for projectiles of this ammo type.
      */
-    internal val projectile = AmmoProjectileFactoryBuilder()
+    val projectile = AmmoProjectileFactoryBuilder()
 
     /**
      * The variants of ammo that belong to this ammo type.
      */
-    internal val variants = mutableListOf<AmmoBuilder>()
+    val variants = mutableListOf<AmmoBuilder>()
 
     /**
      * String invocation overload that creates a new ammo variant
@@ -257,9 +233,9 @@ class AmmoTypeBuilder(val name: String) {
     /**
      * Build a list of ItemID -> [Ammo] pairs based on the variants in this [AmmoTypeBuilder].
      */
-    fun build(): List<Pair<Int, Ammo>> {
+    fun build(): Map<Int, Ammo> {
         val ammoTypeSingular = name.removeSuffix("s")
-        val ammoList = mutableListOf<Pair<Int, Ammo>>()
+        val ammoMap = mutableMapOf<Int, Ammo>()
 
         variants.forEach {
             val requiredLevel = it.requires.level
@@ -267,27 +243,28 @@ class AmmoTypeBuilder(val name: String) {
 
             val projectileGraphicId = it.graphics.projectile ?: throw RuntimeException("Every ammo requires a projectile id")
             val projectileFactory = projectile.build(projectileGraphicId)
-            val attack = it.graphics.attack?.let(::Graphic)
+            val attack = it.graphics.attack?.let({ Graphic(it, 0, 100) })
 
             val ammoName = "${it.name} $ammoTypeSingular"
-            val ammo = Ammo(requiredLevel, dropChance, projectileFactory, attack)
+            val ammo = Ammo(name, requiredLevel, dropChance, projectileFactory, attack)
             val ammoId = lookup_item(ammoName)?.id ?: throw RuntimeException("Unable to find ammo named $ammoName")
 
-            ammoList.add(Pair(ammoId, ammo))
+            ammoMap[ammoId] = ammo
 
-            val enchantment = it.graphics.enchanted?.let(::Graphic)
+            val enchantmentGraphic = it.graphics.enchanted?.let(::Graphic)
             val enchantmentEffect = it.enchantment.effect
             val enchantmentChanceSupplier = it.enchantment.chance
 
-            if (enchantment != null && enchantmentEffect != null && enchantmentChanceSupplier != null) {
+            if (enchantmentGraphic != null && enchantmentEffect != null && enchantmentChanceSupplier != null) {
+                val enchantment = AmmoEnchantment(enchantmentGraphic, enchantmentEffect, enchantmentChanceSupplier)
                 val enchantedAmmoName = "$ammoName (e)"
-                val enchantedAmmo = ammo.toEnchanted(enchantment, enchantmentEffect, enchantmentChanceSupplier)
+                val enchantedAmmo = Ammo(name, requiredLevel, dropChance, projectileFactory, attack, enchantment)
                 val enchantedAmmoId = lookup_item(enchantedAmmoName)?.id ?: throw RuntimeException("Unable to find ammo named $enchantedAmmoName")
 
-                ammoList.add(Pair(enchantedAmmoId, enchantedAmmo))
+                ammoMap[enchantedAmmoId] = enchantedAmmo
             }
         }
 
-        return ammoList
+        return ammoMap
     }
 }
