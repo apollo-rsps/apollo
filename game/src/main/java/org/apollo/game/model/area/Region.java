@@ -400,7 +400,7 @@ public final class Region {
 	 */
 	private <T extends Entity & GroupableEntity> void record(T entity, EntityUpdateType update) {
 		UpdateOperation<?> operation = entity.toUpdateOperation(this, update);
-		RegionUpdateMessage message = operation.toMessage(), inverse = operation.inverse();
+		RegionUpdateMessage message = operation.toMessage();
 
 		int height = entity.getPosition().getHeight();
 		Set<RegionUpdateMessage> updates = this.updates.get(height);
@@ -411,12 +411,12 @@ public final class Region {
 			if (update == EntityUpdateType.REMOVE) {
 				removedObjects.get(height).add(message);
 			} else { // TODO should this really be possible?
-				removedObjects.get(height).remove(inverse);
+				removedObjects.get(height).remove(operation.inverse());
 			}
 		}
 
 		if (update == EntityUpdateType.REMOVE && !type.isTransient()) {
-			updates.remove(inverse);
+			updates.remove(operation.inverse());
 		}
 
 		updates.add(message);
