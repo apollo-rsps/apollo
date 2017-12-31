@@ -67,6 +67,11 @@ public final class World {
 	}
 
 	/**
+	 * A counter for the number of ticks ran.
+	 */
+	private long tickCounter = 0;
+
+	/**
 	 * The logger for this class.
 	 */
 	private static final Logger logger = Logger.getLogger(World.class.getName());
@@ -209,6 +214,15 @@ public final class World {
 	}
 
 	/**
+	 * Get the current value of the {@link #tickCounter} (the number of ticks since the game started).
+	 *
+	 * @return The current value of the tick counter;
+	 */
+	public long tick() {
+		return tickCounter;
+	}
+
+	/**
 	 * Initialises the world by loading definitions from the specified file
 	 * system.
 	 *
@@ -277,6 +291,7 @@ public final class World {
 		unregisterNpcs();
 		registerNpcs();
 		scheduler.pulse();
+		tickCounter++;
 	}
 
 	/**
