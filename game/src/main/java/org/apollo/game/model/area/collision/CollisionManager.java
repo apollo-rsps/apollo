@@ -145,14 +145,15 @@ public final class CollisionManager {
 	}
 
 	/**
-	 * Casts a ray into the world to check for impenetrable objects  from the given {@code start} position to the
+	 * Casts a ray into the world to check for impenetrable objects from the given {@code start} position to the
 	 * {@code end} position using Bresenham's line algorithm.
 	 *
 	 * @param start The start position of the ray.
 	 * @param end The end position of the ray.
+	 * @param objectType
 	 * @return {@code true} if an impenetrable object was hit, {@code false} otherwise.
 	 */
-	public boolean raycast(Position start, Position end) {
+	public boolean raycast(Position start, Position end, EntityType objectType) {
 		Preconditions.checkArgument(start.getHeight() == end.getHeight(), "Positions must be on the same height");
 
 		if (start.equals(end)) {
@@ -221,7 +222,7 @@ public final class CollisionManager {
 			Direction direction = Direction.fromDeltas(currX - lastX, currY - lastY);
 			Position last = new Position(lastX, lastY, start.getHeight());
 
-			if (!traversable(last, EntityType.PROJECTILE, direction)) {
+			if (!traversable(last, objectType, direction)) {
 				return false;
 			}
 
