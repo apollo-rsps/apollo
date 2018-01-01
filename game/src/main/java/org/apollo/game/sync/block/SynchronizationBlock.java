@@ -37,7 +37,7 @@ public abstract class SynchronizationBlock {
 		int combat = player.getSkillSet().getCombatLevel();
 		int id = player.hasNpcDefinition() ? player.getDefinition().getId() : -1;
 
-		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), combat, 0, player.getEquipment(), player.getPrayerIcon(), player.isSkulled(), id);
+		return new AppearanceBlock(player.getEncodedName(), player.getAnimations(), player.getAppearance(), combat, 0, player.getEquipment(), player.getPrayerIcon(), player.isSkulled(), id);
 	}
 
 	/**
