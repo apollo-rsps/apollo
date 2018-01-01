@@ -32,6 +32,7 @@ var Mob.combatAttackTick: Long by attribute("combat_attack_tick", 0)
 
 class CombatState(private val mob: Mob, var attack: Attack) {
     var target: Mob? by WeakRefHolder()
+    var bonuses = CombatBonuses.default()
 
     fun ticksSinceAttack(): Long {
         return mob.world.tick() - mob.combatAttackTick

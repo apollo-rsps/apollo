@@ -1,12 +1,6 @@
-import AttackStyle.*
-import AttackType.Ranged
 import org.apollo.game.model.Animation
 import org.apollo.game.model.entity.Mob
 import org.apollo.game.model.entity.Player
-import org.apollo.game.model.entity.Skill
-import org.apollo.game.plugins.api.attack
-import org.apollo.game.plugins.api.defence
-import org.apollo.game.plugins.api.skills
 
 
 abstract class Attack(
@@ -37,39 +31,8 @@ abstract class Attack(
             }
         }
 
-        // @todo - refactor this out somewhere, all rolls are the same calculations
-        // (damage, hit + defence)
-
-        val effectiveAttackBase = source.skills.attack.currentLevel
-
-        //@todo - attack prayers
-        val effectiveAttackModifier = 1.0
-        val attackStyleBonus = when (style) {
-            Accurate -> 3
-            Controlled -> 1
-            LongRanged -> 1
-            else -> 0
-        }
-
-        val effectiveAttack = effectiveAttackBase * effectiveAttackModifier + attackStyleBonus + 8
-        //@todo - get attack bonus from stats
-        val attackEquipmentBonus = 0
-        val maxHitRoll = effectiveAttack * (attackEquipmentBonus + 64)
-
-        val effectiveDefenceBase = target.skills.defence.currentLevel
-
-        //@todo - defence prayers
-        val effectiveDefenceModifier = 1.0
-        val defenceStyleBonus = when (style) {
-            Defensive, LongRanged -> 3
-            Controlled -> 1
-            else -> 0
-        }
-
-        val effectiveDefence = effectiveDefenceBase * effectiveDefenceModifier + defenceStyleBonus + 8
-        //@todo - get defence bonus from stats
-        val defenceEquipmentBonus = 0
-        val maxDefenceRoll = effectiveDefence * (defenceEquipmentBonus + 64)
+        val maxHitRoll = calculateBasicMaxRoll(RollType.Attack, source)
+        val maxDefenceRoll = calculateBasicMaxRoll(RollType.Defence, target)
 
         val accuracy = if (maxHitRoll > maxDefenceRoll) {
             1 - (maxDefenceRoll + 2) / (2 * (maxHitRoll + 1))
@@ -113,29 +76,6 @@ abstract class BasicAttack(
     requirements: MutableList<AttackRequirement>
 ) : Attack(speed, range, type, style, attackAnimation, requirements) {
     override fun maxDamage(source: Mob): Int {
-
-        val effectiveStrengthBase = when (type) {
-            Ranged -> source.skillSet.getCurrentLevel(Skill.RANGED)
-            else -> source.skillSet.getCurrentLevel(Skill.STRENGTH)
-        }
-
-        // @todo - prayer + others (?)
-        val effectiveStrengthModifier = 1.0
-
-        val hitStyleBonus = when (style) {
-            Aggressive -> 3
-            LongRanged, Controlled -> 1
-            Defensive -> 0
-            Accurate -> if (type == Ranged) 3 else 0
-            else -> 0
-        }
-
-        val effectiveStrength = Math.floor(effectiveStrengthBase * effectiveStrengthModifier) + hitStyleBonus + 8
-        //@todo - get from combat bonuses
-        val strengthBonus = 0
-
-        val baseDamage = 0.5 + effectiveStrength * (strengthBonus + 64) / 640
-
-        return Math.floor(baseDamage).toInt()
+        return calculateBasicMaxRoll(RollType.Damage, source)
     }
 }

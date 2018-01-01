@@ -1,46 +1,74 @@
-data class DamageBonuses(val stab: Int, val slash: Int, val crush: Int, val magic: Int, val range: Int)
-data class CombatBonuses(
-  val attack: DamageBonuses,
-  val defence: DamageBonuses,
-  val meleeStrength: Int,
-  val rangedStrength: Int,
-  val prayer: Int
-)
-
-class CombatBonusesBuilder {
-  var meleeStrength = 0
-  var rangedStrength = 0
-  var prayer = 0
-  var attackBonuses = DamageBonuses(0, 0, 0, 0, 0)
-  var defenceBonuses = DamageBonuses(0, 0, 0, 0, 0)
-
-  fun attack(configurer: DamageBonusesBuilder.() -> Unit) {
-    val builder = DamageBonusesBuilder()
-    builder.configurer()
-
-    attackBonuses = builder.build()
-  }
-
-  fun defence(configurer: DamageBonusesBuilder.() -> Unit) {
-    val builder = DamageBonusesBuilder()
-    builder.configurer()
-
-    defenceBonuses = builder.build()
-  }
-
-  fun build(): CombatBonuses {
-    return CombatBonuses(attackBonuses, defenceBonuses, meleeStrength, rangedStrength, prayer)
-  }
+enum class CombatBonus {
+    MeleeStrength,
+    RangedStrength,
+    Prayer
 }
 
-class DamageBonusesBuilder(
-  var stab: Int = 0,
-  var slash: Int = 0,
-  var crush: Int = 0,
-  var magic: Int = 0,
-  var range: Int = 0
+data class AttackBonuses(private val bonuses: Map<AttackType, Int>) {
+    companion object {
+        fun default() = AttackBonusesBuilder().build()
+    }
+
+    operator fun get(key: AttackType): Int = bonuses[key]!!
+}
+
+data class CombatBonuses(
+    val attack: AttackBonuses,
+    val defence: AttackBonuses,
+    private val combatBonuses: Map<CombatBonus, Int>
 ) {
-  fun build(): DamageBonuses {
-    return DamageBonuses(stab, slash, crush, magic, range)
-  }
+    companion object {
+        fun default() = CombatBonusesBuilder().build()
+    }
+
+    operator fun get(key: CombatBonus): Int = combatBonuses[key]!!
+}
+
+class CombatBonusesBuilder {
+    var meleeStrength = 0
+    var rangedStrength = 0
+    var prayer = 0
+    var attackBonuses = AttackBonuses.default()
+    var defenceBonuses = AttackBonuses.default()
+
+    fun attack(configurer: AttackBonusesBuilder.() -> Unit) {
+        val builder = AttackBonusesBuilder()
+        builder.configurer()
+
+        attackBonuses = builder.build()
+    }
+
+    fun defence(configurer: AttackBonusesBuilder.() -> Unit) {
+        val builder = AttackBonusesBuilder()
+        builder.configurer()
+
+        defenceBonuses = builder.build()
+    }
+
+    fun build(): CombatBonuses {
+        return CombatBonuses(attackBonuses, defenceBonuses, mapOf(
+            CombatBonus.MeleeStrength to meleeStrength,
+            CombatBonus.RangedStrength to rangedStrength,
+            CombatBonus.Prayer to prayer
+        ))
+    }
+}
+
+class AttackBonusesBuilder(
+    var stab: Int = 0,
+    var slash: Int = 0,
+    var crush: Int = 0,
+    var magic: Int = 0,
+    var range: Int = 0
+) {
+
+    fun build(): AttackBonuses {
+        return AttackBonuses(mapOf(
+            AttackType.Stab to stab,
+            AttackType.Slash to slash,
+            AttackType.Crush to crush,
+            AttackType.Magic to magic,
+            AttackType.Ranged to range
+        ))
+    }
 }

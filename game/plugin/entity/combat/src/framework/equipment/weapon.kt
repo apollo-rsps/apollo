@@ -72,8 +72,8 @@ class WeaponBuilder(private val weaponClass: WeaponClass) {
             combatBonusesBuilder.prayer = value
         }
 
-    fun attackBonuses(configurer: DamageBonusesBuilder.() -> Unit) = this.combatBonusesBuilder.attack(configurer)
-    fun defenceBonuses(configurer: DamageBonusesBuilder.() -> Unit) = this.combatBonusesBuilder.defence(configurer)
+    fun attackBonuses(configurer: AttackBonusesBuilder.() -> Unit) = this.combatBonusesBuilder.attack(configurer)
+    fun defenceBonuses(configurer: AttackBonusesBuilder.() -> Unit) = this.combatBonusesBuilder.defence(configurer)
 
     fun build() = Weapon(weaponClass, combatBonusesBuilder.build(), specialAttack)
 }

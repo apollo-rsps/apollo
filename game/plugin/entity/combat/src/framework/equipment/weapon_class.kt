@@ -2,7 +2,7 @@ import org.apollo.game.model.Animation
 
 data class SpecialBar(val button: Int, val configId: Int)
 data class WeaponClassDetails(val widget: Int, val specialBar: SpecialBar?, val styles: List<WeaponClassStyle>)
-data class WeaponClassStyle(val button: Int, val configId: Int, val attackStyle: AttackStyle, val attack: Attack, val blockAnimation: Animation?)
+data class WeaponClassStyle(val button: Int, val attackStyle: AttackStyle, val attack: Attack, val blockAnimation: Animation?)
 
 typealias WeaponClassConfigurer = WeaponClassDetailsBuilder.() -> Unit
 
@@ -75,7 +75,6 @@ class WeaponClassStyleBuilder(val attackStyle: AttackStyle) {
 
         return WeaponClassStyle(
             button ?: throw IllegalStateException("Combat style button is required"),
-            0,
             attackStyle,
             attack,
             blockAnimation
