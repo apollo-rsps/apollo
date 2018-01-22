@@ -90,6 +90,36 @@ public enum CollisionFlag {
 	PROJECTILE_WEST(16);
 
 	/**
+	 * An ordered array (from West to East) of directional flags that should be checked
+	 * when a projectile is traversing a tile.
+	 */
+	public static final CollisionFlag[] PROJECTILE_COLLISION_FLAGS = {
+        PROJECTILE_NORTH_WEST,
+        PROJECTILE_NORTH,
+        PROJECTILE_NORTH_EAST,
+        PROJECTILE_WEST,
+        PROJECTILE_EAST,
+        PROJECTILE_SOUTH_WEST,
+        PROJECTILE_SOUTH,
+        PROJECTILE_SOUTH_EAST
+    };
+
+	/**
+	 * An ordered array (from West to East) of directional flags that should be checked
+	 * when a mob is traversing a tile.
+	 */
+	public static final CollisionFlag[] MOB_COLLISION_FLAGS = {
+        MOB_NORTH_WEST,
+        MOB_NORTH,
+        MOB_NORTH_EAST,
+        MOB_WEST,
+        MOB_EAST,
+        MOB_SOUTH_WEST,
+        MOB_SOUTH,
+        MOB_SOUTH_EAST
+    };
+
+	/**
 	 * Returns an array of CollisionFlags that indicate if the specified {@link EntityType} can be positioned on a tile.
 	 *
 	 * @param type The EntityType.
@@ -105,16 +135,7 @@ public enum CollisionFlag {
 	 * @return The array of CollisionFlags.
 	 */
 	public static CollisionFlag[] mobs() {
-		return new CollisionFlag[] {
-			MOB_NORTH_WEST,
-			MOB_NORTH,
-			MOB_NORTH_EAST,
-			MOB_WEST,
-			MOB_EAST,
-			MOB_SOUTH_WEST,
-			MOB_SOUTH,
-			MOB_SOUTH_EAST
-		};
+		return MOB_COLLISION_FLAGS;
 	}
 
 	/**
@@ -123,16 +144,7 @@ public enum CollisionFlag {
 	 * @return The array of CollisionFlags.
 	 */
 	public static CollisionFlag[] projectiles() {
-		return new CollisionFlag[] {
-			PROJECTILE_NORTH_WEST,
-			PROJECTILE_NORTH,
-			PROJECTILE_NORTH_EAST,
-			PROJECTILE_WEST,
-			PROJECTILE_EAST,
-			PROJECTILE_SOUTH_WEST,
-			PROJECTILE_SOUTH,
-			PROJECTILE_SOUTH_EAST
-		};
+		return PROJECTILE_COLLISION_FLAGS;
 	}
 
 	/**
