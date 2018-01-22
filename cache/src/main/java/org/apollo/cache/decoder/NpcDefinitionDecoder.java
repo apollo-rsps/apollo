@@ -80,9 +80,11 @@ public final class NpcDefinitionDecoder implements Runnable {
 					models[index] = buffer.getShort();
 				}
 			} else if (opcode == 2) {
-				definition.setName(BufferUtil.readString(buffer));
+				String name = BufferUtil.readString(buffer);
+				definition.setName(name.intern());
 			} else if (opcode == 3) {
-				definition.setDescription(BufferUtil.readString(buffer));
+				String description = BufferUtil.readString(buffer);
+				definition.setDescription(description.intern());
 			} else if (opcode == 12) {
 				definition.setSize(buffer.get());
 			} else if (opcode == 13) {
@@ -98,7 +100,7 @@ public final class NpcDefinitionDecoder implements Runnable {
 					action = null;
 				}
 
-				definition.setInteraction(opcode - 30, action);
+				definition.setInteraction(opcode - 30, action.intern());
 			} else if (opcode == 40) {
 				int length = buffer.get() & 0xFF;
 				int[] originalColours = new int[length];

@@ -73,9 +73,11 @@ public final class ItemDefinitionDecoder implements Runnable {
 			} else if (opcode == 1) {
 				buffer.getShort();
 			} else if (opcode == 2) {
-				definition.setName(BufferUtil.readString(buffer));
+				String name = BufferUtil.readString(buffer);
+				definition.setName(name.intern());
 			} else if (opcode == 3) {
-				definition.setDescription(BufferUtil.readString(buffer));
+				String description = BufferUtil.readString(buffer);
+				definition.setDescription(description.intern());
 			} else if (opcode >= 4 && opcode <= 8 || opcode == 10) {
 				buffer.getShort();
 			} else if (opcode == 11) {
@@ -99,9 +101,10 @@ public final class ItemDefinitionDecoder implements Runnable {
 				if (str.equalsIgnoreCase("hidden")) {
 					str = null;
 				}
-				definition.setGroundAction(opcode - 30, str);
+				definition.setGroundAction(opcode - 30, str.intern());
 			} else if (opcode >= 35 && opcode < 40) {
-				definition.setInventoryAction(opcode - 35, BufferUtil.readString(buffer));
+				String action = BufferUtil.readString(buffer);
+				definition.setInventoryAction(opcode - 35, action.intern());
 			} else if (opcode == 40) {
 				int colourCount = buffer.get() & 0xFF;
 				for (int i = 0; i < colourCount; i++) {

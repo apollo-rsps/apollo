@@ -78,9 +78,11 @@ public final class ObjectDefinitionDecoder implements Runnable {
 					data.get();
 				}
 			} else if (opcode == 2) {
-				definition.setName(BufferUtil.readString(data));
+				String name = BufferUtil.readString(data);
+				definition.setName(name.intern());
 			} else if (opcode == 3) {
-				definition.setDescription(BufferUtil.readString(data));
+				String description = BufferUtil.readString(data);
+				definition.setDescription(description.intern());
 			} else if (opcode == 5) {
 				int amount = data.get() & 0xFF;
 				for (int i = 0; i < amount; i++) {
@@ -106,7 +108,7 @@ public final class ObjectDefinitionDecoder implements Runnable {
 					actions = new String[10];
 				}
 				String action = BufferUtil.readString(data);
-				actions[opcode - 30] = action;
+				actions[opcode - 30] = action.intern();
 				definition.setMenuActions(actions);
 			} else if (opcode == 39) {
 				data.get();
