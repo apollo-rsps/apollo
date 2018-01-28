@@ -20,3 +20,21 @@ Apollo is now ready, and can be started using `gradle run`. You may wish to chan
 ### Contributing
 
 Please see [contributing to Apollo](CONTRIBUTING.md).
+
+### Acknowledgements
+
+We'd like to thank the list of service providers/development tool vendors below for offering their products to the Apollo project free of charge.
+
+---
+
+#### [![YourKit](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/java/profiler/index.jsp)
+
+YourKit supports open source projects with its full-featured Java Profiler.
+YourKit, LLC is the creator of <a href="https://www.yourkit.com/java/profiler/">YourKit Java Profiler</a>
+and <a href="https://www.yourkit.com/.net/profiler/">YourKit .NET Profiler</a>,
+innovative and intelligent tools for profiling Java and .NET applications.
+
+#### [Travis CI](https://travis-ci.org)
+
+Travis CI is a Continuous Integration platform that allows for setup of automated testing with minimal configuration.
+
