@@ -1,6 +1,7 @@
 package org.apollo.game.sync.block;
 
 import org.apollo.game.model.Appearance;
+import org.apollo.game.model.entity.AnimationMap;
 import org.apollo.game.model.inv.Inventory;
 
 /**
@@ -9,6 +10,11 @@ import org.apollo.game.model.inv.Inventory;
  * @author Graham
  */
 public final class AppearanceBlock extends SynchronizationBlock {
+
+	/**
+	 * The player's movement animations.
+	 */
+	private final AnimationMap animations;
 
 	/**
 	 * The player's appearance.
@@ -53,32 +59,35 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	/**
 	 * Creates the appearance block. Assumes that the player is not appearing as an npc.
 	 *
-	 * @param name The player's username, encoded to base 37.
+	 * @param name       The player's username, encoded to base 37.
 	 * @param appearance The {@link Appearance}.
-	 * @param combat The player's combat.
-	 * @param skill The player's skill, or 0 if showing the combat level.
-	 * @param equipment The player's equipment.
-	 * @param headIcon The head icon id of the player.
-	 * @param isSkulled Whether or not the player is skulled.
+	 * @param combat     The player's combat.
+	 * @param skill      The player's skill, or 0 if showing the combat level.
+	 * @param equipment  The player's equipment.
+	 * @param headIcon   The head icon id of the player.
+	 * @param isSkulled  Whether or not the player is skulled.
+	 * @param animations
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled) {
-		this(name, appearance, combat, skill, equipment, headIcon, isSkulled, -1);
+	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled, AnimationMap animations) {
+		this(name, animations, appearance, combat, skill, equipment, headIcon, isSkulled, -1);
 	}
 
 	/**
 	 * Creates the appearance block.
 	 *
-	 * @param name The player's username, encoded to base 37.
+	 * @param name       The player's username, encoded to base 37.
+	 * @param animations
 	 * @param appearance The {@link Appearance}.
-	 * @param combat The player's combat.
-	 * @param skill The player's skill, or 0 if showing the combat level.
-	 * @param equipment The player's equipment.
-	 * @param headIcon The prayer icon id of this player.
-	 * @param isSkulled Whether or not the player is skulled.
-	 * @param npcId The npc id of the player, if they are appearing as an npc, (otherwise {@code -1}).
+	 * @param combat     The player's combat.
+	 * @param skill      The player's skill, or 0 if showing the combat level.
+	 * @param equipment  The player's equipment.
+	 * @param headIcon   The prayer icon id of this player.
+	 * @param isSkulled  Whether or not the player is skulled.
+	 * @param npcId      The npc id of the player, if they are appearing as an npc, (otherwise {@code -1}).
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled, int npcId) {
+	AppearanceBlock(long name, AnimationMap animations, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled, int npcId) {
 		this.name = name;
+		this.animations = animations;
 		this.appearance = appearance;
 		this.combat = combat;
 		this.skill = skill;
@@ -95,6 +104,15 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 */
 	public boolean appearingAsNpc() {
 		return npcId != -1;
+	}
+
+	/**
+	 * Gets the player's {@link AnimationMap}.
+	 *
+	 * @return The player's animations.
+	 */
+	public AnimationMap getAnimations() {
+		return animations;
 	}
 
 	/**

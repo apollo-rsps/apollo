@@ -2,36 +2,14 @@ package org.apollo.game.release.r377;
 
 import org.apollo.cache.def.EquipmentDefinition;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
-import org.apollo.game.model.Animation;
-import org.apollo.game.model.Appearance;
-import org.apollo.game.model.Direction;
-import org.apollo.game.model.Graphic;
-import org.apollo.game.model.Item;
-import org.apollo.game.model.Position;
+import org.apollo.game.model.*;
 import org.apollo.game.model.entity.EquipmentConstants;
+import org.apollo.game.model.entity.AnimationMap;
 import org.apollo.game.model.entity.setting.Gender;
 import org.apollo.game.model.inv.Inventory;
-import org.apollo.game.sync.block.AnimationBlock;
-import org.apollo.game.sync.block.AppearanceBlock;
-import org.apollo.game.sync.block.ChatBlock;
-import org.apollo.game.sync.block.ForceChatBlock;
-import org.apollo.game.sync.block.ForceMovementBlock;
-import org.apollo.game.sync.block.GraphicBlock;
-import org.apollo.game.sync.block.HitUpdateBlock;
-import org.apollo.game.sync.block.InteractingMobBlock;
-import org.apollo.game.sync.block.SecondaryHitUpdateBlock;
-import org.apollo.game.sync.block.SynchronizationBlockSet;
-import org.apollo.game.sync.block.TurnToPositionBlock;
-import org.apollo.game.sync.seg.AddPlayerSegment;
-import org.apollo.game.sync.seg.MovementSegment;
-import org.apollo.game.sync.seg.SegmentType;
-import org.apollo.game.sync.seg.SynchronizationSegment;
-import org.apollo.game.sync.seg.TeleportSegment;
-import org.apollo.net.codec.game.DataOrder;
-import org.apollo.net.codec.game.DataTransformation;
-import org.apollo.net.codec.game.DataType;
-import org.apollo.net.codec.game.GamePacket;
-import org.apollo.net.codec.game.GamePacketBuilder;
+import org.apollo.game.sync.block.*;
+import org.apollo.game.sync.seg.*;
+import org.apollo.net.codec.game.*;
 import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.MessageEncoder;
 
@@ -208,13 +186,14 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 			playerProperties.put(DataType.BYTE, color);
 		}
 
-		playerProperties.put(DataType.SHORT, 0x328); // stand
-		playerProperties.put(DataType.SHORT, 0x337); // stand turn
-		playerProperties.put(DataType.SHORT, 0x333); // walk
-		playerProperties.put(DataType.SHORT, 0x334); // turn 180
-		playerProperties.put(DataType.SHORT, 0x335); // turn 90 cw
-		playerProperties.put(DataType.SHORT, 0x336); // turn 90 ccw
-		playerProperties.put(DataType.SHORT, 0x338); // run
+		AnimationMap animations = block.getAnimations();
+		playerProperties.put(DataType.SHORT, animations.getStand()); // stand
+		playerProperties.put(DataType.SHORT, animations.getIdleTurn()); // stand turn
+		playerProperties.put(DataType.SHORT, animations.getWalking()); // walk
+		playerProperties.put(DataType.SHORT, animations.getTurnAround()); // turn 180
+		playerProperties.put(DataType.SHORT, animations.getTurnRight()); // turn 90 cw
+		playerProperties.put(DataType.SHORT, animations.getTurnLeft()); // turn 90 ccw
+		playerProperties.put(DataType.SHORT, animations.getRunning()); // run
 
 		playerProperties.put(DataType.LONG, block.getName());
 		playerProperties.put(DataType.BYTE, block.getCombatLevel());

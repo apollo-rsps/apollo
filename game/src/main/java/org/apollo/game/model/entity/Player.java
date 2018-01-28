@@ -65,6 +65,11 @@ import org.apollo.util.security.PlayerCredentials;
 public final class Player extends Mob {
 
 	/**
+	 * The {@code Mob}s current set of animations used in appearance updates.
+	 */
+	private AnimationMap animations = AnimationMap.DEFAULT_ANIMATION_SET;
+
+	/**
 	 * The default viewing distance, in tiles.
 	 */
 	private static final int DEFAULT_VIEWING_DISTANCE = 15;
@@ -315,6 +320,15 @@ public final class Player extends Mob {
 	 */
 	public boolean friendsWith(String username) {
 		return friends.contains(username.toLowerCase());
+	}
+
+	/**
+	 * Gets the current set of animations used for character movement.
+	 *
+	 * @return The animation set.
+	 */
+	public final AnimationMap getAnimations() {
+		return animations;
 	}
 
 	/**
@@ -795,6 +809,15 @@ public final class Player extends Mob {
 			int worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
 			send(new SendFriendMessage(username, worldId));
 		}
+	}
+
+	/**
+	 * Sets the set of animations to use in {@code Mob} appearance updates.
+	 *
+	 * @param animations The set of animations to use.
+	 */
+	public final void setAnimations(AnimationMap animations) {
+		this.animations = animations;
 	}
 
 	/**

@@ -9,6 +9,7 @@ import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.EquipmentConstants;
+import org.apollo.game.model.entity.AnimationMap;
 import org.apollo.game.model.entity.setting.Gender;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.sync.block.AnimationBlock;
@@ -207,13 +208,14 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 			playerProperties.put(DataType.BYTE, color);
 		}
 
-		playerProperties.put(DataType.SHORT, 0x328); // stand
-		playerProperties.put(DataType.SHORT, 0x337); // stand turn
-		playerProperties.put(DataType.SHORT, 0x333); // walk
-		playerProperties.put(DataType.SHORT, 0x334); // turn 180
-		playerProperties.put(DataType.SHORT, 0x335); // turn 90 cw
-		playerProperties.put(DataType.SHORT, 0x336); // turn 90 ccw
-		playerProperties.put(DataType.SHORT, 0x338); // run
+		AnimationMap animations = block.getAnimations();
+		playerProperties.put(DataType.SHORT, animations.getStand()); // stand
+		playerProperties.put(DataType.SHORT, animations.getIdleTurn()); // stand turn
+		playerProperties.put(DataType.SHORT, animations.getWalking()); // walk
+		playerProperties.put(DataType.SHORT, animations.getTurnAround()); // turn 180
+		playerProperties.put(DataType.SHORT, animations.getTurnRight()); // turn 90 cw
+		playerProperties.put(DataType.SHORT, animations.getTurnLeft()); // turn 90 ccw
+		playerProperties.put(DataType.SHORT, animations.getRunning()); // run
 
 		playerProperties.put(DataType.LONG, block.getName());
 		playerProperties.put(DataType.BYTE, block.getCombatLevel());
