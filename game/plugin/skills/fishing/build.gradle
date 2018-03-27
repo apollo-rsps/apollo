@@ -6,6 +6,8 @@ plugin {
             "tlf30"
     ]
     dependencies = [
-            "util:lookup", "entity:spawn", "api"
+            "api",
+            "entity:spawn",
+            "util:lookup"
     ]
 }

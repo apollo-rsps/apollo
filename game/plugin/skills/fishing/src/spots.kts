@@ -163,7 +163,6 @@ register(NET_ROD, x = 2990, y = 3169)
 register(NET_ROD, x = 2986, y = 3176)
 
 // Shilo Village
-
 register(ROD, x = 2855, y = 2974)
 register(ROD, x = 2865, y = 2972)
 register(ROD, x = 2860, y = 2972)
