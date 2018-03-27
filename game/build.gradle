@@ -12,14 +12,6 @@ buildscript {
 
 apply plugin: 'kotlin'
 
-sourceSets {
-    main {
-        kotlin {
-            exclude 'stub.kt'
-        }
-    }
-}
-
 allprojects {
     it.plugins.withId('kotlin') {
         kotlin { experimental { coroutines 'enable' } }
