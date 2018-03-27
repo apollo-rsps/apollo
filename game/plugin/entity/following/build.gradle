@@ -1,6 +1,5 @@
 plugin {
     name = "following"
-    packageName = "org.apollo.game.plugin.entity"
     authors = [
         "Gary Tierney",
     ]

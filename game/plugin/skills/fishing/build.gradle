@@ -1,6 +1,5 @@
 plugin {
     name = "fishing_skill"
-    packageName = "org.apollo.game.plugin.skills.fishing"
     authors = [
             "Linux",
             "Major",

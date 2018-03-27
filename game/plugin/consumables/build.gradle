@@ -1,6 +1,5 @@
 plugin {
     name = "consumables"
-    packageName = "org.apollo.game.plugin.consumables"
     authors = [
         "Gary Tierney",
     ]

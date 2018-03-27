@@ -1,6 +1,5 @@
 plugin {
     name = "mining-skill"
-    packageName = "org.apollo.game.plugin.skills.mining"
     authors = [
             "Graham",
             "Mikey`",

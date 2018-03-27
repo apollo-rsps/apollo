@@ -1,6 +1,5 @@
 plugin {
     name = "shops"
-    packageName = "org.apollo.game.plugin.shops"
     authors = [
             "Stuart",
             "Major",

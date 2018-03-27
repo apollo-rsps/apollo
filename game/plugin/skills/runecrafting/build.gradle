@@ -1,6 +1,5 @@
 plugin {
     name = "runecrafting-skill"
-    packageName = "org.apollo.game.plugin.skills.runecrafting"
     authors = [
             "Major",
             "BugCrusher",

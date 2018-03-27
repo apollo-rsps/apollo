@@ -1,29 +1,14 @@
 package org.apollo.game.plugin;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import org.apollo.game.model.World;
 import org.apollo.game.plugin.kotlin.KotlinPluginScript;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation;
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity;
-import org.jetbrains.kotlin.cli.common.messages.MessageCollector;
+
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class KotlinPluginEnvironment implements PluginEnvironment {
 

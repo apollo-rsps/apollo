@@ -4,7 +4,6 @@ import org.apollo.cache.def.NpcDefinition
 import org.apollo.game.plugin.shops.CategoryWrapper.Affix
 import org.apollo.game.plugin.util.lookup.lookup_item
 import org.apollo.game.plugin.util.lookup.lookup_npc
-import org.jetbrains.kotlin.utils.keysToMap
 
 /**
  * Creates a [Shop].
@@ -16,7 +15,7 @@ fun shop(name: String, builder: ShopBuilder.() -> Unit) {
     builder(shop)
 
     val built = shop.build()
-    val operators = shop.operators().keysToMap { built }
+    val operators = shop.operators().map { it to built }.toMap()
 
     SHOPS.putAll(operators)
 }

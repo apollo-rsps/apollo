@@ -1,4 +1,3 @@
 plugin {
     name = "command_utilities"
-    packageName = "org.apollo.game.plugins.util"
-}
+    }
