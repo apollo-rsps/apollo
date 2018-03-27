@@ -125,10 +125,6 @@ register(ROD, x = 2385, y = 3422)
 register(ROD, x = 2384, y = 3419)
 register(ROD, x = 2383, y = 3417)
 
-// Gunnarsgrunn
-register(ROD, x = 3101, y = 3092)
-register(ROD, x = 3103, y = 3092)
-
 // Karamja
 register(NET_ROD, x = 2921, y = 3178)
 register(CAGE_HARPOON, x = 2923, y = 3179)
