@@ -1,12 +1,13 @@
 plugin {
     name = "chat_commands"
     authors = [
-        "Graham",
-        "Major",
-        "lare96",
-        "cubeee",
+            "Graham",
+            "Major",
+            "lare96",
+            "cubeee",
     ]
     dependencies = [
-        "util:command",
+            "api",
+            "util:command",
     ]
 }
