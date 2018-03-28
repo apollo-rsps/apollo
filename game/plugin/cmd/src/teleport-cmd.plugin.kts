@@ -2,13 +2,19 @@ import com.google.common.primitives.Ints
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.plugin.util.command.valid_arg_length
+import org.apollo.game.plugins.api.component1
+import org.apollo.game.plugins.api.component2
+import org.apollo.game.plugins.api.component3
 
 /**
  * Sends the player's position.
  */
 on_command("pos", PrivilegeLevel.MODERATOR)
     .then { player ->
-        player.sendMessage("You are at: ${player.position}.")
+        val (x, y, z) = player.position
+        val region = player.position.regionCoordinates
+
+        player.sendMessage("You are at: ($x, $y, $z) in region (${region.x}, ${region.y}).")
     }
 
 /**
