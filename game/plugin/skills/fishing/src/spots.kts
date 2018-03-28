@@ -125,10 +125,6 @@ register(ROD, x = 2385, y = 3422)
 register(ROD, x = 2384, y = 3419)
 register(ROD, x = 2383, y = 3417)
 
-// Gunnarsgrunn
-register(ROD, x = 3101, y = 3092)
-register(ROD, x = 3103, y = 3092)
-
 // Karamja
 register(NET_ROD, x = 2921, y = 3178)
 register(CAGE_HARPOON, x = 2923, y = 3179)
@@ -163,7 +159,6 @@ register(NET_ROD, x = 2990, y = 3169)
 register(NET_ROD, x = 2986, y = 3176)
 
 // Shilo Village
-
 register(ROD, x = 2855, y = 2974)
 register(ROD, x = 2865, y = 2972)
 register(ROD, x = 2860, y = 2972)

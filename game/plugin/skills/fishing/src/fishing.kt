@@ -1,50 +1,54 @@
 package org.apollo.game.plugin.skills.fishing
 
-import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.model.Animation
+import org.apollo.game.plugin.api.Definitions
+import org.apollo.game.plugin.api.rand
 import org.apollo.game.plugin.skills.fishing.Fish.*
 import org.apollo.game.plugin.skills.fishing.FishingTool.*
-import java.util.Random
 
 /**
  * A fish that can be gathered using the fishing skill.
  */
 enum class Fish(val id: Int, val level: Int, val experience: Double) {
-    SHRIMP(317, 1, 10.0),
-    SARDINE(327, 5, 20.0),
-    MACKEREL(353, 16, 20.0),
-    HERRING(345, 10, 30.0),
-    ANCHOVY(321, 15, 40.0),
-    TROUT(335, 20, 50.0),
-    COD(341, 23, 45.0),
-    PIKE(349, 25, 60.0),
-    SALMON(331, 30, 70.0),
-    TUNA(359, 35, 80.0),
-    LOBSTER(377, 40, 90.0),
-    BASS(363, 46, 100.0),
-    SWORDFISH(371, 50, 100.0),
-    SHARK(383, 76, 110.0);
+    SHRIMP(id = 317, level = 1, experience = 10.0),
+    SARDINE(id = 327, level = 5, experience = 20.0),
+    MACKEREL(id = 353, level = 16, experience = 20.0),
+    HERRING(id = 345, level = 10, experience = 30.0),
+    ANCHOVY(id = 321, level = 15, experience = 40.0),
+    TROUT(id = 335, level = 20, experience = 50.0),
+    COD(id = 341, level = 23, experience = 45.0),
+    PIKE(id = 349, level = 25, experience = 60.0),
+    SALMON(id = 331, level = 30, experience = 70.0),
+    TUNA(id = 359, level = 35, experience = 80.0),
+    LOBSTER(id = 377, level = 40, experience = 90.0),
+    BASS(id = 363, level = 46, experience = 100.0),
+    SWORDFISH(id = 371, level = 50, experience = 100.0),
+    SHARK(id = 383, level = 76, experience = 110.0);
 
     /**
      * The name of this fish, formatted so it can be inserted into a message.
      */
-    val formattedName = ItemDefinition.lookup(id).name.toLowerCase()
+    val formattedName = Definitions.item(id)!!.name.toLowerCase()
+    // TODO this leads to incorrect messages, e.g. 'You catch a raw shrimps'.
 
 }
 
 /**
  * A tool used to gather [Fish] from a [FishingSpot].
  */
-enum class FishingTool(val id: Int, animation: Int, val message: String, val bait: Int, val baitName: String?) {
-    LOBSTER_CAGE(301, 619, "You attempt to catch a lobster..."),
-    SMALL_NET(303, 620, "You cast out your net..."),
-    BIG_NET(305, 620, "You cast out your net..."),
-    HARPOON(311, 618, "You start harpooning fish..."),
-    FISHING_ROD(307, 622, "You attempt to catch a fish...", 313, "feathers"),
-    FLY_FISHING_ROD(309, 622, "You attempt to catch a fish...", 314, "fishing bait");
-
-    @Suppress("unused") // IntelliJ bug, doesn't detect that this constructor is used
-    constructor(id: Int, animation: Int, message: String) : this(id, animation, message, -1, null)
+enum class FishingTool(
+    val message: String,
+    val id: Int,
+    animation: Int,
+    val bait: Int = -1,
+    val baitName: String? = null
+) {
+    LOBSTER_CAGE("You attempt to catch a lobster...", id = 301, animation = 619),
+    SMALL_NET("You cast out your net...", id = 303, animation = 620),
+    BIG_NET("You cast out your net...", id = 305, animation = 620),
+    HARPOON("You start harpooning fish...", id = 311, animation = 618),
+    FISHING_ROD("You attempt to catch a fish...", id = 307, animation = 622, bait = 313, baitName = "feathers"),
+    FLY_FISHING_ROD("You attempt to catch a fish...", id = 309, animation = 622, bait = 314, baitName = "fishing bait");
 
     /**
      * The [Animation] played when fishing with this tool.
@@ -54,7 +58,7 @@ enum class FishingTool(val id: Int, animation: Int, val message: String, val bai
     /**
      * The name of this tool, formatted so it can be inserted into a message.
      */
-    val formattedName = ItemDefinition.lookup(id).name.toLowerCase()
+    val formattedName = Definitions.item(id)!!.name.toLowerCase()
 
 }
 
@@ -68,14 +72,12 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
     NET_ROD(316, Option.of(SMALL_NET, SHRIMP, ANCHOVY), Option.of(FISHING_ROD, SARDINE, HERRING));
 
     companion object {
-
         private val FISHING_SPOTS = FishingSpot.values().associateBy({ it.npc }, { it })
 
         /**
          * Returns the [FishingSpot] with the specified [id], or `null` if the spot does not exist.
          */
         fun lookup(id: Int): FishingSpot? = FISHING_SPOTS[id]
-
     }
 
     /**
@@ -93,19 +95,6 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
      * An option at a [FishingSpot] (e.g. either "rod fishing" or "net fishing").
      */
     sealed class Option {
-
-        companion object {
-
-            fun of(tool: FishingTool, primary: Fish): Option = Single(tool, primary)
-
-            fun of(tool: FishingTool, primary: Fish, secondary: Fish): Option {
-                return when {
-                    primary.level < secondary.level -> Pair(tool, primary, secondary)
-                    else -> Pair(tool, secondary, primary)
-                }
-            }
-
-        }
 
         /**
          * The tool used to obtain fish
@@ -131,35 +120,38 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
             override val level = primary.level
 
             override fun sample(level: Int): Fish = primary
-
         }
 
         /**
          * A [FishingSpot] [Option] that can provide a two different types of fish.
          */
         private data class Pair(override val tool: FishingTool, val primary: Fish, val secondary: Fish) : Option() {
-
-            companion object {
-
-                val random = Random()
-
-                /**
-                 * The weighting factor that causes the lower-level fish to be returned more frequently.
-                 */
-                const val WEIGHTING = 70
-
-            }
-
             override val level = Math.min(primary.level, secondary.level)
 
             override fun sample(level: Int): Fish {
-                if (secondary.level > level) {
-                    return primary
+                return if (level < secondary.level || rand(100) < WEIGHTING) {
+                    primary
+                } else {
+                    secondary
                 }
+            }
 
+            private companion object {
+                /**
+                 * The weighting factor that causes the lower-level fish to be returned more frequently.
+                 */
+                private const val WEIGHTING = 70
+            }
+        }
+
+        companion object {
+
+            fun of(tool: FishingTool, primary: Fish): Option = Single(tool, primary)
+
+            fun of(tool: FishingTool, primary: Fish, secondary: Fish): Option {
                 return when {
-                    random.nextInt(100) < WEIGHTING -> primary
-                    else -> secondary
+                    primary.level < secondary.level -> Pair(tool, primary, secondary)
+                    else -> Pair(tool, secondary, primary)
                 }
             }
 
