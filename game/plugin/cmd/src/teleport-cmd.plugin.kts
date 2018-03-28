@@ -1,10 +1,11 @@
+
 import com.google.common.primitives.Ints
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.plugin.util.command.valid_arg_length
-import org.apollo.game.plugins.api.component1
-import org.apollo.game.plugins.api.component2
-import org.apollo.game.plugins.api.component3
+import org.apollo.game.plugins.api.Position.component1
+import org.apollo.game.plugins.api.Position.component2
+import org.apollo.game.plugins.api.Position.component3
 
 /**
  * Sends the player's position.

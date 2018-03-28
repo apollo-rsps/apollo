@@ -2,9 +2,9 @@ package org.apollo.game.plugins.area
 
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Player
-import org.apollo.game.plugins.api.component1
-import org.apollo.game.plugins.api.component2
-import org.apollo.game.plugins.api.component3
+import org.apollo.game.plugins.api.Position.component1
+import org.apollo.game.plugins.api.Position.component2
+import org.apollo.game.plugins.api.Position.component3
 
 /**
  * An area in the game world.
