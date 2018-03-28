@@ -12,17 +12,33 @@ import org.apollo.game.plugin.api.findObject
 import org.apollo.game.plugin.api.mining
 import org.apollo.game.plugin.api.rand
 import org.apollo.game.plugin.skills.mining.Ore
-import org.apollo.game.plugin.skills.mining.PICKAXES
 import org.apollo.game.plugin.skills.mining.Pickaxe
-import org.apollo.game.plugin.skills.mining.lookupOreRock
 import org.apollo.net.message.Message
-import java.util.Optional
+import java.util.Objects
 
-class MiningTarget(val objectId: Int, val position: Position, val ore: Ore) {
+on { ObjectActionMessage::class }
+    .where { option == Actions.MINING }
+    .then { player ->
+        Ore.fromRock(id)?.let { ore ->
+            MiningAction.start(this, player, ore)
+        }
+    }
 
-    fun getObject(world: World): Optional<GameObject> {
+on { ObjectActionMessage::class }
+    .where { option == Actions.PROSPECTING }
+    .then { player ->
+        val ore = Ore.fromRock(id)
+
+        if (ore != null) {
+            ProspectingAction.start(this, player, ore)
+        }
+    }
+
+data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore) {
+
+    fun getObject(world: World): GameObject? {
         val region = world.regionRepository.fromPosition(position)
-        return region.findObject(position, objectId)
+        return region.findObject(position, objectId).orElse(null)
     }
 
     fun isSuccessful(mob: Player): Boolean {
@@ -41,27 +57,22 @@ class MiningAction(
 ) : AsyncDistancedAction<Player>(PULSES, true, player, target.position, ORE_SIZE) {
 
     companion object {
-        private val PULSES = 0
-        private val ORE_SIZE = 1
-
-        fun pickaxeFor(player: Player): Pickaxe? {
-            return PICKAXES
-                .filter { it.level <= player.mining.current }
-                .filter { player.equipment.contains(it.id) || player.inventory.contains(it.id) }
-                .sortedByDescending { it.level }
-                .firstOrNull()
-        }
+        private const val PULSES = 0
+        private const val ORE_SIZE = 1
 
         /**
          * Starts a [MiningAction] for the specified [Player], terminating the [Message] that triggered it.
          */
         fun start(message: ObjectActionMessage, player: Player, ore: Ore) {
-            val pickaxe = pickaxeFor(player)
-            if (pickaxe != null) {
-                val action = MiningAction(player, pickaxe, MiningTarget(message.id, message.position, ore))
-                player.startAction(action)
-            } else {
+            val pickaxe = Pickaxe.bestFor(player)
+
+            if (pickaxe == null) {
                 player.sendMessage("You do not have a pickaxe for which you have the level to use.")
+            } else {
+                val target = MiningTarget(message.id, message.position, ore)
+                val action = MiningAction(player, pickaxe, target)
+
+                player.startAction(action)
             }
 
             message.terminate()
@@ -83,7 +94,7 @@ class MiningAction(
         wait(tool.pulses)
 
         val obj = target.getObject(mob.world)
-        if (!obj.isPresent) {
+        if (obj == null) {
             stop()
         }
 
@@ -94,25 +105,46 @@ class MiningAction(
             }
 
             if (mob.inventory.add(target.ore.id)) {
-                val oreName = Definitions.item(target.ore.id)?.name?.toLowerCase()
+                val oreName = Definitions.item(target.ore.id)!!.name.toLowerCase()
                 mob.sendMessage("You manage to mine some $oreName")
 
                 mob.mining.experience += target.ore.exp
-                mob.world.expireObject(obj.get(), target.ore.objects[target.objectId]!!, target.ore.respawn)
+                mob.world.expireObject(obj!!, target.ore.objects[target.objectId]!!, target.ore.respawn)
                 stop()
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MiningAction
+        return mob == other.mob && target == other.target
+    }
+
+    override fun hashCode(): Int = Objects.hash(mob, target)
+
 }
 
 class ExpiredProspectingAction(
     mob: Player,
     position: Position
-) : DistancedAction<Player>(PROSPECT_PULSES, true, mob, position, ORE_SIZE) {
+) : DistancedAction<Player>(DELAY, true, mob, position, ORE_SIZE) {
 
     companion object {
-        private val PROSPECT_PULSES = 0
-        private val ORE_SIZE = 1
+        private const val DELAY = 0
+        private const val ORE_SIZE = 1
+
+        /**
+         * Starts a [ExpiredProspectingAction] for the specified [Player], terminating the [Message] that triggered it.
+         */
+        fun start(message: ObjectActionMessage, player: Player) {
+            val action = ExpiredProspectingAction(player, message.position)
+            player.startAction(action)
+
+            message.terminate()
+        }
     }
 
     override fun executeAction() {
@@ -120,17 +152,27 @@ class ExpiredProspectingAction(
         stop()
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ExpiredProspectingAction
+        return mob == other.mob && position == other.position
+    }
+
+    override fun hashCode(): Int = Objects.hash(mob, position)
+
 }
 
 class ProspectingAction(
     player: Player,
     position: Position,
     private val ore: Ore
-) : AsyncDistancedAction<Player>(PROSPECT_PULSES, true, player, position, ORE_SIZE) {
+) : AsyncDistancedAction<Player>(DELAY, true, player, position, ORE_SIZE) {
 
     companion object {
-        private val PROSPECT_PULSES = 3
-        private val ORE_SIZE = 1
+        private const val DELAY = 3
+        private const val ORE_SIZE = 1
 
         /**
          * Starts a [MiningAction] for the specified [Player], terminating the [Message] that triggered it.
@@ -141,7 +183,6 @@ class ProspectingAction(
 
             message.terminate()
         }
-
     }
 
     override fun action(): ActionBlock = {
@@ -151,27 +192,24 @@ class ProspectingAction(
         wait()
 
         val oreName = Definitions.item(ore.id)?.name?.toLowerCase()
-        mob.sendMessage("This rock contains $oreName")
+        mob.sendMessage("This rock contains $oreName.")
 
         stop()
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ProspectingAction
+        return mob == other.mob && position == other.position && ore == other.ore
+    }
+
+    override fun hashCode(): Int = Objects.hash(mob, position, ore)
+
 }
 
-on { ObjectActionMessage::class }
-    .where { option == 1 }
-    .then {
-        val ore = lookupOreRock(id)
-        if (ore != null) {
-            MiningAction.start(this, it, ore)
-        }
-    }
-
-on { ObjectActionMessage::class }
-    .where { option == 2 }
-    .then {
-        val ore = lookupOreRock(id)
-        if (ore != null) { // TODO send expired action if rock is expired
-            ProspectingAction.start(this, it, ore)
-        }
-    }
+private object Actions {
+    const val MINING = 1
+    const val PROSPECTING = 2
+}
