@@ -31,6 +31,8 @@ on { ObjectActionMessage::class }
 
         if (ore != null) {
             ProspectingAction.start(this, player, ore)
+        } else if (Ore.fromExpiredRock(id) != null) {
+            ExpiredProspectingAction.start(this, player)
         }
     }
 
