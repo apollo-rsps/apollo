@@ -10,9 +10,8 @@ val PLAYER_PRAYERS: SetMultimap<Player, Prayer> = MultimapBuilder.hashKeys()
     .enumSetValues(Prayer::class.java)
     .build<Player, Prayer>()
 
-fun Player.getCurrentPrayers(): Set<Prayer> {
-    return PLAYER_PRAYERS[this]
-}
+val Player.currentPrayers : Set<Prayer>
+    get() = PLAYER_PRAYERS[this]
 
 enum class Bone(val id: Int, val xp: Double) {
     REGULAR_BONES(id = 526, xp = 5.0),
@@ -63,17 +62,18 @@ enum class Prayer(val button: Int, val level: Int, val setting: Int, val drain: 
     SMITE(button = 685, level = 52, setting = 100, drain = 0.2);
 
     companion object {
-        val PRAYERS = Prayer.values()
+        private val PRAYERS = Prayer.values()
 
         fun forButton(button: Int) = PRAYERS.find { it.button == button }
     }
 }
 
 fun updatePrayer(player: Player, prayer: Prayer) {
-    //Clear active prayer
-    if (player.getCurrentPrayers().contains(prayer)) {
-        player.send(ConfigMessage(prayer.setting, 0))
+    val prayerSettingValue = if (player.currentPrayers.contains(prayer)) {
+        1
     } else {
-        player.send(ConfigMessage(prayer.setting, 1))
+        0
     }
+
+    player.send(ConfigMessage(prayer.setting, prayerSettingValue))
 }
