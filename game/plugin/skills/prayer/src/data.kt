@@ -10,7 +10,7 @@ val PLAYER_PRAYERS: SetMultimap<Player, Prayer> = MultimapBuilder.hashKeys()
     .enumSetValues(Prayer::class.java)
     .build<Player, Prayer>()
 
-val Player.currentPrayers : Set<Prayer>
+val Player.currentPrayers: Set<Prayer>
     get() = PLAYER_PRAYERS[this]
 
 enum class Bone(val id: Int, val xp: Double) {
@@ -35,9 +35,9 @@ enum class Bone(val id: Int, val xp: Double) {
     OURG_BONES(id = 4834, xp = 140.0);
 
     companion object {
-        private val BONES = Bone.values()
+        private val BONES = Bone.values().associateBy { it.id }
 
-        operator fun get(id: Int) = BONES.find { bone -> bone.id == id }
+        operator fun get(id: Int) = BONES[id]
     }
 }
 
@@ -62,9 +62,9 @@ enum class Prayer(val button: Int, val level: Int, val setting: Int, val drain: 
     SMITE(button = 685, level = 52, setting = 100, drain = 0.2);
 
     companion object {
-        private val PRAYERS = Prayer.values()
+        private val PRAYERS = Prayer.values().associateBy { it.button }
 
-        fun forButton(button: Int) = PRAYERS.find { it.button == button }
+        fun forButton(button: Int) = PRAYERS[button]
     }
 }
 
