@@ -5,10 +5,12 @@ import org.apollo.game.model.entity.Player
 
 val BURY_BONE_ANIMATION = Animation(827)
 
-val PLAYER_PRAYERS = hashMapOf<Player, Prayer?>()
+val PLAYER_PRAYERS = hashMapOf<Player, ArrayList<Prayer>?>()
 
-fun Player.getCurrentPrayer(): Prayer? = PLAYER_PRAYERS[this]
-fun Player.setCurrentPrayer(prayer: Prayer?) = {PLAYER_PRAYERS[this] = prayer}
+fun Player.getCurrentPrayers(): ArrayList<Prayer> {
+    PLAYER_PRAYERS[this] = PLAYER_PRAYERS[this] ?: ArrayList<Prayer>(); //Make sure that the array list exists
+    return PLAYER_PRAYERS[this]!!
+}
 
 enum class Bone(val id: Int, val xp: Double) {
     REGULAR_BONES(526, 5.0),
@@ -32,7 +34,8 @@ enum class Bone(val id: Int, val xp: Double) {
     OURG_BONES(4834, 140.0);
 
     companion object {
-        fun findById(id: Int): Bone? = Bone.values().find { bone -> bone.id == id }
+        val BONES = Bone.values()
+        fun findById(id: Int): Bone? = BONES.find { bone -> bone.id == id }
     }
 }
 
@@ -57,22 +60,16 @@ enum class Prayer(val button: Int, val level: Int, val setting: Int, val drain: 
     SMITE(685, 52, 100, 0.2);
 
     companion object {
-        fun findByButton(button: Int): Prayer? = Prayer.values().find { prayer -> prayer.button == button }
+        val PRAYERS = Prayer.values()
+        fun findByButton(button: Int): Prayer? = PRAYERS.find { prayer -> prayer.button == button }
     }
 }
 
-fun updatePrayer(player: Player, prayer: Prayer?) {
+fun updatePrayer(player: Player, prayer: Prayer) {
     //Clear active prayer
-    if (prayer != null) {
-        if (player.getCurrentPrayer() == prayer) {
-            player.send(ConfigMessage(prayer.setting, 0))
-        } else if (player.getCurrentPrayer() == null) {
-            player.send(ConfigMessage(prayer.setting, 1))
-        } else {
-            val cprayer: Prayer = player.getCurrentPrayer()!!
-            player.send(ConfigMessage(cprayer.setting, 0))
-            player.send(ConfigMessage(prayer.setting, 1))
-        }
+    if (player.getCurrentPrayers().contains(prayer)) {
+        player.send(ConfigMessage(prayer.setting, 0))
+    } else {
+        player.send(ConfigMessage(prayer.setting, 1))
     }
-    player.setCurrentPrayer(prayer)
 }

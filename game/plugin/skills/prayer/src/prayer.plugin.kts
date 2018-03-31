@@ -17,7 +17,6 @@ on { ButtonMessage::class }
         .then {
             val prayer = Prayer.findByButton(widgetId) ?: return@then
             if (prayer.level > it.prayer.current) {
-                updatePrayer(it,null)
                 terminate();
                 return@then
             }
