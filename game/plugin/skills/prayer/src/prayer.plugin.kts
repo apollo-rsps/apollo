@@ -1,4 +1,3 @@
-import org.apollo.game.action.Action
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncAction
 import org.apollo.game.message.impl.ButtonMessage
@@ -9,30 +8,31 @@ import org.apollo.game.plugin.api.prayer
 
 //Clear the player prayer on logout
 on_player_event { LogoutEvent::class }
-        .then {
-            PLAYER_PRAYERS[it] = null;
-        }
+    .then {
+        PLAYER_PRAYERS.removeAll(it)
+    }
 
 on { ButtonMessage::class }
-        .then {
-            val prayer = Prayer.findByButton(widgetId) ?: return@then
-            if (prayer.level > it.prayer.current) {
-                terminate();
-                return@then
-            }
-            updatePrayer(it, prayer)
+    .then {
+        val prayer = Prayer.forButton(widgetId) ?: return@then
+        if (prayer.level > it.prayer.current) {
             terminate()
+            return@then
         }
+        updatePrayer(it, prayer)
+        terminate()
+    }
 
 on { ItemOptionMessage::class }
-        .where { option == 1 }
-        .then {
-            val bone = Bone.findById(id) ?: return@then
-            it.startAction(BuryBoneAction(it, slot, bone))
-            terminate()
-        }
+    .where { option == 1 }
+    .then {
+        val bone = Bone[id] ?: return@then
 
-class BuryBoneAction(val player: Player, val slot: Int, val bone: Bone): AsyncAction<Player>(0, true, player) {
+        it.startAction(BuryBoneAction(it, slot, bone))
+        terminate()
+    }
+
+class BuryBoneAction(val player: Player, val slot: Int, val bone: Bone) : AsyncAction<Player>(0, true, player) {
     override fun action(): ActionBlock = {
         if (player.inventory.get(slot).id == bone.id) {
             player.sendMessage("You dig a hole in the ground...")

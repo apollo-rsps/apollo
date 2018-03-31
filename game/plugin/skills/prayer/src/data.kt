@@ -1,67 +1,71 @@
+import com.google.common.collect.MultimapBuilder
+import com.google.common.collect.SetMultimap
 import org.apollo.game.message.impl.ConfigMessage
 import org.apollo.game.model.Animation
-import org.apollo.game.model.entity.Mob
 import org.apollo.game.model.entity.Player
 
 val BURY_BONE_ANIMATION = Animation(827)
 
-val PLAYER_PRAYERS = hashMapOf<Player, ArrayList<Prayer>?>()
+val PLAYER_PRAYERS: SetMultimap<Player, Prayer> = MultimapBuilder.hashKeys()
+    .enumSetValues(Prayer::class.java)
+    .build<Player, Prayer>()
 
-fun Player.getCurrentPrayers(): ArrayList<Prayer> {
-    PLAYER_PRAYERS[this] = PLAYER_PRAYERS[this] ?: ArrayList<Prayer>(); //Make sure that the array list exists
-    return PLAYER_PRAYERS[this]!!
+fun Player.getCurrentPrayers(): Set<Prayer> {
+    return PLAYER_PRAYERS[this]
 }
 
 enum class Bone(val id: Int, val xp: Double) {
-    REGULAR_BONES(526, 5.0),
-    BURNT_BONES(528, 5.0),
-    BAT_BONES(530, 4.0),
-    BIG_BONES(532, 45.0),
-    BABYDRAGON_BONES(534, 30.0),
-    DRAGON_BONES(536, 72.0),
-    WOLF_BONES(2859, 14.0),
-    SHAIKAHAN_BONES(3123, 25.0),
-    JOGRE_BONES(3125, 15.0),
-    BURNT_ZOGRE_BONES(3127, 25.0),
-    MONKEY_BONES_SMALL_0(3179, 14.0),
-    MONKEY_BONES_MEDIUM(3180, 14.0),
-    MONKEY_BONES_LARGE_0(3181, 14.0),
-    MONKEY_BONES_LARGE_1(3182, 14.0),
-    MONKEY_BONES_SMALL_1(3183, 14.0),
-    SHAKING_BONES(3187, 14.0),
-    FAYRG_BONES(4830, 84.0),
-    RAURG_BONES(4832, 96.0),
-    OURG_BONES(4834, 140.0);
+    REGULAR_BONES(id = 526, xp = 5.0),
+    BURNT_BONES(id = 528, xp = 5.0),
+    BAT_BONES(id = 530, xp = 4.0),
+    BIG_BONES(id = 532, xp = 45.0),
+    BABY_DRAGON_BONES(id = 534, xp = 30.0),
+    DRAGON_BONES(id = 536, xp = 72.0),
+    WOLF_BONES(id = 2859, xp = 14.0),
+    SHAIKAHAN_BONES(id = 3123, xp = 25.0),
+    JOGRE_BONES(id = 3125, xp = 15.0),
+    BURNT_ZOGRE_BONES(id = 3127, xp = 25.0),
+    MONKEY_BONES_SMALL_0(id = 3179, xp = 14.0),
+    MONKEY_BONES_MEDIUM(id = 3180, xp = 14.0),
+    MONKEY_BONES_LARGE_0(id = 3181, xp = 14.0),
+    MONKEY_BONES_LARGE_1(id = 3182, xp = 14.0),
+    MONKEY_BONES_SMALL_1(id = 3183, xp = 14.0),
+    SHAKING_BONES(id = 3187, xp = 14.0),
+    FAYRG_BONES(id = 4830, xp = 84.0),
+    RAURG_BONES(id = 4832, xp = 96.0),
+    OURG_BONES(id = 4834, xp = 140.0);
 
     companion object {
-        val BONES = Bone.values()
-        fun findById(id: Int): Bone? = BONES.find { bone -> bone.id == id }
+        private val BONES = Bone.values()
+
+        operator fun get(id: Int) = BONES.find { bone -> bone.id == id }
     }
 }
 
 enum class Prayer(val button: Int, val level: Int, val setting: Int, val drain: Double) {
-    THICK_SKIN(5609, 1, 83, 0.01),
-    BURST_OF_STRENGHT(5610, 4, 84, 0.01),
-    CLARITY_OF_THOUGHT(5611, 7, 85, 0.01),
-    ROCK_SKIN(5612, 10, 86, 0.04),
-    SUPERHUMAN_STRENGTH(5613, 13, 87, 0.04),
-    IMPROVED_REFLEXES(5614, 16, 88, 0.04),
-    RAPID_RESORE(5615, 19, 89, 0.01),
-    RAPID_HEAL(5615, 22, 90, 0.01),
-    PROTECT_ITEM(5617, 25, 91, 0.01),
-    STEEL_SKIN(5618, 28, 92, 0.1),
-    ULTIMATE_STRENGTH(5619, 31, 93, 0.1),
-    INCREDIBLE_REFLEXES(5620, 34, 94, 0.1),
-    PROTECT_FROM_MAGIC(5621, 37, 95, 0.15),
-    PROTECT_FROM_MISSILES(5622, 40, 96, 0.15),
-    PROTECT_FROM_MELEE(5623, 43, 97, 0.15),
-    RETRIBUTION(683, 46, 98, 0.15),
-    REDEMPTION(684, 49, 99, 0.15),
-    SMITE(685, 52, 100, 0.2);
+    THICK_SKIN(button = 5609, level = 1, setting = 83, drain = 0.01),
+    BURST_OF_STRENGTH(button = 5610, level = 4, setting = 84, drain = 0.01),
+    CLARITY_OF_THOUGHT(button = 5611, level = 7, setting = 85, drain = 0.01),
+    ROCK_SKIN(button = 5612, level = 10, setting = 86, drain = 0.04),
+    SUPERHUMAN_STRENGTH(button = 5613, level = 13, setting = 87, drain = 0.04),
+    IMPROVED_REFLEXES(button = 5614, level = 16, setting = 88, drain = 0.04),
+    RAPID_RESTORE(button = 5615, level = 19, setting = 89, drain = 0.01),
+    RAPID_HEAL(button = 5615, level = 22, setting = 90, drain = 0.01),
+    PROTECT_ITEM(button = 5617, level = 25, setting = 91, drain = 0.01),
+    STEEL_SKIN(button = 5618, level = 28, setting = 92, drain = 0.1),
+    ULTIMATE_STRENGTH(button = 5619, level = 31, setting = 93, drain = 0.1),
+    INCREDIBLE_REFLEXES(button = 5620, level = 34, setting = 94, drain = 0.1),
+    PROTECT_FROM_MAGIC(button = 5621, level = 37, setting = 95, drain = 0.15),
+    PROTECT_FROM_MISSILES(button = 5622, level = 40, setting = 96, drain = 0.15),
+    PROTECT_FROM_MELEE(button = 5623, level = 43, setting = 97, drain = 0.15),
+    RETRIBUTION(button = 683, level = 46, setting = 98, drain = 0.15),
+    REDEMPTION(button = 684, level = 49, setting = 99, drain = 0.15),
+    SMITE(button = 685, level = 52, setting = 100, drain = 0.2);
 
     companion object {
         val PRAYERS = Prayer.values()
-        fun findByButton(button: Int): Prayer? = PRAYERS.find { prayer -> prayer.button == button }
+
+        fun forButton(button: Int) = PRAYERS.find { it.button == button }
     }
 }
 
