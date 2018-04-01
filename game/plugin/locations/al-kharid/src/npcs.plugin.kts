@@ -19,7 +19,7 @@ npc_spawn("spider", x = 3323, y = 3138)
 
 npc_spawn("scorpion", x = 3282, y = 3149)
 
-//Camels
+// Camels
 
 npc_spawn("cam_the_camel", x = 3295, y = 3232)
 npc_spawn("elly_the_camel", x = 3312, y = 3210)
