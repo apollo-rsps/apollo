@@ -2,7 +2,10 @@ package org.apollo.plugin.entity.walkto
 
 import org.apollo.game.model.Direction
 import org.apollo.game.model.Position
-import org.apollo.game.model.entity.*
+import org.apollo.game.model.entity.Entity
+import org.apollo.game.model.entity.Mob
+import org.apollo.game.model.entity.Npc
+import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.entity.path.SimplePathfindingAlgorithm
 
@@ -41,7 +44,7 @@ fun Mob.walkBehind(target: Mob) {
     walkTo(target, target.lastDirection.opposite())
 }
 
-fun Mob.walkTo(target: Position, positionPredicate: (Position) -> Boolean = { true }) {
+fun Mob.walkTo(target: Position, positionPredicate: ((Position) -> Boolean)? = null) {
     if (position == target) {
         return
     }
@@ -49,11 +52,15 @@ fun Mob.walkTo(target: Position, positionPredicate: (Position) -> Boolean = { tr
     val pathfinder = SimplePathfindingAlgorithm(world.collisionManager)
     val path = pathfinder.find(position, target)
 
-    for (step in path) {
-        if (!positionPredicate.invoke(step)) {
-            return
-        }
+    if (positionPredicate == null) {
+        path.forEach(walkingQueue::addStep)
+    } else {
+        for (step in path) {
+            if (!positionPredicate.invoke(step)) {
+                return
+            }
 
-        walkingQueue.addStep(step)
+            walkingQueue.addStep(step)
+        }
     }
 }
