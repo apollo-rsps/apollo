@@ -78,10 +78,7 @@ class MiningAction(
 
         wait(tool.pulses)
 
-        val obj = target.getObject(mob.world)
-        if (obj == null) {
-            stop()
-        }
+        val obj = target.getObject(mob.world) ?: stop()
 
         if (target.isSuccessful(mob)) {
             if (mob.inventory.freeSlots() == 0) {
@@ -94,7 +91,7 @@ class MiningAction(
                 mob.sendMessage("You manage to mine some $oreName")
 
                 mob.mining.experience += target.ore.exp
-                mob.world.expireObject(obj!!, target.ore.objects[target.objectId]!!, target.ore.respawn)
+                mob.world.expireObject(obj, target.ore.objects[target.objectId]!!, target.ore.respawn)
                 stop()
             }
         }
