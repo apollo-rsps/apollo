@@ -104,6 +104,14 @@ abstract class KotlinPluginTestHelpers {
     }
 
     /**
+     * Spawn a new object (defaulting to in-front of the player) and immediately interact with it.
+     */
+    fun Player.interactWithObject(id: Int, option: Int, at: Position? = null) {
+        val obj = world.spawnObject(id, at ?: position.step(1, Direction.NORTH))
+        interactWith(obj, option)
+    }
+
+    /**
      * Spawns a new NPC with the minimum set of dependencies required to function correctly in the world.
      */
     fun World.spawnNpc(id: Int, position: Position): Npc {
