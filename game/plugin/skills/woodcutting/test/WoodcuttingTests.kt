@@ -5,7 +5,6 @@ import org.apollo.game.plugin.skills.woodcutting.Axe
 import org.apollo.game.plugin.testing.KotlinPluginTest
 import org.apollo.game.plugin.testing.actionCompleted
 import org.apollo.game.plugin.testing.ticks
-import org.junit.Before
 import org.junit.Test
 import org.junit.runners.Parameterized
 import org.mockito.Matchers.contains
@@ -28,16 +27,18 @@ class WoodcuttingTests(private val data: WoodcuttingTestData) : KotlinPluginTest
         items[data.tree.id] = def
     }
 
-    @Before
-    override fun setup() {
-        super.setup()
+    @Test
+    fun `Attempting to cut a tree when the player has no axe should send a message`() {
+        player.interactWithObject(data.treeId, 1)
 
-        player.inventory.add(Axe.BRONZE.id)
+        verifyAfter(actionCompleted(), player) { sendMessage(contains("do not have a pickaxe")) }
     }
 
     @Test
-    fun `Attempting to cut a tree we don't have the skill to should send the player a message`() {
+    fun `Attempting to cut a tree when the player is too low levelled should send a message`() {
+        player.inventory.add(Axe.BRONZE.id)
         player.skillSet.setCurrentLevel(Skill.WOODCUTTING, data.tree.level - 1)
+
         player.interactWithObject(data.treeId, 1)
 
         verifyAfter(actionCompleted(), player) { sendMessage(contains("do not have the required level")) }
@@ -51,13 +52,15 @@ class WoodcuttingTests(private val data: WoodcuttingTestData) : KotlinPluginTest
         `when`(rng.nextInt(100)).thenReturn(0)
         whenNew(Random::class.java).withAnyArguments().thenReturn(rng)
 
+        player.inventory.add(Axe.BRONZE.id)
         player.skillSet.setCurrentLevel(Skill.WOODCUTTING, data.tree.level)
+
         player.interactWithObject(data.treeId, 1)
 
         verifyAfter(ticks(1), player) { sendMessage(contains("You swing your axe")) }
 
-        // @todo - cummulative ticks() calls?
         after(ticks(2 + Axe.BRONZE.pulses)) {
+            // @todo - cummulative ticks() calls?
             verify(player).sendMessage("You manage to cut some <tree_type>")
             assert(player).hasExperience(Skill.WOODCUTTING, data.tree.exp)
             assert(player.inventory).contains(data.tree.id)
