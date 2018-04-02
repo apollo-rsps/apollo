@@ -90,10 +90,7 @@ class WoodcuttingAction(
             wait(tool.pulses)
 
             // Check that the object exists in the world
-            val obj = target.getObject(mob.world)
-            if (obj == null) {
-                stop()
-            }
+            val obj = target.getObject(mob.world) ?: stop()
 
             if (mob.inventory.add(target.tree.id)) {
                 val logName = Definitions.item(target.tree.id)!!.name.toLowerCase()
@@ -105,7 +102,7 @@ class WoodcuttingAction(
                 // respawn time: http://runescape.wikia.com/wiki/Trees
                 val respawn = TimeUnit.SECONDS.toMillis(MINIMUM_RESPAWN_TIME + rand(150)) / GameConstants.PULSE_DELAY
 
-                mob.world.expireObject(obj!!, target.tree.stump, respawn.toInt())
+                mob.world.expireObject(obj, target.tree.stump, respawn.toInt())
                 stop()
             }
         }
