@@ -1,19 +1,43 @@
 package org.apollo.game.plugin.testing
 
-import org.apollo.cache.def.ItemDefinition
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.game.action.Action
 import org.apollo.game.message.handler.MessageHandlerChainSet
-import org.apollo.game.message.impl.*
-import org.apollo.game.model.*
-import org.apollo.game.model.entity.*
+import org.apollo.game.message.impl.ItemOptionMessage
+import org.apollo.game.message.impl.NpcActionMessage
+import org.apollo.game.message.impl.ObjectActionMessage
+import org.apollo.game.message.impl.PlayerActionMessage
+import org.apollo.game.model.Direction
+import org.apollo.game.model.Position
+import org.apollo.game.model.World
+import org.apollo.game.model.entity.Entity
+import org.apollo.game.model.entity.Npc
+import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.entity.obj.StaticGameObject
 import org.apollo.net.message.Message
 import org.apollo.util.security.PlayerCredentials
 import org.junit.Assert
-import org.mockito.*
+import org.mockito.ArgumentCaptor
+import org.mockito.Matchers
+import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.powermock.api.mockito.PowerMockito
+
+sealed class DelayMode {
+    class AfterTicks(val ticks: Int) : DelayMode()
+    object AfterAction : DelayMode()
+}
+
+data class DelayedVerifier(val mode: DelayMode, val verifier: () -> Unit)
+
+fun ticks(num: Int): DelayMode {
+    return DelayMode.AfterTicks(num)
+}
+
+fun actionCompleted(): DelayMode {
+    return DelayMode.AfterAction
+}
 
 /**
  * A base class containing a set of helper methods to be used within plugin tests.
@@ -22,6 +46,8 @@ abstract class KotlinPluginTestHelpers {
     abstract var world: World
     abstract var player: Player
     abstract var messageHandlers: MessageHandlerChainSet
+
+    val delayedVerifiers = mutableListOf<DelayedVerifier>()
 
     /**
      * Waits for an [Action] to complete within a specified number of pulses, and with an optional predicate
@@ -39,18 +65,42 @@ abstract class KotlinPluginTestHelpers {
         do {
             action.pulse()
 
-            /**
-             * Introducing an artificial delay is necessary to prevent the timeout being exceeded before
-             * an asynchronous [Action] really starts.  When a job is submitted to a new coroutine context
-             * there may be a delay before it is actually executed.
-             *
-             * This delay is typically sub-millisecond and is only incurred with startup.  Since game actions
-             * have larger delays of their own this isn't a problem in practice.
-             */
-            Thread.sleep(50L)
+            val verifiers = delayedVerifiers.filter {
+                when (it.mode) {
+                    is DelayMode.AfterTicks -> pulses == it.mode.ticks - 1
+                    else -> false
+                }
+            }
+
+            verifiers.forEach { it.verifier.invoke() }
         } while (action.isRunning && pulses++ < timeout)
 
+        val verifiers = delayedVerifiers.filter { it.mode == DelayMode.AfterAction }
+        verifiers.forEach { it.verifier.invoke() }
+
         Assert.assertFalse("Exceeded timeout waiting for action completion", pulses > timeout)
+    }
+
+    /**
+     * Verify some expectations on a [mock] after a delayed event (specified by [DelayMode]).
+     */
+    inline fun <T> verifyAfter(mode: DelayMode, mock: T, crossinline verifier: T.() -> Unit) {
+        after(mode) { verify(mock).verifier() }
+    }
+
+    /**
+     * Run a [callback] after a given delay, specified by [DelayMode].
+     */
+    fun after(mode: DelayMode, callback: () -> Unit) {
+        delayedVerifiers.add(DelayedVerifier(mode, callback))
+    }
+
+    /**
+     * Send an [ItemOptionMessage] for the given [id], [option], [slot], and [interfaceId], simulating a
+     * player interacting with an item.
+     */
+    fun Player.interactWithItem(id: Int, option: Int, slot: Int? = null, interfaceId: Int? = null) {
+        this.notify(ItemOptionMessage(option, interfaceId ?: -1, id, slot ?: player.inventory.slotOf(id)))
     }
 
     /**

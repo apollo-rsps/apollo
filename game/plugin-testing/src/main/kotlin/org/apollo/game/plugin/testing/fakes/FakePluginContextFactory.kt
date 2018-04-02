@@ -10,7 +10,7 @@ import org.powermock.api.mockito.PowerMockito
 
 object FakePluginContextFactory {
     fun create(messageHandlers: MessageHandlerChainSet): PluginContext {
-        val answer = Answer<Any?> { invocation: InvocationOnMock ->
+        val answer = Answer { invocation: InvocationOnMock ->
             messageHandlers.putHandler(
                     invocation.arguments[0] as Class<Message>,
                     invocation.arguments[1] as MessageHandler<*>)

@@ -8,6 +8,7 @@ dependencies {
     api group: 'junit', name: 'junit', version: junitVersion
     api group: 'org.powermock', name: 'powermock-api-mockito', version: powermockVersion
     api group: 'org.assertj', name: 'assertj-core', version: assertjVersion
+    api group: 'com.willowtreeapps.assertk', name: 'assertk', version: '0.9'
 
     implementation group: 'org.powermock', name: 'powermock-module-junit4', version: powermockVersion
 }
