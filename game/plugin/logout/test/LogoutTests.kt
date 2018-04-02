@@ -2,6 +2,8 @@
 import org.apollo.game.message.impl.ButtonMessage
 import org.apollo.game.plugin.testing.KotlinPluginTest
 import org.junit.Test
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 
 class LogoutTests : KotlinPluginTest() {
 
