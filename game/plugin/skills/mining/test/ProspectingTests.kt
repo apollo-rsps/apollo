@@ -1,6 +1,5 @@
 
 import org.apollo.cache.def.ItemDefinition
-import org.apollo.game.plugin.skills.mining.Ore
 import org.apollo.game.plugin.testing.KotlinPluginTest
 import org.apollo.game.plugin.testing.actionCompleted
 import org.apollo.game.plugin.testing.ticks
@@ -9,17 +8,13 @@ import org.junit.runners.Parameterized
 import org.mockito.Matchers.contains
 import org.powermock.modules.junit4.PowerMockRunnerDelegate
 
-data class ProspectingTestData(val rockId: Int, val expiredRockId: Int, val ore: Ore)
-
 @PowerMockRunnerDelegate(Parameterized::class)
-class ProspectingTests(private val data: ProspectingTestData) : KotlinPluginTest() {
+class ProspectingTests(private val data: MiningTestData) : KotlinPluginTest() {
 
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data() = Ore.values()
-            .flatMap { ore -> ore.objects.map { ProspectingTestData(it.key, it.value, ore) } }
-            .toList()
+        fun data() = miningTestData()
     }
 
     init {
