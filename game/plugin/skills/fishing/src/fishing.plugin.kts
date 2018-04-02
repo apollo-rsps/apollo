@@ -57,7 +57,7 @@ class FishingAction(player: Player, position: Position, val option: FishingSpot.
                 }
 
                 mob.inventory.add(fish.id)
-                mob.sendMessage("You catch a ${fish.formattedName}.")
+                mob.sendMessage(fish.catchMessage)
                 mob.fishing.experience += fish.experience
 
                 if (mob.inventory.freeSlots() == 0) {
