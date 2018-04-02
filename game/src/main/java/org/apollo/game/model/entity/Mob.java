@@ -328,6 +328,15 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Check whether this mob has a current active {@link Action}.
+	 *
+	 * @return {@code true} if this mob has a non-null {@link Action}.
+	 */
+	public final boolean hasAction() {
+		return action != null;
+	}
+
+	/**
 	 * Returns whether or not this mob has an {@link NpcDefinition}.
 	 *
 	 * @return {@code true} if this mob has an npc definition, {@code false} if not.
