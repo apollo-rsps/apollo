@@ -17,12 +17,12 @@ enum class Ore(
     val exp: Double,
     val respawn: Int,
     val chance: Double,
-    val chanceOffset: Boolean = false
+    val chanceOffset: Double = 0.0
 ) {
-    CLAY(CLAY_OBJECTS, id = 434, level = 1, exp = 5.0, respawn = 1, chance = 0.0085, chanceOffset = true),
-    COPPER(COPPER_OBJECTS, id = 436, level = 1, exp = 17.5, respawn = 4, chance = 0.0085, chanceOffset = true),
-    TIN(TIN_OBJECTS, id = 438, level = 1, exp = 17.5, respawn = 4, chance = 0.0085, chanceOffset = true),
-    IRON(IRON_OBJECTS, id = 440, level = 15, exp = 35.0, respawn = 9, chance = 0.0085, chanceOffset = true),
+    CLAY(CLAY_OBJECTS, id = 434, level = 1, exp = 5.0, respawn = 1, chance = 0.0085, chanceOffset = 0.45),
+    COPPER(COPPER_OBJECTS, id = 436, level = 1, exp = 17.5, respawn = 4, chance = 0.0085, chanceOffset = 0.45),
+    TIN(TIN_OBJECTS, id = 438, level = 1, exp = 17.5, respawn = 4, chance = 0.0085, chanceOffset = 0.45),
+    IRON(IRON_OBJECTS, id = 440, level = 15, exp = 35.0, respawn = 9, chance = 0.0085, chanceOffset = 0.45),
     COAL(COAL_OBJECTS, id = 453, level = 30, exp = 50.0, respawn = 50, chance = 0.004),
     GOLD(GOLD_OBJECTS, id = 444, level = 40, exp = 65.0, respawn = 100, chance = 0.003),
     SILVER(SILVER_OBJECTS, id = 442, level = 20, exp = 40.0, respawn = 100, chance = 0.0085),

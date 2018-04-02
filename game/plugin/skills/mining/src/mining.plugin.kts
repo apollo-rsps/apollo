@@ -117,9 +117,7 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
     }
 
     fun isSuccessful(mob: Player): Boolean {
-        val offset = if (ore.chanceOffset) 1 else 0
-        val percent = (ore.chance * mob.mining.current + offset) * 100
-
+        val percent = (ore.chance * mob.mining.current + ore.chanceOffset) * 100
         return rand(100) < percent
     }
 

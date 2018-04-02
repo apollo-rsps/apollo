@@ -8,6 +8,6 @@ enum class Gem(val id: Int) { // TODO add gem drop chances
 
     companion object {
         private val GEMS = Gem.values().associateBy({ it.id }, { it })
-        fun lookup(id: Int): Gem? = GEMS[id]
+        operator fun get(id: Int): Gem? = GEMS[id]
     }
 }
