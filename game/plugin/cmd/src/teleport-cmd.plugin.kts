@@ -55,14 +55,14 @@ on_command("tele", PrivilegeLevel.ADMINISTRATOR)
             val query = arguments[0]
 
             for (target in TELEPORT_DESTINATIONS) {
-                val name = target.first
+                val (dest, name) = target
 
                 if (!name.startsWith(query)) {
                     continue
                 }
 
                 player.sendMessage("Teleporting to $name.")
-                player.teleport(target.second)
+                player.teleport(dest)
                 return@then
             }
 
