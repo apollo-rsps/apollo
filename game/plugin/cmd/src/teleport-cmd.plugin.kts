@@ -55,7 +55,7 @@ on_command("tele", PrivilegeLevel.ADMINISTRATOR)
             val query = arguments[0]
 
             for (target in TELEPORT_DESTINATIONS) {
-                val (dest, name) = target
+                val (name, dest) = target
 
                 if (!name.startsWith(query)) {
                     continue
