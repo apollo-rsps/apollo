@@ -11,7 +11,7 @@ on_command("pos", PrivilegeLevel.MODERATOR)
         player.sendMessage("You are at: ${player.position}.")
     }
 
-var TELEPORT_DESTINATIONS = listOf<Pair<String, Position>>(
+val TELEPORT_DESTINATIONS = listOf<Pair<String, Position>>(
     "ardougne" to Position(2662, 3304, 0),
     "barrows" to Position(3565, 3314, 0),
     "brimhaven" to Position(2802, 3179, 0),
