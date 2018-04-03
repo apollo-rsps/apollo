@@ -1,5 +1,4 @@
 import com.google.common.primitives.Ints
-import java.io.File
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.plugin.util.command.valid_arg_length
@@ -12,7 +11,7 @@ on_command("pos", PrivilegeLevel.MODERATOR)
         player.sendMessage("You are at: ${player.position}.")
     }
 
-val TELEPORT_DESTINATIONS = mutableListOf<Pair<String, Position>>(
+const val TELEPORT_DESTINATIONS = mutableListOf<Pair<String, Position>>(
     Pair("ardougne", Position(2662, 3304, 0)),
     Pair("barrows", Position(3565, 3314, 0)),
     Pair("brimhaven", Position(2802, 3179, 0)),
@@ -52,12 +51,9 @@ on_command("tele", PrivilegeLevel.ADMINISTRATOR)
     .then { player ->
         val invalidSyntax = "Invalid syntax - ::tele [x] [y] [optional-z] or ::tele [place name]"
 
-        // Quickly jump to a location by any prefix of a name in a file.
         if (arguments.size == 1) {
             val query = arguments[0]
 
-            // For now we do a linear search through the list, but we could
-            // make this smarter in the future.
             for (target in TELEPORT_DESTINATIONS) {
                 val name = target.first
 
