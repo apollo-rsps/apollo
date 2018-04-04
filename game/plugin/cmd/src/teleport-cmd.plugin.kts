@@ -12,7 +12,7 @@ on_command("pos", PrivilegeLevel.MODERATOR)
     }
 
 val TELEPORT_DESTINATIONS = listOf(
-    "alkarid" to Position(3292, 3171, 0),
+    "alkharid" to Position(3292, 3171, 0),
     "ardougne" to Position(2662, 3304, 0),
     "barrows" to Position(3565, 3314, 0),
     "brimhaven" to Position(2802, 3179, 0),
