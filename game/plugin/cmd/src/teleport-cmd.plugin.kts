@@ -12,6 +12,7 @@ on_command("pos", PrivilegeLevel.MODERATOR)
     }
 
 val TELEPORT_DESTINATIONS = listOf(
+    "alkarid" to Position(3292, 3171, 0),
     "ardougne" to Position(2662, 3304, 0),
     "barrows" to Position(3565, 3314, 0),
     "brimhaven" to Position(2802, 3179, 0),
@@ -25,7 +26,6 @@ val TELEPORT_DESTINATIONS = listOf(
     "entrana" to Position(2827, 3343, 0),
     "falador" to Position(2965, 3379, 0),
     "ge" to Position(3164, 3476, 0),
-    "gwd" to Position(2881, 5310, 2),
     "kbd" to Position(2273, 4680, 0),
     "keldagrim" to Position(2845, 10210, 0),
     "kq" to Position(3507, 9494, 0),
@@ -53,14 +53,20 @@ on_command("tele", PrivilegeLevel.ADMINISTRATOR)
 
         if (arguments.size == 1) {
             val query = arguments[0]
+            val results = TELEPORT_DESTINATIONS.filter {
+                (name, _) -> name.startsWith(query)
+            }
 
-            val result = TELEPORT_DESTINATIONS.find { (name, _) -> name.startsWith(query) }
-            if (result == null) {
+            if (results.size == 0) {
                 player.sendMessage("No destinations matching '$query'.")
+                return@then
+            } else if (results.size > 1) {
+                player.sendMessage("Ambiguous query '$query' (could " +
+                                   "be $results). Please disambiguate.")
                 return@then
             }
 
-            val (name, dest) = result
+            val (name, dest) = results[0]
             player.sendMessage("Teleporting to $name.")
             player.teleport(dest)
 
