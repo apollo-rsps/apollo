@@ -1,0 +1,26 @@
+= Apollo Documentation
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+
+This is the home of Apollo's documentation.
+Below you will find various links
+
+== The Basics
+
+* <<basics/what-is-apollo#,What is Apollo?>>
+
+== Getting Started
+
+* <<getting-started/running-apollo#,Getting and running Apollo>>
+* <<getting-started/development-environment#,Setting up a development environment>>
+
+== Authoring plugins for Apollo
+
+* <<plugins/creating-a-plugin#,Creating a plugin>>
+* <<plugins/client-messages#,Reacting to server events>>
+* <<plugins/shared-code#,Writing a plugin that exports shared code>>
+* <<plugins/testing#,Adding automated tests to your plugin>>
+
+== References and Developer Resources
+
+* Apollo API Documentation[TODO]
+* Plugin API Documentation[TODO]
