@@ -1,7 +1,8 @@
+
 import org.apollo.game.model.Position
 import org.apollo.game.plugin.testing.KotlinPluginTest
-import org.junit.Test
-import org.mockito.Mockito.verify
+import org.apollo.game.plugin.testing.actionCompleted
+import org.junit.jupiter.api.Test
 
 class OpenBankTest() : KotlinPluginTest() {
 
@@ -18,9 +19,8 @@ class OpenBankTest() : KotlinPluginTest() {
 
         // @todo - these option numbers only match by coincidence, we should be looking up the correct ones
         player.interactWith(bankTeller, option = 2)
-        player.waitForActionCompletion()
 
-        verify(player).openBank()
+        verifyAfter(actionCompleted()) { player.openBank() }
     }
 
     @Test
@@ -28,9 +28,8 @@ class OpenBankTest() : KotlinPluginTest() {
         val bankBooth = world.spawnObject(BANK_BOOTH_ID, BANK_POSITION)
 
         player.interactWith(bankBooth, option = 2)
-        player.waitForActionCompletion()
 
-        verify(player).openBank()
+        verifyAfter(actionCompleted()) { player.openBank() }
     }
 
 }

@@ -1,41 +1,35 @@
 
 import org.apollo.cache.def.ItemDefinition
+import org.apollo.game.plugin.skills.mining.Ore
 import org.apollo.game.plugin.testing.KotlinPluginTest
 import org.apollo.game.plugin.testing.actionCompleted
 import org.apollo.game.plugin.testing.ticks
-import org.junit.Test
-import org.junit.runners.Parameterized
-import org.mockito.Matchers.contains
-import org.powermock.modules.junit4.PowerMockRunnerDelegate
+import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-@PowerMockRunnerDelegate(Parameterized::class)
-class ProspectingTests(private val data: MiningTestData) : KotlinPluginTest() {
-
-    companion object {
-        @JvmStatic
-        @Parameterized.Parameters
-        fun data() = miningTestData()
-    }
+class ProspectingTests : KotlinPluginTest() {
 
     init {
-        val def = ItemDefinition(data.ore.id)
-        def.name = "<ore_type>"
-
-        items[data.ore.id] = def
+        Ore.values()
+            .map { ItemDefinition(it.id).also { it.name = "<ore_type>" } }
+            .forEach { items[it.id] = it }
     }
 
-    @Test
-    fun `Prospecting a rock should reveal the type of ore it contains`() {
+    @ParameterizedTest
+    @ArgumentsSource(MiningTestDataProvider::class)
+    fun `Prospecting a rock should reveal the type of ore it contains`(data: MiningTestData) {
         player.interactWithObject(data.rockId, 2)
 
-        verifyAfter(ticks(1), player) { sendMessage(contains("You examine the rock")) }
-        verifyAfter(actionCompleted(), player) { sendMessage(contains("This rock contains <ore_type>")) }
+        verifyAfter(ticks(1)) { player.sendMessage(contains("examine the rock")) }
+        verifyAfter(actionCompleted()) { player.sendMessage(contains("This rock contains <ore_type>")) }
     }
 
-    @Test
-    fun `Prospecting an expired rock should reveal it contains no ore`() {
+    @ParameterizedTest
+    @ArgumentsSource(MiningTestDataProvider::class)
+    fun `Prospecting an expired rock should reveal it contains no ore`(data: MiningTestData) {
         player.interactWithObject(data.expiredRockId, 2)
 
-        verifyAfter(actionCompleted(), player) { sendMessage(contains("no ore available in this rock")) }
+        verifyAfter(actionCompleted()) { player.sendMessage(contains("no ore available in this rock")) }
     }
 }

@@ -1,9 +1,8 @@
 
+import io.mockk.verify
 import org.apollo.game.message.impl.ButtonMessage
 import org.apollo.game.plugin.testing.KotlinPluginTest
 import org.junit.Test
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
 
 class LogoutTests : KotlinPluginTest() {
 
@@ -14,7 +13,7 @@ class LogoutTests : KotlinPluginTest() {
 	@Test fun `The player should be logged out when they click the logout button`() {
 		player.notify(ButtonMessage(LOGOUT_BUTTON_ID))
 
-		verify(player, times(1)).logout()
+        verify { player.logout() }
 	}
 
 }

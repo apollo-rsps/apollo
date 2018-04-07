@@ -1,5 +1,9 @@
 package org.apollo.game.plugin.testing
 
+import io.mockk.MockKVerificationScope
+import io.mockk.every
+import io.mockk.spyk
+import io.mockk.verify
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.game.action.Action
 import org.apollo.game.message.handler.MessageHandlerChainSet
@@ -17,12 +21,8 @@ import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.entity.obj.StaticGameObject
 import org.apollo.net.message.Message
 import org.apollo.util.security.PlayerCredentials
-import org.junit.Assert
-import org.mockito.ArgumentCaptor
-import org.mockito.Matchers
-import org.mockito.Mockito
-import org.mockito.Mockito.verify
-import org.powermock.api.mockito.PowerMockito
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 
 sealed class DelayMode {
     class AfterTicks(val ticks: Int) : DelayMode()
@@ -54,11 +54,9 @@ abstract class KotlinPluginTestHelpers {
      * to test the [Action] against.
      */
     fun Player.waitForActionCompletion(predicate: (Action<Player>) -> Boolean = { _ -> true }, timeout: Int = 15) {
-        val actionCaptor: ArgumentCaptor<Action<*>> = ArgumentCaptor.forClass(Action::class.java)
-        Mockito.verify(this).startAction(actionCaptor.capture())
+        val action = player.action as Action<Player>
 
-        val action: Action<Player> = actionCaptor.value as Action<Player>
-        Assert.assertTrue("Found wrong action type", predicate.invoke(action))
+        assertTrue(predicate.invoke(action), "Found wrong action type")
 
         var pulses = 0
 
@@ -78,14 +76,14 @@ abstract class KotlinPluginTestHelpers {
         val verifiers = delayedVerifiers.filter { it.mode == DelayMode.AfterAction }
         verifiers.forEach { it.verifier.invoke() }
 
-        Assert.assertFalse("Exceeded timeout waiting for action completion", pulses > timeout)
+        assertFalse(pulses > timeout, "Exceeded timeout waiting for action completion")
     }
 
     /**
      * Verify some expectations on a [mock] after a delayed event (specified by [DelayMode]).
      */
-    inline fun <T> verifyAfter(mode: DelayMode, mock: T, crossinline verifier: T.() -> Unit) {
-        after(mode) { verify(mock).verifier() }
+    fun verifyAfter(mode: DelayMode, verifier: MockKVerificationScope.() -> Unit) {
+        after(mode) { verify(verifyBlock = verifier) }
     }
 
     /**
@@ -133,11 +131,11 @@ abstract class KotlinPluginTestHelpers {
         val credentials = PlayerCredentials(username, "test", 1, 1, "0.0.0.0")
         val region = regionRepository.fromPosition(position)
 
-        val player = PowerMockito.spy(Player(this, credentials, position))
+        val player = spyk(Player(this, credentials, position))
         register(player)
         region.addEntity(player)
 
-        PowerMockito.doNothing().`when`(player).send(Matchers.any())
+        every { player.send(any()) } answers { }
 
         return player
     }

@@ -236,6 +236,15 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Gets the current action, if any, of this mob.
+	 *
+	 * @return The action.
+	 */
+	public final Action<?> getAction() {
+		return action;
+	}
+
+	/**
 	 * Gets the index of this mob.
 	 *
 	 * @return The index.
