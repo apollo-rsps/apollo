@@ -1,14 +1,14 @@
 package org.apollo.plugin.consumables
 
+import io.mockk.verify
 import org.apollo.game.message.impl.ItemOptionMessage
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.plugin.testing.KotlinPluginTest
-import org.apollo.game.plugin.testing.mockito.KotlinMockitoExtensions.matches
+import org.apollo.game.plugin.testing.actionCompleted
+import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class FoodOrDrinkTests : KotlinPluginTest() {
 
@@ -25,7 +25,8 @@ class FoodOrDrinkTests : KotlinPluginTest() {
         const val MAX_HP_LEVEL = 10
     }
 
-    @Before override fun setup() {
+    @BeforeEach
+    override fun setup() {
         super.setup()
 
         val skills = player.skillSet
@@ -36,7 +37,8 @@ class FoodOrDrinkTests : KotlinPluginTest() {
         drink("test_drink", TEST_DRINK_ID, TEST_DRINK_RESTORATION)
     }
 
-    @Test fun `Consuming food or drink should restore the players hitpoints`() {
+    @Test
+    fun `Consuming food or drink should restore the players hitpoints`() {
         val expectedHpLevel = TEST_FOOD_RESTORATION + HP_LEVEL
 
         player.notify(ItemOptionMessage(1, -1, TEST_FOOD_ID, 1))
@@ -46,41 +48,35 @@ class FoodOrDrinkTests : KotlinPluginTest() {
         assertThat(currentHpLevel).isEqualTo(expectedHpLevel)
     }
 
-    @Test fun `A message should be sent notifying the player if the item restored hitpoints`() {
+    @Test
+    fun `A message should be sent notifying the player if the item restored hitpoints`() {
         player.notify(ItemOptionMessage(1, -1, TEST_FOOD_ID, 1))
-        player.waitForActionCompletion()
 
-        verify(player).sendMessage(matches {
-            assertThat(this).contains("heals some health")
-        })
+        verifyAfter(actionCompleted()) { player.sendMessage("It heals some health.") }
     }
 
-    @Test fun `A message should not be sent to the player if the item did not restore hitpoints`() {
+    @Test
+    fun `A message should not be sent to the player if the item did not restore hitpoints`() {
         player.skillSet.setCurrentLevel(Skill.HITPOINTS, MAX_HP_LEVEL)
         player.notify(ItemOptionMessage(1, -1, TEST_FOOD_ID, 1))
         player.waitForActionCompletion()
 
-        verify(player, never()).sendMessage(matches {
-            assertThat(this).contains("heals some health")
-        })
+        verify(exactly = 0) { player.sendMessage(contains("it heals some")) }
     }
 
-    @Test fun `A message should be sent saying the player has drank an item when consuming a drink`() {
+    @Test
+    fun `A message should be sent saying the player has drank an item when consuming a drink`() {
         player.notify(ItemOptionMessage(1, -1, TEST_DRINK_ID, 1))
-        player.waitForActionCompletion()
 
-        verify(player).sendMessage(matches {
-            assertThat(this).contains("You drink the ${TEST_DRINK_NAME}")
-        })
+        verifyAfter(actionCompleted()) { player.sendMessage("You drink the ${TEST_DRINK_NAME}.") }
+
     }
 
-    @Test fun `A message should be sent saying the player has eaten an item when consuming food`() {
+    @Test
+    fun `A message should be sent saying the player has eaten an item when consuming food`() {
         player.notify(ItemOptionMessage(1, -1, TEST_FOOD_ID, 1))
-        player.waitForActionCompletion()
 
-        verify(player).sendMessage(matches {
-            assertThat(this).contains("You eat the ${TEST_FOOD_NAME}")
-        })
+        verifyAfter(actionCompleted()) { player.sendMessage("You eat the ${TEST_FOOD_NAME}.") }
     }
 
 }

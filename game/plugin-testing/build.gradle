@@ -1,14 +1,21 @@
 apply plugin: 'kotlin'
 
+ext.junitVintageVersion = '5.1.0'
+ext.junitPlatformVersion = '1.1.0'
+ext.junitJupiterVersion = '5.1.0'
+ext.junitVersion = "5.0.0"
+
 dependencies {
-    compileOnly project(':game')
+    compile project(':game')
+
+    // JUnit Jupiter API and TestEngine implementation
+    compile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    compile("org.junit.jupiter:junit-jupiter-params:${junitVersion}")
+    runtime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+    runtime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}") {
+    }
+
+    compile "io.mockk:mockk:1.7.15"
     compile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
     compile 'com.willowtreeapps.assertk:assertk:0.9'
-
-    def gameTestConfiguration = project(':game').configurations.testCompile
-    def gameTestDependencies = gameTestConfiguration.dependencies
-
-    gameTestDependencies.each {
-        compile it
-    }
 }

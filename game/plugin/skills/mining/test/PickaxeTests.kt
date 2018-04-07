@@ -1,20 +1,13 @@
+
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.plugin.skills.mining.Pickaxe
 import org.apollo.game.plugin.testing.KotlinPluginTest
-import org.junit.Assert
-import org.junit.Test
-import org.junit.runners.Parameterized
-import org.powermock.modules.junit4.PowerMockRunnerDelegate
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
-@PowerMockRunnerDelegate(Parameterized::class)
-class PickaxeTests(private val pickaxe: Pickaxe) : KotlinPluginTest() {
-
-    companion object {
-        @JvmStatic
-        @Parameterized.Parameters
-        fun data() = Pickaxe.values()
-    }
+class PickaxeTests : KotlinPluginTest() {
 
     init {
         Pickaxe.values()
@@ -22,39 +15,48 @@ class PickaxeTests(private val pickaxe: Pickaxe) : KotlinPluginTest() {
             .forEach { items[it.id] = it }
     }
 
-    @Test
-    fun `No pickaxe is chosen if none are available`() {
+    @ParameterizedTest
+    @EnumSource(Pickaxe::class)
+    fun `No pickaxe is chosen if none are available`(pickaxe: Pickaxe) {
         player.skillSet.setCurrentLevel(Skill.MINING, pickaxe.level)
 
-        Assert.assertEquals(null, Pickaxe.bestFor(player))
+        assertEquals(null, Pickaxe.bestFor(player))
     }
 
-    @Test
-    fun `The highest level pickaxe is chosen when available`() {
+
+    @ParameterizedTest
+    @EnumSource(Pickaxe::class)
+    fun `The highest level pickaxe is chosen when available`(pickaxe: Pickaxe) {
         player.skillSet.setCurrentLevel(Skill.MINING, pickaxe.level)
         player.inventory.add(pickaxe.id)
 
-        Assert.assertEquals(pickaxe, Pickaxe.bestFor(player))
+        assertEquals(pickaxe, Pickaxe.bestFor(player))
     }
 
-    @Test
-    fun `Only pickaxes the player has are chosen`() {
+
+    @ParameterizedTest
+    @EnumSource(Pickaxe::class)
+    fun `Only pickaxes the player has are chosen`(pickaxe: Pickaxe) {
         player.skillSet.setCurrentLevel(Skill.MINING, pickaxe.level)
         player.inventory.add(Pickaxe.BRONZE.id)
 
-        Assert.assertEquals(Pickaxe.BRONZE, Pickaxe.bestFor(player))
+        assertEquals(Pickaxe.BRONZE, Pickaxe.bestFor(player))
     }
 
-    @Test
-    fun `Pickaxes can be chosen from equipment as well as inventory`() {
+
+    @ParameterizedTest
+    @EnumSource(value = Pickaxe::class)
+    fun `Pickaxes can be chosen from equipment as well as inventory`(pickaxe: Pickaxe) {
         player.skillSet.setCurrentLevel(Skill.MINING, pickaxe.level)
         player.inventory.add(pickaxe.id)
 
-        Assert.assertEquals(pickaxe, Pickaxe.bestFor(player))
+        assertEquals(pickaxe, Pickaxe.bestFor(player))
     }
 
-    @Test
-    fun `Pickaxes with a level requirement higher than the player's are ignored`() {
+
+    @ParameterizedTest
+    @EnumSource(value = Pickaxe::class)
+    fun `Pickaxes with a level requirement higher than the player's are ignored`(pickaxe: Pickaxe) {
         player.skillSet.setCurrentLevel(Skill.MINING, pickaxe.level)
         player.inventory.add(pickaxe.id)
 
@@ -62,7 +64,7 @@ class PickaxeTests(private val pickaxe: Pickaxe) : KotlinPluginTest() {
             .filter { it.level > pickaxe.level }
             .forEach { player.inventory.add(it.id) }
 
-        Assert.assertEquals(pickaxe, Pickaxe.bestFor(player))
+        assertEquals(pickaxe, Pickaxe.bestFor(player))
     }
 
 }
