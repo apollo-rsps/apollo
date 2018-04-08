@@ -1,19 +1,25 @@
-
 import org.apollo.cache.def.ItemDefinition
+import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.plugin.skills.mining.Pickaxe
-import org.apollo.game.plugin.testing.KotlinPluginTest
+import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
+import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
+import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
-class PickaxeTests : KotlinPluginTest() {
+@ExtendWith(ApolloTestingExtension::class)
+class PickaxeTests {
 
-    init {
-        Pickaxe.values()
-            .map { ItemDefinition(it.id).apply { isStackable = false } }
-            .forEach { items[it.id] = it }
+    @ItemDefinitions
+    fun pickaxes() = Pickaxe.values().map {
+        ItemDefinition(it.id).apply { isStackable = false }
     }
+
+    @TestMock
+    lateinit var player: Player
 
     @ParameterizedTest
     @EnumSource(Pickaxe::class)
@@ -32,7 +38,6 @@ class PickaxeTests : KotlinPluginTest() {
 
         assertEquals(pickaxe, Pickaxe.bestFor(player))
     }
-
 
     @ParameterizedTest
     @EnumSource(Pickaxe::class)

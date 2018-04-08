@@ -33,8 +33,73 @@ internal val supportedTestDoubleTypes = setOf(
     ActionCapture::class.createType()
 )
 
-class ApolloTestingExtension : BeforeEachCallback, AfterEachCallback, ParameterResolver {
+class ApolloTestingExtension :
+    BeforeAllCallback,
+    AfterAllCallback,
+    BeforeEachCallback,
+    AfterEachCallback,
+    ParameterResolver {
+
     private val namespace = ExtensionContext.Namespace.create("apollo")
+
+    override fun beforeAll(context: ExtensionContext) {
+        val stubHandlers = MessageHandlerChainSet()
+        val stubWorld = spyk(World())
+
+        val pluginEnvironment = KotlinPluginEnvironment(stubWorld)
+        pluginEnvironment.setContext(FakePluginContextFactory.create(stubHandlers))
+        pluginEnvironment.load(ArrayList<PluginMetaData>())
+
+        val state = ApolloTestState(stubHandlers, stubWorld)
+        val store = context.getStore(namespace)
+        store.put(ApolloTestState::class, state)
+    }
+
+    override fun afterAll(context: ExtensionContext) {
+        val store = context.getStore(namespace)
+        store.remove(ApolloTestState::class)
+    }
+
+    override fun beforeEach(context: ExtensionContext) {
+        val testClass = context.requiredTestClass.kotlin
+        val testClassInstance = context.requiredTestInstance
+        val testClassProps = testClass.declaredMemberProperties
+        val testClassMethods = context.testClass.map { it.kotlin.declaredMemberFunctions }.orElse(emptyList())
+        val testClassItemDefs = testClassMethods.asSequence()
+            .mapNotNull { it.findAnnotation<ItemDefinitions>()?.let { anno -> it to anno } }
+            .flatMap { (it.first.call(context.requiredTestInstance as Any) as Collection<ItemDefinition>).asSequence() }
+            .map { it.id to it }
+            .toMap()
+
+        if (testClassItemDefs.isNotEmpty()) {
+            val itemIdSlot = slot<Int>()
+
+            staticMockk<ItemDefinition>().mock()
+            every { ItemDefinition.lookup(capture(itemIdSlot)) } answers { testClassItemDefs[itemIdSlot.captured] }
+        }
+
+        val store = context.getStore(namespace)
+        val state = store.get(ApolloTestState::class) as ApolloTestState
+
+        val propertyStubSites = testClassProps.asSequence()
+            .mapNotNull { it as? KMutableProperty<*> }
+            .filter { supportedTestDoubleTypes.contains(it.returnType) }
+
+        propertyStubSites.forEach {
+            it.setter.call(
+                testClassInstance,
+                state.createStub(StubPrototype(it.returnType.jvmErasure, it.annotations))
+            )
+        }
+    }
+
+    override fun afterEach(context: ExtensionContext) {
+        val store = context.getStore(namespace)
+        val state = store.get(ApolloTestState::class) as ApolloTestState
+
+        state.actionCapture?.runAction()
+        state.reset()
+    }
 
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
         val param = parameterContext.parameter
@@ -50,58 +115,5 @@ class ApolloTestingExtension : BeforeEachCallback, AfterEachCallback, ParameterR
         val testState = testStore.get(ApolloTestState::class) as ApolloTestState
 
         return testState.createStub(StubPrototype(paramType, param.annotations.toList()))
-    }
-
-    override fun beforeEach(context: ExtensionContext) {
-        val testClass = context.requiredTestClass.kotlin
-        val testClassInstance = context.requiredTestInstance
-        val testClassProps = testClass.declaredMemberProperties
-        val testClassMethods = testClass.declaredMemberFunctions
-
-        val testItemDefs = testClassMethods.asSequence()
-            .mapNotNull { it.findAnnotation<ItemDefinitions>()?.let { anno -> it to anno } }
-            .flatMap { (it.first.call(context.requiredTestInstance as Any) as Collection<ItemDefinition>).asSequence() }
-            .map { it.id to it }
-            .toMap()
-
-        if (testItemDefs.isNotEmpty()) {
-            val itemIdSlot = slot<Int>()
-
-            staticMockk<ItemDefinition>().mock()
-            every { ItemDefinition.lookup(capture(itemIdSlot)) } answers { testItemDefs[itemIdSlot.captured] }
-        }
-
-        val stubHandlers = MessageHandlerChainSet()
-        val stubWorld = spyk(World())
-
-        val pluginEnvironment = KotlinPluginEnvironment(stubWorld)
-        pluginEnvironment.setContext(FakePluginContextFactory.create(stubHandlers))
-        pluginEnvironment.load(ArrayList<PluginMetaData>())
-
-        val testState = ApolloTestState(stubHandlers, stubWorld)
-
-        val propertyStubSites = testClassProps.asSequence()
-            .mapNotNull { it as? KMutableProperty<*> }
-            .filter { supportedTestDoubleTypes.contains(it.returnType) }
-
-        propertyStubSites.forEach {
-            it.setter.call(
-                testClassInstance,
-                testState.createStub(StubPrototype(it.returnType.jvmErasure, it.annotations))
-            )
-        }
-
-        val testStore = context.getStore(namespace)
-        testStore.put(ApolloTestState::class, testState)
-    }
-
-    override fun afterEach(context: ExtensionContext) {
-        val testStore = context.getStore(namespace)
-        val testState = testStore.get(ApolloTestState::class) as ApolloTestState
-
-        testState.actionCapture?.runAction()
-
-        testState.reset()
-        testStore.remove(ApolloTestState::class)
     }
 }

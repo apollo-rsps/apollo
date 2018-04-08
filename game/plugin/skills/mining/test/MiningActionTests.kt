@@ -16,11 +16,11 @@ import org.apollo.game.plugin.testing.assertions.verifyAfter
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
-import org.apollo.game.plugin.testing.junit.api.interactions.WorldInteractions.spawnObject
+import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
+import org.apollo.game.plugin.testing.junit.api.interactions.spawnObject
 import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -35,9 +35,17 @@ class MiningActionTests {
     @ItemDefinitions
     fun pickaxes() = listOf(ItemDefinition(Pickaxe.BRONZE.id))
 
+    @TestMock
+    lateinit var world: World
+
+    @TestMock
+    lateinit var player: Player
+
+    @TestMock
+    lateinit var action: ActionCapture
+
     @Test
-    @DisplayName("Attempting to mine a rock we don't have the skill to should send the player a message")
-    fun skillRequirementsNotMet(world: World, player: Player, action: ActionCapture) {
+    fun `Attempting to mine a rock we don't have the skill to should send the player a message`() {
         val obj = world.spawnObject(1, player.position)
         val target = spyk(MiningTarget(obj.id, obj.position, Ore.TIN))
 
@@ -47,8 +55,7 @@ class MiningActionTests {
     }
 
     @Test
-    @DisplayName("Mining a rock we have the skill to mine should eventually reward ore and experience")
-    fun rewardOreAndExperience(world: World, player: Player, action: ActionCapture) {
+    fun `Mining a rock we have the skill to mine should eventually reward ore and experience`() {
         val (tinId, expiredTinId) = TIN_OBJ_IDS
         val obj = world.spawnObject(tinId, player.position)
         val target = spyk(MiningTarget(obj.id, obj.position, Ore.TIN))

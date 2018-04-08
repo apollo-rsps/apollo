@@ -5,17 +5,13 @@ import org.apollo.game.model.World
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.entity.obj.StaticGameObject
 
-object WorldInteractions {
+/**
+ * Spawn a new static game object into the world with the given id and position.
+ */
+fun World.spawnObject(id: Int, position: Position): GameObject {
+    val obj = StaticGameObject(this, id, position, 0, 0)
 
-    /**
-     * Spawn a new static game object into the world with the given id and position.
-     */
-    fun World.spawnObject(id: Int, position: Position): GameObject {
-        val obj = StaticGameObject(this, id, position, 0, 0)
+    spawn(obj)
 
-        spawn(obj)
-
-        return obj
-    }
-
+    return obj
 }
