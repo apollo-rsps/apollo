@@ -1,32 +1,37 @@
-
 import io.mockk.verify
 import org.apollo.cache.def.ItemDefinition
+import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
-import org.apollo.game.plugin.testing.KotlinPluginTest
-import org.apollo.game.plugin.testing.actionCompleted
-import org.apollo.game.plugin.testing.ticks
+import org.apollo.game.plugin.testing.assertions.after
+import org.apollo.game.plugin.testing.assertions.verifyAfter
+import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
+import org.apollo.game.plugin.testing.junit.api.ActionCapture
+import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
+import org.apollo.game.plugin.testing.junit.api.interactions.interactWithItem
 import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
 
-class BuryBoneTests() : KotlinPluginTest() {
+@ExtendWith(ApolloTestingExtension::class)
+class BuryBoneTests {
 
-    init {
-        Bone.values()
+    @ItemDefinitions
+    fun bones(): Collection<ItemDefinition> {
+        return Bone.values()
             .map { ItemDefinition(it.id) }
-            .forEach { items[it.id] = it }
     }
 
     @ParameterizedTest
     @EnumSource(value = Bone::class)
-    fun `Burying a bone should send a message and give the player experience`(bone: Bone) {
+    fun messageWhenBuryingBones(bone: Bone, player: Player, action: ActionCapture) {
         player.inventory.add(bone.id)
         player.interactWithItem(bone.id, option = 1)
 
-        verifyAfter(ticks(1)) { player.sendMessage(contains("You dig a hole")) }
-        after(actionCompleted()) {
+        verifyAfter(action.ticks(1), "message after animation") { player.sendMessage(contains("You dig a hole")) }
+        after(action.complete(), "experience after completion") {
             verify { player.sendMessage(contains("You bury the bones")) }
             assertEquals(bone.xp, player.skillSet.getExperience(Skill.PRAYER))
             assertEquals(player.inventory.getAmount(bone.id), 0)
