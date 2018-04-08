@@ -1,29 +1,31 @@
 import com.google.common.primitives.Ints
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.model.entity.setting.PrivilegeLevel
-import org.apollo.game.plugin.util.command.valid_arg_length
 
 on_command("item", PrivilegeLevel.ADMINISTRATOR)
     .then { player ->
-        val invalidSyntax = "Invalid syntax - ::item [id] [amount]"
-        if (!valid_arg_length(arguments, 1..2, player, invalidSyntax)) {
+        if (arguments.size !in 1..2) {
+            player.sendMessage("Invalid syntax - ::item [id] [amount]")
             return@then
         }
 
         val id = Ints.tryParse(arguments[0])
         if (id == null) {
-            player.sendMessage(invalidSyntax)
+            player.sendMessage("Invalid syntax - ::item [id] [amount]")
             return@then
         }
 
-        var amount = 1
-        if (arguments.size == 2) {
+        val amount = if (arguments.size == 2) {
             val amt = Ints.tryParse(arguments[1])
+
             if (amt == null) {
-                player.sendMessage(invalidSyntax)
+                player.sendMessage("Invalid syntax - ::item [id] [amount]")
                 return@then
             }
-            amount = amt
+
+            amt
+        } else {
+            1
         }
 
         if (id < 0 || id >= ItemDefinition.count()) {

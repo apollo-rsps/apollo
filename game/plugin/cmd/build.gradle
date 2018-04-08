@@ -7,7 +7,6 @@ plugin {
             "cubeee",
     ]
     dependencies = [
-            "api",
-            "util:command",
+            "api"
     ]
 }

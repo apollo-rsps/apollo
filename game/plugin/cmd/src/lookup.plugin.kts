@@ -1,67 +1,52 @@
-import com.google.common.primitives.Ints
-import org.apollo.cache.def.ItemDefinition
-import org.apollo.cache.def.NpcDefinition
-import org.apollo.cache.def.ObjectDefinition
 import org.apollo.game.model.entity.setting.PrivilegeLevel
-import org.apollo.game.plugin.util.command.valid_arg_length
+import org.apollo.game.plugin.api.Definitions
 
 on_command("iteminfo", PrivilegeLevel.ADMINISTRATOR)
     .then { player ->
-        val invalidSyntax = "Invalid syntax - ::npcinfo [npc id]"
-        if (!valid_arg_length(arguments, 1, player, invalidSyntax)) {
-            return@then
-        }
+        arguments.firstOrNull()
+            ?.let(String::toIntOrNull)
+            ?.let(Definitions::item)
+            ?.apply {
+                val members = if (isMembersOnly) "members" else "not members"
 
-        val id = Ints.tryParse(arguments[0])
-        if (id == null) {
-            player.sendMessage(invalidSyntax)
-            return@then
-        }
+                player.sendMessage("Item $id is called $name and is $members only.")
+                player.sendMessage("Its description is `$description`.")
 
-        val definition = ItemDefinition.lookup(id)
-        val members = if (definition.isMembersOnly) "members" else "not members"
+                return@then
+            }
 
-        player.sendMessage("Item $id is called ${definition.name}, is $members only, and has a " +
-            "team of ${definition.team}.")
-        player.sendMessage("Its description is \"${definition.description}\".")
+        player.sendMessage("Invalid syntax - ::iteminfo [item id]")
     }
 
 on_command("npcinfo", PrivilegeLevel.ADMINISTRATOR)
     .then { player ->
-        val invalidSyntax = "Invalid syntax - ::npcinfo [npc id]"
-        if (!valid_arg_length(arguments, 1, player, invalidSyntax)) {
-            return@then
+        arguments.firstOrNull()
+            ?.let(String::toIntOrNull)
+            ?.let(Definitions::npc)
+            ?.apply {
+                val combat = if (hasCombatLevel()) "has a combat level of $combatLevel" else
+                    "does not have a combat level"
+
+                player.sendMessage("Npc $id is called $name and $combat.")
+                player.sendMessage("Its description is `$description`.")
+
+                return@then
         }
 
-        val id = Ints.tryParse(arguments[0])
-        if (id == null) {
-            player.sendMessage(invalidSyntax)
-            return@then
-        }
-
-        val definition = NpcDefinition.lookup(id)
-        val isCombative = if (definition.hasCombatLevel()) "has a combat level of ${definition.combatLevel}" else
-            "does not have a combat level"
-
-        player.sendMessage("Npc $id is called ${definition.name} and $isCombative.")
-        player.sendMessage("Its description is \"${definition.description}\".")
+        player.sendMessage("Invalid syntax - ::npcinfo [npc id]")
     }
 
 on_command("objectinfo", PrivilegeLevel.ADMINISTRATOR)
     .then { player ->
-        val invalidSyntax = "Invalid syntax - ::objectinfo [object id]"
-        if (!valid_arg_length(arguments, 1, player, invalidSyntax)) {
-            return@then
-        }
+        arguments.firstOrNull()
+            ?.let(String::toIntOrNull)
+            ?.let(Definitions::obj)
+            ?.apply {
+                player.sendMessage("Object ${arguments[0]} is called $name (width=$width, length=$length).")
+                player.sendMessage("Its description is `$description`.")
 
-        val id = Ints.tryParse(arguments[0])
-        if (id == null) {
-            player.sendMessage(invalidSyntax)
-            return@then
-        }
+                return@then
+            }
 
-        val definition = ObjectDefinition.lookup(id)
-        player.sendMessage("Object $id is called ${definition.name} and its description is " +
-            "\"${definition.description}\".")
-        player.sendMessage("Its width is ${definition.width} and its length is ${definition.length}.")
+        player.sendMessage("Invalid syntax - ::objectinfo [object id]")
     }
