@@ -1,18 +1,37 @@
+
 import io.mockk.verify
 import org.apollo.game.model.Position
+import org.apollo.game.model.World
+import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
-import org.apollo.game.plugin.testing.KotlinPluginTest
-import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
-import org.assertj.core.api.Assertions.assertThat
+import org.apollo.game.plugin.testing.assertions.after
+import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
+import org.apollo.game.plugin.testing.junit.api.ActionCapture
+import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
+import org.apollo.game.plugin.testing.junit.api.interactions.interactWith
+import org.apollo.game.plugin.testing.junit.api.interactions.spawnObject
+import org.apollo.game.plugin.testing.assertions.contains
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
-class TrainingDummyTest : KotlinPluginTest() {
+@ExtendWith(ApolloTestingExtension::class)
+class TrainingDummyTest {
 
     companion object {
         const val DUMMY_ID = 823
         val DUMMY_POSITION = Position(3200, 3230, 0)
     }
+
+    @TestMock
+    lateinit var action: ActionCapture
+
+    @TestMock
+    lateinit var player: Player
+
+    @TestMock
+    lateinit var world: World
 
     @Test
     fun `Hitting the training dummy should give the player attack experience`() {
@@ -21,10 +40,10 @@ class TrainingDummyTest : KotlinPluginTest() {
         val beforeExp = skills.getExperience(Skill.ATTACK)
 
         player.interactWith(dummy, option = 2)
-        player.waitForActionCompletion()
 
-        val afterExp = skills.getExperience(Skill.ATTACK)
-        assertThat(afterExp).isGreaterThan(beforeExp)
+        after(action.complete()) {
+            assertTrue(skills.getExperience(Skill.ATTACK) > beforeExp)
+        }
     }
 
     @Test
@@ -35,12 +54,11 @@ class TrainingDummyTest : KotlinPluginTest() {
         val beforeExp = skills.getExperience(Skill.ATTACK)
 
         player.interactWith(dummy, option = 2)
-        player.waitForActionCompletion()
 
-        val afterExp = skills.getExperience(Skill.ATTACK)
-
-        verify { player.sendMessage(contains("nothing more you can learn")) }
-        assertEquals(afterExp, beforeExp)
+        after(action.complete()) {
+            verify { player.sendMessage(contains("nothing more you can learn")) }
+            assertEquals(beforeExp, skills.getExperience(Skill.ATTACK))
+        }
     }
 
 }

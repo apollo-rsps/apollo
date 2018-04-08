@@ -10,7 +10,7 @@ import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.apollo.game.plugin.testing.junit.api.interactions.interactWithItem
-import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
+import org.apollo.game.plugin.testing.assertions.contains
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest

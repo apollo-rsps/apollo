@@ -53,21 +53,22 @@ class MiningAction(
 
         wait(tool.pulses)
 
-        val obj = target.getObject(mob.world) ?: stop()
-        val successScore = rand(100)
+        if (!target.isValid(mob.world)) {
+            stop()
+        }
 
-        if (target.isSuccessful(mob, successScore)) {
+        val successChance = rand(100)
+
+        if (target.isSuccessful(mob, successChance)) {
             if (mob.inventory.freeSlots() == 0) {
                 mob.inventory.forceCapacityExceeded()
                 stop()
             }
 
-            if (mob.inventory.add(target.ore.id)) {
-                val oreName = Definitions.item(target.ore.id)!!.name.toLowerCase()
-                mob.sendMessage("You manage to mine some $oreName")
+            if (target.reward(mob)) {
+                mob.sendMessage("You manage to mine some ${target.oreName()}")
+                target.deplete(mob.world)
 
-                mob.mining.experience += target.ore.exp
-                mob.world.expireObject(obj, target.ore.objects[target.objectId]!!, target.ore.respawn)
                 stop()
             }
         }
@@ -88,22 +89,58 @@ class MiningAction(
 data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore) {
 
     /**
-     * Check if the [mob] has met the skill requirements to mine te [Ore] represented by
-     * this [MiningTarget].
+     * Get the [GameObject] represented by this target.
+     *
+     * @todo: api: shouldn't be as verbose
      */
-    fun skillRequirementsMet(mob: Player): Boolean {
-        return mob.mining.current < ore.level
-    }
-
-    fun getObject(world: World): GameObject? {
+    private fun getObject(world: World): GameObject? {
         val region = world.regionRepository.fromPosition(position)
         return region.findObject(position, objectId).orElse(null)
     }
 
-    fun isSuccessful(mob: Player, score: Int): Boolean {
-        val percent = (ore.chance * mob.mining.current + ore.chanceOffset) * 100
-        return score < percent
+    /**
+     * Deplete this mining resource from the [World], and schedule it to be respawned
+     * in a number of ticks specified by the [Ore].
+     */
+    fun deplete(world: World) {
+        world.expireObject(getObject(world)!!, ore.objects[objectId]!!, ore.respawn)
     }
 
+    /**
+     * Check if the [Player] was successful in mining this ore with a random success [chance] value between 0 and 100.
+     */
+    fun isSuccessful(mob: Player, chance: Int): Boolean {
+        val percent = (ore.chance * mob.mining.current + ore.chanceOffset) * 100
+        return chance < percent
+    }
+
+    /**
+     * Check if this target is still valid in the [World] (i.e. has not been [deplete]d).
+     */
+    fun isValid(world: World) = getObject(world) != null
+
+    /**
+     * Get the normalized name of the [Ore] represented by this target.
+     */
+    fun oreName() = Definitions.item(ore.id)!!.name.toLowerCase()
+
+    /**
+     * Reward a [player] with experience and ore if they have the inventory capacity to take a new ore.
+     */
+    fun reward(player: Player): Boolean {
+        val hasInventorySpace = player.inventory.add(ore.id)
+
+        if (hasInventorySpace) {
+            player.mining.experience += ore.exp
+        }
+
+        return hasInventorySpace
+    }
+
+    /**
+     * Check if the [mob] has met the skill requirements to mine te [Ore] represented by
+     * this [MiningTarget].
+     */
+    fun skillRequirementsMet(mob: Player) = mob.mining.current < ore.level
 }
 

@@ -2,7 +2,6 @@ package org.apollo.game.plugin.testing.assertions
 
 import io.mockk.MockKVerificationScope
 import io.mockk.verify
-import org.apollo.game.plugin.testing.DelayMode
 import org.apollo.game.plugin.testing.junit.api.ActionCaptureCallbackRegistration
 
 
