@@ -1,0 +1,10 @@
+plugin {
+    name = "herblore_skill"
+    authors = [
+        "Chivvon",
+        "Chris Fletcher",
+        "Major"
+    ]
+
+    dependencies = ["api"]
+}
