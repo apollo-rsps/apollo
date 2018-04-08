@@ -343,7 +343,7 @@ class SellBuilder(val amount: Int, val items: MutableList<Pair<String, Int>>) {
      * Overloads the unary minus on Pairs so that name+id pairs can be listed. Only intended to be used with the
      * overloaded String invokation operator.
      */ // ShopBuilder uses the lookup plugin, which can operate on _ids tacked on the end
-    operator fun Pair<String, Int>.unaryMinus() = items.add(Pair("{$this.first}_${this.second}", amount))
+    operator fun Pair<String, Int>.unaryMinus() = items.add(Pair("${this.first}_${this.second}", amount))
 
     /**
      * Overloads function invokation on Strings to map `"ambiguous_npc_name"(id)` to a [Pair].
