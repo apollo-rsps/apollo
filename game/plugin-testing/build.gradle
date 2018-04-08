@@ -7,6 +7,7 @@ ext.junitVersion = "5.0.0"
 
 dependencies {
     compile project(':game')
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: "$kotlinVersion"
 
     // JUnit Jupiter API and TestEngine implementation
     compile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
