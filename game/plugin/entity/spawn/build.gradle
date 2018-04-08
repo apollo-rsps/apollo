@@ -4,6 +4,6 @@ plugin {
         "Gary Tierney",
     ]
     dependencies = [
-        "util:lookup",
+        "api",
     ]
 }

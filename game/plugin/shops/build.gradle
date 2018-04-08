@@ -1,11 +1,11 @@
 plugin {
     name = "shops"
     authors = [
-            "Stuart",
-            "Major",
-            "tlf30"
+        "Stuart",
+        "Major",
+        "tlf30"
     ]
     dependencies = [
-            "util:lookup",
+        "api",
     ]
 }

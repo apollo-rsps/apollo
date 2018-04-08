@@ -1,10 +1,10 @@
 import org.apollo.cache.def.ItemDefinition
+import org.apollo.game.plugin.api.Definitions
 import org.apollo.game.plugin.testing.KotlinPluginTest
-import org.apollo.game.plugin.util.lookup.lookup_item
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class LookupTests : KotlinPluginTest() {
+class NamedLookupTests : KotlinPluginTest() {
     @Test
     fun itemLookup() {
         val testItem = ItemDefinition(0)
@@ -12,6 +12,6 @@ class LookupTests : KotlinPluginTest() {
 
         ItemDefinition.init(arrayOf(testItem))
 
-        assertThat(lookup_item("sword")).isEqualTo(testItem)
+        assertThat(Definitions.item("sword")).isEqualTo(testItem)
     }
 }

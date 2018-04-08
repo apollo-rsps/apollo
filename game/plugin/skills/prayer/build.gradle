@@ -6,6 +6,6 @@ plugin {
         "tlf30"
     ]
     dependencies = [
-        "util:lookup", "api"
+        "api"
     ]
 }

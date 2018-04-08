@@ -1,18 +1,18 @@
-import org.apollo.cache.def.NpcDefinition
+
 import org.apollo.game.model.entity.Npc
+import org.apollo.game.plugin.api.Definitions
 import org.apollo.game.plugin.entity.spawn.Spawns
-import org.apollo.game.plugin.util.lookup.lookup_npc
 
 start { world ->
-    Spawns.list.forEach {
-        val definition = it.id?.let { NpcDefinition.lookup(it) } ?: lookup_npc(it.name) ?:
-            throw IllegalArgumentException("Invalid NPC name or ID ${it.name}, ${it.id}")
+    Spawns.list.forEach { spawn ->
+        val definition = spawn.id?.let(Definitions::npc) ?: Definitions.npc(spawn.name)
+        ?: throw IllegalArgumentException("Invalid NPC name or ID ${spawn.name}, ${spawn.id}")
 
-        val npc = Npc(world, definition.id, it.position)
-        npc.turnTo(it.position.step(1, it.facing))
+        val npc = Npc(world, definition.id, spawn.position)
+        npc.turnTo(spawn.position.step(1, spawn.facing))
 
-        it.spawnAnimation?.let(npc::playAnimation)
-        it.spawnGraphic?.let(npc::playGraphic)
+        spawn.spawnAnimation?.let(npc::playAnimation)
+        spawn.spawnGraphic?.let(npc::playGraphic)
 
         world.register(npc)
     }

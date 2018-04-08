@@ -1,10 +1,12 @@
 plugin {
     name = "runecrafting-skill"
     authors = [
-            "Major",
-            "BugCrusher",
-            "tlf30"
+        "Major",
+        "BugCrusher",
+        "tlf30"
     ]
 
-    dependencies = ["util:lookup", "api"]
+    dependencies = [
+        "api"
+    ]
 }

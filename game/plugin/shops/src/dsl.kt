@@ -1,9 +1,8 @@
 package org.apollo.game.plugin.shops
 
 import org.apollo.cache.def.NpcDefinition
+import org.apollo.game.plugin.api.Definitions
 import org.apollo.game.plugin.shops.CategoryWrapper.Affix
-import org.apollo.game.plugin.util.lookup.lookup_item
-import org.apollo.game.plugin.util.lookup.lookup_npc
 
 /**
  * Creates a [Shop].
@@ -109,7 +108,7 @@ class ShopBuilder(val name: String) {
      * Converts this builder into a [Shop].
      */
     internal fun build(): Shop {
-        val items = sold.associateBy({ (first) -> lookup_item(first)!!.id }, Pair<String, Int>::second)
+        val items = sold.associateBy({ (first) -> Definitions.item(first)!!.id }, Pair<String, Int>::second)
         val npc = NpcDefinition.lookup(operators().first())
 
         return Shop(name, action.action(npc), items, trades.currency, buys.policy)
@@ -174,7 +173,7 @@ class OperatorBuilder internal constructor() {
      * Adds a shop operator, using the specified [name] to resolve the npc id.
      */
     infix fun by(name: String): OperatorBuilder {
-        operators.add(lookup_npc(name)!!.id)
+        operators.add(Definitions.npc(name)!!.id)
         return this
     }
 
