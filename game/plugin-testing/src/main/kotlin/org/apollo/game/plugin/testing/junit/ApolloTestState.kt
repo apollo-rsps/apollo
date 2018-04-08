@@ -8,6 +8,7 @@ import org.apollo.game.message.handler.MessageHandlerChainSet
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.testing.junit.api.ActionCapture
+import org.apollo.game.plugin.testing.junit.mocking.StubPrototype
 import org.apollo.game.plugin.testing.junit.stubs.PlayerStubInfo
 import org.apollo.net.message.Message
 import org.apollo.util.security.PlayerCredentials
@@ -25,6 +26,18 @@ data class ApolloTestState(val handlers: MessageHandlerChainSet, val world: Worl
         actionCapture = ActionCapture(type)
         return actionCapture!!
     }
+
+    fun <T : Any> createStub(proto: StubPrototype<T>): T {
+        val annotations = proto.annotations
+
+        return when (proto.type) {
+            Player::class -> createPlayer(PlayerStubInfo.create(annotations)) as T
+            World::class -> world as T
+            ActionCapture::class -> createActionCapture(Action::class) as T
+            else -> throw IllegalArgumentException("Can't stub ${proto.type.qualifiedName}")
+        }
+    }
+
 
     fun createPlayer(info: PlayerStubInfo): Player {
         val credentials = PlayerCredentials(info.name, "test", 1, 1, "0.0.0.0")

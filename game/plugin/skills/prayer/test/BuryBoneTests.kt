@@ -1,3 +1,4 @@
+
 import io.mockk.verify
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.model.entity.Player
@@ -7,6 +8,7 @@ import org.apollo.game.plugin.testing.assertions.verifyAfter
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
+import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.apollo.game.plugin.testing.junit.api.interactions.interactWithItem
 import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,6 +20,12 @@ import org.junit.jupiter.params.provider.EnumSource
 @ExtendWith(ApolloTestingExtension::class)
 class BuryBoneTests {
 
+    @TestMock
+    lateinit var player: Player
+
+    @TestMock
+    lateinit var action: ActionCapture
+
     @ItemDefinitions
     fun bones(): Collection<ItemDefinition> {
         return Bone.values()
@@ -26,7 +34,7 @@ class BuryBoneTests {
 
     @ParameterizedTest
     @EnumSource(value = Bone::class)
-    fun messageWhenBuryingBones(bone: Bone, player: Player, action: ActionCapture) {
+    fun `Burying a bone should send a message and give the player experience`(bone: Bone) {
         player.inventory.add(bone.id)
         player.interactWithItem(bone.id, option = 1)
 
