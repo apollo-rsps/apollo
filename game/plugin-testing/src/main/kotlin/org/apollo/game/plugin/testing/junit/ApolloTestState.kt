@@ -38,7 +38,6 @@ data class ApolloTestState(val handlers: MessageHandlerChainSet, val world: Worl
         }
     }
 
-
     fun createPlayer(info: PlayerStubInfo): Player {
         val credentials = PlayerCredentials(info.name, "test", 1, 1, "0.0.0.0")
         val region = world.regionRepository.fromPosition(info.position)
@@ -62,6 +61,12 @@ data class ApolloTestState(val handlers: MessageHandlerChainSet, val world: Worl
     }
 
     fun reset() {
+        actionCapture = null
+        players.forEach {
+            it.stopAction()
+            world.unregister(it)
+        }
+
         players.clear()
     }
 }
