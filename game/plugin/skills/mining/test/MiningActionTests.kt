@@ -18,7 +18,7 @@ import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.apollo.game.plugin.testing.junit.api.interactions.spawnObject
-import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
+import org.apollo.game.plugin.testing.assertions.contains
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

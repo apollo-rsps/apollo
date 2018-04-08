@@ -34,6 +34,7 @@ internal val supportedTestDoubleTypes = setOf(
 )
 
 class ApolloTestingExtension :
+    AfterTestExecutionCallback,
     BeforeAllCallback,
     AfterAllCallback,
     BeforeEachCallback,
@@ -41,6 +42,26 @@ class ApolloTestingExtension :
     ParameterResolver {
 
     private val namespace = ExtensionContext.Namespace.create("apollo")
+
+    private fun cleanup(context: ExtensionContext) {
+        val store = context.getStore(namespace)
+        val state = store.get(ApolloTestState::class) as ApolloTestState
+
+        try {
+            state.actionCapture?.runAction()
+        } finally {
+            state.reset()
+        }
+    }
+
+    override fun afterAll(context: ExtensionContext) {
+        val store = context.getStore(namespace)
+        store.remove(ApolloTestState::class)
+    }
+
+    override fun afterEach(context: ExtensionContext) = cleanup(context)
+
+    override fun afterTestExecution(context: ExtensionContext) = cleanup(context)
 
     override fun beforeAll(context: ExtensionContext) {
         val stubHandlers = MessageHandlerChainSet()
@@ -53,11 +74,6 @@ class ApolloTestingExtension :
         val state = ApolloTestState(stubHandlers, stubWorld)
         val store = context.getStore(namespace)
         store.put(ApolloTestState::class, state)
-    }
-
-    override fun afterAll(context: ExtensionContext) {
-        val store = context.getStore(namespace)
-        store.remove(ApolloTestState::class)
     }
 
     override fun beforeEach(context: ExtensionContext) {
@@ -91,14 +107,6 @@ class ApolloTestingExtension :
                 state.createStub(StubPrototype(it.returnType.jvmErasure, it.annotations))
             )
         }
-    }
-
-    override fun afterEach(context: ExtensionContext) {
-        val store = context.getStore(namespace)
-        val state = store.get(ApolloTestState::class) as ApolloTestState
-
-        state.actionCapture?.runAction()
-        state.reset()
     }
 
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {

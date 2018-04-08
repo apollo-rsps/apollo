@@ -8,14 +8,13 @@ import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.apollo.game.plugin.testing.junit.api.interactions.interactWithObject
-import org.apollo.game.plugin.testing.verifiers.StringMockkVerifiers.contains
+import org.apollo.game.plugin.testing.assertions.contains
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
 @ExtendWith(ApolloTestingExtension::class)
 class ProspectingTests {
-
 
     @ItemDefinitions
     fun ores() = Ore.values().map {

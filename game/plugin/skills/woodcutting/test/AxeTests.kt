@@ -1,60 +1,64 @@
 import org.apollo.cache.def.ItemDefinition
+import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.plugin.skills.woodcutting.Axe
-import org.apollo.game.plugin.testing.KotlinPluginTest
-import org.junit.Assert
-import org.junit.Test
-import org.junit.runners.Parameterized
-import org.powermock.modules.junit4.PowerMockRunnerDelegate
+import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
+import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
+import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
-@PowerMockRunnerDelegate(Parameterized::class)
-class AxeTests(private val axe: Axe) : KotlinPluginTest() {
+@ExtendWith(ApolloTestingExtension::class)
+class AxeTests  {
 
-    companion object {
-        @JvmStatic
-        @Parameterized.Parameters
-        fun data() = Axe.values()
+    @ItemDefinitions
+    fun axes() = Axe.values().map {
+        ItemDefinition(it.id).apply { isStackable = false }
     }
 
-    init {
-        Axe.values()
-            .map { ItemDefinition(it.id).apply { isStackable = false } }
-            .forEach { items[it.id] = it }
-    }
+    @TestMock
+    lateinit var player: Player
 
-    @Test
-    fun `No axe is chosen if none are available`() {
+    @ParameterizedTest
+    @EnumSource(Axe::class)
+    fun `No axe is chosen if none are available`(axe: Axe) {
         player.skillSet.setCurrentLevel(Skill.WOODCUTTING, axe.level)
 
-        Assert.assertEquals(null, Axe.bestFor(player))
+        assertEquals(null, Axe.bestFor(player))
     }
 
-    @Test
-    fun `The highest level axe is chosen when available`() {
+    @ParameterizedTest
+    @EnumSource(Axe::class)
+    fun `The highest level axe is chosen when available`(axe: Axe) {
         player.skillSet.setCurrentLevel(Skill.WOODCUTTING, axe.level)
         player.inventory.add(axe.id)
 
-        Assert.assertEquals(axe, Axe.bestFor(player))
+        assertEquals(axe, Axe.bestFor(player))
     }
 
-    @Test
-    fun `Only axes the player has are chosen`() {
+    @ParameterizedTest
+    @EnumSource(Axe::class)
+    fun `Only axes the player has are chosen`(axe: Axe) {
         player.skillSet.setCurrentLevel(Skill.WOODCUTTING, axe.level)
         player.inventory.add(Axe.BRONZE.id)
 
-        Assert.assertEquals(Axe.BRONZE, Axe.bestFor(player))
+        assertEquals(Axe.BRONZE, Axe.bestFor(player))
     }
 
-    @Test
-    fun `Axes can be chosen from equipment as well as inventory`() {
+    @ParameterizedTest
+    @EnumSource(Axe::class)
+    fun `Axes can be chosen from equipment as well as inventory`(axe: Axe) {
         player.skillSet.setCurrentLevel(Skill.WOODCUTTING, axe.level)
         player.inventory.add(axe.id)
 
-        Assert.assertEquals(axe, Axe.bestFor(player))
+        assertEquals(axe, Axe.bestFor(player))
     }
 
-    @Test
-    fun `Axes with a level requirement higher than the player's are ignored`() {
+    @ParameterizedTest
+    @EnumSource(Axe::class)
+    fun `Axes with a level requirement higher than the player's are ignored`(axe: Axe) {
         player.skillSet.setCurrentLevel(Skill.WOODCUTTING, axe.level)
         player.inventory.add(axe.id)
 
@@ -62,7 +66,7 @@ class AxeTests(private val axe: Axe) : KotlinPluginTest() {
             .filter { it.level > axe.level }
             .forEach { player.inventory.add(it.id) }
 
-        Assert.assertEquals(axe, Axe.bestFor(player))
+        assertEquals(axe, Axe.bestFor(player))
     }
 
 }
