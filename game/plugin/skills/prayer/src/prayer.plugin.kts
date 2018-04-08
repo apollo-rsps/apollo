@@ -1,49 +1,37 @@
-import org.apollo.game.action.ActionBlock
-import org.apollo.game.action.AsyncAction
+import Bone.Companion.isBone
+import Prayer.Companion.isPrayerButton
 import org.apollo.game.message.impl.ButtonMessage
 import org.apollo.game.message.impl.ItemOptionMessage
-import org.apollo.game.model.entity.Player
 import org.apollo.game.model.event.impl.LogoutEvent
 import org.apollo.game.plugin.api.prayer
 
-//Clear the player prayer on logout
+// Clear the player's prayer(s) on logout
 on_player_event { LogoutEvent::class }
     .then {
-        PLAYER_PRAYERS.removeAll(it)
+        playerPrayers.removeAll(it)
     }
 
 on { ButtonMessage::class }
-    .then {
-        val prayer = Prayer.forButton(widgetId) ?: return@then
-        if (prayer.level > it.prayer.current) {
+    .where { widgetId.isPrayerButton() }
+    .then { player ->
+        val prayer = Prayer.forButton(widgetId)!!
+        val level = prayer.level
+
+        if (level > player.prayer.current) {
+            player.sendMessage("You need a prayer level of $level to use this prayer.")
             terminate()
             return@then
         }
-        updatePrayer(it, prayer)
+
+        player.updatePrayer(prayer)
         terminate()
     }
 
 on { ItemOptionMessage::class }
-    .where { option == 1 }
-    .then {
-        val bone = Bone[id] ?: return@then
+    .where { option == BuryBoneAction.BURY_OPTION && id.isBone() }
+    .then { player ->
+        val bone = Bone[id]!!
 
-        it.startAction(BuryBoneAction(it, slot, bone))
+        player.startAction(BuryBoneAction(player, slot, bone))
         terminate()
     }
-
-class BuryBoneAction(val player: Player, val slot: Int, val bone: Bone) : AsyncAction<Player>(0, true, player) {
-    override fun action(): ActionBlock = {
-        if (player.inventory.removeSlot(slot, 1) > 0) {
-            player.sendMessage("You dig a hole in the ground...")
-            player.playAnimation(BURY_BONE_ANIMATION)
-
-            wait(1) //Wait for animation
-
-            player.sendMessage("You bury the bones.")
-            player.prayer.experience += bone.xp
-        }
-
-        stop()
-    }
-}
