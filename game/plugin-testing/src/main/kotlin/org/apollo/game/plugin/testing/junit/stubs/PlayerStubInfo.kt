@@ -5,7 +5,7 @@ import org.apollo.game.plugin.testing.junit.api.annotations.Pos
 
 class PlayerStubInfo {
     companion object {
-        fun create(annotations: Array<Annotation>): PlayerStubInfo {
+        fun create(annotations: Collection<Annotation>): PlayerStubInfo {
             val info = PlayerStubInfo()
 
             annotations.forEach {

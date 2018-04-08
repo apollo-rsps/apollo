@@ -5,7 +5,6 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.staticMockk
 import org.apollo.cache.def.ItemDefinition
-import org.apollo.game.action.Action
 import org.apollo.game.message.handler.MessageHandlerChainSet
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Npc
@@ -16,31 +15,32 @@ import org.apollo.game.plugin.PluginMetaData
 import org.apollo.game.plugin.testing.fakes.FakePluginContextFactory
 import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
-import org.apollo.game.plugin.testing.junit.stubs.PlayerStubInfo
+import org.apollo.game.plugin.testing.junit.mocking.StubPrototype
 import org.junit.jupiter.api.extension.*
-import java.lang.reflect.Method
 import java.util.*
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.declaredMemberFunctions
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.jvm.jvmErasure
 
-internal val supportedTestParamTypes = setOf(
-    Player::class,
-    Npc::class,
-    GameObject::class,
-    World::class,
-    ActionCapture::class
+internal val supportedTestDoubleTypes = setOf(
+    Player::class.createType(),
+    Npc::class.createType(),
+    GameObject::class.createType(),
+    World::class.createType(),
+    ActionCapture::class.createType()
 )
 
 class ApolloTestingExtension : BeforeEachCallback, AfterEachCallback, ParameterResolver {
     private val namespace = ExtensionContext.Namespace.create("apollo")
 
-    private fun testMethodNeedsSetup(method: Method): Boolean {
-        return method.parameterTypes.any { supportedTestParamTypes.contains(it.kotlin) }
-    }
-
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
         val param = parameterContext.parameter
         val paramType = param.type.kotlin
 
-        return supportedTestParamTypes.contains(paramType)
+        return supportedTestDoubleTypes.contains(paramType.createType())
     }
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
@@ -49,19 +49,18 @@ class ApolloTestingExtension : BeforeEachCallback, AfterEachCallback, ParameterR
         val testStore = extensionContext.getStore(namespace)
         val testState = testStore.get(ApolloTestState::class) as ApolloTestState
 
-        return when (paramType) {
-            Player::class -> testState.createPlayer(PlayerStubInfo.create(param.annotations))
-            World::class -> testState.world
-            ActionCapture::class -> testState.createActionCapture(Action::class)
-            else -> throw IllegalArgumentException("Unsupported parameter type {${paramType.qualifiedName}")
-        }
+        return testState.createStub(StubPrototype(paramType, param.annotations.toList()))
     }
 
     override fun beforeEach(context: ExtensionContext) {
-        val testClassMethods = context.requiredTestClass.declaredMethods
+        val testClass = context.requiredTestClass.kotlin
+        val testClassInstance = context.requiredTestInstance
+        val testClassProps = testClass.declaredMemberProperties
+        val testClassMethods = testClass.declaredMemberFunctions
+
         val testItemDefs = testClassMethods.asSequence()
-            .filter { it.isAnnotationPresent(ItemDefinitions::class.java) }
-            .flatMap { (it.invoke(context.requiredTestInstance as Any) as Collection<ItemDefinition>).asSequence() }
+            .mapNotNull { it.findAnnotation<ItemDefinitions>()?.let { anno -> it to anno } }
+            .flatMap { (it.first.call(context.requiredTestInstance as Any) as Collection<ItemDefinition>).asSequence() }
             .map { it.id to it }
             .toMap()
 
@@ -72,29 +71,37 @@ class ApolloTestingExtension : BeforeEachCallback, AfterEachCallback, ParameterR
             every { ItemDefinition.lookup(capture(itemIdSlot)) } answers { testItemDefs[itemIdSlot.captured] }
         }
 
-        if (testMethodNeedsSetup(context.requiredTestMethod)) {
-            val testStore = context.getStore(namespace)
+        val stubHandlers = MessageHandlerChainSet()
+        val stubWorld = spyk(World())
 
-            val stubHandlers = MessageHandlerChainSet()
-            val stubWorld = spyk(World())
+        val pluginEnvironment = KotlinPluginEnvironment(stubWorld)
+        pluginEnvironment.setContext(FakePluginContextFactory.create(stubHandlers))
+        pluginEnvironment.load(ArrayList<PluginMetaData>())
 
-            val pluginEnvironment = KotlinPluginEnvironment(stubWorld)
-            pluginEnvironment.setContext(FakePluginContextFactory.create(stubHandlers))
-            pluginEnvironment.load(ArrayList<PluginMetaData>())
+        val testState = ApolloTestState(stubHandlers, stubWorld)
 
-            testStore.put(ApolloTestState::class, ApolloTestState(stubHandlers, stubWorld))
+        val propertyStubSites = testClassProps.asSequence()
+            .mapNotNull { it as? KMutableProperty<*> }
+            .filter { supportedTestDoubleTypes.contains(it.returnType) }
+
+        propertyStubSites.forEach {
+            it.setter.call(
+                testClassInstance,
+                testState.createStub(StubPrototype(it.returnType.jvmErasure, it.annotations))
+            )
         }
+
+        val testStore = context.getStore(namespace)
+        testStore.put(ApolloTestState::class, testState)
     }
 
     override fun afterEach(context: ExtensionContext) {
-        if (testMethodNeedsSetup(context.requiredTestMethod)) {
-            val testStore = context.getStore(namespace)
-            val testState = testStore.get(ApolloTestState::class) as ApolloTestState
+        val testStore = context.getStore(namespace)
+        val testState = testStore.get(ApolloTestState::class) as ApolloTestState
 
-            testState.actionCapture?.runAction()
+        testState.actionCapture?.runAction()
 
-            testState.reset()
-            testStore.remove(ApolloTestState::class)
-        }
+        testState.reset()
+        testStore.remove(ApolloTestState::class)
     }
 }
