@@ -2,7 +2,7 @@
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
 This is the home of Apollo's documentation.
-Below you will find various links
+Below you will find links to tutorial guides on running and using Apollo.
 
 == The Basics
 
