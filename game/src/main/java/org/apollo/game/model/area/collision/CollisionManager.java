@@ -1,19 +1,21 @@
 package org.apollo.game.model.area.collision;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionUpdate.DirectionFlag;
 import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.obj.GameObject;
 
 import java.util.Collection;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.Set;
 
 import static org.apollo.game.model.entity.EntityType.DYNAMIC_OBJECT;
 import static org.apollo.game.model.entity.EntityType.STATIC_OBJECT;
@@ -25,20 +27,14 @@ import static org.apollo.game.model.entity.EntityType.STATIC_OBJECT;
 public final class CollisionManager {
 
 	/**
-	 * A comparator that sorts {@link Position}s by their X coordinate, then Y, then height.
+	 * A {@code HashMultimap} of region coordinates mapped to positions where the tile is completely blocked.
 	 */
-	private static final Comparator<Position> POSITION_COMPARATOR =
-		Comparator.comparingInt(Position::getX).thenComparingInt(Position::getY).thenComparingInt(Position::getHeight);
+	private final Multimap<RegionCoordinates, Position> blocked = HashMultimap.create();
 
 	/**
-	 * A {@code SortedSet} of positions where the tile is part of a bridged structure.
+	 * A {@code HashSet} of positions where the tile is part of a bridged structure.
 	 */
-	private final SortedSet<Position> bridges = new TreeSet<>(POSITION_COMPARATOR);
-
-	/**
-	 * A {@code SortedSet} of positions where the tile is completely blocked.
-	 */
-	private final SortedSet<Position> blocked = new TreeSet<>(POSITION_COMPARATOR);
+	private final Set<Position> bridges = new HashSet<>();
 
 	/**
 	 * The {@link RegionRepository} used to lookup {@link CollisionMatrix} objects.
@@ -69,31 +65,33 @@ public final class CollisionManager {
 			}
 		}
 
-		CollisionUpdate.Builder builder = new CollisionUpdate.Builder();
-		builder.type(CollisionUpdateType.ADDING);
+		regions.getRegions().forEach(region -> {
+			CollisionUpdate.Builder builder = new CollisionUpdate.Builder();
+			builder.type(CollisionUpdateType.ADDING);
 
-		for (Position tile : blocked) {
-			int x = tile.getX(), y = tile.getY();
-			int height = tile.getHeight();
+			blocked.get(region.getCoordinates()).forEach(tile -> {
+				int x = tile.getX(), y = tile.getY();
+				int height = tile.getHeight();
 
-			if (bridges.contains(new Position(x, y, 1))) {
-				height--;
-			}
+				if (bridges.contains(new Position(x, y, 1))) {
+					height--;
+				}
 
-			if (height >= 0) {
-				builder.tile(new Position(x, y, height), false, Direction.NESW);
-			}
-		}
+				if (height >= 0) {
+					builder.tile(new Position(x, y, height), false, Direction.NESW);
+				}
+			});
 
-		apply(builder.build());
+			apply(builder.build());
 
-		for (Region region : regions.getRegions()) {
 			CollisionUpdate.Builder objects = new CollisionUpdate.Builder();
 			objects.type(CollisionUpdateType.ADDING);
 
-			region.getEntities(STATIC_OBJECT, DYNAMIC_OBJECT).forEach(entity -> objects.object((GameObject) entity));
+			region.getEntities(STATIC_OBJECT, DYNAMIC_OBJECT)
+				.forEach(entity -> objects.object((GameObject) entity));
+
 			apply(objects.build());
-		}
+		});
 	}
 
 	/**
@@ -255,7 +253,7 @@ public final class CollisionManager {
 	 * @param position The {@link Position} of the tile.
 	 */
 	public void block(Position position) {
-		blocked.add(position);
+		blocked.put(position.getRegionCoordinates(), position);
 	}
 
 	/**
