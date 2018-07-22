@@ -21,6 +21,11 @@ public abstract class Entity {
 	protected final World world;
 
 	/**
+	 * The EntityBounds for this Entity.
+	 */
+	private EntityBounds bounds;
+
+	/**
 	 * Creates the Entity.
 	 *
 	 * @param world The {@link World} containing the Entity.
@@ -33,6 +38,20 @@ public abstract class Entity {
 
 	@Override
 	public abstract boolean equals(Object obj);
+
+	/**
+	 * Gets the {@link EntityBounds} for this Entity.
+	 *
+	 * @return The EntityBounds.
+	 */
+	public EntityBounds getBounds() {
+
+		if(bounds == null) {
+			bounds = new EntityBounds(this);
+		}
+
+		return bounds;
+	}
 
 	/**
 	 * Gets the {@link Position} of this Entity.
@@ -58,6 +77,20 @@ public abstract class Entity {
 	 * @return The EntityType.
 	 */
 	public abstract EntityType getEntityType();
+
+	/**
+	 * Gets the length of this Entity.
+	 *
+	 * @return The length.
+	 */
+	public abstract int getLength();
+
+	/**
+	 * Gets the width of this Entity.
+	 *
+	 * @return The width.
+	 */
+	public abstract int getWidth();
 
 	@Override
 	public abstract int hashCode();

@@ -80,6 +80,16 @@ public final class GroundItem extends Entity implements GroupableEntity {
 		return EntityType.GROUND_ITEM;
 	}
 
+	@Override
+	public int getLength() {
+		return 1;
+	}
+
+	@Override
+	public int getWidth() {
+		return 1;
+	}
+
 	/**
 	 * Gets the {@link Item} displayed on the ground.
 	 *

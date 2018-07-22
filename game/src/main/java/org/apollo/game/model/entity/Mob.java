@@ -327,6 +327,16 @@ public abstract class Mob extends Entity {
 		return walkingQueue;
 	}
 
+	@Override
+	public int getLength() {
+		return definition.map(NpcDefinition::getSize).orElse(1);
+	}
+
+	@Override
+	public int getWidth() {
+		return definition.map(NpcDefinition::getSize).orElse(1);
+	}
+
 	/**
 	 * Returns whether or not this mob has an {@link NpcDefinition}.
 	 *

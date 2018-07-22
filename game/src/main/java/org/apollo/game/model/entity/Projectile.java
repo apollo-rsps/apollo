@@ -415,6 +415,16 @@ public final class Projectile extends Entity implements GroupableEntity {
 	}
 
 	@Override
+	public int getLength() {
+		return 1;
+	}
+
+	@Override
+	public int getWidth() {
+		return 1;
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hashCode(position, destination, delay, lifetime, target, startHeight,
 			endHeight, pitch, offset, graphic);
