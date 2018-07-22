@@ -1,8 +1,9 @@
 package org.apollo.game.model.entity.obj;
 
+import com.google.common.base.MoreObjects;
 import org.apollo.cache.def.ObjectDefinition;
-import org.apollo.game.model.Position;
 import org.apollo.game.model.Direction;
+import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
@@ -11,7 +12,8 @@ import org.apollo.game.model.area.update.ObjectUpdateOperation;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Player;
 
-import com.google.common.base.MoreObjects;
+import static org.apollo.game.model.entity.obj.ObjectType.RECTANGULAR_CORNER;
+import static org.apollo.game.model.entity.obj.ObjectType.TRIANGULAR_CORNER;
 
 /**
  * Represents an object in the game world.
@@ -86,21 +88,32 @@ public abstract class GameObject extends Entity implements GroupableEntity {
 		return packed >> 2 & 0x3F;
 	}
 
-
 	@Override
 	public int getLength() {
-		Direction direction = Direction.WNES[getOrientation()];
-
-		return direction == Direction.WEST || direction == Direction.EAST ?
-			getDefinition().getWidth() : getDefinition().getLength();
+		return isRotated() ? getDefinition().getWidth() : getDefinition().getLength();
 	}
 
 	@Override
 	public int getWidth() {
-		Direction direction = Direction.WNES[getOrientation()];
+		return isRotated() ? getDefinition().getLength() : getDefinition().getWidth();
+	}
 
-		return direction == Direction.WEST || direction == Direction.EAST ?
-			getDefinition().getLength() : getDefinition().getWidth();
+	/**
+	 * Returns whether or not this GameObject's orientation is rotated {@link Direction#WEST} or {@link Direction#EAST}.
+	 *
+	 * @return {@code true} iff this GameObject's orientation is rotated.
+	 */
+	public boolean isRotated() {
+		int orientation = getOrientation();
+		int type = getType();
+		Direction direction = Direction.WNES[orientation];
+
+		if (type == TRIANGULAR_CORNER.getValue() || type == RECTANGULAR_CORNER.getValue()) {
+			direction = Direction.WNES_DIAGONAL[orientation];
+		}
+
+		return direction == Direction.NORTH || direction == Direction.SOUTH
+			|| direction == Direction.NORTH_WEST || direction == Direction.SOUTH_EAST;
 	}
 
 	@Override

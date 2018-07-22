@@ -86,8 +86,8 @@ public final class CollisionManagerTests {
 	}
 
 	/**
-	 * Tests that a corner wall is untraversable from the sides that it blocks.  Corners are much like walls, with
-	 * the only difference being their orientation.  Instead of {@link Direction#WNES}, they have diagonal directions.
+	 * Tests that a corner triangular wall is untraversable from the sides that it blocks.  Corners are much like walls,
+	 * with the only difference being their orientation.  Instead of {@link Direction#WNES}, they have diagonal directions.
 	 * With a corner wall at (0, 1) facing to the north-east we end up with a grid looking like this:
 	 * <p>
 	 * <pre>
@@ -113,6 +113,42 @@ public final class CollisionManagerTests {
 
 		CollisionManager collisionManager = createCollisionManager(
 			createMapObject(WALL, front, ObjectType.TRIANGULAR_CORNER, Direction.NORTH_EAST)
+		);
+
+		assertTraversable(collisionManager, front, Direction.NORTH, Direction.EAST);
+		assertUntraversable(collisionManager, front, Direction.NORTH_EAST);
+		assertTraversable(collisionManager, back, Direction.SOUTH, Direction.WEST);
+		assertUntraversable(collisionManager, back, Direction.SOUTH_WEST);
+	}
+
+	/**
+	 * Tests that a corner rectangle wall is untraversable from the sides that it blocks.  Corners are much like walls,
+	 * with the only difference being their orientation.  Instead of {@link Direction#WNES}, they have diagonal directions.
+	 * With a corner wall at (0, 1) facing to the north-east we end up with a grid looking like this:
+	 * <p>
+	 * <pre>
+	 * (0,2) |---------|---------|
+	 *       |         |         |
+	 *       |         |         |
+	 *       |         |xxx      |
+	 * (0,1) |---------|---------|
+	 *       |      xxx|         |
+	 *       |         |         |
+	 *       |         |         |
+	 * (0,0) |---------|---------|
+	 * 	   (1,0)     (2,0)     (3,0)
+	 * </pre>
+	 * <p>
+	 * Where you can walk north and east through the tile the corner occupies, as well as south and west through the
+	 * adjacent tile, but not north-east or south-west.
+	 */
+	@Test
+	public void rectangleWall() {
+		Position front = new Position(0, 1, 0);
+		Position back = front.step(1, Direction.NORTH_EAST);
+
+		CollisionManager collisionManager = createCollisionManager(
+			createMapObject(WALL, front, ObjectType.RECTANGULAR_CORNER, Direction.NORTH_EAST)
 		);
 
 		assertTraversable(collisionManager, front, Direction.NORTH, Direction.EAST);

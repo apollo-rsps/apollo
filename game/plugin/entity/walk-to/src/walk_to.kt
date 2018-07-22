@@ -9,20 +9,7 @@ import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.entity.path.SimplePathfindingAlgorithm
 
-private fun bounds(target: Entity): Pair<Int, Int> = when (target) {
-    is GameObject -> {
-        val orientation = Direction.WNES[target.orientation]
-        val rotated = (orientation == Direction.WEST || orientation == Direction.EAST)
-
-        val width = if (rotated) target.definition.length else target.definition.width
-        val height = if (rotated) target.definition.width else target.definition.length
-
-        Pair(width, height)
-    }
-    is Npc -> Pair(target.definition.size, target.definition.size)
-    is Player -> Pair(1, 1)
-    else -> error("Invalid entity type")
-}
+private fun bounds(target: Entity): Pair<Int, Int> = Pair(target.width, target.length)
 
 fun Mob.walkTo(target: Entity, positioningDirection: Direction? = null) {
     val (sourceWidth, sourceHeight) = bounds(target)
