@@ -1,9 +1,10 @@
 plugin {
-    name = "edgeville_npc_spawns"
+    name = "edgeville"
     authors = [
         "Jesse W",
+        "Arham 4"
     ]
     dependencies = [
-        "entity:spawn",
+        "entity:spawn", "shops"
     ]
 }
