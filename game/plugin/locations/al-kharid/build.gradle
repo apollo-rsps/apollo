@@ -1,9 +1,10 @@
 plugin {
-    name = "al_kharid_npc_spawns"
+    name = "al_kharid"
     authors = [
         "Jesse W",
+        "Arham 4"
     ]
     dependencies = [
-        "entity:spawn",
+        "entity:spawn", "shops"
     ]
 }
