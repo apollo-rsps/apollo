@@ -85,18 +85,14 @@ shop("Gem Trader") {
 shop("Louie's Armoured Legs Bazaar") {
     operated by "Louie Legs"
 
-    /*
-     FIXME when this is a category("platelegs"), the s at the end of 'platelegs' is omitted for some reason.
-     When it is modified to be category("platelegs "), then that causes problems as it adds in the space at the end,
-     but it at least allows "platelegs" to be a viable category name.
-     */
-
-    sell(5) of "Bronze platelegs"
-    sell(3) of "Iron platelegs"
-    sell(2) of "Steel platelegs"
-    sell(1) of "Black platelegs"
-    sell(1) of "Mithril platelegs"
-    sell(1) of "Adamant platelegs"
+    category("platelegs", depluralise = false) {
+        sell(5) of "Bronze"
+        sell(3) of "Iron"
+        sell(2) of "Steel"
+        sell(1) of "Black"
+        sell(1) of "Mithril"
+        sell(1) of "Adamant"
+    }
 }
 
 shop("Ranael's Super Skirt Store") {
