@@ -11,8 +11,6 @@ import java.util.Set;
 
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.World;
-import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionManager;
 
 /**
@@ -76,7 +74,7 @@ public final class AStarPathfindingAlgorithm extends PathfindingAlgorithm {
 						continue;
 					}
 
-					Position adjacent = new Position(nextX, nextY);
+					Position adjacent = new Position(nextX, nextY, position.getHeight());
 					Direction direction = Direction.between(adjacent, position);
 					if (traversable(adjacent, direction)) {
 						Node node = nodes.computeIfAbsent(adjacent, Node::new);
