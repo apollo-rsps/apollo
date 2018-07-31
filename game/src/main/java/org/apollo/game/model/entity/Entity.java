@@ -23,7 +23,7 @@ public abstract class Entity {
 	/**
 	 * The EntityBounds for this Entity.
 	 */
-	private EntityBounds bounds;
+	protected EntityBounds bounds;
 
 	/**
 	 * Creates the Entity.

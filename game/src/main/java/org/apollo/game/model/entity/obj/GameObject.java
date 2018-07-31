@@ -104,6 +104,15 @@ public abstract class GameObject extends Entity implements GroupableEntity {
 	}
 
 	@Override
+	public GameObjectBounds getBounds() {
+		if(bounds == null) {
+			bounds = new GameObjectBounds(this);
+		}
+
+		return (GameObjectBounds) bounds;
+	}
+
+	@Override
 	public int hashCode() {
 		return packed;
 	}

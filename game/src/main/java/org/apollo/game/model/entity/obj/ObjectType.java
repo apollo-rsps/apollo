@@ -1,5 +1,7 @@
 package org.apollo.game.model.entity.obj;
 
+import java.util.Arrays;
+
 /**
  * The type of an object, which affects specified behaviour (such as whether it displaces existing objects). TODO
  * complete this...
@@ -68,6 +70,18 @@ public enum ObjectType {
 	ObjectType(int value, ObjectGroup group) {
 		this.value = value;
 		this.group = group;
+	}
+
+	/**
+	 * Gets the type with the specified value.
+	 *
+	 * @param value The value.
+	 * @return The type.
+	 */
+	public static ObjectType valueOf(int value) {
+		return Arrays.stream(values())
+			.filter(type -> type.value == value)
+			.findAny().orElse(null);
 	}
 
 	/**

@@ -19,7 +19,7 @@ public class EntityBounds {
 	 *
 	 * @param entity The entity.
 	 */
-	EntityBounds(Entity entity) {
+	protected EntityBounds(Entity entity) {
 		this.entity = entity;
 	}
 
