@@ -29,30 +29,28 @@ val Player.runecraft: SkillProxy get() = SkillProxy(skillSet, Skill.RUNECRAFT)
 /**
  * A proxy class to allow
  */
-class SkillProxy(val skills: SkillSet, val skill: Int) {
+class SkillProxy(private val skills: SkillSet, private val skill: Int) {
 
     /**
      * The maximum level of this skill.
      */
-    val maximum = skills.getMaximumLevel(skill)
+    val maximum: Int
+        get() = skills.getMaximumLevel(skill)
 
     /**
      * The current level of this skill.
      */
-    val current = skills.getCurrentLevel(skill)
-
-    val experience = ExperienceProxy()
+    val current: Int
+        get() = skills.getCurrentLevel(skill)
 
     /**
-     * A proxy class to make [experience] (effectively) write-only.
+     * The amount of experience in this skill a player has.
      */
-    inner class ExperienceProxy {
-
-        operator fun plusAssign(amount: Int) = skills.addExperience(skill, amount.toDouble())
-
-        operator fun plusAssign(amount: Double) = skills.addExperience(skill, amount)
-
-    }
+    var experience: Double
+        get() = skills.getExperience(skill)
+        set(value) {
+            skills.setExperience(skill, value)
+        }
 
     /**
      * Boosts the current level of this skill by [amount], if possible (i.e. if `current + amount <= maximum + amount`).
