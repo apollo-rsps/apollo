@@ -1,6 +1,4 @@
-plugins {
-    id "java-library"
-}
+apply plugin: 'java-library'
 
 description = 'Apollo Cache'
 
