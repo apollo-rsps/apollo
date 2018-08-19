@@ -4,7 +4,7 @@ jdk:
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 before_install:
-  - gradle -b gradle/wrapper.gradle
+  - gradle -b gradle/wrapper.gradle wrapper
   - mv gradle/gradlew gradle/gradlew.bat .
   - mv gradle/gradle/wrapper gradle/
 before_cache:
