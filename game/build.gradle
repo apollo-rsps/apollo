@@ -1,6 +1,5 @@
 apply plugin: 'application'
 apply plugin: 'org.jetbrains.kotlin.jvm'
-apply plugin: 'org.jetbrains.kotlin.plugin.scripting'
 
 description = 'Apollo Game'
 mainClassName = 'org.apollo.Server'
