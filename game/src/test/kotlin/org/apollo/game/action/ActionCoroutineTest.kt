@@ -1,7 +1,7 @@
 package org.apollo.game.action
 
-import org.apollo.game.action.ActionCoroutine
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ActionCoroutineTest {
@@ -29,7 +29,6 @@ class ActionCoroutineTest {
     fun `Coroutine cancels on stop() calls`() {
         val coroutine = ActionCoroutine.start {
             stop()
-            wait(1)
         }
 
         assertTrue(coroutine.stopped())
