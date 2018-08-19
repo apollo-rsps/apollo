@@ -2,6 +2,8 @@ apply plugin: 'java-library'
 apply plugin: 'org.jetbrains.kotlin.jvm'
 
 dependencies {
+    test.useJUnitPlatform()
+
     api project(':game')
     api project(':net')
 
