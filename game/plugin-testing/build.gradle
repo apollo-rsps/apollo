@@ -1,7 +1,5 @@
-plugins {
-    id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
-}
+apply plugin: 'java-library'
+apply plugin: 'org.jetbrains.kotlin.jvm'
 
 dependencies {
     api project(':game')
