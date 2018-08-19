@@ -1,19 +1,25 @@
+
 import org.apollo.cache.def.ItemDefinition
-import org.apollo.game.plugin.api.Definitions
-import org.apollo.game.plugin.testing.KotlinPluginTest
-import org.assertj.core.api.Assertions.assertThat
 import org.apollo.game.plugin.util.lookup.lookup_item
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
-class NamedLookupTests : KotlinPluginTest() {
+class LookupTests {
     @Test
-    fun itemLookup() {
-        val testItem = ItemDefinition(0)
-        testItem.name = "sword"
+    fun `looking up an item by name returns the correct item`() {
+        val sword = ItemDefinition(0).apply { name = "sword" }
+        ItemDefinition.init(arrayOf(sword))
 
-        ItemDefinition.init(arrayOf(testItem))
+        assertEquals(lookup_item("sword"), sword)
+    }
 
-        assertEquals(Definitions.item("sword"), testItem)
+    @Test
+    fun `looking up an item by name with a suffixed id returns the item with that id`() {
+        val firstSword = ItemDefinition(0).apply { name = "sword" }
+        val secondSword = ItemDefinition(1).apply { name = "sword" }
+
+        ItemDefinition.init(arrayOf(firstSword, secondSword))
+
+        assertEquals(lookup_item("sword_1"), secondSword)
     }
 }
