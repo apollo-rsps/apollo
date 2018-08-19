@@ -1,3 +1,5 @@
+package org.apollo.plugin.locations.alKharid
+
 import org.apollo.game.model.Direction
 import org.apollo.game.plugin.entity.spawn.npc_spawn
 

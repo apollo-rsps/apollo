@@ -1,3 +1,5 @@
+package org.apollo.plugin.locations.lumbridge
+
 import org.apollo.game.plugin.entity.spawn.npc_spawn
 
 npc_spawn("woman", id = 4, x = 3232, y = 3207)
