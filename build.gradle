@@ -2,11 +2,6 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version "1.2.60" apply(false)
 }
 
-wrapper {
-    gradleVersion = "4.9"
-    distributionType = Wrapper.DistributionType.ALL
-}
-
 allprojects {
     group = 'apollo'
     version = '0.0.1'
@@ -21,3 +16,4 @@ allprojects {
 apply from: 'gradle/properties.gradle'
 apply from: 'gradle/kotlin.gradle'
 apply from: 'gradle/jacoco.gradle'
+apply from: 'gradle/wrapper.gradle'

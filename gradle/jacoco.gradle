@@ -43,7 +43,7 @@ task jacocoTestReport(type: JacocoReport) {
      */
     doFirst {
         subprojects.findAll { subproject ->
-            subproject.pluginManager.hasPlugin('java')
+            subproject.pluginManager.hasPlugin('java') || subproject.pluginManager.hasPlugin('kotlin')
         }.each { subproject ->
             additionalSourceDirs files((Set<File>) subproject.sourceSets.main.allJava.srcDirs)
             additionalClassDirs((FileCollection) subproject.sourceSets.main.output)
