@@ -1,4 +1,5 @@
 
+import BuryBoneAction.Companion.BURY_BONE_ANIMATION
 import io.mockk.verify
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.model.entity.Player
