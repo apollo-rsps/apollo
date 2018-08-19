@@ -10,5 +10,5 @@ ext {
     guavaVersion = '19.0'
     commonsCompressVersion = '1.10'
     assertjVersion = '3.8.0'
-    classpathScannerVersion = '2.0.21'
+    classGraphVersion = '4.0.6'
 }
