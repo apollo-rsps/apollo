@@ -9,12 +9,12 @@ import org.apollo.game.plugin.skills.fishing.FishingTool.*
 /**
  * A fish that can be gathered using the fishing skill.
  */
-enum class Fish(val id: Int, val level: Int, val experience: Double) {
-    SHRIMP(id = 317, level = 1, experience = 10.0),
+enum class Fish(val id: Int, val level: Int, val experience: Double, catchSuffix: String? = null) {
+    SHRIMPS(id = 317, level = 1, experience = 10.0, catchSuffix = "some shrimp."),
     SARDINE(id = 327, level = 5, experience = 20.0),
     MACKEREL(id = 353, level = 16, experience = 20.0),
     HERRING(id = 345, level = 10, experience = 30.0),
-    ANCHOVY(id = 321, level = 15, experience = 40.0),
+    ANCHOVIES(id = 321, level = 15, experience = 40.0, catchSuffix = "some anchovies."),
     TROUT(id = 335, level = 20, experience = 50.0),
     COD(id = 341, level = 23, experience = 45.0),
     PIKE(id = 349, level = 25, experience = 60.0),
@@ -23,13 +23,14 @@ enum class Fish(val id: Int, val level: Int, val experience: Double) {
     LOBSTER(id = 377, level = 40, experience = 90.0),
     BASS(id = 363, level = 46, experience = 100.0),
     SWORDFISH(id = 371, level = 50, experience = 100.0),
-    SHARK(id = 383, level = 76, experience = 110.0);
+    SHARK(id = 383, level = 76, experience = 110.0, catchSuffix = "a shark!");
 
     /**
      * The name of this fish, formatted so it can be inserted into a message.
      */
-    val formattedName = Definitions.item(id)!!.name.toLowerCase()
-    // TODO this leads to incorrect messages, e.g. 'You catch a raw shrimps'.
+    val catchMessage = "You catch ${catchSuffix ?: "a ${catchName()}."}"
+
+    private fun catchName() = Definitions.item(id)!!.name.toLowerCase().removePrefix("raw ")
 
 }
 
@@ -69,16 +70,7 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
     ROD(309, Option.of(FLY_FISHING_ROD, TROUT, SALMON), Option.of(FISHING_ROD, PIKE)),
     CAGE_HARPOON(312, Option.of(LOBSTER_CAGE, LOBSTER), Option.of(HARPOON, TUNA, SWORDFISH)),
     NET_HARPOON(313, Option.of(BIG_NET, MACKEREL, COD), Option.of(HARPOON, BASS, SHARK)),
-    NET_ROD(316, Option.of(SMALL_NET, SHRIMP, ANCHOVY), Option.of(FISHING_ROD, SARDINE, HERRING));
-
-    companion object {
-        private val FISHING_SPOTS = FishingSpot.values().associateBy({ it.npc }, { it })
-
-        /**
-         * Returns the [FishingSpot] with the specified [id], or `null` if the spot does not exist.
-         */
-        fun lookup(id: Int): FishingSpot? = FISHING_SPOTS[id]
-    }
+    NET_ROD(316, Option.of(SMALL_NET, SHRIMPS, ANCHOVIES), Option.of(FISHING_ROD, SARDINE, HERRING));
 
     /**
      * Returns the [FishingSpot.Option] associated with the specified action id.
@@ -157,6 +149,15 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
 
         }
 
+    }
+
+    companion object {
+        private val FISHING_SPOTS = FishingSpot.values().associateBy(FishingSpot::npc)
+
+        /**
+         * Returns the [FishingSpot] with the specified [id], or `null` if the spot does not exist.
+         */
+        fun lookup(id: Int): FishingSpot? = FISHING_SPOTS[id]
     }
 
 }

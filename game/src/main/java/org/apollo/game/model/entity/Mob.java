@@ -236,6 +236,15 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
+	 * Gets the current action, if any, of this mob.
+	 *
+	 * @return The action.
+	 */
+	public final Action<?> getAction() {
+		return action;
+	}
+
+	/**
 	 * Gets the index of this mob.
 	 *
 	 * @return The index.
@@ -335,6 +344,15 @@ public abstract class Mob extends Entity {
 	@Override
 	public int getWidth() {
 		return definition.map(NpcDefinition::getSize).orElse(1);
+	}
+
+	/**
+	 * Check whether this mob has a current active {@link Action}.
+	 *
+	 * @return {@code true} if this mob has a non-null {@link Action}.
+	 */
+	public final boolean hasAction() {
+		return action != null;
 	}
 
 	/**

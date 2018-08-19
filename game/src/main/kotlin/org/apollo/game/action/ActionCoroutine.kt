@@ -55,7 +55,7 @@ class ActionCoroutine : Continuation<Unit> {
          * Create a new `ActionCoroutine` and immediately execute the given `block`, returning a continuation that
          * can be resumed.
          */
-        fun start(block: ActionBlock) : ActionCoroutine {
+        fun start(block: ActionBlock): ActionCoroutine {
             val coroutine = ActionCoroutine()
             val continuation = block.createCoroutineUnchecked(coroutine, coroutine)
 
@@ -95,10 +95,7 @@ class ActionCoroutine : Continuation<Unit> {
      * Update this continuation and check if the condition for the next step to be resumed is satisfied.
      */
     fun pulse() {
-        val nextStep = next.getAndSet(null)
-        if (nextStep == null) {
-            return
-        }
+        val nextStep = next.getAndSet(null) ?: return
 
         val condition = nextStep.condition
         val continuation = nextStep.continuation
@@ -120,11 +117,13 @@ class ActionCoroutine : Continuation<Unit> {
     /**
      * Stop execution of this continuation.
      */
-    suspend fun stop() {
-        return suspendCancellableCoroutine(true) { cont ->
+    suspend fun stop(): Nothing {
+        suspendCancellableCoroutine<Unit>(true) { cont ->
             next.set(null)
             cont.cancel()
         }
+
+        error("Tried to resume execution a coroutine that should have been cancelled.")
     }
 
     /**

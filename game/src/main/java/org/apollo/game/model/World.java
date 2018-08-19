@@ -299,7 +299,7 @@ public final class World {
 		playerRepository.add(player);
 		players.put(NameUtil.encodeBase37(username), player);
 
-		logger.info("Registered player: " + player + " [count=" + playerRepository.size() + "]");
+		logger.finest("Registered player: " + player + " [count=" + playerRepository.size() + "]");
 	}
 
 	/**
@@ -359,7 +359,7 @@ public final class World {
 		region.removeEntity(player);
 
 		playerRepository.remove(player);
-		logger.info("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
+		logger.finest("Unregistered player: " + player + " [count=" + playerRepository.size() + "]");
 	}
 
 	/**
