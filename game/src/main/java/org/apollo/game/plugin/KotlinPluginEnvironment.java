@@ -1,6 +1,9 @@
 package org.apollo.game.plugin;
 
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 import org.apollo.game.model.World;
 import org.apollo.game.plugin.kotlin.KotlinPluginScript;
 
@@ -13,6 +16,7 @@ import java.util.logging.Logger;
 public class KotlinPluginEnvironment implements PluginEnvironment {
 
 	private static final Logger logger = Logger.getLogger(KotlinPluginEnvironment.class.getName());
+	private static final String PLUGIN_SUFFIX = "_plugin";
 
 	private final World world;
 	private PluginContext context;
@@ -26,25 +30,26 @@ public class KotlinPluginEnvironment implements PluginEnvironment {
 		List<KotlinPluginScript> pluginScripts = new ArrayList<>();
 		List<Class<? extends KotlinPluginScript>> pluginClasses = new ArrayList<>();
 
-		new FastClasspathScanner()
-			.matchSubclassesOf(KotlinPluginScript.class, pluginClasses::add)
-			.scan();
+		ClassGraph classGraph = new ClassGraph().enableAllInfo();
 
-		try {
-			for (Class<? extends KotlinPluginScript> pluginClass : pluginClasses) {
-				Constructor<? extends KotlinPluginScript> pluginConstructor =
-					pluginClass.getConstructor(World.class, PluginContext.class);
+		try (ScanResult scanResult = classGraph.scan()) {
+			ClassInfoList pluginClassList = scanResult
+				.getSubclasses(KotlinPluginScript.class.getName())
+				.directOnly();
 
-				pluginScripts.add(pluginConstructor.newInstance(world, context));
+			for (ClassInfo pluginClassInfo : pluginClassList) {
+				Class<KotlinPluginScript> scriptClass = pluginClassInfo.loadClass(KotlinPluginScript.class);
+				Constructor<KotlinPluginScript> scriptConstructor = scriptClass.getConstructor(World.class,
+					PluginContext.class);
+
+				pluginScripts.add(scriptConstructor.newInstance(world, context));
+				logger.info(String.format("Loaded plugin: %s", pluginDescriptor(scriptClass)));
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-		pluginScripts.forEach(script -> {
-			logger.info("Starting script: " + script.getClass().getName());
-			script.doStart(world);
-		});
+		pluginScripts.forEach(script -> script.doStart(world));
 	}
 
 	@Override
@@ -52,4 +57,11 @@ public class KotlinPluginEnvironment implements PluginEnvironment {
 		this.context = context;
 	}
 
+	private static String pluginDescriptor(Class<? extends KotlinPluginScript> clazz) {
+		String className = clazz.getSimpleName();
+		String name = className.substring(0, className.length() - PLUGIN_SUFFIX.length());
+		Package pkg = clazz.getPackage();
+
+		return pkg == null ? name : name + " from " + pkg.getName();
+	}
 }

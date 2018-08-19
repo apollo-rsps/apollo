@@ -15,7 +15,7 @@ dependencies {
     compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: kotlinxCoroutinesVersion
 
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
-    implementation group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: classpathScannerVersion
+    implementation group: 'io.github.classgraph', name: 'classgraph', version: classGraphVersion
     implementation group: 'com.lambdaworks', name: 'scrypt', version: scryptVersion
 
     testImplementation group: 'junit', name: 'junit', version: junitVersion
