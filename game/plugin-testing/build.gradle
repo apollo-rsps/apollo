@@ -1,13 +1,15 @@
-apply plugin: 'kotlin'
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
 
 dependencies {
-    compileOnly project(':game')
-    compile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
+    api project(':game')
+    api project(':net')
 
-    def gameTestConfiguration = project(':game').configurations.testCompile
-    def gameTestDependencies = gameTestConfiguration.dependencies
+    api group: 'junit', name: 'junit', version: junitVersion
+    api group: 'org.powermock', name: 'powermock-api-mockito', version: powermockVersion
+    api group: 'org.assertj', name: 'assertj-core', version: assertjVersion
 
-    gameTestDependencies.each {
-        compile it
-    }
+    implementation group: 'org.powermock', name: 'powermock-module-junit4', version: powermockVersion
 }

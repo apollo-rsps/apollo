@@ -1,5 +1,10 @@
+plugins {
+    id "java-library"
+}
+
 description = 'Apollo Cache'
 
 dependencies {
-    compile project(':util')
+    implementation project(':util')
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
 }

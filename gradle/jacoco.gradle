@@ -1,0 +1,59 @@
+apply plugin: "jacoco"
+
+allprojects {
+    tasks.withType(Test) {
+        jacoco {
+            toolVersion = '0.8.1'
+        }
+
+        afterEvaluate {
+            jacocoTestReport {
+                dependsOn tasks.test
+
+                sourceSets sourceSets.main
+                reports {
+                    html.enabled = true
+                    xml.enabled = true
+                    csv.enabled = false
+                }
+            }
+        }
+    }
+}
+
+task jacocoTestReport(type: JacocoReport) {
+    sourceDirectories = files()
+    classDirectories = files()
+    executionData = files()
+
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+    }
+
+    // Work-around to allow us to build list of executionData files in doFirst
+    onlyIf = {
+        true
+    }
+
+    /*
+     * Builds list of source dirs, class dirs, and executionData files
+     * when task is run, not at script evaluation time
+     */
+    doFirst {
+        subprojects.findAll { subproject ->
+            subproject.pluginManager.hasPlugin('java')
+        }.each { subproject ->
+            additionalSourceDirs files((Set<File>) subproject.sourceSets.main.allJava.srcDirs)
+            additionalClassDirs((FileCollection) subproject.sourceSets.main.output)
+            if (subproject.pluginManager.hasPlugin('jacoco')) {
+                executionData subproject.tasks.jacocoTestReport.executionData
+            }
+        }
+
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
+}

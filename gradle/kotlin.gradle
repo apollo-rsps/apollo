@@ -1,0 +1,5 @@
+allprojects {
+    plugins.withId('kotlin') {
+        kotlin { experimental { coroutines 'enable' } }
+    }
+}

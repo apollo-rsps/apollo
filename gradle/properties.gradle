@@ -1,0 +1,14 @@
+ext {
+    kotlinVersion = '1.2.60'
+    kotlinxCoroutinesVersion = '0.24.0'
+    junitVersion = '4.12'
+    powermockVersion = '1.6.4'
+    bouncycastleVersion = '1.54'
+    c3p0Version = '0.9.5.2'
+    scryptVersion = '1.4.0'
+    nettyVersion = '4.0.34.Final'
+    guavaVersion = '19.0'
+    commonsCompressVersion = '1.10'
+    assertjVersion = '3.8.0'
+    classpathScannerVersion = '2.0.21'
+}

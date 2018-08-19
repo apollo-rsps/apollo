@@ -1,17 +1,4 @@
-apply plugin: 'kotlin'
 apply plugin: 'groovy'
-
-buildscript {
-    apply from: '../properties.gradle'
-
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    }
-}
 
 repositories {
     mavenLocal()
@@ -20,6 +7,4 @@ repositories {
 
 dependencies {
     compile gradleApi()
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: "$kotlinVersion"
 }

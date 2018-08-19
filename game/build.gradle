@@ -1,44 +1,28 @@
+plugins {
+    id 'application'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.scripting'
+}
+
 description = 'Apollo Game'
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: "$kotlinVersion"
-    }
-}
-
-apply plugin: 'kotlin'
-
-allprojects {
-    it.plugins.withId('kotlin') {
-        kotlin { experimental { coroutines 'enable' } }
-    }
-}
+mainClassName = 'org.apollo.Server'
 
 dependencies {
     compile project(':cache')
     compile project(':net')
     compile project(':util')
 
-    compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.0.21'
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: "$kotlinVersion"
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime', version: "$kotlinVersion"
-    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: '0.16'
-    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.16'
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8'
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-scripting-common'
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: kotlinxCoroutinesVersion
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: kotlinxCoroutinesVersion
 
-    project(":game:plugin").subprojects.each { plugin ->
-        runtime plugin
-    }
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: classpathScannerVersion
+    implementation group: 'com.lambdaworks', name: 'scrypt', version: scryptVersion
 
-    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
-}
-
-task run(type: JavaExec, dependsOn: classes) {
-    main = 'org.apollo.Server'
-    classpath = sourceSets.main.runtimeClasspath
-    jvmArgs = ['-Xmx1750M']
-    workingDir = "$rootDir"
+    testImplementation group: 'junit', name: 'junit', version: junitVersion
+    testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: powermockVersion
+    testImplementation group: 'org.powermock', name: 'powermock-api-mockito', version: powermockVersion
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion
 }

@@ -1,1 +1,15 @@
+plugins {
+    id "java-library"
+}
+
 description = 'Apollo Utilities'
+
+dependencies {
+    api group: 'io.netty', name: 'netty-all', version: nettyVersion
+
+    implementation group: 'org.apache.commons', name: 'commons-compress', version: commonsCompressVersion
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: bouncycastleVersion
+
+    testImplementation group: 'junit', name: 'junit', version: junitVersion
+}
