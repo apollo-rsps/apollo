@@ -1,3 +1,5 @@
+package org.apollo.plugin.locations.falador
+
 import org.apollo.game.plugin.entity.spawn.npc_spawn
 
 // Generic npcs
