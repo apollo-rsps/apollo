@@ -47,30 +47,19 @@ class ApolloPluginExtension {
      * and its scripts.
      */
     def init() {
-        def gameProject = project.findProject(":game")
-        def pluginTestingProject = project.findProject(':game:plugin-testing')
-
         project.plugins.apply('kotlin')
         project.dependencies {
-            def transitiveGameDeps = gameProject.configurations["compile"].dependencies
-            def gameSources = gameProject.sourceSets.main
-
-            transitiveGameDeps.each { dependency ->
-                compile dependency
-            }
-
-            compile gameSources.output
-            testCompile pluginTestingProject
+            implementation project.findProject(':game')
+            implementation project.findProject(':cache')
+            implementation project.findProject(':net')
+            implementation project.findProject(':util')
+            testImplementation project.findProject(':game:plugin-testing')
         }
 
         project.sourceSets {
             main.kotlin.srcDirs += this.srcDir
             test.kotlin.srcDirs += this.testDir
         }
-
-        project.tasks["compileKotlin"].kotlinOptions.freeCompilerArgs += [
-                "-script-templates", "org.apollo.game.plugin.kotlin.KotlinPluginScript"
-        ]
     }
 
     def getDependencies() {

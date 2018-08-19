@@ -3,7 +3,6 @@ package org.apollo.game.model.entity.attr;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jruby.RubySymbol;
 
 import com.google.common.base.Preconditions;
 
@@ -118,8 +117,6 @@ public final class AttributeMap {
 				return new NumericalAttribute((Double) value);
 			case STRING:
 				return new StringAttribute((String) value);
-			case SYMBOL:
-				return new StringAttribute(((RubySymbol) value).asJavaString(), true);
 			case BOOLEAN:
 				return new BooleanAttribute((Boolean) value);
 		}

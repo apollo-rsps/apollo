@@ -13,11 +13,11 @@ import org.apollo.game.model.event.PlayerEvent
 import org.apollo.game.plugin.PluginContext
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
-import kotlin.script.templates.ScriptTemplateDefinition
+import kotlin.script.experimental.annotations.KotlinScript
+import kotlin.script.experimental.annotations.KotlinScriptFileExtension
 
-@ScriptTemplateDefinition(
-    scriptFilePattern = ".*\\.plugin\\.kts"
-)
+@KotlinScript("Apollo Plugin Script")
+@KotlinScriptFileExtension("plugin.kts")
 abstract class KotlinPluginScript(private var world: World, val context: PluginContext) {
     var startListener: (World) -> Unit = { _ -> }
     var stopListener: (World) -> Unit = { _ -> }
