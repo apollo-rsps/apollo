@@ -1,17 +1,17 @@
 package org.apollo.game.plugin;
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Logger;
+
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import org.apollo.game.model.World;
 import org.apollo.game.plugin.kotlin.KotlinPluginScript;
-
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.logging.Logger;
 
 public class KotlinPluginEnvironment implements PluginEnvironment {
 
@@ -28,7 +28,6 @@ public class KotlinPluginEnvironment implements PluginEnvironment {
 	@Override
 	public void load(Collection<PluginMetaData> plugins) {
 		List<KotlinPluginScript> pluginScripts = new ArrayList<>();
-		List<Class<? extends KotlinPluginScript>> pluginClasses = new ArrayList<>();
 
 		ClassGraph classGraph = new ClassGraph().enableAllInfo();
 

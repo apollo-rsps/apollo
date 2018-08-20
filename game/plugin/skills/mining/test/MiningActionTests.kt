@@ -12,13 +12,13 @@ import org.apollo.game.plugin.skills.mining.Ore
 import org.apollo.game.plugin.skills.mining.Pickaxe
 import org.apollo.game.plugin.skills.mining.TIN_OBJECTS
 import org.apollo.game.plugin.testing.assertions.after
+import org.apollo.game.plugin.testing.assertions.contains
 import org.apollo.game.plugin.testing.assertions.verifyAfter
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.apollo.game.plugin.testing.junit.api.interactions.spawnObject
-import org.apollo.game.plugin.testing.assertions.contains
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -26,14 +26,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(ApolloTestingExtension::class)
 class MiningActionTests {
-    private val TIN_OBJ_IDS = TIN_OBJECTS.entries.first()
-
-    @ItemDefinitions
-    fun ores() = Ore.values()
-        .map { ItemDefinition(it.id).also { it.name = "<ore_type>" } }
-
-    @ItemDefinitions
-    fun pickaxes() = listOf(ItemDefinition(Pickaxe.BRONZE.id))
 
     @TestMock
     lateinit var world: World
@@ -50,8 +42,12 @@ class MiningActionTests {
         val target = spyk(MiningTarget(obj.id, obj.position, Ore.TIN))
 
         every { target.skillRequirementsMet(player) } returns false
+
         player.startAction(MiningAction(player, Pickaxe.BRONZE, target))
-        verifyAfter(action.complete()) { player.sendMessage(contains("do not have the required level")) }
+
+        verifyAfter(action.complete()) {
+            player.sendMessage(contains("do not have the required level"))
+        }
     }
 
     @Test
@@ -63,12 +59,15 @@ class MiningActionTests {
 
         every { target.skillRequirementsMet(player) } returns true
         every { target.isSuccessful(player, any()) } returns true
-        every { world.expireObject(obj, any(), any()) } answers {}
+        every { world.expireObject(obj, any(), any()) } answers { }
 
         player.skillSet.setCurrentLevel(Skill.MINING, Ore.TIN.level)
         player.startAction(MiningAction(player, Pickaxe.BRONZE, target))
 
-        verifyAfter(action.ticks(1)) { player.sendMessage(contains("You swing your pick")) }
+        verifyAfter(action.ticks(1)) {
+            player.sendMessage(contains("You swing your pick"))
+        }
+
         after(action.complete()) {
             verify { player.sendMessage("You manage to mine some <ore_type>") }
             verify { world.expireObject(obj, expiredTinId, Ore.TIN.respawn) }
@@ -77,4 +76,16 @@ class MiningActionTests {
             assertEquals(player.skillSet.getExperience(Skill.MINING), Ore.TIN.exp)
         }
     }
+
+    private companion object {
+        private val TIN_OBJ_IDS = TIN_OBJECTS.entries.first()
+
+        @ItemDefinitions
+        fun ores() = Ore.values()
+            .map { ItemDefinition(it.id).apply { name = "<ore_type>" } }
+
+        @ItemDefinitions
+        fun pickaxes() = listOf(ItemDefinition(Pickaxe.BRONZE.id))
+    }
+
 }

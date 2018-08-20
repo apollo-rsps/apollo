@@ -22,7 +22,11 @@ object Definitions {
     }
 
     fun npc(id: Int): NpcDefinition? {
-        return NpcDefinition.lookup(id)
+        try {
+            return NpcDefinition.lookup(id)
+        } catch (e: NullPointerException) {
+            throw RuntimeException("Failed to find npc $id: count=${NpcDefinition.count()}")
+        }
     }
 
     fun npc(name: String): NpcDefinition? {

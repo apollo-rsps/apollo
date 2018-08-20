@@ -13,11 +13,6 @@ import org.junit.jupiter.params.provider.EnumSource
 @ExtendWith(ApolloTestingExtension::class)
 class PickaxeTests {
 
-    @ItemDefinitions
-    fun pickaxes() = Pickaxe.values().map {
-        ItemDefinition(it.id).apply { isStackable = false }
-    }
-
     @TestMock
     lateinit var player: Player
 
@@ -70,6 +65,13 @@ class PickaxeTests {
             .forEach { player.inventory.add(it.id) }
 
         assertEquals(pickaxe, Pickaxe.bestFor(player))
+    }
+
+    private companion object {
+        @ItemDefinitions
+        fun pickaxes() = Pickaxe.values().map {
+            ItemDefinition(it.id).apply { isStackable = false }
+        }
     }
 
 }
