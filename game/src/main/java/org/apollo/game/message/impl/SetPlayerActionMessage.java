@@ -2,6 +2,8 @@ package org.apollo.game.message.impl;
 
 import org.apollo.net.message.Message;
 
+import java.util.Objects;
+
 /**
  * A {@link Message} sent by the client to add an action to the menu when a player right-clicks another.
  *
@@ -37,8 +39,8 @@ public final class SetPlayerActionMessage extends Message {
 	/**
 	 * Creates the set player action message.
 	 *
-	 * @param text The action text.
-	 * @param slot The menu slot.
+	 * @param text               The action text.
+	 * @param slot               The menu slot.
 	 * @param primaryInteraction Whether or not the action is the primary action.
 	 */
 	public SetPlayerActionMessage(String text, int slot, boolean primaryInteraction) {
@@ -73,6 +75,22 @@ public final class SetPlayerActionMessage extends Message {
 	 */
 	public boolean isPrimaryAction() {
 		return primaryAction;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof SetPlayerActionMessage) {
+			SetPlayerActionMessage other = (SetPlayerActionMessage) o;
+			return slot == other.slot && primaryAction == other.primaryAction && Objects.equals(text, other.text);
+
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(text, slot, primaryAction);
 	}
 
 }
