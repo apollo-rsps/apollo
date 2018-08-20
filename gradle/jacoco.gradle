@@ -1,59 +1,53 @@
-apply plugin: "jacoco"
+apply plugin: 'jacoco'
 
-allprojects {
-    tasks.withType(Test) {
+def testedProjects() {
+    subprojects.findAll { subproject -> subproject.plugins.hasPlugin('java') || subproject.plugins.hasPlugin('kotlin') }
+}
+
+gradle.projectsEvaluated {
+
+    configure(testedProjects()) {
+        apply plugin: 'jacoco'
+
         jacoco {
             toolVersion = '0.8.1'
         }
 
-        afterEvaluate {
-            jacocoTestReport {
-                dependsOn tasks.test
+        jacocoTestReport {
+            sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+            classDirectories = files(sourceSets.main.output)
+        }
 
-                sourceSets sourceSets.main
-                reports {
-                    html.enabled = true
-                    xml.enabled = true
-                    csv.enabled = false
-                }
+        test {
+            jacoco {
+                append = false
+                destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+                classDumpDir = file("$buildDir/jacoco/classpathdumps")
             }
         }
     }
-}
 
-task jacocoTestReport(type: JacocoReport) {
-    sourceDirectories = files()
-    classDirectories = files()
-    executionData = files()
+    task jacocoTestReport(type: JacocoReport) {
+        def tests = []
+        def sourceDirs = files()
+        def classDirs = files()
+        def execData = files()
 
-    reports {
-        html.enabled = true
-        xml.enabled = true
-        csv.enabled = false
-    }
+        testedProjects().each { subproject ->
+            sourceDirs += files(subproject.sourceSets.main.allSource.srcDirs)
+            classDirs += files(subproject.sourceSets.main.output)
+            execData += files(subproject.tasks.jacocoTestReport.executionData.findAll {
+                it.exists()
+            })
 
-    // Work-around to allow us to build list of executionData files in doFirst
-    onlyIf = {
-        true
-    }
-
-    /*
-     * Builds list of source dirs, class dirs, and executionData files
-     * when task is run, not at script evaluation time
-     */
-    doFirst {
-        subprojects.findAll { subproject ->
-            subproject.pluginManager.hasPlugin('java') || subproject.pluginManager.hasPlugin('kotlin')
-        }.each { subproject ->
-            additionalSourceDirs files((Set<File>) subproject.sourceSets.main.allJava.srcDirs)
-            additionalClassDirs((FileCollection) subproject.sourceSets.main.output)
-            if (subproject.pluginManager.hasPlugin('jacoco')) {
-                executionData subproject.tasks.jacocoTestReport.executionData
-            }
+            tests += subproject.tasks.test
         }
 
-        executionData = files(executionData.findAll {
-            it.exists()
-        })
+        dependsOn tests
+        sourceDirectories = sourceDirs
+        classDirectories = classDirs
+        executionData = execData
     }
+
+
 }

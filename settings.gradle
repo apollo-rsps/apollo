@@ -35,5 +35,4 @@ def processPluginDir(Path pluginDir) {
 }
 
 pluginDirs.each { processPluginDir(it) }
-include 'test-plugin'
 
