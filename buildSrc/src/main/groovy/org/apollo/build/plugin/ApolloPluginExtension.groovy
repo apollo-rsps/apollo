@@ -68,9 +68,25 @@ class ApolloPluginExtension {
 
     def setDependencies(List<String> dependencies) {
         dependencies.each {
-            project.dependencies.add('compile', project.findProject(":game:plugin:$it"))
+            def project = project.findProject(":game:plugin:$it")
+            if (project == null) {
+                throw new MissingPluginDependencyException(name, it)
+            }
+
+            this.project.dependencies.add('compile', project)
         }
 
         this.dependencies = dependencies
     }
+}
+
+/**
+ * A {@link RuntimeException} thrown when a plugin dependency was missing.
+ */
+class MissingPluginDependencyException extends RuntimeException {
+
+    MissingPluginDependencyException(String plugin, String dependency) {
+        super("Missing dependency in the `$plugin` plugin: failed to resolve `$dependency`.")
+    }
+
 }
