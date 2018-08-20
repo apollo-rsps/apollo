@@ -33,6 +33,11 @@ gradle.projectsEvaluated {
         def classDirs = files()
         def execData = files()
 
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+
         testedProjects().each { subproject ->
             sourceDirs += files(subproject.sourceSets.main.allSource.srcDirs)
             classDirs += files(subproject.sourceSets.main.output)
