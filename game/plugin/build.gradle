@@ -2,6 +2,10 @@ subprojects { subproj ->
     if (subproj.buildFile.exists()) {
         apply plugin: 'apollo-plugin'
 
+        test {
+            useJUnitPlatform()
+        }
+
         dependencies {
             test.useJUnitPlatform()
             implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
