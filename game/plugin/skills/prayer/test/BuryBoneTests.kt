@@ -26,11 +26,6 @@ class BuryBoneTests {
     @TestMock
     lateinit var action: ActionCapture
 
-    @ItemDefinitions
-    fun bones(): Collection<ItemDefinition> {
-        return Bone.values().map { ItemDefinition(it.id) }
-    }
-
     @ParameterizedTest
     @EnumSource(value = Bone::class)
     fun `Burying a bone should send a message`(bone: Bone) {
@@ -66,6 +61,13 @@ class BuryBoneTests {
 
             assertEquals(bone.xp, player.prayer.experience)
             assertEquals(player.inventory.getAmount(bone.id), 0)
+        }
+    }
+
+    private companion object {
+        @ItemDefinitions
+        fun bones(): Collection<ItemDefinition> {
+            return Bone.values().map { ItemDefinition(it.id) }
         }
     }
 

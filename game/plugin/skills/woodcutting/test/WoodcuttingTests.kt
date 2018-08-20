@@ -20,18 +20,10 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
-import java.util.*
+import java.util.Random
 
 @ExtendWith(ApolloTestingExtension::class)
 class WoodcuttingTests {
-
-    @ItemDefinitions
-    fun logs() = woodcuttingTestData().map {
-        ItemDefinition(it.tree.id).also { it.name = "<tree_type>" }
-    }
-
-    @ItemDefinitions
-    fun tools() = listOf(ItemDefinition(Axe.BRONZE.id))
 
     @TestMock
     lateinit var action: ActionCapture
@@ -84,5 +76,15 @@ class WoodcuttingTests {
             assertEquals(data.tree.exp, player.skillSet.getExperience(Skill.WOODCUTTING))
             assertEquals(1, player.inventory.getAmount(data.tree.id))
         }
+    }
+
+    private companion object {
+        @ItemDefinitions
+        fun logs() = woodcuttingTestData().map {
+            ItemDefinition(it.tree.id).also { it.name = "<tree_type>" }
+        }
+
+        @ItemDefinitions
+        fun tools() = listOf(ItemDefinition(Axe.BRONZE.id))
     }
 }
