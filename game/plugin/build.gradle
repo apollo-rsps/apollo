@@ -1,6 +1,7 @@
 subprojects { subproj ->
     if (subproj.buildFile.exists()) {
         apply plugin: 'apollo-plugin'
+        apply from: "$rootDir/gradle/kotlin.gradle"
 
         test {
             useJUnitPlatform()

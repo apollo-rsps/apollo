@@ -1,5 +1,6 @@
 apply plugin: 'java-library'
 apply plugin: 'org.jetbrains.kotlin.jvm'
+apply from: "$rootDir/gradle/kotlin.gradle"
 
 dependencies {
     test.useJUnitPlatform()
