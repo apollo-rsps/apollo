@@ -35,3 +35,9 @@ dependencies {
         }
     }
 }
+
+applicationDistribution.from("$rootDir/data") {
+    include '*.dat'
+    include '*.xml'
+    into "data/"
+}
