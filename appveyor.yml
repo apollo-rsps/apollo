@@ -18,3 +18,7 @@ environment:
 
 matrix:
   fast_finish: true
+
+artifacts:
+- path: 'game\build\distributions\game-0.0.1.zip'
+  name: Apollo Server Distribution
