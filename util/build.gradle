@@ -11,3 +11,13 @@ dependencies {
 
     testImplementation group: 'junit', name: 'junit', version: junitVersion
 }
+
+task(genRsa, dependsOn: classes, type: JavaExec) {
+    def utilSubproject = project(':util')
+    def utilClasspath = utilSubproject.sourceSets.main.runtimeClasspath
+
+    main = 'org.apollo.util.tools.RsaKeyGenerator'
+    classpath = utilClasspath
+    jvmArgs = ['-Xmx1024M']
+    workingDir = project.rootDir
+}

@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apollo.cache.FileSystemConstants;
 import org.apollo.net.NetworkConstants;
@@ -26,6 +27,11 @@ import com.google.common.net.InetAddresses;
  * @author Graham
  */
 public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> {
+
+	/**
+	 * The logger for this class.
+	 */
+	private static final Logger logger = Logger.getLogger(LoginDecoder.class.getName());
 
 	/**
 	 * The secure random number generator.
@@ -110,6 +116,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			int type = buffer.readUnsignedByte();
 
 			if (type != LoginConstants.TYPE_STANDARD && type != LoginConstants.TYPE_RECONNECTION) {
+				logger.fine("Failed to decode login header.");
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
@@ -137,6 +144,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			int memoryStatus = payload.readUnsignedByte();
 			if (memoryStatus != 0 && memoryStatus != 1) {
+				logger.fine("Login memoryStatus (" + memoryStatus + ") not in expected range of [0, 1].");
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
@@ -150,6 +158,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			int length = payload.readUnsignedByte();
 			if (length != loginLength - 41) {
+				logger.fine("Login packet unexpected length (" + length + ")");
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
@@ -162,6 +171,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			int id = secure.readUnsignedByte();
 			if (id != 10) {
+				logger.fine("Unable to read id from secure payload.");
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
@@ -169,6 +179,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			long clientSeed = secure.readLong();
 			long reportedSeed = secure.readLong();
 			if (reportedSeed != serverSeed) {
+				logger.fine("Reported seed differed from server seed.");
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
@@ -180,6 +191,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			String hostAddress = InetAddresses.toAddrString(socketAddress.getAddress());
 
 			if (password.length() < 6 || password.length() > 20 || username.isEmpty() || username.length() > 12) {
+				logger.fine("Username ('" + username + "') or password did not pass validation.");
 				writeResponseCode(ctx, LoginConstants.STATUS_INVALID_CREDENTIALS);
 				return;
 			}
