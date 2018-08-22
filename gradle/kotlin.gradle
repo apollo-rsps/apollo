@@ -1,14 +1,10 @@
-gradle.projectsEvaluated {
-    configure(subprojects.findAll { it.pluginManager.hasPlugin('kotlin') }) {
-        apply plugin: 'org.jmailen.kotlinter'
+apply plugin: 'org.jmailen.kotlinter'
 
-        kotlinter {
-            ignoreFailures = true
-            indentSize = 4
-            continuationIndentSize = 4
-            reporters = ['checkstyle', 'plain']
-        }
-
-        kotlin { experimental { coroutines 'enable' } }
-    }
+kotlinter {
+    ignoreFailures = true
+    indentSize = 4
+    continuationIndentSize = 4
+    reporters = ['checkstyle', 'plain']
 }
+
+kotlin { experimental { coroutines 'enable' } }
