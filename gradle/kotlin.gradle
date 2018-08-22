@@ -1,9 +1,3 @@
-allprojects {
-    if (it.pluginManager.hasPlugin('kotlin') || it.pluginManager.hasPlugin('apollo-plugin')) {
-
-    }
-}
-
 gradle.projectsEvaluated {
     configure(subprojects.findAll { it.pluginManager.hasPlugin('kotlin') }) {
         apply plugin: 'org.jmailen.kotlinter'
