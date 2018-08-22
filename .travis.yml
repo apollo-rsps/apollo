@@ -4,10 +4,6 @@ jdk:
 after_success:
   - ./gradlew jacocoTestReport
   - bash <(curl -s https://codecov.io/bash)
-before_install:
-  - gradle -b gradle/wrapper.gradle wrapper
-  - mv gradle/gradlew gradle/gradlew.bat .
-  - mv gradle/gradle/wrapper gradle/
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
