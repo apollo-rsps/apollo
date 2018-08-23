@@ -2,10 +2,11 @@ language: java
 jdk:
   - oraclejdk8
 after_success:
-  - ./gradlew sonarqube \
+  - ./gradlew \
       -Dsonar.organization=github-apollo-rsps \
       -Dsonar.host.url=https://sonarcloud.io \
-      -Dsonar.login="$SONARCLOUD_TOKEN"
+      -Dsonar.login="$SONARCLOUD_TOKEN" \
+      sonarqube
   - ./gradlew jacocoTestReport
   - bash <(curl -s https://codecov.io/bash)
 before_cache:
