@@ -10,7 +10,7 @@ import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.event.PlayerEvent
 import org.apollo.game.plugin.api.findObject
 import org.apollo.net.message.Message
-import java.util.Objects
+import java.util.*
 
 enum class DoorType {
     LEFT, RIGHT, NOT_SUPPORTED
@@ -34,7 +34,7 @@ class Door(private val gameObject: GameObject) {
             Direction.EAST to Direction.SOUTH
         )
 
-        val toggledDoors: HashMap<GameObject, GameObject> = hashMapOf()
+        val toggledDoors = hashMapOf<GameObject, GameObject>()
 
         val LEFT_HINGED = setOf(1516, 1536, 1533)
 
@@ -47,13 +47,7 @@ class Door(private val gameObject: GameObject) {
          * @param objectId The [GameObject] id of the door
          */
         fun find(world: World, position: Position, objectId: Int): Door? {
-            val region = world.regionRepository.fromPosition(position)
-            val gameObject = region.findObject(position, objectId).orElseGet(null)
-            return if (gameObject == null) {
-                null
-            } else {
-                Door(gameObject)
-            }
+            return world.findObject(position, objectId)?.let(::Door)
         }
     }
 
@@ -88,7 +82,7 @@ class Door(private val gameObject: GameObject) {
 
         regionRepository.fromPosition(gameObject.position).removeEntity(gameObject)
 
-        val originalDoor: GameObject? = toggledDoors[gameObject]
+        val originalDoor = toggledDoors[gameObject]
 
         if (originalDoor == null) {
             val position = movePosition()
@@ -98,7 +92,7 @@ class Door(private val gameObject: GameObject) {
                 orientation)
 
             regionRepository.fromPosition(position).addEntity(toggledDoor)
-            toggledDoors.put(toggledDoor, gameObject)
+            toggledDoors[toggledDoor] = gameObject
         } else {
             toggledDoors.remove(gameObject)
             regionRepository.fromPosition(originalDoor.position).addEntity(originalDoor)
@@ -119,6 +113,7 @@ class Door(private val gameObject: GameObject) {
      */
     private fun translateDirection(): Direction? {
         val direction = Direction.WNES[gameObject.orientation]
+
         return when (type()) {
             DoorType.LEFT -> LEFT_HINGE_ORIENTATION[direction]
             DoorType.RIGHT -> RIGHT_HINGE_ORIENTATION[direction]

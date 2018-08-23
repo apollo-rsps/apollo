@@ -4,7 +4,6 @@ import org.apollo.game.message.impl.ObjectActionMessage
 import org.apollo.game.model.Position
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
-import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.plugin.api.*
 import org.apollo.game.plugin.skills.mining.Ore
 import org.apollo.game.plugin.skills.mining.Pickaxe
@@ -89,21 +88,13 @@ class MiningAction(
 data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore) {
 
     /**
-     * Get the [GameObject] represented by this target.
-     *
-     * @todo: api: shouldn't be as verbose
-     */
-    private fun getObject(world: World): GameObject? {
-        val region = world.regionRepository.fromPosition(position)
-        return region.findObject(position, objectId).orElse(null)
-    }
-
-    /**
      * Deplete this mining resource from the [World], and schedule it to be respawned
      * in a number of ticks specified by the [Ore].
      */
     fun deplete(world: World) {
-        world.expireObject(getObject(world)!!, ore.objects[objectId]!!, ore.respawn)
+        val obj = world.findObject(position, objectId)!!
+
+        world.expireObject(obj, ore.objects[objectId]!!, ore.respawn)
     }
 
     /**
@@ -117,7 +108,7 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
     /**
      * Check if this target is still valid in the [World] (i.e. has not been [deplete]d).
      */
-    fun isValid(world: World) = getObject(world) != null
+    fun isValid(world: World) = world.findObject(position, objectId) != null
 
     /**
      * Get the normalized name of the [Ore] represented by this target.
@@ -142,5 +133,6 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
      * this [MiningTarget].
      */
     fun skillRequirementsMet(mob: Player) = mob.mining.current < ore.level
+
 }
 

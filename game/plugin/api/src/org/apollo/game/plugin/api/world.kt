@@ -10,22 +10,33 @@ import org.apollo.game.model.entity.EntityType.STATIC_OBJECT
 import org.apollo.game.model.entity.obj.DynamicGameObject
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.scheduling.ScheduledTask
-import java.util.Optional
-import java.util.stream.Stream
 
-fun <T : Entity> Region.find(position: Position, predicate: (T) -> Boolean, vararg types: EntityType): Stream<T> {
-    val result = getEntities<T>(position, *types)
-    return result.stream().filter(predicate::invoke)
+fun <T : Entity> Region.find(position: Position, predicate: (T) -> Boolean, vararg types: EntityType): Sequence<T> {
+    return getEntities<T>(position, *types).asSequence().filter(predicate)
 }
 
-fun Region.findObjects(position: Position, id: Int): Stream<GameObject> {
+fun Region.findObjects(position: Position, id: Int): Sequence<GameObject> {
     return find(position, { it.id == id }, DYNAMIC_OBJECT, STATIC_OBJECT)
 }
 
-fun Region.findObject(position: Position, id: Int): Optional<GameObject> {
-    return find<GameObject>(position, { it.id == id }, DYNAMIC_OBJECT, STATIC_OBJECT)
-        .findFirst()
+fun Region.findObject(position: Position, id: Int): GameObject? {
+    return find<GameObject>(position, { it.id == id }, DYNAMIC_OBJECT, STATIC_OBJECT).firstOrNull()
 }
+
+fun World.findObject(position: Position, objectId: Int): GameObject? {
+    return regionRepository.fromPosition(position).findObject(position, objectId)
+}
+
+fun World.findObjects(position: Position, id: Int): Sequence<GameObject> {
+    return regionRepository.fromPosition(position).findObjects(position, id)
+}
+
+fun World.expireObject(obj: GameObject, replacement: Int, respawnDelay: Int) {
+    val replacementObj = DynamicGameObject.createPublic(this, replacement, obj.position, obj.type, obj.orientation)
+
+    schedule(ExpireObjectTask(this, obj, replacementObj, respawnDelay))
+}
+
 
 class ExpireObjectTask(
     private val world: World,
@@ -49,10 +60,4 @@ class ExpireObjectTask(
             stop()
         }
     }
-}
-
-fun World.expireObject(obj: GameObject, replacement: Int, respawnDelay: Int) {
-    val replacementObj = DynamicGameObject.createPublic(this, replacement, obj.position, obj.type, obj.orientation)
-
-    schedule(ExpireObjectTask(this, obj, replacementObj, respawnDelay))
 }
