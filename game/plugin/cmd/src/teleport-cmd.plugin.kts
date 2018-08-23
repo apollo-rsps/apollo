@@ -75,7 +75,7 @@ on_command("tele", PrivilegeLevel.ADMINISTRATOR)
         }
     }
 
-private val TELEPORT_DESTINATIONS = listOf(
+val TELEPORT_DESTINATIONS = listOf(
     "alkharid" to Position(3292, 3171, 0),
     "ardougne" to Position(2662, 3304, 0),
     "barrows" to Position(3565, 3314, 0),
