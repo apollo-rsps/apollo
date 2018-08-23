@@ -1,3 +1,5 @@
+package org.apollo.plugin.locations.alKharid
+
 import org.apollo.game.plugin.shops.shop
 
 shop("Al-Kharid General Store") {

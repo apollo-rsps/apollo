@@ -1,3 +1,5 @@
+package org.apollo.plugin.locations.edgeville
+
 import org.apollo.game.plugin.shops.shop
 
 shop("Edgeville General Store") {

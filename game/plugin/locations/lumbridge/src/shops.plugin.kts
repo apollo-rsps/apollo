@@ -1,3 +1,5 @@
+package org.apollo.plugin.locations.lumbridge
+
 import org.apollo.game.plugin.shops.shop
 
 shop("Lumbridge General Store") {

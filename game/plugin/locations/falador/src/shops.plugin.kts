@@ -1,3 +1,5 @@
+package org.apollo.plugin.locations.falador
+
 import org.apollo.game.plugin.shops.shop
 
 shop("Falador General Store") {
