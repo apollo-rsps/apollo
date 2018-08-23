@@ -5,7 +5,6 @@ def testedProjects() {
 }
 
 gradle.projectsEvaluated {
-
     configure(testedProjects()) {
         apply plugin: 'jacoco'
 
@@ -19,11 +18,17 @@ gradle.projectsEvaluated {
         }
 
         test {
+            reports {
+                junitXml.enabled = true
+                html.enabled = false
+            }
+
             jacoco {
                 append = false
                 destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
                 classDumpDir = file("$buildDir/jacoco/classpathdumps")
             }
+
         }
     }
 
@@ -35,7 +40,7 @@ gradle.projectsEvaluated {
 
         reports {
             xml.enabled = true
-            html.enabled = true
+            html.enabled = false
         }
 
         testedProjects().each { subproject ->
@@ -54,5 +59,14 @@ gradle.projectsEvaluated {
         executionData = execData
     }
 
+    sonarqube {
+        properties {
+            property "sonar.organization", "github-apollo-rsps"
+            property "sonar.projectKey", "apollo:org.apollo"
+            property "sonar.projectName", "Apollo RSPS"
+            property "sonar.kotlin.file.suffixes", ".kt,.kts"
+        }
+    }
 
+    project.tasks["sonarqube"].dependsOn(jacocoTestReport)
 }
