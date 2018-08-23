@@ -17,5 +17,5 @@ allprojects {
 }
 
 apply from: 'gradle/properties.gradle'
-apply from: 'gradle/jacoco.gradle'
+apply from: 'gradle/quality-gate.gradle'
 apply from: 'gradle/wrapper.gradle'
