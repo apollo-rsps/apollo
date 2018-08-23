@@ -7,11 +7,7 @@ import org.apollo.game.model.Position
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.GameObject
-import org.apollo.game.plugin.api.Definitions
-import org.apollo.game.plugin.api.expireObject
-import org.apollo.game.plugin.api.findObject
-import org.apollo.game.plugin.api.rand
-import org.apollo.game.plugin.api.woodcutting
+import org.apollo.game.plugin.api.*
 import org.apollo.game.plugin.skills.woodcutting.Axe
 import org.apollo.game.plugin.skills.woodcutting.Tree
 import java.util.concurrent.TimeUnit
@@ -30,8 +26,7 @@ class WoodcuttingTarget(private val objectId: Int, val position: Position, val t
      * Get the tree object in the world
      */
     fun getObject(world: World): GameObject? {
-        val region = world.regionRepository.fromPosition(position)
-        return region.findObject(position, objectId).orElse(null)
+        return world.findObject(position, objectId)
     }
 
     /**

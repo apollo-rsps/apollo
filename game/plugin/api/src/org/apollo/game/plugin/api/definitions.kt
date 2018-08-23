@@ -3,6 +3,7 @@ package org.apollo.game.plugin.api
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.cache.def.ObjectDefinition
+import java.lang.IllegalArgumentException
 
 object Definitions {
     fun item(id: Int): ItemDefinition? {
@@ -22,11 +23,7 @@ object Definitions {
     }
 
     fun npc(id: Int): NpcDefinition? {
-        try {
-            return NpcDefinition.lookup(id)
-        } catch (e: NullPointerException) {
-            throw RuntimeException("Failed to find npc $id: count=${NpcDefinition.count()}")
-        }
+        return NpcDefinition.lookup(id)
     }
 
     fun npc(name: String): NpcDefinition? {
@@ -43,11 +40,16 @@ object Definitions {
         nameSupplier: T.() -> String,
         name: String
     ): T? {
-        val definitions = definitionsProvider.invoke()
+        val definitions = definitionsProvider()
 
         if (ID_REGEX matches name) {
-            val id = name.substring(name.lastIndexOf('_') + 1, name.length).toInt()
-            return definitions.getOrNull(id)
+            val id = name.substring(name.lastIndexOf('_') + 1, name.length).toIntOrNull()
+
+            if (id == null || id >= definitions.size) {
+                throw IllegalArgumentException("Error while searching for definition: invalid id suffix in $name.")
+            }
+
+            return definitions[id]
         }
 
         val normalizedName = name.replace('_', ' ')
