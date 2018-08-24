@@ -8,7 +8,7 @@ package org.apollo.game.plugin.testing.junit.api.annotations
  * - Be inside a **companion object** inside an apollo test class (a regular object will not work).
  * - Return a `Collection<ItemDefinition>`.
  */
-@Target(AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ItemDefinitions
 
@@ -20,7 +20,7 @@ annotation class ItemDefinitions
  * - Be inside a **companion object** inside an apollo test class (a regular object will not work).
  * - Return a `Collection<NpcDefinition>`.
  */
-@Target(AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class NpcDefinitions
 
@@ -32,6 +32,6 @@ annotation class NpcDefinitions
  * - Be inside a **companion object** inside an apollo test class (a regular object will not work).
  * - Return a `Collection<ObjectDefinition>`.
  */
-@Target(AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ObjectDefinitions
