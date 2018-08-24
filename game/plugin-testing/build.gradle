@@ -20,3 +20,9 @@ dependencies {
 
     implementation group: 'org.powermock', name: 'powermock-module-junit4', version: powermockVersion
 }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

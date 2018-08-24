@@ -13,23 +13,14 @@ import org.apollo.game.model.entity.Npc
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.plugin.KotlinPluginEnvironment
-import org.apollo.game.plugin.PluginMetaData
 import org.apollo.game.plugin.testing.fakes.FakePluginContextFactory
 import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.NpcDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.ObjectDefinitions
 import org.apollo.game.plugin.testing.junit.mocking.StubPrototype
-import org.junit.jupiter.api.extension.AfterAllCallback
-import org.junit.jupiter.api.extension.AfterEachCallback
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback
-import org.junit.jupiter.api.extension.BeforeAllCallback
-import org.junit.jupiter.api.extension.BeforeEachCallback
-import org.junit.jupiter.api.extension.ExtensionContext
-import org.junit.jupiter.api.extension.ParameterContext
-import org.junit.jupiter.api.extension.ParameterResolver
-import java.util.ArrayList
-import kotlin.reflect.KFunction
+import org.junit.jupiter.api.extension.*
+import kotlin.reflect.KCallable
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.createType
@@ -58,7 +49,7 @@ class ApolloTestingExtension :
 
     private fun cleanup(context: ExtensionContext) {
         val store = context.getStore(namespace)
-        val state = store.get(ApolloTestState::class) as ApolloTestState
+        val state = store[ApolloTestState::class] as ApolloTestState
 
         try {
             state.actionCapture?.runAction()
@@ -84,27 +75,32 @@ class ApolloTestingExtension :
             .map { it.kotlin.companionObject }
             .ifPresent { companion ->
                 val companionInstance = companion.objectInstance!!
-                val testClassMethods = companion.declaredMemberFunctions
+                val callables: List<KCallable<*>> = companion.declaredMemberFunctions + companion.declaredMemberProperties
 
                 createTestDefinitions<ItemDefinition, ItemDefinitions>(
-                    testClassMethods, companionInstance, ItemDefinition::getId, ItemDefinition::lookup
+                    callables, companionInstance, ItemDefinition::getId, ItemDefinition::lookup,
+                    ItemDefinition::getDefinitions
                 )
 
                 createTestDefinitions<NpcDefinition, NpcDefinitions>(
-                    testClassMethods, companionInstance, NpcDefinition::getId, NpcDefinition::lookup
+                    callables, companionInstance, NpcDefinition::getId, NpcDefinition::lookup,
+                    NpcDefinition::getDefinitions
                 )
 
                 createTestDefinitions<ObjectDefinition, ObjectDefinitions>(
-                    testClassMethods, companionInstance, ObjectDefinition::getId, ObjectDefinition::lookup
+                    callables, companionInstance, ObjectDefinition::getId, ObjectDefinition::lookup,
+                    ObjectDefinition::getDefinitions
                 )
             }
 
-        val pluginEnvironment = KotlinPluginEnvironment(stubWorld)
-        pluginEnvironment.setContext(FakePluginContextFactory.create(stubHandlers))
-        pluginEnvironment.load(ArrayList<PluginMetaData>())
+        KotlinPluginEnvironment(stubWorld).apply {
+            setContext(FakePluginContextFactory.create(stubHandlers))
+            load(emptyList())
+        }
 
-        val state = ApolloTestState(stubHandlers, stubWorld)
         val store = context.getStore(namespace)
+        val state = ApolloTestState(stubHandlers, stubWorld)
+
         store.put(ApolloTestState::class, state)
     }
 
@@ -151,30 +147,43 @@ class ApolloTestingExtension :
      * @param lookup The lookup function that returns an instance of [D] given a definition id.
      */
     private inline fun <reified D : Any, reified A : Annotation> createTestDefinitions(
-        testClassMethods: Collection<KFunction<*>>,
+        testClassMethods: Collection<KCallable<*>>,
         companionObjectInstance: Any?,
         crossinline idMapper: (D) -> Int,
-        crossinline lookup: (Int) -> D
+        crossinline lookup: (Int) -> D?,
+        crossinline getAll: () -> Array<D>
     ) {
-        val testDefinitions = testClassMethods.asSequence()
-            .filter { method -> method.annotations.any { it is A } }
-            .flatMap { method ->
-                @Suppress("UNCHECKED_CAST")
-                method as? KFunction<Collection<D>> ?: throw RuntimeException("${method.name} is annotated with " +
-                    "${A::class.simpleName} but does not return Collection<${D::class.simpleName}."
-                )
-
-                method.isAccessible = true // lets us call methods in private companion objects
-                method.call(companionObjectInstance).asSequence()
-            }
+        val testDefinitions = findTestDefinitions<D, A>(testClassMethods, companionObjectInstance)
             .associateBy(idMapper)
 
         if (testDefinitions.isNotEmpty()) {
             val idSlot = slot<Int>()
-
             staticMockk<D>().mock()
-            every { lookup(capture(idSlot)) } answers { testDefinitions[idSlot.captured]!! }
+
+            every { lookup(capture(idSlot)) } answers { testDefinitions[idSlot.captured] }
+            every { getAll() } answers { testDefinitions.values.sortedBy(idMapper).toTypedArray() }
         }
+    }
+
+    companion object {
+
+        inline fun <reified D : Any, reified A : Annotation> findTestDefinitions(
+            callables: Collection<KCallable<*>>,
+            companionObjectInstance: Any?
+        ): List<D> {
+            return callables
+                .filter { method -> method.annotations.any { it is A } }
+                .flatMap { method ->
+                    @Suppress("UNCHECKED_CAST")
+                    method as? KCallable<Collection<D>> ?: throw RuntimeException("${method.name} is annotated with " +
+                        "${A::class.simpleName} but does not return Collection<${D::class.simpleName}>."
+                    )
+
+                    method.isAccessible = true // lets us call methods in private companion objects
+                    method.call(companionObjectInstance)
+                }
+        }
+
     }
 
 }
