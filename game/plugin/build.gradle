@@ -7,6 +7,12 @@ subprojects { subproj ->
             useJUnitPlatform()
         }
 
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+
         dependencies {
             test.useJUnitPlatform()
             implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
