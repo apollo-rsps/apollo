@@ -88,7 +88,7 @@ class WoodcuttingAction(
             val obj = target.getObject(mob.world) ?: stop()
 
             if (mob.inventory.add(target.tree.id)) {
-                val logName = Definitions.item(target.tree.id)!!.name.toLowerCase()
+                val logName = Definitions.item(target.tree.id).name.toLowerCase()
                 mob.sendMessage("You managed to cut some $logName.")
                 mob.woodcutting.experience += target.tree.exp
             }
@@ -97,7 +97,7 @@ class WoodcuttingAction(
                 // respawn time: http://runescape.wikia.com/wiki/Trees
                 val respawn = TimeUnit.SECONDS.toMillis(MINIMUM_RESPAWN_TIME + rand(150)) / GameConstants.PULSE_DELAY
 
-                mob.world.expireObject(obj, target.tree.stump, respawn.toInt())
+                mob.world.replaceObject(obj, target.tree.stump, respawn.toInt())
                 stop()
             }
         }

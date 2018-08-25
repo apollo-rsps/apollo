@@ -5,27 +5,73 @@ import org.apollo.cache.def.NpcDefinition
 import org.apollo.cache.def.ObjectDefinition
 import java.lang.IllegalArgumentException
 
+/**
+ * Provides plugins with access to item, npc, and object definitions
+ */
 object Definitions {
-    fun item(id: Int): ItemDefinition? {
+
+    /**
+     * Returns the [ItemDefinition] with the specified [id]. Callers of this function must perform bounds checking on
+     * the [id] prior to invoking this method (i.e. verify that `id >= 0 && id < ItemDefinition.count()`).
+     *
+     * @throws IndexOutOfBoundsException If the id is out of bounds.
+     */
+    fun item(id: Int): ItemDefinition {
         return ItemDefinition.lookup(id)
     }
 
+    /**
+     * Returns the [ItemDefinition] with the specified name, performing case-insensitive matching. If multiple items
+     * share the same name, the item with the lowest id is returned.
+     *
+     * The name may be suffixed with an explicit item id (as a way to disambiguate in the above case), by ending the
+     * name with `_id`, e.g. `monks_robe_42`. If an explicit id is attached, it must be bounds checked (in the same
+     * manner as [item(id: Int)][item]).
+     */
     fun item(name: String): ItemDefinition? {
         return findEntity(ItemDefinition::getDefinitions, ItemDefinition::getName, name)
     }
 
-    fun obj(id: Int): ObjectDefinition? {
+    /**
+     * Returns the [ObjectDefinition] with the specified [id]. Callers of this function must perform bounds checking on
+     * the [id] prior to invoking this method (i.e. verify that `id >= 0 && id < ObjectDefinition.count()`).
+     *
+     * @throws IndexOutOfBoundsException If the id is out of bounds.
+     */
+    fun obj(id: Int): ObjectDefinition {
         return ObjectDefinition.lookup(id)
     }
 
+    /**
+     * Returns the [ObjectDefinition] with the specified name, performing case-insensitive matching. If multiple objects
+     * share the same name, the object with the lowest id is returned.
+     *
+     * The name may be suffixed with an explicit object id (as a way to disambiguate in the above case), by ending the
+     * name with `_id`, e.g. `man_2`. If an explicit id is attached, it must be bounds checked (in the same
+     * manner as [object(id: Int)][object]).
+     */
     fun obj(name: String): ObjectDefinition? {
         return findEntity(ObjectDefinition::getDefinitions, ObjectDefinition::getName, name)
     }
 
-    fun npc(id: Int): NpcDefinition? {
+    /**
+     * Returns the [NpcDefinition] with the specified [id]. Callers of this function must perform bounds checking on
+     * the [id] prior to invoking this method (i.e. verify that `id >= 0 && id < NpcDefinition.count()`).
+     *
+     * @throws IndexOutOfBoundsException If the id is out of bounds.
+     */
+    fun npc(id: Int): NpcDefinition {
         return NpcDefinition.lookup(id)
     }
 
+    /**
+     * Returns the [NpcDefinition] with the specified name, performing case-insensitive matching. If multiple npcs
+     * share the same name, the npc with the lowest id is returned.
+     *
+     * The name may be suffixed with an explicit npc id (as a way to disambiguate in the above case), by ending the
+     * name with `_id`, e.g. `man_2`. If an explicit id is attached, it must be bounds checked (in the same
+     * manner as [npc(id: Int)][npc]).
+     */
     fun npc(name: String): NpcDefinition? {
         return findEntity(NpcDefinition::getDefinitions, NpcDefinition::getName, name)
     }
