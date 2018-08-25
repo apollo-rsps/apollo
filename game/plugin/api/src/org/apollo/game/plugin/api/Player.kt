@@ -53,26 +53,37 @@ class SkillProxy(private val skills: SkillSet, private val skill: Int) {
         }
 
     /**
-     * Boosts the current level of this skill by [amount], if possible (i.e. if `current + amount <= maximum + amount`).
+     * Boosts the current level of this skill by [amount], if possible.
      */
     fun boost(amount: Int) {
-        val new = Math.min(current + amount, maximum + amount)
+        require(amount >= 1) { "Can only boost skills by positive values." }
+
+        val new = if (current - maximum > amount) {
+            current
+        } else {
+            Math.min(current + amount, maximum + amount)
+        }
+
         skills.setCurrentLevel(skill, new)
     }
 
     /**
-     * Drains the current level of this skill by [amount], if possible (i.e. if `current - amount >= 0`).
+     * Drains the current level of this skill by [amount], if possible.
      */
     fun drain(amount: Int) {
+        require(amount >= 1) { "Can only drain skills by positive values." }
+
         val new = Math.max(current - amount, 0)
         skills.setCurrentLevel(skill, new)
     }
 
     /**
-     * Restores the current level of this skill by [amount], if possible (i.e. if `current + amount < maximum`).
+     * Restores the current level of this skill by [amount], if possible.
      */
     fun restore(amount: Int) {
-        val new = Math.max(current + amount, maximum)
+        require(amount >= 1) { "Can only restore skills by positive values." }
+
+        val new = Math.min(current + amount, maximum)
         skills.setCurrentLevel(skill, new)
     }
 

@@ -28,9 +28,9 @@ enum class Fish(val id: Int, val level: Int, val experience: Double, catchSuffix
     /**
      * The name of this fish, formatted so it can be inserted into a message.
      */
-    val catchMessage = "You catch ${catchSuffix ?: "a ${catchName()}."}"
+    val catchMessage by lazy { "You catch ${catchSuffix ?: "a ${catchName()}."}" }
 
-    private fun catchName() = Definitions.item(id)!!.name.toLowerCase().removePrefix("raw ")
+    private fun catchName() = Definitions.item(id).name.toLowerCase().removePrefix("raw ")
 
 }
 
@@ -59,7 +59,7 @@ enum class FishingTool(
     /**
      * The name of this tool, formatted so it can be inserted into a message.
      */
-    val formattedName = Definitions.item(id)!!.name.toLowerCase()
+    val formattedName by lazy { Definitions.item(id).name.toLowerCase() }
 
 }
 

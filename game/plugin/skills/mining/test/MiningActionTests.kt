@@ -7,7 +7,7 @@ import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
-import org.apollo.game.plugin.api.expireObject
+import org.apollo.game.plugin.api.replaceObject
 import org.apollo.game.plugin.skills.mining.Ore
 import org.apollo.game.plugin.skills.mining.Pickaxe
 import org.apollo.game.plugin.skills.mining.TIN_OBJECTS
@@ -59,7 +59,7 @@ class MiningActionTests {
 
         every { target.skillRequirementsMet(player) } returns true
         every { target.isSuccessful(player, any()) } returns true
-        every { world.expireObject(obj, any(), any()) } answers { }
+        every { world.replaceObject(obj, any(), any()) } answers { }
 
         player.skillSet.setCurrentLevel(Skill.MINING, Ore.TIN.level)
         player.startAction(MiningAction(player, Pickaxe.BRONZE, target))
@@ -70,7 +70,7 @@ class MiningActionTests {
 
         after(action.complete()) {
             verify { player.sendMessage("You manage to mine some <ore_type>") }
-            verify { world.expireObject(obj, expiredTinId, Ore.TIN.respawn) }
+            verify { world.replaceObject(obj, expiredTinId, Ore.TIN.respawn) }
 
             assertTrue(player.inventory.contains(Ore.TIN.id))
             assertEquals(player.skillSet.getExperience(Skill.MINING), Ore.TIN.exp)

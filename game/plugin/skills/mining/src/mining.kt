@@ -94,7 +94,7 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
     fun deplete(world: World) {
         val obj = world.findObject(position, objectId)!!
 
-        world.expireObject(obj, ore.objects[objectId]!!, ore.respawn)
+        world.replaceObject(obj, ore.objects[objectId]!!, ore.respawn)
     }
 
     /**
@@ -113,7 +113,7 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
     /**
      * Get the normalized name of the [Ore] represented by this target.
      */
-    fun oreName() = Definitions.item(ore.id)!!.name.toLowerCase()
+    fun oreName() = Definitions.item(ore.id).name.toLowerCase()
 
     /**
      * Reward a [player] with experience and ore if they have the inventory capacity to take a new ore.
