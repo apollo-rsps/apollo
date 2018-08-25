@@ -1,7 +1,6 @@
-import org.apollo.game.model.Direction
+package org.apollo.game.plugin.skills.fishing
 import org.apollo.game.model.Position
 import org.apollo.game.plugin.entity.spawn.spawnNpc
-import org.apollo.game.plugin.skills.fishing.FishingSpot
 import org.apollo.game.plugin.skills.fishing.FishingSpot.CAGE_HARPOON
 import org.apollo.game.plugin.skills.fishing.FishingSpot.NET_HARPOON
 import org.apollo.game.plugin.skills.fishing.FishingSpot.NET_ROD
@@ -177,5 +176,5 @@ NET_ROD at Position(3103, 3092)
  * Registers the [FishingSpot] at the specified position.
  */
 infix fun FishingSpot.at(position: Position) {
-    spawnNpc("", position.x, position.y, position.height, id = npc, facing = Direction.NORTH)
+    spawnNpc("", position, id = npc)
 }

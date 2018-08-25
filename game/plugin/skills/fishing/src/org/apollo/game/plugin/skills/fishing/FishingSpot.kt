@@ -1,76 +1,36 @@
 package org.apollo.game.plugin.skills.fishing
 
-import org.apollo.game.model.Animation
-import org.apollo.game.plugin.api.Definitions
 import org.apollo.game.plugin.api.rand
 import org.apollo.game.plugin.skills.fishing.Fish.*
-import org.apollo.game.plugin.skills.fishing.FishingTool.*
-
-/**
- * A fish that can be gathered using the fishing skill.
- */
-enum class Fish(val id: Int, val level: Int, val experience: Double, catchSuffix: String? = null) {
-    SHRIMPS(id = 317, level = 1, experience = 10.0, catchSuffix = "some shrimp."),
-    SARDINE(id = 327, level = 5, experience = 20.0),
-    MACKEREL(id = 353, level = 16, experience = 20.0),
-    HERRING(id = 345, level = 10, experience = 30.0),
-    ANCHOVIES(id = 321, level = 15, experience = 40.0, catchSuffix = "some anchovies."),
-    TROUT(id = 335, level = 20, experience = 50.0),
-    COD(id = 341, level = 23, experience = 45.0),
-    PIKE(id = 349, level = 25, experience = 60.0),
-    SALMON(id = 331, level = 30, experience = 70.0),
-    TUNA(id = 359, level = 35, experience = 80.0),
-    LOBSTER(id = 377, level = 40, experience = 90.0),
-    BASS(id = 363, level = 46, experience = 100.0),
-    SWORDFISH(id = 371, level = 50, experience = 100.0),
-    SHARK(id = 383, level = 76, experience = 110.0, catchSuffix = "a shark!");
-
-    /**
-     * The name of this fish, formatted so it can be inserted into a message.
-     */
-    val catchMessage by lazy { "You catch ${catchSuffix ?: "a ${catchName()}."}" }
-
-    private fun catchName() = Definitions.item(id).name.toLowerCase().removePrefix("raw ")
-
-}
-
-/**
- * A tool used to gather [Fish] from a [FishingSpot].
- */
-enum class FishingTool(
-    val message: String,
-    val id: Int,
-    animation: Int,
-    val bait: Int = -1,
-    val baitName: String? = null
-) {
-    LOBSTER_CAGE("You attempt to catch a lobster...", id = 301, animation = 619),
-    SMALL_NET("You cast out your net...", id = 303, animation = 620),
-    BIG_NET("You cast out your net...", id = 305, animation = 620),
-    HARPOON("You start harpooning fish...", id = 311, animation = 618),
-    FISHING_ROD("You attempt to catch a fish...", id = 307, animation = 622, bait = 313, baitName = "feathers"),
-    FLY_FISHING_ROD("You attempt to catch a fish...", id = 309, animation = 622, bait = 314, baitName = "fishing bait");
-
-    /**
-     * The [Animation] played when fishing with this tool.
-     */
-    val animation: Animation = Animation(animation)
-
-    /**
-     * The name of this tool, formatted so it can be inserted into a message.
-     */
-    val formattedName by lazy { Definitions.item(id).name.toLowerCase() }
-
-}
 
 /**
  * A spot that can be fished from.
  */
 enum class FishingSpot(val npc: Int, private val first: Option, private val second: Option) {
-    ROD(309, Option.of(FLY_FISHING_ROD, TROUT, SALMON), Option.of(FISHING_ROD, PIKE)),
-    CAGE_HARPOON(312, Option.of(LOBSTER_CAGE, LOBSTER), Option.of(HARPOON, TUNA, SWORDFISH)),
-    NET_HARPOON(313, Option.of(BIG_NET, MACKEREL, COD), Option.of(HARPOON, BASS, SHARK)),
-    NET_ROD(316, Option.of(SMALL_NET, SHRIMPS, ANCHOVIES), Option.of(FISHING_ROD, SARDINE, HERRING));
+
+    ROD(
+        npc = 309,
+        first = Option.of(tool = FishingTool.FLY_FISHING_ROD, primary = TROUT, secondary = SALMON),
+        second = Option.of(tool = FishingTool.FISHING_ROD, primary = PIKE)
+    ),
+
+    CAGE_HARPOON(
+        npc = 312,
+        first = Option.of(tool = FishingTool.LOBSTER_CAGE, primary = LOBSTER),
+        second = Option.of(tool = FishingTool.HARPOON, primary = TUNA, secondary = SWORDFISH)
+    ),
+
+    NET_HARPOON(
+        npc = 313,
+        first = Option.of(tool = FishingTool.BIG_NET, primary = MACKEREL, secondary = COD),
+        second = Option.of(tool = FishingTool.HARPOON, primary = BASS, secondary = SHARK)
+    ),
+
+    NET_ROD(
+        npc = 316,
+        first = Option.of(tool = FishingTool.SMALL_NET, primary = SHRIMPS, secondary = ANCHOVIES),
+        second = Option.of(tool = FishingTool.FISHING_ROD, primary = SARDINE, secondary = HERRING)
+    );
 
     /**
      * Returns the [FishingSpot.Option] associated with the specified action id.
