@@ -75,6 +75,30 @@ on_command("tele", PrivilegeLevel.ADMINISTRATOR)
         }
     }
 
+/**
+ * Teleports the player to another player.
+ */
+on_command("teleto", PrivilegeLevel.ADMINISTRATOR)
+    .then { player ->
+        val invalidSyntax = "Invalid syntax - ::teleto [player name]"
+
+        if (arguments.size == 1) {
+            val playerName = arguments[0]
+            val foundPlayer = player.world.getPlayer(playerName)
+
+            if (foundPlayer == null) {
+                player.sendMessage("Player $playerName is currently offline or does not exist.")
+                return@then
+            }
+
+            player.teleport(foundPlayer.position)
+            player.sendMessage("You have teleported to player $playerName.")
+        } else {
+            player.sendMessage(invalidSyntax)
+        }
+    }
+
+
 internal val TELEPORT_DESTINATIONS = listOf(
     "alkharid" to Position(3292, 3171),
     "ardougne" to Position(2662, 3304),
