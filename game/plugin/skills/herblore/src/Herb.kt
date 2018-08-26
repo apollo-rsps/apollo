@@ -21,7 +21,7 @@ enum class Herb(
     DWARF_WEED(identified = 267, unidentified = 217, level = 70, experience = 13.8),
     TORSTOL(identified = 269, unidentified = 219, level = 75, experience = 15.0);
 
-    val identifiedName: String = Definitions.item(identified)!!.name
+    val identifiedName by lazy { Definitions.item(identified)!!.name }
 
     companion object {
         private val identified = Herb.values().map(Herb::identified).toHashSet()
