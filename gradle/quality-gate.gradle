@@ -61,7 +61,7 @@ gradle.projectsEvaluated {
 
     sonarqube {
         properties {
-            property "sonar.organization", "github-apollo-rsps"
+            property "sonar.organization", "apollo-rsps"
             property "sonar.projectKey", "apollo:org.apollo"
             property "sonar.projectName", "Apollo RSPS"
             property "sonar.kotlin.file.suffixes", ".kt,.kts"
