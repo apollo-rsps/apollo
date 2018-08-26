@@ -1,10 +1,10 @@
-plugin {
-    name = "herblore_skill"
-    authors = [
-        "Chivvon",
-        "Chris Fletcher",
-        "Major"
-    ]
+apply plugin: 'kotlin'
 
-    dependencies = ["api"]
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+    implementation project(':game:plugin:api')
+    testImplementation project(':game:plugin-testing')
 }

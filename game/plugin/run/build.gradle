@@ -1,3 +1,10 @@
-plugin {
-    name = "run"
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+
+    testImplementation project(':game:plugin-testing')
 }

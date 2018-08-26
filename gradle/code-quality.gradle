@@ -1,0 +1,24 @@
+def detektAggregateReport = "$rootDir/reports/detekt-report.xml"
+
+detekt {
+    version = detektVersion
+
+    defaultProfile {
+        output = file("$buildDir/reports")
+        outputName = "detekt-report"
+        config = file("$rootDir/gradle/config/detekt.yml")
+        parallel = true
+    }
+}
+
+dependencies {
+    detekt group: 'io.gitlab.arturbosch.detekt', name: 'detekt-formatting', version: detektVersion
+}
+
+sonarqube {
+    properties {
+        property "sonar.kotlin.detekt.reportPaths", detektAggregateReport
+    }
+}
+
+tasks["sonarqube"].dependsOn(detektCheck)

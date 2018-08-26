@@ -1,10 +1,13 @@
-plugin {
-    name = "falador"
-    authors = [
-        "Jesse W",
-        "Arham 4"
-    ]
-    dependencies = [
-        "entity:spawn", "shops"
-    ]
+apply plugin: 'kotlin'
+
+
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+    implementation project(':game:plugin:entity:spawn')
+    implementation project(':game:plugin:shops')
+    testImplementation project(':game:plugin-testing')
 }

@@ -16,4 +16,5 @@ ext {
     junitJupiterVersion = '5.1.0'
     mockkVersion = '1.7.15'
     assertkVersion = '0.9'
+    detektVersion = '1.0.0.RC8'
 }
