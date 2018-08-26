@@ -4,7 +4,7 @@ jdk:
 
 addons:
   sonarcloud:
-    organization: "github-apollo-rsps"
+    organization: "apollo-rsps"
 
 after_success:
   - ./gradlew jacocoTestReport
