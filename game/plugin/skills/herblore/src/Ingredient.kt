@@ -19,7 +19,7 @@ enum class CrushableIngredient(val uncrushed: Int, override val id: Int) : Ingre
     CHOCOLATE_BAR(uncrushed = 1973, id = 1975),
     BIRDS_NEST(uncrushed = 5075, id = 6693);
 
-    val uncrushedName: String = Definitions.item(uncrushed)!!.name
+    val uncrushedName by lazy { Definitions.item(uncrushed)!!.name }
 
     companion object {
         private const val PESTLE_AND_MORTAR = 233

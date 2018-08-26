@@ -7,7 +7,12 @@ import org.apollo.game.plugin.api.Definitions
 
 const val VIAL_OF_WATER = 227
 
-enum class UnfinishedPotion(val id: Int, herb: Herb, val level: Int) {
+interface Potion {
+    val id: Int
+    val level: Int
+}
+
+enum class UnfinishedPotion(override val id: Int, herb: Herb, override val level: Int) : Potion {
     GUAM(id = 91, herb = Herb.GUAM_LEAF, level = 1),
     MARRENTILL(id = 93, herb = Herb.MARRENTILL, level = 5),
     TARROMIN(id = 95, herb = Herb.TARROMIN, level = 12),
@@ -36,12 +41,12 @@ enum class UnfinishedPotion(val id: Int, herb: Herb, val level: Int) {
 }
 
 enum class FinishedPotion(
-    val id: Int,
+    override val id: Int,
     val unfinished: UnfinishedPotion,
     ingredient: Ingredient,
-    val level: Int,
+    override val level: Int,
     val experience: Double
-) {
+) : Potion {
     ATTACK(id = 121, unfinished = GUAM, ingredient = EYE_NEWT, level = 1, experience = 25.0),
     ANTIPOISON(id = 175, unfinished = MARRENTILL, ingredient = UNICORN_HORN, level = 5, experience = 37.5),
     STRENGTH(id = 115, unfinished = TARROMIN, ingredient = LIMPWURT_ROOT, level = 12, experience = 50.0),
