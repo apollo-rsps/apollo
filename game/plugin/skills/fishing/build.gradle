@@ -1,12 +1,13 @@
-plugin {
-    name = "fishing_skill"
-    authors = [
-        "Linux",
-        "Major",
-        "tlf30"
-    ]
-    dependencies = [
-        "api",
-        "entity:spawn",
-    ]
+apply plugin: 'kotlin'
+
+
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+    implementation project(':game:plugin:api')
+    implementation project(':game:plugin:entity:spawn')
+    testImplementation project(':game:plugin-testing')
 }

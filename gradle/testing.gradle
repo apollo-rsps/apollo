@@ -1,0 +1,51 @@
+apply plugin: 'jacoco'
+
+def jacocoCoverageAggregate = "$buildDir/jacoco/jacocoTestAll.exec"
+
+def testedProjects() {
+    subprojects.findAll { subproject -> subproject.plugins.hasPlugin('java') || subproject.plugins.hasPlugin('kotlin') }
+}
+
+configure(testedProjects()) {
+
+    jacoco {
+        toolVersion = '0.8.1'
+    }
+
+    jacocoTestReport {
+        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+        classDirectories = files(sourceSets.main.output)
+    }
+
+    test {
+        reports {
+            junitXml.enabled = true
+            html.enabled = false
+        }
+
+        jacoco {
+            append = false
+            destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+            classDumpDir = file("$buildDir/jacoco/classpathdumps")
+        }
+
+    }
+}
+
+task jacocoMerge(type: JacocoMerge) {
+    destinationFile = file(jacocoCoverageAggregate)
+    executionData = project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
+}
+
+sonarqube {
+    properties {
+        property "sonar.organization", "apollo-rsps"
+        property "sonar.projectKey", "apollo:org.apollo"
+        property "sonar.projectName", "Apollo RSPS"
+        property "sonar.kotlin.file.suffixes", ".kt,.kts"
+        property "sonar.jacoco.reportPaths", jacocoCoverageAggregate
+    }
+}
+
+tasks["sonarqube"].dependsOn(jacocoMerge)
+

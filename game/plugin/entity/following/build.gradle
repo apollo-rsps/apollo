@@ -1,10 +1,13 @@
-plugin {
-    name = "following"
-    authors = [
-        "Gary Tierney",
-    ]
-    dependencies = [
-        "entity:walk-to",
-        "entity:player-action",
-    ]
+apply plugin: 'kotlin'
+
+
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+    implementation project(':game:plugin:entity:walk-to')
+    implementation project(':game:plugin:entity:player-action')
+    testImplementation project(':game:plugin-testing')
 }

@@ -1,9 +1,10 @@
-plugin {
-    name = "spawning"
-    authors = [
-        "Gary Tierney",
-    ]
-    dependencies = [
-        "api",
-    ]
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+    implementation project(':game:plugin:api')
+    testImplementation project(':game:plugin-testing')
 }

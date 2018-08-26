@@ -1,9 +1,10 @@
-plugin {
-    name = "tutorial_island_npc_spawns"
-    authors = [
-        "Jesse W",
-    ]
-    dependencies = [
-        "entity:spawn",
-    ]
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+    implementation project(':game:plugin:entity:spawn')
+    testImplementation project(':game:plugin-testing')
 }

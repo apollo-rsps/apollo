@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.intellij' version '0.3.6' apply(false)
     id 'org.jmailen.kotlinter' version '1.16.0' apply(false)
     id 'org.sonarqube' version '2.6.2'
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC8"
 }
 
 allprojects {
@@ -17,5 +18,6 @@ allprojects {
 }
 
 apply from: 'gradle/properties.gradle'
-apply from: 'gradle/quality-gate.gradle'
+apply from: 'gradle/code-quality.gradle'
+apply from: 'gradle/testing.gradle'
 apply from: 'gradle/wrapper.gradle'

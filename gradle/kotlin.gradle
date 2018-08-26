@@ -1,10 +1,1 @@
-apply plugin: 'org.jmailen.kotlinter'
-
-kotlinter {
-    ignoreFailures = true
-    indentSize = 4
-    continuationIndentSize = 4
-    reporters = ['checkstyle', 'plain']
-}
-
 kotlin { experimental { coroutines 'enable' } }
