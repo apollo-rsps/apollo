@@ -3,13 +3,12 @@ package org.apollo.plugin.entity.following
 import org.apollo.game.action.Action
 import org.apollo.game.model.Direction
 import org.apollo.game.model.Position
-import org.apollo.game.model.entity.Mob
 import org.apollo.game.model.entity.Player
 import org.apollo.net.message.Message
-import org.apollo.plugin.entity.walkto.walkBehind
-import org.apollo.plugin.entity.walkto.walkTo
+import org.apollo.plugin.entity.pathing.walkBehind
+import org.apollo.plugin.entity.pathing.walkTo
 
-class FollowAction(player: Player, val target: Player) : Action<Player>(0, true, player) {
+class FollowAction(player: Player, private val target: Player) : Action<Player>(0, true, player) {
     var lastPosition: Position? = null
 
     companion object {
@@ -42,11 +41,10 @@ class FollowAction(player: Player, val target: Player) : Action<Player>(0, true,
             val directionOffset = (Math.random() * directions.size).toInt()
 
             mob.walkTo(target.position.step(1, directions[directionOffset]))
-            return
+        } else {
+            mob.walkBehind(target)
+            lastPosition = target.position
         }
-
-        mob.walkBehind(target)
-        lastPosition = target.position
     }
 
 }
