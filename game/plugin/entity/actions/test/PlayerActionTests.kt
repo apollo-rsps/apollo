@@ -1,4 +1,4 @@
-package org.apollo.game.plugin.entity.player_action
+package org.apollo.game.plugin.entity.actions
 
 import io.mockk.verify
 import org.apollo.game.message.impl.SetPlayerActionMessage

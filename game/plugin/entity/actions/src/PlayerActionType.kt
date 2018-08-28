@@ -1,4 +1,4 @@
-package org.apollo.game.plugin.entity.player_action
+package org.apollo.game.plugin.entity.actions
 
 enum class PlayerActionType(val displayName: String, val slot: Int, val primary: Boolean = true) {
     ATTACK("Attack", 2),

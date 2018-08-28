@@ -1,4 +1,4 @@
-package org.apollo.game.plugin.entity.player_action
+package org.apollo.game.plugin.entity.actions
 
 import org.apollo.game.message.impl.PlayerActionMessage
 import org.apollo.game.model.event.impl.LoginEvent
