@@ -195,23 +195,16 @@ public final class CollisionUpdate {
 			}
 
 			int x = position.getX(), y = position.getY(), height = position.getHeight();
-			int width = definition.getWidth(), length = definition.getLength();
 			boolean impenetrable = definition.isImpenetrable();
 			int orientation = object.getOrientation();
-
-			// north / south for walls, north east / south west for corners
-			if (orientation == 1 || orientation == 3) {
-				width = definition.getLength();
-				length = definition.getWidth();
-			}
 
 			if (type == FLOOR_DECORATION.getValue()) {
 				if (definition.isInteractive() && definition.isSolid()) {
 					tile(new Position(x, y, height), impenetrable, Direction.NESW);
 				}
 			} else if (type >= DIAGONAL_WALL.getValue() && type < FLOOR_DECORATION.getValue()) {
-				for (int dx = 0; dx < width; dx++) {
-					for (int dy = 0; dy < length; dy++) {
+				for (int dx = 0; dx < object.getWidth(); dx++) {
+					for (int dy = 0; dy < object.getLength(); dy++) {
 						tile(new Position(x + dx, y + dy, height), impenetrable, Direction.NESW);
 					}
 				}
