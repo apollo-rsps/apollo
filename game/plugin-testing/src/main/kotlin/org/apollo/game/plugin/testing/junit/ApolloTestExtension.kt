@@ -79,17 +79,17 @@ class ApolloTestingExtension :
 
                 createTestDefinitions<ItemDefinition, ItemDefinitions>(
                     callables, companionInstance, ItemDefinition::getId, ItemDefinition::lookup,
-                    ItemDefinition::getDefinitions
+                    ItemDefinition::getDefinitions, ItemDefinition::count
                 )
 
                 createTestDefinitions<NpcDefinition, NpcDefinitions>(
                     callables, companionInstance, NpcDefinition::getId, NpcDefinition::lookup,
-                    NpcDefinition::getDefinitions
+                    NpcDefinition::getDefinitions, NpcDefinition::count
                 )
 
                 createTestDefinitions<ObjectDefinition, ObjectDefinitions>(
                     callables, companionInstance, ObjectDefinition::getId, ObjectDefinition::lookup,
-                    ObjectDefinition::getDefinitions
+                    ObjectDefinition::getDefinitions, ObjectDefinition::count
                 )
             }
 
@@ -151,7 +151,8 @@ class ApolloTestingExtension :
         companionObjectInstance: Any?,
         crossinline idMapper: (D) -> Int,
         crossinline lookup: (Int) -> D?,
-        crossinline getAll: () -> Array<D>
+        crossinline getAll: () -> Array<D>,
+        crossinline count: () -> Int
     ) {
         val testDefinitions = findTestDefinitions<D, A>(testClassMethods, companionObjectInstance)
             .associateBy(idMapper)
@@ -162,6 +163,7 @@ class ApolloTestingExtension :
 
             every { lookup(capture(idSlot)) } answers { testDefinitions[idSlot.captured] }
             every { getAll() } answers { testDefinitions.values.sortedBy(idMapper).toTypedArray() }
+            every { count() } answers { _ -> testDefinitions.maxBy { (id, _) -> id }?.key?.let { it + 1 } ?: 0 }
         }
     }
 
