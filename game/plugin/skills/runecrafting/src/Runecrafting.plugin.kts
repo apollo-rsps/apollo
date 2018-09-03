@@ -1,8 +1,21 @@
+package org.apollo.game.plugin.skill.runecrafting
+
 import org.apollo.game.message.impl.*
 import org.apollo.game.model.entity.EquipmentConstants
 import org.apollo.game.model.event.impl.LoginEvent
 
 private val changeAltarObjectConfigId = 491
+
+internal val RUNES = mutableListOf<Rune>()
+
+fun List<Rune>.findById(id: Int) : Rune? {
+    return find { rune -> rune.id == id }
+}
+
+
+start {
+    RUNES.addAll(DefaultRune.values())
+}
 
 on_player_event { LoginEvent::class }
     .then {
@@ -20,7 +33,7 @@ on { ObjectActionMessage::class }
         val hat = it.equipment.get(EquipmentConstants.HAT) ?: return@then
 
         if (hat.id == tiara.id && tiara.altar.entranceId == id) {
-            it.startAction(TeleportAction(it, position, 2, tiara.altar.entrance))
+            it.startAction(TeleportToAltarAction(it, position, 2, tiara.altar.entrance))
             terminate()
         }
     }
@@ -57,7 +70,7 @@ on { ItemOnObjectMessage::class }
         val talisman = Talisman.findById(id) ?: return@then
         val altar = Altar.findByEntranceId(objectId) ?: return@then
 
-        it.startAction(TeleportAction(it, position, 2, altar.entrance))
+        it.startAction(TeleportToAltarAction(it, position, 2, altar.entrance))
         terminate()
     }
 
@@ -66,14 +79,14 @@ on { ObjectActionMessage::class }
     .then {
         val altar = Altar.findByPortalId(id) ?: return@then
 
-        it.startAction(TeleportAction(it, altar.entrance, 1, altar.exit))
+        it.startAction(TeleportToAltarAction(it, altar.entrance, 1, altar.exit))
         terminate()
     }
 
 on { ObjectActionMessage::class }
     .where { option == 1 }
     .then {
-        val rune = Rune.findByAltarId(id) ?: return@then
+        val rune = RUNES.findById(id) ?: return@then
         val craftingAltar = Altar.findByCraftingId(id) ?: return@then
 
         it.startAction(RunecraftingAction(it, rune, craftingAltar))

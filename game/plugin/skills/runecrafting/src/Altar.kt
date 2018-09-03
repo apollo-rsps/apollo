@@ -1,3 +1,5 @@
+package org.apollo.game.plugin.skill.runecrafting
+
 import org.apollo.game.model.Position
 
 enum class Altar(val entranceId: Int, val craftingId: Int, val portalId: Int, val entrance: Position, val exit: Position, val center: Position) {

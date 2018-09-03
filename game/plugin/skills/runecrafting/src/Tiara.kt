@@ -1,5 +1,7 @@
-import Altar.*
-import Talisman.*
+package org.apollo.game.plugin.skill.runecrafting
+
+import org.apollo.game.plugin.skill.runecrafting.Altar.*
+import org.apollo.game.plugin.skill.runecrafting.Talisman.*
 
 enum class Tiara(val id: Int, val altar: Altar, val talisman: Talisman, val configId: Int, val xp: Double) {
     AIR_TIARA(5527, AIR_ALTAR, AIR_TALISMAN, 0, 25.0),

@@ -1,3 +1,5 @@
+package org.apollo.game.plugin.skill.runecrafting
+
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Player
 
@@ -22,13 +24,13 @@ enum class Talisman(val id: Int, val altar: Position) {
 
     fun sendProximityMessageTo(player: Player) {
         if (altar.isWithinDistance(player.position, 10)) {
-            player.sendMessage("Your talisman glows brightly.");
+            player.sendMessage("Your talisman glows brightly.")
             return
         }
 
-        var direction = if (player.position.y > altar.y) "North" else "South";
-        direction += if (player.position.x > altar.x) "-East" else "-West";
+        var direction = if (player.position.y > altar.y) "North" else "South"
+        direction += if (player.position.x > altar.x) "-East" else "-West"
 
-        player.sendMessage("The talisman pulls toward the $direction");
+        player.sendMessage("The talisman pulls toward the $direction")
     }
 }
