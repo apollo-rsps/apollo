@@ -24,7 +24,7 @@ class SkillCommandTests {
         world.commandDispatcher.dispatch(player, Command("max", emptyArray()))
 
         for (stat in 0 until Skill.RUNECRAFT) {
-            assertEquals(99, player.skillSet.getCurrentLevel(99))
+            assertEquals(99, player.skillSet.getCurrentLevel(stat))
         }
     }
 }
