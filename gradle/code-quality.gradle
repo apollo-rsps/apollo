@@ -15,6 +15,7 @@ detekt {
 
 dependencies {
     detekt group: 'io.gitlab.arturbosch.detekt', name: 'detekt-formatting', version: detektVersion
+    detekt project(':game:plugin-detekt-rules')
 }
 
 sonarqube {

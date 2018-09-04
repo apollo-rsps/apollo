@@ -473,3 +473,7 @@ style:
   WildcardImport:
     active: false
     excludeImports: 'java.util.*,kotlinx.android.synthetic.*'
+
+apollo-plugin:
+  DeclarationInScript:
+    active: true

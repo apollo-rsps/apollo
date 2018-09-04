@@ -1,0 +1,15 @@
+apply plugin: 'java-library'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply from: "$rootDir/gradle/kotlin.gradle"
+
+dependencies {
+    api group: 'io.gitlab.arturbosch.detekt', name: 'detekt-api', version: detektVersion
+
+    test.useJUnitPlatform()
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${junitJupiterVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+    testImplementation("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+
+    testImplementation group: 'io.gitlab.arturbosch.detekt', name: 'detekt-test', version: detektVersion
+}
