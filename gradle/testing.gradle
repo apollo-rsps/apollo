@@ -5,7 +5,6 @@ def jacocoCoverageAggregate = "$buildDir/jacoco/jacocoTestAll.exec"
 def testedProjects() {
     subprojects.findAll { subproject -> subproject.plugins.hasPlugin('java') || subproject.plugins.hasPlugin('kotlin') }
 }
-
 gradle.projectsEvaluated {
     configure(testedProjects()) {
         apply plugin: "jacoco"
@@ -31,6 +30,43 @@ gradle.projectsEvaluated {
     task jacocoMerge(type: JacocoMerge) {
         destinationFile = file(jacocoCoverageAggregate)
         executionData = project.fileTree(dir: '.', include: '**/build/jacoco/jacocoTest.exec')
+
+        dependsOn(getTasksByName('test', true))
+    }
+
+
+    task jacocoReport(type: JacocoReport) {
+        sourceDirectories = files()
+        classDirectories = files()
+        executionData = files()
+
+        reports {
+            html.enabled = true
+            xml.enabled = true
+            csv.enabled = false
+        }
+
+        // Work-around to allow us to build list of executionData files in doFirst
+        onlyIf = {
+            true
+        }
+
+        /*
+     * Builds list of source dirs, class dirs, and executionData files
+     * when task is run, not at script evaluation time
+     */
+        doFirst {
+            subprojects.findAll { subproject ->
+                subproject.pluginManager.hasPlugin('java') || subproject.pluginManager.hasPlugin('kotlin')
+            }.each { subproject ->
+                additionalSourceDirs files((Set<File>) subproject.sourceSets.main.allSource.srcDirs)
+                additionalClassDirs((FileCollection) subproject.sourceSets.main.output)
+            }
+
+            executionData = files(jacocoCoverageAggregate)
+        }
+
+        dependsOn(jacocoMerge)
     }
 
     sonarqube {
@@ -42,7 +78,4 @@ gradle.projectsEvaluated {
             property "sonar.jacoco.reportPaths", jacocoCoverageAggregate
         }
     }
-
-    tasks["sonarqube"].dependsOn(jacocoMerge)
 }
-

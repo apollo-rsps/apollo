@@ -1,32 +1,24 @@
 def detektAggregateReport = "$rootDir/reports/detekt-report.xml"
 
-gradle.projectsEvaluated {
-    detekt {
-        version = detektVersion
+detekt {
+    version = detektVersion
 
-        defaultProfile {
-            output = file("$buildDir/reports")
-            outputName = "detekt-report"
-            config = file("$rootDir/gradle/config/detekt.yml")
-            parallel = true
-        }
-
-        subprojects.findAll { it.pluginManager.hasPlugin('kotlin') }.forEach { proj ->
-            profile(proj.name) {
-                input = proj.sourceSets.main.kotlin
-            }
-        }
+    profile("main") {
+        input = rootProject.projectDir.absolutePath
+        filters = ".*/resources/.*, .*/build/.*"
+        output = file("$buildDir/reports")
+        outputName = "detekt-report"
+        config = file("$rootDir/gradle/config/detekt.yml")
+        parallel = true
     }
+}
 
-    dependencies {
-        detekt group: 'io.gitlab.arturbosch.detekt', name: 'detekt-formatting', version: detektVersion
+dependencies {
+    detekt group: 'io.gitlab.arturbosch.detekt', name: 'detekt-formatting', version: detektVersion
+}
+
+sonarqube {
+    properties {
+        property "sonar.kotlin.detekt.reportPaths", detektAggregateReport
     }
-
-    sonarqube {
-        properties {
-            property "sonar.kotlin.detekt.reportPaths", detektAggregateReport
-        }
-    }
-
-    tasks["sonarqube"].dependsOn(detektCheck)
 }
