@@ -1,26 +1,18 @@
-group 'apollo'
-version '0.0.1'
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
-    }
+plugins {
+    id 'org.ajoberstar.github-pages'
+    id 'org.asciidoctor.gradle.asciidoctor'
+    id 'org.asciidoctor.convert'
 }
-
-apply plugin: 'org.asciidoctor.convert'
-apply plugin: 'java'
-
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
-asciidoctor {
-    sourceDir = file('src/asciidoc')
-    outputDir = file('build/docs')
+githubPages {
+    repoUri = 'git@github.com:apollo-rsps/apollo-rsps.github.io'
+    targetBranch = 'master'
+
+    pages {
+        from "$buildDir/asciidoc/html5"
+    }
 }
