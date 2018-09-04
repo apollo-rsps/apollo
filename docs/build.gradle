@@ -8,6 +8,11 @@ repositories {
     mavenCentral()
 }
 
+asciidoctor {
+    attributes 'source-highlighter': 'prettify',
+            'toc': 'left'
+}
+
 githubPages {
     repoUri = 'git@github.com:apollo-rsps/apollo-rsps.github.io'
     targetBranch = 'master'
