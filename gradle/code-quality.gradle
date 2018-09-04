@@ -1,4 +1,4 @@
-def detektAggregateReport = "$rootDir/reports/detekt-report.xml"
+def detektAggregateReport = "$buildDir/reports/detekt-report.xml"
 
 detekt {
     version = detektVersion
