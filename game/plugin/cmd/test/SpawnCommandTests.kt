@@ -32,11 +32,12 @@ class SpawnCommandTests {
 
     @Test
     fun `Spawns NPC at players position by default`() {
+        player.position = Position(3, 3, 0)
         world.commandDispatcher.dispatch(player, Command("spawn", arrayOf("1")))
 
         verify {
             world.register(match<Npc> {
-                it.id == 1 && it.position == player.position
+                it.id == 1 && it.position == Position(3, 3,0)
             })
         }
     }
