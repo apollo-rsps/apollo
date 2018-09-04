@@ -16,3 +16,5 @@ githubPages {
         from "$buildDir/asciidoc/html5"
     }
 }
+
+prepareGhPages.dependsOn(asciidoctor)
