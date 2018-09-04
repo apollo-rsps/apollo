@@ -30,6 +30,7 @@ on_command("tele", PrivilegeLevel.ADMINISTRATOR)
 
             if (results.isEmpty()) {
                 player.sendMessage("No destinations matching '$query'.")
+                player.sendMessage(invalidSyntax)
                 return@then
             } else if (results.size > 1) {
                 player.sendMessage("Ambiguous query '$query' (could be $results). Please disambiguate.")
@@ -84,15 +85,20 @@ on_command("teleto", PrivilegeLevel.ADMINISTRATOR)
 
         if (arguments.size == 1) {
             val playerName = arguments[0]
-            val foundPlayer = player.world.getPlayer(playerName)
+            try {
+                val foundPlayer = player.world.getPlayer(playerName)
 
-            if (foundPlayer == null) {
-                player.sendMessage("Player $playerName is currently offline or does not exist.")
-                return@then
+                if (foundPlayer == null) {
+                    player.sendMessage("Player $playerName is currently offline or does not exist.")
+                    return@then
+                }
+
+                player.teleport(foundPlayer.position)
+                player.sendMessage("You have teleported to player $playerName.")
+            } catch (_: Exception) {
+                // Invalid player name syntax
+                player.sendMessage(invalidSyntax)
             }
-
-            player.teleport(foundPlayer.position)
-            player.sendMessage("You have teleported to player $playerName.")
         } else {
             player.sendMessage(invalidSyntax)
         }

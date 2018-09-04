@@ -4,6 +4,7 @@ import org.apollo.game.model.Animation
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.setting.PrivilegeLevel
+import org.apollo.game.plugin.testing.assertions.contains
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.junit.jupiter.api.Test
@@ -25,4 +26,15 @@ class AnimateCommandTests {
 
         verify { player.playAnimation(Animation(1)) }
     }
+
+    @Test
+    fun `Help message sent on invalid syntax`() {
+        player.privilegeLevel = PrivilegeLevel.ADMINISTRATOR
+        world.commandDispatcher.dispatch(player, Command("animate", arrayOf("<garbage>")))
+
+        verify {
+            player.sendMessage(contains("Invalid syntax"))
+        }
+    }
+
 }

@@ -1,12 +1,12 @@
 import io.mockk.verify
-import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.command.Command
+import org.apollo.game.model.Position
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.plugin.testing.assertions.contains
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
-import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
+import org.apollo.game.plugin.testing.junit.api.annotations.Name
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -15,7 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
 @ExtendWith(ApolloTestingExtension::class)
-class ItemCommandTests {
+class TeleportToPlayerCommandTests {
 
     @TestMock
     lateinit var world: World
@@ -23,35 +23,31 @@ class ItemCommandTests {
     @TestMock
     lateinit var player: Player
 
-    @Test
-    fun `Defaults to an amount of 1`() {
-        player.privilegeLevel = PrivilegeLevel.ADMINISTRATOR
-        world.commandDispatcher.dispatch(player, Command("item", arrayOf("1")))
-
-        assertEquals(1, player.inventory.getAmount(1))
-    }
+    @TestMock
+    @Name("player_two")
+    lateinit var secondPlayer: Player
 
     @Test
-    fun `Adds item of specified amount to inventory`() {
+    fun `Teleport to given player`() {
         player.privilegeLevel = PrivilegeLevel.ADMINISTRATOR
-        world.commandDispatcher.dispatch(player, Command("item", arrayOf("1", "10")))
+        player.position = Position(300, 300)
+        secondPlayer.position = Position(1, 2)
+        world.commandDispatcher.dispatch(player, Command("teleto", arrayOf("player_two")))
 
-        assertEquals(10, player.inventory.getAmount(1))
+        assertEquals(secondPlayer.position, player.position)
     }
 
-    @ParameterizedTest(name = "::item {0}")
-    @ValueSource(strings = ["<garbage>", "1 <garbage>", "<garbage> 1"])
+    @ParameterizedTest(name = "::teleto {0}")
+    @ValueSource(strings = [
+        "<garbage_invalid_playername>"
+    ])
     fun `Help message sent on invalid syntax`(args: String) {
         player.privilegeLevel = PrivilegeLevel.ADMINISTRATOR
-        world.commandDispatcher.dispatch(player, Command("item", args.split(" ").toTypedArray()))
+        world.commandDispatcher.dispatch(player, Command("teleto", args.split(" ").toTypedArray()))
 
         verify {
             player.sendMessage(contains("Invalid syntax"))
         }
     }
 
-    companion object {
-        @ItemDefinitions
-        val items = listOf(ItemDefinition(1))
-    }
 }

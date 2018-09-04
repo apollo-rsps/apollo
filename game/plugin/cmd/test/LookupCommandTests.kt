@@ -6,6 +6,7 @@ import org.apollo.game.command.Command
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.setting.PrivilegeLevel
+import org.apollo.game.plugin.testing.assertions.contains
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.annotations.ItemDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.NpcDefinitions
@@ -13,6 +14,8 @@ import org.apollo.game.plugin.testing.junit.api.annotations.ObjectDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @ExtendWith(ApolloTestingExtension::class)
 class LookupCommandTests {
@@ -53,6 +56,17 @@ class LookupCommandTests {
         verify {
             player.sendMessage("Object 1 is called <object_name> (width=1, length=1).")
             player.sendMessage("Its description is `<description>`.")
+        }
+    }
+
+    @ParameterizedTest(name = "::{0} <garbage>")
+    @ValueSource(strings = ["npcinfo", "iteminfo", "objectinfo"])
+    fun `Help message sent on invalid syntax`(command: String) {
+        player.privilegeLevel = PrivilegeLevel.ADMINISTRATOR
+        world.commandDispatcher.dispatch(player, Command(command, arrayOf("<garbage>")))
+
+        verify {
+            player.sendMessage(contains("Invalid syntax"))
         }
     }
 
