@@ -39,7 +39,6 @@ class TeleportCommandTests {
         assertEquals(Position(1, 2, 1), player.position)
     }
 
-
     @Test
     fun `Shows current position information`() {
         player.privilegeLevel = PrivilegeLevel.ADMINISTRATOR
@@ -66,5 +65,4 @@ class TeleportCommandTests {
             player.sendMessage(contains("Invalid syntax"))
         }
     }
-
 }

@@ -35,16 +35,27 @@ on_command("spawn", PrivilegeLevel.ADMINISTRATOR)
         if (arguments.size == 1) {
             position = player.position
         } else {
-            var height = player.position.height
-            if (arguments.size == 4) {
+            val x = Ints.tryParse(arguments[1])
+            val y = Ints.tryParse(arguments[2])
+
+            if (x == null || y == null) {
+                player.sendMessage(invalidSyntax)
+                return@then
+            }
+
+            val height = if (arguments.size == 4) {
                 val h = Ints.tryParse(arguments[3])
                 if (h == null) {
                     player.sendMessage(invalidSyntax)
                     return@then
                 }
-                height = h
+
+                h
+            } else {
+                player.position.height
             }
-            position = Position(arguments[1].toInt(), arguments[2].toInt(), height)
+
+            position = Position(x, y, height)
         }
 
         player.world.register(Npc(player.world, id, position))
