@@ -34,5 +34,4 @@ class ConsumeAction(val consumable: Consumable, player: Player, val slot: Int) :
         wait(consumable.delay)
         stop()
     }
-
 }

@@ -1,5 +1,10 @@
 package org.apollo.game.plugin.testing.junit.params
 
+import java.util.stream.Stream
+import kotlin.reflect.KCallable
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.declaredMemberFunctions
+import kotlin.reflect.full.declaredMemberProperties
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.cache.def.ObjectDefinition
@@ -11,11 +16,6 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.support.AnnotationConsumer
-import java.util.stream.Stream
-import kotlin.reflect.KCallable
-import kotlin.reflect.full.companionObject
-import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.full.declaredMemberProperties
 
 /**
  * An [ArgumentsProvider] for a definition of type `D`.
@@ -64,7 +64,6 @@ object ItemDefinitionsProvider : DefinitionsProvider<ItemDefinition>(
     override fun accept(source: ItemDefinitionSource) {
         sourceNames = source.sourceNames.toHashSet()
     }
-
 }
 
 /**
@@ -80,7 +79,6 @@ object NpcDefinitionsProvider : DefinitionsProvider<NpcDefinition>(
     override fun accept(source: NpcDefinitionSource) {
         sourceNames = source.sourceNames.toHashSet()
     }
-
 }
 
 /**
@@ -96,5 +94,4 @@ object ObjectDefinitionsProvider : DefinitionsProvider<ObjectDefinition>(
     override fun accept(source: ObjectDefinitionSource) {
         sourceNames = source.sourceNames.toHashSet()
     }
-
 }

@@ -87,5 +87,4 @@ class MiningActionTests {
         @ItemDefinitions
         fun pickaxes() = listOf(ItemDefinition(Pickaxe.BRONZE.id))
     }
-
 }

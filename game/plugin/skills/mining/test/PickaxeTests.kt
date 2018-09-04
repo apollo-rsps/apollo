@@ -24,7 +24,6 @@ class PickaxeTests {
         assertEquals(null, Pickaxe.bestFor(player))
     }
 
-
     @ParameterizedTest
     @EnumSource(Pickaxe::class)
     fun `The highest level pickaxe is chosen when available`(pickaxe: Pickaxe) {
@@ -43,7 +42,6 @@ class PickaxeTests {
         assertEquals(Pickaxe.BRONZE, Pickaxe.bestFor(player))
     }
 
-
     @ParameterizedTest
     @EnumSource(value = Pickaxe::class)
     fun `Pickaxes can be chosen from equipment as well as inventory`(pickaxe: Pickaxe) {
@@ -52,7 +50,6 @@ class PickaxeTests {
 
         assertEquals(pickaxe, Pickaxe.bestFor(player))
     }
-
 
     @ParameterizedTest
     @EnumSource(value = Pickaxe::class)
@@ -73,5 +70,4 @@ class PickaxeTests {
             ItemDefinition(it.id).apply { isStackable = false }
         }
     }
-
 }

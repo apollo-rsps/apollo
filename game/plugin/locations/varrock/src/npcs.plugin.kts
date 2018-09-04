@@ -56,7 +56,6 @@ spawnNpc("woman", x = 3221, y = 3396)
 spawnNpc("woman", id = 5, x = 3279, y = 3497)
 spawnNpc("woman", id = 25, x = 3278, y = 3492)
 
-
 spawnNpc("thief", x = 3285, y = 3500)
 spawnNpc("thief", x = 3234, y = 3389)
 spawnNpc("thief", x = 3188, y = 3383)
@@ -129,7 +128,6 @@ spawnNpc("warrior_woman", x = 3205, y = 3493)
 
 spawnNpc("swan", x = 3261, y = 3354)
 spawnNpc("swan", x = 3260, y = 3356)
-
 
 spawnNpc("ram", id = 3673, x = 3238, y = 3346)
 spawnNpc("ram", id = 3673, x = 3248, y = 3352)

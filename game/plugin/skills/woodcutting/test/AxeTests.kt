@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
 @ExtendWith(ApolloTestingExtension::class)
-class AxeTests  {
+class AxeTests {
 
     @TestMock
     lateinit var player: Player
@@ -70,5 +70,4 @@ class AxeTests  {
             ItemDefinition(it.id).apply { isStackable = false }
         }
     }
-
 }

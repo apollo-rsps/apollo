@@ -19,4 +19,3 @@ abstract class AsyncDistancedAction<T : Mob> : DistancedAction<T>, AsyncActionTr
         }
     }
 }
-

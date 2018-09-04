@@ -4,6 +4,14 @@ import io.mockk.every
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.staticMockk
+import kotlin.reflect.KCallable
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.declaredMemberFunctions
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.jvm.jvmErasure
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.cache.def.ObjectDefinition
@@ -20,22 +28,6 @@ import org.apollo.game.plugin.testing.junit.api.annotations.NpcDefinitions
 import org.apollo.game.plugin.testing.junit.api.annotations.ObjectDefinitions
 import org.apollo.game.plugin.testing.junit.mocking.StubPrototype
 import org.junit.jupiter.api.extension.*
-import kotlin.reflect.KCallable
-import kotlin.reflect.KMutableProperty
-import kotlin.reflect.full.companionObject
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.jvm.jvmErasure
-
-internal val supportedTestDoubleTypes = setOf(
-    Player::class.createType(),
-    Npc::class.createType(),
-    GameObject::class.createType(),
-    World::class.createType(),
-    ActionCapture::class.createType()
-)
 
 class ApolloTestingExtension :
     AfterTestExecutionCallback,
@@ -168,6 +160,13 @@ class ApolloTestingExtension :
     }
 
     companion object {
+        internal val supportedTestDoubleTypes = setOf(
+            Player::class.createType(),
+            Npc::class.createType(),
+            GameObject::class.createType(),
+            World::class.createType(),
+            ActionCapture::class.createType()
+        )
 
         inline fun <reified D : Any, reified A : Annotation> findTestDefinitions(
             callables: Collection<KCallable<*>>,
@@ -185,7 +184,5 @@ class ApolloTestingExtension :
                     method.call(companionObjectInstance)
                 }
         }
-
     }
-
 }

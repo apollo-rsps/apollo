@@ -46,5 +46,4 @@ class FollowAction(player: Player, private val target: Player) : Action<Player>(
             lastPosition = target.position
         }
     }
-
 }

@@ -36,5 +36,4 @@ class AnimateCommandTests {
             player.sendMessage(contains("Invalid syntax"))
         }
     }
-
 }

@@ -106,9 +106,7 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
                     else -> Pair(tool, secondary, primary)
                 }
             }
-
         }
-
     }
 
     companion object {
@@ -119,5 +117,4 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
          */
         fun lookup(id: Int): FishingSpot? = FISHING_SPOTS[id]
     }
-
 }

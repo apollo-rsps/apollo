@@ -1,9 +1,6 @@
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.selects.select
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
-import org.apollo.game.action.DistancedAction
 import org.apollo.game.message.impl.ObjectActionMessage
 import org.apollo.game.model.Animation
 import org.apollo.game.model.Position
@@ -50,9 +47,7 @@ class DummyAction(val player: Player, position: Position) : AsyncDistancedAction
             player.startAction(DummyAction(player, position))
             message.terminate()
         }
-
     }
-
 
     override fun action(): ActionBlock = {
         mob.sendMessage("You hit the dummy.")
@@ -68,5 +63,4 @@ class DummyAction(val player: Player, position: Position) : AsyncDistancedAction
             skills.addExperience(Skill.ATTACK, EXP_PER_HIT)
         }
     }
-
 }

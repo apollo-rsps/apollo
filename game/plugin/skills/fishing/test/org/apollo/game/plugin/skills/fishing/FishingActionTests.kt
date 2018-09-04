@@ -89,5 +89,4 @@ class FishingActionTests {
         private val spots = FishingSpot.values()
             .map { NpcDefinition(it.npc).apply { name = "<fishing_spot>" } }
     }
-
 }

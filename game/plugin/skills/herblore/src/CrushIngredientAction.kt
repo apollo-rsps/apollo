@@ -1,8 +1,8 @@
+import java.util.Objects
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncAction
 import org.apollo.game.model.Animation
 import org.apollo.game.model.entity.Player
-import java.util.Objects
 
 class CrushIngredientAction(
     player: Player,

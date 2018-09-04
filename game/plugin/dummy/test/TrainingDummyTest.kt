@@ -5,12 +5,12 @@ import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.plugin.testing.assertions.after
+import org.apollo.game.plugin.testing.assertions.contains
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.ActionCapture
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.apollo.game.plugin.testing.junit.api.interactions.interactWith
 import org.apollo.game.plugin.testing.junit.api.interactions.spawnObject
-import org.apollo.game.plugin.testing.assertions.contains
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -60,5 +60,4 @@ class TrainingDummyTest {
             assertEquals(beforeExp, skills.getExperience(Skill.ATTACK))
         }
     }
-
 }

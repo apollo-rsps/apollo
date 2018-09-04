@@ -30,5 +30,4 @@ class PlayerActionTests {
         verify { player.send(eq(SetPlayerActionMessage("null", type.slot, type.primary))) }
         assertFalse(player.actionEnabled(type)) { "Action $type should not have been enabled, but was." }
     }
-
 }

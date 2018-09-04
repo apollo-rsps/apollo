@@ -119,5 +119,4 @@ class PlayerTests {
             assertEquals(10, hitpoints.maximum)
         }
     }
-
 }

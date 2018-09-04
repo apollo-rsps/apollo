@@ -14,7 +14,6 @@ interface Area {
      * Returns whether or not the specified [Position] is inside this [Area].
      */
     operator fun contains(position: Position): Boolean
-
 }
 
 internal class RectangularArea(private val x: IntRange, private val y: IntRange, private val height: Int) : Area {
@@ -23,5 +22,4 @@ internal class RectangularArea(private val x: IntRange, private val y: IntRange,
         val (x, y, z) = position
         return x in this.x && y in this.y && z == height
     }
-
 }

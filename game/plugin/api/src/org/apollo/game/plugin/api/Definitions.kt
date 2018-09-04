@@ -1,9 +1,9 @@
 package org.apollo.game.plugin.api
 
+import java.lang.IllegalArgumentException
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.cache.def.ObjectDefinition
-import java.lang.IllegalArgumentException
 
 /**
  * Provides plugins with access to item, npc, and object definitions
@@ -101,5 +101,4 @@ object Definitions {
         val normalizedName = name.replace('_', ' ')
         return definitions.firstOrNull { it.nameSupplier().equals(normalizedName, ignoreCase = true) }
     }
-
 }

@@ -1,13 +1,13 @@
 import org.apollo.plugin.consumables.drink
 
-//# Wine
+// # Wine
 drink(name = "jug_of_wine", id = 1993, restoration = 11)
 
-//# Hot Drinks
+// # Hot Drinks
 drink(name = "nettle_tea", id = 4239, restoration = 3)
 drink(name = "nettle_tea", id = 4240, restoration = 3)
 
-//# Gnome Cocktails
+// # Gnome Cocktails
 drink(name = "fruit_blast", id = 2034, restoration = 9)
 drink(name = "fruit_blast", id = 2084, restoration = 9)
 drink(name = "pineapple_punch", id = 2036, restoration = 9)

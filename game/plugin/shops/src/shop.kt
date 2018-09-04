@@ -40,7 +40,6 @@ object Interfaces {
      * The id of the text widget that displays a shop's name.
      */
     const val SHOP_NAME = 3901
-
 }
 
 /**
@@ -69,7 +68,6 @@ data class Currency(val id: Int, val plural: Boolean = false) {
             else -> name
         }
     }
-
 }
 
 /**
@@ -124,7 +122,6 @@ class Shop(
                 else -> throw IllegalArgumentException("Option must be 1-4")
             }
         }
-
     }
 
     /**
@@ -331,5 +328,4 @@ class Shop(
      * @param id The id of the [Item] to sell.
      */
     private fun sells(id: Int): Boolean = sells.containsKey(id)
-
 }

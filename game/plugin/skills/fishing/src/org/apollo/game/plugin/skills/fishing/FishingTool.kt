@@ -29,5 +29,4 @@ enum class FishingTool(
      * The name of this tool, formatted so it can be inserted into a message.
      */
     val formattedName by lazy { Definitions.item(id).name.toLowerCase() }
-
 }

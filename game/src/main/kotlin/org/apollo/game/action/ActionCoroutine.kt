@@ -1,6 +1,5 @@
 package org.apollo.game.action
 
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import java.util.concurrent.CancellationException
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
@@ -11,6 +10,7 @@ import kotlin.coroutines.experimental.RestrictsSuspension
 import kotlin.coroutines.experimental.intrinsics.COROUTINE_SUSPENDED
 import kotlin.coroutines.experimental.intrinsics.createCoroutineUnchecked
 import kotlin.coroutines.experimental.intrinsics.suspendCoroutineOrReturn
+import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 
 typealias ActionPredicate = () -> Boolean
 typealias ActionBlock = suspend ActionCoroutine.() -> Unit

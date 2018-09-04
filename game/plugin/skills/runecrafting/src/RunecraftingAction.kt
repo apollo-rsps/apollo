@@ -25,7 +25,7 @@ class RunecraftingAction(val player: Player, val rune: Rune, altar: Altar) : Asy
 
         wait(1)
 
-        val name = Definitions.item(rune.id).name;
+        val name = Definitions.item(rune.id).name
         val nameArticle = LanguageUtil.getIndefiniteArticle(name)
         val essenceAmount = player.inventory.removeAll(runeEssenceId)
         val runeAmount = essenceAmount * rune.getBonusMultiplier(player.runecraft.current)

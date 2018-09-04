@@ -1,10 +1,10 @@
 package org.apollo.game.plugin.skills.fishing
 
+import java.util.Objects
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.api.fishing
-import java.util.Objects
 
 class FishingAction(
     player: Player,
@@ -82,7 +82,5 @@ class FishingAction(
         internal fun hasTool(player: Player, tool: FishingTool): Boolean {
             return tool.id in player.equipment || tool.id in player.inventory
         }
-
     }
-
 }

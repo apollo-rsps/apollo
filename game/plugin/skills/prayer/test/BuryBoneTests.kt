@@ -70,5 +70,4 @@ class BuryBoneTests {
             return Bone.values().map { ItemDefinition(it.id) }
         }
     }
-
 }

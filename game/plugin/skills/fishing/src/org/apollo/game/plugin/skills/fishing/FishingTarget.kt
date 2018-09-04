@@ -35,5 +35,4 @@ data class FishingTarget(val position: Position, val option: FishingSpot.Option)
 
         return false
     }
-
 }

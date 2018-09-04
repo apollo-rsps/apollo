@@ -28,5 +28,4 @@ class BuryBoneAction(
         public val BURY_BONE_ANIMATION = Animation(827)
         internal const val BURY_OPTION = 1
     }
-
 }

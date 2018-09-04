@@ -1,11 +1,8 @@
 package org.apollo.game.plugin.entity.actions
 
+import java.util.*
 import org.apollo.game.message.impl.SetPlayerActionMessage
 import org.apollo.game.model.entity.Player
-import org.apollo.game.model.event.PlayerEvent
-import java.util.*
-
-class PlayerActionEvent(player: Player, val target: Player, val action: PlayerActionType) : PlayerEvent(player)
 
 fun Player.enableAction(action: PlayerActionType) {
     send(SetPlayerActionMessage(action.displayName, action.slot, action.primary))

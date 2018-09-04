@@ -88,7 +88,5 @@ class DefinitionsTests {
         @ObjectDefinitions
         val objs = listOf("obj zero", "obj one", "obj two", "obj duplicate name", "obj duplicate name")
             .mapIndexed { id, name -> ObjectDefinition(id).also { it.name = name } }
-
     }
-
 }

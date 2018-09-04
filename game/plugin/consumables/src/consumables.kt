@@ -18,7 +18,6 @@ abstract class Consumable(val name: String, val id: Int, val sound: Int, val del
             player.inventory.add(replacement)
         }
     }
-
 }
 
 private val consumables = mutableMapOf<Int, Consumable>()
@@ -41,12 +40,12 @@ class FoodOrDrink : Consumable {
     val type: FoodOrDrinkType
 
     constructor(
-            name: String,
-            id: Int,
-            delay: Int,
-            type: FoodOrDrinkType,
-            restoration: Int,
-            replacement: Int? = null
+        name: String,
+        id: Int,
+        delay: Int,
+        type: FoodOrDrinkType,
+        restoration: Int,
+        replacement: Int? = null
     ) : super(name, id, EAT_FOOD_SOUND, delay, replacement) {
         this.type = type
         this.restoration = restoration
@@ -64,7 +63,6 @@ class FoodOrDrink : Consumable {
 
         player.skillSet.setCurrentLevel(Skill.HITPOINTS, newHitpointsLevel)
     }
-
 }
 
 /**

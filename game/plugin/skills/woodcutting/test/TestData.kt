@@ -1,8 +1,8 @@
+import java.util.stream.Stream
 import org.apollo.game.plugin.skills.woodcutting.Tree
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
-import java.util.stream.Stream
 
 data class WoodcuttingTestData(val treeId: Int, val stumpId: Int, val tree: Tree)
 

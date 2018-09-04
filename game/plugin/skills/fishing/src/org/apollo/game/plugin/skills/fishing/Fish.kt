@@ -27,5 +27,4 @@ enum class Fish(val id: Int, val level: Int, val experience: Double, catchSuffix
     val catchMessage by lazy { "You catch ${catchSuffix ?: "a $catchName."}" }
 
     private val catchName by lazy { Definitions.item(id).name.toLowerCase().removePrefix("raw ") }
-
 }

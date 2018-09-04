@@ -49,5 +49,4 @@ class OpenBankTest {
 
         verifyAfter(action.complete()) { player.openBank() }
     }
-
 }

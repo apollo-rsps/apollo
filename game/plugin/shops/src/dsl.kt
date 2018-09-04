@@ -45,8 +45,12 @@ class ShopBuilder(val name: String) {
      * @param depluralise Whether or not the category name should have the "s".
      * @param builder The builder used to add items to the category.
      */
-    fun category(name: String, affix: Affix = Affix.Suffix, depluralise: Boolean = true,
-                 builder: CategoryWrapper.() -> Unit) {
+    fun category(
+        name: String,
+        affix: Affix = Affix.Suffix,
+        depluralise: Boolean = true,
+        builder: CategoryWrapper.() -> Unit
+    ) {
         val items = mutableListOf<Pair<String, Int>>()
         builder.invoke(CategoryWrapper(items))
 
@@ -118,7 +122,6 @@ class ShopBuilder(val name: String) {
      * Gets the [List] of shop operator ids.
      */
     internal fun operators(): MutableList<Int> = operated.operators
-
 }
 
 @ShopDslMarker
@@ -148,14 +151,12 @@ class CategoryWrapper(private val items: MutableList<Pair<String, Int>>) {
          * Joins the item and category name in the expected manner.
          */
         fun join(item: String, category: String): String = joiner(item, category)
-
     }
 
     /**
      * Creates a [SellBuilder] with the specified [amount].
      */
     fun sell(amount: Int): SellBuilder = SellBuilder(amount, items)
-
 }
 
 /**
@@ -210,7 +211,6 @@ class OperatorBuilder internal constructor() {
      * `"Shopkeeper"(500) vs `"Shopkeeper"(501)`). Use [by(String][by] if the npc name is unambiguous.
      */
     operator fun plus(pair: Pair<String, Int>): OperatorBuilder = by(pair)
-
 }
 
 /**
@@ -270,7 +270,6 @@ class ActionBuilder {
      */
     override fun hashCode(): Int = throw UnsupportedOperationException("ActionBuilder is a utility class for a DSL " +
         "and improperly implements equals() - it should not be used anywhere outside of the DSL.")
-
 }
 
 /**
@@ -288,7 +287,6 @@ class CurrencyBuilder {
         builder.currency = this
         return true
     }
-
 }
 
 /**
@@ -312,7 +310,6 @@ class PurchasesBuilder {
     infix fun any(@Suppress("UNUSED_PARAMETER") items: Unit) {
         policy = Shop.PurchasePolicy.ANY
     }
-
 }
 
 /**
@@ -348,5 +345,4 @@ class SellBuilder(val amount: Int, val items: MutableList<Pair<String, Int>>) {
      * Overloads function invokation on Strings to map `"ambiguous_npc_name"(id)` to a [Pair].
      */
     operator fun String.invoke(id: Int): Pair<String, Int> = Pair(this, id)
-
 }

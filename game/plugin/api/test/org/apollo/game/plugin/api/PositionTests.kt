@@ -22,5 +22,4 @@ class PositionTests {
         assertEquals(y, y2) { "y coordinate mismatch in Position destructuring." }
         assertEquals(z, z2) { "z coordinate mismatch in Position destructuring." }
     }
-
 }

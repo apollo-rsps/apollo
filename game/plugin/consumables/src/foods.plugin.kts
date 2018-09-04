@@ -32,12 +32,12 @@ food(name = "shark", id = 385, restoration = 20)
 food(name = "sea_turtle", id = 397, restoration = 21)
 food(name = "manta_ray", id = 391, restoration = 22)
 
-//# Breads/Wraps
+// # Breads/Wraps
 food(name = "bread", id = 2309, restoration = 5)
 food(name = "oomlie_wrap", id = 2343, restoration = 14)
 food(name = "ugthanki_kebab", id = 1883, restoration = 19)
 
-//# Fruits
+// # Fruits
 food(name = "banana", id = 1963, restoration = 2)
 food(name = "sliced_banana", id = 3162, restoration = 2)
 food(name = "lemon", id = 2102, restoration = 2)
@@ -54,8 +54,8 @@ food(name = "orange", id = 2108, restoration = 2)
 food(name = "orange_rings", id = 2110, restoration = 2)
 food(name = "orange_slices", id = 2112, restoration = 2)
 
-//# Pies
-//# TODO: pie special effects (e.g. fish pie raises fishing level)
+// # Pies
+// # TODO: pie special effects (e.g. fish pie raises fishing level)
 food(name = "redberry_pie", id = 2325, restoration = 5, replacement = 2333, delay = 1)
 food(name = "redberry_pie", id = 2333, restoration = 5, delay = 1)
 
@@ -77,12 +77,12 @@ food(name = "wild_pie", id = 7210, restoration = 11, delay = 1)
 food(name = "summer_pie", id = 7218, restoration = 11, replacement = 7220, delay = 1)
 food(name = "summer_pie", id = 7220, restoration = 11, delay = 1)
 
-//# Stews
+// # Stews
 food(name = "stew", id = 2003, restoration = 11)
 food(name = "banana_stew", id = 4016, restoration = 11)
 food(name = "curry", id = 2011, restoration = 19)
 
-//# Pizzas
+// # Pizzas
 food(name = "plain_pizza", id = 2289, restoration = 7, replacement = 2291)
 food(name = "plain_pizza", id = 2291, restoration = 7)
 
@@ -95,7 +95,7 @@ food(name = "anchovy_pizza", id = 2299, restoration = 9)
 food(name = "pineapple_pizza", id = 2301, restoration = 11, replacement = 2303)
 food(name = "pineapple_pizza", id = 2303, restoration = 11)
 
-//# Cakes
+// # Cakes
 food(name = "fishcake", id = 7530, restoration = 11)
 
 food(name = "cake", id = 1891, restoration = 4, replacement = 1893)
@@ -106,7 +106,7 @@ food(name = "chocolate_cake", id = 1897, restoration = 5, replacement = 1899)
 food(name = "chocolate_cake", id = 1899, restoration = 5, replacement = 1901)
 food(name = "chocolate_cake", id = 1901, restoration = 5)
 
-//# Vegetables
+// # Vegetables
 food(name = "potato", id = 1942, restoration = 1)
 food(name = "spinach_roll", id = 1969, restoration = 2)
 food(name = "baked_potato", id = 6701, restoration = 4)
@@ -119,14 +119,14 @@ food(name = "egg_potato", id = 7056, restoration = 16)
 food(name = "mushroom_potato", id = 7058, restoration = 20)
 food(name = "tuna_potato", id = 7060, restoration = 22)
 
-//# Dairy
+// # Dairy
 food(name = "cheese", id = 1985, restoration = 2)
 food(name = "pot_of_cream", id = 2130, restoration = 1)
 
-//# Gnome Food
+// # Gnome Food
 food(name = "toads_legs", id = 2152, restoration = 3)
 
-//# Gnome Bowls
+// # Gnome Bowls
 food(name = "worm_hole", id = 2191, restoration = 12)
 food(name = "worm_hole", id = 2233, restoration = 12)
 food(name = "vegetable_ball", id = 2195, restoration = 12)
@@ -136,7 +136,7 @@ food(name = "tangled_toads_legs", id = 2231, restoration = 15)
 food(name = "chocolate_bomb", id = 2185, restoration = 15)
 food(name = "chocolate_bomb", id = 2229, restoration = 15)
 
-//# Gnome Crunchies
+// # Gnome Crunchies
 food(name = "toad_crunchies", id = 2217, restoration = 7)
 food(name = "toad_crunchies", id = 2243, restoration = 7)
 food(name = "spicy_crunchies", id = 2213, restoration = 7)
@@ -146,7 +146,7 @@ food(name = "worm_crunchies", id = 2237, restoration = 8)
 food(name = "chocchip_crunchies", id = 2209, restoration = 7)
 food(name = "chocchip_crunchies", id = 2239, restoration = 7)
 
-//# Gnome Battas
+// # Gnome Battas
 food(name = "fruit_batta", id = 2225, restoration = 11)
 food(name = "fruit_batta", id = 2277, restoration = 11)
 food(name = "toad_batta", id = 2221, restoration = 11)

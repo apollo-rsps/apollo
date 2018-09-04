@@ -4,7 +4,6 @@ import io.mockk.MockKVerificationScope
 import io.mockk.verify
 import org.apollo.game.plugin.testing.junit.api.ActionCaptureCallbackRegistration
 
-
 /**
  * Verify some expectations on a [mock] after a delayed event (specified by [DelayMode]).
  */

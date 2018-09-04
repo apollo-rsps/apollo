@@ -27,7 +27,6 @@ class RunecraftingActionTests {
     fun setupPlayer() {
         player.position = TEST_ALTAR.center
         player.inventory.add(runeEssenceId, 25)
-
     }
 
     @Test

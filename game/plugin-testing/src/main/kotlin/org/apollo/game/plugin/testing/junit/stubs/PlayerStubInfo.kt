@@ -18,10 +18,8 @@ class PlayerStubInfo {
 
             return info
         }
-
     }
 
     var position = Position(3222, 3222)
     var name = "test"
 }
-

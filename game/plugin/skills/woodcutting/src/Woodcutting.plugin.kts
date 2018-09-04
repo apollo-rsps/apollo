@@ -1,4 +1,5 @@
 
+import java.util.concurrent.TimeUnit
 import org.apollo.game.GameConstants
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
@@ -10,7 +11,6 @@ import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.plugin.api.*
 import org.apollo.game.plugin.skills.woodcutting.Axe
 import org.apollo.game.plugin.skills.woodcutting.Tree
-import java.util.concurrent.TimeUnit
 
 // TODO Accurate chopping rates, e.g. https://twitter.com/JagexKieren/status/713403124464107520
 
@@ -33,7 +33,6 @@ class WoodcuttingTarget(private val objectId: Int, val position: Position, val t
      * Returns whether or not the tree was cut down.
      */
     fun isCutDown(): Boolean = rand(100) <= tree.chance * 100
-
 }
 
 class WoodcuttingAction(
@@ -102,5 +101,4 @@ class WoodcuttingAction(
             }
         }
     }
-
 }

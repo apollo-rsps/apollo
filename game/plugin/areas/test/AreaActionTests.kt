@@ -55,5 +55,4 @@ class AreaActionTests {
 
         assertTrue(triggered) { "exit_test_action was not triggered." }
     }
-
 }

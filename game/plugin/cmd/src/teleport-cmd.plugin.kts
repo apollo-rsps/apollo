@@ -104,7 +104,6 @@ on_command("teleto", PrivilegeLevel.ADMINISTRATOR)
         }
     }
 
-
 internal val TELEPORT_DESTINATIONS = listOf(
     "alkharid" to Position(3292, 3171),
     "ardougne" to Position(2662, 3304),

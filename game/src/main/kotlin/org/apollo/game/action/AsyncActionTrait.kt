@@ -25,5 +25,5 @@ interface AsyncActionTrait {
     /**
      * Create a new `ActionBlock` to execute.
      */
-    fun action() : ActionBlock
+    fun action(): ActionBlock
 }

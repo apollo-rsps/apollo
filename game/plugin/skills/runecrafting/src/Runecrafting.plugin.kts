@@ -8,10 +8,9 @@ private val changeAltarObjectConfigId = 491
 
 internal val RUNES = mutableListOf<Rune>()
 
-fun List<Rune>.findById(id: Int) : Rune? {
+fun List<Rune>.findById(id: Int): Rune? {
     return find { rune -> rune.id == id }
 }
-
 
 start {
     RUNES.addAll(DefaultRune.values())

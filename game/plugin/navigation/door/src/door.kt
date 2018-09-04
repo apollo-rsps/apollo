@@ -1,5 +1,6 @@
 package org.apollo.plugin.navigation.door
 
+import java.util.*
 import org.apollo.game.action.DistancedAction
 import org.apollo.game.model.Direction
 import org.apollo.game.model.Position
@@ -10,7 +11,6 @@ import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.model.event.PlayerEvent
 import org.apollo.game.plugin.api.findObject
 import org.apollo.net.message.Message
-import java.util.*
 
 enum class DoorType {
     LEFT, RIGHT, NOT_SUPPORTED
@@ -59,7 +59,6 @@ class Door(private val gameObject: GameObject) {
         return type() !== DoorType.NOT_SUPPORTED
     }
 
-
     /**
      * Computes the given door type by which id exists in
      * the supported left and right hinged doors
@@ -97,7 +96,6 @@ class Door(private val gameObject: GameObject) {
             toggledDoors.remove(gameObject)
             regionRepository.fromPosition(originalDoor.position).addEntity(originalDoor)
         }
-
     }
 
     /**
@@ -120,7 +118,6 @@ class Door(private val gameObject: GameObject) {
             DoorType.NOT_SUPPORTED -> null
         }
     }
-
 }
 
 class OpenDoorAction(private val player: Player, private val door: Door, position: Position) : DistancedAction<Player>(
@@ -140,7 +137,6 @@ class OpenDoorAction(private val player: Player, private val door: Door, positio
             player.startAction(OpenDoorAction(player, door, position))
             message.terminate()
         }
-
     }
 
     override fun executeAction() {
@@ -156,7 +152,6 @@ class OpenDoorAction(private val player: Player, private val door: Door, positio
     }
 
     override fun hashCode(): Int = Objects.hash(position, player)
-
 }
 
 class OpenDoorEvent(player: Player) : PlayerEvent(player)

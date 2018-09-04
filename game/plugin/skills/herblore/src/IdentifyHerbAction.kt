@@ -1,10 +1,10 @@
 
+import java.util.Objects
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncAction
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.api.herblore
 import org.apollo.util.LanguageUtil
-import java.util.Objects
 
 class IdentifyHerbAction(
     player: Player,

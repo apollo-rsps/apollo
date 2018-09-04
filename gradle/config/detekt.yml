@@ -257,7 +257,7 @@ formatting:
     active: true
     autoCorrect: true
   NoWildcardImports:
-    active: true
+    active: false
     autoCorrect: true
   ParameterListWrapping:
     active: true
@@ -304,10 +304,11 @@ naming:
     minimumFunctionNameLength: 3
   FunctionNaming:
     active: true
-    functionPattern: '^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'
+    functionPattern: '^([a-z$][a-zA-Z$0-9]*)|(`.*`)|(on_[a-zA-Z_$0-9]*)$'
     excludeClassPattern: '$^'
   MatchingDeclarationName:
     active: true
+    autoCorrect: true
   MemberNameEqualsClassName:
     active: false
     ignoreOverriddenFunction: true
@@ -317,7 +318,7 @@ naming:
     constantPattern: '[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
     active: true
-    packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
+    packagePattern: '^[a-z]+(\.[a-z][a-zA-Z0-9]*)*$'
   TopLevelPropertyNaming:
     active: false
     constantPattern: '[A-Z][_A-Z0-9]*'
@@ -470,5 +471,5 @@ style:
   VarCouldBeVal:
     active: false
   WildcardImport:
-    active: true
+    active: false
     excludeImports: 'java.util.*,kotlinx.android.synthetic.*'

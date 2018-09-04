@@ -50,7 +50,6 @@ class OpenShopAction(
             shop.removeListener(shopListener)
         }
     }
-
 }
 
 /**
@@ -64,5 +63,4 @@ class PlayerInventorySupplier : InventorySupplier {
             else -> null
         }
     }
-
 }

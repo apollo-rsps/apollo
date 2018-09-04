@@ -1,5 +1,8 @@
 package org.apollo.game.plugin.kotlin
 
+import kotlin.reflect.KClass
+import kotlin.script.experimental.annotations.KotlinScript
+import kotlin.script.experimental.annotations.KotlinScriptFileExtension
 import org.apollo.game.command.Command
 import org.apollo.game.command.CommandListener
 import org.apollo.game.message.handler.MessageHandler
@@ -12,9 +15,6 @@ import org.apollo.game.model.event.EventListener
 import org.apollo.game.model.event.PlayerEvent
 import org.apollo.game.plugin.PluginContext
 import org.apollo.net.message.Message
-import kotlin.reflect.KClass
-import kotlin.script.experimental.annotations.KotlinScript
-import kotlin.script.experimental.annotations.KotlinScriptFileExtension
 
 @KotlinScript("Apollo Plugin Script")
 @KotlinScriptFileExtension("plugin.kts")
@@ -63,7 +63,6 @@ abstract class KotlinPluginScript(private var world: World, val context: PluginC
     fun doStop(world: World) {
         this.stopListener.invoke(world)
     }
-
 }
 
 /**
@@ -86,13 +85,11 @@ interface KotlinPlayerHandlerProxyTrait<S : Any> {
         this.register()
     }
 
-
     fun handleProxy(player: Player, subject: S) {
         if (subject.predicate()) {
             subject.callback(player)
         }
     }
-
 }
 
 /**
@@ -106,7 +103,6 @@ class KotlinPlayerEventHandler<T : PlayerEvent>(val world: World, val type: KCla
 
     override fun handle(event: T) = handleProxy(event.player, event)
     override fun register() = world.listenFor(type.java, this)
-
 }
 
 /**
@@ -134,7 +130,6 @@ class KotlinEventHandler<S : Event>(val world: World, val type: KClass<S>) : Eve
     }
 
     fun register() = world.listenFor(type.java, this)
-
 }
 
 /**
@@ -148,7 +143,6 @@ class KotlinMessageHandler<T : Message>(val world: World, val context: PluginCon
 
     override fun handle(player: Player, message: T) = handleProxy(player, message)
     override fun register() = context.addMessageHandler(type.java, this)
-
 }
 
 /**
@@ -162,5 +156,4 @@ class KotlinCommandHandler(val world: World, val command: String, privileges: Pr
 
     override fun execute(player: Player, command: Command) = handleProxy(player, command)
     override fun register() = world.commandDispatcher.register(command, this)
-
 }

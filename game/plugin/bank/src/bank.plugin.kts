@@ -9,7 +9,6 @@ import org.apollo.net.message.Message
 
 val BANK_BOOTH_ID = 2213
 
-
 /**
  * Hook into the [ObjectActionMessage] and listen for when a bank booth's second action ("Open Bank") is selected.
  */
@@ -56,7 +55,6 @@ class BankAction(player: Player, position: Position) : DistancedAction<Player>(0
             player.startAction(BankAction(player, position))
             message.terminate()
         }
-
     }
 
     override fun executeAction() {
@@ -72,5 +70,4 @@ class BankAction(player: Player, position: Position) : DistancedAction<Player>(0
     override fun hashCode(): Int {
         return position.hashCode()
     }
-
 }

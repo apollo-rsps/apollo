@@ -18,7 +18,6 @@ fun World.spawnObject(id: Int, position: Position): GameObject {
     return obj
 }
 
-
 /**
  * Spawns a new NPC with the minimum set of dependencies required to function correctly in the world.
  */

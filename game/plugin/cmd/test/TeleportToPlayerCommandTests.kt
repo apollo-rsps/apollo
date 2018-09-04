@@ -49,5 +49,4 @@ class TeleportToPlayerCommandTests {
             player.sendMessage(contains("Invalid syntax"))
         }
     }
-
 }

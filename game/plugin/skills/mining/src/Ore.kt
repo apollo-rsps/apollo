@@ -36,7 +36,6 @@ enum class Ore(
 
         fun fromRock(id: Int): Ore? = ORE_ROCKS[id]
         fun fromExpiredRock(id: Int): Ore? = EXPIRED_ORE[id]
-
     }
 }
 

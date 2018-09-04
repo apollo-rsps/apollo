@@ -86,5 +86,4 @@ class SkillProxy(private val skills: SkillSet, private val skill: Int) {
         val new = Math.min(current + amount, maximum)
         skills.setCurrentLevel(skill, new)
     }
-
 }

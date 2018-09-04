@@ -45,7 +45,6 @@ spawnNpc("oziach", x = 3067, y = 3518, facing = Direction.EAST)
 spawnNpc("shop_keeper", id = 528, x = 3079, y = 3509)
 spawnNpc("shop_assistant", id = 529, x = 3082, y = 3513)
 
-
 spawnNpc("banker", x = 3096, y = 3489, facing = Direction.WEST)
 spawnNpc("banker", x = 3096, y = 3491, facing = Direction.WEST)
 spawnNpc("banker", x = 3096, y = 3492)

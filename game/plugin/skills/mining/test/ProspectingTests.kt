@@ -45,5 +45,4 @@ class ProspectingTests {
             ItemDefinition(it.id).also { it.name = "<ore_type>" }
         }
     }
-
 }

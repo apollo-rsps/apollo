@@ -37,7 +37,7 @@ class SpawnCommandTests {
 
         verify {
             world.register(match<Npc> {
-                it.id == 1 && it.position == Position(3, 3,0)
+                it.id == 1 && it.position == Position(3, 3, 0)
             })
         }
     }

@@ -2,6 +2,7 @@
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.util.Random
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
-import java.util.Random
 
 @ExtendWith(ApolloTestingExtension::class)
 class WoodcuttingTests {

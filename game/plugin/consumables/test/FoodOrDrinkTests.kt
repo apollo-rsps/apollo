@@ -3,8 +3,8 @@ package org.apollo.plugin.consumables
 import io.mockk.verify
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.Skill
-import org.apollo.game.plugin.testing.assertions.contains
 import org.apollo.game.plugin.testing.assertions.after
+import org.apollo.game.plugin.testing.assertions.contains
 import org.apollo.game.plugin.testing.assertions.verifyAfter
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.ActionCapture
@@ -81,15 +81,13 @@ class FoodOrDrinkTests {
     fun `A message should be sent saying the player has drank an item when consuming a drink`() {
         player.interactWithItem(TEST_DRINK_ID, option = 1, slot = 1)
 
-        verifyAfter(action.complete()) { player.sendMessage("You drink the ${TEST_DRINK_NAME}.") }
-
+        verifyAfter(action.complete()) { player.sendMessage("You drink the $TEST_DRINK_NAME.") }
     }
 
     @Test
     fun `A message should be sent saying the player has eaten an item when consuming food`() {
         player.interactWithItem(TEST_FOOD_ID, option = 1, slot = 1)
 
-        verifyAfter(action.complete()) { player.sendMessage("You eat the ${TEST_FOOD_NAME}.") }
+        verifyAfter(action.complete()) { player.sendMessage("You eat the $TEST_FOOD_NAME.") }
     }
-
 }

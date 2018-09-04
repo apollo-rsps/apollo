@@ -93,5 +93,4 @@ class LookupCommandTests {
             length = 1
         })
     }
-
 }

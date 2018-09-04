@@ -38,5 +38,4 @@ class AreaActionBuilder internal constructor(val name: String, val area: Area) {
     fun exit(listener: AreaListener) {
         this.exit = listener
     }
-
 }

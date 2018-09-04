@@ -1,10 +1,10 @@
 package org.apollo.game.plugin.testing.junit.api
 
+import kotlin.reflect.KClass
+import kotlin.reflect.full.isSuperclassOf
 import org.apollo.game.action.Action
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import kotlin.reflect.KClass
-import kotlin.reflect.full.isSuperclassOf
 
 class ActionCapture(val type: KClass<out Action<*>>) {
     private var action: Action<*>? = null
@@ -61,7 +61,6 @@ class ActionCapture(val type: KClass<out Action<*>>) {
                 .prependIndent("    ")
         })
     }
-
 
     /**
      * Create a callback registration that triggers after exactly [count] ticks.

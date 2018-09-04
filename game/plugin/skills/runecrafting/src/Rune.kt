@@ -2,7 +2,6 @@ package org.apollo.game.plugin.skill.runecrafting
 
 import org.apollo.game.plugin.skill.runecrafting.Altar.*
 
-
 interface Rune {
     /**
      * The item id of the rune.
@@ -29,7 +28,7 @@ interface Rune {
      *
      * [playerLevel] - The players current runecrafting level.
      */
-    fun getBonusMultiplier(playerLevel: Int) : Double
+    fun getBonusMultiplier(playerLevel: Int): Double
 }
 
 enum class DefaultRune(
