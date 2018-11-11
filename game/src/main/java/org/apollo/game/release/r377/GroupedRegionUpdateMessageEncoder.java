@@ -47,7 +47,7 @@ public final class GroupedRegionUpdateMessageEncoder extends MessageEncoder<Grou
 
 			GamePacket packet = encoder.encode(update);
 			builder.put(DataType.BYTE, packet.getOpcode());
-			builder.putBytes(packet.getPayload());
+			builder.putBytes(packet.content());
 		}
 
 		return builder.toGamePacket();

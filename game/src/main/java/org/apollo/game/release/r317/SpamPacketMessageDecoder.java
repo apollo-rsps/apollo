@@ -13,7 +13,7 @@ public final class SpamPacketMessageDecoder extends MessageDecoder<SpamPacketMes
 
 	@Override
 	public SpamPacketMessage decode(GamePacket packet) {
-		return new SpamPacketMessage(packet.getPayload().array());
+		return new SpamPacketMessage(packet.content().array());
 	}
 
 }

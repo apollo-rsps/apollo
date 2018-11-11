@@ -34,7 +34,7 @@ public final class GamePacketReader {
 	 * @param packet The packet.
 	 */
 	public GamePacketReader(GamePacket packet) {
-		buffer = packet.getPayload();
+		buffer = packet.content();
 	}
 
 	/**
