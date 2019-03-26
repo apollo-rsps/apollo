@@ -13,12 +13,14 @@ import org.apollo.game.plugin.api.Position.component3
 on_command("pos", PrivilegeLevel.MODERATOR)
     .then { player ->
         val target: Player
+	      val name: String
 
-        if (arguments.size == 1) {
-          if (player.world.isPlayerOnline(arguments[0])) {
-            target = player.world.getPlayer(arguments[0])
+        if (arguments.size >= 1) {
+          name = arguments.joinToString(" ")
+          if (player.world.isPlayerOnline(name)) {
+            target = player.world.getPlayer(name)
           } else {
-            player.sendMessage("${arguments[0].capitalize()} is offline.")
+            player.sendMessage("$name is offline.")
             return@then
           }
         } else {
@@ -28,7 +30,7 @@ on_command("pos", PrivilegeLevel.MODERATOR)
         val (x, y, z) = target.position
         val region = target.position.regionCoordinates
 
-        player.sendMessage("${target.getUsername().capitalize()} is located at ($x, $y, $z) in region (${region.x}, ${region.y}).")
+        player.sendMessage("${target.username} is located at ($x, $y, $z) in region (${region.x}, ${region.y}).")
     }
 
 /**
