@@ -31,7 +31,7 @@ dependencies {
     testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion
 
     project(":game:plugin").subprojects { pluginProject ->
-        plugins.withId('apollo-plugin') {
+         if (pluginProject.buildFile.exists()) {
             runtimeClasspath pluginProject
         }
     }
