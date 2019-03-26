@@ -1,20 +1,34 @@
 
 import com.google.common.primitives.Ints
 import org.apollo.game.model.Position
+import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.plugin.api.Position.component1
 import org.apollo.game.plugin.api.Position.component2
 import org.apollo.game.plugin.api.Position.component3
 
 /**
- * Sends the player's position.
+ * Sends a player's position.
  */
 on_command("pos", PrivilegeLevel.MODERATOR)
     .then { player ->
-        val (x, y, z) = player.position
-        val region = player.position.regionCoordinates
+        val target: Player
 
-        player.sendMessage("You are at: ($x, $y, $z) in region (${region.x}, ${region.y}).")
+        if (arguments.size == 1) {
+          if (player.world.isPlayerOnline(arguments[0])) {
+            target = player.world.getPlayer(arguments[0])
+          } else {
+            player.sendMessage("${arguments[0].capitalize()} is offline.")
+            return@then
+          }
+        } else {
+          target = player
+        }
+
+        val (x, y, z) = target.position
+        val region = target.position.regionCoordinates
+
+        player.sendMessage("${target.getUsername().capitalize()} is located at ($x, $y, $z) in region (${region.x}, ${region.y}).")
     }
 
 /**
