@@ -13,7 +13,7 @@ import org.apollo.game.plugin.api.Position.component3
 on_command("pos", PrivilegeLevel.MODERATOR)
     .then { player ->
         val target: Player
-	      val name: String
+	val name: String
 
         if (arguments.size >= 1) {
           name = arguments.joinToString(" ")
