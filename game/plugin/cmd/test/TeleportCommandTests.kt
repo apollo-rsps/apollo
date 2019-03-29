@@ -6,6 +6,7 @@ import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.plugin.testing.assertions.contains
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
+import org.apollo.game.plugin.testing.junit.api.annotations.Name
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -21,6 +22,10 @@ class TeleportCommandTests {
 
     @TestMock
     lateinit var player: Player
+
+    @TestMock
+    @Name("player_two")
+    lateinit var player_two: Player
 
     @Test
     fun `Teleport to given coordinates`() {
@@ -47,6 +52,27 @@ class TeleportCommandTests {
 
         verify {
             player.sendMessage(contains("1, 2, 3"))
+        }
+    }
+
+    @Test
+    fun `Shows another players current position information`() {
+        player.privilegeLevel = PrivilegeLevel.ADMINISTRATOR
+        player_two.position = Position(1, 2, 3)
+        world.commandDispatcher.dispatch(player, Command("pos", arrayOf("player_two")))
+
+        verify {
+            player.sendMessage(contains("1, 2, 3"))
+        }
+    }
+
+    @Test
+    fun `Shows no position information for a nonexistent player`() {
+        player.privilegeLevel = PrivilegeLevel.ADMINISTRATOR
+        world.commandDispatcher.dispatch(player, Command("pos", arrayOf("player999")))
+
+        verify {
+            player.sendMessage(contains("offline"))
         }
     }
 
