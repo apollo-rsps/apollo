@@ -44,7 +44,7 @@ public final class GamePacketEncoder extends MessageToByteEncoder<GamePacket> {
 		} else if (type == PacketType.VARIABLE_SHORT) {
 			out.writeShort(payloadLength);
 		}
-		out.writeBytes(packet.getPayload());
+		out.writeBytes(packet.content());
 	}
 
 }

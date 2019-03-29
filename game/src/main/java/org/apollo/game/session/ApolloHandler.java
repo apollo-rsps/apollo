@@ -70,37 +70,32 @@ public final class ApolloHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object message) throws Exception {
-		try {
-			Channel channel = ctx.channel();
-			Attribute<Session> attribute = channel.attr(ApolloHandler.SESSION_KEY);
-			Session session = attribute.get();
+		Channel channel = ctx.channel();
+		Attribute<Session> attribute = channel.attr(ApolloHandler.SESSION_KEY);
+		Session session = attribute.get();
 
-			if (message instanceof HttpRequest || message instanceof JagGrabRequest) {
-				session = new UpdateSession(channel, serverContext);
+		if (message instanceof HttpRequest || message instanceof JagGrabRequest) {
+			session = new UpdateSession(channel, serverContext);
+		}
+
+		if (session != null) {
+			session.messageReceived(message);
+			return;
+		}
+
+		// TODO: Perhaps let HandshakeMessage implement Message to remove this explicit check
+		if (message instanceof HandshakeMessage) {
+			HandshakeMessage handshakeMessage = (HandshakeMessage) message;
+
+			switch (handshakeMessage.getServiceId()) {
+				case HandshakeConstants.SERVICE_GAME:
+					attribute.set(new LoginSession(channel, serverContext));
+					break;
+
+				case HandshakeConstants.SERVICE_UPDATE:
+					attribute.set(new UpdateSession(channel, serverContext));
+					break;
 			}
-
-			if (session != null) {
-				session.messageReceived(message);
-				return;
-			}
-
-			// TODO: Perhaps let HandshakeMessage implement Message to remove this explicit check
-			if (message instanceof HandshakeMessage) {
-				HandshakeMessage handshakeMessage = (HandshakeMessage) message;
-
-				switch (handshakeMessage.getServiceId()) {
-					case HandshakeConstants.SERVICE_GAME:
-						attribute.set(new LoginSession(channel, serverContext));
-						break;
-
-					case HandshakeConstants.SERVICE_UPDATE:
-						attribute.set(new UpdateSession(channel, serverContext));
-						break;
-				}
-			}
-
-		} finally {
-			ReferenceCountUtil.release(message);
 		}
 	}
 
