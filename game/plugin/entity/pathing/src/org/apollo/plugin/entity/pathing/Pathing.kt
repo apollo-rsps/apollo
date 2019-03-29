@@ -63,21 +63,4 @@ fun Mob.walkTo(target: Position, positionPredicate: ((Position) -> Boolean)? = n
 /**
  * Returns the bounding size of the specified [Entity], in [x-size, y-size] format.
  */
-private fun bounds(target: Entity): Pair<Int, Int> {
-    return when (target) {
-        is GameObject -> {
-            val orientation = Direction.WNES[target.orientation]
-            val rotated = (orientation == Direction.WEST || orientation == Direction.EAST)
-
-            val definition = target.definition
-
-            val width = if (rotated) definition.length else definition.width
-            val height = if (rotated) definition.width else definition.length
-
-            Pair(width, height)
-        }
-        is Npc -> Pair(target.definition.size, target.definition.size)
-        is Player -> Pair(1, 1)
-        else -> error("Invalid entity type")
-    }
-}
+private fun bounds(target: Entity): Pair<Int, Int> = Pair(target.width, target.length)
