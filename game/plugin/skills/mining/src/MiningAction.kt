@@ -13,11 +13,10 @@ class MiningAction(
     player: Player,
     private val tool: Pickaxe,
     private val target: MiningTarget
-) : AsyncDistancedAction<Player>(PULSES, true, player, target.position, ORE_SIZE) {
+) : AsyncDistancedAction<Player>(PULSES, true, player, target.position, target.ore.objectSize) {
 
     companion object {
         private const val PULSES = 0
-        private const val ORE_SIZE = 1
 
         /**
          * Starts a [MiningAction] for the specified [Player], terminating the [Message] that triggered it.
