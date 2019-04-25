@@ -20,7 +20,7 @@ enum class Ore(
     val chanceOffset: Double = 0.0,
     val prospectName: String? = null
 ) {
-    RUNE_ESSENCE(ESSENCE_OBJECTS, id = 1436, level = 1, exp = 5.0, respawn = -1, chance = 0.0085, chanceOffset = 0.45, prospectName = "Rune Stone essence"),
+    RUNE_ESSENCE(ESSENCE_OBJECTS, id = -1, level = 1, exp = 5.0, respawn = -1, chance = 0.0085, chanceOffset = 0.45, prospectName = "Rune Stone essence"),
     CLAY(CLAY_OBJECTS, id = 434, level = 1, exp = 5.0, respawn = 1, chance = 0.0085, chanceOffset = 0.45),
     COPPER(COPPER_OBJECTS, id = 436, level = 1, exp = 17.5, respawn = 4, chance = 0.0085, chanceOffset = 0.45),
     TIN(TIN_OBJECTS, id = 438, level = 1, exp = 17.5, respawn = 4, chance = 0.0085, chanceOffset = 0.45),
@@ -40,6 +40,9 @@ enum class Ore(
         fun fromExpiredRock(id: Int): Ore? = EXPIRED_ORE[id]
     }
 }
+
+const val RUNE_ESSENCE = 1436
+const val PURE_ESSENCE = 7936
 
 // Maps from regular rock id to expired rock id.
 
