@@ -64,7 +64,7 @@ class MiningAction(
             }
 
             if (target.reward(mob)) {
-                mob.sendMessage("You manage to mine some ${target.oreName()}")
+                mob.sendMessage("You manage to mine some ${target.oreName(mob)}")
 
                 if (target.ore.respawn != -1) {
                     target.deplete(mob.world)
