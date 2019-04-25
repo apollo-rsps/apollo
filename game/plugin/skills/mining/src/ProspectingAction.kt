@@ -13,11 +13,10 @@ class ProspectingAction(
     player: Player,
     position: Position,
     private val ore: Ore
-) : AsyncDistancedAction<Player>(DELAY, true, player, position, ORE_SIZE) {
+) : AsyncDistancedAction<Player>(DELAY, true, player, position, ore.objectSize) {
 
     companion object {
         private const val DELAY = 3
-        private const val ORE_SIZE = 1
 
         /**
          * Starts a [MiningAction] for the specified [Player], terminating the [Message] that triggered it.
