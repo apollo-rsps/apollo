@@ -1039,4 +1039,30 @@ public final class Player extends Mob {
 		skillSet.addListener(new SynchronizationSkillListener(this));
 		skillSet.addListener(new LevelUpSkillListener(this));
 	}
+
+	/**
+	 * Decrement run energy.
+	 *
+	 * @param weight the amount of weight to be taken into account when
+	 * determining how much run energy will be depleted.
+	 */
+	public void decrementRunEnergy(double weight) {
+		double decrement = (Math.min(weight, 64.0) / 100.0) + 0.64;
+		double outcome = Math.max(0.0, getRunEnergy() - decrement);
+		setRunEnergy(outcome);
+	}
+
+	/**
+	 * Increment run energy.
+	 *
+	 * @param agilityLevel the agility level used to determine how much to
+	 * increment the run energy by.
+	 */
+	public void incrementRunEnergy(int agilityLevel) {
+		double increment = (8.0 + (agilityLevel / 6.0)) / 100.0;
+		double outcome = Math.min(MAXIMUM_RUN_ENERGY, getRunEnergy() + increment);
+		if (outcome != getRunEnergy()) {
+			setRunEnergy(outcome);
+		}
+	}
 }
