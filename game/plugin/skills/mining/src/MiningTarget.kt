@@ -1,3 +1,4 @@
+
 import org.apollo.game.model.Position
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
@@ -54,5 +55,5 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
      * Check if the [mob] has met the skill requirements to mine te [Ore] represented by
      * this [MiningTarget].
      */
-    fun skillRequirementsMet(mob: Player) = mob.mining.current < ore.level
+    fun skillRequirementsMet(mob: Player) = mob.mining.current >= ore.level
 }
