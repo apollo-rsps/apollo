@@ -19,7 +19,14 @@ enum class Fish(val id: Int, val level: Int, val experience: Double, catchSuffix
     LOBSTER(id = 377, level = 40, experience = 90.0),
     BASS(id = 363, level = 46, experience = 100.0),
     SWORDFISH(id = 371, level = 50, experience = 100.0),
-    SHARK(id = 383, level = 76, experience = 110.0, catchSuffix = "a shark!");
+    SHARK(id = 383, level = 76, experience = 110.0, catchSuffix = "a shark!"),
+
+    /*
+     * Junk 'fish'
+     */
+    SEAWEED(id = 401, level = 16, experience = 1.0),
+    CASKET(id = 405, level = 16, experience = 1.0)
+    ;
 
     /**
      * The name of this fish, formatted so it can be inserted into a message.
