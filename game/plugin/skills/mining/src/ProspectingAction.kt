@@ -36,7 +36,7 @@ class ProspectingAction(
 
         wait()
 
-        val oreName = ore.prospectOreName ?: Definitions.item(ore.id).name?.toLowerCase()
+        val oreName = ore.prospectName ?: Definitions.item(ore.id).name?.toLowerCase()
         mob.sendMessage("This rock contains $oreName.")
 
         stop()
