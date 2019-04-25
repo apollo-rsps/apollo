@@ -11,7 +11,7 @@ import java.util.Objects
 
 class MiningAction(
     player: Player,
-    private val tool: Pickaxe,
+    private val tool: Pickaxe?,
     private val target: MiningTarget
 ) : AsyncDistancedAction<Player>(PULSES, true, player, target.position, target.ore.objectSize) {
 
@@ -24,14 +24,10 @@ class MiningAction(
         fun start(message: ObjectActionMessage, player: Player, ore: Ore) {
             val pickaxe = Pickaxe.bestFor(player)
 
-            if (pickaxe == null) {
-                player.sendMessage("You do not have a pickaxe for which you have the level to use.")
-            } else {
-                val target = MiningTarget(message.id, message.position, ore)
-                val action = MiningAction(player, pickaxe, target)
+            val target = MiningTarget(message.id, message.position, ore)
+            val action = MiningAction(player, pickaxe, target)
 
-                player.startAction(action)
-            }
+            player.startAction(action)
 
             message.terminate()
         }
@@ -39,6 +35,11 @@ class MiningAction(
 
     override fun action(): ActionBlock = {
         mob.turnTo(position)
+
+        if (tool == null) {
+            mob.sendMessage("You do not have a pickaxe for which you have the level to use.")
+            stop()
+        }
 
         if (!target.skillRequirementsMet(mob)) {
             mob.sendMessage("You do not have the required level to mine this rock.")
