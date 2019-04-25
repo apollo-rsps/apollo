@@ -22,7 +22,7 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
 
     NET_HARPOON(
         npc = 313,
-        first = Option.of(tool = FishingTool.BIG_NET, primary = MACKEREL, secondary = COD),
+        first = Option.of(tool = FishingTool.BIG_NET, primary = MACKEREL, secondary = COD, junk = arrayOf(SEAWEED, CASKET)),
         second = Option.of(tool = FishingTool.HARPOON, primary = BASS, secondary = SHARK)
     ),
 
@@ -77,14 +77,19 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
         /**
          * A [FishingSpot] [Option] that can provide a two different types of fish.
          */
-        private data class Pair(override val tool: FishingTool, val primary: Fish, val secondary: Fish) : Option() {
+        private class Pair(override val tool: FishingTool, val primary: Fish, val secondary: Fish, vararg val junk: Fish) : Option() {
             override val level = Math.min(primary.level, secondary.level)
 
             override fun sample(level: Int): Fish {
-                return if (level < secondary.level || rand(100) < WEIGHTING) {
-                    primary
-                } else {
-                    secondary
+                if (junk.isNotEmpty() && rand(100) < JUNK_WEIGHTING) {
+                    val valid = junk.filter { level >= it.level }
+                    if (valid.isNotEmpty()) {
+                        return valid[rand(valid.size)]
+                    }
+                }
+                return when {
+                    level < secondary.level || rand(100) < WEIGHTING -> primary
+                    else -> secondary
                 }
             }
 
@@ -93,6 +98,11 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
                  * The weighting factor that causes the lower-level fish to be returned more frequently.
                  */
                 private const val WEIGHTING = 70
+
+                /**
+                 * The weighting factor that causes a junk item to be fished more frequently.
+                 */
+                private const val JUNK_WEIGHTING = 5
             }
         }
 
@@ -104,6 +114,13 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
                 return when {
                     primary.level < secondary.level -> Pair(tool, primary, secondary)
                     else -> Pair(tool, secondary, primary)
+                }
+            }
+
+            fun of(tool: FishingTool, primary: Fish, secondary: Fish, junk: Array<Fish>): Option {
+                return when {
+                    primary.level < secondary.level -> Pair(tool, primary, secondary, *junk)
+                    else -> Pair(tool, secondary, primary, *junk)
                 }
             }
         }
