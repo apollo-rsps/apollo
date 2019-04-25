@@ -46,28 +46,31 @@ class MiningAction(
         }
 
         mob.sendMessage("You swing your pick at the rock.")
-        mob.playAnimation(tool.animation)
 
-        wait(tool.pulses)
+        while (isRunning) {
+            mob.playAnimation(tool.animation)
 
-        if (!target.isValid(mob.world)) {
-            stop()
-        }
+            wait(tool.pulses)
 
-        val successChance = rand(100)
-
-        if (target.isSuccessful(mob, successChance)) {
-            if (mob.inventory.freeSlots() == 0) {
-                mob.inventory.forceCapacityExceeded()
+            if (!target.isValid(mob.world)) {
                 stop()
             }
 
-            if (target.reward(mob)) {
-                mob.sendMessage("You manage to mine some ${target.oreName(mob)}")
+            val successChance = rand(100)
 
-                if (target.ore.respawn != -1) {
-                    target.deplete(mob.world)
+            if (target.isSuccessful(mob, successChance)) {
+                if (mob.inventory.freeSlots() == 0) {
+                    mob.inventory.forceCapacityExceeded()
                     stop()
+                }
+
+                if (target.reward(mob)) {
+                    mob.sendMessage("You manage to mine some ${target.oreName(mob)}")
+
+                    if (target.ore.respawn != -1) {
+                        target.deplete(mob.world)
+                        stop()
+                    }
                 }
             }
         }
