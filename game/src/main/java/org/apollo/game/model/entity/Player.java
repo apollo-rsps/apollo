@@ -473,8 +473,8 @@ public final class Player extends Mob {
 	 *
 	 * @return The run energy.
 	 */
-	public int getRunEnergy() {
-		Attribute<Integer> energy = attributes.get("run_energy");
+	public double getRunEnergy() {
+		Attribute<Double> energy = attributes.get("run_energy");
 		return energy.getValue();
 	}
 
