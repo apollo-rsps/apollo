@@ -1059,9 +1059,10 @@ public final class Player extends Mob {
 	 * increment the run energy by.
 	 */
 	public void incrementRunEnergy(int agilityLevel) {
-		double increment = (8.0 + (agilityLevel / 6.0)) / 100.0;
-		double outcome = Math.min(MAXIMUM_RUN_ENERGY, getRunEnergy() + increment);
-		if (outcome != getRunEnergy()) {
+		double runEnergy = getRunEnergy();
+		if (runEnergy < MAXIMUM_RUN_ENERGY) {
+			double increment = (8.0 + (agilityLevel / 6.0)) / 100.0;
+			double outcome = Math.min(MAXIMUM_RUN_ENERGY, runEnergy + increment);
 			setRunEnergy(outcome);
 		}
 	}
