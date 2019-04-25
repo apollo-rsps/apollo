@@ -17,7 +17,8 @@ enum class Ore(
     val exp: Double,
     val respawn: Int,
     val chance: Double,
-    val chanceOffset: Double = 0.0
+    val chanceOffset: Double = 0.0,
+    val prospectOreName: String? = null
 ) {
     CLAY(CLAY_OBJECTS, id = 434, level = 1, exp = 5.0, respawn = 1, chance = 0.0085, chanceOffset = 0.45),
     COPPER(COPPER_OBJECTS, id = 436, level = 1, exp = 17.5, respawn = 4, chance = 0.0085, chanceOffset = 0.45),
@@ -150,4 +151,8 @@ val RUNITE_OBJECTS = mapOf(
     14859 to 14832,
     14860 to 14833,
     14861 to 14834
+)
+
+val ESSENCE_OBJECTS = mapOf(
+    2491 to -1
 )

@@ -1,4 +1,4 @@
-import java.util.Objects
+
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
 import org.apollo.game.message.impl.ObjectActionMessage
@@ -7,6 +7,7 @@ import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.api.Definitions
 import org.apollo.game.plugin.skills.mining.Ore
 import org.apollo.net.message.Message
+import java.util.Objects
 
 class ProspectingAction(
     player: Player,
@@ -35,7 +36,7 @@ class ProspectingAction(
 
         wait()
 
-        val oreName = Definitions.item(ore.id)?.name?.toLowerCase()
+        val oreName = ore.prospectOreName ?: Definitions.item(ore.id).name?.toLowerCase()
         mob.sendMessage("This rock contains $oreName.")
 
         stop()
