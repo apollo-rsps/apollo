@@ -43,7 +43,7 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
      * Get the item id for the [Ore].
      */
     fun oreReward(mob: Player): Int = when (ore) {
-        Ore.RUNE_ESSENCE -> if (mob.isMembers && mob.mining.current >= 30) PURE_ESSENCE else RUNE_ESSENCE
+        Ore.ESSENCE -> if (mob.isMembers && mob.mining.current >= 30) PURE_ESSENCE else RUNE_ESSENCE
         else -> ore.id
     }
 
