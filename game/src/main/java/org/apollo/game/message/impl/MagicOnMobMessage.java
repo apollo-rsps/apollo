@@ -1,5 +1,6 @@
 package org.apollo.game.message.impl;
 
+import com.google.common.base.MoreObjects;
 import org.apollo.game.model.entity.EntityType;
 import org.apollo.net.message.Message;
 
@@ -65,4 +66,8 @@ public abstract class MagicOnMobMessage extends Message {
 		return spellId;
 	}
 
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("type", getType()).add("index", getIndex()).add("spellId", getSpellId()).toString();
+	}
 }
