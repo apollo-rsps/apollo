@@ -77,7 +77,7 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
         /**
          * A [FishingSpot] [Option] that can provide a two different types of fish.
          */
-        private class Pair(override val tool: FishingTool, val primary: Fish, val secondary: Fish, vararg val junk: Fish) : Option() {
+        private data class Pair(override val tool: FishingTool, val primary: Fish, val secondary: Fish, val junk: Array<Fish>) : Option() {
             override val level = Math.min(primary.level, secondary.level)
 
             override fun sample(level: Int): Fish {
@@ -111,16 +111,18 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
             fun of(tool: FishingTool, primary: Fish): Option = Single(tool, primary)
 
             fun of(tool: FishingTool, primary: Fish, secondary: Fish): Option {
-                return when {
-                    primary.level < secondary.level -> Pair(tool, primary, secondary)
-                    else -> Pair(tool, secondary, primary)
+                return if (primary.level < secondary.level) {
+                    Pair(tool, primary, secondary, emptyArray())
+                } else {
+                    Pair(tool, secondary, primary, emptyArray())
                 }
             }
 
             fun of(tool: FishingTool, primary: Fish, secondary: Fish, junk: Array<Fish>): Option {
-                return when {
-                    primary.level < secondary.level -> Pair(tool, primary, secondary, *junk)
-                    else -> Pair(tool, secondary, primary, *junk)
+                return if (primary.level < secondary.level) {
+                    Pair(tool, primary, secondary, junk)
+                } else {
+                    Pair(tool, secondary, primary, junk)
                 }
             }
         }
