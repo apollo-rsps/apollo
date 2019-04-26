@@ -87,9 +87,10 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
                         return valid[rand(valid.size)]
                     }
                 }
-                return when {
-                    level < secondary.level || rand(100) < WEIGHTING -> primary
-                    else -> secondary
+                return if (level < secondary.level || rand(100) < WEIGHTING) {
+                    primary
+                } else {
+                    secondary
                 }
             }
 
