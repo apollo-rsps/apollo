@@ -8,6 +8,8 @@ import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Player;
 
 /**
+ * A verification {@link MessageHandler} for the {@link MagicOnMobMessage}.
+ *
  * @author Tom
  */
 public final class MagicOnMobVerificationHandler extends MessageHandler<MagicOnMobMessage>{
