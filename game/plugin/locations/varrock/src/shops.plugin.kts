@@ -1,6 +1,6 @@
 package org.apollo.plugin.locations.varrock
 
-import org.apollo.game.plugin.shops.shop
+import org.apollo.game.plugin.shops.builder.shop
 
 shop("Aubury's Rune Shop.") {
     operated by "Aubury"

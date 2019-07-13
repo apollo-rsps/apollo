@@ -1,6 +1,6 @@
 package org.apollo.plugin.locations.alKharid
 
-import org.apollo.game.plugin.shops.shop
+import org.apollo.game.plugin.shops.builder.shop
 
 shop("Al-Kharid General Store") {
     operated by "Shop keeper"(524) and "Shop assistant"(525)

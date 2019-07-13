@@ -1,6 +1,6 @@
 package org.apollo.plugin.locations.lumbridge
 
-import org.apollo.game.plugin.shops.shop
+import org.apollo.game.plugin.shops.builder.shop
 
 shop("Lumbridge General Store") {
     operated by "Shop keeper" and "Shop assistant"

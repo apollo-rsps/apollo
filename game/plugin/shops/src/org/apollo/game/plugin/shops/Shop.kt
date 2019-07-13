@@ -48,34 +48,12 @@ object Interfaces {
 val SHOPS = mutableMapOf<Int, Shop>()
 
 /**
- * A [Shop]'s method of payment.
- *
- * @param id The item id of the currency.
- * @param plural Whether or not the name of this currency is plural.
- */
-data class Currency(val id: Int, val plural: Boolean = false) {
-
-    companion object {
-        val COINS = Currency(995, plural = true)
-    }
-
-    val name: String = ItemDefinition.lookup(id).name?.toLowerCase()
-        ?: throw IllegalArgumentException("Currencies must have a name.")
-
-    fun name(amount: Int): String {
-        return when {
-            amount == 1 && plural -> name.removeSuffix("s")
-            else -> name
-        }
-    }
-}
-
-/**
  * An in-game shop, operated by one or more npcs.
  *
  * @param name The name of the shop.
  * @param action The id of the NpcActionMessage sent (by the client) when a player opens this shop.
  * @param sells The [Map] from item id to amount sold.
+ * @param operators The [List] of Npc ids that can open this shop.
  * @param currency The [Currency] used when making exchanges with this [Shop].
  * @param purchases This [Shop]'s attitude towards purchasing items from players.
  */
@@ -83,67 +61,10 @@ class Shop(
     val name: String,
     val action: Int,
     private val sells: Map<Int, Int>,
+    val operators: List<Int>,
     private val currency: Currency = Currency.COINS,
     private val purchases: PurchasePolicy = OWNED
 ) {
-
-    companion object {
-
-        /**
-         * The amount of pulses between shop inventory restocking.
-         */
-        const val RESTOCK_INTERVAL = 100
-
-        /**
-         * The capacity of a [Shop].
-         */
-        private const val CAPACITY = 30
-
-        /**
-         * The type of exchange occurring between the [Player] and [Shop].
-         */
-        private enum class ExchangeType { BUYING, SELLING }
-
-        /**
-         * The option id for item valuation.
-         */
-        private const val VALUATION_OPTION = 1
-
-        /**
-         * Returns the amount that a player tried to buy or sell.
-         *
-         * @param option The id of the option the player selected.
-         */
-        private fun amount(option: Int): Int {
-            return when (option) {
-                2 -> 1
-                3 -> 5
-                4 -> 10
-                else -> throw IllegalArgumentException("Option must be 1-4")
-            }
-        }
-    }
-
-    /**
-     * The [Shop]s policy regarding purchasing items from players.
-     */
-    enum class PurchasePolicy {
-
-        /**
-         * Never purchase anything from players.
-         */
-        NOTHING,
-
-        /**
-         * Only purchase items that this Shop sells by default.
-         */
-        OWNED,
-
-        /**
-         * Purchase any tradeable items.
-         */
-        ANY
-    }
 
     /**
      * The [Inventory] containing this [Shop]'s current items.
@@ -183,7 +104,7 @@ class Shop(
             return
         }
 
-        var buying: Int = amount(option)
+        var buying = amount(option)
         var unavailable = false
 
         val amount = item.amount
@@ -328,4 +249,64 @@ class Shop(
      * @param id The id of the [Item] to sell.
      */
     private fun sells(id: Int): Boolean = sells.containsKey(id)
+
+    /**
+     * The [Shop]s policy regarding purchasing items from players.
+     */
+    enum class PurchasePolicy {
+
+        /**
+         * Never purchase anything from players.
+         */
+        NOTHING,
+
+        /**
+         * Only purchase items that this Shop sells by default.
+         */
+        OWNED,
+
+        /**
+         * Purchase any tradeable items.
+         */
+        ANY
+    }
+
+    companion object {
+
+        /**
+         * The amount of pulses between shop inventory restocking.
+         */
+        const val RESTOCK_INTERVAL = 100
+
+        /**
+         * The capacity of a [Shop].
+         */
+        private const val CAPACITY = 30
+
+        /**
+         * The type of exchange occurring between the [Player] and [Shop].
+         */
+        private enum class ExchangeType { BUYING, SELLING }
+
+        /**
+         * The option id for item valuation.
+         */
+        private const val VALUATION_OPTION = 1
+
+        /**
+         * Returns the amount that a player tried to buy or sell.
+         *
+         * @param option The id of the option the player selected.
+         */
+        private fun amount(option: Int): Int {
+            return when (option) {
+                2 -> 1
+                3 -> 5
+                4 -> 10
+                else -> throw IllegalArgumentException("Option must be 1-4")
+            }
+        }
+
+    }
+
 }
