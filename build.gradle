@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.intellij' version '0.4.9' apply(false)
     id 'org.jmailen.kotlinter' version '1.16.0' apply(false)
     id 'org.sonarqube' version '2.6.2'
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC8"
+    id "io.gitlab.arturbosch.detekt" version '1.0.0-RC16'
 }
 
 allprojects {
@@ -26,7 +26,7 @@ gradle.projectsEvaluated {
     task check {
         def deps = []
         deps += getTasksByName("check", true).findAll { it.project != rootProject }
-        deps += detektCheck
+        deps += "detekt"
         deps += jacocoReport
 
         dependsOn(deps)

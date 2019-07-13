@@ -1,21 +1,15 @@
 def detektAggregateReport = "$buildDir/reports/detekt-report.xml"
 
-detekt {
-    version = detektVersion
-
-    profile("main") {
-        input = rootProject.projectDir.absolutePath
-        filters = ".*/resources/.*, .*/build/.*"
-        output = file("$buildDir/reports")
-        outputName = "detekt-report"
-        config = file("$rootDir/gradle/config/detekt.yml")
-        parallel = true
-    }
+repositories {
+    maven { url "https://repo.spring.io/plugins-release/" }
 }
 
-dependencies {
-    detekt group: 'io.gitlab.arturbosch.detekt', name: 'detekt-formatting', version: detektVersion
-    detekt project(':game:plugin-detekt-rules')
+detekt {
+    toolVersion = detektVersion
+    input = files(rootProject.projectDir.absolutePath)
+    filters = ".*/resources/.*, .*/build/.*"
+    config = files("$rootDir/gradle/config/detekt.yml")
+    parallel = true
 }
 
 sonarqube {
