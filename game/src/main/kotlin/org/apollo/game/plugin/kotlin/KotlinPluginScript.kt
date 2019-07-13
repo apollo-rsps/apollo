@@ -2,7 +2,6 @@ package org.apollo.game.plugin.kotlin
 
 import kotlin.reflect.KClass
 import kotlin.script.experimental.annotations.KotlinScript
-import kotlin.script.experimental.annotations.KotlinScriptFileExtension
 import org.apollo.game.command.Command
 import org.apollo.game.command.CommandListener
 import org.apollo.game.message.handler.MessageHandler
@@ -16,8 +15,7 @@ import org.apollo.game.model.event.PlayerEvent
 import org.apollo.game.plugin.PluginContext
 import org.apollo.net.message.Message
 
-@KotlinScript("Apollo Plugin Script")
-@KotlinScriptFileExtension("plugin.kts")
+@KotlinScript("Apollo Plugin Script", fileExtension = "plugin.kts")
 abstract class KotlinPluginScript(private var world: World, val context: PluginContext) {
     var startListener: (World) -> Unit = { _ -> }
     var stopListener: (World) -> Unit = { _ -> }

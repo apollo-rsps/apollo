@@ -3,14 +3,10 @@ package org.apollo.game.action
 import java.util.concurrent.CancellationException
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.coroutines.experimental.Continuation
-import kotlin.coroutines.experimental.CoroutineContext
-import kotlin.coroutines.experimental.EmptyCoroutineContext
-import kotlin.coroutines.experimental.RestrictsSuspension
-import kotlin.coroutines.experimental.intrinsics.COROUTINE_SUSPENDED
-import kotlin.coroutines.experimental.intrinsics.createCoroutineUnchecked
-import kotlin.coroutines.experimental.intrinsics.suspendCoroutineOrReturn
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlin.coroutines.intrinsics.COROUTINE_SUSPENDED
+import kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.*
 
 typealias ActionPredicate = () -> Boolean
 typealias ActionBlock = suspend ActionCoroutine.() -> Unit
@@ -57,7 +53,7 @@ class ActionCoroutine : Continuation<Unit> {
          */
         fun start(block: ActionBlock): ActionCoroutine {
             val coroutine = ActionCoroutine()
-            val continuation = block.createCoroutineUnchecked(coroutine, coroutine)
+            val continuation = block.createCoroutine(coroutine, coroutine)
 
             coroutine.resumeContinuation(continuation)
 
@@ -66,8 +62,11 @@ class ActionCoroutine : Continuation<Unit> {
     }
 
     override val context: CoroutineContext = EmptyCoroutineContext
-    override fun resume(value: Unit) {}
-    override fun resumeWithException(exception: Throwable) = throw exception
+    override fun resumeWith(result: Result<Unit>) {
+        if (result.isFailure) {
+            throw result.exceptionOrNull()!!
+        }
+    }
 
     private fun resumeContinuation(continuation: Continuation<Unit>, allowCancellation: Boolean = true) {
         try {
@@ -108,7 +107,7 @@ class ActionCoroutine : Continuation<Unit> {
     }
 
     private suspend fun awaitCondition(condition: ActionCoroutineCondition) {
-        return suspendCoroutineOrReturn { cont ->
+        return suspendCoroutineUninterceptedOrReturn { cont ->
             next.compareAndSet(null, ActionCoroutineStep(condition, cont))
             COROUTINE_SUSPENDED
         }
@@ -118,7 +117,7 @@ class ActionCoroutine : Continuation<Unit> {
      * Stop execution of this continuation.
      */
     suspend fun stop(): Nothing {
-        suspendCancellableCoroutine<Unit>(true) { cont ->
+        suspendCancellableCoroutine<Unit> { cont ->
             next.set(null)
             cont.cancel()
         }

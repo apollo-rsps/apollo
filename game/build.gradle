@@ -12,6 +12,7 @@ dependencies {
 
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8'
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-scripting-common'
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime'
     compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: kotlinxCoroutinesVersion
     compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: kotlinxCoroutinesVersion
 

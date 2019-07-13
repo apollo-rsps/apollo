@@ -1,4 +1,3 @@
-import kotlinx.coroutines.experimental.*
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
 import org.apollo.game.message.impl.ObjectActionMessage
@@ -13,8 +12,8 @@ import org.apollo.net.message.Message
 val DUMMY_IDS = setOf<Int>(823)
 
 on { ObjectActionMessage::class }
-        .where { option == 2 && id in DUMMY_IDS }
-        .then { DummyAction.start(this, it, position) }
+    .where { option == 2 && id in DUMMY_IDS }
+    .then { DummyAction.start(this, it, position) }
 
 class DummyAction(val player: Player, position: Position) : AsyncDistancedAction<Player>(0, true, player, position, DISTANCE) {
 
