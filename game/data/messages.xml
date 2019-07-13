@@ -72,6 +72,12 @@
         </chain>
     </message>
     <message>
+        <type>org.apollo.game.message.impl.MagicOnMobMessage</type>
+        <chain>
+            <handler>org.apollo.game.message.handler.MagicOnMobVerificationHandler</handler>
+        </chain>
+    </message>
+    <message>
         <type>org.apollo.game.message.impl.NpcActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.NpcActionVerificationHandler</handler>
