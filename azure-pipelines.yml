@@ -1,16 +1,28 @@
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
+
 steps:
+  - task: CacheBeta@0
+    inputs:
+      key: $(Agent.OS)
+      path: $(GRADLE_USER_HOME)
+    displayName: "Gradle: setup build cache"
+
   - task: Gradle@2
     displayName: "Gradle: build"
     inputs:
       workingDirectory: ''
       gradleWrapperFile: 'gradlew'
-      gradleOptions: '-Xmx3072m -Dorg.gradle.daemon=false -Dorg.gradle.parallel=true'
+      gradleOptions: '-Xmx3072m -Dorg.gradle.parallel=true -Dorg.gradle.caching=true'
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.8'
       jdkArchitectureOption: 'x64'
       publishJUnitResults: false
       testResultsFiles: '**/TEST-*.xml'
       tasks: 'build'
+
+  - script: |
+      ./gradlew --stop
