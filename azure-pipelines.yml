@@ -22,8 +22,14 @@ steps:
       jdkArchitectureOption: 'x64'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
-      tasks: 'build'
+      tasks: 'check jacocoTestReport'
 
   - script: |
       ./gradlew --stop
     displayName: "Gradle: stop daemon"
+
+  - script: |
+      bash <(curl -s https://codecov.io/bash) -t "${CODECOV_TOKEN}"
+    env:
+      CODECOV_TOKEN: $(CODECOV_TOKEN)
+    displayName: "Codecov: publish coverage"

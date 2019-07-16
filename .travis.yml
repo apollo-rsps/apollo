@@ -7,8 +7,6 @@ addons:
     organization: "apollo-rsps"
 
 after_success:
-  - ./gradlew jacocoTestReport
-  - bash <(curl -s https://codecov.io/bash)
   - git fetch --unshallow
   - ./gradlew -Dsonar.host.url=https://sonarcloud.io -Dsonar.login="$SONAR_TOKEN" sonarqube
 before_cache:
