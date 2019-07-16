@@ -1,4 +1,4 @@
-def detektAggregateReport = "$buildDir/reports/detekt-report.xml"
+def detektAggregateReport = "$buildDir/reports/detekt/detekt.xml"
 
 repositories {
     maven { url "https://repo.spring.io/plugins-release/" }
