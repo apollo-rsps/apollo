@@ -1,6 +1,5 @@
 pool:
-  vmImage: 'ubuntu-latest'
-
+    vmImage: 'ubuntu-latest'
 variables:
   GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
 
@@ -10,6 +9,10 @@ steps:
       key: $(Agent.OS)
       path: $(GRADLE_USER_HOME)
     displayName: "Gradle: setup build cache"
+
+  - task: SonarCloudPrepare@1
+    inputs:
+      scannerMode: 'Other'
 
   - task: Gradle@2
     displayName: "Gradle: build"
