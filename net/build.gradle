@@ -11,6 +11,7 @@ dependencies {
     implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: bouncycastleVersion
 
     test.useJUnitPlatform()
+    testImplementation group: 'junit', name: 'junit', version: junitVersion
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
     testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: junitVintageVersion

@@ -4,6 +4,7 @@ apply from: "$rootDir/gradle/kotlin.gradle"
 
 dependencies {
     api group: 'io.gitlab.arturbosch.detekt', name: 'detekt-api', version: detektVersion
+    api group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8'
 
     test.useJUnitPlatform()
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
