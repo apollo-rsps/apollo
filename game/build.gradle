@@ -28,7 +28,7 @@ dependencies {
 
     testImplementation group: 'junit', name: 'junit', version: junitVersion
     testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: powermockVersion
-    testImplementation group: 'org.powermock', name: 'powermock-api-mockito', version: powermockVersion
+    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: powermockVersion
     testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion
 
     project(":game:plugin").subprojects { pluginProject ->
