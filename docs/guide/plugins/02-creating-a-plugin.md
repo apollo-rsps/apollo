@@ -1,7 +1,6 @@
-[[getting-started-with-plugins]]
-= Creating a plugin
+# Creating a plugin
 
-Apollo's plugins are written in http://kotlinlang.org[Kotlin] and are
+Apollo's plugins are written in [Kotlin](http://kotlinlang.org) and are
 primarily for content, not core code (if you aren't sure where your code
 should go, ask in irc). Note that this tutorial assumes some familiarity
 with Kotlin, although good Java knowledge will probably be enough.
@@ -9,11 +8,10 @@ with Kotlin, although good Java knowledge will probably be enough.
 Note: This tutorial is for developing Plugins for the kotlin-experiments
 branch prior to the release of the Kotlin plugin system for Apollo.
 
-[[create-the-working-environment]]
-== Create a working environment
+## Create a working environment
 
 The project maintainers strongly recommend
-https://www.jetbrains.com/idea/[IntelliJ IDEA].
+[IntelliJ IDEA](https://www.jetbrains.com/idea/).
 
 After starting IDEA, select *checkout project* with the URL:
 https://github.com/apollo-rsps/apollo.git and continue. Make sure to
@@ -24,8 +22,7 @@ use the navigation bar at the top and 'VCS > Git > Branches >
 origin/kotlin-experiments > Checkout as new branch'. Name the new branch
 something like kotlin-experiments-my-plugin.
 
-[[create-the-plugin-metadata]]
-== Create the plugin metadata
+## Create the plugin metadata
 
 Apollo's plugins are stored in */game/plugin*, and each plugin has its
 own directory. Create one for your plugin - something like 'myplugin'.
@@ -35,12 +32,12 @@ Inside that, create a directory called 'src', then right click it and
 Inside your plugin's directory (*not* in src) you'll want a
 *build.gradle* file, containing something like:
 
-....
+```groovy
 plugin {
     name = "myplugin"
     authors = [ "your name" ]
 }
-....
+```
 
 
 Sometimes you need to use code from another plugin, which can be done
@@ -48,8 +45,7 @@ like so: `dependencies = [ "util:lookup" ]`
 
 This imports the `lookup` plugin from `util`.
 
-[[write-the-plugin]]
-== Write the plugin
+## Write the plugin
 
 Plugins are written in kotlin script (_.kts_), which is then transpiled
 into Java (bytecode) at compile time. Kotlin script is designed to be
@@ -62,8 +58,7 @@ Apollo uses the _.plugin.kts_ extension to mark files as plugin scripts.
 Add a file named 'myplugin.plugin.kts' inside `src` and add the
 following code:
 
-[source,kotlin]
-----
+```kotlin
 import org.apollo.game.action.Action
 import org.apollo.game.message.impl.InventoryItemMessage
 import org.apollo.game.model.Item
@@ -103,7 +98,7 @@ on { InventoryItemMessage::class }
         player.startAction(DropItemAction(player, slot))
         terminate()
     }
-----
+```
 
 Here we have an *action*, and a *listener*, the two core features of
 plugins.
