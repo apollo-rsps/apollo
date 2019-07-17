@@ -15,5 +15,9 @@ detekt {
 sonarqube {
     properties {
         property "sonar.kotlin.detekt.reportPaths", detektAggregateReport
+        property "sonar.organization", "apollo-rsps"
+        property "sonar.projectKey", "apollo:org.apollo"
+        property "sonar.projectName", "Apollo RSPS"
+        property "sonar.kotlin.file.suffixes", ".kt,.kts"
     }
 }

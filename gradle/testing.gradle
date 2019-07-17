@@ -36,9 +36,9 @@ gradle.projectsEvaluated {
 
 
     task jacocoReport(type: JacocoReport) {
-        sourceDirectories = files()
-        classDirectories = files()
-        executionData = files()
+        sourceDirectories.setFrom(files())
+        classDirectories.setFrom(files())
+        executionData.setFrom(files())
 
         reports {
             html.enabled = true
@@ -63,19 +63,9 @@ gradle.projectsEvaluated {
                 additionalClassDirs((FileCollection) subproject.sourceSets.main.output)
             }
 
-            executionData = files(jacocoCoverageAggregate)
+            executionData.setFrom(files(jacocoCoverageAggregate))
         }
 
         dependsOn(jacocoMerge)
-    }
-
-    sonarqube {
-        properties {
-            property "sonar.organization", "apollo-rsps"
-            property "sonar.projectKey", "apollo:org.apollo"
-            property "sonar.projectName", "Apollo RSPS"
-            property "sonar.kotlin.file.suffixes", ".kt,.kts"
-            property "sonar.jacoco.reportPaths", jacocoCoverageAggregate
-        }
     }
 }
