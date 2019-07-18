@@ -1,13 +1,25 @@
-plugins {
-    id 'org.asciidoctor.gradle.asciidoctor'
-    id 'org.asciidoctor.convert'
+configurations {
+    doclet {
+        transitive(true)
+    }
 }
 
-repositories {
-    mavenCentral()
+dependencies {
+    doclet files("vendor/docfx-doclet-1.0-SNAPSHOT-jar-with-dependencies.jar")
 }
 
-asciidoctor {
-    attributes 'source-highlighter': 'prettify',
-            'toc': 'left'
+gradle.projectsEvaluated {
+
+    task generateApiDocs(type: Javadoc) {
+        source = project(":game").sourceSets.main.java.sourceDirectories
+        classpath = project(":game").configurations.runtimeClasspath + project(":game").sourceSets.main.output
+
+        options.encoding 'UTF-8'
+        destinationDir = file("build/generated-files")
+        options.addStringOption("doclet", "com.microsoft.doclet.DocFxDoclet")
+        options.docletpath = configurations.doclet.toList()
+
+        dependsOn(project(":game").assemble)
+    }
+
 }

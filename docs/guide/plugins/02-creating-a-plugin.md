@@ -10,17 +10,7 @@ branch prior to the release of the Kotlin plugin system for Apollo.
 
 ## Create a working environment
 
-The project maintainers strongly recommend
-[IntelliJ IDEA](https://www.jetbrains.com/idea/).
 
-After starting IDEA, select *checkout project* with the URL:
-https://github.com/apollo-rsps/apollo.git and continue. Make sure to
-*import using gradle* on the next interface.
-
-Next, checkout the kotlin-experiments branch. To do this via IntelliJ,
-use the navigation bar at the top and 'VCS > Git > Branches >
-origin/kotlin-experiments > Checkout as new branch'. Name the new branch
-something like kotlin-experiments-my-plugin.
 
 ## Create the plugin metadata
 
