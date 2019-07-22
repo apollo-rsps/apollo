@@ -1,157 +1,112 @@
 package org.apollo.game.plugin.kotlin
 
-import kotlin.reflect.KClass
-import kotlin.script.experimental.annotations.KotlinScript
-import org.apollo.game.command.Command
 import org.apollo.game.command.CommandListener
 import org.apollo.game.message.handler.MessageHandler
 import org.apollo.game.message.impl.ButtonMessage
 import org.apollo.game.model.World
-import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.model.event.Event
 import org.apollo.game.model.event.EventListener
 import org.apollo.game.model.event.PlayerEvent
 import org.apollo.game.plugin.PluginContext
 import org.apollo.net.message.Message
+import kotlin.reflect.KClass
+import kotlin.script.experimental.annotations.KotlinScript
 
 @KotlinScript("Apollo Plugin Script", fileExtension = "plugin.kts")
-abstract class KotlinPluginScript(private var world: World, val context: PluginContext) {
-    var startListener: (World) -> Unit = { _ -> }
-    var stopListener: (World) -> Unit = { _ -> }
+abstract class KotlinPluginScript(var world: World, val context: PluginContext) {
 
-    /**
-     * Creates a [MessageHandler].
-     */
-    fun <T : Message> on(type: () -> KClass<T>) = KotlinMessageHandler(world, context, type.invoke())
+    private var startListener: (World) -> Unit = { _ -> }
 
-    /**
-     * Create an [EventListener] for a [PlayerEvent].
-     */
-    fun <T : PlayerEvent> on_player_event(type: () -> KClass<T>) = KotlinPlayerEventHandler(world, type.invoke())
+    private var stopListener: (World) -> Unit = { _ -> }
 
-    /**
-     * Create an [EventListener] for an [Event].
-     */
-    fun <T : Event> on_event(type: () -> KClass<T>) = KotlinEventHandler(world, type.invoke())
+    fun <T : ListenableContext, F : Any> on(listenable: Listenable<T, F>, callback: T.() -> Unit) {
+        // Smart-casting/type-inference is completely broken in this function in intelliJ, so assign to otherwise
+        // pointless `l` values for now.
+
+        return when (listenable) {
+            is MessageListenable -> {
+                @Suppress("UNCHECKED_CAST")
+                val l = listenable as MessageListenable<T, Message>
+
+                val handler = KotlinMessageHandler(world, l, callback)
+                context.addMessageHandler(l.type.java, handler)
+            }
+            is PlayerEventListenable -> {
+                @Suppress("UNCHECKED_CAST")
+                val l = listenable as PlayerEventListenable<T, PlayerEvent>
+
+                world.listenFor(l.type.java) { event ->
+                    val context = l.from(event)
+                    context.callback()
+                }
+            }
+            is EventListenable -> {
+                @Suppress("UNCHECKED_CAST")
+                val l = listenable as EventListenable<T, Event>
+
+                world.listenFor(l.type.java) { event ->
+                    val context = l.from(event)
+                    context.callback()
+                }
+            }
+        }
+    }
 
     /**
      * Create a [CommandListener] for the given [command] name, which only players with a [PrivilegeLevel]
      * of [privileges] and above can use.
      */
-    fun on_command(command: String, privileges: PrivilegeLevel) = KotlinCommandHandler(world, command, privileges)
+    fun on_command(command: String, privileges: PrivilegeLevel): KotlinCommandHandler { // TODO what to do with this?
+        return KotlinCommandHandler(world, command, privileges)
+    }
+
+    /**
+     * Creates a [MessageHandler].
+     */
+    @Deprecated("Use new on(Type) listener")
+    fun <T : Message> on(type: () -> KClass<T>): OldKotlinMessageHandler<T> {
+        return OldKotlinMessageHandler(world, context, type())
+    }
+
+    /**
+     * Create an [EventListener] for a [PlayerEvent].
+     */
+    @Deprecated("Use new on(Type) listener")
+    fun <T : PlayerEvent> on_player_event(type: () -> KClass<T>): OldKotlinPlayerEventHandler<T> {
+        return OldKotlinPlayerEventHandler(world, type())
+    }
+
+    /**
+     * Create an [EventListener] for an [Event].
+     */
+    @Deprecated("Use new on(Type) listener")
+    fun <T : Event> on_event(type: () -> KClass<T>): OldKotlinEventHandler<T> {
+        return OldKotlinEventHandler(world, type())
+    }
 
     /**
      * Create a [ButtonMessage] [MessageHandler] for the given [id].
      */
-    fun on_button(id: Int) = on { ButtonMessage::class }.where { widgetId == id }
+    @Deprecated("Use new on(Type) listener")
+    fun on_button(id: Int): KotlinPlayerHandlerProxyTrait<ButtonMessage> {
+        return on { ButtonMessage::class }.where { widgetId == id }
+    }
 
     fun start(callback: (World) -> Unit) {
-        this.startListener = callback
+        startListener = callback
     }
 
     fun stop(callback: (World) -> Unit) {
-        this.stopListener = callback
+        stopListener = callback
     }
 
     fun doStart(world: World) {
-        this.startListener.invoke(world)
+        startListener(world)
     }
 
     fun doStop(world: World) {
-        this.stopListener.invoke(world)
-    }
-}
-
-/**
- * A proxy interface for any handler that operates on [Player]s.
- */
-interface KotlinPlayerHandlerProxyTrait<S : Any> {
-
-    var callback: S.(Player) -> Unit
-    var predicate: S.() -> Boolean
-
-    fun register()
-
-    fun where(predicate: S.() -> Boolean): KotlinPlayerHandlerProxyTrait<S> {
-        this.predicate = predicate
-        return this
+        stopListener(world)
     }
 
-    fun then(callback: S.(Player) -> Unit) {
-        this.callback = callback
-        this.register()
-    }
-
-    fun handleProxy(player: Player, subject: S) {
-        if (subject.predicate()) {
-            subject.callback(player)
-        }
-    }
-}
-
-/**
- * A handler for [PlayerEvent]s.
- */
-class KotlinPlayerEventHandler<T : PlayerEvent>(val world: World, val type: KClass<T>) :
-    KotlinPlayerHandlerProxyTrait<T>, EventListener<T> {
-
-    override var callback: T.(Player) -> Unit = {}
-    override var predicate: T.() -> Boolean = { true }
-
-    override fun handle(event: T) = handleProxy(event.player, event)
-    override fun register() = world.listenFor(type.java, this)
-}
-
-/**
- * A handler for [Event]s.
- */
-class KotlinEventHandler<S : Event>(val world: World, val type: KClass<S>) : EventListener<S> {
-
-    private var callback: S.() -> Unit = {}
-    private var predicate: S.() -> Boolean = { true }
-
-    fun where(predicate: S.() -> Boolean): KotlinEventHandler<S> {
-        this.predicate = predicate
-        return this
-    }
-
-    fun then(callback: S.() -> Unit) {
-        this.callback = callback
-        this.register()
-    }
-
-    override fun handle(event: S) {
-        if (event.predicate()) {
-            event.callback()
-        }
-    }
-
-    fun register() = world.listenFor(type.java, this)
-}
-
-/**
- * A handler for [Message]s.
- */
-class KotlinMessageHandler<T : Message>(val world: World, val context: PluginContext, val type: KClass<T>) :
-    KotlinPlayerHandlerProxyTrait<T>, MessageHandler<T>(world) {
-
-    override var callback: T.(Player) -> Unit = {}
-    override var predicate: T.() -> Boolean = { true }
-
-    override fun handle(player: Player, message: T) = handleProxy(player, message)
-    override fun register() = context.addMessageHandler(type.java, this)
-}
-
-/**
- * A handler for [Command]s.
- */
-class KotlinCommandHandler(val world: World, val command: String, privileges: PrivilegeLevel) :
-    KotlinPlayerHandlerProxyTrait<Command>, CommandListener(privileges) {
-
-    override var callback: Command.(Player) -> Unit = {}
-    override var predicate: Command.() -> Boolean = { true }
-
-    override fun execute(player: Player, command: Command) = handleProxy(player, command)
-    override fun register() = world.commandDispatcher.register(command, this)
 }
