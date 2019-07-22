@@ -1,4 +1,4 @@
-package org.apollo.game.plugin.kotlin.action.obj
+package org.apollo.game.plugin.kotlin.message.action.obj
 
 import org.apollo.cache.def.ObjectDefinition
 import org.apollo.game.message.handler.MessageHandler
@@ -8,18 +8,6 @@ import org.apollo.game.model.entity.EntityType
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.plugin.kotlin.KotlinPluginScript
-import org.apollo.game.plugin.kotlin.action.on
-
-@Deprecated("example function, remove")
-fun KotlinPluginScript.x() {
-    on(ObjectAction, option = "Trade", objects = listOf()) {
-
-    }
-
-    on(ObjectAction, option = "Trade") {
-
-    }
-}
 
 /**
  * Registers a listener for [ObjectActionMessage]s that occur on any of the given [InteractiveObject]s using the
@@ -27,7 +15,7 @@ fun KotlinPluginScript.x() {
  *
  * ```
  * on(ObjectAction, option = "Open", objects = DOORS.toList()) {
- *     player.sendMessage("You open the door")
+ *     player.sendMessage("You open the door.")
  * }
  * ```
  */
@@ -39,10 +27,8 @@ fun <T : InteractiveObject> KotlinPluginScript.on(
 ) {
     if (objects.isEmpty()) {
         on(listenable) {
-            if (this.option.equals(option, ignoreCase = true)) {
-                @Suppress("UNCHECKED_CAST") (this as ObjectAction<T>)
-                callback()
-            }
+            @Suppress("UNCHECKED_CAST") (callback as ObjectAction<*>.() -> Unit)
+            callback(this)
         }
     } else {
         val handler = ObjectActionMessageHandler(world, listenable, objects, option, callback)
@@ -50,9 +36,6 @@ fun <T : InteractiveObject> KotlinPluginScript.on(
     }
 }
 
-/**
- * A [MessageHandler]
- */
 class ObjectActionMessageHandler<T : InteractiveObject>(
     world: World,
     private val listenable: ObjectActionListenable,
@@ -71,8 +54,8 @@ class ObjectActionMessageHandler<T : InteractiveObject>(
             .first { it.definition == def }
 
         if (option.equals(selectedAction, ignoreCase = true) && objects.any { it.instanceOf(obj) }) {
-            val context = listenable.from(player, message, objects)
-            context.callback()
+            val context = listenable.createContext(player, message, objects)
+            context?.callback()
         }
     }
 

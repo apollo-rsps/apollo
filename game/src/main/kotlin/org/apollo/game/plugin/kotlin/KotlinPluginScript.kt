@@ -20,34 +20,34 @@ abstract class KotlinPluginScript(var world: World, val context: PluginContext) 
 
     private var stopListener: (World) -> Unit = { _ -> }
 
-    fun <T : ListenableContext, F : Any> on(listenable: Listenable<T, F>, callback: T.() -> Unit) {
+    fun <T : Any, C : ListenableContext> on(listenable: Listenable<T, C>, callback: C.() -> Unit) {
         // Smart-casting/type-inference is completely broken in this function in intelliJ, so assign to otherwise
         // pointless `l` values for now.
 
         return when (listenable) {
             is MessageListenable -> {
                 @Suppress("UNCHECKED_CAST")
-                val l = listenable as MessageListenable<T, Message>
+                val l = listenable as MessageListenable<Message, C>
 
                 val handler = KotlinMessageHandler(world, l, callback)
                 context.addMessageHandler(l.type.java, handler)
             }
             is PlayerEventListenable -> {
                 @Suppress("UNCHECKED_CAST")
-                val l = listenable as PlayerEventListenable<T, PlayerEvent>
+                val l = listenable as PlayerEventListenable<PlayerEvent, C>
 
                 world.listenFor(l.type.java) { event ->
-                    val context = l.from(event)
-                    context.callback()
+                    val context = l.createContext(event)
+                    context?.callback()
                 }
             }
             is EventListenable -> {
                 @Suppress("UNCHECKED_CAST")
-                val l = listenable as EventListenable<T, Event>
+                val l = listenable as EventListenable<Event, C>
 
                 world.listenFor(l.type.java) { event ->
-                    val context = l.from(event)
-                    context.callback()
+                    val context = l.createContext(event)
+                    context?.callback()
                 }
             }
         }

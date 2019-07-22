@@ -13,17 +13,29 @@ class KotlinCommandHandler(
     val world: World,
     val command: String,
     privileges: PrivilegeLevel
-) : KotlinPlayerHandlerProxyTrait<Command>, CommandListener(privileges) {
+) : CommandListener(privileges) {
 
-    override var callback: Command.(Player) -> Unit = {}
-    override var predicate: Command.() -> Boolean = { true }
+    var callback: Command.(Player) -> Unit = {}
+    var predicate: Command.() -> Boolean = { true }
 
     override fun execute(player: Player, command: Command) {
-        handleProxy(player, command)
+        if (command.predicate()) {
+            command.callback(player)
+        }
     }
 
-    override fun register() {
+    fun register() {
         world.commandDispatcher.register(command, this)
+    }
+
+    fun where(predicate: Command.() -> Boolean): KotlinCommandHandler {
+        this.predicate = predicate
+        return this
+    }
+
+    fun then(callback: Command.(Player) -> Unit) {
+        this.callback = callback
+        this.register()
     }
 
 }

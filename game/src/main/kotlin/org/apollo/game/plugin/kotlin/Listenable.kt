@@ -9,24 +9,24 @@ import kotlin.reflect.KClass
 /**
  * A game occurrence that can be listened to.
  */
-sealed class Listenable<T : ListenableContext, F : Any> {
-    abstract val type: KClass<F>
+sealed class Listenable<T : Any, C : ListenableContext> {
+    abstract val type: KClass<T>
 }
 
-abstract class EventListenable<T : ListenableContext, F : Event> : Listenable<T, F>() {
-    abstract fun from(event: F): T
+abstract class EventListenable<T : Event, C : ListenableContext> : Listenable<T, C>() {
+    abstract fun createContext(event: T): C?
 }
 
-abstract class MessageListenable<T : ListenableContext, F : Message> : Listenable<T, F>() {
-    abstract fun from(player: Player, message: F): T
+abstract class MessageListenable<T : Message, C : ListenableContext> : Listenable<T, C>() {
+    abstract fun createContext(player: Player, message: T): C?
 }
 
-abstract class PlayerEventListenable<T : ListenableContext, F : PlayerEvent> : EventListenable<T, F>() {
+abstract class PlayerEventListenable<T : PlayerEvent, C : ListenableContext> : EventListenable<T, C>() {
 
-    abstract fun from(player: Player, event: F): T
+    abstract fun createContext(player: Player, event: T): C?
 
-    override fun from(event: F): T {
-        return from(event.player, event)
+    final override fun createContext(event: T): C? {
+        return createContext(event.player, event)
     }
 
 }

@@ -1,6 +1,15 @@
 package org.apollo.game.plugin.kotlin
 
+import org.apollo.game.model.entity.Player
+
 /**
- * Contains contextual information for a [Listenable].
+ * Contextual information for a [Listenable].
  */
 interface ListenableContext
+
+/**
+ * Contextual information for a [Listenable] involving a specific [Player].
+ */
+interface PlayerContext : ListenableContext {
+    val player: Player
+}

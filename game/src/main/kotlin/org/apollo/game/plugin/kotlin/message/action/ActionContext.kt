@@ -1,9 +1,8 @@
-package org.apollo.game.plugin.kotlin.action
+package org.apollo.game.plugin.kotlin.message.action
 
-import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.kotlin.KotlinPluginScript
-import org.apollo.game.plugin.kotlin.ListenableContext
 import org.apollo.game.plugin.kotlin.MessageListenable
+import org.apollo.game.plugin.kotlin.PlayerContext
 import org.apollo.net.message.Message
 
 /**
@@ -15,8 +14,8 @@ import org.apollo.net.message.Message
  * }
  * ```
  */
-inline fun <T : ActionListenableContext, reified F : Message> KotlinPluginScript.on(
-    listenable: MessageListenable<T, F>,
+inline fun <T : ActionContext, reified F : Message> KotlinPluginScript.on(
+    listenable: MessageListenable<F, T>,
     option: String,
     crossinline callback: T.() -> Unit
 ) {
@@ -27,7 +26,6 @@ inline fun <T : ActionListenableContext, reified F : Message> KotlinPluginScript
     }
 }
 
-interface ActionListenableContext : ListenableContext {
+interface ActionContext : PlayerContext {
     val option: String
-    val player: Player
 }
