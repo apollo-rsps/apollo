@@ -13,3 +13,5 @@ interface ListenableContext
 interface PlayerContext : ListenableContext {
     val player: Player
 }
+
+interface PredicateContext

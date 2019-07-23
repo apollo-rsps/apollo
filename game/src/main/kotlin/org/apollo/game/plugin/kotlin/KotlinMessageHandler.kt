@@ -7,19 +7,6 @@ import org.apollo.game.plugin.PluginContext
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
 
-class KotlinMessageHandler<F : Message, T : ListenableContext>(
-    world: World,
-    private val listenable: MessageListenable<F, T>,
-    private val callback: T.() -> Unit
-) : MessageHandler<F>(world) {
-
-    override fun handle(player: Player, message: F) {
-        val context = listenable.createContext(player, message)
-        context?.callback()
-    }
-
-}
-
 /**
  * A handler for [Message]s.
  */

@@ -1,32 +1,27 @@
 package org.apollo.game.plugin.kotlin
 
-import org.apollo.game.model.entity.Player
+import org.apollo.game.message.handler.MessageHandler
+import org.apollo.game.model.World
 import org.apollo.game.model.event.Event
-import org.apollo.game.model.event.PlayerEvent
+import org.apollo.game.model.event.EventListener
 import org.apollo.net.message.Message
 import kotlin.reflect.KClass
 
 /**
  * A game occurrence that can be listened to.
  */
-sealed class Listenable<T : Any, C : ListenableContext> {
+sealed class Listenable<T : Any, C : ListenableContext, P : PredicateContext> {
     abstract val type: KClass<T>
 }
 
-abstract class EventListenable<T : Event, C : ListenableContext> : Listenable<T, C>() {
-    abstract fun createContext(event: T): C?
+abstract class EventListenable<T : Event, C : ListenableContext, P : PredicateContext> : Listenable<T, C, P>() {
+
+    abstract fun createHandler(world: World, predicateContext: P?, callback: C.() -> Unit): EventListener<T>
+
 }
 
-abstract class MessageListenable<T : Message, C : ListenableContext> : Listenable<T, C>() {
-    abstract fun createContext(player: Player, message: T): C?
-}
+abstract class MessageListenable<T : Message, C : ListenableContext, P : PredicateContext> : Listenable<T, C, P>() {
 
-abstract class PlayerEventListenable<T : PlayerEvent, C : ListenableContext> : EventListenable<T, C>() {
-
-    abstract fun createContext(player: Player, event: T): C?
-
-    final override fun createContext(event: T): C? {
-        return createContext(event.player, event)
-    }
+    abstract fun createHandler(world: World, predicateContext: P?, callback: C.() -> Unit): MessageHandler<T>
 
 }

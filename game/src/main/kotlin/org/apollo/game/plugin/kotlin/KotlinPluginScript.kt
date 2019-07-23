@@ -20,35 +20,35 @@ abstract class KotlinPluginScript(var world: World, val context: PluginContext) 
 
     private var stopListener: (World) -> Unit = { _ -> }
 
-    fun <T : Any, C : ListenableContext> on(listenable: Listenable<T, C>, callback: C.() -> Unit) {
+    fun <T : Any, C : ListenableContext, I : PredicateContext> on(
+        listenable: Listenable<T, C, I>,
+        callback: C.() -> Unit
+    ) {
+        registerListener(listenable, null, callback)
+    }
+
+    internal fun <T : Any, C : ListenableContext, I : PredicateContext> registerListener(
+        listenable: Listenable<T, C, I>,
+        predicateContext: I?,
+        callback: C.() -> Unit
+    ) {
         // Smart-casting/type-inference is completely broken in this function in intelliJ, so assign to otherwise
         // pointless `l` values for now.
 
         return when (listenable) {
             is MessageListenable -> {
                 @Suppress("UNCHECKED_CAST")
-                val l = listenable as MessageListenable<Message, C>
+                val l = listenable as MessageListenable<Message, C, I>
 
-                val handler = KotlinMessageHandler(world, l, callback)
+                val handler = l.createHandler(world, predicateContext, callback)
                 context.addMessageHandler(l.type.java, handler)
-            }
-            is PlayerEventListenable -> {
-                @Suppress("UNCHECKED_CAST")
-                val l = listenable as PlayerEventListenable<PlayerEvent, C>
-
-                world.listenFor(l.type.java) { event ->
-                    val context = l.createContext(event)
-                    context?.callback()
-                }
             }
             is EventListenable -> {
                 @Suppress("UNCHECKED_CAST")
-                val l = listenable as EventListenable<Event, C>
+                val l = listenable as EventListenable<Event, C, I>
 
-                world.listenFor(l.type.java) { event ->
-                    val context = l.createContext(event)
-                    context?.callback()
-                }
+                val handler = l.createHandler(world, predicateContext, callback)
+                world.listenFor(l.type.java, handler)
             }
         }
     }
