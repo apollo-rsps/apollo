@@ -7,6 +7,8 @@ import io.netty.channel.ChannelFutureListener;
 import java.io.IOException;
 import java.util.Optional;
 
+import io.netty.handler.codec.http.websocketx.WebSocket13FrameEncoder;
+import io.netty.util.AttributeKey;
 import org.apollo.ServerContext;
 import org.apollo.game.io.player.PlayerLoaderResponse;
 import org.apollo.game.model.World.RegistrationStatus;
@@ -21,6 +23,8 @@ import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.net.codec.login.LoginRequest;
 import org.apollo.net.codec.login.LoginResponse;
 import org.apollo.net.release.Release;
+import org.apollo.net.websocket.ByteBufToWebSockBufferEncoder;
+import org.apollo.net.websocket.RequestContext;
 import org.apollo.util.security.IsaacRandomPair;
 
 /**
@@ -29,6 +33,8 @@ import org.apollo.util.security.IsaacRandomPair;
  * @author Graham
  */
 public final class LoginSession extends Session {
+
+	private static final AttributeKey<RequestContext> WEBSOCKET_CONTEXT = AttributeKey.valueOf("websocket");
 
 	/**
 	 * The ServerContext.
@@ -101,6 +107,8 @@ public final class LoginSession extends Session {
 		IsaacRandomPair randomPair = request.getRandomPair();
 		boolean flagged = false;
 
+		RequestContext requestContext = channel.attr(WEBSOCKET_CONTEXT).get();
+
 		GameSession session = new GameSession(channel, context, player, request.isReconnecting());
 		channel.attr(ApolloHandler.SESSION_KEY).set(session);
 		player.setSession(session);
@@ -112,6 +120,13 @@ public final class LoginSession extends Session {
 
 		channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
 		channel.pipeline().addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
+
+		if(requestContext != null && requestContext.isWebsocketRequest()) {
+			channel.pipeline().remove("byteBufToWebsocketEncoder");
+			channel.pipeline().addBefore("gameEncoder", "byteBufToWebsocketEncoder", new ByteBufToWebSockBufferEncoder());
+			channel.pipeline().addBefore("byteBufToWebsocketEncoder",  "websocketEncoder", new WebSocket13FrameEncoder(false));
+
+		}
 
 		channel.pipeline().addBefore("handler", "gameDecoder",
 				new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));

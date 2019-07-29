@@ -29,7 +29,7 @@ public final class RsaKeyGenerator {
 	/**
 	 * The path to the private key file.
 	 */
-	private static final String PRIVATE_KEY_FILE = "data/rsa.pem";
+	private static final String PRIVATE_KEY_FILE = "/home/detuks/Projects/runescape/webpk/apollo/game/data/rsa.pem";
 
 	/**
 	 * The entry point of the RsaKeyGenerator.

@@ -41,6 +41,11 @@ public final class NetworkConstants {
 	public static final int JAGGRAB_PORT;
 
 	/**
+	 * The JAGGRAB port.
+	 */
+	public static final int JAGGRAB_ORIG_PORT;
+
+	/**
 	 * The exponent used when decrypting the RSA block.
 	 */
 	public static final BigInteger RSA_EXPONENT;
@@ -55,6 +60,11 @@ public final class NetworkConstants {
 	 */
 	public static final int SERVICE_PORT;
 
+	/**
+	 * The original service port.
+	 */
+	public static final int SERVICE_ORIG_PORT;
+
 	static {
 		try (InputStream is = new FileInputStream("data/net.xml")) {
 			XmlNode net = new XmlParser().parse(is);
@@ -65,12 +75,15 @@ public final class NetworkConstants {
 			XmlNode ports = net.getChild("ports");
 			Preconditions.checkState(ports != null, "Root node must have a child named 'ports'.");
 
-			XmlNode http = ports.getChild("http"), service = ports.getChild("service"), jaggrab = ports.getChild("jaggrab");
-			Preconditions.checkState(http != null && service != null && jaggrab != null, "Ports node must have three children: 'http', 'service', and 'jaggrab'.");
+			XmlNode http = ports.getChild("http"), service = ports.getChild("service"), serviceOrig = ports.getChild("serviceOrig"),
+				jaggrab = ports.getChild("jaggrab"), jaggrabOrig = ports.getChild("jaggrabOrig");
+			Preconditions.checkState(http != null && service != null && serviceOrig != null && jaggrab != null && jaggrabOrig != null, "Ports node must have three children: 'http', 'service', and 'jaggrab'.");
 
 			HTTP_PORT = Integer.parseInt(http.getValue());
 			SERVICE_PORT = Integer.parseInt(service.getValue());
+			SERVICE_ORIG_PORT = Integer.parseInt(serviceOrig.getValue());
 			JAGGRAB_PORT = Integer.parseInt(jaggrab.getValue());
+			JAGGRAB_ORIG_PORT = Integer.parseInt(jaggrabOrig.getValue());
 		} catch (Exception exception) {
 			throw new ExceptionInInitializerError(new IOException("Error parsing net.xml.", exception));
 		}

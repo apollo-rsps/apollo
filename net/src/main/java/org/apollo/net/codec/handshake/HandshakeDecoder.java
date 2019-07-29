@@ -35,7 +35,7 @@ public final class HandshakeDecoder extends ByteToMessageDecoder {
 
 		switch (id) {
 			case HandshakeConstants.SERVICE_GAME:
-				ctx.pipeline().addFirst("loginEncoder", new LoginEncoder());
+				ctx.pipeline().addLast("loginEncoder", new LoginEncoder());
 				ctx.pipeline().addAfter("handshakeDecoder", "loginDecoder", new LoginDecoder());
 				break;
 

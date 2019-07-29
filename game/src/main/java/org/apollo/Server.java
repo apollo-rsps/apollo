@@ -1,14 +1,5 @@
 package org.apollo;
 
-import java.io.IOException;
-import java.net.BindException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.common.base.Stopwatch;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -26,7 +17,18 @@ import org.apollo.net.HttpChannelInitializer;
 import org.apollo.net.JagGrabChannelInitializer;
 import org.apollo.net.NetworkConstants;
 import org.apollo.net.ServiceChannelInitializer;
+import org.apollo.net.WebSocketJagGrabChannelInitializer;
+import org.apollo.net.WebSocketServiceChannelInitializer;
 import org.apollo.net.release.Release;
+
+import java.io.IOException;
+import java.net.BindException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The core class of the Apollo server.
@@ -53,10 +55,12 @@ public final class Server {
 			server.init(args.length == 1 ? args[0] : Release377.class.getName());
 
 			SocketAddress service = new InetSocketAddress(NetworkConstants.SERVICE_PORT);
+			SocketAddress serviceOrig = new InetSocketAddress(NetworkConstants.SERVICE_ORIG_PORT);
 			SocketAddress http = new InetSocketAddress(NetworkConstants.HTTP_PORT);
 			SocketAddress jaggrab = new InetSocketAddress(NetworkConstants.JAGGRAB_PORT);
+			SocketAddress jaggrabOrig = new InetSocketAddress(NetworkConstants.JAGGRAB_ORIG_PORT);
 
-			server.bind(service, http, jaggrab);
+			server.bind(service, serviceOrig, http, jaggrab, jaggrabOrig);
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, "Error whilst starting server.", t);
 			System.exit(0);
@@ -76,6 +80,11 @@ public final class Server {
 	private final ServerBootstrap jaggrabBootstrap = new ServerBootstrap();
 
 	/**
+	 * The {@link ServerBootstrap} for the JAGGRAB listener.
+	 */
+	private final ServerBootstrap jaggrabOrigBootstrap = new ServerBootstrap();
+
+	/**
 	 * The event loop group.
 	 */
 	private final EventLoopGroup loopGroup = new NioEventLoopGroup();
@@ -84,6 +93,11 @@ public final class Server {
 	 * The {@link ServerBootstrap} for the service listener.
 	 */
 	private final ServerBootstrap serviceBootstrap = new ServerBootstrap();
+
+	/**
+	 * The {@link ServerBootstrap} for the service listener.
+	 */
+	private final ServerBootstrap origServiceBootstrap = new ServerBootstrap();
 
 	/**
 	 * Creates the Apollo server.
@@ -96,13 +110,14 @@ public final class Server {
 	 * Binds the server to the specified address.
 	 *
 	 * @param service The service address to bind to.
-	 * @param http The HTTP address to bind to.
+	 * @param http    The HTTP address to bind to.
 	 * @param jaggrab The JAGGRAB address to bind to.
 	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress.
 	 */
-	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) throws IOException {
+	public void bind(SocketAddress service, SocketAddress serviceOrig, SocketAddress http, SocketAddress jaggrab, SocketAddress jaggrabOrig) throws IOException {
 		logger.fine("Binding service listener to address: " + service + "...");
 		bind(serviceBootstrap, service);
+		bind(origServiceBootstrap, serviceOrig);
 
 		try {
 			logger.fine("Binding HTTP listener to address: " + http + "...");
@@ -113,6 +128,7 @@ public final class Server {
 
 		logger.fine("Binding JAGGRAB listener to address: " + jaggrab + "...");
 		bind(jaggrabBootstrap, jaggrab);
+		bind(jaggrabOrigBootstrap, jaggrabOrig);
 
 		logger.info("Ready for connections.");
 	}
@@ -131,8 +147,10 @@ public final class Server {
 		logger.info("Initialized " + release + ".");
 
 		serviceBootstrap.group(loopGroup);
+		origServiceBootstrap.group(loopGroup);
 		httpBootstrap.group(loopGroup);
 		jaggrabBootstrap.group(loopGroup);
+		jaggrabOrigBootstrap.group(loopGroup);
 
 		World world = new World();
 		ServiceManager services = new ServiceManager(world);
@@ -140,15 +158,25 @@ public final class Server {
 		ServerContext context = new ServerContext(release, services, fs);
 		ApolloHandler handler = new ApolloHandler(context);
 
-		ChannelInitializer<SocketChannel> service = new ServiceChannelInitializer(handler);
+		ChannelInitializer<SocketChannel> serviceOrig = new ServiceChannelInitializer(handler);
+		origServiceBootstrap.channel(NioServerSocketChannel.class);
+		origServiceBootstrap.childHandler(serviceOrig);
+
+		ChannelInitializer<SocketChannel> service = new WebSocketServiceChannelInitializer(handler);
 		serviceBootstrap.channel(NioServerSocketChannel.class);
 		serviceBootstrap.childHandler(service);
+
 
 		ChannelInitializer<SocketChannel> http = new HttpChannelInitializer(handler);
 		httpBootstrap.channel(NioServerSocketChannel.class);
 		httpBootstrap.childHandler(http);
 
-		ChannelInitializer<SocketChannel> jaggrab = new JagGrabChannelInitializer(handler);
+
+		ChannelInitializer<SocketChannel> jaggrabOrig = new JagGrabChannelInitializer(handler);
+		jaggrabOrigBootstrap.channel(NioServerSocketChannel.class);
+		jaggrabOrigBootstrap.childHandler(jaggrabOrig);
+
+		ChannelInitializer<SocketChannel> jaggrab = new WebSocketJagGrabChannelInitializer(handler);
 		jaggrabBootstrap.channel(NioServerSocketChannel.class);
 		jaggrabBootstrap.childHandler(jaggrab);
 
@@ -162,7 +190,7 @@ public final class Server {
 	 * Attempts to bind the specified ServerBootstrap to the specified SocketAddress.
 	 *
 	 * @param bootstrap The ServerBootstrap.
-	 * @param address The SocketAddress.
+	 * @param address   The SocketAddress.
 	 * @throws IOException If the ServerBootstrap fails to bind to the SocketAddress.
 	 */
 	private void bind(ServerBootstrap bootstrap, SocketAddress address) throws IOException {

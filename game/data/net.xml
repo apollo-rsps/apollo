@@ -1,7 +1,9 @@
 <net>
   <ports>
-    <http>80</http>
+    <http>8080</http>
     <service>43594</service>
+    <serviceOrig>43593</serviceOrig>
     <jaggrab>43595</jaggrab>
+    <jaggrabOrig>43596</jaggrabOrig>
   </ports>
 </net>
