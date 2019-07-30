@@ -67,4 +67,12 @@ public class GamePacketEncoderTests {
 		assertEquals('o', out.readUnsignedByte());
 	}
 
+	@Test
+	public void testIsaac() {
+		IsaacRandom random = new IsaacRandom(new int[] { 1, 2, 3, 4 });
+		int r1 = random.nextInt();
+		int r2 = random.nextInt();
+		int r3 = random.nextInt();
+	}
+
 }

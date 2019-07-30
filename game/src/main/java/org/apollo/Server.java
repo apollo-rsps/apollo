@@ -37,6 +37,8 @@ import java.util.logging.Logger;
  */
 public final class Server {
 
+	private static boolean USE_WS = true;
+
 	/**
 	 * The logger for this class.
 	 */
@@ -116,8 +118,11 @@ public final class Server {
 	 */
 	public void bind(SocketAddress service, SocketAddress serviceOrig, SocketAddress http, SocketAddress jaggrab, SocketAddress jaggrabOrig) throws IOException {
 		logger.fine("Binding service listener to address: " + service + "...");
-		bind(serviceBootstrap, service);
-		bind(origServiceBootstrap, serviceOrig);
+		if (USE_WS) {
+			bind(serviceBootstrap, service);
+		} else {
+			bind(origServiceBootstrap, serviceOrig);
+		}
 
 		try {
 			logger.fine("Binding HTTP listener to address: " + http + "...");
@@ -125,10 +130,13 @@ public final class Server {
 		} catch (IOException cause) {
 			logger.log(Level.WARNING, "Unable to bind to HTTP - JAGGRAB will be used as a fallback.", cause);
 		}
-
 		logger.fine("Binding JAGGRAB listener to address: " + jaggrab + "...");
-		bind(jaggrabBootstrap, jaggrab);
-		bind(jaggrabOrigBootstrap, jaggrabOrig);
+
+		if (USE_WS) {
+			bind(jaggrabBootstrap, jaggrab);
+		} else {
+			bind(jaggrabOrigBootstrap, jaggrabOrig);
+		}
 
 		logger.info("Ready for connections.");
 	}
@@ -157,28 +165,30 @@ public final class Server {
 		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(version)), true);
 		ServerContext context = new ServerContext(release, services, fs);
 		ApolloHandler handler = new ApolloHandler(context);
-
-		ChannelInitializer<SocketChannel> serviceOrig = new ServiceChannelInitializer(handler);
-		origServiceBootstrap.channel(NioServerSocketChannel.class);
-		origServiceBootstrap.childHandler(serviceOrig);
-
-		ChannelInitializer<SocketChannel> service = new WebSocketServiceChannelInitializer(handler);
-		serviceBootstrap.channel(NioServerSocketChannel.class);
-		serviceBootstrap.childHandler(service);
+		if (USE_WS) {
+			ChannelInitializer<SocketChannel> service = new WebSocketServiceChannelInitializer(handler);
+			serviceBootstrap.channel(NioServerSocketChannel.class);
+			serviceBootstrap.childHandler(service);
+		} else {
+			ChannelInitializer<SocketChannel> serviceOrig = new ServiceChannelInitializer(handler);
+			origServiceBootstrap.channel(NioServerSocketChannel.class);
+			origServiceBootstrap.childHandler(serviceOrig);
+		}
 
 
 		ChannelInitializer<SocketChannel> http = new HttpChannelInitializer(handler);
 		httpBootstrap.channel(NioServerSocketChannel.class);
 		httpBootstrap.childHandler(http);
 
-
-		ChannelInitializer<SocketChannel> jaggrabOrig = new JagGrabChannelInitializer(handler);
-		jaggrabOrigBootstrap.channel(NioServerSocketChannel.class);
-		jaggrabOrigBootstrap.childHandler(jaggrabOrig);
-
-		ChannelInitializer<SocketChannel> jaggrab = new WebSocketJagGrabChannelInitializer(handler);
-		jaggrabBootstrap.channel(NioServerSocketChannel.class);
-		jaggrabBootstrap.childHandler(jaggrab);
+		if (USE_WS) {
+			ChannelInitializer<SocketChannel> jaggrab = new WebSocketJagGrabChannelInitializer(handler);
+			jaggrabBootstrap.channel(NioServerSocketChannel.class);
+			jaggrabBootstrap.childHandler(jaggrab);
+		} else {
+			ChannelInitializer<SocketChannel> jaggrabOrig = new JagGrabChannelInitializer(handler);
+			jaggrabOrigBootstrap.channel(NioServerSocketChannel.class);
+			jaggrabOrigBootstrap.childHandler(jaggrabOrig);
+		}
 
 		PluginManager manager = new PluginManager(world, new PluginContext(context));
 		services.startAll();

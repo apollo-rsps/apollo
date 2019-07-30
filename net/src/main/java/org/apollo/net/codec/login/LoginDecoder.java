@@ -212,7 +212,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid, hostAddress);
 			IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
-			out.add(new LoginRequest(credentials, randomPair, reconnecting, lowMemory, release, crcs, version));
+			out.add(new LoginRequest(credentials, randomPair, lowMemory, reconnecting, release, crcs, version));
 		}
 	}
 

@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apollo.net.meta.PacketMetaData;
 import org.apollo.net.meta.PacketType;
@@ -21,6 +22,7 @@ import com.google.common.base.Preconditions;
  */
 public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderState> {
 
+	private static final Logger logger = Logger.getLogger(GamePacketDecoder.class.getName());
 	/**
 	 * The current length.
 	 */
@@ -99,6 +101,8 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 		if (buffer.isReadable()) {
 			int encryptedOpcode = buffer.readUnsignedByte();
 			opcode = encryptedOpcode - random.nextInt() & 0xFF;
+
+			logger.info("Received packet with opcode:" + opcode);
 
 			PacketMetaData metaData = release.getIncomingPacketMetaData(opcode);
 			Preconditions.checkNotNull(metaData, "Illegal opcode: " + opcode + ".");

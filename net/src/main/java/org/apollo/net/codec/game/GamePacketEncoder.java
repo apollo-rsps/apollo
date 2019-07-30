@@ -6,6 +6,8 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import org.apollo.net.meta.PacketType;
 import org.apollo.util.security.IsaacRandom;
 
+import java.util.logging.Logger;
+
 /**
  * A {@link MessageToByteEncoder} which encodes in-game packets.
  *
@@ -13,6 +15,7 @@ import org.apollo.util.security.IsaacRandom;
  */
 public final class GamePacketEncoder extends MessageToByteEncoder<GamePacket> {
 
+	private static final Logger logger = Logger.getLogger(GamePacketEncoder.class.getName());
 	/**
 	 * The random number generator.
 	 */
@@ -37,7 +40,7 @@ public final class GamePacketEncoder extends MessageToByteEncoder<GamePacket> {
 		} else if (type == PacketType.VARIABLE_SHORT && payloadLength >= 65_536) {
 			throw new Exception("Payload too long for variable short packet.");
 		}
-
+		logger.info("Sending packet with opcode: " + packet.getOpcode());
 		out.writeByte(packet.getOpcode() + random.nextInt() & 0xFF);
 		if (type == PacketType.VARIABLE_BYTE) {
 			out.writeByte(payloadLength);
