@@ -31,16 +31,16 @@ class ButtonClick(override val player: Player, val button: Int) : PlayerContext 
     companion object : MessageListenable<ButtonMessage, ButtonClick, ButtonPredicateContext>() {
 
         override val type = ButtonMessage::class
-        
+
         override fun createHandler(
             world: World,
-            predicateContext: ButtonPredicateContext?,
+            predicateContext: ButtonPredicateContext,
             callback: ButtonClick.() -> Unit
         ): MessageHandler<ButtonMessage> {
             return object : MessageHandler<ButtonMessage>(world) {
 
                 override fun handle(player: Player, message: ButtonMessage) {
-                    if (predicateContext == null || predicateContext.button == message.widgetId) {
+                    if (predicateContext.button == message.widgetId) {
                         val context = ButtonClick(player, message.widgetId)
                         context.callback()
                     }

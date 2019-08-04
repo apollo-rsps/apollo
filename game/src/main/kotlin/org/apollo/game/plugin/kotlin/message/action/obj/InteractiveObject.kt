@@ -9,6 +9,4 @@ interface InteractiveObject {
 
     val id: Int
 
-    fun instanceOf(other: GameObject): Boolean // TODO alternative name?
-
 }
