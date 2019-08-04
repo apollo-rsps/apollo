@@ -8,18 +8,18 @@ dependencies {
     doclet files("vendor/docfx-doclet-1.0-SNAPSHOT-jar-with-dependencies.jar")
 }
 
-gradle.projectsEvaluated {
 
+gradle.projectsEvaluated {
     task generateApiDocs(type: Javadoc) {
-        source = project(":game").sourceSets.main.java.sourceDirectories
-        classpath = project(":game").configurations.runtimeClasspath + project(":game").sourceSets.main.output
+            source = project(":game").sourceSets.main.java.sourceDirectories
+            classpath = project(":game").configurations.runtimeClasspath + project(":game").sourceSets.main.output
+            dependsOn(project(":game").assemble)
 
         options.encoding 'UTF-8'
         destinationDir = file("build/generated-files")
         options.addStringOption("doclet", "com.microsoft.doclet.DocFxDoclet")
         options.docletpath = configurations.doclet.toList()
 
-        dependsOn(project(":game").assemble)
     }
 
 }

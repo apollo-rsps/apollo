@@ -1,10 +1,10 @@
 FROM mono:latest
 
-RUN apt-get update -y && apt-get install -y unzip
+RUN apt-get update -y && apt-get install -y unzip git
 
 RUN mkdir -p /docfx
 WORKDIR /docfx
-RUN curl -L https://github.com/dotnet/docfx/releases/download/v2.43.3/docfx.zip -O \
+RUN curl -L https://github.com/dotnet/docfx/releases/download/v2.44/docfx.zip -O \
   && unzip docfx.zip \
   && chmod +r /docfx
 

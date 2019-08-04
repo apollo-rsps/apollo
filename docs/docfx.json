@@ -1,18 +1,12 @@
 {
-  "metadata": [
-    {
-      "src": [
-        {
-          "files": [
-          ]
-        }
-      ],
-      "dest": "api",
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    }
-  ],
   "build": {
+    "globalMetadata": {
+      "_appTitle": "Apollo Documentation",
+      "_gitContribute": {
+        "repo": "https://github.com/apollo-rsps/apollo",
+        "branch": "kotlin-experiments"
+      }
+    },
     "content": [
       {
         "files": [
@@ -27,6 +21,12 @@
           "toc.yml",
           "*.md"
         ]
+      },
+      {
+        "files": [
+          "plugin-api/toc.yml",
+          "plugin-api/spec/**.yml"
+        ]
       }
     ],
     "resource": [
@@ -39,7 +39,7 @@
     "overwrite": [
       {
         "files": [
-          "apidoc/**.md"
+          "plugin-api/overwrites/**.md"
         ],
         "exclude": [
           "obj/**",

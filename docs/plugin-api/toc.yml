@@ -1,0 +1,6 @@
+### YamlMime:TableOfContent
+- uid: "org.apollo.game.plugin.action"
+  name: "Actions"
+  items:
+    - uid: "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction"
+      name: "ObjectAction"
