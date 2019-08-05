@@ -74,3 +74,13 @@ jobs:
       inputs:
         filename: docfx
         arguments: docs/docfx.json
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: docs/_site
+        includeRootFolder: false
+        archiveFile: '$(Build.ArtifactStagingDirectory)/docs.zip'
+        replaceExistingArchive: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/docs.zip'
+        artifactName: 'docs.zip'
