@@ -27,5 +27,6 @@ configure(subprojects.findAll { it.buildFile.exists() }) { subproj ->
 
     dependencies {
         kotlinScriptDef(":game")
+        implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
     }
 }
