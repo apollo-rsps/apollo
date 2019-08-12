@@ -102,7 +102,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 			int encryptedOpcode = buffer.readUnsignedByte();
 			opcode = encryptedOpcode - random.nextInt() & 0xFF;
 
-			logger.info("Received packet with opcode:" + opcode);
+//			logger.info("Received packet with opcode:" + opcode);
 
 			PacketMetaData metaData = release.getIncomingPacketMetaData(opcode);
 			Preconditions.checkNotNull(metaData, "Illegal opcode: " + opcode + ".");

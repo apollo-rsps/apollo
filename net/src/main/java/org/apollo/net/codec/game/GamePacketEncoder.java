@@ -40,7 +40,7 @@ public final class GamePacketEncoder extends MessageToByteEncoder<GamePacket> {
 		} else if (type == PacketType.VARIABLE_SHORT && payloadLength >= 65_536) {
 			throw new Exception("Payload too long for variable short packet.");
 		}
-		logger.info("Sending packet with opcode: " + packet.getOpcode());
+//		logger.info("Sending packet with opcode: " + packet.getOpcode());
 		out.writeByte(packet.getOpcode() + random.nextInt() & 0xFF);
 		if (type == PacketType.VARIABLE_BYTE) {
 			out.writeByte(payloadLength);

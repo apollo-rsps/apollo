@@ -21,11 +21,12 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 			System.out.println("Http Request Received");
 
 			HttpHeaders headers = httpRequest.headers();
-			System.out.println("Connection : " +headers.get("Connection"));
-			System.out.println("Upgrade : " + headers.get("Upgrade"));
-
-			if ("Upgrade".equalsIgnoreCase(headers.get("Connection")) &&
-				"WebSocket".equalsIgnoreCase(headers.get("Upgrade"))) {
+			String connection = headers.get("Connection");
+			String upgrade = headers.get("Upgrade");
+			System.out.println("Connection : " + connection);
+			System.out.println("Upgrade : " + upgrade);
+			if (connection != null && connection.contains("Upgrade") &&
+				"WebSocket".equalsIgnoreCase(upgrade)) {
 
 				//Adding new handler to the existing pipeline to handle WebSocket Messages
 				ctx.pipeline().replace(this, "websocketHandler", new WebSockBufferToByteBufDecoder());
@@ -56,7 +57,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
 	protected String getWebSocketURL(HttpRequest req) {
 		System.out.println("Req URI : " + req.getUri());
-		String url =  "ws://" + req.headers().get("Host") + req.getUri() ;
+		String url = "ws://" + req.headers().get("Host") + req.getUri();
 		System.out.println("Constructed URL : " + url);
 		return url;
 	}

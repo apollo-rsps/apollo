@@ -5,6 +5,17 @@ apply from: "$rootDir/gradle/kotlin.gradle"
 description = 'Apollo Game'
 mainClassName = 'org.apollo.Server'
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
 dependencies {
     compile project(':cache')
     compile project(':net')
@@ -42,4 +53,11 @@ applicationDistribution.from("$rootDir/data") {
     include '*.dat'
     include '*.xml'
     into "data/"
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.apollo.Server'
+    }
 }

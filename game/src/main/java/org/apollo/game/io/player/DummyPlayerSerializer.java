@@ -28,8 +28,8 @@ public final class DummyPlayerSerializer extends PlayerSerializer {
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) {
 		int status = LoginConstants.STATUS_OK;
 
-		Player player = new Player(world, credentials, TUTORIAL_ISLAND_SPAWN);
-		player.setPrivilegeLevel(PrivilegeLevel.ADMINISTRATOR);
+		Player player = new Player(world, credentials, EDGEVILLAGE_SPAWN);
+		player.setPrivilegeLevel(PrivilegeLevel.STANDARD);
 		player.setMembers(MembershipStatus.PAID);
 
 		return new PlayerLoaderResponse(status, player);
