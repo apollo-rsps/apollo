@@ -19,15 +19,14 @@ allprojects {
 
 apply from: 'gradle/properties.gradle'
 apply from: 'gradle/code-quality.gradle'
-apply from: 'gradle/testing.gradle'
 apply from: 'gradle/wrapper.gradle'
+apply plugin: "jacoco"
 
 gradle.projectsEvaluated {
     task check {
         def deps = []
         deps += getTasksByName("check", true).findAll { it.project != rootProject }
         deps += "detekt"
-        deps += jacocoReport
 
         dependsOn(deps)
     }
