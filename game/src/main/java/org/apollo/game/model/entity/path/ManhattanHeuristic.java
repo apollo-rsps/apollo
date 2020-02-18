@@ -7,7 +7,7 @@ import org.apollo.game.model.Position;
  *
  * @author Major
  */
-final class ManhattanHeuristic extends Heuristic {
+final class ManhattanHeuristic implements Heuristic {
 
 	@Override
 	public int estimate(Position current, Position goal) {

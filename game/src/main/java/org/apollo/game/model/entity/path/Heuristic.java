@@ -7,7 +7,7 @@ import org.apollo.game.model.Position;
  *
  * @author Major
  */
-public abstract class Heuristic {
+public interface Heuristic {
 
 	/**
 	 * Estimates the value for this heuristic.
