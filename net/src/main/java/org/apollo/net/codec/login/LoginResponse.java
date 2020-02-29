@@ -1,5 +1,8 @@
 package org.apollo.net.codec.login;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
 /**
  * Represents a login response.
  *
@@ -8,40 +11,27 @@ package org.apollo.net.codec.login;
 public final class LoginResponse {
 
 	/**
-	 * The flagged flag.
-	 */
-	private final boolean flagged;
-
-	/**
-	 * The rights level.
-	 */
-	private final int rights;
-
-	/**
 	 * The login status.
 	 */
 	private final int status;
 
 	/**
+	 * The payload.
+	 */
+	private ByteBuf payload;
+	/**
 	 * Creates the login response.
 	 *
 	 * @param status The login status.
-	 * @param rights The rights level.
-	 * @param flagged The flagged flag.
+	 * @param payload The rights payload.
 	 */
-	public LoginResponse(int status, int rights, boolean flagged) {
+	public LoginResponse(int status, ByteBuf payload) {
 		this.status = status;
-		this.rights = rights;
-		this.flagged = flagged;
+		this.payload = payload;
 	}
 
-	/**
-	 * Gets the rights level.
-	 *
-	 * @return The rights level.
-	 */
-	public int getRights() {
-		return rights;
+	public LoginResponse(int status) {
+		this(status, Unpooled.EMPTY_BUFFER);
 	}
 
 	/**
@@ -53,13 +43,7 @@ public final class LoginResponse {
 		return status;
 	}
 
-	/**
-	 * Checks if the player should be flagged.
-	 *
-	 * @return The flagged flag.
-	 */
-	public boolean isFlagged() {
-		return flagged;
+	public ByteBuf getPayload() {
+		return payload;
 	}
-
 }

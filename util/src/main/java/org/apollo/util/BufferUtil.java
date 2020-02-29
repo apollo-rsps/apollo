@@ -24,6 +24,18 @@ public final class BufferUtil {
 		return value;
 	}
 
+
+	public static int readHugeSmart(ByteBuffer buffer) {
+		int value = 0;
+		int read;
+		for (read = readSmart(buffer); read == 32767; read = readSmart(buffer)) {
+			value += 32767;
+		}
+		value += read;
+		return value;
+	}
+
+
 	/**
 	 * Reads a string from the specified {@link ByteBuffer}.
 	 *

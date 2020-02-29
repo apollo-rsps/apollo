@@ -1,9 +1,9 @@
 package org.apollo.game.fs.decoder;
 
-import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.Cache;
 import org.apollo.cache.map.MapConstants;
 import org.apollo.cache.map.MapFile;
-import org.apollo.cache.map.MapFileDecoder;
+import org.apollo.cache.map.MapTerrainDecoder;
 import org.apollo.cache.map.MapIndex;
 import org.apollo.cache.map.MapPlane;
 import org.apollo.cache.map.Tile;
@@ -31,9 +31,9 @@ public final class WorldMapDecoder implements Runnable {
 	private static final int BRIDGE_TILE = 0x2;
 
 	/**
-	 * The {@link IndexedFileSystem}.
+	 * The {@link Cache}.
 	 */
-	private IndexedFileSystem fs;
+	private Cache fs;
 
 	/**
 	 * The {@link CollisionManager} to notify of bridged / blocked tiles.
@@ -43,10 +43,10 @@ public final class WorldMapDecoder implements Runnable {
 	/**
 	 * Create a new {@link WorldMapDecoder}.
 	 *
-	 * @param fs The {@link IndexedFileSystem} to load {@link MapFile}s. from.
+	 * @param fs The {@link Cache} to load {@link MapFile}s. from.
 	 * @param collisionManager The {@link CollisionManager} to register tiles with.
 	 */
-	public WorldMapDecoder(IndexedFileSystem fs, CollisionManager collisionManager) {
+	public WorldMapDecoder(Cache fs, CollisionManager collisionManager) {
 		this.fs = fs;
 		this.collisionManager = collisionManager;
 	}
@@ -61,7 +61,7 @@ public final class WorldMapDecoder implements Runnable {
 
 		try {
 			for (MapIndex index : mapIndices.values()) {
-				MapFileDecoder decoder = MapFileDecoder.create(fs, index);
+				MapTerrainDecoder decoder = MapTerrainDecoder.create(index);
 				MapFile mapFile = decoder.decode();
 				MapPlane[] mapPlanes = mapFile.getPlanes();
 

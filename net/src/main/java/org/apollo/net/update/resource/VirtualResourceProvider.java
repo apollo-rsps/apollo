@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.Cache;
 
 /**
  * A {@link ResourceProvider} which maps virtual resources (such as {@code /media}) to files in an
- * {@link IndexedFileSystem}.
+ * {@link Cache}.
  *
  * @author Graham
  */
@@ -25,14 +25,14 @@ public final class VirtualResourceProvider implements ResourceProvider {
 	/**
 	 * The file system.
 	 */
-	private final IndexedFileSystem fs;
+	private final Cache fs;
 
 	/**
 	 * Creates a new virtual resource provider with the specified file system.
 	 *
 	 * @param fs The file system.
 	 */
-	public VirtualResourceProvider(IndexedFileSystem fs) {
+	public VirtualResourceProvider(Cache fs) {
 		this.fs = fs;
 	}
 
@@ -45,7 +45,7 @@ public final class VirtualResourceProvider implements ResourceProvider {
 
 	@Override
 	public Optional<ByteBuffer> get(String path) throws IOException {
-		if (path.startsWith("/crc")) {
+		/*if (path.startsWith("/crc")) {
 			return Optional.of(fs.getCrcTable());
 		} else if (path.startsWith("/title")) {
 			return Optional.of(fs.getFile(0, 1));
@@ -63,7 +63,7 @@ public final class VirtualResourceProvider implements ResourceProvider {
 			return Optional.of(fs.getFile(0, 7));
 		} else if (path.startsWith("/sounds")) {
 			return Optional.of(fs.getFile(0, 8));
-		}
+		}*/
 
 		return Optional.empty();
 	}

@@ -1,30 +1,29 @@
 package org.apollo.cache.map;
 
-import org.apollo.cache.IndexedFileSystem;
-import org.apollo.util.CompressionUtil;
+import org.apollo.cache.CacheBuffer;
 
-import java.nio.ByteBuffer;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * A decoder for the terrain data stored in {@link MapFile}s.
  *
  * @author Major
  */
-public class MapFileDecoder {
+public class MapTerrainDecoder {
 	/**
 	 * Creates a MapFileDecoder for the specified map file.
 	 *
-	 * @param fs The {@link IndexedFileSystem} to get the file from.
 	 * @param index The {@link MapIndex} to get the file index from.
 	 * @return The MapFileDecoder.
 	 * @throws IOException If there is an error reading or decompressing the file.
 	 */
-	public static MapFileDecoder create(IndexedFileSystem fs, MapIndex index) throws IOException {
-		ByteBuffer compressed = fs.getFile(MapConstants.MAP_INDEX, index.getMapFile());
-		ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(compressed));
-
-		return new MapFileDecoder(decompressed);
+	public static MapTerrainDecoder create(MapIndex index) throws IOException {
+		final var folder = index.getTerrainFolder().get();
+		if (folder == null) {
+			return null;
+		}
+		return new MapTerrainDecoder(folder.findRSFileByID(0).getData());
 	}
 
 	/**
@@ -39,8 +38,8 @@ public class MapFileDecoder {
 	 *
 	 * @param buffer The DataBuffer containing the MapFile data.
 	 */
-	public MapFileDecoder(ByteBuffer buffer) {
-		this.buffer = buffer.asReadOnlyBuffer();
+	public MapTerrainDecoder(CacheBuffer buffer) {
+		this.buffer = ByteBuffer.wrap(buffer.getBuffer());
 	}
 
 	/**
@@ -62,7 +61,7 @@ public class MapFileDecoder {
 	 * Decodes a {@link MapPlane} with the specified level.
 	 *
 	 * @param planes The previously-decoded {@link MapPlane}s, for calculating the height of the tiles.
-	 * @param level The level.
+	 * @param level  The level.
 	 * @return The MapPlane.
 	 */
 	private MapPlane decodePlane(MapPlane[] planes, int level) {
@@ -81,9 +80,9 @@ public class MapFileDecoder {
 	 * Decodes the data into a {@link Tile}.
 	 *
 	 * @param planes The previously-decoded {@link MapPlane}s, for calculating the height of the Tile.
-	 * @param level The level the Tile is on.
-	 * @param x The x coordinate of the Tile.
-	 * @param z The z coordinate of the Tile.
+	 * @param level  The level the Tile is on.
+	 * @param x      The x coordinate of the Tile.
+	 * @param z      The z coordinate of the Tile.
 	 * @return The MapFile.
 	 */
 	private Tile decodeTile(MapPlane[] planes, int level, int x, int z) {
@@ -107,10 +106,9 @@ public class MapFileDecoder {
 				builder.setHeight((height == 1 ? 0 : height) * MapConstants.HEIGHT_MULTIPLICAND + below);
 			} else if (type <= MapConstants.MINIMUM_OVERLAY_TYPE) {
 				builder.setOverlay(buffer.get());
-				builder.setOverlayType((type - MapConstants.LOWEST_CONTINUED_TYPE)
-					/ MapConstants.ORIENTATION_COUNT);
-				builder.setOverlayOrientation(type - MapConstants.LOWEST_CONTINUED_TYPE
-					% MapConstants.ORIENTATION_COUNT);
+				builder.setOverlayType((type - MapConstants.LOWEST_CONTINUED_TYPE) / MapConstants.ORIENTATION_COUNT);
+				builder.setOverlayOrientation(
+						type - MapConstants.LOWEST_CONTINUED_TYPE % MapConstants.ORIENTATION_COUNT);
 			} else if (type <= MapConstants.MINIMUM_ATTRIBUTES_TYPE) {
 				builder.setAttributes(type - MapConstants.MINIMUM_OVERLAY_TYPE);
 			} else {

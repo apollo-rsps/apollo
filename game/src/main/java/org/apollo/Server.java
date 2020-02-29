@@ -1,14 +1,5 @@
 package org.apollo;
 
-import java.io.IOException;
-import java.net.BindException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.common.base.Stopwatch;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -16,7 +7,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.Cache;
 import org.apollo.game.model.World;
 import org.apollo.game.plugin.PluginContext;
 import org.apollo.game.plugin.PluginManager;
@@ -27,6 +18,16 @@ import org.apollo.net.JagGrabChannelInitializer;
 import org.apollo.net.NetworkConstants;
 import org.apollo.net.ServiceChannelInitializer;
 import org.apollo.net.release.Release;
+
+import java.io.IOException;
+import java.net.BindException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The core class of the Apollo server.
@@ -52,11 +53,10 @@ public final class Server {
 			Server server = new Server();
 			server.init(args.length == 1 ? args[0] : Release377.class.getName());
 
-			SocketAddress service = new InetSocketAddress(NetworkConstants.SERVICE_PORT);
-			SocketAddress http = new InetSocketAddress(NetworkConstants.HTTP_PORT);
-			SocketAddress jaggrab = new InetSocketAddress(NetworkConstants.JAGGRAB_PORT);
-
-			server.bind(service, http, jaggrab);
+			server.bind(new InetSocketAddress(NetworkConstants.HTTP_PORT),
+					new InetSocketAddress(NetworkConstants.JAGGRAB_PORT),
+					new InetSocketAddress(NetworkConstants.GAME_PORT),
+					new InetSocketAddress(NetworkConstants.UPDATE_PORT));
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, "Error whilst starting server.", t);
 			System.exit(0);
@@ -95,14 +95,14 @@ public final class Server {
 	/**
 	 * Binds the server to the specified address.
 	 *
-	 * @param service The service address to bind to.
-	 * @param http The HTTP address to bind to.
-	 * @param jaggrab The JAGGRAB address to bind to.
+	 * @param services The service addresses to bind to.
+	 * @param http     The HTTP address to bind to.
+	 * @param jaggrab  The JAGGRAB address to bind to.
 	 * @throws BindException If the ServerBootstrap fails to bind to the SocketAddress.
 	 */
-	public void bind(SocketAddress service, SocketAddress http, SocketAddress jaggrab) throws IOException {
-		logger.fine("Binding service listener to address: " + service + "...");
-		bind(serviceBootstrap, service);
+	public void bind(SocketAddress http, SocketAddress jaggrab, SocketAddress... services) throws IOException {
+		logger.fine("Binding service listener to address: " + Arrays.toString(services) + "...");
+		bind(serviceBootstrap, services);
 
 		try {
 			logger.fine("Binding HTTP listener to address: " + http + "...");
@@ -136,7 +136,7 @@ public final class Server {
 
 		World world = new World();
 		ServiceManager services = new ServiceManager(world);
-		IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs", Integer.toString(version)), true);
+		Cache fs = Cache.openCache(Paths.get("data/fs", Integer.toString(version)));
 		ServerContext context = new ServerContext(release, services, fs);
 		ApolloHandler handler = new ApolloHandler(context);
 
@@ -162,15 +162,16 @@ public final class Server {
 	 * Attempts to bind the specified ServerBootstrap to the specified SocketAddress.
 	 *
 	 * @param bootstrap The ServerBootstrap.
-	 * @param address The SocketAddress.
+	 * @param addresses The SocketAddress.
 	 * @throws IOException If the ServerBootstrap fails to bind to the SocketAddress.
 	 */
-	private void bind(ServerBootstrap bootstrap, SocketAddress address) throws IOException {
-		try {
-			bootstrap.bind(address).sync();
-		} catch (Exception cause) {
-			throw new IOException("Failed to bind to " + address, cause);
+	private void bind(ServerBootstrap bootstrap, SocketAddress... addresses) throws IOException {
+		for (SocketAddress address : addresses) {
+			try {
+				bootstrap.bind(address).sync();
+			} catch (Exception cause) {
+				throw new IOException("Failed to bind to " + address, cause);
+			}
 		}
 	}
-
 }

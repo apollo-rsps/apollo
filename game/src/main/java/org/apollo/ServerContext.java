@@ -1,12 +1,12 @@
 package org.apollo;
 
-import java.util.Objects;
-
-import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.Cache;
 import org.apollo.game.service.GameService;
 import org.apollo.game.service.LoginService;
 import org.apollo.game.service.UpdateService;
 import org.apollo.net.release.Release;
+
+import java.util.Objects;
 
 /**
  * A {@link ServerContext} is created along with the {@link Server} object. The primary difference is that a reference
@@ -21,7 +21,7 @@ public final class ServerContext {
 	/**
 	 * The IndexedFileSystem.
 	 */
-	private final IndexedFileSystem fileSystem;
+	private final Cache fileSystem;
 
 	/**
 	 * The current release.
@@ -40,7 +40,7 @@ public final class ServerContext {
 	 * @param services The service manager.
 	 * @param fileSystem The indexed file system.
 	 */
-	protected ServerContext(Release release, ServiceManager services, IndexedFileSystem fileSystem) {
+	protected ServerContext(Release release, ServiceManager services, Cache fileSystem) {
 		this.release = Objects.requireNonNull(release);
 		this.services = Objects.requireNonNull(services);
 		this.services.setContext(this);
@@ -52,7 +52,7 @@ public final class ServerContext {
 	 *
 	 * @return The IndexedFileSystem.
 	 */
-	public IndexedFileSystem getFileSystem() {
+	public Cache getFileSystem() {
 		return fileSystem;
 	}
 

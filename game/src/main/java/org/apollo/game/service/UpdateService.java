@@ -1,22 +1,16 @@
 package org.apollo.game.service;
 
-import java.io.FileNotFoundException;
+import org.apollo.Service;
+import org.apollo.cache.Cache;
+import org.apollo.net.update.*;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apollo.Service;
-import org.apollo.cache.IndexedFileSystem;
-import org.apollo.net.update.HttpRequestWorker;
-import org.apollo.net.update.JagGrabRequestWorker;
-import org.apollo.net.update.OnDemandRequestWorker;
-import org.apollo.net.update.RequestWorker;
-import org.apollo.net.update.UpdateDispatcher;
 
 /**
  * A class which services file requests.
@@ -66,17 +60,12 @@ public final class UpdateService extends Service {
 
 	@Override
 	public void start() {
-		int release = context.getRelease().getReleaseNumber();
-		try {
-			Path base = Paths.get("data/fs/", Integer.toString(release));
-
-			for (int i = 0; i < THREADS_PER_TYPE; i++) {
-				workers.add(new JagGrabRequestWorker(dispatcher, new IndexedFileSystem(base, true)));
-				workers.add(new OnDemandRequestWorker(dispatcher, new IndexedFileSystem(base, true)));
-				workers.add(new HttpRequestWorker(dispatcher, new IndexedFileSystem(base, true)));
-			}
-		} catch (FileNotFoundException reason) {
-			logger.log(Level.SEVERE, "Unable to find index or data files from the file system.", reason);
+		Path base = Paths.get("data/fs/", Integer.toString(context.getRelease().getReleaseNumber()));
+		final var cache = Cache.openCache(base);
+		for (int i = 0; i < THREADS_PER_TYPE; i++) {
+			workers.add(new JagGrabRequestWorker(dispatcher, cache));
+			workers.add(new OnDemandRequestWorker(dispatcher, cache));
+			workers.add(new HttpRequestWorker(dispatcher, cache));
 		}
 
 		workers.forEach(service::submit);

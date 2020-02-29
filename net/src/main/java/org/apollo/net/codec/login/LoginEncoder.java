@@ -21,11 +21,7 @@ public final class LoginEncoder extends MessageToByteEncoder<LoginResponse> {
 	@Override
 	protected void encode(ChannelHandlerContext ctx, LoginResponse response, ByteBuf out) {
 		out.writeByte(response.getStatus());
-
-		if (response.getStatus() == LoginConstants.STATUS_OK) {
-			out.writeByte(response.getRights());
-			out.writeByte(response.isFlagged() ? 1 : 0);
-		}
+		out.writeBytes(response.getPayload());
 	}
 
 }

@@ -1,18 +1,15 @@
 package org.apollo.cache.map;
 
+import org.apollo.cache.Cache;
+import org.apollo.cache.Archive;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apollo.cache.IndexedFileSystem;
-import org.apollo.cache.archive.Archive;
-import org.apollo.cache.archive.ArchiveEntry;
-import org.apollo.cache.map.MapIndex;
-
 /**
- * Decodes {@link MapIndex}s from the {@link IndexedFileSystem}.
+ * Decodes {@link MapIndex}s from the {@link Archive}.
  *
  * @author Ryley
  * @author Major
@@ -25,35 +22,42 @@ public final class MapIndexDecoder implements Runnable {
 	private static final int VERSIONS_ARCHIVE_FILE_ID = 5;
 
 	/**
-	 * The IndexedFileSystem.
+	 * The Cache.
 	 */
-	private final IndexedFileSystem fs;
+	private final Cache cache;
+	private final XteaDecoder xteaDecoder;
 
-	public MapIndexDecoder(IndexedFileSystem fs) {
-		this.fs = fs;
+	public MapIndexDecoder(Cache cache, XteaDecoder xteaDecoder) {
+		this.cache = cache;
+		this.xteaDecoder = xteaDecoder;
 	}
 
 	/**
-	 * Decodes {@link MapIndex}s from the specified {@link IndexedFileSystem}.
+	 * Decodes {@link MapIndex}s from the specified {@link Archive}.
 	 *
 	 * @return A {@link Map} of packed coordinates to their MapDefinitions.
 	 * @throws IOException If there is an error reading or decoding the Archive.
 	 */
 	public Map<Integer, MapIndex> decode() throws IOException {
-		Archive archive = fs.getArchive(0, VERSIONS_ARCHIVE_FILE_ID);
-		ArchiveEntry entry = archive.getEntry("map_index");
 		Map<Integer, MapIndex> definitions = new HashMap<>();
 
-		ByteBuffer buffer = entry.getBuffer();
-		int count = buffer.capacity() / (3 * Short.BYTES + Byte.BYTES);
+		final var fs = cache.getArchive(MapConstants.MAP_INDEX);
+		for (var entry : xteaDecoder.getAll()) {
+			final var region = entry.getIntKey();
+			final var regionX = region >> 8;
+			final var regionY = region & 0xFF;
 
-		for (int times = 0; times < count; times++) {
-			int id = buffer.getShort() & 0xFFFF;
-			int terrain = buffer.getShort() & 0xFFFF;
-			int objects = buffer.getShort() & 0xFFFF;
-			boolean members = buffer.get() == 1;
+			try {
+				final var terrainFolder = fs.findFolderByName("m" + regionX + "_" + regionY);
+				final var landscapeFolder = fs.findFolderByName("l" + regionX + "_" + regionY, entry.getValue());
+				if (landscapeFolder == null) {
+					continue;
+				}
 
-			definitions.put(id, new MapIndex(id, terrain, objects, members));
+				definitions.put(region, new MapIndex(region, terrainFolder, landscapeFolder, true));
+			} catch (Throwable e) {
+
+			}
 		}
 
 		return definitions;
@@ -62,6 +66,7 @@ public final class MapIndexDecoder implements Runnable {
 	@Override
 	public void run() {
 		try {
+			xteaDecoder.run();
 			MapIndex.init(decode());
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);

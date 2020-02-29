@@ -1,11 +1,7 @@
 package org.apollo.cache.map;
 
-import org.apollo.cache.IndexedFileSystem;
-import org.apollo.cache.map.MapIndex;
-import org.apollo.cache.map.MapConstants;
-import org.apollo.cache.map.MapObject;
+import org.apollo.cache.CacheBuffer;
 import org.apollo.util.BufferUtil;
-import org.apollo.util.CompressionUtil;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -17,20 +13,20 @@ import java.util.List;
  *
  * @author Major
  */
-public final class MapObjectsDecoder {
+public final class MapLandscapeDecoder {
 	/**
 	 * Creates a MapObjectsDecoder for the specified map file.
 	 *
-	 * @param fs The {@link IndexedFileSystem} to get the file from.
 	 * @param index The map index to decode objects for.
 	 * @return The MapObjectsDecoder.
 	 * @throws IOException If there is an error reading or decompressing the file.
 	 */
-	public static MapObjectsDecoder create(IndexedFileSystem fs, MapIndex index) throws IOException {
-		ByteBuffer compressed = fs.getFile(MapConstants.MAP_INDEX, index.getObjectFile());
-		ByteBuffer decompressed = ByteBuffer.wrap(CompressionUtil.degzip(compressed));
-
-		return new MapObjectsDecoder(decompressed);
+	public static MapLandscapeDecoder create(MapIndex index) throws IOException {
+		final var folder = index.getLandscapeFolder().get();
+		if (folder == null) {
+			return null;
+		}
+		return new MapLandscapeDecoder(folder.findRSFileByID(0).getData());
 	}
 
 	/**
@@ -39,12 +35,12 @@ public final class MapObjectsDecoder {
 	private final ByteBuffer buffer;
 
 	/**
-	 * Create a new {@link MapObjectsDecoder} from the given buffer and map coordinates.
+	 * Create a new {@link MapLandscapeDecoder} from the given buffer and map coordinates.
 	 *
 	 * @param buffer The decompressed object file buffer.
 	 */
-	public MapObjectsDecoder(ByteBuffer buffer) {
-		this.buffer = buffer.asReadOnlyBuffer();
+	public MapLandscapeDecoder(CacheBuffer buffer) {
+		this.buffer = ByteBuffer.wrap(buffer.getBuffer());
 	}
 
 	/**
@@ -56,7 +52,7 @@ public final class MapObjectsDecoder {
 		List<MapObject> objects = new ArrayList<>();
 
 		int id = -1;
-		int idOffset = BufferUtil.readSmart(buffer);
+		int idOffset = BufferUtil.readHugeSmart(buffer);
 
 		while (idOffset != 0) {
 			id += idOffset;
@@ -75,7 +71,7 @@ public final class MapObjectsDecoder {
 				positionOffset = BufferUtil.readSmart(buffer);
 			}
 
-			idOffset = BufferUtil.readSmart(buffer);
+			idOffset = BufferUtil.readHugeSmart(buffer);
 		}
 
 		return objects;

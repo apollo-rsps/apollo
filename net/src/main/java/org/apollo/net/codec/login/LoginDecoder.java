@@ -1,17 +1,10 @@
 package org.apollo.net.codec.login;
 
+import com.google.common.net.InetAddresses;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.math.BigInteger;
-import java.net.InetSocketAddress;
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.logging.Logger;
-
-import org.apollo.cache.FileSystemConstants;
 import org.apollo.net.NetworkConstants;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.StatefulFrameDecoder;
@@ -19,7 +12,11 @@ import org.apollo.util.security.IsaacRandom;
 import org.apollo.util.security.IsaacRandomPair;
 import org.apollo.util.security.PlayerCredentials;
 
-import com.google.common.net.InetAddresses;
+import java.math.BigInteger;
+import java.net.InetSocketAddress;
+import java.security.SecureRandom;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * A {@link StatefulFrameDecoder} which decodes the login request frames.
@@ -32,11 +29,6 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * The logger for this class.
 	 */
 	private static final Logger logger = Logger.getLogger(LoginDecoder.class.getName());
-
-	/**
-	 * The secure random number generator.
-	 */
-	private static final SecureRandom RANDOM = new SecureRandom();
 
 	/**
 	 * The login packet length.
@@ -62,15 +54,12 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * Creates the login decoder with the default initial state.
 	 */
 	public LoginDecoder() {
-		super(LoginDecoderState.LOGIN_HANDSHAKE);
+		super(LoginDecoderState.LOGIN_HEADER);
 	}
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, LoginDecoderState state) {
 		switch (state) {
-			case LOGIN_HANDSHAKE:
-				decodeHandshake(ctx, in, out);
-				break;
 			case LOGIN_HEADER:
 				decodeHeader(ctx, in, out);
 				break;
@@ -83,36 +72,14 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	}
 
 	/**
-	 * Decodes in the handshake state.
-	 *
-	 * @param ctx The channel handler context.
-	 * @param buffer The buffer.
-	 * @param out The {@link List} of objects to pass forward through the pipeline.
-	 */
-	private void decodeHandshake(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
-		if (buffer.isReadable()) {
-			usernameHash = buffer.readUnsignedByte();
-			serverSeed = RANDOM.nextLong();
-
-			ByteBuf response = ctx.alloc().buffer(17);
-			response.writeByte(LoginConstants.STATUS_EXCHANGE_DATA);
-			response.writeLong(0);
-			response.writeLong(serverSeed);
-			ctx.channel().write(response);
-
-			setState(LoginDecoderState.LOGIN_HEADER);
-		}
-	}
-
-	/**
 	 * Decodes in the header state.
 	 *
-	 * @param ctx The channel handler context.
+	 * @param ctx    The channel handler context.
 	 * @param buffer The buffer.
-	 * @param out The {@link List} of objects to pass forward through the pipeline.
+	 * @param out    The {@link List} of objects to pass forward through the pipeline.
 	 */
 	private void decodeHeader(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
-		if (buffer.readableBytes() >= 2) {
+		if (buffer.readableBytes() >= Byte.BYTES + Integer.BYTES + Integer.BYTES) {
 			int type = buffer.readUnsignedByte();
 
 			if (type != LoginConstants.TYPE_STANDARD && type != LoginConstants.TYPE_RECONNECTION) {
@@ -121,8 +88,8 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 				return;
 			}
 
+			loginLength = buffer.readUnsignedShort();
 			reconnecting = type == LoginConstants.TYPE_RECONNECTION;
-			loginLength = buffer.readUnsignedByte();
 
 			setState(LoginDecoderState.LOGIN_PAYLOAD);
 		}
@@ -131,16 +98,16 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	/**
 	 * Decodes in the payload state.
 	 *
-	 * @param ctx The channel handler context.
+	 * @param ctx    The channel handler context.
 	 * @param buffer The buffer.
-	 * @param out The {@link List} of objects to pass forward through the pipeline.
+	 * @param out    The {@link List} of objects to pass forward through the pipeline.
 	 */
 	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
 		if (buffer.readableBytes() >= loginLength) {
 			ByteBuf payload = buffer.readBytes(loginLength);
-			int version = 255 - payload.readUnsignedByte();
 
-			int release = payload.readUnsignedShort();
+			long release = payload.readUnsignedInt();
+			long version = payload.readUnsignedInt();
 
 			int memoryStatus = payload.readUnsignedByte();
 			if (memoryStatus != 0 && memoryStatus != 1) {
@@ -151,10 +118,6 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 			boolean lowMemory = memoryStatus == 1;
 
-			int[] crcs = new int[FileSystemConstants.ARCHIVE_COUNT];
-			for (int index = 0; index < 9; index++) {
-				crcs[index] = payload.readInt();
-			}
 
 			int length = payload.readUnsignedByte();
 			if (length != loginLength - 41) {
@@ -170,13 +133,25 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			secure = Unpooled.wrappedBuffer(value.toByteArray());
 
 			int id = secure.readUnsignedByte();
-			if (id != 10) {
+			if (id != 1) {
 				logger.fine("Unable to read id from secure payload.");
 				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
 				return;
 			}
 
+			int[] rounds = new int[4];
+			for (int index = 0; index < rounds.length; index++) {
+				rounds[index] = secure.readInt();
+			}
+
 			long clientSeed = secure.readLong();
+
+			int[] seed = new int[4];
+			seed[0] = (int) (clientSeed >> 32);
+			seed[1] = (int) clientSeed;
+			seed[2] = (int) (serverSeed >> 32);
+			seed[3] = (int) serverSeed;
+
 			long reportedSeed = secure.readLong();
 			if (reportedSeed != serverSeed) {
 				logger.fine("Reported seed differed from server seed.");
@@ -196,11 +171,11 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 				return;
 			}
 
-			int[] seed = new int[4];
-			seed[0] = (int) (clientSeed >> 32);
-			seed[1] = (int) clientSeed;
-			seed[2] = (int) (serverSeed >> 32);
-			seed[3] = (int) serverSeed;
+			int[] crcs = new int[25];
+			for (int index = 0; index < 9; index++) {
+				crcs[index] = payload.readInt();
+			}
+
 
 			IsaacRandom decodingRandom = new IsaacRandom(seed);
 			for (int index = 0; index < seed.length; index++) {
@@ -219,7 +194,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	/**
 	 * Writes a response code to the client and closes the current channel.
 	 *
-	 * @param ctx The context of the channel handler.
+	 * @param ctx      The context of the channel handler.
 	 * @param response The response code to write.
 	 */
 	private void writeResponseCode(ChannelHandlerContext ctx, int response) {

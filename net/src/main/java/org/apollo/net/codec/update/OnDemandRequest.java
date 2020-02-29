@@ -1,7 +1,5 @@
 package org.apollo.net.codec.update;
 
-import org.apollo.cache.FileDescriptor;
-
 /**
  * Represents a single 'on-demand' request.
  *
@@ -90,7 +88,8 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 	/**
 	 * The FileDescriptor.
 	 */
-	private final FileDescriptor descriptor;
+	private final int fs;
+	private final int folder;
 
 	/**
 	 * The request Priority.
@@ -100,11 +99,13 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 	/**
 	 * Creates the OnDemandRequest.
 	 *
-	 * @param descriptor The {@link FileDescriptor}.
+	 * @param fs       The file system.
+	 * @param folder   The folder.
 	 * @param priority The {@link Priority}.
 	 */
-	public OnDemandRequest(FileDescriptor descriptor, Priority priority) {
-		this.descriptor = descriptor;
+	public OnDemandRequest(int fs, int folder, Priority priority) {
+		this.fs = fs;
+		this.folder = folder;
 		this.priority = priority;
 	}
 
@@ -113,13 +114,12 @@ public final class OnDemandRequest implements Comparable<OnDemandRequest> {
 		return priority.compareWith(other.priority);
 	}
 
-	/**
-	 * Gets the {@link FileDescriptor}.
-	 *
-	 * @return The FileDescriptor.
-	 */
-	public FileDescriptor getFileDescriptor() {
-		return descriptor;
+	public int getFs() {
+		return fs;
+	}
+
+	public int getFolder() {
+		return folder;
 	}
 
 	/**

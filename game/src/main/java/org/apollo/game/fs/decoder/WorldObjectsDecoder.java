@@ -1,9 +1,9 @@
 package org.apollo.game.fs.decoder;
 
-import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.Cache;
 import org.apollo.cache.map.MapIndex;
+import org.apollo.cache.map.MapLandscapeDecoder;
 import org.apollo.cache.map.MapObject;
-import org.apollo.cache.map.MapObjectsDecoder;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
@@ -20,9 +20,9 @@ import java.util.Map;
  */
 public final class WorldObjectsDecoder implements Runnable {
 	/**
-	 * The IndexedFileSystem.
+	 * The Cache.
 	 */
-	private final IndexedFileSystem fs;
+	private final Cache cache;
 
 	/**
 	 * The {@link RegionRepository} to lookup {@link Region}s from.
@@ -37,12 +37,12 @@ public final class WorldObjectsDecoder implements Runnable {
 	/**
 	 * Create a new {@link WorldObjectsDecoder}.
 	 *
-	 * @param fs The {@link IndexedFileSystem} to load object files from.
+	 * @param cache The {@link Cache} to load object files from.
 	 * @param world The {@link World} to register objects with.
 	 * @param regionRepository The {@link RegionRepository} to lookup {@link Region}s from.
 	 */
-	public WorldObjectsDecoder(IndexedFileSystem fs, World world, RegionRepository regionRepository) {
-		this.fs = fs;
+	public WorldObjectsDecoder(Cache cache, World world, RegionRepository regionRepository) {
+		this.cache = cache;
 		this.world = world;
 		this.regionRepository = regionRepository;
 	}
@@ -56,7 +56,7 @@ public final class WorldObjectsDecoder implements Runnable {
 
 		try {
 			for (MapIndex index : mapIndices.values()) {
-				MapObjectsDecoder decoder = MapObjectsDecoder.create(fs, index);
+				MapLandscapeDecoder decoder = MapLandscapeDecoder.create(index);
 				List<MapObject> objects = decoder.decode();
 
 				int mapX = index.getX(), mapY = index.getY();

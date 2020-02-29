@@ -1,15 +1,10 @@
 package org.apollo.game.session;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-
-import java.io.IOException;
-import java.util.Optional;
-
 import org.apollo.ServerContext;
 import org.apollo.game.io.player.PlayerLoaderResponse;
-import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.service.GameService;
 import org.apollo.game.service.LoginService;
@@ -23,12 +18,21 @@ import org.apollo.net.codec.login.LoginResponse;
 import org.apollo.net.release.Release;
 import org.apollo.util.security.IsaacRandomPair;
 
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.Optional;
+
 /**
  * A login session.
  *
  * @author Graham
  */
 public final class LoginSession extends Session {
+
+	/**
+	 * The secure random number generator.
+	 */
+	private static final SecureRandom RANDOM = new SecureRandom();
 
 	/**
 	 * The ServerContext.
@@ -41,6 +45,11 @@ public final class LoginSession extends Session {
 	private LoginRequest request;
 
 	/**
+	 * The key assigned for this session.
+	 */
+	private long serverSessionKey = RANDOM.nextLong();
+
+	/**
 	 * Creates a login session for the specified channel.
 	 *
 	 * @param channel The channel.
@@ -49,6 +58,13 @@ public final class LoginSession extends Session {
 	public LoginSession(Channel channel, ServerContext context) {
 		super(channel);
 		this.context = context;
+		init();
+	}
+
+	private void init() {
+		ByteBuf buf = channel.alloc().buffer(Long.BYTES);
+		buf.writeLong(serverSessionKey);
+		channel.write(new LoginResponse(LoginConstants.STATUS_EXCHANGE_DATA, buf));
 	}
 
 	@Override
@@ -59,7 +75,7 @@ public final class LoginSession extends Session {
 	/**
 	 * Handles a response from the login service.
 	 *
-	 * @param request The request this response corresponds to.
+	 * @param request  The request this response corresponds to.
 	 * @param response The response.
 	 */
 	public void handlePlayerLoaderResponse(LoginRequest request, PlayerLoaderResponse response) {
@@ -87,9 +103,7 @@ public final class LoginSession extends Session {
 	 * @param status The failure status.
 	 */
 	public void sendLoginFailure(int status) {
-		boolean flagged = false;
-		LoginResponse response = new LoginResponse(status, 0, flagged);
-		channel.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+		channel.writeAndFlush(new LoginResponse(status)).addListener(ChannelFutureListener.CLOSE);
 	}
 
 	/**
@@ -106,12 +120,13 @@ public final class LoginSession extends Session {
 		player.setSession(session);
 
 		int rights = player.getPrivilegeLevel().toInteger();
-		channel.writeAndFlush(new LoginResponse(LoginConstants.STATUS_OK, rights, flagged));
+		channel.writeAndFlush(new LoginResponse(LoginConstants.STATUS_OK, session.getChannel().alloc().buffer()));
 
 		Release release = context.getRelease();
 
 		channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
-		channel.pipeline().addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
+		channel.pipeline()
+				.addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
 
 		channel.pipeline().addBefore("handler", "gameDecoder",
 				new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
