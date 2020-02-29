@@ -54,7 +54,7 @@ public final class UpdateSession extends Session {
 			OnDemandInfo info = (OnDemandInfo) message;
 
 			int status;
-			if (info.getReleaseNumber() == 181) {//context.getRelease().getReleaseNumber()
+			if (info.getReleaseNumber() == context.getRelease().getReleaseNumber()) {
 				status = LoginConstants.STATUS_EXCHANGE_DATA;
 			} else {
 				status = LoginConstants.STATUS_GAME_UPDATED;
