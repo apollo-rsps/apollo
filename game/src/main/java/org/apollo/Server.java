@@ -1,6 +1,7 @@
 package org.apollo;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Sets;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -25,6 +26,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -166,7 +168,8 @@ public final class Server {
 	 * @throws IOException If the ServerBootstrap fails to bind to the SocketAddress.
 	 */
 	private void bind(ServerBootstrap bootstrap, SocketAddress... addresses) throws IOException {
-		for (SocketAddress address : addresses) {
+		final var set = Sets.newHashSet(addresses);
+		for (SocketAddress address : set) {
 			try {
 				bootstrap.bind(address).sync();
 			} catch (Exception cause) {
