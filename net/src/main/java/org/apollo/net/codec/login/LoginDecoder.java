@@ -178,10 +178,10 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		payload.readBytes(randFileContents);
 
 		final var areaKey = BufferUtil.readString(payload); // TODO this is known.
-		final var someID = payload.readInt(); // Some sort of ID
+		payload.readInt(); // Affiliate
 
-		final var stats = new UserStats();
-		if (!stats.populate(payload)) {
+		final var stats = new UserStats(payload);
+		if (!stats.isValid()) {
 			logger.fine("User statistics version mismatched.");
 			writeResponseCode(ctx, LoginConstants.STATUS_GAME_UPDATED);
 			return;
@@ -203,7 +203,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
 		String hostAddress = InetAddresses.toAddrString(socketAddress.getAddress());
 
-		PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, 0, hostAddress);
+		PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, stats, hostAddress);
 		IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
 		out.add(new LoginRequest(credentials, randomPair, reconnecting, lowMemory, release, crcs, version));

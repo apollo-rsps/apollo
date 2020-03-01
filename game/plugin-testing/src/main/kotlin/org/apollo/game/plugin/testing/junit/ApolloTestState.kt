@@ -39,7 +39,7 @@ data class ApolloTestState(val handlers: MessageHandlerChainSet, val world: Worl
     }
 
     fun createPlayer(info: PlayerStubInfo): Player {
-        val credentials = PlayerCredentials(info.name, "test", 1, 1, "0.0.0.0")
+        val credentials = PlayerCredentials(info.name, "test", 1, null, "0.0.0.0")
         val region = world.regionRepository.fromPosition(info.position)
 
         val player = spyk(Player(world, credentials, info.position))
