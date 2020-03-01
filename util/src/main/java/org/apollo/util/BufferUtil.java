@@ -78,9 +78,25 @@ public final class BufferUtil {
 	}
 
 	/**
+	 * Reads a 24-bit medium integer from the specified {@link ByteBuffer}s current position and increases the buffers
+	 * position by 3.
+	 *
+	 * @param buffer The {@link ByteBuffer} to read from.
+	 * @return The read 24-bit medium integer.
+	 */
+	public static int readUnsignedMedium(ByteBuf buffer) {
+		return buffer.readUnsignedShort() << 8 | buffer.readUnsignedByte();
+	}
+
+	public static String readJagexString(ByteBuf buffer) {
+		buffer.readByte();
+		return readString(buffer);
+	}
+
+	/**
 	 * The terminator of a string.
 	 */
-	public static final int STRING_TERMINATOR = 10;
+	public static final int STRING_TERMINATOR = 0;
 
 	/**
 	 * Default private constructor to prevent instantiation.
@@ -88,5 +104,6 @@ public final class BufferUtil {
 	private BufferUtil() {
 
 	}
+
 
 }

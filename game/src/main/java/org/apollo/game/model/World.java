@@ -7,7 +7,7 @@ import org.apollo.cache.decoder.ItemDefinitionDecoder;
 import org.apollo.cache.decoder.NpcDefinitionDecoder;
 import org.apollo.cache.decoder.ObjectDefinitionDecoder;
 import org.apollo.cache.map.MapIndexDecoder;
-import org.apollo.cache.map.XteaDecoder;
+import org.apollo.cache.map.XteaParser;
 import org.apollo.game.command.CommandDispatcher;
 import org.apollo.game.fs.decoder.SynchronousDecoder;
 import org.apollo.game.fs.decoder.WorldMapDecoder;
@@ -221,7 +221,7 @@ public final class World {
 			new NpcDefinitionDecoder(cache),
 			new ItemDefinitionDecoder(cache),
 			new ObjectDefinitionDecoder(cache),
-			new MapIndexDecoder(cache, new XteaDecoder(release)),
+			new MapIndexDecoder(cache, new XteaParser(release)),
 			EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat")
 		);
 

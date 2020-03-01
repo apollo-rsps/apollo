@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class XteaDecoder implements Runnable {
+public class XteaParser implements Runnable {
 
 	private static final Gson GSON = new Gson();
 
@@ -33,7 +33,7 @@ public class XteaDecoder implements Runnable {
 	private final int release;
 	private final Int2ObjectArrayMap<int[]> xteas;
 
-	public XteaDecoder(int release) {
+	public XteaParser(int release) {
 		this.xteas = new Int2ObjectArrayMap<>();
 		this.release = release;
 	}

@@ -8,13 +8,14 @@ import io.netty.channel.ChannelHandlerContext;
 import org.apollo.net.NetworkConstants;
 import org.apollo.util.BufferUtil;
 import org.apollo.util.StatefulFrameDecoder;
+import org.apollo.util.XteaUtil;
 import org.apollo.util.security.IsaacRandom;
 import org.apollo.util.security.IsaacRandomPair;
 import org.apollo.util.security.PlayerCredentials;
+import org.apollo.util.security.UserStats;
 
 import java.math.BigInteger;
 import java.net.InetSocketAddress;
-import java.security.SecureRandom;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -39,11 +40,6 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * The reconnecting flag.
 	 */
 	private boolean reconnecting;
-
-	/**
-	 * The server-side session key.
-	 */
-	private long serverSeed;
 
 	/**
 	 * The username hash.
@@ -79,116 +75,138 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	 * @param out    The {@link List} of objects to pass forward through the pipeline.
 	 */
 	private void decodeHeader(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
-		if (buffer.readableBytes() >= Byte.BYTES + Integer.BYTES + Integer.BYTES) {
-			int type = buffer.readUnsignedByte();
-
-			if (type != LoginConstants.TYPE_STANDARD && type != LoginConstants.TYPE_RECONNECTION) {
-				logger.fine("Failed to decode login header.");
-				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
-				return;
-			}
-
-			loginLength = buffer.readUnsignedShort();
-			reconnecting = type == LoginConstants.TYPE_RECONNECTION;
-
-			setState(LoginDecoderState.LOGIN_PAYLOAD);
+		if (!buffer.isReadable(Byte.BYTES + Short.BYTES)) {
+			return;
 		}
+
+		int type = buffer.readUnsignedByte();
+
+		if (type != LoginConstants.TYPE_STANDARD && type != LoginConstants.TYPE_RECONNECTION) {
+			logger.fine("Failed to decode login header.");
+			writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
+			return;
+		}
+
+		loginLength = buffer.readUnsignedShort();
+		reconnecting = type == LoginConstants.TYPE_RECONNECTION;
+
+		setState(LoginDecoderState.LOGIN_PAYLOAD);
 	}
 
 	/**
 	 * Decodes in the payload state.
 	 *
-	 * @param ctx    The channel handler context.
+	 * @param ctx     The channel handler context.
 	 * @param buffer The buffer.
-	 * @param out    The {@link List} of objects to pass forward through the pipeline.
+	 * @param out     The {@link List} of objects to pass forward through the pipeline.
 	 */
 	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
-		if (buffer.readableBytes() >= loginLength) {
-			ByteBuf payload = buffer.readBytes(loginLength);
-
-			long release = payload.readUnsignedInt();
-			long version = payload.readUnsignedInt();
-
-			int memoryStatus = payload.readUnsignedByte();
-			if (memoryStatus != 0 && memoryStatus != 1) {
-				logger.fine("Login memoryStatus (" + memoryStatus + ") not in expected range of [0, 1].");
-				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
-				return;
-			}
-
-			boolean lowMemory = memoryStatus == 1;
-
-
-			int length = payload.readUnsignedByte();
-			if (length != loginLength - 41) {
-				logger.fine("Login packet unexpected length (" + length + ")");
-				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
-				return;
-			}
-
-			ByteBuf secure = payload.readBytes(length);
-
-			BigInteger value = new BigInteger(secure.array());
-			value = value.modPow(NetworkConstants.RSA_EXPONENT, NetworkConstants.RSA_MODULUS);
-			secure = Unpooled.wrappedBuffer(value.toByteArray());
-
-			int id = secure.readUnsignedByte();
-			if (id != 1) {
-				logger.fine("Unable to read id from secure payload.");
-				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
-				return;
-			}
-
-			int[] rounds = new int[4];
-			for (int index = 0; index < rounds.length; index++) {
-				rounds[index] = secure.readInt();
-			}
-
-			long clientSeed = secure.readLong();
-
-			int[] seed = new int[4];
-			seed[0] = (int) (clientSeed >> 32);
-			seed[1] = (int) clientSeed;
-			seed[2] = (int) (serverSeed >> 32);
-			seed[3] = (int) serverSeed;
-
-			long reportedSeed = secure.readLong();
-			if (reportedSeed != serverSeed) {
-				logger.fine("Reported seed differed from server seed.");
-				writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
-				return;
-			}
-
-			int uid = secure.readInt();
-			String username = BufferUtil.readString(secure);
-			String password = BufferUtil.readString(secure);
-			InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-			String hostAddress = InetAddresses.toAddrString(socketAddress.getAddress());
-
-			if (password.length() < 6 || password.length() > 20 || username.isEmpty() || username.length() > 12) {
-				logger.fine("Username ('" + username + "') or password did not pass validation.");
-				writeResponseCode(ctx, LoginConstants.STATUS_INVALID_CREDENTIALS);
-				return;
-			}
-
-			int[] crcs = new int[25];
-			for (int index = 0; index < 9; index++) {
-				crcs[index] = payload.readInt();
-			}
-
-
-			IsaacRandom decodingRandom = new IsaacRandom(seed);
-			for (int index = 0; index < seed.length; index++) {
-				seed[index] += 50;
-			}
-
-			IsaacRandom encodingRandom = new IsaacRandom(seed);
-
-			PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, uid, hostAddress);
-			IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
-
-			out.add(new LoginRequest(credentials, randomPair, reconnecting, lowMemory, release, crcs, version));
+		if (!buffer.isReadable(loginLength)) {
+			return;
 		}
+
+		final var payload = buffer.readBytes(loginLength);
+		final var release = payload.readUnsignedInt();
+		final var version = payload.readUnsignedInt();
+		final var clientType = payload.readUnsignedByte() & 0x3; // 0 desktop, 1 android, 2 ios
+
+		byte[] securePayload = new byte[payload.readUnsignedShort()];
+		payload.readBytes(securePayload);
+
+		final var secureBuf = Unpooled.wrappedBuffer(
+				new BigInteger(securePayload).modPow(NetworkConstants.RSA_EXPONENT, NetworkConstants.RSA_MODULUS)
+						.toByteArray());
+
+		final var secureCheck = secureBuf.readUnsignedByte();
+		if (secureCheck != 1) {
+			logger.fine("Login secureCheck (" + secureCheck + ") is not expected value of 1.");
+			writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
+			return;
+		}
+
+		final var seed = new int[4];
+		for (int index = 0; index < seed.length; index++) {
+			seed[index] = secureBuf.readInt();
+		}
+
+		final var serverSessionKey = secureBuf.readLong();
+
+		final short authType;
+		final int authCode;
+		final String password;
+		final var previousSeed = new int[4];
+
+		if (reconnecting) {
+			for (int index = 0; index < previousSeed.length; index++) {
+				previousSeed[index] = secureBuf.readInt();
+			}
+
+			authType = -1;
+			authCode = -1;
+			password = "";
+		} else {
+			authType = secureBuf.readUnsignedByte();
+			if (authType == 1) { // Authenticator Related = 1
+				authCode = secureBuf.readInt();
+			} else if (authType == 0 || authType == 2) {//Authenticator Related = 2, TrustedPC = 0
+				authCode = secureBuf.readUnsignedMedium();
+				secureBuf.skipBytes(Byte.BYTES);
+			} else { //Regular Login
+				authCode = secureBuf.readInt();
+			}
+
+			secureBuf.skipBytes(Byte.BYTES);
+			password = BufferUtil.readString(secureBuf);
+		}
+
+		XteaUtil.decipher(payload, payload.readerIndex(), loginLength, seed);
+
+		final var username = BufferUtil.readString(payload);
+		if (password.length() < 4 || password.length() > 20 || username.isEmpty() || username.length() > 12) {
+			logger.fine("Username ('" + username + "') or password did not pass validation.");
+			writeResponseCode(ctx, LoginConstants.STATUS_INVALID_CREDENTIALS);
+			return;
+		}
+
+		final var clientProperties = payload.readUnsignedByte();
+		final var lowMemory = (clientProperties & 0x1) == 1;
+		final var frameType = (clientProperties >> 1) == 1;// Resizable/Fixed
+		final var frameWidth = payload.readShort();
+		final var frameHeight = payload.readShort();
+
+		final var randFileContents = new byte[24];
+		payload.readBytes(randFileContents);
+
+		final var areaKey = BufferUtil.readString(payload); // TODO this is known.
+		final var someID = payload.readInt(); // Some sort of ID
+
+		final var stats = new UserStats();
+		if (!stats.populate(payload)) {
+			logger.fine("User statistics version mismatched.");
+			writeResponseCode(ctx, LoginConstants.STATUS_GAME_UPDATED);
+			return;
+		}
+
+		final var jsEnabled = payload.readUnsignedByte() == 1;
+
+		int[] crcs = new int[20];
+		for (int index = 0; index < 9; index++) {
+			crcs[index] = payload.readInt();
+		}
+
+		IsaacRandom decodingRandom = new IsaacRandom(seed);
+		for (int index = 0; index < seed.length; index++) {
+			seed[index] += 50;
+		}
+		IsaacRandom encodingRandom = new IsaacRandom(seed);
+
+		InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
+		String hostAddress = InetAddresses.toAddrString(socketAddress.getAddress());
+
+		PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, 0, hostAddress);
+		IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
+
+		out.add(new LoginRequest(credentials, randomPair, reconnecting, lowMemory, release, crcs, version));
 	}
 
 	/**
