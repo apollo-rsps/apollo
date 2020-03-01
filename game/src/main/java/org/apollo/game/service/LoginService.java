@@ -1,12 +1,5 @@
 package org.apollo.game.service;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.apollo.Service;
 import org.apollo.game.io.player.PlayerLoaderResponse;
 import org.apollo.game.io.player.PlayerSerializer;
@@ -23,6 +16,12 @@ import org.apollo.util.ThreadUtil;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * The {@link LoginService} manages {@link LoginRequest}s.
@@ -88,7 +87,7 @@ public final class LoginService extends Service {
 	 * Submits a save request.
 	 *
 	 * @param session The session submitting this request.
-	 * @param player The player to save.
+	 * @param player  The player to save.
 	 */
 	public void submitSaveRequest(GameSession session, Player player) {
 		executor.submit(new PlayerSaverWorker(serializer, session, player));
@@ -97,8 +96,8 @@ public final class LoginService extends Service {
 	/**
 	 * Initialises the login service.
 	 *
-	 * @throws SAXException If there is an error parsing the XML file.
-	 * @throws IOException If there is an error accessing the file.
+	 * @throws SAXException                 If there is an error parsing the XML file.
+	 * @throws IOException                  If there is an error accessing the file.
 	 * @throws ReflectiveOperationException If the {@link PlayerSerializer} implementation could not be created.
 	 */
 	private void init() throws SAXException, IOException, ReflectiveOperationException {
@@ -136,9 +135,13 @@ public final class LoginService extends Service {
 		}
 
 		int[] clientCrcs = request.getArchiveCrcs();
-		int[] serverCrcs = context.getFileSystem().getCrcs();
-
-		return !Arrays.equals(clientCrcs, serverCrcs);
+		for (int index = 0; index < clientCrcs.length; index++) {
+			int crc = context.getFileSystem().getArchive(index).getCRC32();
+			if (index != 16 && crc != clientCrcs[index]) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

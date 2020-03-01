@@ -3,9 +3,6 @@ package org.apollo.util.security;
 import io.netty.buffer.ByteBuf;
 import org.apollo.util.BufferUtil;
 
-/**
- * The type User stats.
- */
 public class UserStats {
 
 	/**
@@ -79,6 +76,10 @@ public class UserStats {
 	 */
 	private final int cpuClockspeed;
 	/**
+	 * The description of the gpu's driver.
+	 */
+	private final String gpuDriverDescription;
+	/**
 	 * The name of the GPU.
 	 */
 	private final String gpuName;
@@ -116,7 +117,7 @@ public class UserStats {
 		version = buffer.readUnsignedByte();
 		osType = buffer.readUnsignedByte();
 		os64Bit = buffer.readBoolean();
-		osVersion = buffer.readUnsignedByte();
+		osVersion = buffer.readUnsignedShort();
 		javaVendor = buffer.readUnsignedByte();
 		javaMajor = buffer.readUnsignedByte();
 		javaMinor = buffer.readUnsignedByte();
@@ -126,6 +127,8 @@ public class UserStats {
 		availableProcessors = buffer.readUnsignedByte();
 		ramAmount = BufferUtil.readUnsignedMedium(buffer);
 		cpuClockspeed = buffer.readUnsignedShort();
+		gpuDriverDescription = BufferUtil.readJagexString(buffer);
+		BufferUtil.readJagexString(buffer); // empty
 		gpuName = BufferUtil.readJagexString(buffer);
 		directxVersion = BufferUtil.readJagexString(buffer);
 		gpuDriverYear = buffer.readUnsignedByte();
@@ -138,7 +141,7 @@ public class UserStats {
 			cpuFeatures[index] = buffer.readInt();
 		}
 		cpuModel = buffer.readInt();
-		BufferUtil.readJagexString(buffer); // This is always empty so don't know. Possibly mobile related?
+		BufferUtil.readJagexString(buffer); // Empty
 	}
 
 	/**
@@ -292,6 +295,15 @@ public class UserStats {
 	 */
 	public int getCpuClockspeed() {
 		return cpuClockspeed;
+	}
+
+	/**
+	 * Gets gpu driver description.
+	 *
+	 * @return the gpu driver description
+	 */
+	public String getGpuDriverDescription() {
+		return gpuDriverDescription;
 	}
 
 	/**

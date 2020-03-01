@@ -42,8 +42,8 @@ public class Cache {
 
 			crcs = new int[numIndices];
 			for (int i = 0; i < archives.length; i++) {
-				var fs = getArchive(i);
-				crcs[i] = fs == null ? 0 : fs.getCRC32();
+				var archive = getArchive(i);
+				crcs[i] = archive == null ? 0 : archive.getCRC32();
 			}
 		} catch (IOException ioex) {
 			ioex.printStackTrace();

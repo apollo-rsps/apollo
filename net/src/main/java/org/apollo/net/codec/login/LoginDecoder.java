@@ -2,6 +2,7 @@ package org.apollo.net.codec.login;
 
 import com.google.common.net.InetAddresses;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -96,9 +97,9 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 	/**
 	 * Decodes in the payload state.
 	 *
-	 * @param ctx     The channel handler context.
+	 * @param ctx    The channel handler context.
 	 * @param buffer The buffer.
-	 * @param out     The {@link List} of objects to pass forward through the pipeline.
+	 * @param out    The {@link List} of objects to pass forward through the pipeline.
 	 */
 	private void decodePayload(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
 		if (!buffer.isReadable(loginLength)) {
@@ -110,14 +111,13 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		final var version = payload.readUnsignedInt();
 		final var clientType = payload.readUnsignedByte() & 0x3; // 0 desktop, 1 android, 2 ios
 
-		byte[] securePayload = new byte[payload.readUnsignedShort()];
-		payload.readBytes(securePayload);
+		var secure = payload.readBytes(payload.readUnsignedShort());
+		final var rsa = new BigInteger(
+				ByteBufUtil.getBytes(secure, secure.readerIndex(), secure.readableBytes(), false))
+				.modPow(NetworkConstants.RSA_EXPONENT, NetworkConstants.RSA_MODULUS);
+		secure = Unpooled.wrappedBuffer(rsa.toByteArray());
 
-		final var secureBuf = Unpooled.wrappedBuffer(
-				new BigInteger(securePayload).modPow(NetworkConstants.RSA_EXPONENT, NetworkConstants.RSA_MODULUS)
-						.toByteArray());
-
-		final var secureCheck = secureBuf.readUnsignedByte();
+		final var secureCheck = secure.readUnsignedByte();
 		if (secureCheck != 1) {
 			logger.fine("Login secureCheck (" + secureCheck + ") is not expected value of 1.");
 			writeResponseCode(ctx, LoginConstants.STATUS_LOGIN_SERVER_REJECTED_SESSION);
@@ -126,10 +126,10 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 		final var seed = new int[4];
 		for (int index = 0; index < seed.length; index++) {
-			seed[index] = secureBuf.readInt();
+			seed[index] = secure.readInt();
 		}
 
-		final var serverSessionKey = secureBuf.readLong();
+		final var serverSessionKey = secure.readLong();
 
 		final short authType;
 		final int authCode;
@@ -138,25 +138,25 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 		if (reconnecting) {
 			for (int index = 0; index < previousSeed.length; index++) {
-				previousSeed[index] = secureBuf.readInt();
+				previousSeed[index] = secure.readInt();
 			}
 
 			authType = -1;
 			authCode = -1;
 			password = "";
 		} else {
-			authType = secureBuf.readUnsignedByte();
+			authType = secure.readUnsignedByte();
 			if (authType == 1) { // Authenticator Related = 1
-				authCode = secureBuf.readInt();
+				authCode = secure.readInt();
 			} else if (authType == 0 || authType == 2) {//Authenticator Related = 2, TrustedPC = 0
-				authCode = secureBuf.readUnsignedMedium();
-				secureBuf.skipBytes(Byte.BYTES);
+				authCode = secure.readUnsignedMedium();
+				secure.skipBytes(Byte.BYTES);
 			} else { //Regular Login
-				authCode = secureBuf.readInt();
+				authCode = secure.readInt();
 			}
 
-			secureBuf.skipBytes(Byte.BYTES);
-			password = BufferUtil.readString(secureBuf);
+			secure.skipBytes(Byte.BYTES);
+			password = BufferUtil.readString(secure);
 		}
 
 		XteaUtil.decipher(payload, payload.readerIndex(), loginLength, seed);
@@ -187,10 +187,12 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 			return;
 		}
 
-		final var jsEnabled = payload.readUnsignedByte() == 1;
+		var test2 = payload.readUnsignedByte(); // The client type again?
+		var test = payload.readInt(); // This is always zero.
 
-		int[] crcs = new int[20];
-		for (int index = 0; index < 9; index++) {
+		System.out.println(payload.readerIndex() + " " + loginLength);
+		int[] crcs = new int[21];
+		for (int index = 0; index < crcs.length; index++) {
 			crcs[index] = payload.readInt();
 		}
 
