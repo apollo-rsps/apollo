@@ -3,6 +3,7 @@ package org.apollo.util;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A utility class which contains {@link ByteBuffer}-related utility methods.
@@ -88,9 +89,27 @@ public final class BufferUtil {
 		return buffer.readUnsignedShort() << 8 | buffer.readUnsignedByte();
 	}
 
+	/**
+	 * Reads a jagex-string from the specified {@link ByteBuf}.
+	 *
+	 * @param buffer The buffer.
+	 * @return The string.
+	 */
 	public static String readJagexString(ByteBuf buffer) {
 		buffer.readByte();
 		return readString(buffer);
+	}
+
+
+	/**
+	 * Writes a string to the specified {@link ByteBuf}
+	 * @param buffer
+	 * @param str
+	 */
+	public static void writeString(ByteBuf buffer, String str) {
+		byte[] bytes = str.getBytes(StandardCharsets.ISO_8859_1);
+		buffer.writeBytes(bytes);
+		buffer.writeByte(0);
 	}
 
 	/**

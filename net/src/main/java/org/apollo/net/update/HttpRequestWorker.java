@@ -18,10 +18,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.apollo.cache.Cache;
-import org.apollo.net.update.resource.CombinedResourceProvider;
-import org.apollo.net.update.resource.HypertextResourceProvider;
-import org.apollo.net.update.resource.ResourceProvider;
-import org.apollo.net.update.resource.VirtualResourceProvider;
+import org.apollo.net.update.resource.*;
 
 import com.google.common.base.Charsets;
 
@@ -54,7 +51,7 @@ public final class HttpRequestWorker extends RequestWorker<HttpRequest, Resource
 	 * @param fs The file system.
 	 */
 	public HttpRequestWorker(UpdateDispatcher dispatcher, Cache fs) {
-		super(dispatcher, new CombinedResourceProvider(new VirtualResourceProvider(fs), new HypertextResourceProvider(WWW_DIRECTORY)));
+		super(dispatcher, new CombinedResourceProvider(new WorldListResourceProvider(), new VirtualResourceProvider(fs), new HypertextResourceProvider(WWW_DIRECTORY)));
 	}
 
 	/**
