@@ -113,6 +113,17 @@ public final class BufferUtil {
 	}
 
 	/**
+	 * Writes a string to the specified {@link ByteBuf}
+	 * @param buffer
+	 * @param str
+	 */
+	public static void writeString(ByteBuffer buffer, String str) {
+		byte[] bytes = str.getBytes(StandardCharsets.ISO_8859_1);
+		buffer.put(bytes);
+		buffer.put((byte) 0);
+	}
+
+	/**
 	 * The terminator of a string.
 	 */
 	public static final int STRING_TERMINATOR = 0;
