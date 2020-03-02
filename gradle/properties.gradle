@@ -1,6 +1,6 @@
 ext {
-    kotlinVersion = '1.3.61'
-    kotlinxCoroutinesVersion = '1.3.3'
+    kotlinVersion = '1.3.40'
+    kotlinxCoroutinesVersion = '1.3.0-M2'
     junitVersion = '4.12'
     powermockVersion = '2.0.2'
     bouncycastleVersion = '1.54'

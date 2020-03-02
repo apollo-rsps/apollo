@@ -4,7 +4,7 @@ import org.apollo.game.message.impl.*
 import org.apollo.game.model.entity.EquipmentConstants
 import org.apollo.game.model.event.impl.LoginEvent
 
-private val changeAltarObjectConfigId = 491
+internal val changeAltarObjectConfigId = 491
 
 internal val RUNES = mutableListOf<Rune>()
 

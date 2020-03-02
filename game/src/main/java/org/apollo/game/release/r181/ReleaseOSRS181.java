@@ -1,9 +1,8 @@
 package org.apollo.game.release.r181;
 
+import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
-
-import java.util.Arrays;
 
 public class ReleaseOSRS181 extends Release {
 
@@ -121,6 +120,36 @@ public class ReleaseOSRS181 extends Release {
 	}
 
 	private void init() {
+		/**
+		 * Server
+		 */
+
+
+
+		register(ConfigMessage.class, new ConfigMessageEncoder());
+
+
+		/**
+		 * Client
+		 */
+
+		/**
+		 * Friends List
+		 */
+		register(88, new AddFriendMessageDecoder());
+		register(54, new RemoveFriendMessageDecoder());
+
+		/**
+		 * Ignores List
+		 */
+		register(90, new AddIgnoreMessageDecoder());
+		register(28, new RemoveIgnoreMessageDecoder());
+
+		/**
+		 * Private Message
+		 */
+		register(25, new PrivateChatMessageDecoder());
+
 		//TODO register completed client prot here.
 	}
 }
