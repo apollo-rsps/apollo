@@ -12,7 +12,7 @@ import org.apollo.cache.Cache;
 import org.apollo.game.model.World;
 import org.apollo.game.plugin.PluginContext;
 import org.apollo.game.plugin.PluginManager;
-import org.apollo.game.release.r377.Release377;
+import org.apollo.game.release.r181.Release181;
 import org.apollo.game.session.ApolloHandler;
 import org.apollo.net.HttpChannelInitializer;
 import org.apollo.net.JagGrabChannelInitializer;
@@ -26,7 +26,6 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,7 +52,7 @@ public final class Server {
 
 		try {
 			Server server = new Server();
-			server.init(args.length == 1 ? args[0] : Release377.class.getName());
+			server.init(args.length == 1 ? args[0] : Release181.class.getName());
 
 			server.bind(new InetSocketAddress(NetworkConstants.HTTP_PORT),
 					new InetSocketAddress(NetworkConstants.JAGGRAB_PORT),

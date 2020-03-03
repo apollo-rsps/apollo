@@ -37,6 +37,6 @@ fun Player.interactWith(entity: Entity, option: Int = 1) {
     when (entity) {
         is GameObject -> send(ObjectActionMessage(option, entity.id, entity.position))
         is Npc -> send(NpcActionMessage(option, entity.index))
-        is Player -> send(PlayerActionMessage(option, entity.index))
+        is Player -> send(PlayerActionMessage(option, entity.index, movementType))
     }
 }

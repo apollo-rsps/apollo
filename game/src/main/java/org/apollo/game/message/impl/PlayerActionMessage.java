@@ -18,19 +18,25 @@ public final class PlayerActionMessage extends Message {
 	private final int index;
 
 	/**
+	 * The movement type that the player performs.
+	 */
+	private final int movementType;
+
+	/**
 	 * The option number.
 	 */
 	private final int option;
 
 	/**
 	 * Creates a player action message.
-	 *
-	 * @param option The option number.
+	 *  @param option The option number.
 	 * @param index The index of the player.
+	 * @param movementType The type of movement.
 	 */
-	public PlayerActionMessage(int option, int index) {
+	public PlayerActionMessage(int option, int index, int movementType) {
 		this.option = option;
 		this.index = index;
+		this.movementType = movementType;
 	}
 
 	/**
@@ -40,6 +46,15 @@ public final class PlayerActionMessage extends Message {
 	 */
 	public int getIndex() {
 		return index;
+	}
+
+	/**
+	 * Gets movement type.
+	 *
+	 * @return the movement type
+	 */
+	public int getMovementType() {
+		return movementType;
 	}
 
 	/**
