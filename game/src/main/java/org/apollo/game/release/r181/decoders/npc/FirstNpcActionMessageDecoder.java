@@ -1,4 +1,4 @@
-package org.apollo.game.release.r181.decoders.npcs;
+package org.apollo.game.release.r181.decoders.npc;
 
 import org.apollo.game.message.impl.NpcActionMessage;
 import org.apollo.net.codec.game.*;

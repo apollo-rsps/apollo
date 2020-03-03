@@ -4,7 +4,7 @@ import org.apollo.game.message.impl.ConfigMessage;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.interfaces.ClosedInterfaceMessageDecoder;
 import org.apollo.game.release.r181.decoders.interfaces.EnteredAmountMessageDecoder;
-import org.apollo.game.release.r181.decoders.npcs.*;
+import org.apollo.game.release.r181.decoders.npc.*;
 import org.apollo.game.release.r181.decoders.obj.*;
 import org.apollo.game.release.r181.decoders.player.actions.*;
 import org.apollo.game.release.r181.decoders.social.PrivacyOptionMessageDecoder;
