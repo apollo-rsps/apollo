@@ -1,4 +1,4 @@
-package org.apollo.game.release.r377;
+package org.apollo.game.release.r181;
 
 import org.apollo.game.message.impl.NpcActionMessage;
 import org.apollo.net.codec.game.DataOrder;
@@ -19,7 +19,9 @@ public final class ThirdNpcActionMessageDecoder extends MessageDecoder<NpcAction
 	public NpcActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 		int index = (int) reader.getSigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-		return new NpcActionMessage(3, index);
+		int movementType = (int) reader.getSigned(DataType.BYTE);
+
+		return new NpcActionMessage(3, index, movementType);
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.apollo.game.release.r377;
+package org.apollo.game.release.r181;
 
 import org.apollo.game.message.impl.ObjectActionMessage;
 import org.apollo.game.model.Position;
@@ -20,11 +20,12 @@ public final class FirstObjectActionMessageDecoder extends MessageDecoder<Object
 	public ObjectActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
-		int x = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
-		int y = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-		int id = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
+		int y = (int) reader.getUnsigned(DataType.SHORT);
+		int movementType = (int) reader.getUnsigned(DataType.BYTE, DataTransformation.SUBTRACT);
+		int id = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
+		int x = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
 
-		return new ObjectActionMessage(1, id, new Position(x, y));
+		return new ObjectActionMessage(1, id, new Position(x, y), movementType);
 	}
 
 }

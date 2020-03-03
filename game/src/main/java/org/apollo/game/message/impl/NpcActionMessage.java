@@ -22,14 +22,21 @@ public final class NpcActionMessage extends Message {
 	private final int index;
 
 	/**
+	 * The movement type that the player performs.
+	 */
+	private final int movementType;
+
+	/**
 	 * Creates an npc action message.
 	 *
-	 * @param option The option number.
+	 *  @param option The option number.
 	 * @param index The index of the npc.
+	 * @param movementType The type of movement.
 	 */
-	public NpcActionMessage(int option, int index) {
+	public NpcActionMessage(int option, int index, int movementType) {
 		this.option = option;
 		this.index = index;
+		this.movementType = movementType;
 	}
 
 	/**
@@ -48,6 +55,15 @@ public final class NpcActionMessage extends Message {
 	 */
 	public int getIndex() {
 		return index;
+	}
+
+	/**
+	 * Gets movement type.
+	 *
+	 * @return the movement type
+	 */
+	public int getMovementType() {
+		return movementType;
 	}
 
 }

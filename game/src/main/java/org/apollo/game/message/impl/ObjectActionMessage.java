@@ -29,16 +29,22 @@ public final class ObjectActionMessage extends Message {
 	private final Position position;
 
 	/**
+	 * The movement type that the player performs.
+	 */
+	private final int movementType;
+
+	/**
 	 * Creates a new object action message.
 	 *
 	 * @param option The option number.
 	 * @param id The id of the object.
 	 * @param position The position of the object.
 	 */
-	public ObjectActionMessage(int option, int id, Position position) {
+	public ObjectActionMessage(int option, int id, Position position,  int movementType) {
 		this.option = option;
 		this.id = id;
 		this.position = position;
+		this.movementType = movementType;
 	}
 
 	/**
@@ -68,4 +74,12 @@ public final class ObjectActionMessage extends Message {
 		return position;
 	}
 
+	/**
+	 * Gets movement type.
+	 *
+	 * @return the movement type
+	 */
+	public int getMovementType() {
+		return movementType;
+	}
 }

@@ -186,7 +186,25 @@ public class Release181 extends Release {
 		register(50, new EightPlayerActionMessageDecoder());
 
 
+		/**
+		 * NPC
+		 */
+		register(71, new FirstNpcActionMessageDecoder());
+		register(1, new SecondNpcActionMessageDecoder());
+		register(33, new ThirdNpcActionMessageDecoder());
+		register(59, new FourthNpcActionMessageDecoder());
+		register(31, new FifthNpcActionMessageDecoder());
+		register(30, new SixthNpcActionMessageDecoder());
 
+		/**
+		 * Objects
+		 */
+		register(10, new FirstObjectActionMessageDecoder());
+		register(79, new SecondObjectActionMessageDecoder());
+		register(89, new ThirdObjectActionMessageDecoder());
+		register(3, new FourthObjectActionMessageDecoder());
+		register(94, new FifthObjectActionMessageDecoder());
+		register(36, new SixthObjectActionMessageDecoder());
 
 		register(38, new ReportAbuseMessageDecoder());
 

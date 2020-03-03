@@ -13,6 +13,11 @@ import org.apollo.net.message.Message;
 public final class PlayerActionMessage extends Message {
 
 	/**
+	 * The option number.
+	 */
+	private final int option;
+
+	/**
 	 * The index of the clicked player.
 	 */
 	private final int index;
@@ -21,11 +26,6 @@ public final class PlayerActionMessage extends Message {
 	 * The movement type that the player performs.
 	 */
 	private final int movementType;
-
-	/**
-	 * The option number.
-	 */
-	private final int option;
 
 	/**
 	 * Creates a player action message.
