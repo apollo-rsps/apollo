@@ -7,8 +7,8 @@ import org.apollo.game.release.r181.decoders.interfaces.EnteredAmountMessageDeco
 import org.apollo.game.release.r181.decoders.npc.*;
 import org.apollo.game.release.r181.decoders.obj.*;
 import org.apollo.game.release.r181.decoders.player.actions.*;
-import org.apollo.game.release.r181.decoders.social.PrivacyOptionMessageDecoder;
-import org.apollo.game.release.r181.decoders.social.PrivateChatMessageDecoder;
+import org.apollo.game.release.r181.decoders.player.*;
+import org.apollo.game.release.r181.decoders.social.*;
 import org.apollo.game.release.r181.decoders.social.friends.AddFriendMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.friends.RemoveFriendMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.ignores.AddIgnoreMessageDecoder;
@@ -224,8 +224,9 @@ public class Release181 extends Release {
 
 
 		register(38, new ReportAbuseMessageDecoder());
-
+		register(73, new FocusUpdateMessageDecoder());
 		register(60, new CommandMessageDecoder());
+		register(41, new MouseClickedMessageDecoder());
 		register(22, new KeepAliveMessageDecoder());
 
 		//TODO register completed client prot here.

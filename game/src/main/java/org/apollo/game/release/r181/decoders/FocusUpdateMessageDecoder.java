@@ -1,4 +1,4 @@
-package org.apollo.game.release.r377;
+package org.apollo.game.release.r181.decoders;
 
 import org.apollo.game.message.impl.FocusUpdateMessage;
 import org.apollo.net.codec.game.DataType;
@@ -15,8 +15,9 @@ public final class FocusUpdateMessageDecoder extends MessageDecoder<FocusUpdateM
 
 	@Override
 	public FocusUpdateMessage decode(GamePacket packet) {
-		GamePacketReader decoder = new GamePacketReader(packet);
-		return new FocusUpdateMessage(decoder.getUnsigned(DataType.BYTE) == 1);
+		GamePacketReader reader = new GamePacketReader(packet);
+		boolean focused = (byte) reader.getUnsigned(DataType.BYTE) == 1;
+		return new FocusUpdateMessage(focused);
 	}
 
 }

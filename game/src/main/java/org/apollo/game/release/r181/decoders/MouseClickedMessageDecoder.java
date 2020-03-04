@@ -1,4 +1,4 @@
-package org.apollo.game.release.r377;
+package org.apollo.game.release.r181.decoders;
 
 import org.apollo.game.message.impl.MouseClickedMessage;
 import org.apollo.net.codec.game.DataType;
@@ -16,14 +16,12 @@ public final class MouseClickedMessageDecoder extends MessageDecoder<MouseClicke
 	@Override
 	public MouseClickedMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
-		int value = (int) reader.getUnsigned(DataType.INT);
+		int mousePacked = (int) reader.getUnsigned(DataType.SHORT);
+		int y = (int) reader.getUnsigned(DataType.SHORT);
+		int x = (int) reader.getUnsigned(DataType.SHORT);
 
-		long delay = (value >> 20) * 50;
-		boolean right = (value >> 19 & 0x1) == 1;
-
-		int cords = value & 0x3FFFF;
-		int x = cords % 765;
-		int y = cords / 765;
+		long delay = mousePacked >> 1;
+		boolean right = (mousePacked & 0x1) == 1;
 
 		return new MouseClickedMessage(delay, right, x, y);
 	}

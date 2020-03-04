@@ -37,7 +37,7 @@ public class WorldListResourceProvider implements ResourceProvider {
 		BufferUtil.writeString(world, address); // address
 		BufferUtil.writeString(world, activity); // activity
 		world.put((byte) 0); // country
-		world.putShort((short) 2000);// number of players
+		world.putShort((short) 100);// number of players
 		world.flip();
 
 		ByteBuffer list = ByteBuffer.allocate(Short.BYTES + world.remaining());

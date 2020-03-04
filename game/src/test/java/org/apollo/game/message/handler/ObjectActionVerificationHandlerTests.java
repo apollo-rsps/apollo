@@ -55,7 +55,7 @@ public final class ObjectActionVerificationHandlerTests {
 		when(region.getEntities(objectPosition, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT))
 				.thenReturn(entitySet);
 
-		ObjectActionMessage objectActionMessage = new ObjectActionMessage(1, 4151, objectPosition);
+		ObjectActionMessage objectActionMessage = new ObjectActionMessage(1, 4151, objectPosition, 0);
 		ObjectActionVerificationHandler objectActionVerificationHandler = new ObjectActionVerificationHandler(world);
 
 		objectActionVerificationHandler.handle(player, objectActionMessage);
@@ -81,7 +81,7 @@ public final class ObjectActionVerificationHandlerTests {
 		when(region.getEntities(objectPosition, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT))
 				.thenReturn(entitySet);
 
-		ObjectActionMessage objectActionMessage = new ObjectActionMessage(1, 4151, objectPosition);
+		ObjectActionMessage objectActionMessage = new ObjectActionMessage(1, 4151, objectPosition, 0);
 		ObjectActionVerificationHandler objectActionVerificationHandler = new ObjectActionVerificationHandler(world);
 
 		objectActionVerificationHandler.handle(player, objectActionMessage);

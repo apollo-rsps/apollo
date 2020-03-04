@@ -3,7 +3,7 @@ package org.apollo.util;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 /**
  * A utility class which contains {@link ByteBuffer}-related utility methods.
@@ -107,7 +107,7 @@ public final class BufferUtil {
 	 * @param str
 	 */
 	public static void writeString(ByteBuf buffer, String str) {
-		byte[] bytes = str.getBytes(StandardCharsets.ISO_8859_1);
+		byte[] bytes = str.getBytes(CHARSET);
 		buffer.writeBytes(bytes);
 		buffer.writeByte(0);
 	}
@@ -118,7 +118,7 @@ public final class BufferUtil {
 	 * @param str
 	 */
 	public static void writeString(ByteBuffer buffer, String str) {
-		byte[] bytes = str.getBytes(StandardCharsets.ISO_8859_1);
+		byte[] bytes = str.getBytes(CHARSET);
 		buffer.put(bytes);
 		buffer.put((byte) 0);
 	}
@@ -127,6 +127,11 @@ public final class BufferUtil {
 	 * The terminator of a string.
 	 */
 	public static final int STRING_TERMINATOR = 0;
+
+	/**
+	 * Charset that Jagex uses.
+	 */
+	public static final Charset CHARSET = Charset.forName("Windows-1252");
 
 	/**
 	 * Default private constructor to prevent instantiation.
