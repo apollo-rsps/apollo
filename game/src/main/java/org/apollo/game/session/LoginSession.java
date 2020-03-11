@@ -119,8 +119,18 @@ public final class LoginSession extends Session {
 		channel.attr(ApolloHandler.SESSION_KEY).set(session);
 		player.setSession(session);
 
-		int rights = player.getPrivilegeLevel().toInteger();
-		channel.writeAndFlush(new LoginResponse(LoginConstants.STATUS_OK, session.getChannel().alloc().buffer()));
+		final var payload = channel.alloc()
+				.buffer(Byte.BYTES * 2 + Integer.BYTES + Byte.BYTES * 2 + Short.BYTES + Byte.BYTES);
+		payload.writeByte(13);
+
+		boolean isTrusted = false;
+		payload.writeBoolean(isTrusted); // If 2FA is enabled
+		payload.writeInt(isTrusted ? randomPair.getEncodingRandom().nextInt() : 0);
+		payload.writeByte(player.getPrivilegeLevel().toInteger());
+		payload.writeBoolean(player.isMembers());
+		payload.writeShort(player.getIndex());
+		payload.writeBoolean(flagged); // flagged
+		channel.writeAndFlush(new LoginResponse(LoginConstants.STATUS_OK, payload));
 
 		Release release = context.getRelease();
 

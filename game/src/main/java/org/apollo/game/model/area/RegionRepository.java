@@ -1,14 +1,14 @@
 package org.apollo.game.model.area;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import org.apollo.cache.map.XteaRepository;
+import org.apollo.game.model.Position;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apollo.game.model.Position;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 
 /**
  * A repository of {@link Region}s, backed by a {@link HashMap} of {@link RegionCoordinates} that correspond to their
@@ -53,6 +53,11 @@ public final class RegionRepository {
 	 * A list of default {@link RegionListener}s which will be added to {@link Region}s upon creation.
 	 */
 	private final List<RegionListener> defaultRegionListeners = new ArrayList<>();
+
+	/**
+	 * A repository of xteas.
+	 */
+	private XteaRepository xteaRepository;
 
 	/**
 	 * Creates a new RegionRepository.
@@ -169,4 +174,21 @@ public final class RegionRepository {
 		return regions.remove(region.getCoordinates()) != null;
 	}
 
+	/**
+	 * Gets xtea repository.
+	 *
+	 * @return the xtea repository
+	 */
+	public XteaRepository getXteaRepository() {
+		return xteaRepository;
+	}
+
+	/**
+	 * Sets xtea repository.
+	 *
+	 * @param xteaRepository the xtea repository
+	 */
+	public void setXteaRepository(XteaRepository xteaRepository) {
+		this.xteaRepository = xteaRepository;
+	}
 }

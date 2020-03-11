@@ -7,7 +7,7 @@ import org.apollo.cache.decoder.ItemDefinitionDecoder;
 import org.apollo.cache.decoder.NpcDefinitionDecoder;
 import org.apollo.cache.decoder.ObjectDefinitionDecoder;
 import org.apollo.cache.map.MapIndexDecoder;
-import org.apollo.cache.map.XteaParser;
+import org.apollo.cache.map.XteaRepository;
 import org.apollo.game.command.CommandDispatcher;
 import org.apollo.game.fs.decoder.SynchronousDecoder;
 import org.apollo.game.fs.decoder.WorldMapDecoder;
@@ -217,18 +217,20 @@ public final class World {
 	public void init(int release, Cache cache, PluginManager manager) throws Exception {
 		releaseNumber = release;
 
+		regions.setXteaRepository(new XteaRepository(release));
+
 		SynchronousDecoder firstStageDecoder = new SynchronousDecoder(
 			new NpcDefinitionDecoder(cache),
 			new ItemDefinitionDecoder(cache),
 			new ObjectDefinitionDecoder(cache),
-			new MapIndexDecoder(cache, new XteaParser(release)),
+			new MapIndexDecoder(cache, regions.getXteaRepository()),
 			EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat")
 		);
 
 		firstStageDecoder.block();
 
 		SynchronousDecoder secondStageDecoder = new SynchronousDecoder(
-			new WorldObjectsDecoder(cache, this, regions),
+			new WorldObjectsDecoder(cache, this),
 			new WorldMapDecoder(cache, collisionManager)
 		);
 

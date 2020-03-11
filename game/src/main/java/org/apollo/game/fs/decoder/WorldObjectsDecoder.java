@@ -25,11 +25,6 @@ public final class WorldObjectsDecoder implements Runnable {
 	private final Cache cache;
 
 	/**
-	 * The {@link RegionRepository} to lookup {@link Region}s from.
-	 */
-	private final RegionRepository regionRepository;
-
-	/**
 	 * The {@link World} to register {@link StaticGameObject}s with.
 	 */
 	private final World world;
@@ -39,12 +34,10 @@ public final class WorldObjectsDecoder implements Runnable {
 	 *
 	 * @param cache The {@link Cache} to load object files from.
 	 * @param world The {@link World} to register objects with.
-	 * @param regionRepository The {@link RegionRepository} to lookup {@link Region}s from.
 	 */
-	public WorldObjectsDecoder(Cache cache, World world, RegionRepository regionRepository) {
+	public WorldObjectsDecoder(Cache cache, World world) {
 		this.cache = cache;
 		this.world = world;
-		this.regionRepository = regionRepository;
 	}
 
 	/**
@@ -68,7 +61,7 @@ public final class WorldObjectsDecoder implements Runnable {
 					StaticGameObject gameObject = new StaticGameObject(world, object.getId(), position,
 						object.getType(), object.getOrientation());
 
-					regionRepository.fromPosition(position).addEntity(gameObject, false);
+					world.getRegionRepository().fromPosition(position).addEntity(gameObject, false);
 				}
 			}
 		} catch (IOException ex) {

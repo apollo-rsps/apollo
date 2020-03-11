@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class XteaParser implements Runnable {
+public class XteaRepository implements Runnable {
 
 	private static final Gson GSON = new Gson();
 
@@ -33,7 +33,7 @@ public class XteaParser implements Runnable {
 	private final int release;
 	private final Int2ObjectArrayMap<int[]> xteas;
 
-	public XteaParser(int release) {
+	public XteaRepository(int release) {
 		this.xteas = new Int2ObjectArrayMap<>();
 		this.release = release;
 	}
@@ -53,6 +53,10 @@ public class XteaParser implements Runnable {
 
 	public int[] get(int region) {
 		return xteas.getOrDefault(region, null);
+	}
+
+	public int[] get(int x, int y) {
+		return get(x << 8 | y);
 	}
 
 	public Int2ObjectMap.FastEntrySet<int[]> getAll() {

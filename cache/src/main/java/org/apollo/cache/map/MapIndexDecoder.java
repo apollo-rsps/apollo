@@ -25,11 +25,11 @@ public final class MapIndexDecoder implements Runnable {
 	 * The Cache.
 	 */
 	private final Cache cache;
-	private final XteaParser xteaParser;
+	private final XteaRepository xteaRepository;
 
-	public MapIndexDecoder(Cache cache, XteaParser xteaParser) {
+	public MapIndexDecoder(Cache cache, XteaRepository xteaRepository) {
 		this.cache = cache;
-		this.xteaParser = xteaParser;
+		this.xteaRepository = xteaRepository;
 	}
 
 	/**
@@ -42,7 +42,7 @@ public final class MapIndexDecoder implements Runnable {
 		Map<Integer, MapIndex> definitions = new HashMap<>();
 
 		final var fs = cache.getArchive(MapConstants.MAP_INDEX);
-		for (var entry : xteaParser.getAll()) {
+		for (var entry : xteaRepository.getAll()) {
 			final var region = entry.getIntKey();
 			final var regionX = region >> 8;
 			final var regionY = region & 0xFF;
@@ -66,7 +66,7 @@ public final class MapIndexDecoder implements Runnable {
 	@Override
 	public void run() {
 		try {
-			xteaParser.run();
+			xteaRepository.run();
 			MapIndex.init(decode());
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);

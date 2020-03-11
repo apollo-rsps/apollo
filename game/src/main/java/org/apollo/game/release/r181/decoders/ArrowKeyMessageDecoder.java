@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders;
 
-import org.apollo.game.message.impl.ArrowKeyMessage;
+import org.apollo.game.message.impl.decode.ArrowKeyMessage;
 import org.apollo.net.codec.game.*;
 import org.apollo.net.release.MessageDecoder;
 

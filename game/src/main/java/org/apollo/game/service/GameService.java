@@ -123,10 +123,6 @@ public final class GameService extends Service {
 		world.register(player);
 		Region region = world.getRegionRepository().fromPosition(player.getPosition());
 		region.addEntity(player);
-
-		if (!player.getSession().isReconnecting()) {
-			player.sendInitialMessages();
-		}
 	}
 
 	/**
@@ -218,8 +214,11 @@ public final class GameService extends Service {
 			} else if (world.getPlayerRepository().full()) {
 				request.session.sendLoginFailure(LoginConstants.STATUS_SERVER_FULL);
 			} else {
-				request.session.sendLoginSuccess(player);
 				finalizePlayerRegistration(player);
+				request.session.sendLoginSuccess(player);
+				if (!player.getSession().isReconnecting()) {
+					player.sendInitialMessages();
+				}
 			}
 		}
 	}

@@ -103,11 +103,11 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 				added++;
 
 				npc.turnTo(npc.getFacingPosition());
-				segments.add(new AddNpcSegment(npc.getBlockSet(), npc.getIndex(), position, npc.getId()));
+				segments.add(new AddNpcSegment(npc.getBlockSet(), npc.getIndex(), position, npc.getId(), npc.getLastDirection()));
 			}
 		}
 
-		player.send(new NpcSynchronizationMessage(playerPosition, segments, originalCount));
+		player.send(new NpcSynchronizationMessage(playerPosition, segments, originalCount, player.getViewingDistance() > Player.DEFAULT_VIEWING_DISTANCE));
 	}
 
 }

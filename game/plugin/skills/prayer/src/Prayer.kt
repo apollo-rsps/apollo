@@ -1,6 +1,6 @@
 import com.google.common.collect.MultimapBuilder
 import com.google.common.collect.SetMultimap
-import org.apollo.game.message.impl.ConfigMessage
+import org.apollo.game.message.impl.encode.ConfigMessage
 import org.apollo.game.model.entity.Player
 
 enum class Prayer(val button: Int, val level: Int, val setting: Int, val drain: Double) {

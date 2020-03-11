@@ -30,16 +30,22 @@ public final class NpcSynchronizationMessage extends Message {
 	private final List<SynchronizationSegment> segments;
 
 	/**
+	 * If the player has an extended viewport.
+	 */
+	private final boolean extendedView;
+
+	/**
 	 * Creates a new {@link NpcSynchronizationMessage}.
 	 *
 	 * @param position The position of the {@link Npc}.
 	 * @param segments The list of segments.
 	 * @param localNpcs The amount of local npcs.
 	 */
-	public NpcSynchronizationMessage(Position position, List<SynchronizationSegment> segments, int localNpcs) {
+	public NpcSynchronizationMessage(Position position, List<SynchronizationSegment> segments, int localNpcs, boolean extendedView) {
 		this.position = position;
 		this.segments = segments;
 		this.localNpcs = localNpcs;
+		this.extendedView = extendedView;
 	}
 
 	/**
@@ -69,4 +75,13 @@ public final class NpcSynchronizationMessage extends Message {
 		return segments;
 	}
 
+
+	/**
+	 * Is view extended boolean.
+	 *
+	 * @return the boolean
+	 */
+	public boolean isViewExtended() {
+		return extendedView;
+	}
 }

@@ -115,6 +115,7 @@ public final class GamePacketDecoder extends StatefulFrameDecoder<GameDecoderSta
 					}
 					break;
 				case VARIABLE_BYTE:
+				case VARIABLE_SHORT:
 					setState(GameDecoderState.GAME_LENGTH);
 					break;
 				default:

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.apollo.game.message.impl.ClearRegionMessage;
 import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
-import org.apollo.game.message.impl.RegionChangeMessage;
+import org.apollo.game.message.impl.encode.RebuildNormalMessage;
 import org.apollo.game.message.impl.RegionUpdateMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
@@ -72,7 +72,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 			local = false;
 
 			player.setLastKnownRegion(position);
-			player.send(new RegionChangeMessage(position));
+			player.send(new RebuildNormalMessage(position, player.getIndex(), player.getWorld().getRegionRepository().getXteaRepository(), true));
 		}
 
 		RegionRepository repository = player.getWorld().getRegionRepository();
