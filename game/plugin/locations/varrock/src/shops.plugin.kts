@@ -100,7 +100,7 @@ shop("Thessalia's Fine Clothes.") {
         sell(2) of "Blue"
     }
 
-    sell(4) of "Cape"
+    sell(4) of "Red cape"
     sell(5) of "Silk"
 
     sell(3) of {
@@ -110,7 +110,7 @@ shop("Thessalia's Fine Clothes.") {
 }
 
 shop("Varrock General Store.") {
-    operated by "Shopkeeper"(513) and "Shop assistant"(514)
+    operated by "Shopkeeper"(2815) and "Shop assistant"(2816)
     buys any items
 
     sell(5) of "Pot"
@@ -126,7 +126,7 @@ shop("Varrock General Store.") {
 }
 
 shop("Varrock Swordshop.") {
-    operated by "Shopkeeper"(515) and "Shop assistant"(516)
+    operated by "Shopkeeper"(2884) and "Shop assistant"(2885)
 
     category("swords") {
         sell(5) of "Bronze"

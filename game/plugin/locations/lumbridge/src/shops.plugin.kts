@@ -3,7 +3,7 @@ package org.apollo.plugin.locations.lumbridge
 import org.apollo.game.plugin.shops.builder.shop
 
 shop("Lumbridge General Store") {
-    operated by "Shop keeper" and "Shop assistant"
+    operated by "Shop keeper"(2813) and "Shop assistant"(2814)
     buys any items
 
     sell(5) of "Pot"
@@ -19,7 +19,7 @@ shop("Lumbridge General Store") {
 }
 
 shop("Bob's Brilliant Axes") {
-    operated by "Bob"
+    operated by "Bob"(2812)
 
     category("pickaxe") {
         sell(5) of "Bronze"

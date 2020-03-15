@@ -3,7 +3,7 @@ package org.apollo.plugin.locations.edgeville
 import org.apollo.game.plugin.shops.builder.shop
 
 shop("Edgeville General Store") {
-    operated by "Shop keeper"(510) and "Shop assistant"(509)
+    operated by "Shop keeper"(2821) and "Shop assistant"(2822)
     buys any items
 
     sell(5) of "Pot"

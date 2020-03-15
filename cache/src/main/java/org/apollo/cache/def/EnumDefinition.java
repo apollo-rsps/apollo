@@ -8,7 +8,6 @@ import org.apollo.cache.decoder.rsenum.ScriptVarType;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public final class EnumDefinition {
 
 	private static final Map<Integer, EnumDefinition> definitions = new HashMap<>();
