@@ -17,12 +17,13 @@ import org.apollo.game.release.r181.decoders.social.friends.AddFriendMessageDeco
 import org.apollo.game.release.r181.decoders.social.friends.RemoveFriendMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.ignores.AddIgnoreMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.ignores.RemoveIgnoreMessageDecoder;
+import org.apollo.game.release.r181.encoders.UpdateRunEnergyMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateSkillMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateWeightMessageEncoder;
-import org.apollo.game.release.r181.encoders.ui.ConfigMessageEncoder;
 import org.apollo.game.release.r181.encoders.game.ServerChatMessageEncoder;
 import org.apollo.game.release.r181.encoders.npc.NpcSynchronizationMessageEncoder;
 import org.apollo.game.release.r181.encoders.region.RebuildNormalMessageEncoder;
+import org.apollo.game.release.r181.encoders.ui.ConfigMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.IfMoveSubMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.IfOpenSubMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.IfOpenTopMessageEncoder;
@@ -156,6 +157,7 @@ public class Release181 extends Release {
 		register(ServerChatMessage.class, new ServerChatMessageEncoder());
 		register(UpdateWeightMessage.class, new UpdateWeightMessageEncoder());
 		register(UpdateSkillMessage.class, new UpdateSkillMessageEncoder());
+		register(UpdateRunEnergyMessage.class, new UpdateRunEnergyMessageEncoder());
 
 		register(RebuildNormalMessage.class, new RebuildNormalMessageEncoder());
 		register(ConfigMessage.class, new ConfigMessageEncoder());

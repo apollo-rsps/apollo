@@ -4,13 +4,13 @@ import org.apollo.game.message.impl.decode.DisplayStatusMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 
-public class DisplayStatusMessageDecoder extends MessageHandler<DisplayStatusMessage> {
+public class DisplayStatusMessageHandler extends MessageHandler<DisplayStatusMessage> {
 	/**
 	 * Creates the MessageListener.
 	 *
 	 * @param world The {@link World} the {@link DisplayStatusMessage} occurred in.
 	 */
-	public DisplayStatusMessageDecoder(World world) {
+	public DisplayStatusMessageHandler(World world) {
 		super(world);
 	}
 
