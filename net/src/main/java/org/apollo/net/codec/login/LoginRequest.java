@@ -19,6 +19,7 @@ public final class LoginRequest {
 	 * The version denoting whether the client has been modified or not.
 	 */
 	private final long clientVersion;
+	private final int displayMode;
 
 	/**
 	 * The player's credentials.
@@ -47,15 +48,17 @@ public final class LoginRequest {
 
 	/**
 	 * Creates a login request.
-	 *  @param credentials The player credentials.
+	 * @param credentials The player credentials.
 	 * @param randomPair The pair of random number generators.
 	 * @param lowMemory The low memory flag.
 	 * @param reconnecting The reconnecting flag.
 	 * @param releaseNumber The release number.
 	 * @param archiveCrcs The archive CRCs.
 	 * @param clientVersion The client version.
+	 * @param displayMode
 	 */
-	public LoginRequest(PlayerCredentials credentials, IsaacRandomPair randomPair, boolean lowMemory, boolean reconnecting, long releaseNumber, int[] archiveCrcs, long clientVersion) {
+	public LoginRequest(PlayerCredentials credentials, IsaacRandomPair randomPair, boolean lowMemory, boolean reconnecting, long releaseNumber, int[] archiveCrcs, long clientVersion,
+						int displayMode) {
 		this.credentials = credentials;
 		this.randomPair = randomPair;
 		this.lowMemory = lowMemory;
@@ -63,6 +66,7 @@ public final class LoginRequest {
 		this.releaseNumber = releaseNumber;
 		this.archiveCrcs = archiveCrcs;
 		this.clientVersion = clientVersion;
+		this.displayMode = displayMode;
 	}
 
 	/**
@@ -128,4 +132,7 @@ public final class LoginRequest {
 		return reconnecting;
 	}
 
+	public int getDisplayMode() {
+		return displayMode;
+	}
 }

@@ -18,9 +18,7 @@ import org.apollo.game.model.entity.setting.PrivilegeLevel;
 import org.apollo.game.model.entity.setting.ScreenBrightness;
 import org.apollo.game.model.event.impl.LoginEvent;
 import org.apollo.game.model.event.impl.LogoutEvent;
-import org.apollo.game.model.inter.InterfaceConstants;
-import org.apollo.game.model.inter.InterfaceListener;
-import org.apollo.game.model.inter.InterfaceSet;
+import org.apollo.game.model.inter.*;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inter.bank.BankInterfaceListener;
 import org.apollo.game.model.inv.*;
@@ -651,7 +649,8 @@ public final class Player extends Mob {
 		bank.forceRefresh();
 
 		InterfaceListener interListener = new BankInterfaceListener(this, invListener, bankListener);
-		interfaceSet.openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID, BankConstants.SIDEBAR_ID);
+		interfaceSet.openModal(interListener, BankConstants.BANK_WINDOW_ID);
+		interfaceSet.openTopLevel(BankConstants.SIDEBAR_INVENTORY_ID, TopLevelPosition.INVENTORY_TAB);
 	}
 
 	/**
@@ -722,18 +721,20 @@ public final class Player extends Mob {
 	/**
 	 * Sends the initial messages.
 	 */
-	public void sendInitialMessages() {
+	public void sendInitialMessages(DisplayMode mode) {
 		send(new RebuildNormalMessage(position, index, world.getRegionRepository().getXteaRepository(), false));
-		send(new IfOpenTopMessage(161));
-		sendMessage("Welcome to RuneScape.");
 
-		if (isMuted()) {
-			sendMessage("You are currently muted. Other players will not see your chat messages.");
+		interfaceSet.openTop(mode);
+		for (TopLevelPosition position : TopLevelPosition.values()) {
+			if (position.getInterfaceId() == -1) {
+				continue;
+			}
+			interfaceSet.openTopLevel(position);
 		}
 
-		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
-		for (int tab = 0; tab < tabs.length; tab++) {
-			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
+		sendMessage("Welcome to RuneScape.");
+		if (isMuted()) {
+			sendMessage("You are currently muted. Other players will not see your chat messages.");
 		}
 
 		updateAppearance();
@@ -767,7 +768,7 @@ public final class Player extends Mob {
 		for (int pos = 0; pos < lines; pos++) {
 			send(new SetWidgetTextMessage(InterfaceConstants.QUEST_TEXT[pos], pos < size ? text.get(pos) : ""));
 		}
-		interfaceSet.openWindow(InterfaceConstants.QUEST_INTERFACE);
+		interfaceSet.openModal(InterfaceConstants.QUEST_INTERFACE);
 	}
 
 	/**

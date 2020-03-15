@@ -1,14 +1,5 @@
 package org.apollo.game.service;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.apollo.Service;
 import org.apollo.game.GameConstants;
 import org.apollo.game.GamePulseHandler;
@@ -18,6 +9,7 @@ import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.inter.DisplayMode;
 import org.apollo.game.session.GameSession;
 import org.apollo.game.session.LoginSession;
 import org.apollo.game.sync.ClientSynchronizer;
@@ -26,6 +18,15 @@ import org.apollo.util.ThreadUtil;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The {@link GameService} class schedules and manages the execution of the {@link GamePulseHandler} class.
@@ -52,7 +53,7 @@ public final class GameService extends Service {
 		/**
 		 * Creates the LoginPlayerRequest.
 		 *
-		 * @param player The {@link Player} logging in.
+		 * @param player  The {@link Player} logging in.
 		 * @param session The {@link LoginSession} of the Player.
 		 */
 		public LoginPlayerRequest(Player player, LoginSession session) {
@@ -81,7 +82,8 @@ public final class GameService extends Service {
 	/**
 	 * The scheduled executor service.
 	 */
-	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.create("GameService"));
+	private final ScheduledExecutorService executor = Executors
+			.newSingleThreadScheduledExecutor(ThreadUtil.create("GameService"));
 
 	/**
 	 * The Queue of LoginPlayers to add.
@@ -166,7 +168,7 @@ public final class GameService extends Service {
 	/**
 	 * Registers a {@link Player} at the end of the next cycle.
 	 *
-	 * @param player The Player to register.
+	 * @param player  The Player to register.
 	 * @param session the {@link LoginSession} of the Player.
 	 */
 	public void registerPlayer(Player player, LoginSession session) {
@@ -217,7 +219,8 @@ public final class GameService extends Service {
 				finalizePlayerRegistration(player);
 				request.session.sendLoginSuccess(player);
 				if (!player.getSession().isReconnecting()) {
-					player.sendInitialMessages();
+					player.sendInitialMessages(request.session.getRequest()
+							.getDisplayMode() == 1 ? DisplayMode.RESIZABLE : DisplayMode.FIXED);
 				}
 			}
 		}
@@ -242,8 +245,8 @@ public final class GameService extends Service {
 	/**
 	 * Initializes the game service.
 	 *
-	 * @throws IOException If there is an error accessing the file.
-	 * @throws SAXException If there is an error parsing the file.
+	 * @throws IOException                  If there is an error accessing the file.
+	 * @throws SAXException                 If there is an error parsing the file.
 	 * @throws ReflectiveOperationException If a MessageHandler could not be created.
 	 */
 	private void init() throws IOException, SAXException, ReflectiveOperationException {

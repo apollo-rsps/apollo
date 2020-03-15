@@ -6,6 +6,7 @@ import org.apollo.cache.Cache;
 import org.apollo.cache.decoder.ItemDefinitionDecoder;
 import org.apollo.cache.decoder.NpcDefinitionDecoder;
 import org.apollo.cache.decoder.ObjectDefinitionDecoder;
+import org.apollo.cache.decoder.rsenum.EnumDefinitionDecoder;
 import org.apollo.cache.map.MapIndexDecoder;
 import org.apollo.cache.map.XteaRepository;
 import org.apollo.game.command.CommandDispatcher;
@@ -222,6 +223,7 @@ public final class World {
 		SynchronousDecoder firstStageDecoder = new SynchronousDecoder(
 			new NpcDefinitionDecoder(cache),
 			new ItemDefinitionDecoder(cache),
+			new EnumDefinitionDecoder(cache),
 			new ObjectDefinitionDecoder(cache),
 			new MapIndexDecoder(cache, regions.getXteaRepository()),
 			EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat")

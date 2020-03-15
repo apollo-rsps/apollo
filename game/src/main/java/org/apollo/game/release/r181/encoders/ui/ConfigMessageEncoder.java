@@ -1,4 +1,4 @@
-package org.apollo.game.release.r181.encoders;
+package org.apollo.game.release.r181.encoders.ui;
 
 import org.apollo.game.message.impl.encode.ConfigMessage;
 import org.apollo.net.codec.game.DataTransformation;

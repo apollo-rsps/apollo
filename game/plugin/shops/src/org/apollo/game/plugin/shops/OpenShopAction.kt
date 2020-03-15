@@ -6,6 +6,7 @@ import org.apollo.game.message.impl.SetWidgetTextMessage
 import org.apollo.game.model.entity.Mob
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.inter.InterfaceListener
+import org.apollo.game.model.inter.TopLevelPosition
 import org.apollo.game.model.inv.Inventory
 import org.apollo.game.model.inv.SynchronizationInventoryListener
 
@@ -24,8 +25,8 @@ class OpenShopAction(
         val closeListener = addInventoryListeners(mob, shop.inventory)
         mob.send(SetWidgetTextMessage(ShopInterfaces.SHOP_NAME, shop.name))
 
-        mob.interfaceSet.openWindowWithSidebar(closeListener, ShopInterfaces.SHOP_WINDOW,
-            ShopInterfaces.INVENTORY_SIDEBAR)
+        mob.interfaceSet.openModal(closeListener, ShopInterfaces.SHOP_WINDOW);
+        mob.interfaceSet.openTopLevel(ShopInterfaces.INVENTORY_SIDEBAR, TopLevelPosition.INVENTORY_TAB)
         stop()
     }
 

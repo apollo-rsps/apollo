@@ -1,24 +1,28 @@
 package org.apollo.game.release.r181;
 
 import org.apollo.game.message.impl.NpcSynchronizationMessage;
-import org.apollo.game.message.impl.encode.ConfigMessage;
-import org.apollo.game.message.impl.encode.RebuildNormalMessage;
-import org.apollo.game.message.impl.encode.IfOpenTopMessage;
+import org.apollo.game.message.impl.ServerChatMessage;
+import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.interfaces.ClosedInterfaceMessageDecoder;
+import org.apollo.game.release.r181.decoders.interfaces.DisplayStatusMessageDecoder;
 import org.apollo.game.release.r181.decoders.interfaces.EnteredAmountMessageDecoder;
 import org.apollo.game.release.r181.decoders.npc.*;
 import org.apollo.game.release.r181.decoders.obj.*;
+import org.apollo.game.release.r181.decoders.player.ReportAbuseMessageDecoder;
 import org.apollo.game.release.r181.decoders.player.actions.*;
-import org.apollo.game.release.r181.decoders.player.*;
-import org.apollo.game.release.r181.decoders.social.*;
+import org.apollo.game.release.r181.decoders.social.PrivacyOptionMessageDecoder;
+import org.apollo.game.release.r181.decoders.social.PrivateChatMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.friends.AddFriendMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.friends.RemoveFriendMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.ignores.AddIgnoreMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.ignores.RemoveIgnoreMessageDecoder;
-import org.apollo.game.release.r181.encoders.ConfigMessageEncoder;
+import org.apollo.game.release.r181.encoders.ui.ConfigMessageEncoder;
+import org.apollo.game.release.r181.encoders.game.ServerChatMessageEncoder;
 import org.apollo.game.release.r181.encoders.npc.NpcSynchronizationMessageEncoder;
 import org.apollo.game.release.r181.encoders.region.RebuildNormalMessageEncoder;
+import org.apollo.game.release.r181.encoders.ui.IfMoveSubMessageEncoder;
+import org.apollo.game.release.r181.encoders.ui.IfOpenSubMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.IfOpenTopMessageEncoder;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
@@ -144,6 +148,12 @@ public class Release181 extends Release {
 		 */
 
 		register(IfOpenTopMessage.class, new IfOpenTopMessageEncoder());
+		register(IfOpenSubMessage.class, new IfOpenSubMessageEncoder());
+		register(IfMoveSubMessage.class, new IfMoveSubMessageEncoder());
+
+
+		register(ServerChatMessage.class, new ServerChatMessageEncoder());
+
 		register(RebuildNormalMessage.class, new RebuildNormalMessageEncoder());
 		register(ConfigMessage.class, new ConfigMessageEncoder());
 		register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
@@ -185,6 +195,7 @@ public class Release181 extends Release {
 		/**
 		 * Interface
 		 */
+		register(35, new DisplayStatusMessageDecoder());
 		register(20, new ClosedInterfaceMessageDecoder());
 
 		/**

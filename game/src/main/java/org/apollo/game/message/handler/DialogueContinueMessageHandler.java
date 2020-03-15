@@ -3,7 +3,7 @@ package org.apollo.game.message.handler;
 import org.apollo.game.message.impl.DialogueContinueMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.inter.InterfaceType;
+import org.apollo.game.model.inter.ServerInterfaceType;
 
 /**
  * A {@link MessageHandler} for the {@link DialogueContinueMessage}.
@@ -23,7 +23,7 @@ public final class DialogueContinueMessageHandler extends MessageHandler<Dialogu
 
 	@Override
 	public void handle(Player player, DialogueContinueMessage message) {
-		if (player.getInterfaceSet().contains(InterfaceType.DIALOGUE)) {
+		if (player.getInterfaceSet().contains(ServerInterfaceType.DIALOGUE)) {
 			player.getInterfaceSet().continueRequested();
 		}
 	}

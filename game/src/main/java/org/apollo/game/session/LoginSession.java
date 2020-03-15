@@ -156,4 +156,8 @@ public final class LoginSession extends Session {
 		LoginService service = context.getLoginService();
 		service.submitLoadRequest(this, request);
 	}
+
+	public LoginRequest getRequest() {
+		return request;
+	}
 }

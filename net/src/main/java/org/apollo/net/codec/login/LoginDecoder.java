@@ -170,7 +170,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 
 		final var clientProperties = payload.readUnsignedByte();
 		final var lowMemory = (clientProperties & 0x1) == 1;
-		final var frameType = (clientProperties >> 1) == 1;// Resizable/Fixed
+		final var displayMode = clientProperties >> 1;
 		final var frameWidth = payload.readShort();
 		final var frameHeight = payload.readShort();
 
@@ -208,7 +208,7 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		PlayerCredentials credentials = new PlayerCredentials(username, password, usernameHash, stats, hostAddress);
 		IsaacRandomPair randomPair = new IsaacRandomPair(encodingRandom, decodingRandom);
 
-		out.add(new LoginRequest(credentials, randomPair, reconnecting, lowMemory, release, crcs, version));
+		out.add(new LoginRequest(credentials, randomPair, reconnecting, lowMemory, release, crcs, version, displayMode));
 	}
 
 	/**

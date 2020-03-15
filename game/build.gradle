@@ -19,6 +19,7 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
     implementation group: 'io.github.classgraph', name: 'classgraph', version: classGraphVersion
     implementation group: 'com.lambdaworks', name: 'scrypt', version: scryptVersion
+    implementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.3.1'
 
     test.useJUnitPlatform()
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
