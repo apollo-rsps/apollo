@@ -4,19 +4,19 @@ import org.apollo.net.message.Message;
 
 public class IfMoveSubMessage extends Message {
 
-	private final int fromComponent;
-	private final int toComponent;
+	private final int fromPackedInterface;
+	private final int toPackedInterface;
 
-	public IfMoveSubMessage(int fromComponent, int toComponent) {
-		this.fromComponent = fromComponent;
-		this.toComponent = toComponent;
+	public IfMoveSubMessage(int fromPackedInterface, int toPackedInterface) {
+		this.fromPackedInterface = fromPackedInterface;
+		this.toPackedInterface = toPackedInterface;
 	}
 
-	public int getFromComponent() {
-		return fromComponent;
+	public int getFromPackedInterface() {
+		return fromPackedInterface;
 	}
 
-	public int getToComponent() {
-		return toComponent;
+	public int getToPackedInterface() {
+		return toPackedInterface;
 	}
 }

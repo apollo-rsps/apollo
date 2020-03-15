@@ -12,8 +12,8 @@ public class IfMoveSubMessageEncoder extends MessageEncoder<IfMoveSubMessage> {
 	@Override
 	public GamePacket encode(IfMoveSubMessage message) {
 		GamePacketBuilder builder = new GamePacketBuilder(82, PacketType.FIXED);
-		builder.put(DataType.INT, message.getToComponent());
-		builder.put(DataType.INT, message.getFromComponent());
+		builder.put(DataType.INT, message.getToPackedInterface());
+		builder.put(DataType.INT, message.getFromPackedInterface());
 		return builder.toGamePacket();
 	}
 }

@@ -29,20 +29,22 @@ public final class OnDemandResponseEncoder extends MessageToByteEncoder<OnDemand
 		buf.writeByte(compression);
 
 		int bytes = container.readableBytes();
-		if (bytes > 508)
-			bytes = 508;
+		if (bytes > 508) bytes = 508;
 
 		buf.writeBytes(container.readBytes(bytes));
 
-		for (;;) {
+		for (; ; ) {
 			bytes = container.readableBytes();
-			if (bytes == 0)
+			if (bytes == 0) {
 				break;
-			else if (bytes > 511)
-				bytes = 511;
+			} else if (bytes > 511) bytes = 511;
 
 			buf.writeByte(0xFF);
-			buf.writeBytes(container.readBytes(bytes));
+
+			final var payload = container.readBytes(bytes);
+			buf.writeBytes(payload);
+
+			payload.release();
 		}
 	}
 }

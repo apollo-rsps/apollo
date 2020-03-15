@@ -23,10 +23,7 @@ import org.apollo.game.release.r181.encoders.UpdateWeightMessageEncoder;
 import org.apollo.game.release.r181.encoders.game.ServerChatMessageEncoder;
 import org.apollo.game.release.r181.encoders.npc.NpcSynchronizationMessageEncoder;
 import org.apollo.game.release.r181.encoders.region.RebuildNormalMessageEncoder;
-import org.apollo.game.release.r181.encoders.ui.ConfigMessageEncoder;
-import org.apollo.game.release.r181.encoders.ui.IfMoveSubMessageEncoder;
-import org.apollo.game.release.r181.encoders.ui.IfOpenSubMessageEncoder;
-import org.apollo.game.release.r181.encoders.ui.IfOpenTopMessageEncoder;
+import org.apollo.game.release.r181.encoders.ui.*;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
 
@@ -153,6 +150,7 @@ public class Release181 extends Release {
 		register(IfOpenTopMessage.class, new IfOpenTopMessageEncoder());
 		register(IfOpenSubMessage.class, new IfOpenSubMessageEncoder());
 		register(IfMoveSubMessage.class, new IfMoveSubMessageEncoder());
+		register(IfSetEventMessage.class, new IfSetEventMessageEncoder());
 
 		register(ServerChatMessage.class, new ServerChatMessageEncoder());
 		register(UpdateWeightMessage.class, new UpdateWeightMessageEncoder());

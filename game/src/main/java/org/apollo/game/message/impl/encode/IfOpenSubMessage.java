@@ -13,7 +13,7 @@ public final class IfOpenSubMessage extends Message {
 	/**
 	 * The parent interface.
 	 */
-	private final int parentComponent;
+	private final int packedParentInterface;
 
 	/**
 	 * The type of the interface.
@@ -28,12 +28,12 @@ public final class IfOpenSubMessage extends Message {
 	/**
 	 * Creates the message with the specified interface id.
 	 *
-	 * @param parentComponent the parent component
+	 * @param packedParentInterface the parent component
 	 * @param type            the type
 	 * @param id              the id
 	 */
-	public IfOpenSubMessage(int parentComponent, ClientInterfaceType type, int id) {
-		this.parentComponent = parentComponent;
+	public IfOpenSubMessage(int packedParentInterface, ClientInterfaceType type, int id) {
+		this.packedParentInterface = packedParentInterface;
 		this.type = type;
 		this.id = id;
 	}
@@ -52,8 +52,8 @@ public final class IfOpenSubMessage extends Message {
 	 *
 	 * @return the parent component
 	 */
-	public int getParentComponent() {
-		return parentComponent;
+	public int getPackedParentInterface() {
+		return packedParentInterface;
 	}
 
 	/**
