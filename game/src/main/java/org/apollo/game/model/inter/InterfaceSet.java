@@ -251,20 +251,16 @@ public final class InterfaceSet {
 		for (var newComponent : newEnumMap.int2IntEntrySet()) {
 			int key = newComponent.getIntKey();
 			int to = newComponent.getIntValue();
-
 			if (to == -1) {
 				continue;
 			}
 
-			if (oldEnumMap.containsKey(key)) {
-				int from = oldEnumMap.get(key);
-
-				if (from == -1) {
-					continue;
-				}
-
-				player.send(new IfMoveSubMessage(from, to));
+			int from = oldEnumMap.getOrDefault(key, -1);
+			if (from == -1) {
+				continue;
 			}
+
+			player.send(new IfMoveSubMessage(from, to));
 		}
 
 		this.mode = mode;
