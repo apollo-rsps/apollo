@@ -1,11 +1,11 @@
 package org.apollo.game.message.impl;
 
-import java.util.List;
-
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.sync.seg.SynchronizationSegment;
 import org.apollo.net.message.Message;
+
+import java.util.List;
 
 /**
  * A {@link Message} sent to the client to synchronize npcs with players.

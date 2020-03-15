@@ -1,6 +1,5 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.cache.def.ItemDefinition;
 import org.apollo.cache.def.ObjectDefinition;
 import org.apollo.game.message.impl.ObjectActionMessage;
 import org.apollo.game.model.Position;
@@ -12,7 +11,6 @@ import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.obj.StaticGameObject;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -21,10 +19,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.junit.Assert.assertTrue;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({World.class, Player.class, ObjectDefinition.class, RegionRepository.class, Region.class})

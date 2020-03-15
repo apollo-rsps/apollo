@@ -1,7 +1,10 @@
 package org.apollo.game.release.r181.decoders.npc;
 
 import org.apollo.game.message.impl.NpcActionMessage;
-import org.apollo.net.codec.game.*;
+import org.apollo.net.codec.game.DataTransformation;
+import org.apollo.net.codec.game.DataType;
+import org.apollo.net.codec.game.GamePacket;
+import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;
 
 /**

@@ -1,9 +1,8 @@
 package org.apollo.game.sync.seg;
 
+import com.google.common.base.Preconditions;
 import org.apollo.game.model.Direction;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
-
-import com.google.common.base.Preconditions;
 
 /**
  * A {@link SynchronizationSegment} where a mob is moved (or doesn't move!).

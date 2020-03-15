@@ -2,11 +2,7 @@ package org.apollo.game.model.entity;
 
 import org.apollo.cache.def.NpcDefinition;
 import org.apollo.game.action.Action;
-import org.apollo.game.model.Animation;
-import org.apollo.game.model.Direction;
-import org.apollo.game.model.Graphic;
-import org.apollo.game.model.Position;
-import org.apollo.game.model.World;
+import org.apollo.game.model.*;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.attr.Attribute;

@@ -1,11 +1,11 @@
 package org.apollo;
 
-import java.util.logging.Logger;
-
 import org.apollo.game.model.World;
 import org.apollo.game.service.GameService;
 import org.apollo.game.service.LoginService;
 import org.apollo.game.service.UpdateService;
+
+import java.util.logging.Logger;
 
 /**
  * A class which manages {@link Service}s.

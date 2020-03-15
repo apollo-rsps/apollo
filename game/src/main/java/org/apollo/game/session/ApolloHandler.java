@@ -7,15 +7,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
-import io.netty.util.ReferenceCountUtil;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apollo.ServerContext;
 import org.apollo.net.codec.handshake.HandshakeConstants;
 import org.apollo.net.codec.handshake.HandshakeMessage;
 import org.apollo.net.codec.jaggrab.JagGrabRequest;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * An implementation of {@link ChannelInboundHandlerAdapter} which handles incoming upstream events from Netty.

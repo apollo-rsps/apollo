@@ -1,12 +1,12 @@
 package org.apollo.game.model.entity.obj;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A {@link GameObject} that is loaded dynamically, usually for specific Players.

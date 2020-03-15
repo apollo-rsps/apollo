@@ -1,13 +1,13 @@
 package org.apollo.game.login;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apollo.game.io.player.PlayerLoaderResponse;
 import org.apollo.game.io.player.PlayerSerializer;
 import org.apollo.game.session.LoginSession;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.net.codec.login.LoginRequest;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A class which processes a single login request.

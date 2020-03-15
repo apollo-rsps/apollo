@@ -2,7 +2,6 @@ package org.apollo.game.model.inv;
 
 import org.apollo.game.model.Item;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.sync.block.SynchronizationBlock;
 
 /**
  * An {@link InventoryListener} which updates the player's appearance when any items are updated.

@@ -1,10 +1,9 @@
 package org.apollo.game.model.entity.attr;
 
+import com.google.common.base.Preconditions;
+
 import java.util.HashMap;
 import java.util.Map;
-
-
-import com.google.common.base.Preconditions;
 
 /**
  * A {@link Map} wrapper used to store {@link Attribute}s and their {@link AttributeDefinition definitions}.

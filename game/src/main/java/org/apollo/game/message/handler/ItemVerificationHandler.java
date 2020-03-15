@@ -1,8 +1,5 @@
 package org.apollo.game.message.handler;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apollo.game.message.impl.InventoryItemMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
@@ -10,6 +7,9 @@ import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A {@link MessageHandler} that verifies {@link InventoryItemMessage}s.

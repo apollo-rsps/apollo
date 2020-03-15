@@ -1,14 +1,14 @@
 package org.apollo.game.io;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
-
 import org.apollo.game.plugin.PluginMetaData;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 
 /**
  * A class that parses {@code plugin.xml} files into {@link PluginMetaData} objects.

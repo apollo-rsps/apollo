@@ -1,12 +1,11 @@
 package org.apollo.game.message.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.base.MoreObjects;
 import org.apollo.game.model.entity.Player;
 import org.apollo.net.message.Message;
 
-import com.google.common.base.MoreObjects;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A chain of {@link MessageHandler}s

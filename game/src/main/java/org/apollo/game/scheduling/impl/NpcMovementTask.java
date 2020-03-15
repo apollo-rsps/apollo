@@ -1,21 +1,14 @@
 package org.apollo.game.scheduling.impl;
 
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Random;
-
+import com.google.common.base.Preconditions;
 import org.apollo.game.model.Position;
-import org.apollo.game.model.World;
-import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionManager;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.WalkingQueue;
 import org.apollo.game.model.entity.path.SimplePathfindingAlgorithm;
 import org.apollo.game.scheduling.ScheduledTask;
 
-import com.google.common.base.Preconditions;
+import java.util.*;
 
 /**
  * A {@link ScheduledTask} that causes {@link Npc}s to randomly walk around in their boundary.

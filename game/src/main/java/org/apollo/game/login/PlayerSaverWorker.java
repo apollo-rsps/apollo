@@ -1,11 +1,11 @@
 package org.apollo.game.login;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apollo.game.io.player.PlayerSerializer;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.session.GameSession;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A class which processes a single save request.

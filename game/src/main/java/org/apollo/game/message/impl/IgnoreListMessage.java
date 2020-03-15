@@ -1,8 +1,8 @@
 package org.apollo.game.message.impl;
 
-import java.util.List;
-
 import org.apollo.net.message.Message;
+
+import java.util.List;
 
 /**
  * A {@link Message} sent to the client that updates the ignored user list.

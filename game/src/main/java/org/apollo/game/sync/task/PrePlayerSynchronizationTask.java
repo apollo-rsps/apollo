@@ -1,18 +1,18 @@
 package org.apollo.game.sync.task;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.apollo.game.message.impl.ClearRegionMessage;
 import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
-import org.apollo.game.message.impl.encode.RebuildNormalMessage;
 import org.apollo.game.message.impl.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.RebuildNormalMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.Player;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A {@link SynchronizationTask} which does pre-synchronization work for the specified {@link Player}.

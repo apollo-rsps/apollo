@@ -1,9 +1,9 @@
 package org.apollo.game;
 
+import org.apollo.game.service.GameService;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apollo.game.service.GameService;
 
 /**
  * A class which handles the logic for each pulse of the {@link GameService}.

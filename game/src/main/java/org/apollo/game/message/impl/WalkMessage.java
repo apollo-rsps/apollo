@@ -1,9 +1,8 @@
 package org.apollo.game.message.impl;
 
+import com.google.common.base.Preconditions;
 import org.apollo.game.model.Position;
 import org.apollo.net.message.Message;
-
-import com.google.common.base.Preconditions;
 
 /**
  * A {@link Message} sent by the client to request that the player walks somewhere.

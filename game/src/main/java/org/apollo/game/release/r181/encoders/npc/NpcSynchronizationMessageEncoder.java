@@ -1,30 +1,17 @@
 package org.apollo.game.release.r181.encoders.npc;
 
-import kotlin.UByte;
 import org.apollo.game.message.impl.NpcSynchronizationMessage;
 import org.apollo.game.model.Animation;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.sync.block.AnimationBlock;
-import org.apollo.game.sync.block.ForceChatBlock;
-import org.apollo.game.sync.block.GraphicBlock;
-import org.apollo.game.sync.block.HitUpdateBlock;
-import org.apollo.game.sync.block.InteractingMobBlock;
-import org.apollo.game.sync.block.SecondaryHitUpdateBlock;
-import org.apollo.game.sync.block.SynchronizationBlockSet;
-import org.apollo.game.sync.block.TransformBlock;
-import org.apollo.game.sync.block.TurnToPositionBlock;
+import org.apollo.game.sync.block.*;
 import org.apollo.game.sync.seg.AddNpcSegment;
 import org.apollo.game.sync.seg.MovementSegment;
 import org.apollo.game.sync.seg.SegmentType;
 import org.apollo.game.sync.seg.SynchronizationSegment;
-import org.apollo.net.codec.game.DataOrder;
-import org.apollo.net.codec.game.DataTransformation;
-import org.apollo.net.codec.game.DataType;
-import org.apollo.net.codec.game.GamePacket;
-import org.apollo.net.codec.game.GamePacketBuilder;
+import org.apollo.net.codec.game.*;
 import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.MessageEncoder;
 

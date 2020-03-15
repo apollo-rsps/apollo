@@ -1,11 +1,10 @@
 package org.apollo.game.message.impl;
 
-import java.util.List;
-import java.util.Set;
-
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.net.message.Message;
+
+import java.util.Set;
 
 /**
  * A {@link Message} sent to the client that contains multiple

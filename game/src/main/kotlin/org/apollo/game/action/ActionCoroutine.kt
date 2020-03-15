@@ -1,12 +1,12 @@
 package org.apollo.game.action
 
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.CancellationException
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.coroutines.*
 import kotlin.coroutines.intrinsics.COROUTINE_SUSPENDED
 import kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.*
 
 typealias ActionPredicate = () -> Boolean
 typealias ActionBlock = suspend ActionCoroutine.() -> Unit

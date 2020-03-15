@@ -1,8 +1,9 @@
 package org.apollo.game.model.entity.obj;
 
+import com.google.common.base.MoreObjects;
 import org.apollo.cache.def.ObjectDefinition;
-import org.apollo.game.model.Position;
 import org.apollo.game.model.Direction;
+import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
@@ -10,8 +11,6 @@ import org.apollo.game.model.area.update.GroupableEntity;
 import org.apollo.game.model.area.update.ObjectUpdateOperation;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.Player;
-
-import com.google.common.base.MoreObjects;
 
 import static org.apollo.game.model.entity.obj.ObjectType.RECTANGULAR_CORNER;
 import static org.apollo.game.model.entity.obj.ObjectType.TRIANGULAR_CORNER;

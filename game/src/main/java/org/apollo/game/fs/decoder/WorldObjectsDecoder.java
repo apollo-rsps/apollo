@@ -6,8 +6,6 @@ import org.apollo.cache.map.MapLandscapeDecoder;
 import org.apollo.cache.map.MapObject;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
-import org.apollo.game.model.area.Region;
-import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.obj.StaticGameObject;
 
 import java.io.IOException;

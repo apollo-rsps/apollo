@@ -1,12 +1,7 @@
 package org.apollo.game.fs.decoder;
 
 import org.apollo.cache.Cache;
-import org.apollo.cache.map.MapConstants;
-import org.apollo.cache.map.MapFile;
-import org.apollo.cache.map.MapTerrainDecoder;
-import org.apollo.cache.map.MapIndex;
-import org.apollo.cache.map.MapPlane;
-import org.apollo.cache.map.Tile;
+import org.apollo.cache.map.*;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.collision.CollisionManager;
 

@@ -1,11 +1,5 @@
 package org.apollo.game.sync.task;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
-
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
@@ -17,11 +11,13 @@ import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.ChatBlock;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
-import org.apollo.game.sync.seg.AddPlayerSegment;
-import org.apollo.game.sync.seg.MovementSegment;
-import org.apollo.game.sync.seg.RemoveMobSegment;
-import org.apollo.game.sync.seg.SynchronizationSegment;
-import org.apollo.game.sync.seg.TeleportSegment;
+import org.apollo.game.sync.seg.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * A {@link SynchronizationTask} which synchronizes the specified {@link Player} .
@@ -140,7 +136,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	/**
 	 * Tests whether or not the specified Player has a cached appearance within
 	 * the specified appearance ticket array.
-	 * 
+	 *
 	 * @param appearanceTickets The appearance tickets.
 	 * @param index The index of the Player.
 	 * @param appearanceTicket The current appearance ticket for the Player.

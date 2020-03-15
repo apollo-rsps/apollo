@@ -1,9 +1,9 @@
 package org.apollo.game.model.entity;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import com.google.common.base.Preconditions;
 
 /**
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.
@@ -40,7 +40,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		/**
 		 * Constructs a new {@link MobRepositoryIterator} with the specified
 		 * MobRepository.
-		 * 
+		 *
 		 * @param repository
 		 *            The MobRepository we're iterating over.
 		 */

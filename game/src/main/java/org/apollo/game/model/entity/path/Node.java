@@ -1,11 +1,10 @@
 package org.apollo.game.model.entity.path;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
+import com.google.common.base.MoreObjects;
 import org.apollo.game.model.Position;
 
-import com.google.common.base.MoreObjects;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * A Node representing a weighted {@link Position}.

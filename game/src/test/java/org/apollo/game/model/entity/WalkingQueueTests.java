@@ -3,7 +3,6 @@ package org.apollo.game.model.entity;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
-import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionManager;
 import org.apollo.util.security.PlayerCredentials;
 import org.junit.Test;

@@ -1,14 +1,13 @@
 package org.apollo.game.model.entity;
 
-import java.util.Optional;
-
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import org.apollo.cache.def.NpcDefinition;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.sync.block.SynchronizationBlock;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
+import java.util.Optional;
 
 /**
  * A {@link Mob} that is not controlled by a player.

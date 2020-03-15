@@ -12,7 +12,6 @@ import org.apollo.game.model.entity.Entity;
 import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.obj.StaticGameObject;
-import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
 import org.junit.Before;

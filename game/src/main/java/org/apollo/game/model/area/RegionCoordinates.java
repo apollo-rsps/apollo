@@ -1,8 +1,7 @@
 package org.apollo.game.model.area;
 
-import org.apollo.game.model.Position;
-
 import com.google.common.base.MoreObjects;
+import org.apollo.game.model.Position;
 
 /**
  * An immutable class representing the coordinates of a region, where the coordinates ({@code x, y}) are the top-left of

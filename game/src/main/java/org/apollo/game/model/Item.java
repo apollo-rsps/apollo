@@ -1,9 +1,8 @@
 package org.apollo.game.model;
 
-import org.apollo.cache.def.ItemDefinition;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import org.apollo.cache.def.ItemDefinition;
 
 /**
  * Represents a single item.

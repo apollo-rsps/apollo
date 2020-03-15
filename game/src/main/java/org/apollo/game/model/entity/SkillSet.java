@@ -1,13 +1,12 @@
 package org.apollo.game.model.entity;
 
+import com.google.common.base.Preconditions;
+import com.google.common.primitives.Ints;
+import org.apollo.game.model.skill.SkillListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apollo.game.model.skill.SkillListener;
-
-import com.google.common.base.Preconditions;
-import com.google.common.primitives.Ints;
 
 /**
  * Represents the set of the player's skills.

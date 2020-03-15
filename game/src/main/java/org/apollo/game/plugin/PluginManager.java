@@ -1,5 +1,9 @@
 package org.apollo.game.plugin;
 
+import org.apollo.game.io.PluginMetaDataParser;
+import org.apollo.game.model.World;
+import org.xml.sax.SAXException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,10 +11,6 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.apollo.game.io.PluginMetaDataParser;
-import org.apollo.game.model.World;
-import org.xml.sax.SAXException;
 
 /**
  * A class which manages plugins.
