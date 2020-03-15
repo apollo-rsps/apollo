@@ -9,7 +9,7 @@ import org.apollo.game.plugin.entity.spawn.spawnNpc
 
 spawnNpc("master_chef", x = 3076, y = 3085)
 spawnNpc("quest_guide", x = 3086, y = 3122)
-spawnNpc("financial_advisor", x = 3127, y = 3124, facing = Direction.WEST)
+spawnNpc("account_guide", x = 3127, y = 3124, facing = Direction.WEST)
 spawnNpc("brother_brace", x = 3124, y = 3107, facing = Direction.EAST)
 spawnNpc("magic_instructor", x = 3140, y = 3085)
 

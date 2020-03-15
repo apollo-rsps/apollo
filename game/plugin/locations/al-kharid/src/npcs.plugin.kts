@@ -77,7 +77,7 @@ spawnNpc("scorpion", x = 3301, y = 3312)
 
 // Functional npcs
 
-spawnNpc("gnome_pilot", x = 3279, y = 3213)
+spawnNpc("captain_dalbur", x = 3279, y = 3213)
 
 spawnNpc("banker", id = 496, x = 3267, y = 3164, facing = Direction.EAST)
 spawnNpc("banker", id = 496, x = 3267, y = 3167, facing = Direction.EAST)
