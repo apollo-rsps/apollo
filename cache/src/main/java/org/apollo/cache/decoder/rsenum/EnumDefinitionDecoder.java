@@ -11,7 +11,7 @@ import org.apollo.cache.def.EnumDefinition;
 /**
  * Decodes item data from the {@code obj.dat} file into {@link EnumDefinition}s.
  *
- * @author Graham
+ * @author Cjay0091
  */
 public final class EnumDefinitionDecoder implements Runnable {
 
