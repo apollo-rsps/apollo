@@ -30,13 +30,13 @@ public final class ItemOnItemVerificationHandler extends MessageHandler<ItemOnIt
 
 		switch (message.getInterfaceId()) {
 			case SynchronizationInventoryListener.INVENTORY_ID:
-			case BankConstants.SIDEBAR_INVENTORY_ID:
+			case BankConstants.BANK_CONTAINER_COMPONENT:
 				inventory = player.getInventory();
 				break;
 			case SynchronizationInventoryListener.EQUIPMENT_ID:
 				inventory = player.getEquipment();
 				break;
-			case BankConstants.BANK_INVENTORY_ID:
+			case BankConstants.INVENTORY_INTERFACE:
 				inventory = player.getBank();
 				break;
 			default:

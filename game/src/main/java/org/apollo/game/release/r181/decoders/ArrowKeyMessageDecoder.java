@@ -7,7 +7,7 @@ import org.apollo.net.release.MessageDecoder;
 /**
  * A {@link MessageDecoder} for the {@link ArrowKeyMessage}.
  *
- * @author Major
+ * @author Khaled Abdeljaber
  */
 public final class ArrowKeyMessageDecoder extends MessageDecoder<ArrowKeyMessage> {
 

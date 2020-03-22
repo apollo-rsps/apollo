@@ -31,13 +31,13 @@ public final class SwitchItemMessageHandler extends MessageHandler<SwitchItemMes
 
 		switch (message.getInterfaceId()) {
 			case SynchronizationInventoryListener.INVENTORY_ID:
-			case BankConstants.SIDEBAR_INVENTORY_ID:
+			case BankConstants.INVENTORY_INTERFACE:
 				inventory = player.getInventory();
 				break;
 			case SynchronizationInventoryListener.EQUIPMENT_ID:
 				inventory = player.getEquipment();
 				break;
-			case BankConstants.BANK_INVENTORY_ID:
+			case BankConstants.BANK_WINDOW_ID:
 				inventory = player.getBank();
 				insertPermitted = true;
 				break;

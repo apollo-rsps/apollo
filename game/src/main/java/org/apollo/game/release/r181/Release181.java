@@ -2,15 +2,19 @@ package org.apollo.game.release.r181;
 
 import org.apollo.game.message.impl.NpcSynchronizationMessage;
 import org.apollo.game.message.impl.ServerChatMessage;
+import org.apollo.game.message.impl.UpdateInventoryFullMessage;
+import org.apollo.game.message.impl.UpdateInventoryPartialMessage;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.interfaces.ClosedInterfaceMessageDecoder;
 import org.apollo.game.release.r181.decoders.interfaces.DisplayStatusMessageDecoder;
 import org.apollo.game.release.r181.decoders.interfaces.EnteredAmountMessageDecoder;
-import org.apollo.game.release.r181.decoders.npc.*;
-import org.apollo.game.release.r181.decoders.obj.*;
-import org.apollo.game.release.r181.decoders.player.ReportAbuseMessageDecoder;
-import org.apollo.game.release.r181.decoders.player.actions.*;
+import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
+import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
+import org.apollo.game.release.r181.decoders.map.npc.*;
+import org.apollo.game.release.r181.decoders.map.obj.*;
+import org.apollo.game.release.r181.decoders.map.player.*;
+import org.apollo.game.release.r181.decoders.map.player.actions.*;
 import org.apollo.game.release.r181.decoders.social.PrivacyOptionMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.PrivateChatMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.friends.AddFriendMessageDecoder;
@@ -25,6 +29,8 @@ import org.apollo.game.release.r181.encoders.npc.NpcSynchronizationMessageEncode
 import org.apollo.game.release.r181.encoders.player.SetPlayerActionMessageEncoder;
 import org.apollo.game.release.r181.encoders.region.RebuildNormalMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.*;
+import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerFullMessageEncoder;
+import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerPartialMessageEncoder;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
 
@@ -155,6 +161,9 @@ public class Release181 extends Release {
 		register(IfMoveSubMessage.class, new IfMoveSubMessageEncoder());
 		register(IfSetEventMessage.class, new IfSetEventMessageEncoder());
 
+		register(UpdateInventoryPartialMessage.class, new UpdateContainerPartialMessageEncoder());
+		register(UpdateInventoryFullMessage.class, new UpdateContainerFullMessageEncoder());
+
 		register(UpdateWeightMessage.class, new UpdateWeightMessageEncoder());
 		register(UpdateSkillMessage.class, new UpdateSkillMessageEncoder());
 		register(UpdateRunEnergyMessage.class, new UpdateRunEnergyMessageEncoder());
@@ -252,11 +261,17 @@ public class Release181 extends Release {
 		register(22, new KeepAliveMessageDecoder());
 
 		/**
+		 * Map
+		 */
+		register(76, new MapRebuildCompleteDecoder());
+
+		/**
 		 * Misc
 		 */
 		{
-			//register(34, new EventMouseMoveDecoder()); TODO this later for now using spam
-			register(34, new SpamPacketMessageDecoder());
+			//TODO these if they are relevant.
+			register(34, new SpamPacketMessageDecoder()); // register(34, new EventMouseMoveDecoder());
+			register(4, new SpamPacketMessageDecoder()); // register(34, new LoginInfoMessageDecoder());
 		}
 		register(49, new KeepAliveMessageDecoder());
 

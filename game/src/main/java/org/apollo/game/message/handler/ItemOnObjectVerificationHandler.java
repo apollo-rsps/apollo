@@ -33,7 +33,7 @@ public final class ItemOnObjectVerificationHandler extends MessageHandler<ItemOn
 
 	@Override
 	public void handle(Player player, ItemOnObjectMessage message) {
-		if (message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID && message.getInterfaceId() != BankConstants.SIDEBAR_INVENTORY_ID) {
+		if (message.getInterfaceId() != SynchronizationInventoryListener.INVENTORY_ID && message.getInterfaceId() != BankConstants.INVENTORY_INTERFACE) {
 			message.terminate();
 			return;
 		}

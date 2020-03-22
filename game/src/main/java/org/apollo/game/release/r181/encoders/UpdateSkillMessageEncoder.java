@@ -9,7 +9,7 @@ import org.apollo.net.release.MessageEncoder;
 /**
  * A {@link MessageEncoder} for the {@link UpdateSkillMessage}.
  *
- * @author Graham
+ * @author Khaled Abdeljaber
  */
 public class UpdateSkillMessageEncoder extends MessageEncoder<UpdateSkillMessage> {
 	@Override

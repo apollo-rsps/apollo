@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageDecoder;
 /**
  * A {@link MessageDecoder} for the {@link AddFriendMessage}.
  *
- * @author Major
+ * @author Khaled Abdeljaber
  */
 public final class AddFriendMessageDecoder extends MessageDecoder<AddFriendMessage> {
 

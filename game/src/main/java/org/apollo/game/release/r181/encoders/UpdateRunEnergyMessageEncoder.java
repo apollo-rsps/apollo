@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 /**
  * A {@link MessageEncoder} for the {@link UpdateRunEnergyMessage}.
  *
- * @author Major
+ * @author Khaled Abdeljaber
  */
 public class UpdateRunEnergyMessageEncoder extends MessageEncoder<UpdateRunEnergyMessage> {
 	@Override

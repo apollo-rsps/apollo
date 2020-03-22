@@ -18,7 +18,7 @@ import org.apollo.net.release.MessageEncoder;
 /**
  * A {@link MessageEncoder} for the {@link NpcSynchronizationMessage}.
  *
- * @author Major
+ * @author Khaled Abdeljaber
  */
 public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSynchronizationMessage> {
 

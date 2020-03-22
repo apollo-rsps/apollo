@@ -215,9 +215,9 @@ public final class Player extends Mob {
 	/**
 	 * Creates the Player.
 	 *
-	 * @param world The {@link World} containing the Player.
+	 * @param world       The {@link World} containing the Player.
 	 * @param credentials The player's credentials.
-	 * @param position The initial position.
+	 * @param position    The initial position.
 	 */
 	public Player(World world, PlayerCredentials credentials, Position position) {
 		super(world, position);
@@ -640,8 +640,10 @@ public final class Player extends Mob {
 	 * Opens this player's bank.
 	 */
 	public void openBank() {
-		InventoryListener invListener = new SynchronizationInventoryListener(this, BankConstants.SIDEBAR_INVENTORY_ID);
-		InventoryListener bankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
+		InventoryListener invListener = new SynchronizationInventoryListener(this, BankConstants.INVENTORY_INTERFACE,
+				BankConstants.BANK_INVENTORY_COMPONENT, SynchronizationInventoryListener.INVENTORY_INVENTORY);
+		InventoryListener bankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_WINDOW_ID,
+				BankConstants.BANK_CONTAINER_COMPONENT, BankConstants.BANK_INVENTORY);
 
 		inventory.addListener(invListener);
 		bank.addListener(bankListener);
@@ -650,7 +652,7 @@ public final class Player extends Mob {
 
 		InterfaceListener interListener = new BankInterfaceListener(this, invListener, bankListener);
 		interfaceSet.openModal(interListener, BankConstants.BANK_WINDOW_ID);
-		interfaceSet.openTopLevel(BankConstants.SIDEBAR_INVENTORY_ID, TopLevelPosition.INVENTORY_TAB);
+		interfaceSet.openTopLevel(BankConstants.INVENTORY_INTERFACE, TopLevelPosition.INVENTORY_TAB);
 	}
 
 	/**
@@ -926,7 +928,7 @@ public final class Player extends Mob {
 	 * Sets whether or not the player is withdrawing notes from the bank.
 	 *
 	 * @param withdrawingNotes Whether or not the player is withdrawing noted
-	 * items.
+	 *                         items.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
 		this.withdrawingNotes = withdrawingNotes;
@@ -965,7 +967,7 @@ public final class Player extends Mob {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
-			.toString();
+				.toString();
 	}
 
 	/**
@@ -998,19 +1000,17 @@ public final class Player extends Mob {
 	 */
 	private void initInventories() {
 		InventoryListener fullInventory = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
-		InventoryListener fullBank = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearance = new AppearanceInventoryListener(this);
 
 		InventoryListener syncInventory = new SynchronizationInventoryListener(this,
-			SynchronizationInventoryListener.INVENTORY_ID);
-		InventoryListener syncBank = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
+				SynchronizationInventoryListener.INVENTORY_ID, SynchronizationInventoryListener.INVENTORY_CONTAINER_COMPONENT,
+				SynchronizationInventoryListener.INVENTORY_INVENTORY);
 		InventoryListener syncEquipment = new SynchronizationInventoryListener(this,
-			SynchronizationInventoryListener.EQUIPMENT_ID);
+				SynchronizationInventoryListener.EQUIPMENT_ID, SynchronizationInventoryListener.EQUIPMENT_CONTAINER_COMPONENT,
+				SynchronizationInventoryListener.EQUIPMENT_CONTAINER);
 
 		inventory.addListener(syncInventory);
 		inventory.addListener(fullInventory);
-		bank.addListener(syncBank);
-		bank.addListener(fullBank);
 		equipment.addListener(syncEquipment);
 		equipment.addListener(appearance);
 	}
@@ -1022,5 +1022,4 @@ public final class Player extends Mob {
 		skillSet.addListener(new SynchronizationSkillListener(this));
 		skillSet.addListener(new LevelUpSkillListener(this));
 	}
-
 }

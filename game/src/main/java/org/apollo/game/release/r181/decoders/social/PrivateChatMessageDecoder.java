@@ -9,7 +9,7 @@ import org.apollo.util.TextUtil;
 /**
  * A {@link MessageDecoder} for the {@link PrivateChatMessage}.
  *
- * @author Major
+ * @author Khaled Abdeljaber
  */
 public final class PrivateChatMessageDecoder extends MessageDecoder<PrivateChatMessage> {
 

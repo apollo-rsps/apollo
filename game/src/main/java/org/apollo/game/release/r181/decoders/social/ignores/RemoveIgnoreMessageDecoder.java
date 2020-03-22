@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageDecoder;
 /**
  * A {@link MessageDecoder} for the {@link RemoveIgnoreMessage}.
  *
- * @author Major
+ * @author Khaled Abdeljaber
  */
 public final class RemoveIgnoreMessageDecoder extends MessageDecoder<RemoveIgnoreMessage> {
 

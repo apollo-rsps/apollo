@@ -8,7 +8,7 @@ import org.apollo.net.release.MessageEncoder;
 /**
  * A {@link MessageEncoder} for the {@link RebuildNormalMessage}.
  *
- * @author Graham
+ * @author Khaled Abdeljaber
  */
 public final class RebuildNormalMessageEncoder extends MessageEncoder<RebuildNormalMessage> {
 

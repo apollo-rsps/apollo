@@ -11,7 +11,7 @@ import org.apollo.net.release.MessageEncoder;
  * A {@link MessageEncoder} for the {@link ConfigMessage}.
  *
  * @author Chris Fletcher
- * @author Major
+ * @author Khaled Abdeljaber
  */
 public final class ConfigMessageEncoder extends MessageEncoder<ConfigMessage> {
 
