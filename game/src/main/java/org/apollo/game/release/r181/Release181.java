@@ -22,6 +22,7 @@ import org.apollo.game.release.r181.encoders.UpdateSkillMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateWeightMessageEncoder;
 import org.apollo.game.release.r181.encoders.game.ServerChatMessageEncoder;
 import org.apollo.game.release.r181.encoders.npc.NpcSynchronizationMessageEncoder;
+import org.apollo.game.release.r181.encoders.player.SetPlayerActionMessageEncoder;
 import org.apollo.game.release.r181.encoders.region.RebuildNormalMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.*;
 import org.apollo.net.meta.PacketMetaDataGroup;
@@ -147,20 +148,22 @@ public class Release181 extends Release {
 		 * Server
 		 */
 
+		register(SetPlayerActionMessage.class, new SetPlayerActionMessageEncoder());
+
 		register(IfOpenTopMessage.class, new IfOpenTopMessageEncoder());
 		register(IfOpenSubMessage.class, new IfOpenSubMessageEncoder());
 		register(IfMoveSubMessage.class, new IfMoveSubMessageEncoder());
 		register(IfSetEventMessage.class, new IfSetEventMessageEncoder());
 
-		register(ServerChatMessage.class, new ServerChatMessageEncoder());
 		register(UpdateWeightMessage.class, new UpdateWeightMessageEncoder());
 		register(UpdateSkillMessage.class, new UpdateSkillMessageEncoder());
 		register(UpdateRunEnergyMessage.class, new UpdateRunEnergyMessageEncoder());
 
 		register(RebuildNormalMessage.class, new RebuildNormalMessageEncoder());
-		register(ConfigMessage.class, new ConfigMessageEncoder());
 		register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
 
+		register(ConfigMessage.class, new ConfigMessageEncoder());
+		register(ServerChatMessage.class, new ServerChatMessageEncoder());
 
 		/**
 		 * Client
@@ -218,7 +221,6 @@ public class Release181 extends Release {
 		register(75, new SeventhPlayerActionMessageDecoder());
 		register(50, new EightPlayerActionMessageDecoder());
 
-
 		/**
 		 * NPC
 		 */
@@ -243,12 +245,21 @@ public class Release181 extends Release {
 		 * Floor Items
 		 */
 
-
 		register(38, new ReportAbuseMessageDecoder());
 		register(73, new FocusUpdateMessageDecoder());
 		register(60, new CommandMessageDecoder());
 		register(41, new MouseClickedMessageDecoder());
 		register(22, new KeepAliveMessageDecoder());
+
+		/**
+		 * Misc
+		 */
+		{
+			//register(34, new EventMouseMoveDecoder()); TODO this later for now using spam
+			register(34, new SpamPacketMessageDecoder());
+		}
+		register(49, new KeepAliveMessageDecoder());
+
 
 		//TODO register completed client prot here.
 	}

@@ -9,7 +9,7 @@ import org.apollo.cache.RSFile;
 import org.apollo.cache.def.EnumDefinition;
 
 /**
- * Decodes item data from the {@code obj.dat} file into {@link EnumDefinition}s.
+ * Decodes archive two folder eight into {@link EnumDefinition}s.
  *
  * @author Cjay0091
  */
