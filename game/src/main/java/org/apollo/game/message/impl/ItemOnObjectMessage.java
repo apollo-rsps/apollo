@@ -26,14 +26,14 @@ public final class ItemOnObjectMessage extends InventoryItemMessage {
 	 * Creates an item on object message.
 	 *
 	 * @param interfaceId The interface id.
-	 * @param itemId The item id.
-	 * @param itemSlot The slot the item is in.
-	 * @param objectId The object id.
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
+	 * @param itemId      The item id.
+	 * @param itemSlot    The slot the item is in.
+	 * @param objectId    The object id.
+	 * @param x           The x coordinate.
+	 * @param y           The y coordinate.
 	 */
-	public ItemOnObjectMessage(int interfaceId, int itemId, int itemSlot, int objectId, int x, int y) {
-		super(OptionalInt.empty(), interfaceId, itemId, itemSlot);
+	public ItemOnObjectMessage(int interfaceId, int componentId, int itemId, int itemSlot, int objectId, int x, int y) {
+		super(OptionalInt.empty(), interfaceId, componentId, itemId, itemSlot);
 		this.objectId = objectId;
 		position = new Position(x, y);
 	}

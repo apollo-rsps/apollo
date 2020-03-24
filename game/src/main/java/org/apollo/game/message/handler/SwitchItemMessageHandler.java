@@ -37,7 +37,7 @@ public final class SwitchItemMessageHandler extends MessageHandler<SwitchItemMes
 			case SynchronizationInventoryListener.EQUIPMENT_ID:
 				inventory = player.getEquipment();
 				break;
-			case BankConstants.BANK_WINDOW_ID:
+			case BankConstants.WINDOW_ID:
 				inventory = player.getBank();
 				insertPermitted = true;
 				break;

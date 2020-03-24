@@ -6,14 +6,11 @@ import org.apollo.game.message.impl.UpdateInventoryFullMessage;
 import org.apollo.game.message.impl.UpdateInventoryPartialMessage;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
-import org.apollo.game.release.r181.decoders.interfaces.ClosedInterfaceMessageDecoder;
-import org.apollo.game.release.r181.decoders.interfaces.DisplayStatusMessageDecoder;
-import org.apollo.game.release.r181.decoders.interfaces.EnteredAmountMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
 import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.npc.*;
 import org.apollo.game.release.r181.decoders.map.obj.*;
-import org.apollo.game.release.r181.decoders.map.player.*;
+import org.apollo.game.release.r181.decoders.map.player.ReportAbuseMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.player.actions.*;
 import org.apollo.game.release.r181.decoders.social.PrivacyOptionMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.PrivateChatMessageDecoder;
@@ -21,6 +18,12 @@ import org.apollo.game.release.r181.decoders.social.friends.AddFriendMessageDeco
 import org.apollo.game.release.r181.decoders.social.friends.RemoveFriendMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.ignores.AddIgnoreMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.ignores.RemoveIgnoreMessageDecoder;
+import org.apollo.game.release.r181.decoders.ui.ClosedInterfaceMessageDecoder;
+import org.apollo.game.release.r181.decoders.ui.DisplayStatusMessageDecoder;
+import org.apollo.game.release.r181.decoders.ui.EnteredAmountMessageDecoder;
+import org.apollo.game.release.r181.decoders.ui.if1.*;
+import org.apollo.game.release.r181.decoders.ui.if3.If3ActionMessageDecoder;
+import org.apollo.game.release.r181.decoders.ui.opheld.*;
 import org.apollo.game.release.r181.encoders.UpdateRunEnergyMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateSkillMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateWeightMessageEncoder;
@@ -212,6 +215,24 @@ public class Release181 extends Release {
 		 */
 		register(35, new DisplayStatusMessageDecoder());
 		register(20, new ClosedInterfaceMessageDecoder());
+
+		final var if3 = new int[]{68, 21, 48, 19, 40, 66, 85, 14, 84, 0};
+		for (int index = 0; index < if3.length; index++) {
+			register(if3[index], new If3ActionMessageDecoder(index + 1));
+		}
+
+		register(46, new FirstIf1ActionMessageDecoder());
+		register(26, new SecondIf1ActionMessageDecoder());
+		register(65, new ThirdIf1ActionMessageDecoder());
+		register(64, new FourthIf1ActionMessageDecoder());
+		register(32, new FifthIf1ActionMessageDecoder());
+
+		register(87, new FirstOpHeldMessageDecoder());
+		register(98, new SecondOpHeldMessageDecoder());
+		register(72, new ThirdOpHeldMessageDecoder());
+		register(7, new FourthOpHeldMessageDecoder());
+		register(58, new FifthOpHeldMessageDecoder());
+		register(24, new SixthOpHeldMessageDecoder());
 
 		/**
 		 * Resume Inputs

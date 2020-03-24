@@ -1,4 +1,4 @@
-package org.apollo.game.release.r181.decoders.interfaces;
+package org.apollo.game.release.r181.decoders.ui;
 
 import org.apollo.game.message.impl.decode.DisplayStatusMessage;
 import org.apollo.game.model.inter.DisplayMode;

@@ -23,6 +23,11 @@ public abstract class InventoryItemMessage extends Message {
 	private final int interfaceId;
 
 	/**
+	 * The component id.
+	 */
+	private final int componentId;
+
+	/**
 	 * The option number (1-5 if present).
 	 */
 	private final OptionalInt option;
@@ -35,14 +40,15 @@ public abstract class InventoryItemMessage extends Message {
 	/**
 	 * Creates the InventoryItemMessage.
 	 *
-	 * @param option The option number, if applicable.
+	 * @param option      The option number, if applicable.
 	 * @param interfaceId The interface id.
-	 * @param id The id.
-	 * @param slot The slot.
+	 * @param id          The id.
+	 * @param slot        The slot.
 	 */
-	protected InventoryItemMessage(OptionalInt option, int interfaceId, int id, int slot) {
+	protected InventoryItemMessage(OptionalInt option, int interfaceId, int componentId, int id, int slot) {
 		this.option = option;
 		this.interfaceId = interfaceId;
+		this.componentId = componentId;
 		this.id = id;
 		this.slot = slot;
 	}
@@ -63,6 +69,11 @@ public abstract class InventoryItemMessage extends Message {
 	 */
 	public final int getInterfaceId() {
 		return interfaceId;
+	}
+
+
+	public int getComponentId() {
+		return componentId;
 	}
 
 	/**
@@ -93,4 +104,9 @@ public abstract class InventoryItemMessage extends Message {
 		return option.isPresent();
 	}
 
+
+	@Override
+	public String toString() {
+		return "InventoryItemMessage{" + "id=" + id + ", interfaceId=" + interfaceId + ", componentId=" + componentId + ", option=" + option + ", slot=" + slot + '}';
+	}
 }

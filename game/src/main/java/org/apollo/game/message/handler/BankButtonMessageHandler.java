@@ -1,20 +1,20 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.ButtonMessage;
+import org.apollo.game.message.impl.IfActionMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 
 /**
- * A {@link MessageHandler} that responds to {@link ButtonMessage}s for withdrawing items as notes.
+ * A {@link MessageHandler} that responds to {@link IfActionMessage}s for withdrawing items as notes.
  *
  * @author Graham
  */
-public final class BankButtonMessageHandler extends MessageHandler<ButtonMessage> {
+public final class BankButtonMessageHandler extends MessageHandler<IfActionMessage> {
 
 	/**
 	 * Creates the BankButtonMessageHandler.
 	 *
-	 * @param world The {@link World} the {@link ButtonMessage} occurred in.
+	 * @param world The {@link World} the {@link IfActionMessage} occurred in.
 	 */
 	public BankButtonMessageHandler(World world) {
 		super(world);
@@ -31,10 +31,10 @@ public final class BankButtonMessageHandler extends MessageHandler<ButtonMessage
 	private static final int WITHDRAW_AS_NOTE = 5386;
 
 	@Override
-	public void handle(Player player, ButtonMessage message) {
-		if (message.getWidgetId() == WITHDRAW_AS_ITEM) {
+	public void handle(Player player, IfActionMessage message) {
+		if (message.getComponentId() == WITHDRAW_AS_ITEM) {
 			player.setWithdrawingNotes(false);
-		} else if (message.getWidgetId() == WITHDRAW_AS_NOTE) {
+		} else if (message.getComponentId() == WITHDRAW_AS_NOTE) {
 			player.setWithdrawingNotes(true);
 		}
 	}

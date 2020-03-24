@@ -20,6 +20,11 @@ public final class ItemOnItemMessage extends InventoryItemMessage {
 	private final int targetInterface;
 
 	/**
+	 * The component id of the target item.
+	 */
+	private final int targetComponentId;
+
+	/**
 	 * The slot of the target item.
 	 */
 	private final int targetSlot;
@@ -34,9 +39,10 @@ public final class ItemOnItemMessage extends InventoryItemMessage {
 	 * @param targetId The id of the target item.
 	 * @param targetSlot The slot of the target item.
 	 */
-	public ItemOnItemMessage(int usedInterface, int usedId, int usedSlot, int targetInterface, int targetId, int targetSlot) {
-		super(OptionalInt.empty(), usedInterface, usedId, usedSlot);
+	public ItemOnItemMessage(int usedInterface, int usedComponentId, int usedId, int usedSlot, int targetInterface, int targetComponentId, int targetId, int targetSlot) {
+		super(OptionalInt.empty(), usedInterface, usedComponentId, usedId, usedSlot);
 		this.targetInterface = targetInterface;
+		this.targetComponentId = targetComponentId;
 		this.targetSlot = targetSlot;
 		this.targetId = targetId;
 	}
@@ -57,6 +63,10 @@ public final class ItemOnItemMessage extends InventoryItemMessage {
 	 */
 	public int getTargetInterfaceId() {
 		return targetInterface;
+	}
+
+	public int getTargetComponentId() {
+		return targetComponentId;
 	}
 
 	/**

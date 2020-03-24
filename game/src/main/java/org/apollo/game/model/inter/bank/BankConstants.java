@@ -15,22 +15,22 @@ public final class BankConstants {
 	/**
 	 * The bank inventory component.
 	 */
-	public static final int BANK_INVENTORY_COMPONENT = 3;
+	public static final int INVENTORY_COMPONENT = 3;
 
 	/**
 	 * The bank window id.
 	 */
-	public static final int BANK_WINDOW_ID = 12;
+	public static final int WINDOW_ID = 12;
 
 	/**
 	 * The bank window component.
 	 */
-	public static final int BANK_CONTAINER_COMPONENT = -1;
+	public static final int CONTAINER_COMPONENT = -1;
 
 	/**
 	 * The inventory id for banks.
 	 */
-	public static final int BANK_INVENTORY = 95;
+	public static final int INVENTORY = 95;
 
 	/**
 	 * Default private constructor to prevent instantiation.

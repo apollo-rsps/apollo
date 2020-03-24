@@ -16,13 +16,15 @@ public final class ItemActionMessage extends InventoryItemMessage {
 	/**
 	 * Creates the ItemActionMessage.
 	 *
-	 * @param option The option number.
+	 * @param option      The option number.
 	 * @param interfaceId The interface id.
-	 * @param id The id.
-	 * @param slot The slot.
+	 * @param componentId The component id.
+	 * @param id          The id.
+	 * @param slot        The slot.
 	 */
-	public ItemActionMessage(int option, int interfaceId, int id, int slot) {
-		super(OptionalInt.of(option), interfaceId, id, slot);
+	public ItemActionMessage(int option, int interfaceId, int componentId, int id, int slot) {
+		super(OptionalInt.of(option), interfaceId, componentId, id, slot);
 	}
+
 
 }

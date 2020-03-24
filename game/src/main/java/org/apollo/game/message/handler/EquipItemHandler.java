@@ -50,7 +50,6 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 		int equippingId = equipping.getId();
 
 		EquipmentDefinition definition = EquipmentDefinition.lookup(equippingId);
-
 		if (definition == null) {
 			return;
 		} else if (!hasRequirements(player, definition)) {
@@ -120,7 +119,7 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 
 		equipment.reset(SHIELD);
 		equipment.set(WEAPON, inventory.reset(inventorySlot));
-		
+
 		if (shield != null) {
 			inventory.add(shield);
 		}

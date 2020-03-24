@@ -1,7 +1,7 @@
-import org.apollo.game.message.impl.ButtonMessage
+import org.apollo.game.message.impl.IfActionMessage
 
-on { ButtonMessage::class }
-    .where { widgetId in Emote.MAP }
+on { IfActionMessage::class }
+    .where { componentId in Emote.MAP }
     .then { player ->
-        player.playAnimation(Emote.fromButton(widgetId)!!.animation)
+        player.playAnimation(Emote.fromButton(componentId)!!.animation)
     }

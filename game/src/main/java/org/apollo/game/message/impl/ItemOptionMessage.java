@@ -7,7 +7,7 @@ import java.util.OptionalInt;
  * Note that the actual message sent by the client is one of the five item option messages, but this is the message that
  * should be intercepted (and the option verified).
  *
- * @author Chris Fletcher
+ * @author Khaled Abdeljaber
  */
 public final class ItemOptionMessage extends InventoryItemMessage {
 
@@ -19,8 +19,7 @@ public final class ItemOptionMessage extends InventoryItemMessage {
 	 * @param id The id.
 	 * @param slot The slot.
 	 */
-	public ItemOptionMessage(int option, int interfaceId, int id, int slot) {
-		super(OptionalInt.of(option), interfaceId, id, slot);
+	public ItemOptionMessage(int option, int interfaceId, int componentId, int id, int slot) {
+		super(OptionalInt.of(option), interfaceId, componentId, id, slot);
 	}
-
 }

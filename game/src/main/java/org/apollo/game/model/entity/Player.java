@@ -641,9 +641,9 @@ public final class Player extends Mob {
 	 */
 	public void openBank() {
 		InventoryListener invListener = new SynchronizationInventoryListener(this, BankConstants.INVENTORY_INTERFACE,
-				BankConstants.BANK_INVENTORY_COMPONENT, SynchronizationInventoryListener.INVENTORY_INVENTORY);
-		InventoryListener bankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_WINDOW_ID,
-				BankConstants.BANK_CONTAINER_COMPONENT, BankConstants.BANK_INVENTORY);
+				BankConstants.INVENTORY_COMPONENT, SynchronizationInventoryListener.INVENTORY_INVENTORY);
+		InventoryListener bankListener = new SynchronizationInventoryListener(this, BankConstants.WINDOW_ID,
+				BankConstants.CONTAINER_COMPONENT, BankConstants.INVENTORY);
 
 		inventory.addListener(invListener);
 		bank.addListener(bankListener);
@@ -651,7 +651,7 @@ public final class Player extends Mob {
 		bank.forceRefresh();
 
 		InterfaceListener interListener = new BankInterfaceListener(this, invListener, bankListener);
-		interfaceSet.openModal(interListener, BankConstants.BANK_WINDOW_ID);
+		interfaceSet.openModal(interListener, BankConstants.WINDOW_ID);
 		interfaceSet.openTopLevel(BankConstants.INVENTORY_INTERFACE, TopLevelPosition.INVENTORY_TAB);
 	}
 

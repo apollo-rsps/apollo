@@ -22,8 +22,8 @@ public final class MagicOnItemMessage extends InventoryItemMessage {
 	 * @param slot The item slot.
 	 * @param spell The spell id.
 	 */
-	public MagicOnItemMessage(int interfaceId, int id, int slot, int spell) {
-		super(OptionalInt.empty(), interfaceId, id, slot);
+	public MagicOnItemMessage(int interfaceId, int componentId, int id, int slot, int spell) {
+		super(OptionalInt.empty(), interfaceId, componentId, id, slot);
 		this.spell = spell;
 	}
 

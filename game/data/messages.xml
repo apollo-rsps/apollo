@@ -1,6 +1,6 @@
 <messages>
     <message>
-        <type>org.apollo.game.message.impl.ButtonMessage</type>
+        <type>org.apollo.game.message.impl.IfActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.DialogueButtonHandler</handler>
             <handler>org.apollo.game.message.handler.BankButtonMessageHandler</handler>

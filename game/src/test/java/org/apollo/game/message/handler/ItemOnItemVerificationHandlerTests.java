@@ -38,8 +38,8 @@ public final class ItemOnItemVerificationHandlerTests {
 
 		when(player.getInventory()).thenReturn(inventory);
 
-		ItemOnItemMessage itemOnItemMessage = new ItemOnItemMessage(BankConstants.INVENTORY_INTERFACE, 4151, 1,
-				BankConstants.INVENTORY_INTERFACE, 4152, 2);
+		ItemOnItemMessage itemOnItemMessage = new ItemOnItemMessage(BankConstants.INVENTORY_INTERFACE, BankConstants.INVENTORY_COMPONENT, 4151, 1,
+				BankConstants.INVENTORY_INTERFACE, BankConstants.INVENTORY_COMPONENT, 4152, 2);
 
 		itemOnItemVerificationHandler.handle(player, itemOnItemMessage);
 

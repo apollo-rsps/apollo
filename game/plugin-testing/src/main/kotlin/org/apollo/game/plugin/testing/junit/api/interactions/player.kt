@@ -15,8 +15,8 @@ import org.apollo.game.model.entity.obj.GameObject
  * Send an [ItemOptionMessage] for the given [id], [option], [slot], and [interfaceId], simulating a
  * player interacting with an item.
  */
-fun Player.interactWithItem(id: Int, option: Int, slot: Int? = null, interfaceId: Int? = null) {
-    send(ItemOptionMessage(option, interfaceId ?: -1, id, slot ?: inventory.slotOf(id)))
+fun Player.interactWithItem(id: Int, option: Int, slot: Int? = null, interfaceId: Int? = null, componentId: Int? = null) {
+    send(ItemOptionMessage(option, interfaceId ?: -1, componentId ?: -1, id, slot ?: inventory.slotOf(id)))
 }
 
 /**

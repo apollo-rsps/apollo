@@ -1,6 +1,6 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.ButtonMessage;
+import org.apollo.game.message.impl.IfActionMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.ServerInterfaceType;
@@ -11,21 +11,21 @@ import org.apollo.game.model.inter.ServerInterfaceType;
  *
  * @author Chris Fletcher
  */
-public final class DialogueButtonHandler extends MessageHandler<ButtonMessage> {
+public final class DialogueButtonHandler extends MessageHandler<IfActionMessage> {
 
 	/**
 	 * Creates the DialogueButtonHandler.
 	 *
-	 * @param world The {@link World} the {@link ButtonMessage} occurred in.
+	 * @param world The {@link World} the {@link IfActionMessage} occurred in.
 	 */
 	public DialogueButtonHandler(World world) {
 		super(world);
 	}
 
 	@Override
-	public void handle(Player player, ButtonMessage message) {
+	public void handle(Player player, IfActionMessage message) {
 		if (player.getInterfaceSet().contains(ServerInterfaceType.DIALOGUE)) {
-			boolean terminate = player.getInterfaceSet().buttonClicked(message.getWidgetId());
+			boolean terminate = player.getInterfaceSet().buttonClicked(message.getComponentId());
 
 			if (terminate) {
 				message.terminate();
