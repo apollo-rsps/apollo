@@ -8,6 +8,7 @@ import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
 import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
+import org.apollo.game.release.r181.decoders.map.item.*;
 import org.apollo.game.release.r181.decoders.map.npc.*;
 import org.apollo.game.release.r181.decoders.map.obj.*;
 import org.apollo.game.release.r181.decoders.map.player.ReportAbuseMessageDecoder;
@@ -233,6 +234,13 @@ public class Release181 extends Release {
 		register(7, new FourthOpHeldMessageDecoder());
 		register(58, new FifthOpHeldMessageDecoder());
 		register(24, new SixthOpHeldMessageDecoder());
+
+
+		register(5, new FirstOpItemMessageDecoder());
+		register(74, new SecondOpItemMessageDecoder());
+		register(6, new ThirdOpItemMessageDecoder());
+		register(29, new FourthOpItemMessageDecoder());
+		register(51, new FifthOpItemMessageDecoder());
 
 		/**
 		 * Resume Inputs

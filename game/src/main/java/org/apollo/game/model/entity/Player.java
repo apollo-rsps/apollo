@@ -223,6 +223,8 @@ public final class Player extends Mob {
 		super(world, position);
 		this.credentials = credentials;
 
+		inventory.add(4155, 1);
+
 		init();
 	}
 
@@ -1003,10 +1005,12 @@ public final class Player extends Mob {
 		InventoryListener appearance = new AppearanceInventoryListener(this);
 
 		InventoryListener syncInventory = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.INVENTORY_ID, SynchronizationInventoryListener.INVENTORY_CONTAINER_COMPONENT,
+				SynchronizationInventoryListener.INVENTORY_ID,
+				SynchronizationInventoryListener.INVENTORY_CONTAINER_COMPONENT,
 				SynchronizationInventoryListener.INVENTORY_INVENTORY);
 		InventoryListener syncEquipment = new SynchronizationInventoryListener(this,
-				SynchronizationInventoryListener.EQUIPMENT_ID, SynchronizationInventoryListener.EQUIPMENT_CONTAINER_COMPONENT,
+				SynchronizationInventoryListener.EQUIPMENT_ID,
+				SynchronizationInventoryListener.EQUIPMENT_CONTAINER_COMPONENT,
 				SynchronizationInventoryListener.EQUIPMENT_CONTAINER);
 
 		inventory.addListener(syncInventory);
