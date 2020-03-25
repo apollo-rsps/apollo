@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.decode;
 
 import org.apollo.game.model.Appearance;
 import org.apollo.net.message.Message;

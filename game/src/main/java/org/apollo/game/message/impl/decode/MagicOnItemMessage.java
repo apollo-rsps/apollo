@@ -1,4 +1,6 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.decode;
+
+import org.apollo.game.message.impl.decode.InventoryItemMessage;
 
 import java.util.OptionalInt;
 

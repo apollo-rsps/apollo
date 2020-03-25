@@ -1,6 +1,6 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.PlayerDesignMessage;
+import org.apollo.game.message.impl.decode.PlayerDesignMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;

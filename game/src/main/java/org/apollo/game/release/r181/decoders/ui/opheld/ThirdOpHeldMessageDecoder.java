@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.ui.opheld;
 
-import org.apollo.game.message.impl.ItemActionMessage;
+import org.apollo.game.message.impl.decode.ItemActionMessage;
 import org.apollo.net.codec.game.*;
 import org.apollo.net.release.MessageDecoder;
 

@@ -1,6 +1,6 @@
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncAction
-import org.apollo.game.message.impl.ItemOptionMessage
+import org.apollo.game.message.impl.decode.ItemOptionMessage
 import org.apollo.game.model.Animation
 import org.apollo.game.model.entity.Player
 import org.apollo.net.message.Message

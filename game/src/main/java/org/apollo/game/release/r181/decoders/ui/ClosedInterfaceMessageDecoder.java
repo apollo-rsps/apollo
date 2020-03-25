@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.ui;
 
-import org.apollo.game.message.impl.ClosedInterfaceMessage;
+import org.apollo.game.message.impl.decode.ClosedInterfaceMessage;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.release.MessageDecoder;
 

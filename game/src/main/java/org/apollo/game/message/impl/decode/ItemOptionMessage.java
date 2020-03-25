@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.decode;
 
 import java.util.OptionalInt;
 

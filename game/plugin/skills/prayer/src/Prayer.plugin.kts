@@ -1,7 +1,7 @@
 import Bone.Companion.isBone
 import Prayer.Companion.isPrayerButton
 import org.apollo.game.message.impl.IfActionMessage
-import org.apollo.game.message.impl.ItemOptionMessage
+import org.apollo.game.message.impl.decode.ItemOptionMessage
 import org.apollo.game.model.event.impl.LogoutEvent
 import org.apollo.game.plugin.api.prayer
 

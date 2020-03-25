@@ -1,7 +1,7 @@
 package org.apollo.game.message.handler;
 
 import org.apollo.cache.def.ItemDefinition;
-import org.apollo.game.message.impl.ItemOnItemMessage;
+import org.apollo.game.message.impl.decode.ItemOnItemMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;

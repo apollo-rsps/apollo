@@ -1,5 +1,6 @@
 package org.apollo.game.message.impl;
 
+import org.apollo.game.message.impl.decode.FocusUpdateMessage;
 import org.apollo.net.message.Message;
 
 /**

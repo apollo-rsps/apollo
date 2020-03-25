@@ -11,6 +11,7 @@ import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.item.*;
 import org.apollo.game.release.r181.decoders.map.npc.*;
 import org.apollo.game.release.r181.decoders.map.obj.*;
+import org.apollo.game.release.r181.decoders.map.player.PlayerDesignMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.player.ReportAbuseMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.player.actions.*;
 import org.apollo.game.release.r181.decoders.social.PrivacyOptionMessageDecoder;
@@ -258,6 +259,8 @@ public class Release181 extends Release {
 		register(93, new SixthPlayerActionMessageDecoder());
 		register(75, new SeventhPlayerActionMessageDecoder());
 		register(50, new EightPlayerActionMessageDecoder());
+
+		register(12, new PlayerDesignMessageDecoder());
 
 		/**
 		 * NPC
