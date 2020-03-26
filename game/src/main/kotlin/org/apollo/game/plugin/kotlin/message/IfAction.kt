@@ -19,29 +19,30 @@ import org.apollo.game.plugin.kotlin.PredicateContext
  * ```
  */
 fun KotlinPluginScript.on(
-    listenable: ButtonClick.Companion,
-    button: Int,
-    callback: ButtonClick.() -> Unit
+    listenable: IfAction.Companion,
+    inter: Int,
+    comp: Int,
+    callback: IfAction.() -> Unit
 ) {
-    registerListener(listenable, ButtonPredicateContext(button), callback)
+    registerListener(listenable, IfActionPredicateContext(inter, comp), callback)
 }
 
-class ButtonClick(override val player: Player, val button: Int) : PlayerContext {
+class IfAction(override val player: Player) : PlayerContext {
 
-    companion object : MessageListenable<IfActionMessage, ButtonClick, ButtonPredicateContext>() {
+    companion object : MessageListenable<IfActionMessage, IfAction, IfActionPredicateContext>() {
 
         override val type = IfActionMessage::class
 
         override fun createHandler(
             world: World,
-            predicateContext: ButtonPredicateContext?,
-            callback: ButtonClick.() -> Unit
+            predicateContext: IfActionPredicateContext?,
+            callback: IfAction.() -> Unit
         ): MessageHandler<IfActionMessage> {
             return object : MessageHandler<IfActionMessage>(world) {
 
                 override fun handle(player: Player, message: IfActionMessage) {
-                    if (predicateContext == null || predicateContext.button == message.componentId) {
-                        val context = ButtonClick(player, message.componentId)
+                    if (predicateContext == null || predicateContext.inter == message.interfaceId && predicateContext.comp == message.componentId) {
+                        val context = IfAction(player)
                         context.callback()
                     }
                 }
@@ -53,4 +54,4 @@ class ButtonClick(override val player: Player, val button: Int) : PlayerContext 
 
 }
 
-class ButtonPredicateContext(val button: Int) : PredicateContext
+class IfActionPredicateContext(val inter: Int, val comp: Int) : PredicateContext

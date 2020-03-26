@@ -1,10 +1,8 @@
-import org.apollo.game.message.impl.IfActionMessage
+import org.apollo.game.model.inter.TopLevelPosition
+import org.apollo.game.plugin.kotlin.message.*
 
 val LOGOUT_COMPONENT = 8
-val LOGOUT_INTERFACE = 182
 
-on { IfActionMessage::class }
-    .where { interfaceId == LOGOUT_INTERFACE && componentId == LOGOUT_COMPONENT }
-    .then { player ->
-        player.logout()
-    }
+on(IfAction, inter = TopLevelPosition.LOGOUT_TAB.interfaceId, comp = LOGOUT_COMPONENT) {
+    player.logout()
+}
