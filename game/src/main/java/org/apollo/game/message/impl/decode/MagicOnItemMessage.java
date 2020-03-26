@@ -7,7 +7,7 @@ import java.util.OptionalInt;
 /**
  * A {@link InventoryItemMessage} sent by the client when a player casts a spell on an inventory item.
  *
- * @author Chris Fletcher
+ * @author Khaled Abdeljaber
  */
 public final class MagicOnItemMessage extends InventoryItemMessage {
 

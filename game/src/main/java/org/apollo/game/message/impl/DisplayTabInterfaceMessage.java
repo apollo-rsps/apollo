@@ -5,7 +5,7 @@ import org.apollo.net.message.Message;
 /**
  * A {@link Message} sent to the client to change the currently displayed tab interface.
  *
- * @author Chris Fletcher
+ * @author Khaled Abdeljaber
  */
 public final class DisplayTabInterfaceMessage extends Message {
 

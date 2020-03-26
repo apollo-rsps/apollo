@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
 import org.apollo.net.message.Message;
 
@@ -7,6 +7,6 @@ import org.apollo.net.message.Message;
  *
  * @author Major
  */
-public final class MobAnimationResetMessage extends Message {
+public final class MobResetAnimsMessage extends Message {
 
 }

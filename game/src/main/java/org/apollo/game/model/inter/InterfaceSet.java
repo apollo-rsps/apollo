@@ -4,8 +4,6 @@ import org.apollo.cache.def.EnumDefinition;
 import org.apollo.game.message.handler.MessageHandlerChain;
 import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
-import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
-import org.apollo.game.message.impl.OpenDialogueOverlayMessage;
 import org.apollo.game.message.impl.encode.IfMoveSubMessage;
 import org.apollo.game.message.impl.encode.IfOpenSubMessage;
 import org.apollo.game.message.impl.encode.IfOpenTopMessage;
@@ -160,7 +158,7 @@ public final class InterfaceSet {
 		this.listener = Optional.ofNullable(listener);
 
 		interfaces.put(ServerInterfaceType.DIALOGUE, dialogueId);
-		player.send(new OpenDialogueInterfaceMessage(dialogueId));
+		//player.send(new OpenDialogueInterfaceMessage(dialogueId));
 	}
 
 	/**
@@ -170,31 +168,6 @@ public final class InterfaceSet {
 	 */
 	public void openDialogue(int dialogueId) {
 		openDialogue(null, dialogueId);
-	}
-
-	/**
-	 * Opens a dialogue overlay interface.
-	 *
-	 * @param listener   The {@link DialogueListener}.
-	 * @param dialogueId The dialogue id.
-	 */
-	public void openDialogueOverlay(DialogueListener listener, int dialogueId) {
-		closeAndNotify();
-
-		dialogueListener = Optional.ofNullable(listener);
-		this.listener = Optional.ofNullable(listener);
-
-		interfaces.put(ServerInterfaceType.DIALOGUE, dialogueId);
-		player.send(new OpenDialogueOverlayMessage(dialogueId));
-	}
-
-	/**
-	 * Opens a dialogue overlay.
-	 *
-	 * @param dialogueId The dialogue id.
-	 */
-	public void openDialogueOverlay(int dialogueId) {
-		openDialogueOverlay(null, dialogueId);
 	}
 
 	/**

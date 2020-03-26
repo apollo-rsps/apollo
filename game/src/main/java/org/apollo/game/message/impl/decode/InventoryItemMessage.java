@@ -8,7 +8,7 @@ import java.util.OptionalInt;
 /**
  * A {@link Message} that represents some sort of action on an item in an inventory.
  *
- * @author Chris Fletcher
+ * @author Khaled Abdeljaber
  */
 public abstract class InventoryItemMessage extends Message {
 

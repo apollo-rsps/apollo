@@ -1,13 +1,13 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
 import org.apollo.net.message.Message;
 
 /**
  * A {@link Message} sent to the client to set a widget's displayed mob's animation.
  *
- * @author Chris Fletcher
+ * @author Khaled Abdeljaber
  */
-public final class SetWidgetModelAnimationMessage extends Message {
+public final class IfSetAnimMessage extends Message {
 
 	/**
 	 * The model's animation id.
@@ -17,16 +17,16 @@ public final class SetWidgetModelAnimationMessage extends Message {
 	/**
 	 * The interface id.
 	 */
-	private final int interfaceId;
+	private final int interfacePacked;
 
 	/**
 	 * Creates a new set interface npc model's animation message.
 	 *
-	 * @param interfaceId The interface id.
+	 * @param interfacePacked The interface id.
 	 * @param animation The model's animation id.
 	 */
-	public SetWidgetModelAnimationMessage(int interfaceId, int animation) {
-		this.interfaceId = interfaceId;
+	public IfSetAnimMessage(int interfacePacked, int componentId, int animation) {
+		this.interfacePacked = interfacePacked << 16 | componentId;
 		this.animation = animation;
 	}
 
@@ -44,8 +44,8 @@ public final class SetWidgetModelAnimationMessage extends Message {
 	 *
 	 * @return The interface id.
 	 */
-	public int getInterfaceId() {
-		return interfaceId;
+	public int getInterfacePacked() {
+		return interfacePacked;
 	}
 
 }

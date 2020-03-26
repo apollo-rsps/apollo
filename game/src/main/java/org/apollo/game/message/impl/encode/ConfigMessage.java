@@ -5,7 +5,7 @@ import org.apollo.net.message.Message;
 /**
  * A {@link Message} sent to the client to adjust a certain config or attribute setting.
  *
- * @author Chris Fletcher
+ * @author Khaled Abdeljaber
  */
 public final class ConfigMessage extends Message {
 

@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import org.apollo.game.message.impl.*;
 import org.apollo.game.message.impl.encode.ConfigMessage;
 import org.apollo.game.message.impl.encode.RebuildNormalMessage;
+import org.apollo.game.message.impl.encode.IfSetTextMessage;
 import org.apollo.game.message.impl.encode.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
@@ -770,7 +771,7 @@ public final class Player extends Mob {
 		Preconditions.checkArgument(size <= lines, "List contains too much text to display on this interface.");
 
 		for (int pos = 0; pos < lines; pos++) {
-			send(new SetWidgetTextMessage(InterfaceConstants.QUEST_TEXT[pos], pos < size ? text.get(pos) : ""));
+			//send(new IfSetTextMessage(InterfaceConstants.QUEST_TEXT[pos], - pos < size ? text.get(pos) : ""));
 		}
 		interfaceSet.openModal(InterfaceConstants.QUEST_INTERFACE);
 	}

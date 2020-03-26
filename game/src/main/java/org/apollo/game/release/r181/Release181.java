@@ -1,15 +1,13 @@
 package org.apollo.game.release.r181;
 
-import org.apollo.game.message.impl.NpcSynchronizationMessage;
-import org.apollo.game.message.impl.ServerChatMessage;
-import org.apollo.game.message.impl.UpdateInventoryFullMessage;
-import org.apollo.game.message.impl.UpdateInventoryPartialMessage;
+import org.apollo.game.message.impl.*;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
+import org.apollo.game.release.r181.encoders.region.MobResetAnimsEncoder;
 import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.item.*;
-import org.apollo.game.release.r181.decoders.map.npc.*;
+import org.apollo.game.release.r181.decoders.map.npc.actions.*;
 import org.apollo.game.release.r181.decoders.map.obj.*;
 import org.apollo.game.release.r181.decoders.map.player.PlayerDesignMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.player.ReportAbuseMessageDecoder;
@@ -161,10 +159,26 @@ public class Release181 extends Release {
 
 		register(SetPlayerActionMessage.class, new SetPlayerActionMessageEncoder());
 
+		register(MobResetAnimsMessage.class, new MobResetAnimsEncoder());
+
 		register(IfOpenTopMessage.class, new IfOpenTopMessageEncoder());
 		register(IfOpenSubMessage.class, new IfOpenSubMessageEncoder());
 		register(IfMoveSubMessage.class, new IfMoveSubMessageEncoder());
 		register(IfSetEventMessage.class, new IfSetEventMessageEncoder());
+		register(IfClearItemsMessage.class, new IfClearItemsEncoder());
+		register(IfSetAngleMessage.class, new IfSetAngleEncoder());
+		register(IfSetAnimMessage.class, new IfSetAnimEncoder());
+		register(IfSetColourMessage.class, new IfSetColourEncoder());
+		register(IfSetHideMessage.class, new IfSetHiddenEncoder());
+		register(IfSetItemMessage.class, new IfSetItemEncoder());
+		register(IfSetModelMessage.class, new IfSetModelEncoder());
+		register(IfSetModelRotateMessage.class, new IfSetModelRotateEncoder());
+		register(IfSetNpcHeadMessage.class, new IfSetNpcHeadEncoder());
+		register(IfSetPlayerHeadMessage.class, new IfSetPlayerHeadEncoder());
+		register(IfSetPositionMessage.class, new IfSetPositionEncoder());
+		register(IfSetScrollPosMessage.class, new IfSetScrollPosEncoder());
+		register(IfSetTextMessage.class, new IfSetTextEncoder());
+		register(RunClientScriptMessage.class, new RunClientScriptEncoder());
 
 		register(UpdateInventoryPartialMessage.class, new UpdateContainerPartialMessageEncoder());
 		register(UpdateInventoryFullMessage.class, new UpdateContainerFullMessageEncoder());

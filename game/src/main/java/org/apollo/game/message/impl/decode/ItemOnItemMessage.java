@@ -5,7 +5,7 @@ import java.util.OptionalInt;
 /**
  * A {@link InventoryItemMessage} sent by the client when a player uses one inventory item on another.
  *
- * @author Chris Fletcher
+ * @author Khaled Abdeljaber
  */
 public final class ItemOnItemMessage extends InventoryItemMessage {
 

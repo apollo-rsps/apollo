@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
 import org.apollo.net.message.Message;
 
@@ -7,7 +7,7 @@ import org.apollo.net.message.Message;
  *
  * @author Major
  */
-public final class SetWidgetModelMessage extends Message {
+public final class IfSetModelMessage extends Message {
 
 	/**
 	 * The model id.
@@ -17,16 +17,16 @@ public final class SetWidgetModelMessage extends Message {
 	/**
 	 * The interface id.
 	 */
-	private final int interfaceId;
+	private final int interfacePacked;
 
 	/**
 	 * Creates a new SetWidgetModelMessage.
 	 *
-	 * @param interfaceId The interface id.
+	 * @param interfacePacked The interface id.
 	 * @param model The model id.
 	 */
-	public SetWidgetModelMessage(int interfaceId, int model) {
-		this.interfaceId = interfaceId;
+	public IfSetModelMessage(int interfacePacked, int componentId, int model) {
+		this.interfacePacked = interfacePacked << 16 | componentId;
 		this.model = model;
 	}
 
@@ -44,8 +44,8 @@ public final class SetWidgetModelMessage extends Message {
 	 *
 	 * @return The interface id.
 	 */
-	public int getInterfaceId() {
-		return interfaceId;
+	public int getInterfacePacked() {
+		return interfacePacked;
 	}
 
 }

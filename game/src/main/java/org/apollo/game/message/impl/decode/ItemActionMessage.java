@@ -9,7 +9,7 @@ import java.util.OptionalInt;
  * sent by the client is one of the five item action messages, but this is the message that should be intercepted (and
  * the option verified).
  *
- * @author Chris Fletcher
+ * @author Khaled Abdeljaber
  */
 public final class ItemActionMessage extends InventoryItemMessage {
 
