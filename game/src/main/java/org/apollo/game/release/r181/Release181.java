@@ -2,8 +2,10 @@ package org.apollo.game.release.r181;
 
 import org.apollo.game.message.impl.*;
 import org.apollo.game.message.impl.encode.*;
+import org.apollo.game.model.event.impl.LogoutEvent;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
+import org.apollo.game.release.r181.encoders.game.LogoutEncoder;
 import org.apollo.game.release.r181.encoders.region.MobResetAnimsEncoder;
 import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.item.*;
@@ -31,6 +33,7 @@ import org.apollo.game.release.r181.encoders.game.ServerChatMessageEncoder;
 import org.apollo.game.release.r181.encoders.npc.NpcSynchronizationMessageEncoder;
 import org.apollo.game.release.r181.encoders.player.SetPlayerActionMessageEncoder;
 import org.apollo.game.release.r181.encoders.region.RebuildNormalMessageEncoder;
+import org.apollo.game.release.r181.encoders.region.SetMapFlagEncoder;
 import org.apollo.game.release.r181.encoders.ui.*;
 import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerFullMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerPartialMessageEncoder;
@@ -157,7 +160,10 @@ public class Release181 extends Release {
 		 * Server
 		 */
 
+		register(LogoutMessage.class, new LogoutEncoder());
+
 		register(SetPlayerActionMessage.class, new SetPlayerActionMessageEncoder());
+		register(SetMapFlagMessage.class, new SetMapFlagEncoder());
 
 		register(MobResetAnimsMessage.class, new MobResetAnimsEncoder());
 

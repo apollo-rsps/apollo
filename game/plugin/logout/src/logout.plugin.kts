@@ -1,5 +1,10 @@
-val LOGOUT_BUTTON_ID = 2458
+import org.apollo.game.message.impl.IfActionMessage
 
-on_button(LOGOUT_BUTTON_ID)
-    .where { componentId == LOGOUT_BUTTON_ID }
-    .then { it.logout() }
+val LOGOUT_COMPONENT = 8
+val LOGOUT_INTERFACE = 182
+
+on { IfActionMessage::class }
+    .where { interfaceId == LOGOUT_INTERFACE && componentId == LOGOUT_COMPONENT }
+    .then { player ->
+        player.logout()
+    }
