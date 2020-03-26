@@ -16,7 +16,7 @@ public class IfSetTextEncoder extends MessageEncoder<IfSetTextMessage> {
 	public GamePacket encode(IfSetTextMessage message) {
 		final var builder = new GamePacketBuilder(19, PacketType.VARIABLE_SHORT);
 
-		builder.put(DataType.INT, message.getInterfacePacked());
+		builder.put(DataType.INT, message.getPackedInterface());
 		builder.putString(message.getText());
 
 		return builder.toGamePacket();

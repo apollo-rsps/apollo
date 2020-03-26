@@ -13,7 +13,7 @@ public class IfSetModelEncoder extends MessageEncoder<IfSetModelMessage> {
 	public GamePacket encode(IfSetModelMessage message) {
 		final var builder = new GamePacketBuilder(31, PacketType.FIXED);
 
-		builder.put(DataType.INT, DataOrder.MIDDLE, message.getInterfacePacked());
+		builder.put(DataType.INT, DataOrder.MIDDLE, message.getPackedInterface());
 		builder.put(DataType.SHORT, DataTransformation.ADD, message.getModel());
 
 		return builder.toGamePacket();

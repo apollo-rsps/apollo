@@ -12,10 +12,10 @@ public class FifthOpHeldMessageDecoder extends MessageDecoder<ItemActionMessage>
 	public ItemActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
-		int interfacePacked = (int) reader.getUnsigned(DataType.INT);
+		int packedInterface = (int) reader.getUnsigned(DataType.INT);
 		int slot = (int) reader.getUnsigned(DataType.SHORT);
 		int itemId = (int) reader.getUnsigned(DataType.SHORT);
 
-		return new ItemActionMessage(5, interfacePacked >> 16, interfacePacked & 0xFFFF, itemId, slot);
+		return new ItemActionMessage(5, packedInterface >> 16, packedInterface & 0xFFFF, itemId, slot);
 	}
 }

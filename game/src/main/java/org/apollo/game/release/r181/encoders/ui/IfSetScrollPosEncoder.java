@@ -13,7 +13,7 @@ public class IfSetScrollPosEncoder extends MessageEncoder<IfSetScrollPosMessage>
 	public GamePacket encode(IfSetScrollPosMessage message) {
 		final var builder = new GamePacketBuilder(76, PacketType.FIXED);
 
-		builder.put(DataType.INT, DataOrder.MIDDLE, message.getInterfacePacked());
+		builder.put(DataType.INT, DataOrder.MIDDLE, message.getPackedInterface());
 		builder.put(DataType.SHORT, DataTransformation.ADD, message.getScrollPosition());
 
 		return builder.toGamePacket();

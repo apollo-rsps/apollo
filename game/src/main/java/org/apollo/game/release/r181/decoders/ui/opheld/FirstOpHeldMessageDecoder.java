@@ -16,9 +16,9 @@ public class FirstOpHeldMessageDecoder extends MessageDecoder<ItemActionMessage>
 		GamePacketReader reader = new GamePacketReader(packet);
 
 		int itemId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE);
-		int interfacePacked = (int) reader.getUnsigned(DataType.INT, DataOrder.MIDDLE);
+		int packedInterface = (int) reader.getUnsigned(DataType.INT, DataOrder.MIDDLE);
 		int slot = (int) reader.getUnsigned(DataType.SHORT);
 
-		return new ItemActionMessage(1, interfacePacked >> 16, interfacePacked & 0xFFFF, itemId, slot);
+		return new ItemActionMessage(1, packedInterface >> 16, packedInterface & 0xFFFF, itemId, slot);
 	}
 }

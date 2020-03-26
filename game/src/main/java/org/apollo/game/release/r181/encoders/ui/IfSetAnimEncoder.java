@@ -17,7 +17,7 @@ public class IfSetAnimEncoder extends MessageEncoder<IfSetAnimMessage> {
 		final var builder = new GamePacketBuilder(61, PacketType.FIXED);
 
 		builder.put(DataType.SHORT, message.getAnimation());
-		builder.put(DataType.INT, DataOrder.INVERSED_MIDDLE, message.getInterfacePacked());
+		builder.put(DataType.INT, DataOrder.INVERSED_MIDDLE, message.getPackedInterface());
 
 		return builder.toGamePacket();
 	}

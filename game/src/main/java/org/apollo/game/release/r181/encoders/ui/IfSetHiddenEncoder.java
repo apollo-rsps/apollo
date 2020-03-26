@@ -16,7 +16,7 @@ public class IfSetHiddenEncoder extends MessageEncoder<IfSetHideMessage> {
 	public GamePacket encode(IfSetHideMessage message) {
 		final var builder = new GamePacketBuilder(21, PacketType.FIXED);
 
-		builder.put(DataType.INT, message.getInterfacePacked());
+		builder.put(DataType.INT, message.getPackedInterface());
 		builder.put(DataType.BYTE, DataOrder.INVERSED_MIDDLE, message.isVisible() ? 0 : 1);
 
 		return builder.toGamePacket();

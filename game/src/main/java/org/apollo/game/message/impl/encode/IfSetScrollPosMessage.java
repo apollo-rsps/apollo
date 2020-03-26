@@ -9,7 +9,7 @@ import org.apollo.net.message.Message;
  */
 public class IfSetScrollPosMessage extends Message {
 
-	private final int interfacePacked;
+	private final int packedInterface;
 	private final int scrollPosition;
 
 	/**
@@ -20,7 +20,7 @@ public class IfSetScrollPosMessage extends Message {
 	 * @param scrollPosition  the scroll position
 	 */
 	public IfSetScrollPosMessage(int interfaceId, int componentId, int scrollPosition) {
-		this.interfacePacked = interfaceId << 16 | componentId;
+		this.packedInterface = interfaceId << 16 | componentId;
 		this.scrollPosition = scrollPosition;
 	}
 
@@ -29,8 +29,8 @@ public class IfSetScrollPosMessage extends Message {
 	 *
 	 * @return the interface packed
 	 */
-	public int getInterfacePacked() {
-		return interfacePacked;
+	public int getPackedInterface() {
+		return packedInterface;
 	}
 
 	/**

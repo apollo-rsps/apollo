@@ -16,7 +16,7 @@ public class IfSetItemEncoder extends MessageEncoder<IfSetItemMessage> {
 	public GamePacket encode(IfSetItemMessage message) {
 		final var builder = new GamePacketBuilder(11, PacketType.FIXED);
 
-		builder.put(DataType.INT, message.getInterfacePacked());
+		builder.put(DataType.INT, message.getPackedInterface());
 		builder.put(DataType.SHORT, message.getItem());
 		builder.put(DataType.INT, DataOrder.INVERSED_MIDDLE, message.getAmount());
 

@@ -12,7 +12,7 @@ public final class IfClearItemsMessage extends Message {
 	/**
 	 * The interface's id.
 	 */
-	private final int interfacePacked;
+	private final int packedInterface;
 
 	/**
 	 * Creates a new set interface item model message.
@@ -21,7 +21,7 @@ public final class IfClearItemsMessage extends Message {
 	 * @param componentId The component id.
 	 */
 	public IfClearItemsMessage(int interfaceId, int componentId) {
-		this.interfacePacked = interfaceId << 16 | componentId;
+		this.packedInterface = interfaceId << 16 | componentId;
 	}
 
 	/**
@@ -29,7 +29,7 @@ public final class IfClearItemsMessage extends Message {
 	 *
 	 * @return The id.
 	 */
-	public int getInterfacePacked() {
-		return interfacePacked;
+	public int getPackedInterface() {
+		return packedInterface;
 	}
 }

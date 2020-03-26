@@ -12,10 +12,10 @@ public class ThirdOpHeldMessageDecoder extends MessageDecoder<ItemActionMessage>
 	public ItemActionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
-		int interfacePacked = (int) reader.getUnsigned(DataType.INT, DataOrder.LITTLE);
+		int packedInterface = (int) reader.getUnsigned(DataType.INT, DataOrder.LITTLE);
 		int slot = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
 		int itemId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
 
-		return new ItemActionMessage(3, interfacePacked >> 16, interfacePacked & 0xFFFF, itemId, slot);
+		return new ItemActionMessage(3, packedInterface >> 16, packedInterface & 0xFFFF, itemId, slot);
 	}
 }

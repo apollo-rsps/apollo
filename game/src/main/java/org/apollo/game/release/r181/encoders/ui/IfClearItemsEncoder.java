@@ -15,7 +15,7 @@ public class IfClearItemsEncoder extends MessageEncoder<IfClearItemsMessage> {
 	@Override
 	public GamePacket encode(IfClearItemsMessage message) {
 		final var builder = new GamePacketBuilder(7, PacketType.FIXED);
-		builder.put(DataType.INT, DataOrder.INVERSED_MIDDLE, message.getInterfacePacked());
+		builder.put(DataType.INT, DataOrder.INVERSED_MIDDLE, message.getPackedInterface());
 		return builder.toGamePacket();
 	}
 }

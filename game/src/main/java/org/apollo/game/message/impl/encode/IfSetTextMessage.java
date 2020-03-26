@@ -12,7 +12,7 @@ public final class IfSetTextMessage extends Message {
 	/**
 	 * The interface's id.
 	 */
-	private final int interfacePacked;
+	private final int packedInterface;
 
 	/**
 	 * The text.
@@ -27,7 +27,7 @@ public final class IfSetTextMessage extends Message {
 	 * @param text        The interface's text.
 	 */
 	public IfSetTextMessage(int interfaceId, int componentId, String text) {
-		this.interfacePacked = interfaceId << 16 | componentId;
+		this.packedInterface = interfaceId << 16 | componentId;
 		this.text = text;
 	}
 
@@ -36,8 +36,8 @@ public final class IfSetTextMessage extends Message {
 	 *
 	 * @return The interface id.
 	 */
-	public int getInterfacePacked() {
-		return interfacePacked;
+	public int getPackedInterface() {
+		return packedInterface;
 	}
 
 	/**

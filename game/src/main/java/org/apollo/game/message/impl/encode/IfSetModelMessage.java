@@ -17,16 +17,16 @@ public final class IfSetModelMessage extends Message {
 	/**
 	 * The interface id.
 	 */
-	private final int interfacePacked;
+	private final int packedInterface;
 
 	/**
 	 * Creates a new SetWidgetModelMessage.
 	 *
-	 * @param interfacePacked The interface id.
+	 * @param packedInterface The interface id.
 	 * @param model The model id.
 	 */
-	public IfSetModelMessage(int interfacePacked, int componentId, int model) {
-		this.interfacePacked = interfacePacked << 16 | componentId;
+	public IfSetModelMessage(int packedInterface, int componentId, int model) {
+		this.packedInterface = packedInterface << 16 | componentId;
 		this.model = model;
 	}
 
@@ -44,8 +44,8 @@ public final class IfSetModelMessage extends Message {
 	 *
 	 * @return The interface id.
 	 */
-	public int getInterfacePacked() {
-		return interfacePacked;
+	public int getPackedInterface() {
+		return packedInterface;
 	}
 
 }

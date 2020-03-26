@@ -13,7 +13,7 @@ public final class IfSetHideMessage extends Message {
 	/**
 	 * The component id.
 	 */
-	private final int interfacePacked;
+	private final int packedInterface;
 
 	/**
 	 * Visible flag.
@@ -28,7 +28,7 @@ public final class IfSetHideMessage extends Message {
 	 * @param visible     The flag for showing or hiding the component.
 	 */
 	public IfSetHideMessage(int interfaceId, int componentId, boolean visible) {
-		this.interfacePacked = interfaceId << 16 | componentId;
+		this.packedInterface = interfaceId << 16 | componentId;
 		this.visible = visible;
 	}
 
@@ -37,8 +37,8 @@ public final class IfSetHideMessage extends Message {
 	 *
 	 * @return The packed interface.
 	 */
-	public int getInterfacePacked() {
-		return interfacePacked;
+	public int getPackedInterface() {
+		return packedInterface;
 	}
 
 	/**

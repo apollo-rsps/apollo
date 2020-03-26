@@ -17,16 +17,16 @@ public final class IfSetAnimMessage extends Message {
 	/**
 	 * The interface id.
 	 */
-	private final int interfacePacked;
+	private final int packedInterface;
 
 	/**
 	 * Creates a new set interface npc model's animation message.
 	 *
-	 * @param interfacePacked The interface id.
+	 * @param packedInterface The interface id.
 	 * @param animation The model's animation id.
 	 */
-	public IfSetAnimMessage(int interfacePacked, int componentId, int animation) {
-		this.interfacePacked = interfacePacked << 16 | componentId;
+	public IfSetAnimMessage(int packedInterface, int componentId, int animation) {
+		this.packedInterface = packedInterface << 16 | componentId;
 		this.animation = animation;
 	}
 
@@ -44,8 +44,8 @@ public final class IfSetAnimMessage extends Message {
 	 *
 	 * @return The interface id.
 	 */
-	public int getInterfacePacked() {
-		return interfacePacked;
+	public int getPackedInterface() {
+		return packedInterface;
 	}
 
 }

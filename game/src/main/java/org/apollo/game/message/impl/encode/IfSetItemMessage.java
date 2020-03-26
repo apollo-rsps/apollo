@@ -12,7 +12,7 @@ public final class IfSetItemMessage extends Message {
 	/**
 	 * The interface's id.
 	 */
-	private final int interfacePacked;
+	private final int packedInterface;
 
 	/**
 	 * The item id.
@@ -33,7 +33,7 @@ public final class IfSetItemMessage extends Message {
 	 * @param amount The zoom level.
 	 */
 	public IfSetItemMessage(int interfaceId, int componentId, int item, int amount) {
-		this.interfacePacked = interfaceId << 16 | componentId;
+		this.packedInterface = interfaceId << 16 | componentId;
 		this.item = item;
 		this.amount = amount;
 	}
@@ -43,8 +43,8 @@ public final class IfSetItemMessage extends Message {
 	 *
 	 * @return The id.
 	 */
-	public int getInterfacePacked() {
-		return interfacePacked;
+	public int getPackedInterface() {
+		return packedInterface;
 	}
 
 	/**

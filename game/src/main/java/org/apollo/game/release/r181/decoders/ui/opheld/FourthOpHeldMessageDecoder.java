@@ -13,9 +13,9 @@ public class FourthOpHeldMessageDecoder extends MessageDecoder<ItemActionMessage
 		GamePacketReader reader = new GamePacketReader(packet);
 
 		int itemId = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
-		int interfacePacked = (int) reader.getUnsigned(DataType.INT);
+		int packedInterface = (int) reader.getUnsigned(DataType.INT);
 		int slot = (int) reader.getUnsigned(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD);
 
-		return new ItemActionMessage(4, interfacePacked >> 16, interfacePacked & 0xFFFF, itemId, slot);
+		return new ItemActionMessage(4, packedInterface >> 16, packedInterface & 0xFFFF, itemId, slot);
 	}
 }
