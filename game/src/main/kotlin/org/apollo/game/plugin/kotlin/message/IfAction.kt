@@ -1,7 +1,7 @@
 package org.apollo.game.plugin.kotlin.message
 
 import org.apollo.game.message.handler.MessageHandler
-import org.apollo.game.message.impl.IfActionMessage
+import org.apollo.game.message.impl.decode.IfActionMessage
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.kotlin.KotlinPluginScript

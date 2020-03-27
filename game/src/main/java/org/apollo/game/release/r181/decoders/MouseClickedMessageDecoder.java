@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders;
 
-import org.apollo.game.message.impl.MouseClickedMessage;
+import org.apollo.game.message.impl.decode.MouseClickedMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;

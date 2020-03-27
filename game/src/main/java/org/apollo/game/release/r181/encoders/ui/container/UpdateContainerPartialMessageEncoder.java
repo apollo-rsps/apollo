@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.encoders.ui.container;
 
-import org.apollo.game.message.impl.UpdateInventoryPartialMessage;
+import org.apollo.game.message.impl.encode.UpdateInventoryPartialMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.inv.SlottedItem;
 import org.apollo.net.codec.game.DataType;

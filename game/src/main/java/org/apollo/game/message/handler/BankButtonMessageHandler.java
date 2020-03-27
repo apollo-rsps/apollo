@@ -1,6 +1,6 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.IfActionMessage;
+import org.apollo.game.message.impl.decode.IfActionMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 

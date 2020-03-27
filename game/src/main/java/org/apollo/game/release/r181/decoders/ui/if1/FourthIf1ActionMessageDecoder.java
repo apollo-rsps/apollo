@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.ui.if1;
 
-import org.apollo.game.message.impl.IfActionMessage;
+import org.apollo.game.message.impl.decode.IfActionMessage;
 import org.apollo.net.codec.game.*;
 import org.apollo.net.release.MessageDecoder;
 

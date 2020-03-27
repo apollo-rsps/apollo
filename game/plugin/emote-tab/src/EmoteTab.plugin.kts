@@ -1,4 +1,4 @@
-import org.apollo.game.message.impl.IfActionMessage
+import org.apollo.game.message.impl.decode.IfActionMessage
 
 on { IfActionMessage::class }
     .where { componentId in Emote.MAP }

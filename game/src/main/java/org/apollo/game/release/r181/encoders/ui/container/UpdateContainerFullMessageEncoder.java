@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.encoders.ui.container;
 
-import org.apollo.game.message.impl.UpdateInventoryFullMessage;
+import org.apollo.game.message.impl.encode.UpdateInventoryFullMessage;
 import org.apollo.game.model.Item;
 import org.apollo.net.codec.game.DataOrder;
 import org.apollo.net.codec.game.DataType;

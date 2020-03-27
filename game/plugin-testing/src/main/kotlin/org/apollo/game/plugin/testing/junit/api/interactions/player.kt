@@ -1,9 +1,9 @@
 package org.apollo.game.plugin.testing.junit.api.interactions
 
 import org.apollo.game.message.impl.decode.ItemOptionMessage
-import org.apollo.game.message.impl.NpcActionMessage
-import org.apollo.game.message.impl.ObjectActionMessage
-import org.apollo.game.message.impl.PlayerActionMessage
+import org.apollo.game.message.impl.decode.NpcActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
+import org.apollo.game.message.impl.decode.PlayerActionMessage
 import org.apollo.game.model.Direction
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Entity

@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.map.obj;
 
-import org.apollo.game.message.impl.ObjectActionMessage;
+import org.apollo.game.message.impl.decode.ObjectActionMessage;
 import org.apollo.game.model.Position;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;

@@ -1,7 +1,7 @@
 package org.apollo.game.model.inv;
 
-import org.apollo.game.message.impl.UpdateInventoryFullMessage;
-import org.apollo.game.message.impl.UpdateInventoryPartialMessage;
+import org.apollo.game.message.impl.encode.UpdateInventoryFullMessage;
+import org.apollo.game.message.impl.encode.UpdateInventoryPartialMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.entity.Player;
 

@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders;
 
-import org.apollo.game.message.impl.KeepAliveMessage;
+import org.apollo.game.message.impl.decode.KeepAliveMessage;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.release.MessageDecoder;
 

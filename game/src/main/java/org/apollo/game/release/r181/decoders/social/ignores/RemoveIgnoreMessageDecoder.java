@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.social.ignores;
 
-import org.apollo.game.message.impl.RemoveIgnoreMessage;
+import org.apollo.game.message.impl.decode.RemoveIgnoreMessage;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;
 import org.apollo.net.release.MessageDecoder;

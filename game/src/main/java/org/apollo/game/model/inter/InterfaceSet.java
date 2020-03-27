@@ -2,8 +2,8 @@ package org.apollo.game.model.inter;
 
 import org.apollo.cache.def.EnumDefinition;
 import org.apollo.game.message.handler.MessageHandlerChain;
-import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
+import org.apollo.game.message.impl.encode.CloseInterfaceMessage;
 import org.apollo.game.message.impl.encode.IfMoveSubMessage;
 import org.apollo.game.message.impl.encode.IfOpenSubMessage;
 import org.apollo.game.message.impl.encode.IfOpenTopMessage;

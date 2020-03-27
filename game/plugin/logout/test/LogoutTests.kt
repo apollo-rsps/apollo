@@ -1,5 +1,5 @@
 import io.mockk.verify
-import org.apollo.game.message.impl.IfActionMessage
+import org.apollo.game.message.impl.decode.IfActionMessage
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock

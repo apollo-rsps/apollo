@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.encoders.game;
 
-import org.apollo.game.message.impl.LogoutMessage;
+import org.apollo.game.message.impl.encode.LogoutMessage;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;
 import org.apollo.net.meta.PacketType;

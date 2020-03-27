@@ -1,5 +1,5 @@
-import org.apollo.game.message.impl.AddIgnoreMessage
-import org.apollo.game.message.impl.RemoveIgnoreMessage
+import org.apollo.game.message.impl.decode.AddIgnoreMessage
+import org.apollo.game.message.impl.decode.RemoveIgnoreMessage
 
 on { AddIgnoreMessage::class }
         .then { it.addIgnore(username) }

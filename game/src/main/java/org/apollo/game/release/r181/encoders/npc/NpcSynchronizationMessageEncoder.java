@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.encoders.npc;
 
-import org.apollo.game.message.impl.NpcSynchronizationMessage;
+import org.apollo.game.message.impl.encode.NpcSynchronizationMessage;
 import org.apollo.game.model.Animation;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;

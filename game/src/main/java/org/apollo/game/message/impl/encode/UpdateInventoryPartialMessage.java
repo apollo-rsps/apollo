@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
 import org.apollo.game.model.inv.SlottedItem;
 import org.apollo.net.message.Message;

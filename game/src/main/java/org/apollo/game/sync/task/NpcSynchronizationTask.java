@@ -1,6 +1,6 @@
 package org.apollo.game.sync.task;
 
-import org.apollo.game.message.impl.NpcSynchronizationMessage;
+import org.apollo.game.message.impl.encode.NpcSynchronizationMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionCoordinates;

@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.map.player.actions;
 
-import org.apollo.game.message.impl.PlayerActionMessage;
+import org.apollo.game.message.impl.decode.PlayerActionMessage;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;

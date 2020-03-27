@@ -1,4 +1,4 @@
-import org.apollo.game.message.impl.AddFriendMessage
+import org.apollo.game.message.impl.decode.AddFriendMessage
 import org.apollo.game.message.impl.SendFriendMessage
 import org.apollo.game.model.entity.setting.PrivacyState
 

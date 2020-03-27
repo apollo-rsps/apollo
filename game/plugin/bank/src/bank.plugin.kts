@@ -1,6 +1,6 @@
 import org.apollo.game.action.DistancedAction
-import org.apollo.game.message.impl.NpcActionMessage
-import org.apollo.game.message.impl.ObjectActionMessage
+import org.apollo.game.message.impl.decode.NpcActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Npc
 import org.apollo.game.model.entity.Player

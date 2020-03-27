@@ -2,7 +2,6 @@ package org.apollo.game.release.r181;
 
 import org.apollo.game.message.impl.*;
 import org.apollo.game.message.impl.encode.*;
-import org.apollo.game.model.event.impl.LogoutEvent;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
 import org.apollo.game.release.r181.encoders.game.LogoutEncoder;

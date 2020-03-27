@@ -1,6 +1,6 @@
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
-import org.apollo.game.message.impl.ObjectActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
 import org.apollo.game.model.Animation
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.*

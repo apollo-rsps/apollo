@@ -1,4 +1,4 @@
-import org.apollo.game.message.impl.IfActionMessage
+import org.apollo.game.message.impl.decode.IfActionMessage
 
 val WALK_BUTTON_ID = 152
 val RUN_BUTTON_ID = 153

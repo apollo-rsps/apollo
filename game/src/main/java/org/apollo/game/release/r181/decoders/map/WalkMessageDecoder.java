@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.map;
 
-import org.apollo.game.message.impl.WalkMessage;
+import org.apollo.game.message.impl.decode.WalkMessage;
 import org.apollo.game.model.Position;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;

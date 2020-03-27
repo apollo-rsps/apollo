@@ -1,6 +1,6 @@
 <messages>
     <message>
-        <type>org.apollo.game.message.impl.IfActionMessage</type>
+        <type>org.apollo.game.message.impl.decode.IfActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.DialogueButtonHandler</handler>
             <handler>org.apollo.game.message.handler.BankButtonMessageHandler</handler>
@@ -84,19 +84,19 @@
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.NpcActionMessage</type>
+        <type>org.apollo.game.message.impl.decode.NpcActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.NpcActionVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.ObjectActionMessage</type>
+        <type>org.apollo.game.message.impl.decode.ObjectActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ObjectActionVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.PlayerActionMessage</type>
+        <type>org.apollo.game.message.impl.decode.PlayerActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.PlayerActionVerificationHandler</handler>
         </chain>
@@ -115,7 +115,7 @@
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.WalkMessage</type>
+        <type>org.apollo.game.message.impl.decode.WalkMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.WalkMessageHandler</handler>
         </chain>

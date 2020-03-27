@@ -1,5 +1,5 @@
 
-import org.apollo.game.message.impl.ObjectActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
 import org.apollo.plugin.navigation.door.Door
 import org.apollo.plugin.navigation.door.OpenDoorAction
 

@@ -2,7 +2,7 @@ package org.apollo.game.plugin.kotlin
 
 import org.apollo.game.command.CommandListener
 import org.apollo.game.message.handler.MessageHandler
-import org.apollo.game.message.impl.IfActionMessage
+import org.apollo.game.message.impl.decode.IfActionMessage
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.model.event.Event
