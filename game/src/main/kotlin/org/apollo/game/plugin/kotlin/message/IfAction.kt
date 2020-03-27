@@ -22,9 +22,10 @@ fun KotlinPluginScript.on(
     listenable: IfAction.Companion,
     inter: Int,
     comp: Int,
+    action: Int = 1,
     callback: IfAction.() -> Unit
 ) {
-    registerListener(listenable, IfActionPredicateContext(inter, comp), callback)
+    registerListener(listenable, IfActionPredicateContext(inter, comp, action), callback)
 }
 
 class IfAction(override val player: Player) : PlayerContext {
@@ -41,10 +42,13 @@ class IfAction(override val player: Player) : PlayerContext {
             return object : MessageHandler<IfActionMessage>(world) {
 
                 override fun handle(player: Player, message: IfActionMessage) {
-                    if (predicateContext == null || predicateContext.inter == message.interfaceId && predicateContext.comp == message.componentId) {
-                        val context = IfAction(player)
-                        context.callback()
+                    if (predicateContext == null || predicateContext.inter != message.interfaceId ||
+                        predicateContext.comp != message.componentId || predicateContext.action != message.action) {
+                        return;
                     }
+
+                    val context = IfAction(player)
+                    context.callback()
                 }
 
             }
@@ -54,4 +58,4 @@ class IfAction(override val player: Player) : PlayerContext {
 
 }
 
-class IfActionPredicateContext(val inter: Int, val comp: Int) : PredicateContext
+class IfActionPredicateContext(val inter: Int, val comp: Int, val action: Int) : PredicateContext

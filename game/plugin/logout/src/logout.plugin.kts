@@ -1,5 +1,6 @@
 import org.apollo.game.model.inter.TopLevelPosition
-import org.apollo.game.plugin.kotlin.message.*
+import org.apollo.game.plugin.kotlin.message.IfAction
+import org.apollo.game.plugin.kotlin.message.on
 
 val LOGOUT_COMPONENT = 8
 
