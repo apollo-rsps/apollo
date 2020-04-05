@@ -25,18 +25,10 @@ public final class WalkMessageHandler extends MessageHandler<WalkMessage> {
 	@Override
 	public void handle(Player player, WalkMessage message) {
 		WalkingQueue queue = player.getWalkingQueue();
-
-		Position[] steps = message.getSteps();
-		for (int index = 0; index < steps.length; index++) {
-			Position step = steps[index];
-			if (index == 0) {
-				queue.addFirstStep(step);
-			} else {
-				queue.addStep(step);
-			}
-		}
-
 		queue.setRunning(message.isRunning() || player.isRunning());
+
+		queue.addFirstStep(new Position(message.getX(), message.getY(), player.getPosition().getHeight()));
+
 		player.getInterfaceSet().close();
 
 		if (queue.size() > 0) {

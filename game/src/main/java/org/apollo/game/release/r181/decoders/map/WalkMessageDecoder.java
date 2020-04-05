@@ -24,9 +24,7 @@ public final class WalkMessageDecoder extends MessageDecoder<WalkMessage> {
 		int x = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
 		long type = reader.getUnsigned(DataType.BYTE, DataTransformation.ADD);
 
-		Position[] positions = new Position[1];
-		positions[0] = new Position(x, y);
-		return new WalkMessage(positions, type == 1);
+		return new WalkMessage(x, y, type == 1);
 	}
 
 }

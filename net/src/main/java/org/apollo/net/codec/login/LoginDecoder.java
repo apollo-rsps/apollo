@@ -190,7 +190,6 @@ public final class LoginDecoder extends StatefulFrameDecoder<LoginDecoderState> 
 		var test2 = payload.readUnsignedByte(); // The client type again?
 		var test = payload.readInt(); // This is always zero.
 
-		System.out.println(payload.readerIndex() + " " + loginLength);
 		int[] crcs = new int[21];
 		for (int index = 0; index < crcs.length; index++) {
 			crcs[index] = payload.readInt();

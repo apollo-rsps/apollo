@@ -20,6 +20,7 @@ import org.apollo.util.security.IsaacRandomPair;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -134,16 +135,21 @@ public final class LoginSession extends Session {
 
 		Release release = context.getRelease();
 
-		channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
-		channel.pipeline()
-				.addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
+		try {
+			channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
+			channel.pipeline()
+					.addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
 
-		channel.pipeline().addBefore("handler", "gameDecoder",
-				new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
-		channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
+			channel.pipeline().addAfter("gameEncoder", "gameDecoder",
+					new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
+			channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
 
-		channel.pipeline().remove("loginDecoder");
-		channel.pipeline().remove("loginEncoder");
+			channel.pipeline().remove("loginDecoder");
+			channel.pipeline().remove("loginEncoder");
+		} catch (NoSuchElementException ex) {
+
+		}
+
 	}
 
 	/**

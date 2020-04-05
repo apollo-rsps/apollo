@@ -160,7 +160,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
-		if (index < 1 || index >= capacity() + 1) {
+		if (index < 1) {
 			throw new IndexOutOfBoundsException("Mob index is out of bounds.");
 		}
 		return (T) mobs[index - 1];

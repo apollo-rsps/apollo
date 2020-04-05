@@ -243,6 +243,19 @@ public final class Region {
 	}
 
 	/**
+	 * Gets a shallow copy of the {@link Set} of {@link Entity} objects of the specified type. The returned
+	 * type will be immutable.
+	 *
+	 * @param type The type of entity.
+	 * @return The Set. Will be immutable.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> Stream<T> getEntities(EntityType type) {
+		return (Stream<T>) entities.values().stream().flatMap(Collection::stream)
+				.filter(entity -> entity.getEntityType() == type);
+	}
+
+	/**
 	 * Gets a shallow copy of the {@link Set} of {@link Entity}s with the specified {@link EntityType}(s). The returned
 	 * type will be immutable. Type will be inferred from the call, so ensure that the Entity type and the reference
 	 * correspond, or this method will fail at runtime.

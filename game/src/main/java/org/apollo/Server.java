@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -48,6 +49,8 @@ public final class Server {
 	 * @param args The command-line arguments passed to the application.
 	 */
 	public static void main(String[] args) {
+		Arrays.stream(LogManager.getLogManager().getLogger("").getHandlers()).forEach(h -> h.setLevel(Level.ALL));
+
 		Stopwatch stopwatch = Stopwatch.createStarted();
 
 		try {

@@ -1,5 +1,7 @@
 package org.apollo.game.model.entity;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import org.apollo.cache.def.NpcDefinition;
 import org.apollo.game.action.Action;
 import org.apollo.game.model.*;
@@ -62,7 +64,7 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's list of local players.
 	 */
-	private final List<Player> localPlayers = new ArrayList<>();
+	private final IntSet localPlayers = new IntOpenHashSet();
 
 	/**
 	 * This mob's set of synchronization blocks.
@@ -301,7 +303,7 @@ public abstract class Mob extends Entity {
 	 *
 	 * @return The list.
 	 */
-	public final List<Player> getLocalPlayerList() {
+	public final IntSet getLocalPlayerList() {
 		return localPlayers;
 	}
 

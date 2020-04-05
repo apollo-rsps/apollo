@@ -19,27 +19,38 @@ public final class WalkMessage extends Message {
 	/**
 	 * The steps.
 	 */
-	private final Position[] steps;
+	private int x, y;
 
 	/**
 	 * Creates the message.
 	 *
-	 * @param steps The steps array.
+	 * @param x   The absolute x-axis position.
+	 * @param y   The absolute y-axis position.
 	 * @param run The run flag.
 	 */
-	public WalkMessage(Position[] steps, boolean run) {
-		Preconditions.checkArgument(steps.length >= 0, "Number of steps cannot be negative.");
-		this.steps = steps;
+	public WalkMessage(int x, int y, boolean run) {
+		this.x = x;
+		this.y = y;
 		this.run = run;
 	}
 
+
 	/**
-	 * Gets the steps array.
+	 * Gets x.
 	 *
-	 * @return An array of steps.
+	 * @return the x
 	 */
-	public Position[] getSteps() {
-		return steps;
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * Gets y.
+	 *
+	 * @return the y
+	 */
+	public int getY() {
+		return y;
 	}
 
 	/**

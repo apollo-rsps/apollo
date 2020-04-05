@@ -1,14 +1,16 @@
-package org.apollo.game.sync.seg;
+package org.apollo.game.sync.seg.player;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
+import org.apollo.game.sync.seg.SegmentType;
+import org.apollo.game.sync.seg.SynchronizationSegment;
 
 /**
  * A {@link SynchronizationSegment} which adds a player.
  *
  * @author Graham
  */
-public final class AddPlayerSegment extends SynchronizationSegment {
+public final class AddHighResolutionPlayer extends SynchronizationSegment {
 
 	/**
 	 * The index.
@@ -27,7 +29,7 @@ public final class AddPlayerSegment extends SynchronizationSegment {
 	 * @param index The player's index.
 	 * @param position The position.
 	 */
-	public AddPlayerSegment(SynchronizationBlockSet blockSet, int index, Position position) {
+	public AddHighResolutionPlayer(SynchronizationBlockSet blockSet, int index, Position position) {
 		super(blockSet);
 		this.index = index;
 		this.position = position;
