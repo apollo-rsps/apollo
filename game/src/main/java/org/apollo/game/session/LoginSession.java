@@ -125,7 +125,7 @@ public final class LoginSession extends Session {
 		payload.writeByte(13);
 
 		boolean isTrusted = false;
-		payload.writeBoolean(isTrusted); // If 2FA is enabled
+		payload.writeBoolean(isTrusted);
 		payload.writeInt(isTrusted ? randomPair.getEncodingRandom().nextInt() : 0);
 		payload.writeByte(player.getPrivilegeLevel().toInteger());
 		payload.writeBoolean(player.isMembers());

@@ -124,7 +124,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 			}
 
 			mobs[index] = mob;
-			mob.setIndex(index + 1);
+			mob.setIndex(index);
 			size++;
 
 			return true;
@@ -160,10 +160,10 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
-		if (index < 1) {
+		if (index < 0) {
 			throw new IndexOutOfBoundsException("Mob index is out of bounds.");
 		}
-		return (T) mobs[index - 1];
+		return (T) mobs[index];
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 			throw new IllegalArgumentException("MobRepository index mismatch, cannot remove Mob.");
 		}
 
-		mobs[index - 1] = null;
+		mobs[index] = null;
 		mob.setIndex(-1);
 		size--;
 	}

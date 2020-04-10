@@ -19,7 +19,6 @@ public final class WalkMessageDecoder extends MessageDecoder<WalkMessage> {
 	public WalkMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
-
 		int y = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
 		int x = (int) reader.getUnsigned(DataType.SHORT, DataTransformation.ADD);
 		long type = reader.getUnsigned(DataType.BYTE, DataTransformation.ADD);

@@ -1,6 +1,7 @@
 package org.apollo.net.codec.game;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.CompositeByteBuf;
 import io.netty.buffer.Unpooled;
 
 import org.apollo.net.meta.PacketType;
@@ -225,7 +226,7 @@ public final class GamePacketBuilder {
 	public void putBits(int numBits, int value) {
 		Preconditions.checkArgument(numBits >= 1 && numBits <= 32, "Number of bits must be between 1 and 32 inclusive.");
 
-		checkBitAccess();
+		//checkBitAccess();
 
 		int bytePos = bitIndex >> 3;
 		int bitOffset = 8 - (bitIndex & 7);
@@ -431,6 +432,10 @@ public final class GamePacketBuilder {
 		buffer.writerIndex((bitIndex + 7) / 8);
 	}
 
+	public void addComposite(CompositeByteBuf composite) {
+		composite.addComponent(buffer);
+	}
+
 	/**
 	 * Creates a {@link GamePacket} based on the current contents of this builder.
 	 *
@@ -444,5 +449,4 @@ public final class GamePacketBuilder {
 
 		return new GamePacket(opcode, type, buffer);
 	}
-
 }

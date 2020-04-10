@@ -1,11 +1,11 @@
 package org.apollo.game.sync.task;
 
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.PlayerUpdateInfo;
 import org.apollo.game.sync.block.AppearanceBlock;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.game.sync.block.SynchronizationBlockSet;
@@ -31,29 +31,21 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	private static final int NEW_PLAYERS_PER_CYCLE = 20;
 
 	/**
+	 * Contains packed location update data.
+	 */
+	private static final int[][] PACKED_LOCATION_UPDATE1 = new int[][]{{0, 3, 5}, {1, -1, 6}, {2, 4, 7}};
+	/**
+	 * Contains packed location update data.
+	 */
+	private static final int[][] PACKED_LOCATION_UPDATE3 = new int[][]{{0, 5, 7, 9, 11}, {1, -1, -1, -1, 12}, {2, -1, -1, -1, 13}, {3, -1, -1, -1, 14}, {4, 6, 8, 10, 15}};
+
+	/**
 	 * The Player.
 	 */
 	private final Player player;
 
-	private byte[] skipped = new byte[2048];
-
-	private Int2IntOpenHashMap externalPositions = new Int2IntOpenHashMap(2048);
-
-	private final GamePacketBuilder[] builders = new GamePacketBuilder[4];
+	private final GamePacketBuilder[] nsnBuilders = new GamePacketBuilder[4];
 	private final GamePacketBuilder blockBuilder = new GamePacketBuilder();
-
-	/**
-	 * Contains packed location update data.
-	 */
-	private static final int[][] PACKED_LOCATION_UPDATE1 = new int[][] { { 0, 3, 5 }, { 1, -1, 6 }, { 2, 4, 7 } };
-	/**
-	 * Contains packed location update data.
-	 */
-	private static final int[][] PACKED_LOCATION_UPDATE2 = new int[][] { { 0, 3, 5 }, { 1, -1, 6 }, { 2, 4, 7 } };
-	/**
-	 * Contains packed location update data.
-	 */
-	private static final int[][] PACKED_LOCATION_UPDATE3 = new int[][] { { 0, 5, 7, 9, 11 }, { 1, -1, -1, -1, 12 }, { 2, -1, -1, -1, 13 }, { 3, -1, -1, -1, 14 }, { 4, 6, 8, 10, 15 } };
 
 	/**
 	 * Creates the {@link PlayerSynchronizationTask} for the specified {@link Player}.
@@ -62,174 +54,131 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	 */
 	public PlayerSynchronizationTask(Player player) {
 		this.player = player;
+		for (int index = 0; index < nsnBuilders.length; index++) {
+			nsnBuilders[index] = new GamePacketBuilder();
+		}
 	}
 
 	@Override
 	public void run() {
 		final var counts = new short[4];
-		for (int index = 0; index < builders.length; index++) {
-			builders[index] = new GamePacketBuilder();
-		}
 
-		final var oldLocalPlayers = player.getLocalPlayerList();
+		final var localPlayers = player.getLocalPlayerList();
 		final var distance = player.getViewingDistance();
 		final var appearanceTickets = player.getAppearanceTickets();
-		final var position = player.getPosition();
-		final var repo = player.getWorld().getPlayerRepository();
-		final var repository = player.getWorld().getRegionRepository();
-		final var current = repository.fromPosition(position);
+
+		final var repoPlayer = player.getWorld().getPlayerRepository();
+		final var repoRegion = player.getWorld().getRegionRepository();
+
+		final var current = repoRegion.fromPosition(player.getPosition());
 		final var regions = current.getSurrounding();
 		regions.add(current.getCoordinates());
 
+		final var info = player.getPlayerUpdateInfo();
 
-		for (int index = 0; index < builders.length; index++) {
-			builders[index].switchToBitAccess();
+		for (var builder : nsnBuilders) {
+			builder.switchToBitAccess();
 		}
 
-		final var players = new IntOpenHashSet(250);
+		// Determine which local players need to be removed.
+		final var toRemove = new IntOpenHashSet();
+		final var position = player.getPosition();
+		for (var iterator = localPlayers.iterator(); iterator.hasNext(); ) {
+			final var index = iterator.nextInt();
+			final var remove = removable(position, distance, repoPlayer.get(index));
+			if (remove) {
+				toRemove.add(index);
+			}
+		}
+
+		// Determine which local players need to be added.
+		final var toAdd = new IntOpenHashSet();
+		outer:
 		for (var coordinates : regions) {
-			var region = repository.get(coordinates);
-			region.<Player>getEntities(EntityType.PLAYER).forEach(player -> players.add(player.getIndex()));
+			var region = repoRegion.get(coordinates);
+			var players = region.<Player>getEntities(EntityType.PLAYER);
+			var iterator = players.iterator();
+			while (iterator.hasNext()) {
+				if (toAdd.size() + localPlayers.size() >= MAXIMUM_LOCAL_PLAYERS) {
+					player.flagExcessivePlayers();
+					break outer;
+				}
+
+				final var other = iterator.next();
+				final var index = other.getIndex();
+				if (index != player.getIndex() && other.getPosition()
+						.isWithinDistance(position, distance) && !localPlayers.contains(index)) {
+					toAdd.add(index);
+				}
+			}
 		}
 
-		for (var index = 1; index < 2048; index++) {
-			final var firstPass = (skipped[index - 1] & 0x1) == 0;
-			final var other = repo.get(index);
-			final var nsn = other != null && oldLocalPlayers.contains(index) ? firstPass ? 0 : 1 : firstPass ? 2 : 3;
+		for (var index = 0; index < 2048; index++) {
+			final var firstPass = (info.getSkip(index) & 0x1) == 0;
+			final var other = repoPlayer.get(index);
+			final var nsn = other != null && (localPlayers.contains(index) || player
+					.getIndex() == index) ? firstPass ? 0 : 1 : firstPass ? 2 : 3;
 			final var low = nsn == 2 || nsn == 3;
 
-			skipBody(nsn, counts[nsn]);
-			counts[nsn] = 0;
-
 			if (low) {
-				if (players.contains(index)) {
+				if (toAdd.contains(index)) {
 					SynchronizationBlockSet blockSet = other.getBlockSet();
-					if (!blockSet.contains(AppearanceBlock.class) && !hasCachedAppearance(appearanceTickets, index - 1,
+					if (!blockSet.contains(AppearanceBlock.class) && !hasCachedAppearance(appearanceTickets, index,
 							other.getAppearanceTicket())) {
 						blockSet = blockSet.clone();
 						blockSet.add(SynchronizationBlock.createAppearanceBlock(other));
 					}
-					oldLocalPlayers.add(index);
-					addPlayer(nsn, index, other.getPosition(), blockSet);
+					addPlayer(info, nsn, index, other.getPosition(), blockSet);
 				} else {
 					if (other == null) {
-						lowrez(nsn, index, null);
+						lowrez(nsn, index, info, null);
 					} else {
-						lowrez(nsn, index, other.getPosition());
+						lowrez(nsn, index, info, other.getPosition());
 					}
 				}
 			} else {
 				SynchronizationBlockSet blockSet = other.getBlockSet();
-				if (!blockSet.contains(AppearanceBlock.class) && !hasCachedAppearance(appearanceTickets, index - 1,
+				if (!blockSet.contains(AppearanceBlock.class) && !hasCachedAppearance(appearanceTickets, index,
 						other.getAppearanceTicket())) {
 					blockSet = blockSet.clone();
 					blockSet.add(SynchronizationBlock.createAppearanceBlock(other));
 				}
 
-				if (!players.contains(index) || !other.getPosition().isWithinDistance(position, distance)) {
-					oldLocalPlayers.remove(index);
-					highrez(nsn, other, false);
-				} else {
-					oldLocalPlayers.add(index);
-					highrez(nsn, other, true);
+				final var remove = toRemove.contains(index);
+				if (remove) {
+					localPlayers.remove(index);
 				}
+				highrez(info, nsn, other, remove);
 			}
 
-			skipped[index] >>= 1;
+			info.setSkip(index, (byte) (info.getSkip(index) >> 1));
 		}
 
-		for (var nsn = 0; nsn < builders.length; nsn++) {
-			skipFooter(nsn, counts[nsn]);
+		for (var nsn = 0; nsn < nsnBuilders.length; nsn++) {
+			skipFooter(info, nsn, counts[nsn]);
 		}
 
-		//player.send(new PlayerSynchronizationMessage(builders));
+		player.send(new PlayerSynchronizationMessage(nsnBuilders, blockBuilder));
 	}
 
-	private void addPlayer(int nsn, int index, Position position, SynchronizationBlockSet blockSet) {
-		final var main = builders[nsn];
+	private void addPlayer(PlayerUpdateInfo info, int nsn, int index, Position position,
+						   SynchronizationBlockSet blockSet) {
+		final var main = nsnBuilders[nsn];
 		main.putBits(2, 0);
 
-		final var lastPosition = externalPositions.getOrDefault(index, -1);
-		if (lastPosition != position.hashCode()) {
+		if (info.getExternalPosition(index) != position.hashCode()) {
 			main.putBit(1);
-			lowrez(nsn, index, position);
+			lowrez(nsn, index, info, position);
 		} else {
 			main.putBit(0);
 		}
 
-		main.putBits(13, position.getY() << 13 | position.getX());
-		main.putBits(13, position.getY());
-		flagBlockUpdate(nsn, blockSet);
+		main.putBits(26, position.getY() << 13 | position.getX());
+		flagBlockUpdate(nsn, info, blockSet);
 	}
 
-	private void lowrez(int nsn, int index, Position position) {
-		final var main = builders[nsn];
-		final var lastPosition = externalPositions.getOrDefault(index, -1);
-		if (lastPosition == -1) {
-			return;
-		}
-		final var currentPosition = position.hashCode();
-		if (lastPosition != currentPosition) {
-			externalPositions.put(index, currentPosition);
-
-			final var lastY = lastPosition & 0xFF;
-			final var lastX = lastPosition >> 8 & 0xFF;
-			final var lastPlane = lastPosition >> 16;
-
-			final var currentY = currentPosition & 0xFF;
-			final var currentX = currentPosition >> 8 & 0xFF;
-			final var currentPlane = currentPosition >> 16;
-
-			final var yOffset = currentY - lastY;
-			final var xOffset = currentX - lastX;
-			final var planeOffset = (currentPlane - lastPlane) & 0x3;
-
-			if (currentX == lastX && currentY == lastY) {
-				main.putBits(2, 1);
-				main.putBits(2, planeOffset);
-			} else if (Math.abs(xOffset) <= 1 && Math.abs(yOffset) <= 1) {
-				main.putBits(2, 2);
-				main.putBits(5,
-						(PACKED_LOCATION_UPDATE1[xOffset + 1][yOffset + 1] & 0x7) + ((planeOffset & 0x3) << 3));
-			} else {
-				main.putBits(2, 3);
-				main.putBits(18, ((xOffset & 0xFF) << 8) + (yOffset & 0xFF) + ((planeOffset & 0x3) << 16));
-			}
-		} else {
-			main.putBits(2, 0);
-		}
-	}
-
-	private void flagBlockUpdate(int nsn, SynchronizationBlockSet blockSet) {
-		final var buffer = builders[nsn];
-		if (blockSet.size() == 0) {
-			buffer.putBit(0);
-			return;
-		}
-
-		buffer.putBit(1);
-		if (blockSet.contains(AppearanceBlock.class)) {
-			int flag = 0;
-
-			//accumulate flag here.
-
-			if (flag >= 0xFF) {
-				flag |= 0x8;
-			}
-
-			blockBuilder.put(DataType.BYTE, flag);
-
-			if (flag >= 0xFF) {
-				blockBuilder.put(DataType.BYTE, flag >> 8);
-			}
-
-			// write the blocks here.
-
-		}
-	}
-
-	private void highrez(int nsn, Player other, boolean remove) {
-		final var main = builders[nsn];
+	private void highrez(PlayerUpdateInfo info, int nsn, Player other, boolean remove) {
+		final var main = nsnBuilders[nsn];
 		final var directions = other.getDirections();
 		final var nextUpdateType = other.isTeleporting() ? 3 : directions.length;
 		final var position = other.getPosition();
@@ -241,12 +190,12 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 			blockSet.add(SynchronizationBlock.createAppearanceBlock(other));
 		}
 
-		flagBlockUpdate(nsn, blockSet);
+		flagBlockUpdate(nsn, info, blockSet);
 		main.putBits(2, nextUpdateType);
 
 		if (remove) {
 			main.putBit(1);
-			lowrez(nsn, other.getIndex(), position);
+			lowrez(nsn, other.getIndex(), info, position);
 		} else if (nextUpdateType == 1) {
 			main.putBits(3, directions[0].toInteger());
 		} else if (nextUpdateType == 2) {
@@ -266,8 +215,72 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		}
 	}
 
-	private void skipBody(int nsn, int skips) {
-		final var builder = builders[nsn];
+	private void lowrez(int nsn, int index, PlayerUpdateInfo info, Position position) {
+		final var main = nsnBuilders[nsn];
+		final var lastPosition = info.getExternalPosition(index);
+		if (position != null) {
+			final var currentPosition = position.hashCode();
+			if (lastPosition != currentPosition) {
+				info.setExternalPositions(index, currentPosition);
+
+				final var lastY = lastPosition & 0xFF;
+				final var lastX = lastPosition >> 8 & 0xFF;
+				final var lastPlane = lastPosition >> 16;
+
+				final var currentY = currentPosition & 0xFF;
+				final var currentX = currentPosition >> 8 & 0xFF;
+				final var currentPlane = currentPosition >> 16;
+
+				final var yOffset = currentY - lastY;
+				final var xOffset = currentX - lastX;
+				final var planeOffset = (currentPlane - lastPlane) & 0x3;
+
+				if (currentX == lastX && currentY == lastY) {
+					main.putBits(2, 1);
+					main.putBits(2, planeOffset);
+				} else if (Math.abs(xOffset) <= 1 && Math.abs(yOffset) <= 1) {
+					main.putBits(2, 2);
+					main.putBits(5,
+							(PACKED_LOCATION_UPDATE1[xOffset + 1][yOffset + 1] & 0x7) + ((planeOffset & 0x3) << 3));
+				} else {
+					main.putBits(2, 3);
+					main.putBits(18, ((xOffset & 0xFF) << 8) + (yOffset & 0xFF) + ((planeOffset & 0x3) << 16));
+				}
+				return;
+			}
+		}
+
+		main.putBits(2, 0);
+	}
+
+	private void flagBlockUpdate(int nsn, PlayerUpdateInfo info, SynchronizationBlockSet blockSet) {
+		final var buffer = nsnBuilders[nsn];
+		if (blockSet.size() == 0) {
+			buffer.putBit(0);
+			return;
+		}
+
+		buffer.putBit(1);
+
+		var flag = 0;
+		//accumulate flag here.
+
+		if (flag >= 0xFF) {
+			flag |= 0x8;
+		}
+
+		blockBuilder.put(DataType.BYTE, flag);
+
+		if (flag >= 0xFF) {
+			blockBuilder.put(DataType.BYTE, flag >> 8);
+		}
+
+		// write the blocks here.
+
+	}
+
+	private void skipBody(PlayerUpdateInfo info, int nsn, int skips) {
+		final var builder = nsnBuilders[nsn];
 		if (skips != 0) {
 			builder.putBit(0);
 			skip(builder, skips - 1);
@@ -275,9 +288,10 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		builder.putBit(1);
 	}
 
-	private void skipFooter(int nsn, int skips) {
-		final var builder = builders[nsn];
+	private void skipFooter(PlayerUpdateInfo info, int nsn, int skips) {
+		final var builder = nsnBuilders[nsn];
 		if (skips == 0) {
+			builder.switchToByteAccess();
 			return;
 		}
 		builder.putBit(0);
@@ -327,7 +341,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	 * @return {@code true} iff the specified Player should be removed.
 	 */
 	private boolean removable(Position position, int distance, Player other) {
-		if (other.isTeleporting() || !other.isActive()) {
+		if (other == null || other.isTeleporting() || !other.isActive()) {
 			return true;
 		}
 

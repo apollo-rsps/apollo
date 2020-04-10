@@ -1,5 +1,6 @@
 package org.apollo.game.release.r181.encoders.player;
 
+import io.netty.buffer.Unpooled;
 import org.apollo.cache.def.EquipmentDefinition;
 import org.apollo.game.message.impl.PlayerSynchronizationMessage;
 import org.apollo.game.model.Animation;
@@ -45,17 +46,14 @@ public final class PlayerSynchronizationMessageEncoder extends MessageEncoder<Pl
 
 	@Override
 	public GamePacket encode(PlayerSynchronizationMessage message) {
-		GamePacketBuilder builder = new GamePacketBuilder(90, PacketType.VARIABLE_SHORT);
-		builder.switchToBitAccess();
+		final var nsnBuilders = message.getNsnBuilders();
+		final var blockBuilder = message.getBlockBuilder();
+		final var composite = Unpooled.compositeBuffer(nsnBuilders.length + 1);
 
-		GamePacketBuilder blockBuilder = new GamePacketBuilder();
-
-
-		//low-rez-movement
-		//low-rez-
-
-		// high-rez-movement
-
-		return builder.toGamePacket();
+		for (GamePacketBuilder builder : nsnBuilders) {
+			builder.addComposite(composite);
+		}
+		blockBuilder.addComposite(composite);
+		return new GamePacket(79, PacketType.VARIABLE_SHORT, composite);
 	}
 }

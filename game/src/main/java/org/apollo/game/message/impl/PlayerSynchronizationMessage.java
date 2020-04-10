@@ -1,13 +1,24 @@
 package org.apollo.game.message.impl;
 
-import org.apollo.game.model.Position;
-import org.apollo.game.sync.seg.SynchronizationSegment;
+import org.apollo.net.codec.game.GamePacketBuilder;
 import org.apollo.net.message.Message;
-
-import java.util.List;
 
 public final class PlayerSynchronizationMessage extends Message {
 
-	public PlayerSynchronizationMessage() {
+
+	private final GamePacketBuilder[] nsnBuilders;
+	private final GamePacketBuilder blockBuilder;
+
+	public PlayerSynchronizationMessage(GamePacketBuilder[] nsnBuilders, GamePacketBuilder blockBuilder) {
+		this.nsnBuilders = nsnBuilders;
+		this.blockBuilder = blockBuilder;
+	}
+
+	public GamePacketBuilder[] getNsnBuilders() {
+		return nsnBuilders;
+	}
+
+	public GamePacketBuilder getBlockBuilder() {
+		return blockBuilder;
 	}
 }

@@ -105,6 +105,8 @@ public final class Player extends Mob {
 	 */
 	private final Deque<Message> queuedMessages = new ArrayDeque<>();
 
+	private final PlayerUpdateInfo playerUpdateInfo = new PlayerUpdateInfo();
+
 	/**
 	 * The player's appearance.
 	 */
@@ -298,6 +300,10 @@ public final class Player extends Mob {
 	 */
 	public boolean friendsWith(String username) {
 		return friends.contains(username.toLowerCase());
+	}
+
+	public PlayerUpdateInfo getPlayerUpdateInfo() {
+		return playerUpdateInfo;
 	}
 
 	/**
