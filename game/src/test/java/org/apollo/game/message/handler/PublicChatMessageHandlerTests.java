@@ -26,7 +26,8 @@ public final class PublicChatMessageHandlerTests {
 
 		when(player.isMuted()).thenReturn(true);
 
-		PublicChatMessage publicChatMessage = new PublicChatMessage("Test", "Test".getBytes(), 0, 0);
+		PublicChatMessage publicChatMessage = new PublicChatMessage("Test", "Test".getBytes(),
+				0, 0, PublicChatMessage.PublicChatType.NONE);
 		handler.handle(player, publicChatMessage);
 
 		assertTrue("PublicChatMessageHandler: player can send messages when muted", publicChatMessage.terminated());
