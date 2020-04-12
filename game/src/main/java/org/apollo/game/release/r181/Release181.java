@@ -194,7 +194,7 @@ public class Release181 extends Release {
 		register(UpdateRunEnergyMessage.class, new UpdateRunEnergyMessageEncoder());
 
 		register(RebuildNormalMessage.class, new RebuildNormalMessageEncoder());
-		//register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
+		register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
 		register(PlayerSynchronizationMessage.class, new PlayerSynchronizationMessageEncoder());
 
 		register(ConfigMessage.class, new ConfigMessageEncoder());
@@ -268,6 +268,7 @@ public class Release181 extends Release {
 		 * Resume Inputs
 		 */
 		register(17, new EnteredAmountMessageDecoder());
+		register(67, new EventKeyboardDecoder());
 
 		/**
 		 * Player

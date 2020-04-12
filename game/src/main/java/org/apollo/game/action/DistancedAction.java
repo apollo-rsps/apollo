@@ -2,10 +2,7 @@ package org.apollo.game.action;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Mob;
-import org.apollo.game.model.entity.path.AStarPathfindingAlgorithm;
-import org.apollo.game.model.entity.path.Heuristic;
-import org.apollo.game.model.entity.path.ManhattanHeuristic;
-import org.apollo.game.model.entity.path.SimplePathfindingAlgorithm;
+import org.apollo.game.model.entity.path.*;
 
 /**
  * An @{link Action} which fires when a distance requirement is met.
@@ -70,7 +67,7 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 					executeAction();
 				}
 			} else {
-				var pathfinder = new AStarPathfindingAlgorithm(mob.getWorld().getCollisionManager(), new ManhattanHeuristic());
+				var pathfinder = new AStarPathfindingAlgorithm(mob.getWorld().getCollisionManager(), new ChebyshevHeuristic());
 				var path = pathfinder.find(mob.getPosition(), position);
 
 				path.forEach(mob.getWalkingQueue()::addStep);

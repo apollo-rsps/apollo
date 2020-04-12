@@ -725,7 +725,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	 * @param builder The builder.
 	 */
 	private static void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
-		var direction = Direction.between(block.getTurnPosition(), block.getMobPosition());
+		var direction = Direction.between(block.getMobPosition(), block.getTurnPosition());
 		builder.put(DataType.SHORT, DataOrder.LITTLE, direction.getClientValue());
 	}
 

@@ -237,7 +237,7 @@ public final class GamePacketReader {
 	 */
 	public int getLength() {
 		checkByteAccess();
-		return buffer.writableBytes();
+		return buffer.readableBytes();
 	}
 
 	/**
