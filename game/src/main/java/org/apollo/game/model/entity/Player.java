@@ -2,8 +2,13 @@ package org.apollo.game.model.entity;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import org.apollo.game.message.impl.*;
-import org.apollo.game.message.impl.encode.*;
+import org.apollo.game.message.impl.IgnoreListMessage;
+import org.apollo.game.message.impl.SendFriendMessage;
+import org.apollo.game.message.impl.ServerChatMessage;
+import org.apollo.game.message.impl.encode.ConfigMessage;
+import org.apollo.game.message.impl.encode.LogoutMessage;
+import org.apollo.game.message.impl.encode.RebuildNormalMessage;
+import org.apollo.game.message.impl.encode.UpdateRunEnergyMessage;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -105,7 +110,7 @@ public final class Player extends Mob {
 	 */
 	private final Deque<Message> queuedMessages = new ArrayDeque<>();
 
-	private final PlayerUpdateInfo playerUpdateInfo = new PlayerUpdateInfo();
+	private final PlayerUpdateInfo updateInfo = new PlayerUpdateInfo();
 
 	/**
 	 * The player's appearance.
@@ -302,8 +307,8 @@ public final class Player extends Mob {
 		return friends.contains(username.toLowerCase());
 	}
 
-	public PlayerUpdateInfo getPlayerUpdateInfo() {
-		return playerUpdateInfo;
+	public PlayerUpdateInfo getUpdateInfo() {
+		return updateInfo;
 	}
 
 	/**
@@ -730,7 +735,8 @@ public final class Player extends Mob {
 	 * Sends the initial messages.
 	 */
 	public void sendInitialMessages(DisplayMode mode) {
-		send(new RebuildNormalMessage(position, index, world.getRegionRepository().getXteaRepository(), false));
+		send(new RebuildNormalMessage(position, index, updateInfo, world.getPlayerRepository(),
+				world.getRegionRepository().getXteaRepository(), false));
 
 		interfaceSet.openTop(mode);
 		for (TopLevelPosition position : TopLevelPosition.values()) {
@@ -746,6 +752,8 @@ public final class Player extends Mob {
 		}
 
 		updateAppearance();
+
+		send(new ConfigMessage(1737, 1 << 31));
 
 		inventory.forceRefresh();
 		equipment.forceRefresh();

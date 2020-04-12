@@ -27,7 +27,8 @@ public final class WalkMessageHandler extends MessageHandler<WalkMessage> {
 		WalkingQueue queue = player.getWalkingQueue();
 		queue.setRunning(message.isRunning() || player.isRunning());
 
-		queue.addFirstStep(new Position(message.getX(), message.getY(), player.getPosition().getHeight()));
+		player.teleport(new Position(message.getX(), message.getY(), player.getPosition().getHeight()));
+		//queue.addFirstStep(new Position(message.getX(), message.getY(), player.getPosition().getHeight()));
 
 		player.getInterfaceSet().close();
 

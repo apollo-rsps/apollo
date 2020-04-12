@@ -1,5 +1,7 @@
 package org.apollo.game.sync.block;
 
+import org.apollo.game.sync.block.SynchronizationBlock;
+
 /**
  * The transform {@link SynchronizationBlock}. Only npcs can utilise this block.
  *

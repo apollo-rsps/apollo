@@ -194,7 +194,7 @@ public class Release181 extends Release {
 		register(UpdateRunEnergyMessage.class, new UpdateRunEnergyMessageEncoder());
 
 		register(RebuildNormalMessage.class, new RebuildNormalMessageEncoder());
-		register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
+		//register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
 		register(PlayerSynchronizationMessage.class, new PlayerSynchronizationMessageEncoder());
 
 		register(ConfigMessage.class, new ConfigMessageEncoder());

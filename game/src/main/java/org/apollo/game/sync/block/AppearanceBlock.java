@@ -2,6 +2,7 @@ package org.apollo.game.sync.block;
 
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.inv.Inventory;
+import org.apollo.game.sync.block.SynchronizationBlock;
 
 /**
  * The appearance {@link SynchronizationBlock}. Only players can utilise this block.
@@ -33,7 +34,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	/**
 	 * The player's name.
 	 */
-	private final long name;
+	private final String name;
 
 	/**
 	 * The npc id this player is appearing as, if any.
@@ -61,7 +62,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 * @param headIcon The head icon id of the player.
 	 * @param isSkulled Whether or not the player is skulled.
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled) {
+	AppearanceBlock(String name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled) {
 		this(name, appearance, combat, skill, equipment, headIcon, isSkulled, -1);
 	}
 
@@ -77,7 +78,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 * @param isSkulled Whether or not the player is skulled.
 	 * @param npcId The npc id of the player, if they are appearing as an npc, (otherwise {@code -1}).
 	 */
-	AppearanceBlock(long name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled, int npcId) {
+	AppearanceBlock(String name, Appearance appearance, int combat, int skill, Inventory equipment, int headIcon, boolean isSkulled, int npcId) {
 		this.name = name;
 		this.appearance = appearance;
 		this.combat = combat;
@@ -138,7 +139,7 @@ public final class AppearanceBlock extends SynchronizationBlock {
 	 *
 	 * @return The player's name.
 	 */
-	public long getName() {
+	public String getName() {
 		return name;
 	}
 

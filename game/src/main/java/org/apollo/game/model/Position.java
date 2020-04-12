@@ -239,4 +239,8 @@ public final class Position {
 		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight())
 				.add("map", getRegionCoordinates()).toString();
 	}
+
+    public int get18BitHash() {
+    	return (getY() >> 13) + ((getX() >> 13) << 8) + (getHeight() << 16);
+	}
 }

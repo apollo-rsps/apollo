@@ -7,6 +7,7 @@ import org.apollo.game.model.Graphic;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.sync.block.*;
+import org.apollo.game.sync.block.TransformBlock;
 import org.apollo.game.sync.seg.AddNpcSegment;
 import org.apollo.game.sync.seg.MovementSegment;
 import org.apollo.game.sync.seg.SegmentType;
@@ -302,7 +303,7 @@ public final class NpcSynchronizationMessageEncoder extends MessageEncoder<NpcSy
 	 * @param builder The builder.
 	 */
 	private static void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
-		Position position = block.getPosition();
+		Position position = block.getTurnPosition();
 		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, position.getX() * 2 + 1);
 		builder.put(DataType.SHORT, DataOrder.LITTLE, position.getY() * 2 + 1);
 	}

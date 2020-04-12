@@ -1,9 +1,9 @@
 package org.apollo.game.model.entity;
 
-import com.google.common.base.Preconditions;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import com.google.common.base.Preconditions;
 
 /**
  * A {@link MobRepository} is a repository of {@link Mob}s that are currently active in the game world.
@@ -124,7 +124,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 			}
 
 			mobs[index] = mob;
-			mob.setIndex(index);
+			mob.setIndex(index + 1);
 			size++;
 
 			return true;
@@ -160,10 +160,10 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
-		if (index < 0) {
+		if (index < 1 || index >= capacity() + 1) {
 			throw new IndexOutOfBoundsException("Mob index is out of bounds.");
 		}
-		return (T) mobs[index];
+		return (T) mobs[index - 1];
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 			throw new IllegalArgumentException("MobRepository index mismatch, cannot remove Mob.");
 		}
 
-		mobs[index] = null;
+		mobs[index - 1] = null;
 		mob.setIndex(-1);
 		size--;
 	}

@@ -9,6 +9,10 @@ import org.apollo.net.message.Message;
  */
 public final class PublicChatMessage extends ChatMessage {
 
+	public enum PublicChatType {
+		NONE, QUICKCHAT, CLANCHAT
+	}
+
 	/**
 	 * The text color.
 	 */
@@ -20,17 +24,24 @@ public final class PublicChatMessage extends ChatMessage {
 	private final int effects;
 
 	/**
+	 * The type of public chat.
+	 */
+	private final PublicChatType type;
+
+	/**
 	 * Creates a new chat message.
 	 *
-	 * @param message The message.
+	 * @param message           The message.
 	 * @param compressedMessage The compressed message.
-	 * @param color The text color.
-	 * @param effects The text effects.
+	 * @param color             The text color.
+	 * @param effects           The text effects.
+	 * @param type              The chat type.
 	 */
-	public PublicChatMessage(String message, byte[] compressedMessage, int color, int effects) {
+	public PublicChatMessage(String message, byte[] compressedMessage, int color, int effects, PublicChatType type) {
 		super(message, compressedMessage);
 		this.color = color;
 		this.effects = effects;
+		this.type = type;
 	}
 
 	/**
@@ -51,4 +62,12 @@ public final class PublicChatMessage extends ChatMessage {
 		return effects;
 	}
 
+	/**
+	 * Gets the chat type.
+	 *
+	 * @return the type of public chat.
+	 */
+	public PublicChatType getType() {
+		return type;
+	}
 }

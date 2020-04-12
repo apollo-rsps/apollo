@@ -2,6 +2,9 @@ package org.apollo.game.message.impl.encode;
 
 import org.apollo.cache.map.XteaRepository;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.entity.MobRepository;
+import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.PlayerUpdateInfo;
 import org.apollo.net.message.Message;
 
 /**
@@ -22,9 +25,19 @@ public final class RebuildNormalMessage extends Message {
 	private final int index;
 
 	/**
+	 * The update information of the player.
+	 */
+	private PlayerUpdateInfo info;
+
+	/**
 	 * The repository containing xteas.
 	 */
-	private final XteaRepository repository;
+	private final XteaRepository xteaRepository;
+
+	/**
+	 * The repository containing players.
+	 */
+	private final MobRepository<Player> playerRepository;
 
 	/**
 	 * If the player has a last known region.
@@ -35,13 +48,15 @@ public final class RebuildNormalMessage extends Message {
 	 * Creates the region changed message.
 	 *
 	 * @param position           The position of the region.
-	 * @param repository         the repository
+	 * @param xteaRepository         the repository
 	 * @param hasLastKnownRegion if the player has been in a region.
 	 */
-	public RebuildNormalMessage(Position position, int index, XteaRepository repository, boolean hasLastKnownRegion) {
+	public RebuildNormalMessage(Position position, int index, PlayerUpdateInfo info, MobRepository<Player> playerRepository, XteaRepository xteaRepository, boolean hasLastKnownRegion) {
 		this.position = position;
 		this.index = index;
-		this.repository = repository;
+		this.info = info;
+		this.xteaRepository = xteaRepository;
+		this.playerRepository = playerRepository;
 		this.hasLastKnownRegion = hasLastKnownRegion;
 	}
 
@@ -64,13 +79,17 @@ public final class RebuildNormalMessage extends Message {
 		return index;
 	}
 
+	public PlayerUpdateInfo getInfo() {
+		return info;
+	}
+
 	/**
 	 * Gets repository.
 	 *
 	 * @return the repository
 	 */
-	public XteaRepository getRepository() {
-		return repository;
+	public XteaRepository getXteaRepository() {
+		return xteaRepository;
 	}
 
 	/**
@@ -80,5 +99,9 @@ public final class RebuildNormalMessage extends Message {
 	 */
 	public boolean isHasLastKnownRegion() {
 		return hasLastKnownRegion;
+	}
+
+	public MobRepository<Player> getPlayerRepository() {
+		return playerRepository;
 	}
 }

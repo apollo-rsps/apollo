@@ -19,15 +19,7 @@ public final class RebuildNormalMessageEncoder extends MessageEncoder<RebuildNor
 		// TODO the player shit here.
 
 		if (!message.isHasLastKnownRegion()) {
-			builder.switchToBitAccess();
-			builder.putBits(30, position.hashCode());
-			for (int index = 1; index < 2048; index++) {
-				if (index == message.getIndex()) {
-					continue;
-				}
-				builder.putBits(18, 0);
-			}
-			builder.switchToByteAccess();
+			message.getInfo().init(message.getPlayerRepository(), message.getIndex(), position, builder);
 		}
 
 		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD,
@@ -48,7 +40,7 @@ public final class RebuildNormalMessageEncoder extends MessageEncoder<RebuildNor
 			for (int mapY = ((position.getCentralRegionY() - 6) / 8); mapY <= ((position
 					.getCentralRegionY() + 6) / 8); mapY++) {
 				if (force || (mapY != 49 && mapY != 149 && mapY != 147 && mapX != 50 && (mapX != 49 || mapY != 47))) {
-					int[] keys = message.getRepository().get(mapX, mapY);
+					int[] keys = message.getXteaRepository().get(mapX, mapY);
 					for (int i = 0; i < 4; i++)
 						map.put(DataType.INT, keys[i]);
 				}

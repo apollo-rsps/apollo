@@ -1,5 +1,7 @@
 package org.apollo.game.sync.block;
 
+import org.apollo.game.sync.block.SynchronizationBlock;
+
 /**
  * The hit update {@link SynchronizationBlock}. Both npcs and players can utilise this block.
  *

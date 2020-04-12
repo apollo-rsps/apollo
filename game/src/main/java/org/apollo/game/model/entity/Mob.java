@@ -1,7 +1,7 @@
 package org.apollo.game.model.entity;
 
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 import org.apollo.cache.def.NpcDefinition;
 import org.apollo.game.action.Action;
 import org.apollo.game.model.*;
@@ -64,7 +64,7 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's list of local players.
 	 */
-	private final IntSet localPlayers = new IntOpenHashSet();
+	private final ObjectSet<Player> localPlayers = new ObjectOpenHashSet<>();
 
 	/**
 	 * This mob's set of synchronization blocks.
@@ -95,6 +95,11 @@ public abstract class Mob extends Entity {
 	 * The position this mob is facing towards.
 	 */
 	private Position facingPosition = position;
+
+	/**
+	 * The old position of this mob.
+	 */
+	private Position oldPosition = position;
 
 	/**
 	 * This mob's first movement direction.
@@ -215,6 +220,15 @@ public abstract class Mob extends Entity {
 		return equipment;
 	}
 
+
+	public Position getOldPosition() {
+		return oldPosition;
+	}
+
+	public void setOldPosition(Position oldPosition) {
+		this.oldPosition = oldPosition;
+	}
+
 	/**
 	 * Gets the {@link Position} this mob is facing towards.
 	 *
@@ -303,7 +317,7 @@ public abstract class Mob extends Entity {
 	 *
 	 * @return The list.
 	 */
-	public final IntSet getLocalPlayerList() {
+	public final ObjectSet<Player> getLocalPlayerList() {
 		return localPlayers;
 	}
 
@@ -486,6 +500,8 @@ public abstract class Mob extends Entity {
 	public final void setPosition(Position position) {
 		if (!position.equals(this.position) && world.submit(new MobPositionUpdateEvent(this, position))) {
 			Position old = this.position;
+			setOldPosition(old);
+
 			RegionRepository repository = world.getRegionRepository();
 			Region current = repository.fromPosition(old), next = repository.fromPosition(position);
 
@@ -587,7 +603,7 @@ public abstract class Mob extends Entity {
 	 */
 	public final void turnTo(Position position) {
 		facingPosition = position;
-		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(position));
+		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(getPosition(), position));
 	}
 
 	/**
@@ -596,6 +612,5 @@ public abstract class Mob extends Entity {
 	private void init() {
 		world.schedule(new SkillNormalizationTask(this));
 	}
-
 
 }
