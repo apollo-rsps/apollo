@@ -439,7 +439,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 			flag |= 0x10;
 		}
 		if (blockSet.contains(TitleBlock.class)) {
-			flag |= 0x4;
+			flag |= 0x100;
 		}
 		if (blockSet.contains(AnimationBlock.class)) {
 			flag |= 0x80;
@@ -725,8 +725,8 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	 * @param builder The builder.
 	 */
 	private static void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
-		var direction = Direction.between(block.getMobPosition(), block.getTurnPosition());
-		builder.put(DataType.SHORT, direction.getClientValue());
+		var direction = Direction.between(block.getTurnPosition(), block.getMobPosition());
+		builder.put(DataType.SHORT, DataOrder.LITTLE, direction.getClientValue());
 	}
 
 	/**
