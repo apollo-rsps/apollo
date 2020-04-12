@@ -55,12 +55,16 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 
 	@Override
 	public void run() {
-		Position old = player.getOldPosition();
+		Position old = player.getPosition();
+		player.setOldPosition(old);
+
 		player.getWalkingQueue().pulse();
 
 		boolean local = true;
 
-		if (player.isTeleporting()) {
+		var teleportPosition = player.getTeleportPosition();
+		if (teleportPosition != null) {
+			player.setPosition(player.getTeleportPosition());
 			player.resetViewingDistance();
 			local = false;
 		}

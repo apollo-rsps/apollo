@@ -970,8 +970,8 @@ public final class Player extends Mob {
 	}
 
 	@Override
-	public void teleport(Position position) {
-		super.teleport(position);
+	public void teleport(Position teleportPosition) {
+		super.teleport(teleportPosition);
 
 		if (interfaceSet.size() > 0) {
 			interfaceSet.close();

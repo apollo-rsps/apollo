@@ -1,5 +1,3 @@
-
-import java.util.concurrent.TimeUnit
 import org.apollo.game.GameConstants
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
@@ -11,6 +9,9 @@ import org.apollo.game.model.entity.obj.GameObject
 import org.apollo.game.plugin.api.*
 import org.apollo.game.plugin.skills.woodcutting.Axe
 import org.apollo.game.plugin.skills.woodcutting.Tree
+import org.apollo.plugin.entity.pathing.walkBehind
+import org.apollo.plugin.entity.pathing.walkTo
+import java.util.concurrent.TimeUnit
 
 // TODO Accurate chopping rates, e.g. https://twitter.com/JagexKieren/status/713403124464107520
 

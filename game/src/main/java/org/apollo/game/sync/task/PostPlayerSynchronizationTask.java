@@ -25,7 +25,7 @@ public final class PostPlayerSynchronizationTask extends SynchronizationTask {
 
 	@Override
 	public void run() {
-		player.setTeleporting(false);
+		player.resetTeleportPosition();
 		player.setRegionChanged(false);
 		player.resetBlockSet();
 

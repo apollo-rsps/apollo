@@ -16,7 +16,6 @@ import org.apollo.game.model.entity.PlayerUpdateInfo;
 import org.apollo.game.model.entity.setting.Gender;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.sync.block.*;
-import org.apollo.game.sync.block.TitleBlock;
 import org.apollo.net.codec.game.DataOrder;
 import org.apollo.net.codec.game.DataTransformation;
 import org.apollo.net.codec.game.DataType;
@@ -638,7 +637,10 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	}
 
 	/**
+	 * Puts a title block into the specified builder.
 	 *
+	 * @param block   The block.
+	 * @param builder The builder.
 	 */
 	private static void putTitleBlock(TitleBlock block, GamePacketBuilder builder) {
 		var titles = block.getTitles();
@@ -666,7 +668,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	/**
 	 * Puts a movement type block into the specified builder.
 	 *
-	 * @param block The block.
+	 * @param block   The block.
 	 * @param builder The builder.
 	 */
 	private static void putMovementTypeBlock(MovementTypeBlock block, GamePacketBuilder builder) {
@@ -676,7 +678,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	/**
 	 * Puts a temporary movement type block into the specified builder.
 	 *
-	 * @param block The block.
+	 * @param block   The block.
 	 * @param builder The builder.
 	 */
 	private static void putTemporaryMovementTypeBlock(TemporaryMovementTypeBlock block, GamePacketBuilder builder) {
@@ -726,8 +728,15 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		var mobPosition = block.getMobPosition();
 		var turnPosition = block.getTurnPosition();
 
-		builder.put(DataType.SHORT, ((int) (Math.atan2(turnPosition.getX() - mobPosition.getX(),
-				turnPosition.getY() - mobPosition.getY()) * 2607.5945876176133)) & 0x3fff);
+		int srcX = (mobPosition.getX() * 512) + (1 * 256);
+		int srcY = (mobPosition.getY() * 512) + (1 * 256);
+		int dstX = (turnPosition.getX() * 512) + (1 * 256);
+		int dstY = (turnPosition.getY() * 512) + (1 * 256);
+		int deltaX = srcX - dstX;
+		int deltaY = srcY - dstY;
+
+		builder.put(DataType.SHORT, deltaX != 0 || deltaY != 0 ? (int) (Math
+				.atan2(deltaX, deltaY) * 2607.5945876176133) & 0x3FFF : 0);
 	}
 
 	/**

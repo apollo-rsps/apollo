@@ -117,9 +117,9 @@ public abstract class Mob extends Entity {
 	private Direction secondDirection = Direction.NONE;
 
 	/**
-	 * Indicates whether this mob is currently teleporting or not.
+	 * The position to teleport to.
 	 */
-	private boolean teleporting;
+	private Position teleportPosition;
 
 	/**
 	 * Creates the Mob.
@@ -386,15 +386,6 @@ public abstract class Mob extends Entity {
 	}
 
 	/**
-	 * Checks if this mob is currently teleporting.
-	 *
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public final boolean isTeleporting() {
-		return teleporting;
-	}
-
-	/**
 	 * Makes this mob perform the specified {@link Animation}.
 	 *
 	 * @param animation The animation.
@@ -500,7 +491,6 @@ public abstract class Mob extends Entity {
 	public final void setPosition(Position position) {
 		if (!position.equals(this.position) && world.submit(new MobPositionUpdateEvent(this, position))) {
 			Position old = this.position;
-			setOldPosition(old);
 
 			RegionRepository repository = world.getRegionRepository();
 			Region current = repository.fromPosition(old), next = repository.fromPosition(position);
@@ -510,15 +500,6 @@ public abstract class Mob extends Entity {
 
 			next.addEntity(this);
 		}
-	}
-
-	/**
-	 * Sets whether this mob is teleporting or not.
-	 *
-	 * @param teleporting {@code true} if the mob is teleporting, {@code false} if not.
-	 */
-	public final void setTeleporting(boolean teleporting) {
-		this.teleporting = teleporting;
 	}
 
 	/**
@@ -587,13 +568,33 @@ public abstract class Mob extends Entity {
 	 * Teleports this mob to the specified {@link Position}, setting the appropriate flags and clearing the walking
 	 * queue.
 	 *
-	 * @param position The position.
+	 * @param teleportPosition The position.
 	 */
-	public void teleport(Position position) {
-		setPosition(position);
-		teleporting = true;
+	public void teleport(Position teleportPosition) {
+		this.teleportPosition = teleportPosition;
 		walkingQueue.clear();
 		stopAction();
+	}
+
+	/**
+	 * Checks if this mob is currently teleporting.
+	 *
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public final boolean isTeleporting() {
+		return teleportPosition != null;
+	}
+
+	/**
+	 * The {@link Position} to teleport to.
+	 * @return The teleport position.
+	 */
+	public Position getTeleportPosition() {
+		return teleportPosition;
+	}
+
+	public void resetTeleportPosition() {
+		this.teleportPosition = null;
 	}
 
 	/**
