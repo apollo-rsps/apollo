@@ -1,5 +1,6 @@
 package org.apollo.game.message.impl;
 
+import org.apollo.game.message.impl.encode.ChatFilterSettingsMessage;
 import org.apollo.game.model.entity.setting.PrivacyState;
 import org.apollo.net.message.Message;
 
@@ -10,17 +11,7 @@ import org.apollo.net.message.Message;
  * @author Kyle Stevenson
  * @author Major
  */
-public final class PrivacyOptionMessage extends Message {
-
-	/**
-	 * The privacy state of the player's chat.
-	 */
-	private final PrivacyState chatPrivacy;
-
-	/**
-	 * The privacy state of the player's friend chat.
-	 */
-	private final PrivacyState friendPrivacy;
+public final class PrivacyOptionMessage extends ChatFilterSettingsMessage {
 
 	/**
 	 * The privacy state of the player's trade chat.
@@ -35,27 +26,8 @@ public final class PrivacyOptionMessage extends Message {
 	 * @param tradePrivacy The privacy state of the player's trade chat.
 	 */
 	public PrivacyOptionMessage(int chatPrivacy, int friendPrivacy, int tradePrivacy) {
-		this.chatPrivacy = PrivacyState.valueOf(chatPrivacy, true);
-		this.friendPrivacy = PrivacyState.valueOf(friendPrivacy, false);
+		super(chatPrivacy, friendPrivacy);
 		this.tradePrivacy = PrivacyState.valueOf(tradePrivacy, false);
-	}
-
-	/**
-	 * Gets the chat {@link PrivacyState}.
-	 *
-	 * @return The privacy state.
-	 */
-	public PrivacyState getChatPrivacy() {
-		return chatPrivacy;
-	}
-
-	/**
-	 * Gets the friend {@link PrivacyState}.
-	 *
-	 * @return The privacy state.
-	 */
-	public PrivacyState getFriendPrivacy() {
-		return friendPrivacy;
 	}
 
 	/**

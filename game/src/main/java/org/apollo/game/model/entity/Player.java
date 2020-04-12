@@ -5,10 +5,7 @@ import com.google.common.base.Preconditions;
 import org.apollo.game.message.impl.IgnoreListMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.ServerChatMessage;
-import org.apollo.game.message.impl.encode.ConfigMessage;
-import org.apollo.game.message.impl.encode.LogoutMessage;
-import org.apollo.game.message.impl.encode.RebuildNormalMessage;
-import org.apollo.game.message.impl.encode.UpdateRunEnergyMessage;
+import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -754,6 +751,7 @@ public final class Player extends Mob {
 		updateAppearance();
 
 		send(new ConfigMessage(1737, 1 << 31));
+		send(new ChatFilterSettingsMessage(chatPrivacy, friendPrivacy));
 
 		inventory.forceRefresh();
 		equipment.forceRefresh();

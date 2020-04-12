@@ -10,7 +10,18 @@ import org.apollo.net.message.Message;
 public final class PublicChatMessage extends ChatMessage {
 
 	public enum PublicChatType {
-		NONE, QUICKCHAT, CLANCHAT
+		NONE, QUICKCHAT, CLANCHAT;
+
+		static final PublicChatType[] VALUES = values();
+
+		public static PublicChatType of(int ordinal) {
+			for (var value : VALUES) {
+				if (value.ordinal() == ordinal) {
+					return value;
+				}
+			}
+			return NONE;
+		}
 	}
 
 	/**

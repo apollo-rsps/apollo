@@ -4,6 +4,7 @@ import org.apollo.game.message.impl.*;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
+import org.apollo.game.release.r181.decoders.social.PublicChatDecoder;
 import org.apollo.game.release.r181.encoders.game.LogoutEncoder;
 import org.apollo.game.release.r181.encoders.player.PlayerSynchronizationMessageEncoder;
 import org.apollo.game.release.r181.encoders.region.MobResetAnimsEncoder;
@@ -194,7 +195,7 @@ public class Release181 extends Release {
 		register(UpdateRunEnergyMessage.class, new UpdateRunEnergyMessageEncoder());
 
 		register(RebuildNormalMessage.class, new RebuildNormalMessageEncoder());
-		register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
+		//register(NpcSynchronizationMessage.class, new NpcSynchronizationMessageEncoder());
 		register(PlayerSynchronizationMessage.class, new PlayerSynchronizationMessageEncoder());
 
 		register(ConfigMessage.class, new ConfigMessageEncoder());
@@ -205,22 +206,18 @@ public class Release181 extends Release {
 		 */
 
 		/**
-		 * Friends List
+		 * Social
 		 */
 		register(88, new AddFriendMessageDecoder());
 		register(54, new RemoveFriendMessageDecoder());
 
-		/**
-		 * Ignores List
-		 */
 		register(90, new AddIgnoreMessageDecoder());
 		register(28, new RemoveIgnoreMessageDecoder());
 
-		/**
-		 * Private Message
-		 */
 		register(25, new PrivateChatMessageDecoder());
 		register(15, new PrivacyOptionMessageDecoder());
+
+		register(97, new PublicChatDecoder());
 
 		/**
 		 * Movement
@@ -256,7 +253,6 @@ public class Release181 extends Release {
 		register(7, new FourthOpHeldMessageDecoder());
 		register(58, new FifthOpHeldMessageDecoder());
 		register(24, new SixthOpHeldMessageDecoder());
-
 
 		register(5, new FirstOpItemMessageDecoder());
 		register(74, new SecondOpItemMessageDecoder());

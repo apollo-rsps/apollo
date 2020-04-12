@@ -42,15 +42,12 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	private final World world;
 	private final ObjectSet<Player> limitedPlayers;
 
-	private ObjectOpenHashSet<Player> added;
-
 	public PlayerSynchronizationTask(Player player) {
 		this.player = player;
 		this.info = player.getUpdateInfo();
 		this.world = player.getWorld();
 
 		this.limitedPlayers = player.getLocalPlayerList();
-		this.added = new ObjectOpenHashSet<>();
 	}
 
 	@Override
