@@ -725,18 +725,8 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	 * @param builder The builder.
 	 */
 	private static void putTurnToPositionBlock(TurnToPositionBlock block, GamePacketBuilder builder) {
-		var mobPosition = block.getMobPosition();
-		var turnPosition = block.getTurnPosition();
-
-		int srcX = (mobPosition.getX() * 512) + (1 * 256);
-		int srcY = (mobPosition.getY() * 512) + (1 * 256);
-		int dstX = (turnPosition.getX() * 512) + (1 * 256);
-		int dstY = (turnPosition.getY() * 512) + (1 * 256);
-		int deltaX = srcX - dstX;
-		int deltaY = srcY - dstY;
-
-		builder.put(DataType.SHORT, deltaX != 0 || deltaY != 0 ? (int) (Math
-				.atan2(deltaX, deltaY) * 2607.5945876176133) & 0x3FFF : 0);
+		var direction = Direction.between(block.getMobPosition(), block.getTurnPosition());
+		builder.put(DataType.SHORT, direction.getClientValue());
 	}
 
 	/**

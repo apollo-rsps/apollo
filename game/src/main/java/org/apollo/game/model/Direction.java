@@ -10,47 +10,47 @@ public enum Direction {
 	/**
 	 * No movement.
 	 */
-	NONE(-1),
+	NONE(-1, -1),
 
 	/**
 	 * North west movement.
 	 */
-	NORTH_WEST(0),
+	NORTH_WEST(0, 768),
 
 	/**
 	 * North movement.
 	 */
-	NORTH(1),
+	NORTH(1, 1024),
 
 	/**
 	 * North east movement.
 	 */
-	NORTH_EAST(2),
+	NORTH_EAST(2, 1280),
 
 	/**
 	 * West movement.
 	 */
-	WEST(3),
+	WEST(3, 512),
 
 	/**
 	 * East movement.
 	 */
-	EAST(4),
+	EAST(4, 1536),
 
 	/**
 	 * South west movement.
 	 */
-	SOUTH_WEST(5),
+	SOUTH_WEST(5, 256),
 
 	/**
 	 * South movement.
 	 */
-	SOUTH(6),
+	SOUTH(6, 0),
 
 	/**
 	 * South east movement.
 	 */
-	SOUTH_EAST(7);
+	SOUTH_EAST(7, 1792);
 
 	/**
 	 * An empty direction array.
@@ -152,12 +152,18 @@ public enum Direction {
 	private final int intValue;
 
 	/**
+	 * The direction as a JAG-Rotation.
+	 */
+	private final int clientValue;
+
+	/**
 	 * Creates the direction.
 	 *
 	 * @param intValue The direction as an integer.
 	 */
-	Direction(int intValue) {
+	Direction(int intValue, int clientValue) {
 		this.intValue = intValue;
+		this.clientValue = clientValue;
 	}
 
 	/**
@@ -244,6 +250,14 @@ public enum Direction {
 	 */
 	public int toInteger() {
 		return intValue;
+	}
+
+	/**
+	 * The client value for the given direction.
+	 * @return The client value.
+	 */
+	public int getClientValue() {
+		return clientValue;
 	}
 
 	/**
