@@ -1,7 +1,7 @@
 import Bone.Companion.isBone
 import Prayer.Companion.isPrayerButton
 import org.apollo.game.message.impl.decode.IfActionMessage
-import org.apollo.game.message.impl.decode.ItemOptionMessage
+import org.apollo.game.message.impl.decode.ItemActionMessage
 import org.apollo.game.model.event.impl.LogoutEvent
 import org.apollo.game.plugin.api.prayer
 
@@ -27,7 +27,7 @@ on { IfActionMessage::class }
         terminate()
     }
 
-on { ItemOptionMessage::class }
+on { ItemActionMessage::class }
     .where { option == BuryBoneAction.BURY_OPTION && id.isBone() }
     .then { player ->
         val bone = Bone[id]!!

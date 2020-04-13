@@ -1,7 +1,8 @@
 package org.apollo.game.message.handler;
 
 import org.apollo.cache.def.EquipmentDefinition;
-import org.apollo.game.message.impl.decode.ItemOptionMessage;
+import org.apollo.game.message.impl.decode.InventoryItemMessage;
+import org.apollo.game.message.impl.decode.ItemActionMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -21,7 +22,7 @@ import static org.apollo.game.model.inv.SynchronizationInventoryListener.INVENTO
  * @author Graham
  * @author Ryley
  */
-public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
+public final class EquipItemHandler extends MessageHandler<InventoryItemMessage> {
 
 	/**
 	 * The option used when equipping an item.
@@ -31,14 +32,14 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 	/**
 	 * Creates the EquipItemHandler.
 	 *
-	 * @param world The {@link World} the {@link ItemOptionMessage} occurred in.
+	 * @param world The {@link World} the {@link ItemActionMessage} occurred in.
 	 */
 	public EquipItemHandler(World world) {
 		super(world);
 	}
 
 	@Override
-	public void handle(Player player, ItemOptionMessage message) {
+	public void handle(Player player, InventoryItemMessage message) {
 		if (message.getInterfaceId() != INVENTORY_ID || message.getOption() != EQUIP_OPTION) {
 			return;
 		}
@@ -106,9 +107,9 @@ public final class EquipItemHandler extends MessageHandler<ItemOptionMessage> {
 	 * @param weapon The weapon the {@link Player} currently has equipped.
 	 * @param shield The shield the {@link Player} currently has equipped.
 	 * @param player The {@link Player} equipping the item.
-	 * @param message The {@link ItemOptionMessage} sent by the client.
+	 * @param message The {@link ItemActionMessage} sent by the client.
 	 */
-	private void handleTwoHanded(Inventory inventory, Inventory equipment, int inventorySlot, Item weapon, Item shield, Player player, ItemOptionMessage message) {
+	private void handleTwoHanded(Inventory inventory, Inventory equipment, int inventorySlot, Item weapon, Item shield, Player player, InventoryItemMessage message) {
 		int slotsRequired = weapon != null && shield != null ? 1 : 0;
 
 		if (inventory.freeSlots() < slotsRequired) {

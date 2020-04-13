@@ -44,14 +44,6 @@
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.decode.ItemActionMessage</type>
-        <chain>
-            <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
-            <handler>org.apollo.game.message.handler.RemoveEquippedItemHandler</handler>
-            <handler>org.apollo.game.message.handler.BankMessageHandler</handler>
-        </chain>
-    </message>
-    <message>
         <type>org.apollo.game.message.impl.decode.ItemOnItemMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
@@ -65,10 +57,13 @@
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.decode.ItemOptionMessage</type>
+        <type>org.apollo.game.message.impl.decode.ItemActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
             <handler>org.apollo.game.message.handler.EquipItemHandler</handler>
+            <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
+            <handler>org.apollo.game.message.handler.RemoveEquippedItemHandler</handler>
+            <handler>org.apollo.game.message.handler.BankMessageHandler</handler>
         </chain>
     </message>
     <message>

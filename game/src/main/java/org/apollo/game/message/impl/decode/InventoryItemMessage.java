@@ -15,27 +15,27 @@ public abstract class InventoryItemMessage extends Message {
 	/**
 	 * The item id.
 	 */
-	private final int id;
+	protected final int id;
 
 	/**
 	 * The interface id.
 	 */
-	private final int interfaceId;
+	protected final int interfaceId;
 
 	/**
 	 * The component id.
 	 */
-	private final int componentId;
+	protected final int componentId;
 
 	/**
 	 * The option number (1-5 if present).
 	 */
-	private final OptionalInt option;
+	protected final OptionalInt option;
 
 	/**
 	 * The item's slot.
 	 */
-	private final int slot;
+	protected final int slot;
 
 	/**
 	 * Creates the InventoryItemMessage.
