@@ -70,6 +70,6 @@ public final class SendProjectileMessage extends RegionUpdateMessage {
 
 	@Override
 	public int priority() {
-		return LOW_PRIORITY;
+		return 1;
 	}
 }

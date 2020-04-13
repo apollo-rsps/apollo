@@ -191,6 +191,8 @@ public class Release181 extends Release {
 		register(AddObjectMessage.class, new AddObjectEncoder());
 		register(RemoveObjectMessage.class, new RemoveObjectEncoder());
 
+
+		register(UpdateZonePartialEnclosedMessage.class, new UpdateZonePartialEnclosedEncoder(this));
 		register(UpdateZoneFullFollowsMessage.class, new UpdateZoneFullFollowsEncoder());
 		register(UpdateZonePartialFollowsMessage.class, new UpdateZonePartialFollowsEncoder());
 

@@ -77,7 +77,7 @@ public final class SendTileItemMessage extends RegionUpdateMessage {
 
 	@Override
 	public int priority() {
-		return LOW_PRIORITY;
+		return 8;
 	}
 
 }

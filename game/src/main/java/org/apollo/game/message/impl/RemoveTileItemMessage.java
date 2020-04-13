@@ -78,7 +78,7 @@ public final class RemoveTileItemMessage extends RegionUpdateMessage {
 
 	@Override
 	public int priority() {
-		return HIGH_PRIORITY;
+		return 7;
 	}
 
 }

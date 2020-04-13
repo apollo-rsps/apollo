@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author Major
  */
-public final class GroupedRegionUpdateMessage extends Message {
+public final class UpdateZonePartialEnclosedMessage extends Message {
 
 	/**
 	 * The last known region Position of the Player.
@@ -35,8 +35,8 @@ public final class GroupedRegionUpdateMessage extends Message {
 	 * @param coordinates The {@link RegionCoordinates} of the Region being updated.
 	 * @param messages The {@link Set} of {@link RegionUpdateMessage}s.
 	 */
-	public GroupedRegionUpdateMessage(Position lastKnownRegion, RegionCoordinates coordinates,
-	                                  Set<RegionUpdateMessage> messages) {
+	public UpdateZonePartialEnclosedMessage(Position lastKnownRegion, RegionCoordinates coordinates,
+											Set<RegionUpdateMessage> messages) {
 		this.lastKnownRegion = lastKnownRegion;
 		region = new Position(coordinates.getAbsoluteX(), coordinates.getAbsoluteY());
 		this.messages = messages;

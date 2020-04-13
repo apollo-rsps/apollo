@@ -103,7 +103,7 @@ public final class AddObjectMessage extends RegionUpdateMessage {
 
 	@Override
 	public int priority() {
-		return LOW_PRIORITY;
+		return 9;
 	}
 
 }

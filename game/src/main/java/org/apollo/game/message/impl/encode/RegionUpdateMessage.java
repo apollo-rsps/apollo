@@ -3,23 +3,13 @@ package org.apollo.game.message.impl.encode;
 import org.apollo.net.message.Message;
 
 /**
- * A {@link Message} that can be grouped with other Messages as part of a {@link GroupedRegionUpdateMessage}.
+ * A {@link Message} that can be grouped with other Messages as part of a {@link UpdateZonePartialEnclosedMessage}.
  * <p>
  * This is a utility class for Messages that can be grouped, as is not encoded directly.
  *
  * @author Major
  */
 public abstract class RegionUpdateMessage extends Message implements Comparable<RegionUpdateMessage> {
-
-	/**
-	 * The integer value indicating this RegionUpdateMessage is a high-priority message.
-	 */
-	protected static final int HIGH_PRIORITY = 0;
-
-	/**
-	 * The integer value indicating this RegionUpdateMessage is a low-priority message.
-	 */
-	protected static final int LOW_PRIORITY = 1;
 
 	@Override
 	public final int compareTo(RegionUpdateMessage other) {

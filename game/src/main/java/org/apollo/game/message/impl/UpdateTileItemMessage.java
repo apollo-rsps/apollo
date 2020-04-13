@@ -104,7 +104,7 @@ public final class UpdateTileItemMessage extends RegionUpdateMessage {
 
 	@Override
 	public int priority() {
-		return LOW_PRIORITY;
+		return 0;
 	}
 
 }
