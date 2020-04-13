@@ -12,7 +12,7 @@ public class IfActionMessage extends Message {
 	/**
 	 * The option that was pressed.
 	 */
-	private final int action;
+	private final int option;
 
 	/**
 	 * The interface id.
@@ -37,14 +37,14 @@ public class IfActionMessage extends Message {
 	/**
 	 * Instantiates a new If action message.
 	 *
-	 * @param action      the action
+	 * @param option      the action
 	 * @param interfaceId the interface id
 	 * @param componentId the component id
 	 * @param slot        the slot
 	 * @param itemId      the item id
 	 */
-	public IfActionMessage(int action, int interfaceId, int componentId, int slot, int itemId) {
-		this.action = action;
+	public IfActionMessage(int option, int interfaceId, int componentId, int slot, int itemId) {
+		this.option = option;
 		this.interfaceId = interfaceId;
 		this.componentId = componentId;
 		this.slot = slot;
@@ -56,8 +56,8 @@ public class IfActionMessage extends Message {
 	 *
 	 * @return the action
 	 */
-	public int getAction() {
-		return action;
+	public int getOption() {
+		return option;
 	}
 
 	/**
@@ -103,6 +103,6 @@ public class IfActionMessage extends Message {
 
 	@Override
 	public String toString() {
-		return "IfActionMessage{" + "action=" + action + ", interfaceId=" + interfaceId + ", componentId=" + componentId + ", slot=" + slot + ", itemId=" + itemId + '}';
+		return "IfActionMessage{" + "action=" + option + ", interfaceId=" + interfaceId + ", componentId=" + componentId + ", slot=" + slot + ", itemId=" + itemId + '}';
 	}
 }

@@ -43,7 +43,7 @@ class IfAction(override val player: Player) : PlayerContext {
 
                 override fun handle(player: Player, message: IfActionMessage) {
                     if (predicateContext == null || predicateContext.inter != message.interfaceId ||
-                        predicateContext.comp != message.componentId || predicateContext.action != message.action) {
+                        predicateContext.comp != message.componentId || predicateContext.action != message.option) {
                         return;
                     }
 

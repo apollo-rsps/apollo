@@ -69,14 +69,12 @@ public final class ParallelClientSynchronizer extends ClientSynchronizer {
 		}
 		phaser.arriveAndAwaitAdvance();
 
-		long duration = System.currentTimeMillis();
 		phaser.bulkRegister(playerCount);
 		for (Player player : players) {
 			SynchronizationTask task = new PlayerSynchronizationTask(player);
 			executor.submit(new PhasedSynchronizationTask(phaser, task));
 		}
 		phaser.arriveAndAwaitAdvance();
-		System.out.println("Took " + (System.currentTimeMillis() - duration) + " milliseconds");
 
 		phaser.bulkRegister(playerCount);
 		for (Player player : players) {

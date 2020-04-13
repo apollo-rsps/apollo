@@ -4,6 +4,7 @@
         <chain>
             <handler>org.apollo.game.message.handler.DialogueButtonHandler</handler>
             <handler>org.apollo.game.message.handler.BankButtonMessageHandler</handler>
+            <handler>org.apollo.game.message.handler.RemoveEquippedItemHandler</handler>
         </chain>
     </message>
     <message>
@@ -62,7 +63,6 @@
             <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
             <handler>org.apollo.game.message.handler.EquipItemHandler</handler>
             <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
-            <handler>org.apollo.game.message.handler.RemoveEquippedItemHandler</handler>
             <handler>org.apollo.game.message.handler.BankMessageHandler</handler>
         </chain>
     </message>
