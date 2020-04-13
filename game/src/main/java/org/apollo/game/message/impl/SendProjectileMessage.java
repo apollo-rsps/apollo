@@ -1,5 +1,6 @@
 package org.apollo.game.message.impl;
 
+import org.apollo.game.message.impl.encode.RegionUpdateMessage;
 import org.apollo.game.model.entity.Projectile;
 import org.apollo.net.message.Message;
 

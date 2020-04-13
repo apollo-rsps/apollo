@@ -1,8 +1,8 @@
 package org.apollo.game.sync.task;
 
-import org.apollo.game.message.impl.ClearRegionMessage;
-import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
-import org.apollo.game.message.impl.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.UpdateZoneFullFollowsMessage;
+import org.apollo.game.message.impl.encode.GroupedRegionUpdateMessage;
+import org.apollo.game.message.impl.encode.RegionUpdateMessage;
 import org.apollo.game.message.impl.encode.RebuildNormalMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
@@ -136,7 +136,7 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 					.computeIfAbsent(coordinates, coords -> repository.get(coords).encode(height));
 
 			if (!messages.isEmpty()) {
-				player.send(new ClearRegionMessage(position, coordinates));
+				player.send(new UpdateZoneFullFollowsMessage(position, coordinates));
 				player.send(new GroupedRegionUpdateMessage(position, coordinates, messages));
 			}
 		}

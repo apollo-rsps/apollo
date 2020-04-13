@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
 import org.apollo.game.model.entity.obj.GameObject;
 import org.apollo.net.message.Message;
@@ -8,7 +8,7 @@ import org.apollo.net.message.Message;
  *
  * @author Major
  */
-public final class SendObjectMessage extends RegionUpdateMessage {
+public final class AddObjectMessage extends RegionUpdateMessage {
 
 	/**
 	 * The id of the object.
@@ -36,7 +36,7 @@ public final class SendObjectMessage extends RegionUpdateMessage {
 	 * @param object The {@link GameObject} to send.
 	 * @param positionOffset The offset of the object's position from the region's central position.
 	 */
-	public SendObjectMessage(GameObject object, int positionOffset) {
+	public AddObjectMessage(GameObject object, int positionOffset) {
 		id = object.getId();
 		this.positionOffset = positionOffset;
 		type = object.getType();
@@ -45,8 +45,8 @@ public final class SendObjectMessage extends RegionUpdateMessage {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof SendObjectMessage) {
-			SendObjectMessage other = (SendObjectMessage) obj;
+		if (obj instanceof AddObjectMessage) {
+			AddObjectMessage other = (AddObjectMessage) obj;
 			if (id != other.id || type != other.type) {
 				return false;
 			}

@@ -1,8 +1,8 @@
 package org.apollo.game.model.area.update;
 
-import org.apollo.game.message.impl.RegionUpdateMessage;
-import org.apollo.game.message.impl.RemoveObjectMessage;
-import org.apollo.game.message.impl.SendObjectMessage;
+import org.apollo.game.message.impl.encode.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.RemoveObjectMessage;
+import org.apollo.game.message.impl.encode.AddObjectMessage;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.obj.GameObject;
@@ -27,7 +27,7 @@ public final class ObjectUpdateOperation extends UpdateOperation<GameObject> {
 
 	@Override
 	protected RegionUpdateMessage add(int offset) {
-		return new SendObjectMessage(entity, offset);
+		return new AddObjectMessage(entity, offset);
 	}
 
 	@Override

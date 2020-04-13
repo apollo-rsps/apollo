@@ -1,15 +1,15 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.net.message.Message;
 
 /**
- * A {@link Message} sent to the client to remove all spawned objects and items from a Region.
+ * A {@link Message} sent to the client to set the coordinates of the Region currently being updated.
  *
  * @author Major
  */
-public final class ClearRegionMessage extends Message {
+public final class UpdateZonePartialFollowsMessage extends Message {
 
 	/**
 	 * The Position of the Player.
@@ -22,12 +22,12 @@ public final class ClearRegionMessage extends Message {
 	private final Position region;
 
 	/**
-	 * Creates the ClearRegionMessage.
+	 * Creates the SetUpdatedRegionMessage.
 	 *
 	 * @param player The {@link Position} of the Player this {@link Message} is being sent to.
-	 * @param region The {@link RegionCoordinates} of the Region being cleared.
+	 * @param region The {@link RegionCoordinates} of the Region being set.
 	 */
-	public ClearRegionMessage(Position player, RegionCoordinates region) {
+	public UpdateZonePartialFollowsMessage(Position player, RegionCoordinates region) {
 		this.player = player;
 		this.region = new Position(region.getAbsoluteX(), region.getAbsoluteY());
 	}

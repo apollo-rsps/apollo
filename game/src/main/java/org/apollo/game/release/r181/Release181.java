@@ -7,7 +7,7 @@ import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
 import org.apollo.game.release.r181.decoders.social.PublicChatDecoder;
 import org.apollo.game.release.r181.encoders.game.LogoutEncoder;
 import org.apollo.game.release.r181.encoders.player.PlayerSynchronizationMessageEncoder;
-import org.apollo.game.release.r181.encoders.region.MobResetAnimsEncoder;
+import org.apollo.game.release.r181.encoders.region.*;
 import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.item.*;
 import org.apollo.game.release.r181.decoders.map.npc.actions.*;
@@ -33,8 +33,6 @@ import org.apollo.game.release.r181.encoders.UpdateWeightMessageEncoder;
 import org.apollo.game.release.r181.encoders.game.ServerChatMessageEncoder;
 import org.apollo.game.release.r181.encoders.npc.NpcSynchronizationMessageEncoder;
 import org.apollo.game.release.r181.encoders.player.SetPlayerActionMessageEncoder;
-import org.apollo.game.release.r181.encoders.region.RebuildNormalMessageEncoder;
-import org.apollo.game.release.r181.encoders.region.SetMapFlagEncoder;
 import org.apollo.game.release.r181.encoders.ui.*;
 import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerFullMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerPartialMessageEncoder;
@@ -189,6 +187,12 @@ public class Release181 extends Release {
 
 		register(UpdateInventoryPartialMessage.class, new UpdateContainerPartialMessageEncoder());
 		register(UpdateInventoryFullMessage.class, new UpdateContainerFullMessageEncoder());
+
+		register(AddObjectMessage.class, new AddObjectEncoder());
+		register(RemoveObjectMessage.class, new RemoveObjectEncoder());
+
+		register(UpdateZoneFullFollowsMessage.class, new UpdateZoneFullFollowsEncoder());
+		register(UpdateZonePartialFollowsMessage.class, new UpdateZonePartialFollowsEncoder());
 
 		register(UpdateWeightMessage.class, new UpdateWeightMessageEncoder());
 		register(UpdateSkillMessage.class, new UpdateSkillMessageEncoder());
