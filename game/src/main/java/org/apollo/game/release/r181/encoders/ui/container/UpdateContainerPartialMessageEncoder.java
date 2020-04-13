@@ -33,6 +33,10 @@ public final class UpdateContainerPartialMessageEncoder extends MessageEncoder<U
 
 			builder.put(DataType.SHORT, id + 1);
 
+			if (id == -1) {
+				continue;
+			}
+
 			if (amount > 254) {
 				builder.put(DataType.BYTE, 255);
 				builder.put(DataType.INT, amount);

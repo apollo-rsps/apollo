@@ -36,7 +36,7 @@ public final class UpdateInventoryPartialMessage extends Message {
 	 * @param interfaceId The interface id.
 	 * @param items       The slotted items.
 	 */
-	public UpdateInventoryPartialMessage(int interfaceId, int containerId, int component, SlottedItem... items) {
+	public UpdateInventoryPartialMessage(int interfaceId, int component, int containerId, SlottedItem... items) {
 		this.interfaceId = interfaceId;
 		this.component = component;
 		this.containerId = containerId;
