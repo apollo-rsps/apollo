@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
 import com.google.common.base.Strings;
 import org.apollo.net.message.Message;

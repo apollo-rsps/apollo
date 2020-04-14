@@ -2,10 +2,9 @@ package org.apollo.game.sync.task;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import org.apollo.cache.def.EquipmentDefinition;
-import org.apollo.game.message.impl.PlayerSynchronizationMessage;
+import org.apollo.game.message.impl.encode.PlayerSynchronizationMessage;
 import org.apollo.game.model.*;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;

@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181;
 
-import org.apollo.game.message.impl.*;
+import org.apollo.game.message.impl.SendProjectileMessage;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
@@ -31,7 +31,6 @@ import org.apollo.game.release.r181.encoders.UpdateRunEnergyMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateSkillMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateWeightMessageEncoder;
 import org.apollo.game.release.r181.encoders.game.ServerChatMessageEncoder;
-import org.apollo.game.release.r181.encoders.npc.NpcSynchronizationMessageEncoder;
 import org.apollo.game.release.r181.encoders.player.SetPlayerActionMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.*;
 import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerFullMessageEncoder;
@@ -190,7 +189,10 @@ public class Release181 extends Release {
 
 		register(AddObjectMessage.class, new AddObjectEncoder());
 		register(RemoveObjectMessage.class, new RemoveObjectEncoder());
-
+		register(AddTileItemMessage.class, new AddTileItemEncoder());
+		register(UpdateTileItemMessage.class, new UpdateTileItemEncoder());
+		register(RemoveTileItemMessage.class, new RemoveTileItemEncoder());
+		register(SendProjectileMessage.class, new SendProjectileMessageEncoder());
 
 		register(UpdateZonePartialEnclosedMessage.class, new UpdateZonePartialEnclosedEncoder(this));
 		register(UpdateZoneFullFollowsMessage.class, new UpdateZoneFullFollowsEncoder());

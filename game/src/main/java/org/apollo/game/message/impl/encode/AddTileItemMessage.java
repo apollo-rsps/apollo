@@ -1,6 +1,5 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
-import org.apollo.game.message.impl.encode.RegionUpdateMessage;
 import org.apollo.game.model.Item;
 import org.apollo.net.message.Message;
 
@@ -9,7 +8,7 @@ import org.apollo.net.message.Message;
  *
  * @author Major
  */
-public final class SendPublicTileItemMessage extends RegionUpdateMessage {
+public final class AddTileItemMessage extends RegionUpdateMessage {
 
 	/**
 	 * The index of the player who dropped the item.
@@ -33,7 +32,7 @@ public final class SendPublicTileItemMessage extends RegionUpdateMessage {
 	 * @param index The index of the player who dropped the item.
 	 * @param positionOffset The offset from the 'base' position.
 	 */
-	public SendPublicTileItemMessage(Item item, int index, int positionOffset) {
+	public AddTileItemMessage(Item item, int index, int positionOffset) {
 		this.item = item;
 		this.index = index;
 		this.positionOffset = positionOffset;
@@ -41,8 +40,8 @@ public final class SendPublicTileItemMessage extends RegionUpdateMessage {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof SendPublicTileItemMessage) {
-			SendPublicTileItemMessage other = (SendPublicTileItemMessage) obj;
+		if (obj instanceof AddTileItemMessage) {
+			AddTileItemMessage other = (AddTileItemMessage) obj;
 			return item.equals(other.item) && index == other.index && positionOffset == other.positionOffset;
 		}
 
@@ -94,7 +93,7 @@ public final class SendPublicTileItemMessage extends RegionUpdateMessage {
 
 	@Override
 	public int priority() {
-		return 7;
+		return 8;
 	}
 
 }

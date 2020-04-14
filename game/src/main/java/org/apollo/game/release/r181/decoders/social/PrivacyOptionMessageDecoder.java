@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.social;
 
-import org.apollo.game.message.impl.PrivacyOptionMessage;
+import org.apollo.game.message.impl.decode.PrivacyOptionMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;

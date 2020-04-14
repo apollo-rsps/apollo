@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.encode;
 
 import org.apollo.game.model.entity.PlayerUpdateInfo;
 import org.apollo.net.codec.game.GamePacketBuilder;

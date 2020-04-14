@@ -1,4 +1,4 @@
-package org.apollo.game.message.impl;
+package org.apollo.game.message.impl.decode;
 
 import org.apollo.game.message.impl.encode.ChatFilterSettingsMessage;
 import org.apollo.game.model.entity.setting.PrivacyState;

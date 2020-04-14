@@ -1,8 +1,8 @@
 package org.apollo.game.model.area.update;
 
 import org.apollo.game.message.impl.encode.RegionUpdateMessage;
-import org.apollo.game.message.impl.RemoveTileItemMessage;
-import org.apollo.game.message.impl.SendPublicTileItemMessage;
+import org.apollo.game.message.impl.encode.RemoveTileItemMessage;
+import org.apollo.game.message.impl.encode.AddTileItemMessage;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.GroundItem;
@@ -27,7 +27,7 @@ public final class ItemUpdateOperation extends UpdateOperation<GroundItem> {
 
 	@Override
 	protected RegionUpdateMessage add(int offset) {
-		return new SendPublicTileItemMessage(entity.getItem(), entity.getOwnerIndex(), offset);
+		return new AddTileItemMessage(entity.getItem(), entity.getOwnerIndex(), offset);
 	}
 
 	@Override

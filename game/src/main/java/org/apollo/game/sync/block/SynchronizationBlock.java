@@ -1,6 +1,6 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.message.impl.PublicChatMessage;
+import org.apollo.game.message.impl.decode.PublicChatMessage;
 import org.apollo.game.model.Animation;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;

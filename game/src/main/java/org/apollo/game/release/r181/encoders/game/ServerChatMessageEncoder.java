@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.encoders.game;
 
-import org.apollo.game.message.impl.ServerChatMessage;
+import org.apollo.game.message.impl.encode.ServerChatMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;

@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.encoders.player;
 
-import org.apollo.game.message.impl.PlayerSynchronizationMessage;
+import org.apollo.game.message.impl.encode.PlayerSynchronizationMessage;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.release.MessageEncoder;
 

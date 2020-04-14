@@ -1,7 +1,7 @@
 package org.apollo.game.message.handler;
 
 import org.apollo.game.command.Command;
-import org.apollo.game.message.impl.CommandMessage;
+import org.apollo.game.message.impl.decode.CommandMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.net.message.Message;

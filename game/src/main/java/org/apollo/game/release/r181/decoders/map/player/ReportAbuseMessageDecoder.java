@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders.map.player;
 
-import org.apollo.game.message.impl.ReportAbuseMessage;
+import org.apollo.game.message.impl.decode.ReportAbuseMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;

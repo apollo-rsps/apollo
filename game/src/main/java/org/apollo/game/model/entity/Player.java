@@ -4,7 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import org.apollo.game.message.impl.IgnoreListMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
-import org.apollo.game.message.impl.ServerChatMessage;
+import org.apollo.game.message.impl.encode.ServerChatMessage;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
