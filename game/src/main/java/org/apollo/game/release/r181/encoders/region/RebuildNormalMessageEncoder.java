@@ -5,6 +5,8 @@ import org.apollo.net.codec.game.*;
 import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.MessageEncoder;
 
+import java.util.Arrays;
+
 /**
  * A {@link MessageEncoder} for the {@link RebuildNormalMessage}.
  *
@@ -41,15 +43,15 @@ public final class RebuildNormalMessageEncoder extends MessageEncoder<RebuildNor
 					.getCentralRegionY() + 6) / 8); mapY++) {
 				if (force || (mapY != 49 && mapY != 149 && mapY != 147 && mapX != 50 && (mapX != 49 || mapY != 47))) {
 					int[] keys = message.getXteaRepository().get(mapX, mapY);
-					for (int i = 0; i < 4; i++)
-						map.put(DataType.INT, keys[i]);
+					for (int key : keys) {
+						map.put(DataType.INT, key);
+					}
 				}
 			}
 		}
 
-		builder.put(DataType.SHORT, map.getLength() / Integer.BYTES);
+		builder.put(DataType.SHORT, map.getLength() / (Integer.BYTES * 4));
 		builder.putBytes(map);
 		return builder.toGamePacket();
 	}
-
 }

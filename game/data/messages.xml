@@ -14,7 +14,7 @@
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.PublicChatMessage</type>
+        <type>org.apollo.game.message.impl.decode.PublicChatMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.PublicChatVerificationHandler</handler>
             <handler>org.apollo.game.message.handler.PublicChatMessageHandler</handler>
