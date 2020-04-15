@@ -2,6 +2,7 @@ import com.google.common.primitives.Doubles
 import com.google.common.primitives.Ints
 import org.apollo.game.model.entity.Skill
 import org.apollo.game.model.entity.SkillSet
+import org.apollo.game.model.entity.SkillSet.SKILL_COUNT
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 
 /**
@@ -38,7 +39,7 @@ on_command("level", PrivilegeLevel.ADMINISTRATOR)
             return@then
         }
 
-        if (skillId !in 0..20 || level !in 1..99) {
+        if (skillId !in 0..SKILL_COUNT || level !in 1..99) {
             player.sendMessage(invalidSyntax)
             return@then
         }

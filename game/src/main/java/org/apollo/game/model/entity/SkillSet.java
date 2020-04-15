@@ -21,14 +21,15 @@ public final class SkillSet {
 	public static final double MAXIMUM_EXP = 200_000_000;
 
 	/**
+	 * The number of skills.
+	 */
+	public static final int SKILL_COUNT = 23;
+
+	/**
 	 * The minimum amounts of experience required for the levels.
 	 */
 	private static final int[] EXPERIENCE_FOR_LEVEL = new int[100];
 
-	/**
-	 * The number of skills.
-	 */
-	private static final int SKILL_COUNT = 21;
 
 	static {
 		int points = 0, output = 0;
@@ -57,7 +58,8 @@ public final class SkillSet {
 	 * @return The minimum level.
 	 */
 	public static int getLevelForExperience(double experience) {
-		Preconditions.checkArgument(experience >= 0 && experience <= MAXIMUM_EXP, "Experience must be between 0 and " + MAXIMUM_EXP + ", inclusive.");
+		Preconditions.checkArgument(experience >= 0 && experience <= MAXIMUM_EXP,
+				"Experience must be between 0 and " + MAXIMUM_EXP + ", inclusive.");
 		for (int level = 1; level <= 98; level++) {
 			if (experience < EXPERIENCE_FOR_LEVEL[level + 1]) {
 				return level;
@@ -97,7 +99,7 @@ public final class SkillSet {
 	/**
 	 * Adds experience to the specified skill.
 	 *
-	 * @param id The skill id.
+	 * @param id         The skill id.
 	 * @param experience The amount of experience.
 	 */
 	public void addExperience(int id, double experience) {
@@ -258,7 +260,7 @@ public final class SkillSet {
 	/**
 	 * Sets the experience level of the specified skill.
 	 *
-	 * @param skill The skill.
+	 * @param skill      The skill.
 	 * @param experience The experience.
 	 */
 	public void setExperience(int skill, double experience) {
@@ -280,7 +282,7 @@ public final class SkillSet {
 	/**
 	 * Sets a {@link Skill}.
 	 *
-	 * @param id The id.
+	 * @param id    The id.
 	 * @param skill The skill.
 	 */
 	public void setSkill(int id, Skill skill) {

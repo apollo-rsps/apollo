@@ -11,6 +11,7 @@ import java.nio.file.Files;
 public class XteaRepository implements Runnable {
 
 	private static final Gson GSON = new Gson();
+	private static final int[] DEFAULT = {0, 0, 0, 0};
 
 	public static class Xtea {
 		private final int region;
@@ -52,7 +53,7 @@ public class XteaRepository implements Runnable {
 	}
 
 	public int[] get(int region) {
-		return xteas.getOrDefault(region, null);
+		return xteas.getOrDefault(region, DEFAULT);
 	}
 
 	public int[] get(int x, int y) {
