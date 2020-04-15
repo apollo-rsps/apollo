@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181;
 
-import org.apollo.game.message.impl.SendProjectileMessage;
+import org.apollo.game.message.impl.encode.SendProjectileMessage;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
@@ -192,6 +192,9 @@ public class Release181 extends Release {
 		register(AddTileItemMessage.class, new AddTileItemEncoder());
 		register(UpdateTileItemMessage.class, new UpdateTileItemEncoder());
 		register(RemoveTileItemMessage.class, new RemoveTileItemEncoder());
+		register(AreaSoundMessage.class, new AreaSoundEncoder());
+		register(SpotAnimMessage.class, new SpotAnimEncoder());
+		register(ObjectAnimationMessage.class, new ObjectAnimEncoder());
 		register(SendProjectileMessage.class, new SendProjectileMessageEncoder());
 
 		register(UpdateZonePartialEnclosedMessage.class, new UpdateZonePartialEnclosedEncoder(this));

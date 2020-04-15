@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.encoders.region;
 
-import org.apollo.game.message.impl.SendProjectileMessage;
+import org.apollo.game.message.impl.encode.SendProjectileMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Projectile;
 import org.apollo.net.codec.game.*;

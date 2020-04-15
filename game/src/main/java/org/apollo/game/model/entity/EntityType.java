@@ -28,16 +28,33 @@ public enum EntityType {
 	PLAYER,
 
 	/**
+	 * A GameObject that is loaded statically (i.e. from the game resources) at start-up.
+	 */
+	STATIC_OBJECT,
+
+	/**
 	 * A projectile (e.g. an arrow).
 	 */
 	PROJECTILE,
 
 	/**
-	 * A GameObject that is loaded statically (i.e. from the game resources) at start-up.
+	 * A sound that is heard within an area.
 	 */
-	STATIC_OBJECT;
+	AREA_SOUND,
 
 	/**
+	 * A graphic that is played within an area.
+	 */
+	SPOT_ANIM,
+
+	/**
+	 * A graphic that is heard within an area.
+	 */
+	OBJECT_ANIMATION
+
+	;
+
+    /**
 	 * Returns whether or not this EntityType is for a Mob.
 	 *
 	 * @return {@code true} if this EntityType is for a Mob, otherwise {@code false}.
@@ -52,6 +69,6 @@ public enum EntityType {
 	 * @return {@code true} if this EntityType is short-lived.
 	 */
 	public boolean isTransient() {
-		return this == PROJECTILE;
+		return this == PROJECTILE || this == AREA_SOUND || this == SPOT_ANIM || this == OBJECT_ANIMATION;
 	}
 }
