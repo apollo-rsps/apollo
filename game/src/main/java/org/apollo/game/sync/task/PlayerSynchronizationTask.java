@@ -618,7 +618,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 		builder.put(DataType.SHORT, DataTransformation.ADD, block.getTextEffects() << 8 | block.getTextColor());
 		builder.put(DataType.BYTE, block.getPrivilegeLevel().toInteger());
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, block.getType().ordinal());
-		builder.put(DataType.BYTE, bytes.length);
+		builder.putSmart(bytes.length);
 		builder.putBytes(bytes);
 	}
 

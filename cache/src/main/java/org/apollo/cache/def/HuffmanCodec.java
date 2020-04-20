@@ -86,7 +86,7 @@ public final class HuffmanCodec {
 	 */
 	byte[] compress_(String str, int compressedLength) {
 		var len = str.length();
-		var compressed = new byte[compressedLength];
+		var compressed = new byte[compressedLength + 1];
 
 		var key = 0;
 		var bitPos = 8;

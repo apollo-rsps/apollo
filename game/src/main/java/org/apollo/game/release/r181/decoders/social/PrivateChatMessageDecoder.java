@@ -28,7 +28,10 @@ public final class PrivateChatMessageDecoder extends MessageDecoder<PrivateChatM
 		decompressed = TextUtil.filterInvalidCharacters(decompressed);
 		decompressed = TextUtil.capitalize(decompressed);
 
-		return new PrivateChatMessage(decompressed, username);
+		final var recompressed = HuffmanCodec
+				.compress(decompressed, length); // in case invalid data gets sent, this effectively verifies it
+
+		return new PrivateChatMessage(decompressed, recompressed, username);
 	}
 
 }

@@ -1,14 +1,13 @@
 package org.apollo.game.release.r181.encoders.player.social;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.apollo.game.message.impl.ForwardPrivateChatMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;
 import org.apollo.net.meta.PacketType;
 import org.apollo.net.release.MessageEncoder;
-import org.apollo.util.NameUtil;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A {@link MessageEncoder} for the {@link ForwardPrivateChatMessage}.
@@ -31,7 +30,10 @@ public final class ForwardPrivateChatMessageEncoder extends MessageEncoder<Forwa
 		builder.put(DataType.SHORT, count >> 16);
 		builder.put(DataType.TRI_BYTE, count & 0xFFFFFF);
 		builder.put(DataType.BYTE, message.getSenderPrivilege().toInteger());
-		builder.putString(message.getCompressedMessage());
+
+		final var compressed = message.getCompressedMessage();
+		builder.putSmart(compressed.length);
+		builder.putBytes(compressed);
 
 		return builder.toGamePacket();
 	}
