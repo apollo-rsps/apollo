@@ -9,7 +9,7 @@ on { PrivateChatMessage::class }
             val friend = it.world.getPlayer(username)
 
             if (interactionPermitted(it, friend)) {
-                friend.send(ForwardPrivateChatMessage(it.username, it.privilegeLevel, compressedMessage))
+                friend.send(ForwardPrivateChatMessage(it.username, it.privilegeLevel, message))
             }
         }
 

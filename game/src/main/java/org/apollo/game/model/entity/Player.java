@@ -4,7 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import org.apollo.game.message.impl.IgnoreListMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
-import org.apollo.game.message.impl.encode.ServerChatMessage;
+import org.apollo.game.message.impl.SendFriendMessage.FriendMessageComponent;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
@@ -225,8 +225,7 @@ public final class Player extends Mob {
 		super(world, position);
 		this.credentials = credentials;
 
-		inventory.add(4155, 1);
-
+		addFriend("Cjaytest");
 		init();
 	}
 
@@ -793,10 +792,17 @@ public final class Player extends Mob {
 			send(new IgnoreListMessage(ignores));
 		}
 
-		for (String username : friends) {
-			int worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
-			send(new SendFriendMessage(username, worldId));
+		send(new FriendListUnlockMessage());
+
+		FriendMessageComponent[] components = new FriendMessageComponent[friends.size()];
+		for (int index = 0; index < components.length; index++) {
+			var username = friends.get(index);
+			var worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
+
+			components[index] = new FriendMessageComponent(username, worldId);
 		}
+		send(new SendFriendMessage(components));
+
 	}
 
 	/**

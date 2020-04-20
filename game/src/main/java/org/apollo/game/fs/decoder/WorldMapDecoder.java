@@ -1,6 +1,5 @@
 package org.apollo.game.fs.decoder;
 
-import org.apollo.cache.Cache;
 import org.apollo.cache.map.*;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.collision.CollisionManager;
@@ -26,11 +25,6 @@ public final class WorldMapDecoder implements Runnable {
 	private static final int BRIDGE_TILE = 0x2;
 
 	/**
-	 * The {@link Cache}.
-	 */
-	private Cache fs;
-
-	/**
 	 * The {@link CollisionManager} to notify of bridged / blocked tiles.
 	 */
 	private CollisionManager collisionManager;
@@ -38,11 +32,9 @@ public final class WorldMapDecoder implements Runnable {
 	/**
 	 * Create a new {@link WorldMapDecoder}.
 	 *
-	 * @param fs The {@link Cache} to load {@link MapFile}s. from.
 	 * @param collisionManager The {@link CollisionManager} to register tiles with.
 	 */
-	public WorldMapDecoder(Cache fs, CollisionManager collisionManager) {
-		this.fs = fs;
+	public WorldMapDecoder(CollisionManager collisionManager) {
 		this.collisionManager = collisionManager;
 	}
 

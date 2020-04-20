@@ -1,5 +1,6 @@
 package org.apollo.game.release.r181.decoders.social;
 
+import org.apollo.cache.def.HuffmanCodec;
 import org.apollo.game.message.impl.PrivateChatMessage;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;
@@ -18,19 +19,16 @@ public final class PrivateChatMessageDecoder extends MessageDecoder<PrivateChatM
 		GamePacketReader reader = new GamePacketReader(packet);
 
 		String username = reader.getString();
-		int length = packet.getLength() - Long.BYTES;
 
-		byte[] originalCompressed = new byte[length];
+		final var length = reader.getLength();
+		final var originalCompressed = new byte[length];
 		reader.getBytes(originalCompressed);
 
-		String decompressed = TextUtil.decompress(originalCompressed, length);
+		String decompressed = HuffmanCodec.decompress(originalCompressed);
 		decompressed = TextUtil.filterInvalidCharacters(decompressed);
 		decompressed = TextUtil.capitalize(decompressed);
 
-		byte[] recompressed = new byte[length];
-		TextUtil.compress(decompressed, recompressed);
-
-		return new PrivateChatMessage(decompressed, recompressed, username);
+		return new PrivateChatMessage(decompressed, username);
 	}
 
 }

@@ -23,7 +23,7 @@ public final class ForwardPrivateChatMessage extends Message {
 	/**
 	 * The message.
 	 */
-	private final byte[] message;
+	private final String message;
 
 	/**
 	 * Creates a new forward private message message.
@@ -32,7 +32,7 @@ public final class ForwardPrivateChatMessage extends Message {
 	 * @param level The {@link PrivilegeLevel} of the player sending the message.
 	 * @param message The compressed message.
 	 */
-	public ForwardPrivateChatMessage(String username, PrivilegeLevel level, byte[] message) {
+	public ForwardPrivateChatMessage(String username, PrivilegeLevel level, String message) {
 		this.username = username;
 		privilege = level;
 		this.message = message;
@@ -61,7 +61,7 @@ public final class ForwardPrivateChatMessage extends Message {
 	 *
 	 * @return The message.
 	 */
-	public byte[] getCompressedMessage() {
+	public String getCompressedMessage() {
 		return message;
 	}
 

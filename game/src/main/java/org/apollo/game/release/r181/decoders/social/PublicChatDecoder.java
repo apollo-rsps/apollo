@@ -1,5 +1,6 @@
 package org.apollo.game.release.r181.decoders.social;
 
+import org.apollo.cache.def.HuffmanCodec;
 import org.apollo.game.message.impl.decode.PublicChatMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
@@ -24,12 +25,11 @@ public class PublicChatDecoder extends MessageDecoder<PublicChatMessage> {
 		final var originalCompressed = new byte[length];
 		reader.getBytes(originalCompressed);
 
-		String uncompressed = TextUtil.decompress(originalCompressed, length);
+		String uncompressed = HuffmanCodec.decompress(originalCompressed);
 		uncompressed = TextUtil.filterInvalidCharacters(uncompressed);
 		uncompressed = TextUtil.capitalize(uncompressed);
 
-		final var recompressed = new byte[length];
-		TextUtil.compress(uncompressed, recompressed); // in case invalid data gets sent, this effectively verifies it
+		final var recompressed = HuffmanCodec.compress(uncompressed, length); // in case invalid data gets sent, this effectively verifies it
 
 		return new PublicChatMessage(uncompressed, recompressed, color, effects, type);
 	}

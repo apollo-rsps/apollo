@@ -1,6 +1,12 @@
-import org.apollo.game.message.impl.decode.AddFriendMessage
 import org.apollo.game.message.impl.SendFriendMessage
+import org.apollo.game.message.impl.SendFriendMessage.FriendMessageComponent
+import org.apollo.game.message.impl.decode.AddFriendMessage
 import org.apollo.game.model.entity.setting.PrivacyState
+import org.apollo.game.model.event.impl.LoginEvent
+
+on_player_event { LoginEvent::class }.then {
+    player.sendUserLists();
+}
 
 on { AddFriendMessage::class }
     .then {
@@ -9,13 +15,13 @@ on { AddFriendMessage::class }
         val friend = it.world.getPlayer(username)
 
         if (friend == null || friend.friendPrivacy == PrivacyState.OFF) {
-            it.send(SendFriendMessage(username, 0))
+            it.send(SendFriendMessage(FriendMessageComponent(username, 0)))
             return@then
         } else {
-            it.send(SendFriendMessage(username, friend.worldId))
+            it.send(SendFriendMessage(FriendMessageComponent(username, friend.worldId)))
         }
 
         if (friend.friendsWith(it.username) && it.friendPrivacy != PrivacyState.OFF) {
-            friend.send(SendFriendMessage(it.username, it.worldId))
+            friend.send(SendFriendMessage(FriendMessageComponent(it.username, it.worldId)))
         }
     }

@@ -10,6 +10,7 @@ import org.apollo.cache.decoder.rsenum.EnumDefinitionDecoder;
 import org.apollo.cache.map.MapIndexDecoder;
 import org.apollo.cache.map.XteaRepository;
 import org.apollo.game.command.CommandDispatcher;
+import org.apollo.game.fs.decoder.HuffmanCodecDecoder;
 import org.apollo.game.fs.decoder.SynchronousDecoder;
 import org.apollo.game.fs.decoder.WorldMapDecoder;
 import org.apollo.game.fs.decoder.WorldObjectsDecoder;
@@ -232,8 +233,9 @@ public final class World {
 		firstStageDecoder.block();
 
 		SynchronousDecoder secondStageDecoder = new SynchronousDecoder(
+			new HuffmanCodecDecoder(cache),
 			new WorldObjectsDecoder(cache, this),
-			new WorldMapDecoder(cache, collisionManager)
+			new WorldMapDecoder(collisionManager)
 		);
 
 		secondStageDecoder.block();

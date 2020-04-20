@@ -1,5 +1,7 @@
 package org.apollo.game.release.r181;
 
+import org.apollo.game.message.impl.ForwardPrivateChatMessage;
+import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.encode.SendProjectileMessage;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
@@ -7,6 +9,9 @@ import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
 import org.apollo.game.release.r181.decoders.social.PublicChatDecoder;
 import org.apollo.game.release.r181.encoders.game.LogoutEncoder;
 import org.apollo.game.release.r181.encoders.player.PlayerSynchronizationMessageEncoder;
+import org.apollo.game.release.r181.encoders.player.social.ForwardPrivateChatMessageEncoder;
+import org.apollo.game.release.r181.encoders.player.social.FriendListUnlockEncoder;
+import org.apollo.game.release.r181.encoders.player.social.SendFriendMessageEncoder;
 import org.apollo.game.release.r181.encoders.region.*;
 import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.item.*;
@@ -211,6 +216,10 @@ public class Release181 extends Release {
 
 		register(ConfigMessage.class, new ConfigMessageEncoder());
 		register(ServerChatMessage.class, new ServerChatMessageEncoder());
+		register(SendFriendMessage.class, new SendFriendMessageEncoder());
+		register(FriendListUnlockMessage.class, new FriendListUnlockEncoder());
+		register(ForwardPrivateChatMessage.class, new ForwardPrivateChatMessageEncoder());
+
 
 		/**
 		 * Client
