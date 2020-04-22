@@ -20,14 +20,17 @@ public class PublicChatDecoder extends MessageDecoder<PublicChatMessage> {
 		final var color = (int) reader.getUnsigned(DataType.BYTE);
 		final var effects = (int) reader.getUnsigned(DataType.BYTE);
 
-		final var originalCompressed = new byte[packet.getLength() - 3];
+		final var length = packet.getLength() - 3;
+
+		final var originalCompressed = new byte[length];
 		reader.getBytes(originalCompressed);
 
 		String uncompressed = HuffmanCodec.decompress(originalCompressed);
 		uncompressed = TextUtil.filterInvalidCharacters(uncompressed);
 		uncompressed = TextUtil.capitalize(uncompressed);
 
-		final var recompressed = HuffmanCodec.compress(uncompressed); // in case invalid data gets sent, this effectively verifies it
+		final var recompressed = HuffmanCodec.compress(uncompressed, length); // in case invalid data gets sent, this effectively verifies it
+
 		return new PublicChatMessage(uncompressed, recompressed, color, effects, type);
 	}
 }
