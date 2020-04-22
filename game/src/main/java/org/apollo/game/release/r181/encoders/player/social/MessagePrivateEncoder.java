@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.encoders.player.social;
 
-import org.apollo.game.message.impl.ForwardPrivateChatMessage;
+import org.apollo.game.message.impl.MessagePrivateMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketBuilder;
@@ -10,11 +10,11 @@ import org.apollo.net.release.MessageEncoder;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A {@link MessageEncoder} for the {@link ForwardPrivateChatMessage}.
+ * A {@link MessageEncoder} for the {@link MessagePrivateMessage}.
  *
  * @author Major
  */
-public final class ForwardPrivateChatMessageEncoder extends MessageEncoder<ForwardPrivateChatMessage> {
+public final class MessagePrivateEncoder extends MessageEncoder<MessagePrivateMessage> {
 
 	/**
 	 * The amount of messages sent globally, offset by a random variable x, {@code 0 <= x < 100,000,000}.
@@ -22,7 +22,7 @@ public final class ForwardPrivateChatMessageEncoder extends MessageEncoder<Forwa
 	private static AtomicInteger messageCounter = new AtomicInteger((int) (Math.random() * 100_000_000));
 
 	@Override
-	public GamePacket encode(ForwardPrivateChatMessage message) {
+	public GamePacket encode(MessagePrivateMessage message) {
 		GamePacketBuilder builder = new GamePacketBuilder(10, PacketType.VARIABLE_SHORT);
 
 		builder.putString(message.getSenderUsername());
@@ -32,7 +32,6 @@ public final class ForwardPrivateChatMessageEncoder extends MessageEncoder<Forwa
 		builder.put(DataType.BYTE, message.getSenderPrivilege().toInteger());
 
 		final var compressed = message.getCompressedMessage();
-		builder.putSmart(compressed.length);
 		builder.putBytes(compressed);
 
 		return builder.toGamePacket();

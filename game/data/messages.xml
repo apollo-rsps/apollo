@@ -20,6 +20,14 @@
             <handler>org.apollo.game.message.handler.PublicChatMessageHandler</handler>
         </chain>
     </message>
+
+    <message>
+        <type>org.apollo.game.message.impl.decode.PrivacyOptionMessage</type>
+        <chain>
+            <handler>org.apollo.game.message.handler.PrivacyOptionMessageHandler</handler>
+        </chain>
+    </message>
+
     <message>
         <type>org.apollo.game.message.impl.decode.ClosedInterfaceMessage</type>
         <chain>

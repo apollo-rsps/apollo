@@ -16,28 +16,28 @@ public class ChatFilterSettingsMessage extends Message {
 	/**
 	 * The privacy state of the player's friend chat.
 	 */
-	private final PrivacyState friendPrivacy;
+	private final PrivacyState tradePrivacy;
 
 	/**
 	 * Creates a privacy option message.
 	 *
-	 * @param chatPrivacy The privacy state of the player's chat.
-	 * @param friendPrivacy The privacy state of the player's friend chat.
+	 * @param chatPrivacy  The privacy state of the player's chat.
+	 * @param tradePrivacy The privacy state of the player's trade chat.
 	 */
-	public ChatFilterSettingsMessage(int chatPrivacy, int friendPrivacy) {
+	public ChatFilterSettingsMessage(int chatPrivacy, int tradePrivacy) {
 		this.chatPrivacy = PrivacyState.valueOf(chatPrivacy, true);
-		this.friendPrivacy = PrivacyState.valueOf(friendPrivacy, false);
+		this.tradePrivacy = PrivacyState.valueOf(tradePrivacy, false);
 	}
 
 	/**
 	 * Creates a privacy option message.
 	 *
-	 * @param chatPrivacy The privacy state of the player's chat.
-	 * @param friendPrivacy The privacy state of the player's friend chat.
+	 * @param chatPrivacy  The privacy state of the player's chat.
+	 * @param tradePrivacy The privacy state of the player's trade chat.
 	 */
-	public ChatFilterSettingsMessage(PrivacyState chatPrivacy, PrivacyState friendPrivacy) {
+	public ChatFilterSettingsMessage(PrivacyState chatPrivacy, PrivacyState tradePrivacy) {
 		this.chatPrivacy = chatPrivacy;
-		this.friendPrivacy = chatPrivacy;
+		this.tradePrivacy = tradePrivacy;
 	}
 
 	/**
@@ -50,11 +50,11 @@ public class ChatFilterSettingsMessage extends Message {
 	}
 
 	/**
-	 * Gets the friend {@link PrivacyState}.
+	 * Gets the trade {@link PrivacyState}.
 	 *
 	 * @return The privacy state.
 	 */
-	public PrivacyState getFriendPrivacy() {
-		return friendPrivacy;
+	public PrivacyState getTradePrivacy() {
+		return tradePrivacy;
 	}
 }

@@ -1,18 +1,10 @@
 package org.apollo.game.release.r181;
 
-import org.apollo.game.message.impl.ForwardPrivateChatMessage;
+import org.apollo.game.message.impl.MessagePrivateMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
-import org.apollo.game.message.impl.encode.SendProjectileMessage;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
-import org.apollo.game.release.r181.decoders.social.PublicChatDecoder;
-import org.apollo.game.release.r181.encoders.game.LogoutEncoder;
-import org.apollo.game.release.r181.encoders.player.PlayerSynchronizationMessageEncoder;
-import org.apollo.game.release.r181.encoders.player.social.ForwardPrivateChatMessageEncoder;
-import org.apollo.game.release.r181.encoders.player.social.FriendListUnlockEncoder;
-import org.apollo.game.release.r181.encoders.player.social.SendFriendMessageEncoder;
-import org.apollo.game.release.r181.encoders.region.*;
 import org.apollo.game.release.r181.decoders.map.WalkMessageDecoder;
 import org.apollo.game.release.r181.decoders.map.item.*;
 import org.apollo.game.release.r181.decoders.map.npc.actions.*;
@@ -22,6 +14,7 @@ import org.apollo.game.release.r181.decoders.map.player.ReportAbuseMessageDecode
 import org.apollo.game.release.r181.decoders.map.player.actions.*;
 import org.apollo.game.release.r181.decoders.social.PrivacyOptionMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.PrivateChatMessageDecoder;
+import org.apollo.game.release.r181.decoders.social.PublicChatDecoder;
 import org.apollo.game.release.r181.decoders.social.friends.AddFriendMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.friends.RemoveFriendMessageDecoder;
 import org.apollo.game.release.r181.decoders.social.ignores.AddIgnoreMessageDecoder;
@@ -35,8 +28,12 @@ import org.apollo.game.release.r181.decoders.ui.opheld.*;
 import org.apollo.game.release.r181.encoders.UpdateRunEnergyMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateSkillMessageEncoder;
 import org.apollo.game.release.r181.encoders.UpdateWeightMessageEncoder;
+import org.apollo.game.release.r181.encoders.game.LogoutEncoder;
 import org.apollo.game.release.r181.encoders.game.ServerChatMessageEncoder;
+import org.apollo.game.release.r181.encoders.player.PlayerSynchronizationMessageEncoder;
 import org.apollo.game.release.r181.encoders.player.SetPlayerActionMessageEncoder;
+import org.apollo.game.release.r181.encoders.player.social.*;
+import org.apollo.game.release.r181.encoders.region.*;
 import org.apollo.game.release.r181.encoders.ui.*;
 import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerFullMessageEncoder;
 import org.apollo.game.release.r181.encoders.ui.container.UpdateContainerPartialMessageEncoder;
@@ -218,7 +215,11 @@ public class Release181 extends Release {
 		register(ServerChatMessage.class, new ServerChatMessageEncoder());
 		register(SendFriendMessage.class, new SendFriendMessageEncoder());
 		register(FriendListUnlockMessage.class, new FriendListUnlockEncoder());
-		register(ForwardPrivateChatMessage.class, new ForwardPrivateChatMessageEncoder());
+		register(MessagePrivateMessage.class, new MessagePrivateEncoder());
+		register(MessagePrivateEchoMessage.class, new MessagePrivateEchoEncoder());
+
+		register(SetPrivateChatFilterMessage.class, new SetPrivateChatFilterEncoder());
+		register(ChatFilterSettingsMessage.class, new ChatFilterSettingsEncoder());
 
 
 		/**

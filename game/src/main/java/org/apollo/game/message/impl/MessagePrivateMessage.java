@@ -8,7 +8,7 @@ import org.apollo.net.message.Message;
  *
  * @author Major
  */
-public final class ForwardPrivateChatMessage extends Message {
+public final class MessagePrivateMessage extends Message {
 
 	/**
 	 * The username of the player sending the message.
@@ -29,12 +29,12 @@ public final class ForwardPrivateChatMessage extends Message {
 	 * Creates a new forward private message message.
 	 *
 	 * @param username The username of the player sending the message.
-	 * @param level The {@link PrivilegeLevel} of the player sending the message.
+	 * @param privilege The {@link PrivilegeLevel} of the player sending the message.
 	 * @param message The compressed message.
 	 */
-	public ForwardPrivateChatMessage(String username, PrivilegeLevel level, byte[] message) {
+	public MessagePrivateMessage(String username, PrivilegeLevel privilege, byte[] message) {
 		this.username = username;
-		privilege = level;
+		this.privilege = privilege;
 		this.message = message;
 	}
 

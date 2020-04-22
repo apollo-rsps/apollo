@@ -29,6 +29,7 @@ import org.apollo.game.session.GameSession;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.net.message.Message;
 import org.apollo.util.CollectionUtil;
+import org.apollo.util.TextUtil;
 import org.apollo.util.security.PlayerCredentials;
 
 import java.util.*;
@@ -751,6 +752,7 @@ public final class Player extends Mob {
 
 		send(new ConfigMessage(1737, 1 << 31));
 		send(new ChatFilterSettingsMessage(chatPrivacy, friendPrivacy));
+		send(new ChatFilterSettingsMessage(chatPrivacy, friendPrivacy));
 
 		inventory.forceRefresh();
 		equipment.forceRefresh();
@@ -799,7 +801,7 @@ public final class Player extends Mob {
 			var username = friends.get(index);
 			var worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
 
-			components[index] = new FriendMessageComponent(username, worldId);
+			components[index] = new FriendMessageComponent(TextUtil.capitalize(username), worldId);
 		}
 		send(new SendFriendMessage(components));
 

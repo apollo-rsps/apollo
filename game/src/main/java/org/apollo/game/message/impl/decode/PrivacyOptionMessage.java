@@ -16,7 +16,7 @@ public final class PrivacyOptionMessage extends ChatFilterSettingsMessage {
 	/**
 	 * The privacy state of the player's trade chat.
 	 */
-	private final PrivacyState tradePrivacy;
+	private final PrivacyState friendPrivacy;
 
 	/**
 	 * Creates a privacy option message.
@@ -26,17 +26,17 @@ public final class PrivacyOptionMessage extends ChatFilterSettingsMessage {
 	 * @param tradePrivacy The privacy state of the player's trade chat.
 	 */
 	public PrivacyOptionMessage(int chatPrivacy, int friendPrivacy, int tradePrivacy) {
-		super(chatPrivacy, friendPrivacy);
-		this.tradePrivacy = PrivacyState.valueOf(tradePrivacy, false);
+		super(chatPrivacy, tradePrivacy);
+		this.friendPrivacy = PrivacyState.valueOf(friendPrivacy, false);
 	}
 
 	/**
-	 * Gets the trade {@link PrivacyState}.
+	 * Gets the friend {@link PrivacyState}.
 	 *
 	 * @return The privacy state.
 	 */
-	public PrivacyState getTradePrivacy() {
-		return tradePrivacy;
+	public PrivacyState getFriendPrivacy() {
+		return friendPrivacy;
 	}
 
 }

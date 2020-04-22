@@ -17,11 +17,11 @@ public final class PrivacyOptionMessageDecoder extends MessageDecoder<PrivacyOpt
 	public PrivacyOptionMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
-		int publicChatState = (int) reader.getUnsigned(DataType.BYTE);
-		int privateChatState = (int) reader.getUnsigned(DataType.BYTE);
-		int tradeChatState = (int) reader.getUnsigned(DataType.BYTE);
+		int chatPrivacy = (int) reader.getUnsigned(DataType.BYTE);
+		int friendPrivacy = (int) reader.getUnsigned(DataType.BYTE);
+		int tradePrivacy = (int) reader.getUnsigned(DataType.BYTE);
 
-		return new PrivacyOptionMessage(publicChatState, privateChatState, tradeChatState);
+		return new PrivacyOptionMessage(chatPrivacy, friendPrivacy, tradePrivacy);
 	}
 
 }

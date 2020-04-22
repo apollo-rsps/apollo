@@ -16,7 +16,7 @@ public class ChatFilterSettingsEncoder extends MessageEncoder<ChatFilterSettings
 	@Override
 	public GamePacket encode(ChatFilterSettingsMessage message) {
 		var builder = new GamePacketBuilder(80, PacketType.FIXED);
-		builder.put(DataType.BYTE, DataTransformation.NEGATE, message.getFriendPrivacy().toInteger(true));
+		builder.put(DataType.BYTE, DataTransformation.NEGATE, message.getTradePrivacy().toInteger(true));
 		builder.put(DataType.BYTE, DataTransformation.NEGATE, message.getChatPrivacy().toInteger(true));
 		return builder.toGamePacket();
 	}

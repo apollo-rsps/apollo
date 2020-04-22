@@ -1,5 +1,6 @@
-import org.apollo.game.message.impl.ForwardPrivateChatMessage
+import org.apollo.game.message.impl.MessagePrivateMessage
 import org.apollo.game.message.impl.PrivateChatMessage
+import org.apollo.game.message.impl.encode.MessagePrivateEchoMessage
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.setting.PrivacyState.OFF
 import org.apollo.game.model.entity.setting.PrivacyState.ON
@@ -9,7 +10,8 @@ on { PrivateChatMessage::class }
             val friend = it.world.getPlayer(username)
 
             if (interactionPermitted(it, friend)) {
-                friend.send(ForwardPrivateChatMessage(it.username, it.privilegeLevel, compressedMessage))
+                it.send(MessagePrivateEchoMessage(friend.username, compressedMessage))
+                friend.send(MessagePrivateMessage(it.username, it.privilegeLevel, compressedMessage))
             }
         }
 
