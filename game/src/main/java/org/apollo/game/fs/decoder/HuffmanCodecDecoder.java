@@ -45,7 +45,7 @@ public class HuffmanCodecDecoder implements Runnable {
 		var tree = new int[8];
 		var codeFrequencies = data.getBuffer();
 
-		int largestVistedIndex = 0;
+		var largestVisitedIndex = 0;
 		while (data.getRemaining() > 0) {
 			var position = data.getPosition();
 			var len = data.readByte();
@@ -91,7 +91,7 @@ public class HuffmanCodecDecoder implements Runnable {
 				var bit = Integer.MIN_VALUE >>> shift;
 				if ((code & bit) != 0) {
 					if (tree[treeIndex] == 0) {
-						tree[treeIndex] = largestVistedIndex;
+						tree[treeIndex] = largestVisitedIndex;
 					}
 
 					treeIndex = tree[treeIndex];
@@ -108,8 +108,8 @@ public class HuffmanCodecDecoder implements Runnable {
 			}
 
 			tree[treeIndex] = ~position;
-			if (treeIndex >= largestVistedIndex) {
-				largestVistedIndex = treeIndex + 1;
+			if (treeIndex >= largestVisitedIndex) {
+				largestVisitedIndex = treeIndex + 1;
 			}
 		}
 
