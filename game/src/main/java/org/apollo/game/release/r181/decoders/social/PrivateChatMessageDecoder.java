@@ -20,17 +20,14 @@ public final class PrivateChatMessageDecoder extends MessageDecoder<PrivateChatM
 
 		String username = reader.getString();
 
-		final var length = reader.getLength();
-		final var originalCompressed = new byte[length];
+		final var originalCompressed = new byte[reader.getLength()];
 		reader.getBytes(originalCompressed);
 
 		String decompressed = HuffmanCodec.decompress(originalCompressed);
 		decompressed = TextUtil.filterInvalidCharacters(decompressed);
 		decompressed = TextUtil.capitalize(decompressed);
 
-		final var recompressed = HuffmanCodec
-				.compress(decompressed, length); // in case invalid data gets sent, this effectively verifies it
-
+		final var recompressed = HuffmanCodec.compress(decompressed);
 		return new PrivateChatMessage(decompressed, recompressed, username);
 	}
 

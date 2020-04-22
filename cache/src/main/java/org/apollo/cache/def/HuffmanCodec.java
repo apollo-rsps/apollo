@@ -15,8 +15,8 @@ public final class HuffmanCodec {
 		return codec.decompress_(compressed);
 	}
 
-	public static byte[] compress(String str, int length) {
-		return codec.compress_(str, length);
+	public static byte[] compress(String str) {
+		return codec.compress_(str, str.length() + 1);
 	}
 
 	/**
