@@ -2,9 +2,10 @@ package org.apollo.game.model.entity;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import org.apollo.game.message.impl.IgnoreListMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
 import org.apollo.game.message.impl.SendFriendMessage.FriendMessageComponent;
+import org.apollo.game.message.impl.UpdateIgnoreListMessage;
+import org.apollo.game.message.impl.UpdateIgnoreListMessage.IgnoreMessageComponent;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
@@ -790,21 +791,29 @@ public final class Player extends Mob {
 	 * Sends the friend and ignore user lists.
 	 */
 	public void sendUserLists() {
-		if (!ignores.isEmpty()) {
-			send(new IgnoreListMessage(ignores));
+
+		{
+			final var components = new IgnoreMessageComponent[ignores.size()];
+			for (int index = 0; index < components.length; index++) {
+				var username = ignores.get(index);
+
+				components[index] = new IgnoreMessageComponent(username);
+			}
+
+			send(new UpdateIgnoreListMessage(components));
 		}
 
 		send(new FriendListUnlockMessage());
+		{
+			final var components = new FriendMessageComponent[friends.size()];
+			for (int index = 0; index < components.length; index++) {
+				var username = friends.get(index);
+				var worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
 
-		FriendMessageComponent[] components = new FriendMessageComponent[friends.size()];
-		for (int index = 0; index < components.length; index++) {
-			var username = friends.get(index);
-			var worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
-
-			components[index] = new FriendMessageComponent(TextUtil.capitalize(username), worldId);
+				components[index] = new FriendMessageComponent(username, worldId);
+			}
+			send(new SendFriendMessage(components));
 		}
-		send(new SendFriendMessage(components));
-
 	}
 
 	/**

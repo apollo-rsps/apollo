@@ -10,7 +10,7 @@ import org.apollo.net.release.MessageEncoder;
 /**
  * @author Khaled Abdeljaber
  */
-public final class SendFriendMessageEncoder extends MessageEncoder<SendFriendMessage> {
+public final class SendFriendEncoder extends MessageEncoder<SendFriendMessage> {
 
 	@Override
 	public GamePacket encode(SendFriendMessage message) {

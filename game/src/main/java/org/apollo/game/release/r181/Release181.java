@@ -2,6 +2,7 @@ package org.apollo.game.release.r181;
 
 import org.apollo.game.message.impl.MessagePrivateMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
+import org.apollo.game.message.impl.UpdateIgnoreListMessage;
 import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.release.r181.decoders.*;
 import org.apollo.game.release.r181.decoders.map.MapRebuildCompleteDecoder;
@@ -213,8 +214,9 @@ public class Release181 extends Release {
 
 		register(ConfigMessage.class, new ConfigMessageEncoder());
 		register(ServerChatMessage.class, new ServerChatMessageEncoder());
-		register(SendFriendMessage.class, new SendFriendMessageEncoder());
+		register(SendFriendMessage.class, new SendFriendEncoder());
 		register(FriendListUnlockMessage.class, new FriendListUnlockEncoder());
+		register(UpdateIgnoreListMessage.class, new UpdateIgnoreListEncoder());
 		register(MessagePrivateMessage.class, new MessagePrivateEncoder());
 		register(MessagePrivateEchoMessage.class, new MessagePrivateEchoEncoder());
 
