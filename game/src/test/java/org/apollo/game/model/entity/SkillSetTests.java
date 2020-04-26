@@ -2,7 +2,7 @@ package org.apollo.game.model.entity;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Tests the {@link SkillSet} class.

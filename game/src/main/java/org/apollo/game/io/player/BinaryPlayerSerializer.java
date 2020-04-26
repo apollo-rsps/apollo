@@ -1,6 +1,21 @@
 package org.apollo.game.io.player;
 
-import com.lambdaworks.crypto.SCryptUtil;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
@@ -8,20 +23,25 @@ import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
 import org.apollo.game.model.entity.SkillSet;
-import org.apollo.game.model.entity.attr.*;
-import org.apollo.game.model.entity.setting.*;
+import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeMap;
+import org.apollo.game.model.entity.attr.AttributePersistence;
+import org.apollo.game.model.entity.attr.AttributeType;
+import org.apollo.game.model.entity.attr.BooleanAttribute;
+import org.apollo.game.model.entity.attr.NumericalAttribute;
+import org.apollo.game.model.entity.attr.StringAttribute;
+import org.apollo.game.model.entity.setting.Gender;
+import org.apollo.game.model.entity.setting.MembershipStatus;
+import org.apollo.game.model.entity.setting.PrivacyState;
+import org.apollo.game.model.entity.setting.PrivilegeLevel;
+import org.apollo.game.model.entity.setting.ScreenBrightness;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.util.NameUtil;
 import org.apollo.util.StreamUtil;
 import org.apollo.util.security.PlayerCredentials;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.Map.Entry;
+import com.lambdaworks.crypto.SCryptUtil;
 
 /**
  * A {@link PlayerSerializer} implementation that uses a binary file to store player data.

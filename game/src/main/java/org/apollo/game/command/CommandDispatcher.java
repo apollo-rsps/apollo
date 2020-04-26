@@ -1,10 +1,10 @@
 package org.apollo.game.command;
 
-import org.apollo.game.model.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.apollo.game.model.entity.Player;
 
 /**
  * A class that dispatches {@link Command}s to {@link CommandListener}s.

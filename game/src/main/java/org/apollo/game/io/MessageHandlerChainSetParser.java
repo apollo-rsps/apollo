@@ -1,5 +1,8 @@
 package org.apollo.game.io;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apollo.game.message.handler.MessageHandler;
 import org.apollo.game.message.handler.MessageHandlerChain;
 import org.apollo.game.message.handler.MessageHandlerChainSet;
@@ -8,9 +11,6 @@ import org.apollo.net.message.Message;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * A class that parses the {@code messages.xml} file to produce {@link MessageHandlerChainSet}s.

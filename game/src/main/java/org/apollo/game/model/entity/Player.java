@@ -1,5 +1,13 @@
 package org.apollo.game.model.entity;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import org.apollo.game.message.impl.SendFriendMessage;
@@ -11,7 +19,12 @@ import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.WorldConstants;
-import org.apollo.game.model.entity.attr.*;
+import org.apollo.game.model.entity.attr.Attribute;
+import org.apollo.game.model.entity.attr.AttributeDefinition;
+import org.apollo.game.model.entity.attr.AttributeMap;
+import org.apollo.game.model.entity.attr.AttributePersistence;
+import org.apollo.game.model.entity.attr.NumericalAttribute;
+import org.apollo.game.model.entity.attr.BooleanAttribute;
 import org.apollo.game.model.entity.obj.DynamicGameObject;
 import org.apollo.game.model.entity.setting.MembershipStatus;
 import org.apollo.game.model.entity.setting.PrivacyState;
@@ -19,22 +32,27 @@ import org.apollo.game.model.entity.setting.PrivilegeLevel;
 import org.apollo.game.model.entity.setting.ScreenBrightness;
 import org.apollo.game.model.event.impl.LoginEvent;
 import org.apollo.game.model.event.impl.LogoutEvent;
-import org.apollo.game.model.inter.*;
+import org.apollo.game.model.inter.InterfaceConstants;
+import org.apollo.game.model.inter.InterfaceListener;
+import org.apollo.game.model.inter.InterfaceSet;
+import org.apollo.game.model.inter.DisplayMode;
+import org.apollo.game.model.inter.TopLevelPosition;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inter.bank.BankInterfaceListener;
-import org.apollo.game.model.inv.*;
+import org.apollo.game.model.inv.AppearanceInventoryListener;
+import org.apollo.game.model.inv.FullInventoryListener;
+import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.Inventory.StackMode;
+import org.apollo.game.model.inv.InventoryConstants;
+import org.apollo.game.model.inv.InventoryListener;
+import org.apollo.game.model.inv.SynchronizationInventoryListener;
 import org.apollo.game.model.skill.LevelUpSkillListener;
 import org.apollo.game.model.skill.SynchronizationSkillListener;
 import org.apollo.game.session.GameSession;
 import org.apollo.game.sync.block.SynchronizationBlock;
 import org.apollo.net.message.Message;
 import org.apollo.util.CollectionUtil;
-import org.apollo.util.TextUtil;
 import org.apollo.util.security.PlayerCredentials;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A {@link Mob} that a user is controlling.

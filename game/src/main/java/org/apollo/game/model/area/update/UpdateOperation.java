@@ -1,6 +1,5 @@
 package org.apollo.game.model.area.update;
 
-import com.google.common.base.Preconditions;
 import org.apollo.game.message.impl.encode.RegionUpdateMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.EntityUpdateType;
@@ -8,6 +7,8 @@ import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.entity.Entity;
 import org.apollo.net.message.Message;
+
+import com.google.common.base.Preconditions;
 
 /**
  * An type that is contained in the snapshot of a {@link Region}, which consists of an {@link Entity} being added,

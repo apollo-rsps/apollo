@@ -1,8 +1,13 @@
 package org.apollo.game.io;
 
-import org.apollo.cache.def.EquipmentDefinition;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 
-import java.io.*;
+import org.apollo.cache.def.EquipmentDefinition;
 
 /**
  * A class that parses the {@code data/equipment-[release].dat} file to create an array of {@link

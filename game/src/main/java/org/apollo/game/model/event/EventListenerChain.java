@@ -1,9 +1,9 @@
 package org.apollo.game.model.event;
 
-import com.google.common.base.MoreObjects;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.base.MoreObjects;
 
 /**
  * A chain of {@link EventListener}s.

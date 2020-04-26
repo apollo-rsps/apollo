@@ -1,7 +1,7 @@
 package org.apollo.game.plugin.kotlin.message
 
 import org.apollo.game.message.handler.MessageHandler
-import org.apollo.game.message.impl.decode.IfActionMessage
+import org.apollo.game.message.impl.decode.ButtonMessage
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.kotlin.KotlinPluginScript
@@ -10,7 +10,7 @@ import org.apollo.game.plugin.kotlin.PlayerContext
 import org.apollo.game.plugin.kotlin.PredicateContext
 
 /**
- * Registers a listener for [IfActionMessage]s that occur on the given [button] id.
+ * Registers a listener for [ButtonMessage]s that occur on the given [button] id.
  *
  * ```
  * on(ButtonClick, button = 416) {
@@ -30,18 +30,18 @@ fun KotlinPluginScript.on(
 
 class IfAction(override val player: Player) : PlayerContext {
 
-    companion object : MessageListenable<IfActionMessage, IfAction, IfActionPredicateContext>() {
+    companion object : MessageListenable<ButtonMessage, IfAction, IfActionPredicateContext>() {
 
-        override val type = IfActionMessage::class
+        override val type = ButtonMessage::class
 
         override fun createHandler(
             world: World,
             predicateContext: IfActionPredicateContext?,
             callback: IfAction.() -> Unit
-        ): MessageHandler<IfActionMessage> {
-            return object : MessageHandler<IfActionMessage>(world) {
+        ): MessageHandler<ButtonMessage> {
+            return object : MessageHandler<ButtonMessage>(world) {
 
-                override fun handle(player: Player, message: IfActionMessage) {
+                override fun handle(player: Player, message: ButtonMessage) {
                     if (predicateContext == null || predicateContext.inter != message.interfaceId ||
                         predicateContext.comp != message.componentId || predicateContext.action != message.option) {
                         return;

@@ -6,7 +6,14 @@ import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.service.GameService;
-import org.apollo.game.sync.task.*;
+import org.apollo.game.sync.task.NpcSynchronizationTask;
+import org.apollo.game.sync.task.PhasedSynchronizationTask;
+import org.apollo.game.sync.task.PlayerSynchronizationTask;
+import org.apollo.game.sync.task.PostNpcSynchronizationTask;
+import org.apollo.game.sync.task.PostPlayerSynchronizationTask;
+import org.apollo.game.sync.task.PreNpcSynchronizationTask;
+import org.apollo.game.sync.task.PrePlayerSynchronizationTask;
+import org.apollo.game.sync.task.SynchronizationTask;
 import org.apollo.util.ThreadUtil;
 
 import java.util.Map;

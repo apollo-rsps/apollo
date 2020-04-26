@@ -1,8 +1,6 @@
 package org.apollo.cache.def;
 
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apollo.cache.decoder.rsenum.ScriptVarType;
 
 import java.util.HashMap;
@@ -60,8 +58,8 @@ public final class EnumDefinition {
 	private ScriptVarType valType = ScriptVarType.INTEGER;
 	private int defaultInt = 0;
 	private String defaultString = "";
-	private Int2IntOpenHashMap intValues;
-	private Int2ObjectOpenHashMap<String> stringValues;
+	private HashMap<Integer, Integer> intValues;
+	private HashMap<Integer, String> stringValues;
 
 	/**
 	 * Creates a new enum definition.
@@ -122,19 +120,19 @@ public final class EnumDefinition {
 		this.defaultString = defaultString;
 	}
 
-	public Int2IntOpenHashMap getIntValues() {
+	public HashMap<Integer, Integer> getIntValues() {
 		return intValues;
 	}
 
-	public void setIntValues(Int2IntOpenHashMap intValues) {
+	public void setIntValues(HashMap<Integer, Integer> intValues) {
 		this.intValues = intValues;
 	}
 
-	public Int2ObjectOpenHashMap<String> getStringValues() {
+	public HashMap<Integer, String> getStringValues() {
 		return stringValues;
 	}
 
-	public void setStringValues(Int2ObjectOpenHashMap<String> stringValues) {
+	public void setStringValues(HashMap<Integer, String> stringValues) {
 		this.stringValues = stringValues;
 	}
 }

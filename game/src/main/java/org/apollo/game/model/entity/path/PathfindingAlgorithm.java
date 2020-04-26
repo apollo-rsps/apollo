@@ -1,13 +1,17 @@
 package org.apollo.game.model.entity.path;
 
-import com.google.common.base.Preconditions;
+import java.util.Deque;
+import java.util.Optional;
+
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
+import org.apollo.game.model.area.Region;
+import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.area.collision.CollisionManager;
 import org.apollo.game.model.entity.EntityType;
 
-import java.util.Deque;
-import java.util.Optional;
+import com.google.common.base.Preconditions;
 
 /**
  * An algorithm used to find a path between two {@link Position}s.

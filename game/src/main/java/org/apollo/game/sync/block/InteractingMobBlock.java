@@ -1,7 +1,5 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.sync.block.SynchronizationBlock;
-
 /**
  * The interacting mob {@link SynchronizationBlock}. Both players and npcs can utilise this block.
  *

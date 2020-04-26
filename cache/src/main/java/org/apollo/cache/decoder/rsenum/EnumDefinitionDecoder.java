@@ -1,12 +1,12 @@
 package org.apollo.cache.decoder.rsenum;
 
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apollo.cache.Archive;
 import org.apollo.cache.Cache;
 import org.apollo.cache.CacheBuffer;
 import org.apollo.cache.RSFile;
 import org.apollo.cache.def.EnumDefinition;
+
+import java.util.HashMap;
 
 /**
  * Decodes archive two folder eight into {@link EnumDefinition}s.
@@ -65,14 +65,14 @@ public final class EnumDefinitionDecoder implements Runnable {
 				def.setDefaultInt(buffer.readInt());
 			} else if (opcode == 5) {
 				final var size = buffer.readUShort();
-				final var values = new Int2ObjectOpenHashMap<String>(size);
+				final var values = new HashMap<Integer, String>(size);
 				for (int index = 0; index < size; index++) {
 					values.put(buffer.readInt(), buffer.readString());
 				}
 				def.setStringValues(values);
 			} else if (opcode == 6) {
 				final var size = buffer.readUShort();
-				final var values = new Int2IntOpenHashMap(size);
+				final var values = new HashMap<Integer, Integer>(size);
 				for (int index = 0; index < size; index++) {
 					values.put(buffer.readInt(), buffer.readInt());
 				}

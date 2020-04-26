@@ -3,15 +3,15 @@ package org.apollo.net.codec.handshake;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import org.apollo.net.codec.login.LoginConstants;
+
+import java.util.List;
+import java.util.logging.Logger;
+
 import org.apollo.net.codec.login.LoginDecoder;
 import org.apollo.net.codec.login.LoginEncoder;
 import org.apollo.net.codec.update.OnDemandInfoEncoder;
 import org.apollo.net.codec.update.OnDemandResponseEncoder;
 import org.apollo.net.codec.update.UpdateDecoder;
-
-import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * A {@link ByteToMessageDecoder} which decodes the handshake and makes changes to the pipeline as appropriate for the

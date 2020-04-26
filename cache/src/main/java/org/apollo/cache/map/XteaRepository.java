@@ -1,23 +1,22 @@
 package org.apollo.cache.map;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 public class XteaRepository implements Runnable {
 
-	private static final Gson GSON = new Gson();
 	private static final int[] DEFAULT = {0, 0, 0, 0};
 
 	public static class Xtea {
 		private final int region;
 		private final int[] keys;
 
-		public Xtea(int region, int[] keys) {
+		public Xtea(@JsonProperty("region") int region, @JsonProperty("keys") int[] keys) {
 			this.region = region;
 			this.keys = keys;
 		}
@@ -43,7 +42,8 @@ public class XteaRepository implements Runnable {
 	public void run() {
 		File file = new File("./data/fs/" + release + "/xtea.json");
 		try {
-			var xteas = GSON.fromJson(Files.newBufferedReader(file.toPath()), Xtea[].class);
+			var mapper = new ObjectMapper();
+			var xteas = mapper.readValue(file, Xtea[].class);
 			for (var xtea : xteas) {
 				this.xteas.put(xtea.region, xtea.getKeys());
 			}

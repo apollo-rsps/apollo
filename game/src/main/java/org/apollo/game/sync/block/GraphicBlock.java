@@ -1,7 +1,6 @@
 package org.apollo.game.sync.block;
 
 import org.apollo.game.model.Graphic;
-import org.apollo.game.sync.block.SynchronizationBlock;
 
 /**
  * The graphic {@link SynchronizationBlock}. Both players and npcs can utilise this block.

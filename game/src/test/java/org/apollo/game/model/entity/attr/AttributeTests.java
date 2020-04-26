@@ -1,11 +1,12 @@
 package org.apollo.game.model.entity.attr;
 
-import com.google.common.primitives.Longs;
+import java.nio.charset.StandardCharsets;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
+import com.google.common.primitives.Longs;
 
 /**
  * Tests for different {@link Attribute}s.

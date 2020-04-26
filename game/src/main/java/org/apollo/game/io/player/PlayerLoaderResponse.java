@@ -1,10 +1,11 @@
 package org.apollo.game.io.player;
 
-import com.google.common.base.Preconditions;
+import java.util.Optional;
+
 import org.apollo.game.model.entity.Player;
 import org.apollo.net.codec.login.LoginConstants;
 
-import java.util.Optional;
+import com.google.common.base.Preconditions;
 
 /**
  * A response for the {@link PlayerSerializer#loadPlayer} call.

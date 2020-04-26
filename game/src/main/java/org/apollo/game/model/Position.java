@@ -1,9 +1,10 @@
 package org.apollo.game.model;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionCoordinates;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 /**
  * Represents a position in the world.

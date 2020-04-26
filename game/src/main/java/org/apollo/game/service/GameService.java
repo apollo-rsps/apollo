@@ -1,5 +1,14 @@
 package org.apollo.game.service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.apollo.Service;
 import org.apollo.game.GameConstants;
 import org.apollo.game.GamePulseHandler;
@@ -18,15 +27,6 @@ import org.apollo.util.ThreadUtil;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The {@link GameService} class schedules and manages the execution of the {@link GamePulseHandler} class.

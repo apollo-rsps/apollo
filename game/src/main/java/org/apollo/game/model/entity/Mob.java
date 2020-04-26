@@ -1,10 +1,12 @@
 package org.apollo.game.model.entity;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import org.apollo.cache.def.NpcDefinition;
 import org.apollo.game.action.Action;
-import org.apollo.game.model.*;
+import org.apollo.game.model.Animation;
+import org.apollo.game.model.Direction;
+import org.apollo.game.model.Graphic;
+import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.attr.Attribute;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * A living entity in the world, such as a player or npc.
@@ -64,7 +68,7 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's list of local players.
 	 */
-	private final ObjectSet<Player> localPlayers = new ObjectOpenHashSet<>();
+	private final Set<Player> localPlayers = new HashSet<>();
 
 	/**
 	 * This mob's set of synchronization blocks.
@@ -317,7 +321,7 @@ public abstract class Mob extends Entity {
 	 *
 	 * @return The list.
 	 */
-	public final ObjectSet<Player> getLocalPlayerList() {
+	public final Set<Player> getLocalPlayerList() {
 		return localPlayers;
 	}
 

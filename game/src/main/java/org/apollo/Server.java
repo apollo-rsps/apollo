@@ -1,5 +1,16 @@
 package org.apollo;
 
+import java.io.IOException;
+import java.net.BindException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Sets;
 import io.netty.bootstrap.ServerBootstrap;
@@ -19,17 +30,6 @@ import org.apollo.net.JagGrabChannelInitializer;
 import org.apollo.net.NetworkConstants;
 import org.apollo.net.ServiceChannelInitializer;
 import org.apollo.net.release.Release;
-
-import java.io.IOException;
-import java.net.BindException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 /**
  * The core class of the Apollo server.

@@ -7,7 +7,7 @@ import org.apollo.net.message.Message;
  *
  * @author Khaled Abdeljaber
  */
-public class IfActionMessage extends Message {
+public class ButtonMessage extends Message {
 
 	/**
 	 * The option that was pressed.
@@ -43,7 +43,7 @@ public class IfActionMessage extends Message {
 	 * @param slot        the slot
 	 * @param itemId      the item id
 	 */
-	public IfActionMessage(int option, int interfaceId, int componentId, int slot, int itemId) {
+	public ButtonMessage(int option, int interfaceId, int componentId, int slot, int itemId) {
 		this.option = option;
 		this.interfaceId = interfaceId;
 		this.componentId = componentId;

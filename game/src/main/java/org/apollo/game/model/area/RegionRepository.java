@@ -1,14 +1,15 @@
 package org.apollo.game.model.area;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import org.apollo.cache.map.XteaRepository;
-import org.apollo.game.model.Position;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apollo.cache.map.XteaRepository;
+import org.apollo.game.model.Position;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 /**
  * A repository of {@link Region}s, backed by a {@link HashMap} of {@link RegionCoordinates} that correspond to their

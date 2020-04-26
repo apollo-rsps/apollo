@@ -1,5 +1,9 @@
 package org.apollo.game.model.inter;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.apollo.cache.def.EnumDefinition;
 import org.apollo.game.message.handler.MessageHandlerChain;
 import org.apollo.game.message.impl.EnterAmountMessage;
@@ -10,10 +14,7 @@ import org.apollo.game.message.impl.encode.IfOpenTopMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.event.impl.CloseInterfacesEvent;
 import org.apollo.game.model.inter.dialogue.DialogueListener;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import org.apollo.game.model.inv.InventoryListener;
 
 /**
  * Represents the set of interfaces the player has open.
@@ -221,9 +222,9 @@ public final class InterfaceSet {
 
 		final var oldEnumMap = EnumDefinition.lookup(this.mode.getTopLevelEnum()).getIntValues();
 		final var newEnumMap = EnumDefinition.lookup(mode.getTopLevelEnum()).getIntValues();
-		for (var newComponent : newEnumMap.int2IntEntrySet()) {
-			int key = newComponent.getIntKey();
-			int to = newComponent.getIntValue();
+		for (var newComponent : newEnumMap.entrySet()) {
+			int key = newComponent.getKey();
+			int to = newComponent.getValue();
 			if (to == -1) {
 				continue;
 			}

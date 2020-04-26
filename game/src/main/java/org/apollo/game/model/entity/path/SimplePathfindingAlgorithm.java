@@ -1,12 +1,14 @@
 package org.apollo.game.model.entity.path;
 
-import org.apollo.game.model.Direction;
-import org.apollo.game.model.Position;
-import org.apollo.game.model.area.collision.CollisionManager;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;
+
+import org.apollo.game.model.Direction;
+import org.apollo.game.model.Position;
+import org.apollo.game.model.World;
+import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.collision.CollisionManager;
 
 /**
  * A very simple pathfinding algorithm that simply walks in the direction of the target until it either reaches it or is

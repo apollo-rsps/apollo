@@ -176,16 +176,16 @@ public final class ObjectDefinitionDecoder implements Runnable {
 
 				definition.getMorphisms()[1 + length] = model;
 			} else if (opcode == 78) {
-				definition.setF2117(buffer.readUShort());
-				definition.setF2118(buffer.readUByte());
+				definition.setSound(buffer.readUShort());
+				definition.setSoundRadius(buffer.readUByte());
 			} else if (opcode == 79) {
-				definition.setF2119(buffer.readUShort());
-				definition.setF2120(buffer.readUShort());
-				definition.setF2118(buffer.readUByte());
+				definition.setSoundDelayMinDuration(buffer.readUShort());
+				definition.setSoundDelayMaxDuration(buffer.readUShort());
+				definition.setSoundRadius(buffer.readUByte());
 				final int count = buffer.readUByte();
-				definition.setF2121(new int[count]);
+				definition.setSounds(new int[count]);
 				for (int i = 0; i < count; i++)
-					definition.getF2121()[i] = buffer.readUShort();
+					definition.getSounds()[i] = buffer.readUShort();
 			} else if (opcode == 81) {
 				definition.setAdjustValue(buffer.readUByte() * 256);
 			} else if (opcode == 82) {

@@ -140,11 +140,11 @@ public final class ObjectDefinition {
 	private int varbit;
 	private int varp;
 	private int[] morphisms;
-	private int f2117;
-	private int f2118;
-	private int f2119;
-	private int f2120;
-	private int[] f2121;
+	private int sound;
+	private int soundRadius;
+	private int soundDelayMinDuration;
+	private int soundDelayMaxDuration;
+	private int[] sounds;
 	private boolean members;
 	private int mapSceneType;
 	private int[] animations;
@@ -562,44 +562,44 @@ public final class ObjectDefinition {
 		this.morphisms = morphisms;
 	}
 
-	public int getF2117() {
-		return f2117;
+	public int getSound() {
+		return sound;
 	}
 
-	public void setF2117(int f2117) {
-		this.f2117 = f2117;
+	public void setSound(int f2117) {
+		this.sound = f2117;
 	}
 
-	public int getF2118() {
-		return f2118;
+	public int getSoundRadius() {
+		return soundRadius;
 	}
 
-	public void setF2118(int f2118) {
-		this.f2118 = f2118;
+	public void setSoundRadius(int soundRadius) {
+		this.soundRadius = soundRadius;
 	}
 
-	public int getF2119() {
-		return f2119;
+	public int getSoundDelayMinDuration() {
+		return soundDelayMinDuration;
 	}
 
-	public void setF2119(int f2119) {
-		this.f2119 = f2119;
+	public void setSoundDelayMinDuration(int soundDelayMinDuration) {
+		this.soundDelayMinDuration = soundDelayMinDuration;
 	}
 
-	public int getF2120() {
-		return f2120;
+	public int getSoundDelayMaxDuration() {
+		return soundDelayMaxDuration;
 	}
 
-	public void setF2120(int f2120) {
-		this.f2120 = f2120;
+	public void setSoundDelayMaxDuration(int soundDelayMaxDuration) {
+		this.soundDelayMaxDuration = soundDelayMaxDuration;
 	}
 
-	public int[] getF2121() {
-		return f2121;
+	public int[] getSounds() {
+		return sounds;
 	}
 
-	public void setF2121(int[] f2121) {
-		this.f2121 = f2121;
+	public void setSounds(int[] sounds) {
+		this.sounds = sounds;
 	}
 
 	public boolean isMembers() {

@@ -6,7 +6,7 @@ import org.apollo.net.message.Message;
  * A {@link Message} sent by the client when the player clicks the "Click here to continue" button on a dialogue
  * interface.
  *
- * @author Khaled Abdeljaber
+ * @author Chris Fletcher
  */
 public final class DialogueContinueMessage extends Message {
 

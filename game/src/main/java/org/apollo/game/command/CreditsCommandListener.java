@@ -1,11 +1,12 @@
 package org.apollo.game.command;
 
-import com.google.common.collect.ImmutableSet;
-import org.apollo.game.model.entity.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import org.apollo.game.model.entity.Player;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Implements a {@code ::credits} command that lists the authors of all plugins used in the server.

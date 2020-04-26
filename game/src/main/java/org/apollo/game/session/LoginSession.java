@@ -2,9 +2,17 @@ package org.apollo.game.session;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.apollo.ServerContext;
 import org.apollo.game.io.player.PlayerLoaderResponse;
+import org.apollo.game.model.World.RegistrationStatus;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.service.GameService;
 import org.apollo.game.service.LoginService;
@@ -17,11 +25,6 @@ import org.apollo.net.codec.login.LoginRequest;
 import org.apollo.net.codec.login.LoginResponse;
 import org.apollo.net.release.Release;
 import org.apollo.util.security.IsaacRandomPair;
-
-import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * A login session.

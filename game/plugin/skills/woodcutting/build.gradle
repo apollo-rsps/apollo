@@ -5,7 +5,6 @@ dependencies {
     implementation project(':cache')
     implementation project(':net')
     implementation project(':util')
-    implementation project(':game:plugin:entity:pathing')
     implementation project(':game:plugin:entity:actions')
     implementation project(':game:plugin:api')
     testImplementation project(':game:plugin-testing')

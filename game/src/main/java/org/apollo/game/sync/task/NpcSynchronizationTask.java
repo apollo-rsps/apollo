@@ -1,5 +1,11 @@
 package org.apollo.game.sync.task;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import org.apollo.game.message.impl.encode.NpcSynchronizationMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
@@ -12,12 +18,6 @@ import org.apollo.game.sync.seg.AddNpcSegment;
 import org.apollo.game.sync.seg.MovementSegment;
 import org.apollo.game.sync.seg.RemoveMobSegment;
 import org.apollo.game.sync.seg.SynchronizationSegment;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * A {@link SynchronizationTask} which synchronizes npcs with the specified {@link Player}.

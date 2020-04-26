@@ -3,17 +3,18 @@ package org.apollo.game.session;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apollo.ServerContext;
 import org.apollo.game.GameConstants;
 import org.apollo.game.message.handler.MessageHandlerChainSet;
 import org.apollo.game.message.impl.encode.LogoutMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.net.message.Message;
-
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A game session.

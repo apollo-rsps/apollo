@@ -1,16 +1,23 @@
 package org.apollo.game.sync;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apollo.game.message.impl.encode.RegionUpdateMessage;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Npc;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.service.GameService;
-import org.apollo.game.sync.task.*;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import org.apollo.game.sync.task.NpcSynchronizationTask;
+import org.apollo.game.sync.task.PlayerSynchronizationTask;
+import org.apollo.game.sync.task.PostNpcSynchronizationTask;
+import org.apollo.game.sync.task.PostPlayerSynchronizationTask;
+import org.apollo.game.sync.task.PreNpcSynchronizationTask;
+import org.apollo.game.sync.task.PrePlayerSynchronizationTask;
+import org.apollo.game.sync.task.SynchronizationTask;
 
 /**
  * An implementation of {@link ClientSynchronizer} which runs in a single thread (the {@link GameService} thread from

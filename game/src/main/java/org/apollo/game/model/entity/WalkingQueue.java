@@ -5,11 +5,16 @@ import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionRepository;
+import org.apollo.game.model.area.collision.CollisionFlag;
 import org.apollo.game.model.area.collision.CollisionManager;
+import org.apollo.game.model.area.collision.CollisionMatrix;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Queue;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * A queue of {@link Direction}s which a {@link Mob} will follow.

@@ -1,7 +1,5 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.sync.block.SynchronizationBlock;
-
 /**
  * The force chat {@link SynchronizationBlock}. Both players and npcs can utilise this block. It is not possible to add
  * colour or effect (e.g. wave or scroll) to this block.

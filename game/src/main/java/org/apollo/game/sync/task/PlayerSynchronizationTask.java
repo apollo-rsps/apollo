@@ -2,7 +2,6 @@ package org.apollo.game.sync.task;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import org.apollo.cache.def.EquipmentDefinition;
 import org.apollo.game.message.impl.encode.PlayerSynchronizationMessage;
 import org.apollo.game.model.*;
@@ -23,6 +22,8 @@ import org.apollo.net.meta.PacketType;
 import org.apollo.util.BufferUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 import static org.apollo.game.model.entity.PlayerUpdateInfo.MAXIMUM_LOCAL_PLAYERS;
 
 /**
@@ -39,7 +40,7 @@ public final class PlayerSynchronizationTask extends SynchronizationTask {
 	private final Player player;
 	private final PlayerUpdateInfo info;
 	private final World world;
-	private final ObjectSet<Player> limitedPlayers;
+	private final Set<Player> limitedPlayers;
 
 	public PlayerSynchronizationTask(Player player) {
 		this.player = player;

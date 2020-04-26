@@ -1,10 +1,17 @@
 package org.apollo.game.model.entity.path;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
+
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.collision.CollisionManager;
-
-import java.util.*;
 
 /**
  * A {@link PathfindingAlgorithm} that utilises the A* algorithm to find a solution.

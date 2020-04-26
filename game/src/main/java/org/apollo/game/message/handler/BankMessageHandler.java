@@ -52,11 +52,9 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 	@Override
 	public void handle(Player player, ItemActionMessage message) {
 		if (player.getInterfaceSet().contains(BankConstants.WINDOW_ID)) {
-			//if (message.getInterfaceId() == BankConstants.SIDEBAR_INVENTORY_ID) {
 				deposit(player, message);
 			} else if (message.getInterfaceId() == BankConstants.INVENTORY_INTERFACE) {
 				withdraw(player, message);
-		//	}
 		}
 	}
 

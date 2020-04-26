@@ -1,5 +1,12 @@
 package org.apollo.game.service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apollo.Service;
 import org.apollo.game.io.player.PlayerLoaderResponse;
 import org.apollo.game.io.player.PlayerSerializer;
@@ -16,12 +23,6 @@ import org.apollo.util.ThreadUtil;
 import org.apollo.util.xml.XmlNode;
 import org.apollo.util.xml.XmlParser;
 import org.xml.sax.SAXException;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * The {@link LoginService} manages {@link LoginRequest}s.

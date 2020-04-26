@@ -1,7 +1,8 @@
 package org.apollo.game.model;
 
-import com.google.common.base.Preconditions;
 import org.apollo.game.model.entity.setting.Gender;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Represents the appearance of a player.

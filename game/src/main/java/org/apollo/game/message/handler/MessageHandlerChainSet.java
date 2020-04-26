@@ -1,12 +1,12 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.model.entity.Player;
-import org.apollo.net.message.Message;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apollo.game.model.entity.Player;
+import org.apollo.net.message.Message;
 
 /**
  * A group of {@link MessageHandlerChain}s classified by the {@link Message} type.
