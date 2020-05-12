@@ -3,19 +3,18 @@ package org.apollo.game.message.impl.decode;
 import org.apollo.net.message.Message;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The type Event keyboard message.
  *
  * @author Khaled Abdeljaber
  */
-public class EventKeyboardMessage extends Message {
+public class KeyboardEventMessage extends Message {
 
 	/**
 	 * The event that occurs on a keyboard press.
 	 */
-	public static class EventKeyboard {
+	public static class KeyboardEvent {
 		/**
 		 * The key pressed.
 		 */
@@ -24,16 +23,16 @@ public class EventKeyboardMessage extends Message {
 		/**
 		 * The duration in milliseconds.
 		 */
-		private Duration duration;
+		private long duration;
 
 		/**
 		 * Instantiates a new Event keyboard.
 		 *  @param key      the key
 		 * @param duration the duration
 		 */
-		public EventKeyboard(int key, Duration duration) {
+		public KeyboardEvent(int key, Duration duration) {
 			this.key = key;
-			this.duration = duration;
+			this.duration = duration.toMillis();
 		}
 
 		/**
@@ -50,19 +49,19 @@ public class EventKeyboardMessage extends Message {
 		 *
 		 * @return the duration
 		 */
-		public Duration getDuration() {
+		public long getDuration() {
 			return duration;
 		}
 	}
 
-	private final EventKeyboard[] events;
+	private final KeyboardEvent[] events;
 
 	/**
 	 * Instantiates a new Event keyboard message.
 	 *
 	 * @param events the events
 	 */
-	public EventKeyboardMessage(EventKeyboard... events) {
+	public KeyboardEventMessage(KeyboardEvent... events) {
 		this.events = events;
 	}
 
@@ -71,7 +70,7 @@ public class EventKeyboardMessage extends Message {
 	 *
 	 * @return the events
 	 */
-	public EventKeyboard[] getEvents() {
+	public KeyboardEvent[] getEvents() {
 		return events;
 	}
 }

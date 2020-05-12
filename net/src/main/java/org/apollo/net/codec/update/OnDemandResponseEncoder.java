@@ -8,9 +8,28 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 /**
  * A {@link MessageToMessageEncoder} for the 'on-demand' protocol.
  *
- * @author Graham
  */
 public final class OnDemandResponseEncoder extends MessageToByteEncoder<OnDemandResponse> {
+
+	/**
+	 * Flag which denotes the request is async.
+	 */
+	private static final int PREFTECH = 0x80;
+
+	/**
+	 * The maximum number of bytes the initial payload can have. Includes the header.
+	 */
+	private static final int ENTRY_PAYLOAD_START = 508;
+
+	/**
+	 * The maximum number of bytes per entry.
+	 */
+	private static final int ENTRY_PAYLOAD = 511;
+
+	/**
+	 * Marks the beginning of the entry.
+	 */
+	private static final int ENTRY_DELIMITER = 0xFF;
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, OnDemandResponse response, ByteBuf buf) {
@@ -23,23 +42,15 @@ public final class OnDemandResponseEncoder extends MessageToByteEncoder<OnDemand
 
 		int compression = container.readUnsignedByte();
 		if (response.getPriority() == OnDemandRequest.Priority.LOW) {
-			compression |= 0x80;
+			compression |= PREFTECH;
 		}
 
 		buf.writeByte(compression);
+		buf.writeBytes(container.readBytes(Math.min(ENTRY_PAYLOAD_START, container.readableBytes())));
 
-		int bytes = container.readableBytes();
-		if (bytes > 508) bytes = 508;
-
-		buf.writeBytes(container.readBytes(bytes));
-
-		for (; ; ) {
-			bytes = container.readableBytes();
-			if (bytes == 0) {
-				break;
-			} else if (bytes > 511) bytes = 511;
-
-			buf.writeByte(0xFF);
+		int bytes;
+		while ((bytes = Math.min(ENTRY_PAYLOAD, container.readableBytes())) != 0) {
+			buf.writeByte(ENTRY_DELIMITER);
 
 			final var payload = container.readBytes(bytes);
 			buf.writeBytes(payload);

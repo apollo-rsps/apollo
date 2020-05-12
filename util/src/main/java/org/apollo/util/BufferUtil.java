@@ -129,7 +129,7 @@ public final class BufferUtil {
 	public static final int STRING_TERMINATOR = 0;
 
 	/**
-	 * Charset that Jagex uses.
+	 * Charset that Runescape uses.
 	 */
 	public static final Charset CHARSET = Charset.forName("Windows-1252");
 

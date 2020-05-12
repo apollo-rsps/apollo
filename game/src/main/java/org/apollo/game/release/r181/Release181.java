@@ -287,7 +287,7 @@ public class Release181 extends Release {
 		 * Resume Inputs
 		 */
 		register(17, new EnteredAmountMessageDecoder());
-		register(67, new EventKeyboardDecoder());
+		register(67, new KeyboardEventDecoder());
 
 		/**
 		 * Player

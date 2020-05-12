@@ -1,6 +1,6 @@
 package org.apollo.game.release.r181.decoders;
 
-import org.apollo.game.message.impl.decode.EventMouseMoveMessage;
+import org.apollo.game.message.impl.decode.MouseMoveEventMessage;
 import org.apollo.net.codec.game.DataType;
 import org.apollo.net.codec.game.GamePacket;
 import org.apollo.net.codec.game.GamePacketReader;
@@ -9,9 +9,9 @@ import org.apollo.net.release.MessageDecoder;
 /**
  * @author Khaled Abdeljaber
  */
-public class EventMouseMoveDecoder extends MessageDecoder<EventMouseMoveMessage> {
+public class MouseMoveEventDecoder extends MessageDecoder<MouseMoveEventMessage> {
 	@Override
-	public EventMouseMoveMessage decode(GamePacket packet) {
+	public MouseMoveEventMessage decode(GamePacket packet) {
 		GamePacketReader reader = new GamePacketReader(packet);
 
 		int length = packet.getLength();
@@ -80,6 +80,6 @@ public class EventMouseMoveDecoder extends MessageDecoder<EventMouseMoveMessage>
 		 *                    }
 		 */
 
-		return new EventMouseMoveMessage(dx, dy, dt);
+		return new MouseMoveEventMessage(dx, dy, dt);
 	}
 }
