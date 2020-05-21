@@ -1,7 +1,45 @@
+apply plugin: 'application'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply from: "$rootDir/gradle/kotlin.gradle"
+
 description = 'Apollo Game'
+mainClassName = 'org.apollo.Server'
 
 dependencies {
     compile project(':cache')
     compile project(':net')
     compile project(':util')
+
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8'
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-scripting-common'
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-script-runtime'
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: kotlinxCoroutinesVersion
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: kotlinxCoroutinesVersion
+
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'io.github.classgraph', name: 'classgraph', version: classGraphVersion
+    implementation group: 'com.lambdaworks', name: 'scrypt', version: scryptVersion
+
+    test.useJUnitPlatform()
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: junitVintageVersion
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: junitPlatformVersion
+
+    testImplementation group: 'junit', name: 'junit', version: junitVersion
+    testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: powermockVersion
+    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: powermockVersion
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion
+
+    project(":game:plugin").subprojects { pluginProject ->
+         if (pluginProject.buildFile.exists()) {
+            runtimeClasspath pluginProject
+        }
+    }
+}
+
+applicationDistribution.from("$rootDir/data") {
+    include '*.dat'
+    include '*.xml'
+    into "data/"
 }

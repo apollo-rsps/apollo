@@ -9,8 +9,10 @@
 *.class
 *.iml
 
-/data/rsa.pem
-/data/savedGames
+/game/data/rsa.pem
+/game/data/savedGames
 /lib/
 */target/
 */build/
+**/build/
+**/out/

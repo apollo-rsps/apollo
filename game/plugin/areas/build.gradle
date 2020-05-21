@@ -1,0 +1,12 @@
+apply plugin: 'kotlin'
+
+description = 'Enables plugins to listen on mobs entering, moving inside of, or leaving a rectangular area.'
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+    implementation project(':game:plugin:api')
+    testImplementation project(':game:plugin-testing')
+}

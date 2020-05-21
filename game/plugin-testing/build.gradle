@@ -1,0 +1,28 @@
+apply plugin: 'java-library'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply from: "$rootDir/gradle/kotlin.gradle"
+
+dependencies {
+    test.useJUnitPlatform()
+
+    api project(':game')
+    api project(':net')
+
+    // JUnit Jupiter API and TestEngine implementation
+    api("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    api("org.junit.jupiter:junit-jupiter-params:${junitJupiterVersion}")
+    implementation("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+    implementation("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+
+    api group: 'io.mockk', name: 'mockk', version: mockkVersion
+    api group: 'org.assertj', name: 'assertj-core', version: assertjVersion
+    api group: 'com.willowtreeapps.assertk', name: 'assertk', version: assertkVersion
+
+    implementation group: 'org.powermock', name: 'powermock-module-junit4', version: powermockVersion
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

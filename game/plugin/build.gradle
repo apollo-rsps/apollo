@@ -1,0 +1,33 @@
+gradle.projectsEvaluated {
+    configure(subprojects.findAll { it.buildFile.exists() }) { subproj ->
+        apply from: "$rootDir/gradle/kotlin.gradle"
+
+        sourceSets {
+            main {
+                kotlin {
+                    srcDirs += "src"
+                }
+            }
+
+            test {
+                kotlin {
+                    srcDirs += "test"
+                }
+            }
+        }
+
+        test {
+            useJUnitPlatform()
+        }
+
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+
+        dependencies {
+            implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+        }
+    }
+}

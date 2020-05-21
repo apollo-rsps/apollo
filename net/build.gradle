@@ -1,6 +1,19 @@
+apply plugin: 'java-library'
+
 description = 'Apollo Net'
 
 dependencies {
-    compile project(':cache')
-    compile project(':util')
+    api project(':cache')
+
+    implementation project(':util')
+    implementation group: 'io.netty', name: 'netty-all', version: nettyVersion
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: bouncycastleVersion
+
+    test.useJUnitPlatform()
+    testImplementation group: 'junit', name: 'junit', version: junitVersion
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: junitVintageVersion
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: junitPlatformVersion
 }

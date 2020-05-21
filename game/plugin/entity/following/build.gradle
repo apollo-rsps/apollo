@@ -1,0 +1,11 @@
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+    implementation project(':game:plugin:entity:pathing')
+    implementation project(':game:plugin:entity:actions')
+    testImplementation project(':game:plugin-testing')
+}

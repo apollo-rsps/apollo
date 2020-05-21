@@ -1,0 +1,16 @@
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: 'java'
+description = 'Helpers and API for common plugin usecases'
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cache')
+    implementation project(':net')
+    implementation project(':util')
+
+    testImplementation project(':game:plugin-testing')
+}

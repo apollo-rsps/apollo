@@ -1,0 +1,19 @@
+def detektAggregateReport = "$buildDir/reports/detekt/detekt.xml"
+
+repositories {
+    maven { url "https://repo.spring.io/plugins-release/" }
+}
+
+detekt {
+    toolVersion = detektVersion
+    input = files(rootProject.projectDir.absolutePath)
+    filters = ".*/resources/.*, .*/build/.*"
+    config = files("$rootDir/gradle/config/detekt.yml")
+    parallel = true
+}
+
+sonarqube {
+    properties {
+        property "sonar.kotlin.detekt.reportPaths", detektAggregateReport
+    }
+}

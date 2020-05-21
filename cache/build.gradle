@@ -1,5 +1,14 @@
+apply plugin: 'java-library'
+
 description = 'Apollo Cache'
 
 dependencies {
-    compile project(':util')
+    implementation project(':util')
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+
+    test.useJUnitPlatform()
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: junitVintageVersion
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: junitPlatformVersion
 }
