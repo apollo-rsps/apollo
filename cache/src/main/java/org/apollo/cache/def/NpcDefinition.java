@@ -1,6 +1,7 @@
 package org.apollo.cache.def;
 
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 
 /**
  * Represents a type of Npc.
@@ -94,6 +95,30 @@ public final class NpcDefinition {
 	 * The various animation ids.
 	 */
 	private int standAnim = -1, walkAnim = -1, walkBackAnim = -1, walkLeftAnim = -1, walkRightAnim = -1;
+	private int turnLeftSequence = -1;
+	private int turnRightSequence = -1;
+
+	private short[] originalColours;
+	private int rotation;
+	private short[] replacementColours;
+	private int[] models;
+	private int[] headModels;
+	private short[] replacementTextures;
+	private boolean slowWalk;
+	private int scaleX;
+	private int contrast;
+	private int varbit;
+	private boolean drawMapdot;
+	private int scaleY;
+	private boolean priority;
+	private int ambience;
+	private int headIcon;
+	private int[] morphisms;
+	private short[] originalTextures;
+	private int varp;
+	private boolean isClickable;
+	private boolean animateIdle;
+	private Int2ObjectArrayMap<Object> parameters;
 
 	/**
 	 * Creates a new npc definition.
@@ -302,7 +327,7 @@ public final class NpcDefinition {
 	/**
 	 * Sets an interaction option.
 	 *
-	 * @param slot The slot of the option.
+	 * @param slot        The slot of the option.
 	 * @param interaction The interaction options.
 	 * @throws IndexOutOfBoundsException If the slot is out of bounds.
 	 */
@@ -350,9 +375,9 @@ public final class NpcDefinition {
 	/**
 	 * Sets the various walking animations of the npc.
 	 *
-	 * @param walkAnim The walking animation.
-	 * @param walkBackAnim The walk-back animation.
-	 * @param walkLeftAnim The walk-left animation.
+	 * @param walkAnim      The walking animation.
+	 * @param walkBackAnim  The walk-back animation.
+	 * @param walkLeftAnim  The walk-left animation.
 	 * @param walkRightAnim The walk-right animation.
 	 */
 	public void setWalkAnimations(int walkAnim, int walkBackAnim, int walkLeftAnim, int walkRightAnim) {
@@ -362,4 +387,187 @@ public final class NpcDefinition {
 		this.walkRightAnim = walkRightAnim;
 	}
 
+	public int getTurnLeftSequence() {
+		return turnLeftSequence;
+	}
+
+	public void setTurnLeftSequence(int turnLeftSequence) {
+		this.turnLeftSequence = turnLeftSequence;
+	}
+
+	public int getTurnRightSequence() {
+		return turnRightSequence;
+	}
+
+	public void setTurnRightSequence(int turnRightSequence) {
+		this.turnRightSequence = turnRightSequence;
+	}
+
+	public short[] getOriginalColours() {
+		return originalColours;
+	}
+
+	public void setOriginalColours(short[] originalColours) {
+		this.originalColours = originalColours;
+	}
+
+	public int getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
+	}
+
+	public short[] getReplacementColours() {
+		return replacementColours;
+	}
+
+	public void setReplacementColours(short[] replacementColours) {
+		this.replacementColours = replacementColours;
+	}
+
+	public int[] getModels() {
+		return models;
+	}
+
+	public void setModels(int[] models) {
+		this.models = models;
+	}
+
+	public int[] getHeadModels() {
+		return headModels;
+	}
+
+	public void setHeadModels(int[] headModels) {
+		this.headModels = headModels;
+	}
+
+	public short[] getReplacementTextures() {
+		return replacementTextures;
+	}
+
+	public void setReplacementTextures(short[] replacementTextures) {
+		this.replacementTextures = replacementTextures;
+	}
+
+	public boolean isSlowWalk() {
+		return slowWalk;
+	}
+
+	public void setSlowWalk(boolean slowWalk) {
+		this.slowWalk = slowWalk;
+	}
+
+	public int getScaleX() {
+		return scaleX;
+	}
+
+	public void setScaleX(int scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	public int getContrast() {
+		return contrast;
+	}
+
+	public void setContrast(int contrast) {
+		this.contrast = contrast;
+	}
+
+	public int getVarbit() {
+		return varbit;
+	}
+
+	public void setVarbit(int varbit) {
+		this.varbit = varbit;
+	}
+
+	public boolean isDrawMapdot() {
+		return drawMapdot;
+	}
+
+	public void setDrawMapdot(boolean drawMapdot) {
+		this.drawMapdot = drawMapdot;
+	}
+
+	public int getScaleY() {
+		return scaleY;
+	}
+
+	public void setScaleY(int scaleY) {
+		this.scaleY = scaleY;
+	}
+
+	public boolean isPriority() {
+		return priority;
+	}
+
+	public void setPriority(boolean priority) {
+		this.priority = priority;
+	}
+
+	public int getAmbience() {
+		return ambience;
+	}
+
+	public void setAmbience(int ambience) {
+		this.ambience = ambience;
+	}
+
+	public int getHeadIcon() {
+		return headIcon;
+	}
+
+	public void setHeadIcon(int headIcon) {
+		this.headIcon = headIcon;
+	}
+
+	public int[] getMorphisms() {
+		return morphisms;
+	}
+
+	public void setMorphisms(int[] morphisms) {
+		this.morphisms = morphisms;
+	}
+
+	public short[] getOriginalTextures() {
+		return originalTextures;
+	}
+
+	public void setOriginalTextures(short[] originalTextures) {
+		this.originalTextures = originalTextures;
+	}
+
+	public int getVarp() {
+		return varp;
+	}
+
+	public void setVarp(int varp) {
+		this.varp = varp;
+	}
+
+	public boolean isClickable() {
+		return isClickable;
+	}
+
+	public void setClickable(boolean clickable) {
+		isClickable = clickable;
+	}
+
+	public boolean isAnimateIdle() {
+		return animateIdle;
+	}
+
+	public void setAnimateIdle(boolean animateIdle) {
+		this.animateIdle = animateIdle;
+	}
+
+	public Int2ObjectArrayMap<Object> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Int2ObjectArrayMap<Object> parameters) {
+		this.parameters = parameters;
+	}
 }

@@ -1,6 +1,6 @@
 package org.apollo.game.model.inv;
 
-import org.apollo.game.message.impl.ServerChatMessage;
+import org.apollo.game.message.impl.encode.ServerChatMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.net.message.Message;
 

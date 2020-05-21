@@ -1,7 +1,7 @@
 package org.apollo.game.message.handler;
 
 import org.apollo.cache.def.ItemDefinition;
-import org.apollo.game.message.impl.ItemOnItemMessage;
+import org.apollo.game.message.impl.decode.ItemOnItemMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -39,8 +39,8 @@ public final class ItemOnItemVerificationHandlerTests {
 
 		when(player.getInventory()).thenReturn(inventory);
 
-		ItemOnItemMessage itemOnItemMessage = new ItemOnItemMessage(BankConstants.SIDEBAR_INVENTORY_ID, 4151, 1,
-				BankConstants.SIDEBAR_INVENTORY_ID, 4152, 2);
+		ItemOnItemMessage itemOnItemMessage = new ItemOnItemMessage(BankConstants.INVENTORY_INTERFACE, BankConstants.INVENTORY_COMPONENT, 4151, 1,
+				BankConstants.INVENTORY_INTERFACE, BankConstants.INVENTORY_COMPONENT, 4152, 2);
 
 		itemOnItemVerificationHandler.handle(player, itemOnItemMessage);
 

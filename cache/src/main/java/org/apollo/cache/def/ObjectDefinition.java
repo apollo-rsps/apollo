@@ -1,6 +1,7 @@
 package org.apollo.cache.def;
 
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * Represents a type of GameObject.
@@ -109,6 +110,45 @@ public final class ObjectDefinition {
 	 * This object's width.
 	 */
 	private int width = 1;
+
+	private int[] types;
+	private int[][] models;
+	private int height;
+	private int collisionType;
+	private int adjustValue;
+	private boolean dynamicShading;
+	private byte occludes;
+	private int decorationDisplacement;
+	private int contrast;
+	private int ambience;
+	private short[] originalColours;
+	private short[] replacementColours;
+	private short[] originalTextures;
+	private short[] replacementTextures;
+	private boolean mirrorModel;
+	private boolean castsShadow;
+	private int scaleX;
+	private int scaleY;
+	private int scaleZ;
+	private int mapscene;
+	private int rotationFlag;
+	private int translateX;
+	private int translateY;
+	private int translateZ;
+	private boolean decoration;
+	private int holdsItemPiles;
+	private int varbit;
+	private int varp;
+	private int[] morphisms;
+	private int sound;
+	private int soundRadius;
+	private int soundDelayMinDuration;
+	private int soundDelayMaxDuration;
+	private int[] sounds;
+	private boolean members;
+	private int mapSceneType;
+	private int[] animations;
+	private Int2ObjectMap<Object> parameters;
 
 	/**
 	 * Creates a new object definition.
@@ -290,4 +330,307 @@ public final class ObjectDefinition {
 		this.obstructive = obstructive;
 	}
 
+	public int[] getTypes() {
+		return types;
+	}
+
+	public void setTypes(int[] types) {
+		this.types = types;
+	}
+
+	public int[][] getModels() {
+		return models;
+	}
+
+	public void setModels(int[][] models) {
+		this.models = models;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getCollisionType() {
+		return collisionType;
+	}
+
+	public void setCollisionType(int collisionType) {
+		this.collisionType = collisionType;
+	}
+
+	public int getAdjustValue() {
+		return adjustValue;
+	}
+
+	public void setAdjustValue(int adjustValue) {
+		this.adjustValue = adjustValue;
+	}
+
+	public boolean isDynamicShading() {
+		return dynamicShading;
+	}
+
+	public void setDynamicShading(boolean dynamicShading) {
+		this.dynamicShading = dynamicShading;
+	}
+
+	public byte getOccludes() {
+		return occludes;
+	}
+
+	public void setOccludes(byte occludes) {
+		this.occludes = occludes;
+	}
+
+	public int getDecorationDisplacement() {
+		return decorationDisplacement;
+	}
+
+	public void setDecorationDisplacement(int decorationDisplacement) {
+		this.decorationDisplacement = decorationDisplacement;
+	}
+
+	public int getContrast() {
+		return contrast;
+	}
+
+	public void setContrast(int contrast) {
+		this.contrast = contrast;
+	}
+
+	public int getAmbience() {
+		return ambience;
+	}
+
+	public void setAmbience(int ambience) {
+		this.ambience = ambience;
+	}
+
+	public short[] getOriginalColours() {
+		return originalColours;
+	}
+
+	public void setOriginalColours(short[] originalColours) {
+		this.originalColours = originalColours;
+	}
+
+	public short[] getReplacementColours() {
+		return replacementColours;
+	}
+
+	public void setReplacementColours(short[] replacementColours) {
+		this.replacementColours = replacementColours;
+	}
+
+	public short[] getOriginalTextures() {
+		return originalTextures;
+	}
+
+	public void setOriginalTextures(short[] originalTextures) {
+		this.originalTextures = originalTextures;
+	}
+
+	public short[] getReplacementTextures() {
+		return replacementTextures;
+	}
+
+	public void setReplacementTextures(short[] replacementTextures) {
+		this.replacementTextures = replacementTextures;
+	}
+
+	public boolean isMirrorModel() {
+		return mirrorModel;
+	}
+
+	public void setMirrorModel(boolean mirrorModel) {
+		this.mirrorModel = mirrorModel;
+	}
+
+	public boolean isCastsShadow() {
+		return castsShadow;
+	}
+
+	public void setCastsShadow(boolean castsShadow) {
+		this.castsShadow = castsShadow;
+	}
+
+	public int getScaleX() {
+		return scaleX;
+	}
+
+	public void setScaleX(int scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	public int getScaleY() {
+		return scaleY;
+	}
+
+	public void setScaleY(int scaleY) {
+		this.scaleY = scaleY;
+	}
+
+	public int getScaleZ() {
+		return scaleZ;
+	}
+
+	public void setScaleZ(int scaleZ) {
+		this.scaleZ = scaleZ;
+	}
+
+	public int getMapscene() {
+		return mapscene;
+	}
+
+	public void setMapscene(int mapscene) {
+		this.mapscene = mapscene;
+	}
+
+	public int getRotationFlag() {
+		return rotationFlag;
+	}
+
+	public void setRotationFlag(int rotationFlag) {
+		this.rotationFlag = rotationFlag;
+	}
+
+	public int getTranslateX() {
+		return translateX;
+	}
+
+	public void setTranslateX(int translateX) {
+		this.translateX = translateX;
+	}
+
+	public int getTranslateY() {
+		return translateY;
+	}
+
+	public void setTranslateY(int translateY) {
+		this.translateY = translateY;
+	}
+
+	public int getTranslateZ() {
+		return translateZ;
+	}
+
+	public void setTranslateZ(int translateZ) {
+		this.translateZ = translateZ;
+	}
+
+	public boolean isDecoration() {
+		return decoration;
+	}
+
+	public void setDecoration(boolean decoration) {
+		this.decoration = decoration;
+	}
+
+	public int getHoldsItemPiles() {
+		return holdsItemPiles;
+	}
+
+	public void setHoldsItemPiles(int holdsItemPiles) {
+		this.holdsItemPiles = holdsItemPiles;
+	}
+
+	public int getVarbit() {
+		return varbit;
+	}
+
+	public void setVarbit(int varbit) {
+		this.varbit = varbit;
+	}
+
+	public int getVarp() {
+		return varp;
+	}
+
+	public void setVarp(int varp) {
+		this.varp = varp;
+	}
+
+	public int[] getMorphisms() {
+		return morphisms;
+	}
+
+	public void setMorphisms(int[] morphisms) {
+		this.morphisms = morphisms;
+	}
+
+	public int getSound() {
+		return sound;
+	}
+
+	public void setSound(int f2117) {
+		this.sound = f2117;
+	}
+
+	public int getSoundRadius() {
+		return soundRadius;
+	}
+
+	public void setSoundRadius(int soundRadius) {
+		this.soundRadius = soundRadius;
+	}
+
+	public int getSoundDelayMinDuration() {
+		return soundDelayMinDuration;
+	}
+
+	public void setSoundDelayMinDuration(int soundDelayMinDuration) {
+		this.soundDelayMinDuration = soundDelayMinDuration;
+	}
+
+	public int getSoundDelayMaxDuration() {
+		return soundDelayMaxDuration;
+	}
+
+	public void setSoundDelayMaxDuration(int soundDelayMaxDuration) {
+		this.soundDelayMaxDuration = soundDelayMaxDuration;
+	}
+
+	public int[] getSounds() {
+		return sounds;
+	}
+
+	public void setSounds(int[] sounds) {
+		this.sounds = sounds;
+	}
+
+	public boolean isMembers() {
+		return members;
+	}
+
+	public void setMembers(boolean members) {
+		this.members = members;
+	}
+
+	public int getMapSceneType() {
+		return mapSceneType;
+	}
+
+	public void setMapSceneType(int mapSceneType) {
+		this.mapSceneType = mapSceneType;
+	}
+
+	public int[] getAnimations() {
+		return animations;
+	}
+
+	public void setAnimations(int[] animations) {
+		this.animations = animations;
+	}
+
+	public Int2ObjectMap<Object> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Int2ObjectMap<Object> parameters) {
+		this.parameters = parameters;
+	}
 }

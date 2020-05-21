@@ -1,15 +1,15 @@
 package org.apollo.game.message.handler;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apollo.game.message.impl.InventoryItemMessage;
+import org.apollo.game.message.impl.decode.InventoryItemMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.SynchronizationInventoryListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A {@link MessageHandler} that verifies {@link InventoryItemMessage}s.
@@ -44,9 +44,9 @@ public final class ItemVerificationHandler extends MessageHandler<InventoryItemM
 
 	static {
 		inventories.put(SynchronizationInventoryListener.INVENTORY_ID, Player::getInventory);
-		inventories.put(BankConstants.SIDEBAR_INVENTORY_ID, Player::getInventory);
+		inventories.put(BankConstants.INVENTORY_INTERFACE, Player::getInventory);
 		inventories.put(SynchronizationInventoryListener.EQUIPMENT_ID, Player::getEquipment);
-		inventories.put(BankConstants.BANK_INVENTORY_ID, Player::getBank);
+		inventories.put(BankConstants.WINDOW_ID, Player::getBank);
 	}
 
 	/**

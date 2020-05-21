@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apollo.cache.def.ObjectDefinition;
-import org.apollo.game.message.impl.ObjectActionMessage;
+import org.apollo.game.message.impl.decode.ObjectActionMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;

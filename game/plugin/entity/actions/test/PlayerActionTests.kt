@@ -1,7 +1,7 @@
 package org.apollo.game.plugin.entity.actions
 
 import io.mockk.verify
-import org.apollo.game.message.impl.SetPlayerActionMessage
+import org.apollo.game.message.impl.encode.SetPlayerActionMessage
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock

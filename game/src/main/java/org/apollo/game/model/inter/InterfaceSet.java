@@ -4,15 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apollo.cache.def.EnumDefinition;
 import org.apollo.game.message.handler.MessageHandlerChain;
-import org.apollo.game.message.impl.CloseInterfaceMessage;
 import org.apollo.game.message.impl.EnterAmountMessage;
-import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
-import org.apollo.game.message.impl.OpenDialogueOverlayMessage;
-import org.apollo.game.message.impl.OpenInterfaceMessage;
-import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
-import org.apollo.game.message.impl.OpenOverlayMessage;
-import org.apollo.game.message.impl.OpenSidebarMessage;
+import org.apollo.game.message.impl.encode.CloseInterfaceMessage;
+import org.apollo.game.message.impl.encode.IfMoveSubMessage;
+import org.apollo.game.message.impl.encode.IfOpenSubMessage;
+import org.apollo.game.message.impl.encode.IfOpenTopMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.event.impl.CloseInterfacesEvent;
 import org.apollo.game.model.inter.dialogue.DialogueListener;
@@ -40,14 +38,19 @@ import org.apollo.game.model.inv.InventoryListener;
 public final class InterfaceSet {
 
 	/**
-	 * A map of open interfaces.
-	 */
-	private final Map<InterfaceType, Integer> interfaces = new HashMap<>();
-
-	/**
 	 * The player whose interfaces are being managed.
 	 */
 	private final Player player;
+
+	/**
+	 * The display mode.
+	 */
+	private DisplayMode mode = DisplayMode.FIXED;
+
+	/**
+	 * A map of open interfaces.
+	 */
+	private final Map<ServerInterfaceType, Integer> interfaces = new HashMap<>();
 
 	/**
 	 * The current enter amount listener.
@@ -113,7 +116,7 @@ public final class InterfaceSet {
 	 * @param type The interface's type.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
-	public boolean contains(InterfaceType type) {
+	public boolean contains(ServerInterfaceType type) {
 		return interfaces.containsKey(type);
 	}
 
@@ -121,9 +124,7 @@ public final class InterfaceSet {
 	 * Called when the player has clicked the "Click here to continue" button on a dialogue.
 	 */
 	public void continueRequested() {
-		if (dialogueListener.isPresent()) {
-			dialogueListener.get().continued();
-		}
+		dialogueListener.ifPresent(DialogueListener::continued);
 	}
 
 	/**
@@ -148,7 +149,7 @@ public final class InterfaceSet {
 	/**
 	 * Opens a dialogue interface.
 	 *
-	 * @param listener The {@link DialogueListener}.
+	 * @param listener   The {@link DialogueListener}.
 	 * @param dialogueId The dialogue id.
 	 */
 	public void openDialogue(DialogueListener listener, int dialogueId) {
@@ -157,8 +158,8 @@ public final class InterfaceSet {
 		dialogueListener = Optional.ofNullable(listener);
 		this.listener = Optional.ofNullable(listener);
 
-		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
-		player.send(new OpenDialogueInterfaceMessage(dialogueId));
+		interfaces.put(ServerInterfaceType.DIALOGUE, dialogueId);
+		//player.send(new OpenDialogueInterfaceMessage(dialogueId));
 	}
 
 	/**
@@ -168,31 +169,6 @@ public final class InterfaceSet {
 	 */
 	public void openDialogue(int dialogueId) {
 		openDialogue(null, dialogueId);
-	}
-
-	/**
-	 * Opens a dialogue overlay interface.
-	 *
-	 * @param listener The {@link DialogueListener}.
-	 * @param dialogueId The dialogue id.
-	 */
-	public void openDialogueOverlay(DialogueListener listener, int dialogueId) {
-		closeAndNotify();
-
-		dialogueListener = Optional.ofNullable(listener);
-		this.listener = Optional.ofNullable(listener);
-
-		interfaces.put(InterfaceType.DIALOGUE, dialogueId);
-		player.send(new OpenDialogueOverlayMessage(dialogueId));
-	}
-
-	/**
-	 * Opens a dialogue overlay.
-	 *
-	 * @param dialogueId The dialogue id.
-	 */
-	public void openDialogueOverlay(int dialogueId) {
-		openDialogueOverlay(null, dialogueId);
 	}
 
 	/**
@@ -206,90 +182,64 @@ public final class InterfaceSet {
 	}
 
 	/**
-	 * Opens an overlay interface.
+	 * Opens a modal.
 	 *
-	 * @param overlay The overlay id.
+	 * @param modal The window's id.
 	 */
-	public void openOverlay(int overlay) {
-		interfaces.put(InterfaceType.OVERLAY, overlay);
-		player.send(new OpenOverlayMessage(overlay));
+	public void openModal(int modal) {
+		openModal(null, modal);
 	}
 
 	/**
-	 * Opens an sidebar interface.
-	 *
-	 * @param sidebar The sidebar id.
-	 */
-	public void openSidebar(int sidebar) {
-		closeAndNotify();
-		interfaces.put(InterfaceType.SIDEBAR, sidebar);
-
-		player.send(new OpenSidebarMessage(sidebar));
-	}
-
-	/**
-	 * Opens an sidebar interface with the specified {@link InventoryListener}.
-	 *
-	 * @param listener The listener.
-	 * @param sidebar The sidebar id.
-	 */
-	public void openSidebar(InterfaceListener listener, int sidebar) {
-		closeAndNotify();
-		this.listener = Optional.ofNullable(listener);
-		interfaces.put(InterfaceType.SIDEBAR, sidebar);
-
-		player.send(new OpenSidebarMessage(sidebar));
-	}
-
-	/**
-	 * Opens a window.
-	 *
-	 * @param windowId The window's id.
-	 */
-	public void openWindow(int windowId) {
-		openWindow(null, windowId);
-	}
-
-	/**
-	 * Opens a window with the specified listener.
+	 * Opens a modal with the specified listener.
 	 *
 	 * @param listener The listener for this interface.
-	 * @param windowId The window's id.
+	 * @param modal    The modal's id.
 	 */
-	public void openWindow(InterfaceListener listener, int windowId) {
+	public void openModal(InterfaceListener listener, int modal) {
 		closeAndNotify();
 		this.listener = Optional.ofNullable(listener);
 
-		interfaces.put(InterfaceType.WINDOW, windowId);
-		player.send(new OpenInterfaceMessage(windowId));
+		interfaces.put(ServerInterfaceType.MODAL, modal);
+		openTopLevel(modal, TopLevelPosition.MODAL);
+	}
+
+	public void openTopLevel(TopLevelPosition position) {
+		openTopLevel(position.getInterfaceId(), position);
+	}
+
+	public void openTopLevel(int id, TopLevelPosition position) {
+		player.send(new IfOpenSubMessage(position.getComponent(mode), position.getInterfaceType(), id));
 	}
 
 	/**
-	 * Opens a window and inventory sidebar.
+	 * Opens the top interface.
 	 *
-	 * @param windowId The window's id.
-	 * @param sidebarId The sidebar's id.
+	 * @param mode - The display mode.
 	 */
-	public void openWindowWithSidebar(int windowId, int sidebarId) {
-		openWindowWithSidebar(null, windowId, sidebarId);
+	public void openTop(DisplayMode mode) {
+		player.send(new IfOpenTopMessage(mode.getInterfaceId()));
+
+		final var oldEnumMap = EnumDefinition.lookup(this.mode.getTopLevelEnum()).getIntValues();
+		final var newEnumMap = EnumDefinition.lookup(mode.getTopLevelEnum()).getIntValues();
+		for (var newComponent : newEnumMap.entrySet()) {
+			int key = newComponent.getKey();
+			int to = newComponent.getValue();
+			if (to == -1) {
+				continue;
+			}
+
+			int from = oldEnumMap.getOrDefault(key, -1);
+			if (from == -1) {
+				continue;
+			}
+
+			player.send(new IfMoveSubMessage(from, to));
+		}
+
+		this.mode = mode;
 	}
 
-	/**
-	 * Opens a window and inventory sidebar with the specified listener.
-	 *
-	 * @param listener The listener for this interface.
-	 * @param windowId The window's id.
-	 * @param sidebarId The sidebar's id.
-	 */
-	public void openWindowWithSidebar(InterfaceListener listener, int windowId, int sidebarId) {
-		closeAndNotify();
-		this.listener = Optional.ofNullable(listener);
-
-		interfaces.put(InterfaceType.WINDOW, windowId);
-		interfaces.put(InterfaceType.SIDEBAR, sidebarId);
-
-		player.send(new OpenInterfaceSidebarMessage(windowId, sidebarId));
-	}
 
 	/**
 	 * Gets the size of the interface set.

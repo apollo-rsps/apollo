@@ -1,6 +1,6 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.ItemActionMessage;
+import org.apollo.game.message.impl.decode.ItemActionMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.inter.EnterAmountListener;
@@ -51,12 +51,10 @@ public final class BankMessageHandler extends MessageHandler<ItemActionMessage> 
 
 	@Override
 	public void handle(Player player, ItemActionMessage message) {
-		if (player.getInterfaceSet().contains(BankConstants.BANK_WINDOW_ID)) {
-			if (message.getInterfaceId() == BankConstants.SIDEBAR_INVENTORY_ID) {
+		if (player.getInterfaceSet().contains(BankConstants.WINDOW_ID)) {
 				deposit(player, message);
-			} else if (message.getInterfaceId() == BankConstants.BANK_INVENTORY_ID) {
+			} else if (message.getInterfaceId() == BankConstants.INVENTORY_INTERFACE) {
 				withdraw(player, message);
-			}
 		}
 	}
 

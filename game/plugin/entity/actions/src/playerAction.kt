@@ -1,7 +1,7 @@
 package org.apollo.game.plugin.entity.actions
 
 import java.util.*
-import org.apollo.game.message.impl.SetPlayerActionMessage
+import org.apollo.game.message.impl.encode.SetPlayerActionMessage
 import org.apollo.game.model.entity.Player
 
 fun Player.enableAction(action: PlayerActionType) {

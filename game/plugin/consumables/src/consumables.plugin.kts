@@ -1,12 +1,12 @@
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncAction
-import org.apollo.game.message.impl.ItemOptionMessage
+import org.apollo.game.message.impl.decode.ItemActionMessage
 import org.apollo.game.model.Animation
 import org.apollo.game.model.entity.Player
 import org.apollo.net.message.Message
 import org.apollo.plugin.consumables.*
 
-on { ItemOptionMessage::class }
+on { ItemActionMessage::class }
         .where { option == 1 && isConsumable(id) }
         .then {
             ConsumeAction.start(this, it, lookupConsumable(id), slot)

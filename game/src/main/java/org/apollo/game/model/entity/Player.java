@@ -10,15 +10,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import org.apollo.game.message.impl.ConfigMessage;
-import org.apollo.game.message.impl.IdAssignmentMessage;
-import org.apollo.game.message.impl.IgnoreListMessage;
-import org.apollo.game.message.impl.LogoutMessage;
 import org.apollo.game.message.impl.SendFriendMessage;
-import org.apollo.game.message.impl.ServerChatMessage;
-import org.apollo.game.message.impl.SetWidgetTextMessage;
-import org.apollo.game.message.impl.SwitchTabInterfaceMessage;
-import org.apollo.game.message.impl.UpdateRunEnergyMessage;
+import org.apollo.game.message.impl.SendFriendMessage.FriendMessageComponent;
+import org.apollo.game.message.impl.UpdateIgnoreListMessage;
+import org.apollo.game.message.impl.UpdateIgnoreListMessage.IgnoreMessageComponent;
+import org.apollo.game.message.impl.encode.*;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -39,6 +35,8 @@ import org.apollo.game.model.event.impl.LogoutEvent;
 import org.apollo.game.model.inter.InterfaceConstants;
 import org.apollo.game.model.inter.InterfaceListener;
 import org.apollo.game.model.inter.InterfaceSet;
+import org.apollo.game.model.inter.DisplayMode;
+import org.apollo.game.model.inter.TopLevelPosition;
 import org.apollo.game.model.inter.bank.BankConstants;
 import org.apollo.game.model.inter.bank.BankInterfaceListener;
 import org.apollo.game.model.inv.AppearanceInventoryListener;
@@ -67,7 +65,12 @@ public final class Player extends Mob {
 	/**
 	 * The default viewing distance, in tiles.
 	 */
-	private static final int DEFAULT_VIEWING_DISTANCE = 15;
+	public static final int DEFAULT_VIEWING_DISTANCE = 15;
+
+	/**
+	 * The default viewing distance, in tiles.
+	 */
+	public static final int EXTENDED_VIEWING_DISTANCE = 127;
 
 	/**
 	 * The current amount of appearance tickets.
@@ -123,6 +126,8 @@ public final class Player extends Mob {
 	 * A temporary queue of messages sent during the login process.
 	 */
 	private final Deque<Message> queuedMessages = new ArrayDeque<>();
+
+	private final PlayerUpdateInfo updateInfo = new PlayerUpdateInfo();
 
 	/**
 	 * The player's appearance.
@@ -232,14 +237,15 @@ public final class Player extends Mob {
 	/**
 	 * Creates the Player.
 	 *
-	 * @param world The {@link World} containing the Player.
+	 * @param world       The {@link World} containing the Player.
 	 * @param credentials The player's credentials.
-	 * @param position The initial position.
+	 * @param position    The initial position.
 	 */
 	public Player(World world, PlayerCredentials credentials, Position position) {
 		super(world, position);
 		this.credentials = credentials;
 
+		addFriend("Cjaytest");
 		init();
 	}
 
@@ -315,6 +321,10 @@ public final class Player extends Mob {
 	 */
 	public boolean friendsWith(String username) {
 		return friends.contains(username.toLowerCase());
+	}
+
+	public PlayerUpdateInfo getUpdateInfo() {
+		return updateInfo;
 	}
 
 	/**
@@ -657,8 +667,10 @@ public final class Player extends Mob {
 	 * Opens this player's bank.
 	 */
 	public void openBank() {
-		InventoryListener invListener = new SynchronizationInventoryListener(this, BankConstants.SIDEBAR_INVENTORY_ID);
-		InventoryListener bankListener = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
+		InventoryListener invListener = new SynchronizationInventoryListener(this, BankConstants.INVENTORY_INTERFACE,
+				BankConstants.INVENTORY_COMPONENT, SynchronizationInventoryListener.INVENTORY_INVENTORY);
+		InventoryListener bankListener = new SynchronizationInventoryListener(this, BankConstants.WINDOW_ID,
+				BankConstants.CONTAINER_COMPONENT, BankConstants.INVENTORY);
 
 		inventory.addListener(invListener);
 		bank.addListener(bankListener);
@@ -666,7 +678,8 @@ public final class Player extends Mob {
 		bank.forceRefresh();
 
 		InterfaceListener interListener = new BankInterfaceListener(this, invListener, bankListener);
-		interfaceSet.openWindowWithSidebar(interListener, BankConstants.BANK_WINDOW_ID, BankConstants.SIDEBAR_ID);
+		interfaceSet.openModal(interListener, BankConstants.WINDOW_ID);
+		interfaceSet.openTopLevel(BankConstants.INVENTORY_INTERFACE, TopLevelPosition.INVENTORY_TAB);
 	}
 
 	/**
@@ -737,19 +750,28 @@ public final class Player extends Mob {
 	/**
 	 * Sends the initial messages.
 	 */
-	public void sendInitialMessages() {
-		updateAppearance();
-		send(new IdAssignmentMessage(index, members));
-		sendMessage("Welcome to RuneScape.");
+	public void sendInitialMessages(DisplayMode mode) {
+		send(new RebuildNormalMessage(position, index, updateInfo, world.getPlayerRepository(),
+				world.getRegionRepository().getXteaRepository(), false));
 
+		interfaceSet.openTop(mode);
+		for (TopLevelPosition position : TopLevelPosition.values()) {
+			if (position.getInterfaceId() == -1) {
+				continue;
+			}
+			interfaceSet.openTopLevel(position);
+		}
+
+		sendMessage("Welcome to RuneScape.");
 		if (isMuted()) {
 			sendMessage("You are currently muted. Other players will not see your chat messages.");
 		}
 
-		int[] tabs = InterfaceConstants.DEFAULT_INVENTORY_TABS;
-		for (int tab = 0; tab < tabs.length; tab++) {
-			send(new SwitchTabInterfaceMessage(tab, tabs[tab]));
-		}
+		updateAppearance();
+
+		send(new ConfigMessage(1737, 1 << 31));
+		send(new ChatFilterSettingsMessage(chatPrivacy, friendPrivacy));
+		send(new ChatFilterSettingsMessage(chatPrivacy, friendPrivacy));
 
 		inventory.forceRefresh();
 		equipment.forceRefresh();
@@ -778,22 +800,37 @@ public final class Player extends Mob {
 		Preconditions.checkArgument(size <= lines, "List contains too much text to display on this interface.");
 
 		for (int pos = 0; pos < lines; pos++) {
-			send(new SetWidgetTextMessage(InterfaceConstants.QUEST_TEXT[pos], pos < size ? text.get(pos) : ""));
+			//send(new IfSetTextMessage(InterfaceConstants.QUEST_TEXT[pos], - pos < size ? text.get(pos) : ""));
 		}
-		interfaceSet.openWindow(InterfaceConstants.QUEST_INTERFACE);
+		interfaceSet.openModal(InterfaceConstants.QUEST_INTERFACE);
 	}
 
 	/**
 	 * Sends the friend and ignore user lists.
 	 */
 	public void sendUserLists() {
-		if (!ignores.isEmpty()) {
-			send(new IgnoreListMessage(ignores));
+
+		{
+			final var components = new IgnoreMessageComponent[ignores.size()];
+			for (int index = 0; index < components.length; index++) {
+				var username = ignores.get(index);
+
+				components[index] = new IgnoreMessageComponent(username);
+			}
+
+			send(new UpdateIgnoreListMessage(components));
 		}
 
-		for (String username : friends) {
-			int worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
-			send(new SendFriendMessage(username, worldId));
+		send(new FriendListUnlockMessage());
+		{
+			final var components = new FriendMessageComponent[friends.size()];
+			for (int index = 0; index < components.length; index++) {
+				var username = friends.get(index);
+				var worldId = world.isPlayerOnline(username) ? world.getPlayer(username).worldId : 0;
+
+				components[index] = new FriendMessageComponent(username, worldId);
+			}
+			send(new SendFriendMessage(components));
 		}
 	}
 
@@ -938,7 +975,7 @@ public final class Player extends Mob {
 	 * Sets whether or not the player is withdrawing notes from the bank.
 	 *
 	 * @param withdrawingNotes Whether or not the player is withdrawing noted
-	 * items.
+	 *                         items.
 	 */
 	public void setWithdrawingNotes(boolean withdrawingNotes) {
 		this.withdrawingNotes = withdrawingNotes;
@@ -966,8 +1003,8 @@ public final class Player extends Mob {
 	}
 
 	@Override
-	public void teleport(Position position) {
-		super.teleport(position);
+	public void teleport(Position teleportPosition) {
+		super.teleport(teleportPosition);
 
 		if (interfaceSet.size() > 0) {
 			interfaceSet.close();
@@ -977,7 +1014,7 @@ public final class Player extends Mob {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("username", getUsername()).add("privilege", privilegeLevel)
-			.toString();
+				.toString();
 	}
 
 	/**
@@ -1010,19 +1047,19 @@ public final class Player extends Mob {
 	 */
 	private void initInventories() {
 		InventoryListener fullInventory = new FullInventoryListener(this, FullInventoryListener.FULL_INVENTORY_MESSAGE);
-		InventoryListener fullBank = new FullInventoryListener(this, FullInventoryListener.FULL_BANK_MESSAGE);
 		InventoryListener appearance = new AppearanceInventoryListener(this);
 
 		InventoryListener syncInventory = new SynchronizationInventoryListener(this,
-			SynchronizationInventoryListener.INVENTORY_ID);
-		InventoryListener syncBank = new SynchronizationInventoryListener(this, BankConstants.BANK_INVENTORY_ID);
+				SynchronizationInventoryListener.INVENTORY_ID,
+				SynchronizationInventoryListener.INVENTORY_CONTAINER_COMPONENT,
+				SynchronizationInventoryListener.INVENTORY_INVENTORY);
 		InventoryListener syncEquipment = new SynchronizationInventoryListener(this,
-			SynchronizationInventoryListener.EQUIPMENT_ID);
+				SynchronizationInventoryListener.EQUIPMENT_ID,
+				SynchronizationInventoryListener.EQUIPMENT_CONTAINER_COMPONENT,
+				SynchronizationInventoryListener.EQUIPMENT_CONTAINER);
 
 		inventory.addListener(syncInventory);
 		inventory.addListener(fullInventory);
-		bank.addListener(syncBank);
-		bank.addListener(fullBank);
 		equipment.addListener(syncEquipment);
 		equipment.addListener(appearance);
 	}
@@ -1034,5 +1071,4 @@ public final class Player extends Mob {
 		skillSet.addListener(new SynchronizationSkillListener(this));
 		skillSet.addListener(new LevelUpSkillListener(this));
 	}
-
 }

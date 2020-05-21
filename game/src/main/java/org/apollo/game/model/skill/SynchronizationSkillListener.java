@@ -1,12 +1,11 @@
 package org.apollo.game.model.skill;
 
-import java.util.stream.IntStream;
-
-import org.apollo.game.message.impl.UpdateSkillMessage;
+import org.apollo.game.message.impl.encode.UpdateSkillMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
 import org.apollo.game.model.entity.SkillSet;
-import org.apollo.game.sync.block.SynchronizationBlock;
+
+import java.util.stream.IntStream;
 
 /**
  * A {@link SkillListener} which synchronizes the state of a {@link SkillSet} with a client.

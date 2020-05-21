@@ -1,10 +1,13 @@
 package org.apollo.game.plugin.skill.runecrafting
 
-import org.apollo.game.message.impl.*
+import org.apollo.game.message.impl.decode.ItemOnObjectMessage
+import org.apollo.game.message.impl.decode.ItemActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
+import org.apollo.game.message.impl.encode.ConfigMessage
 import org.apollo.game.model.entity.EquipmentConstants
 import org.apollo.game.model.event.impl.LoginEvent
 
-private val changeAltarObjectConfigId = 491
+internal val changeAltarObjectConfigId = 491
 
 internal val RUNES = mutableListOf<Rune>()
 
@@ -55,7 +58,7 @@ on { ItemOnObjectMessage::class }
         terminate()
     }
 
-on { ItemOptionMessage::class }
+on { ItemActionMessage::class }
     .where { option == 4 }
     .then {
         val talisman = Talisman.findById(id) ?: return@then

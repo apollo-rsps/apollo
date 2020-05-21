@@ -51,9 +51,14 @@ public final class NetworkConstants {
 	public static final BigInteger RSA_MODULUS;
 
 	/**
-	 * The service port.
+	 * The game port.
 	 */
-	public static final int SERVICE_PORT;
+	public static final int GAME_PORT;
+
+	/**
+	 * The update port.
+	 */
+	public static final int UPDATE_PORT;
 
 	static {
 		try (InputStream is = new FileInputStream("data/net.xml")) {
@@ -65,12 +70,13 @@ public final class NetworkConstants {
 			XmlNode ports = net.getChild("ports");
 			Preconditions.checkState(ports != null, "Root node must have a child named 'ports'.");
 
-			XmlNode http = ports.getChild("http"), service = ports.getChild("service"), jaggrab = ports.getChild("jaggrab");
-			Preconditions.checkState(http != null && service != null && jaggrab != null, "Ports node must have three children: 'http', 'service', and 'jaggrab'.");
+			XmlNode http = ports.getChild("http"), game = ports.getChild("game"), update = ports.getChild("update"), jaggrab = ports.getChild("jaggrab");
+			Preconditions.checkState(http != null && game != null && update != null && jaggrab != null, "Ports node must have four children: 'http', 'game', 'update', and 'jaggrab'.");
 
 			HTTP_PORT = Integer.parseInt(http.getValue());
-			SERVICE_PORT = Integer.parseInt(service.getValue());
 			JAGGRAB_PORT = Integer.parseInt(jaggrab.getValue());
+			GAME_PORT = Integer.parseInt(game.getValue());
+			UPDATE_PORT = Integer.parseInt(update.getValue());
 		} catch (Exception exception) {
 			throw new ExceptionInInitializerError(new IOException("Error parsing net.xml.", exception));
 		}

@@ -5,6 +5,10 @@ description = 'Apollo Cache'
 dependencies {
     implementation project(':util')
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'org.tukaani', name: 'xz', version: '1.8'
+    implementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.3.1'
+    implementation group: 'org.apache.ant', name: 'ant', version: '1.10.7'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0.rc1'
 
     test.useJUnitPlatform()
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion

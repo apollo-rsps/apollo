@@ -1,6 +1,6 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.PublicChatMessage;
+import org.apollo.game.message.impl.decode.PublicChatMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.junit.Test;
@@ -26,7 +26,8 @@ public final class PublicChatMessageHandlerTests {
 
 		when(player.isMuted()).thenReturn(true);
 
-		PublicChatMessage publicChatMessage = new PublicChatMessage("Test", "Test".getBytes(), 0, 0);
+		PublicChatMessage publicChatMessage = new PublicChatMessage("Test", "Test".getBytes(),
+				0, 0, PublicChatMessage.PublicChatType.NONE);
 		handler.handle(player, publicChatMessage);
 
 		assertTrue("PublicChatMessageHandler: player can send messages when muted", publicChatMessage.terminated());

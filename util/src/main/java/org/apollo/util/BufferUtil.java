@@ -3,6 +3,7 @@ package org.apollo.util;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 /**
  * A utility class which contains {@link ByteBuffer}-related utility methods.
@@ -23,6 +24,18 @@ public final class BufferUtil {
 		int value = peek > Byte.MAX_VALUE ? (buffer.getShort() & 0xFFFF) + Short.MIN_VALUE : buffer.get() & 0xFF;
 		return value;
 	}
+
+
+	public static int readHugeSmart(ByteBuffer buffer) {
+		int value = 0;
+		int read;
+		for (read = readSmart(buffer); read == 32767; read = readSmart(buffer)) {
+			value += 32767;
+		}
+		value += read;
+		return value;
+	}
+
 
 	/**
 	 * Reads a string from the specified {@link ByteBuffer}.
@@ -66,9 +79,59 @@ public final class BufferUtil {
 	}
 
 	/**
+	 * Reads a 24-bit medium integer from the specified {@link ByteBuffer}s current position and increases the buffers
+	 * position by 3.
+	 *
+	 * @param buffer The {@link ByteBuffer} to read from.
+	 * @return The read 24-bit medium integer.
+	 */
+	public static int readUnsignedMedium(ByteBuf buffer) {
+		return buffer.readUnsignedShort() << 8 | buffer.readUnsignedByte();
+	}
+
+	/**
+	 * Reads a jagex-string from the specified {@link ByteBuf}.
+	 *
+	 * @param buffer The buffer.
+	 * @return The string.
+	 */
+	public static String readJagexString(ByteBuf buffer) {
+		buffer.readByte();
+		return readString(buffer);
+	}
+
+
+	/**
+	 * Writes a string to the specified {@link ByteBuf}
+	 * @param buffer
+	 * @param str
+	 */
+	public static void writeString(ByteBuf buffer, String str) {
+		byte[] bytes = str.getBytes(CHARSET);
+		buffer.writeBytes(bytes);
+		buffer.writeByte(0);
+	}
+
+	/**
+	 * Writes a string to the specified {@link ByteBuf}
+	 * @param buffer
+	 * @param str
+	 */
+	public static void writeString(ByteBuffer buffer, String str) {
+		byte[] bytes = str.getBytes(CHARSET);
+		buffer.put(bytes);
+		buffer.put((byte) 0);
+	}
+
+	/**
 	 * The terminator of a string.
 	 */
-	public static final int STRING_TERMINATOR = 10;
+	public static final int STRING_TERMINATOR = 0;
+
+	/**
+	 * Charset that Runescape uses.
+	 */
+	public static final Charset CHARSET = Charset.forName("Windows-1252");
 
 	/**
 	 * Default private constructor to prevent instantiation.
@@ -76,5 +139,6 @@ public final class BufferUtil {
 	private BufferUtil() {
 
 	}
+
 
 }

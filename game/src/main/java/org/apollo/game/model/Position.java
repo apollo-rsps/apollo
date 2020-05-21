@@ -41,14 +41,14 @@ public final class Position {
 	/**
 	 * Creates a position with the specified height.
 	 *
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
+	 * @param x      The x coordinate.
+	 * @param y      The y coordinate.
 	 * @param height The height.
 	 */
 	public Position(int x, int y, int height) {
 		Preconditions.checkElementIndex(height, HEIGHT_LEVELS, "Height must be [0, 3), received " + height + ".");
 
-		packed = height << 30 | (y & 0x7FFF) << 15 | x & 0x7FFF;
+		packed = y & 0x3fff | ((x & 0x3fff) << 14) | (height << 28);
 	}
 
 	@Override
@@ -89,15 +89,6 @@ public final class Position {
 		int deltaX = getX() - other.getX();
 		int deltaY = getY() - other.getY();
 		return (int) Math.ceil(Math.sqrt(deltaX * deltaX + deltaY * deltaY));
-	}
-
-	/**
-	 * Gets the height level.
-	 *
-	 * @return The height level.
-	 */
-	public int getHeight() {
-		return packed >>> 30;
 	}
 
 	/**
@@ -183,7 +174,7 @@ public final class Position {
 	 * @return The x coordinate.
 	 */
 	public int getX() {
-		return packed & 0x7FFF;
+		return packed >>> 14 & 0x3fff;
 	}
 
 	/**
@@ -192,7 +183,16 @@ public final class Position {
 	 * @return The y coordinate.
 	 */
 	public int getY() {
-		return packed >> 15 & 0x7FFF;
+		return packed & 0x3fff;
+	}
+
+	/**
+	 * Gets the height level.
+	 *
+	 * @return The height level.
+	 */
+	public int getHeight() {
+		return packed >>> 28;
 	}
 
 	@Override
@@ -214,7 +214,7 @@ public final class Position {
 	/**
 	 * Checks if the position is within distance of another.
 	 *
-	 * @param other The other position.
+	 * @param other    The other position.
 	 * @param distance The distance.
 	 * @return {@code true} if so, {@code false} if not.
 	 */
@@ -227,7 +227,7 @@ public final class Position {
 	/**
 	 * Creates a new position {@code num} steps from this position in the given direction.
 	 *
-	 * @param num The number of steps to make.
+	 * @param num       The number of steps to make.
 	 * @param direction The direction to make steps in.
 	 * @return A new {@code Position} that is {@code num} steps in {@code direction} ahead of this one.
 	 */
@@ -237,6 +237,11 @@ public final class Position {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight()).add("map", getRegionCoordinates()).toString();
+		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("height", getHeight())
+				.add("map", getRegionCoordinates()).toString();
+	}
+
+    public int get18BitHash() {
+    	return (getY() >> 13) + ((getX() >> 13) << 8) + (getHeight() << 16);
 	}
 }

@@ -1,16 +1,15 @@
 package org.apollo.cache.tools;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.nio.file.Paths;
-
-import org.apollo.cache.IndexedFileSystem;
+import com.google.common.base.Preconditions;
+import org.apollo.cache.Cache;
 import org.apollo.cache.decoder.ItemDefinitionDecoder;
 import org.apollo.cache.def.ItemDefinition;
 import org.apollo.util.tools.EquipmentConstants;
 
-import com.google.common.base.Preconditions;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
 
 /**
  * A tool for updating the equipment data.
@@ -30,8 +29,8 @@ public final class EquipmentUpdater {
 		Preconditions.checkArgument(args.length == 1, "Usage:\njava -cp ... org.apollo.tools.EquipmentUpdater [release].");
 		String release = args[0];
 
-		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release + ".dat")));
-			IndexedFileSystem fs = new IndexedFileSystem(Paths.get("data/fs/", release), true)) {
+		try (DataOutputStream os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/equipment-" + release + ".dat")))) {
+			Cache fs = Cache.openCache(Paths.get("data/fs/", release));
 			ItemDefinitionDecoder decoder = new ItemDefinitionDecoder(fs);
 			decoder.run();
 
@@ -358,8 +357,6 @@ public final class EquipmentUpdater {
 		} else if (name.equals("Dragon plateskirt")) {
 			return 60;
 		} else if (name.equals("Dragon platelegs")) {
-			return 60;
-		} else if (name.equals("Dragon sq shield")) {
 			return 60;
 		} else if (name.equals("Rune med helm")) {
 			return 40;

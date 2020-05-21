@@ -1,7 +1,7 @@
 package org.apollo.game.model.area.update;
 
-import org.apollo.game.message.impl.RegionUpdateMessage;
-import org.apollo.game.message.impl.SendProjectileMessage;
+import org.apollo.game.message.impl.encode.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.SendProjectileMessage;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.entity.Projectile;

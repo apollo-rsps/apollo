@@ -3,7 +3,7 @@ package org.apollo.plugin.locations.falador
 import org.apollo.game.plugin.shops.builder.shop
 
 shop("Falador General Store") {
-    operated by "Shop keeper"(524) and "Shop assistant"( 525)
+    operated by "Shop keeper"(2819) and "Shop assistant"( 2820)
     buys any items
 
     sell(5) of "Pot"

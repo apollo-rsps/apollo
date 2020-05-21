@@ -10,7 +10,7 @@ public final class MapConstants {
 	/**
 	 * The index containing the map files.
 	 */
-	public static final int MAP_INDEX = 4;
+	public static final int MAP_INDEX = 5;
 
 	/**
 	 * The width (and length) of a {@link MapFile} in {@link Tile}s.

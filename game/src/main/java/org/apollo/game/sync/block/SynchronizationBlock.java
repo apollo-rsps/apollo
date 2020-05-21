@@ -1,6 +1,6 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.message.impl.PublicChatMessage;
+import org.apollo.game.message.impl.decode.PublicChatMessage;
 import org.apollo.game.model.Animation;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Graphic;
@@ -37,7 +37,7 @@ public abstract class SynchronizationBlock {
 		int combat = player.getSkillSet().getCombatLevel();
 		int id = player.hasNpcDefinition() ? player.getDefinition().getId() : -1;
 
-		return new AppearanceBlock(player.getEncodedName(), player.getAppearance(), combat, 0, player.getEquipment(), player.getPrayerIcon(), player.isSkulled(), id);
+		return new AppearanceBlock(player.getUsername(), player.getAppearance(), combat, 0, player.getEquipment(), player.getPrayerIcon(), player.isSkulled(), id);
 	}
 
 	/**
@@ -123,11 +123,11 @@ public abstract class SynchronizationBlock {
 	/**
 	 * Creates a {@link TurnToPositionBlock} with the specified {@link Position}.
 	 *
-	 * @param position The position.
+	 * @param turnPosition The position.
 	 * @return The turn to position block.
 	 */
-	public static SynchronizationBlock createTurnToPositionBlock(Position position) {
-		return new TurnToPositionBlock(position);
+	public static SynchronizationBlock createTurnToPositionBlock(Position mobPosition, Position turnPosition) {
+		return new TurnToPositionBlock(mobPosition, turnPosition);
 	}
 
 }

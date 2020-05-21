@@ -10,7 +10,7 @@ public final class GameConstants {
 	/**
 	 * The maximum amount of messages to process per pulse (per session).
 	 */
-	public static final int MESSAGES_PER_PULSE = 25;
+	public static final int MESSAGES_PER_PULSE = 3000;
 
 	/**
 	 * The delay between consecutive pulses, in milliseconds.

@@ -113,11 +113,21 @@ public final class Skill {
 	public static final int RUNECRAFT = 20;
 
 	/**
+	 * The construction id.
+	 */
+	public static final int CONSTRUCTION = 21;
+
+	/**
+	 * The hunter id.
+	 */
+	public static final int HUNTER = 20;
+
+	/**
 	 * The skill names.
 	 */
 	private static final String[] SKILL_NAMES = { "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer",
 			"Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining",
-			"Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecraft" };
+			"Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecraft", "Construction", "Hunter" };
 
 	/**
 	 * Gets the name of a skill.

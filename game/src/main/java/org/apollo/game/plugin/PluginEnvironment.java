@@ -1,6 +1,5 @@
 package org.apollo.game.plugin;
 
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Set;
 

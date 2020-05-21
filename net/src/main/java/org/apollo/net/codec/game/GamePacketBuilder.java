@@ -280,6 +280,16 @@ public final class GamePacketBuilder {
 	}
 
 	/**
+	 * Puts the bytes from the specified buffer into this packet's buffer.
+	 *
+	 * @param buffer The source {@link ByteBuf}.
+	 */
+	public void putBytes(GamePacketBuilder buffer) {
+		putBytes(buffer.buffer);
+	}
+
+
+	/**
 	 * Puts the bytes into the buffer with the specified transformation.
 	 *
 	 * @param transformation The transformation.
@@ -434,5 +444,4 @@ public final class GamePacketBuilder {
 
 		return new GamePacket(opcode, type, buffer);
 	}
-
 }

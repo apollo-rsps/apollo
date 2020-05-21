@@ -1,5 +1,5 @@
 import io.mockk.verify
-import org.apollo.game.message.impl.ButtonMessage
+import org.apollo.game.message.impl.decode.ButtonMessage
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.testing.junit.ApolloTestingExtension
 import org.apollo.game.plugin.testing.junit.api.annotations.TestMock
@@ -18,7 +18,7 @@ class LogoutTests {
 
     @Test
     fun `The player should be logged out when they click the logout button`() {
-        player.send(ButtonMessage(LOGOUT_BUTTON_ID))
+        player.send(ButtonMessage(LOGOUT_BUTTON_ID, 0, 0, 0, 0))
 
         verify { player.logout() }
     }

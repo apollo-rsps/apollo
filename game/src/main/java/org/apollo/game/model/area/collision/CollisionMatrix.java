@@ -1,12 +1,11 @@
 package org.apollo.game.model.area.collision;
 
-import java.util.Arrays;
-
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.entity.EntityType;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
+import java.util.Arrays;
 
 /**
  * A 2-dimensional adjacency matrix containing tile collision data.

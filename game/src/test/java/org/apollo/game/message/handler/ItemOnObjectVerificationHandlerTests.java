@@ -2,7 +2,7 @@ package org.apollo.game.message.handler;
 
 import org.apollo.cache.def.ItemDefinition;
 import org.apollo.cache.def.ObjectDefinition;
-import org.apollo.game.message.impl.ItemOnObjectMessage;
+import org.apollo.game.message.impl.decode.ItemOnObjectMessage;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
@@ -28,8 +28,7 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Player.class, World.class, Region.class, RegionRepository.class, ObjectDefinition.class,
-		ItemDefinition.class})
+@PrepareForTest({Player.class, World.class, Region.class, RegionRepository.class, ObjectDefinition.class, ItemDefinition.class})
 public final class ItemOnObjectVerificationHandlerTests {
 
 	@Before
@@ -63,13 +62,15 @@ public final class ItemOnObjectVerificationHandlerTests {
 		when(region.getEntities(objectPosition, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT))
 				.thenReturn(entitySet);
 
-		ItemOnObjectMessage itemOnObjectMessage = new ItemOnObjectMessage(SynchronizationInventoryListener.INVENTORY_ID, 4151, 1,
-				1, objectPosition.getX(), objectPosition.getY());
+		ItemOnObjectMessage itemOnObjectMessage = new ItemOnObjectMessage(SynchronizationInventoryListener.INVENTORY_ID,
+				SynchronizationInventoryListener.INVENTORY_CONTAINER_COMPONENT, 4151, 1, 1, objectPosition.getX(),
+				objectPosition.getY());
 		ItemOnObjectVerificationHandler itemOnObjectVerificationHandler = new ItemOnObjectVerificationHandler(world);
 
 		itemOnObjectVerificationHandler.handle(player, itemOnObjectMessage);
 
-		assertTrue("ObjectVerificationHandler: message not terminated valid item given!", itemOnObjectMessage.terminated());
+		assertTrue("ObjectVerificationHandler: message not terminated valid item given!",
+				itemOnObjectMessage.terminated());
 	}
 
 	@Test
@@ -93,13 +94,15 @@ public final class ItemOnObjectVerificationHandlerTests {
 		when(region.getEntities(objectPosition, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT))
 				.thenReturn(entitySet);
 
-		ItemOnObjectMessage itemOnObjectMessage = new ItemOnObjectMessage(SynchronizationInventoryListener.INVENTORY_ID, 4151, 30,
-				1, objectPosition.getX(), objectPosition.getY());
+		ItemOnObjectMessage itemOnObjectMessage = new ItemOnObjectMessage(SynchronizationInventoryListener.INVENTORY_ID,
+				SynchronizationInventoryListener.INVENTORY_CONTAINER_COMPONENT, 4151, 30, 1, objectPosition.getX(),
+				objectPosition.getY());
 		ItemOnObjectVerificationHandler itemOnObjectVerificationHandler = new ItemOnObjectVerificationHandler(world);
 
 		itemOnObjectVerificationHandler.handle(player, itemOnObjectMessage);
 
-		assertTrue("ObjectVerificationHandler: message not terminated when no valid slot given!", itemOnObjectMessage.terminated());
+		assertTrue("ObjectVerificationHandler: message not terminated when no valid slot given!",
+				itemOnObjectMessage.terminated());
 	}
 
 	@Test
@@ -124,12 +127,14 @@ public final class ItemOnObjectVerificationHandlerTests {
 		when(region.getEntities(objectPosition, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT))
 				.thenReturn(entitySet);
 
-		ItemOnObjectMessage itemOnObjectMessage = new ItemOnObjectMessage(SynchronizationInventoryListener.INVENTORY_ID, 4151, 1,
-				1, objectPosition.getX(), objectPosition.getY());
+		ItemOnObjectMessage itemOnObjectMessage = new ItemOnObjectMessage(SynchronizationInventoryListener.INVENTORY_ID,
+				SynchronizationInventoryListener.INVENTORY_CONTAINER_COMPONENT, 4151, 1, 1, objectPosition.getX(),
+				objectPosition.getY());
 		ItemOnObjectVerificationHandler itemOnObjectVerificationHandler = new ItemOnObjectVerificationHandler(world);
 
 		itemOnObjectVerificationHandler.handle(player, itemOnObjectMessage);
 
-		assertTrue("ObjectVerificationHandler: message not terminated when object out of range!", itemOnObjectMessage.terminated());
+		assertTrue("ObjectVerificationHandler: message not terminated when object out of range!",
+				itemOnObjectMessage.terminated());
 	}
 }

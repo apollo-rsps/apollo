@@ -1,6 +1,6 @@
 package org.apollo.game.model.area.update;
 
-import org.apollo.game.message.impl.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.RegionUpdateMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.EntityUpdateType;
 import org.apollo.game.model.area.Region;

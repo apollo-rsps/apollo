@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import org.apollo.ServerContext;
 import org.apollo.game.GameConstants;
 import org.apollo.game.message.handler.MessageHandlerChainSet;
-import org.apollo.game.message.impl.LogoutMessage;
+import org.apollo.game.message.impl.encode.LogoutMessage;
 import org.apollo.game.model.entity.Player;
 import org.apollo.net.message.Message;
 

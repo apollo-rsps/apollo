@@ -7,7 +7,7 @@ import org.apollo.game.model.Position;
  *
  * @author Major
  */
-final class ChebyshevHeuristic extends Heuristic {
+public final class ChebyshevHeuristic extends Heuristic {
 
 	@Override
 	public int estimate(Position current, Position goal) {

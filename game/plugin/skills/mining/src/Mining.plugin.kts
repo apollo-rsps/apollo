@@ -1,4 +1,4 @@
-import org.apollo.game.message.impl.ObjectActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
 import org.apollo.game.plugin.skills.mining.Ore
 
 on { ObjectActionMessage::class }

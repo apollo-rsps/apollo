@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * A living entity in the world, such as a player or npc.
@@ -66,7 +68,7 @@ public abstract class Mob extends Entity {
 	/**
 	 * This mob's list of local players.
 	 */
-	private final List<Player> localPlayers = new ArrayList<>();
+	private final Set<Player> localPlayers = new HashSet<>();
 
 	/**
 	 * This mob's set of synchronization blocks.
@@ -99,6 +101,11 @@ public abstract class Mob extends Entity {
 	private Position facingPosition = position;
 
 	/**
+	 * The old position of this mob.
+	 */
+	private Position oldPosition = position;
+
+	/**
 	 * This mob's first movement direction.
 	 */
 	private Direction firstDirection = Direction.NONE;
@@ -114,9 +121,9 @@ public abstract class Mob extends Entity {
 	private Direction secondDirection = Direction.NONE;
 
 	/**
-	 * Indicates whether this mob is currently teleporting or not.
+	 * The position to teleport to.
 	 */
-	private boolean teleporting;
+	private Position teleportPosition;
 
 	/**
 	 * Creates the Mob.
@@ -217,6 +224,15 @@ public abstract class Mob extends Entity {
 		return equipment;
 	}
 
+
+	public Position getOldPosition() {
+		return oldPosition;
+	}
+
+	public void setOldPosition(Position oldPosition) {
+		this.oldPosition = oldPosition;
+	}
+
 	/**
 	 * Gets the {@link Position} this mob is facing towards.
 	 *
@@ -305,7 +321,7 @@ public abstract class Mob extends Entity {
 	 *
 	 * @return The list.
 	 */
-	public final List<Player> getLocalPlayerList() {
+	public final Set<Player> getLocalPlayerList() {
 		return localPlayers;
 	}
 
@@ -371,15 +387,6 @@ public abstract class Mob extends Entity {
 	 */
 	public final boolean isActive() {
 		return index != -1;
-	}
-
-	/**
-	 * Checks if this mob is currently teleporting.
-	 *
-	 * @return {@code true} if so, {@code false} if not.
-	 */
-	public final boolean isTeleporting() {
-		return teleporting;
 	}
 
 	/**
@@ -488,6 +495,7 @@ public abstract class Mob extends Entity {
 	public final void setPosition(Position position) {
 		if (!position.equals(this.position) && world.submit(new MobPositionUpdateEvent(this, position))) {
 			Position old = this.position;
+
 			RegionRepository repository = world.getRegionRepository();
 			Region current = repository.fromPosition(old), next = repository.fromPosition(position);
 
@@ -496,15 +504,6 @@ public abstract class Mob extends Entity {
 
 			next.addEntity(this);
 		}
-	}
-
-	/**
-	 * Sets whether this mob is teleporting or not.
-	 *
-	 * @param teleporting {@code true} if the mob is teleporting, {@code false} if not.
-	 */
-	public final void setTeleporting(boolean teleporting) {
-		this.teleporting = teleporting;
 	}
 
 	/**
@@ -573,13 +572,33 @@ public abstract class Mob extends Entity {
 	 * Teleports this mob to the specified {@link Position}, setting the appropriate flags and clearing the walking
 	 * queue.
 	 *
-	 * @param position The position.
+	 * @param teleportPosition The position.
 	 */
-	public void teleport(Position position) {
-		setPosition(position);
-		teleporting = true;
+	public void teleport(Position teleportPosition) {
+		this.teleportPosition = teleportPosition;
 		walkingQueue.clear();
 		stopAction();
+	}
+
+	/**
+	 * Checks if this mob is currently teleporting.
+	 *
+	 * @return {@code true} if so, {@code false} if not.
+	 */
+	public final boolean isTeleporting() {
+		return teleportPosition != null;
+	}
+
+	/**
+	 * The {@link Position} to teleport to.
+	 * @return The teleport position.
+	 */
+	public Position getTeleportPosition() {
+		return teleportPosition;
+	}
+
+	public void resetTeleportPosition() {
+		this.teleportPosition = null;
 	}
 
 	/**
@@ -589,7 +608,7 @@ public abstract class Mob extends Entity {
 	 */
 	public final void turnTo(Position position) {
 		facingPosition = position;
-		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(position));
+		blockSet.add(SynchronizationBlock.createTurnToPositionBlock(getPosition(), position));
 	}
 
 	/**
@@ -598,6 +617,5 @@ public abstract class Mob extends Entity {
 	private void init() {
 		world.schedule(new SkillNormalizationTask(this));
 	}
-
 
 }

@@ -1,6 +1,6 @@
 package org.apollo.game.plugin.entity.actions
 
-import org.apollo.game.message.impl.PlayerActionMessage
+import org.apollo.game.message.impl.decode.PlayerActionMessage
 import org.apollo.game.model.event.impl.LoginEvent
 
 on { PlayerActionMessage::class }

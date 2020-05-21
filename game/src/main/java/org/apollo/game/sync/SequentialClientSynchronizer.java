@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apollo.game.message.impl.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.RegionUpdateMessage;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.entity.MobRepository;
 import org.apollo.game.model.entity.Npc;

@@ -40,7 +40,7 @@ public final class MobRepository<T extends Mob> implements Iterable<T> {
 		/**
 		 * Constructs a new {@link MobRepositoryIterator} with the specified
 		 * MobRepository.
-		 * 
+		 *
 		 * @param repository
 		 *            The MobRepository we're iterating over.
 		 */

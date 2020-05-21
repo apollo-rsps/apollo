@@ -2,10 +2,10 @@ package org.apollo.game.plugin.shops
 
 import org.apollo.game.action.DistancedAction
 import org.apollo.game.message.handler.ItemVerificationHandler
-import org.apollo.game.message.impl.SetWidgetTextMessage
 import org.apollo.game.model.entity.Mob
 import org.apollo.game.model.entity.Player
 import org.apollo.game.model.inter.InterfaceListener
+import org.apollo.game.model.inter.TopLevelPosition
 import org.apollo.game.model.inv.Inventory
 import org.apollo.game.model.inv.SynchronizationInventoryListener
 
@@ -22,10 +22,9 @@ class OpenShopAction(
         mob.interactingMob = operator
 
         val closeListener = addInventoryListeners(mob, shop.inventory)
-        mob.send(SetWidgetTextMessage(ShopInterfaces.SHOP_NAME, shop.name))
 
-        mob.interfaceSet.openWindowWithSidebar(closeListener, ShopInterfaces.SHOP_WINDOW,
-            ShopInterfaces.INVENTORY_SIDEBAR)
+        mob.interfaceSet.openModal(closeListener, ShopInterfaces.SHOP_INTERFACE);
+        mob.interfaceSet.openTopLevel(ShopInterfaces.INVENTORY_INTERFACE, TopLevelPosition.INVENTORY_TAB)
         stop()
     }
 
@@ -34,8 +33,8 @@ class OpenShopAction(
      * [InterfaceListener] that removes them when the interface is closed.
      */
     private fun addInventoryListeners(player: Player, shop: Inventory): InterfaceListener {
-        val invListener = SynchronizationInventoryListener(player, ShopInterfaces.INVENTORY_CONTAINER)
-        val shopListener = SynchronizationInventoryListener(player, ShopInterfaces.SHOP_CONTAINER)
+        val invListener = SynchronizationInventoryListener(player, ShopInterfaces.INVENTORY_INTERFACE, ShopInterfaces.INVENTORY_COMPONENT, SynchronizationInventoryListener.INVENTORY_INVENTORY)
+        val shopListener = SynchronizationInventoryListener(player, ShopInterfaces.SHOP_INTERFACE, ShopInterfaces.SHOP_COMPONENT, ShopInterfaces.SHOP_CONTAINER_ID)
 
         player.inventory.addListener(invListener)
         player.inventory.forceRefresh()

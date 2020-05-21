@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apollo.cache.map.XteaRepository;
 import org.apollo.game.model.Position;
 
 import com.google.common.base.Preconditions;
@@ -53,6 +54,11 @@ public final class RegionRepository {
 	 * A list of default {@link RegionListener}s which will be added to {@link Region}s upon creation.
 	 */
 	private final List<RegionListener> defaultRegionListeners = new ArrayList<>();
+
+	/**
+	 * A repository of xteas.
+	 */
+	private XteaRepository xteaRepository;
 
 	/**
 	 * Creates a new RegionRepository.
@@ -169,4 +175,21 @@ public final class RegionRepository {
 		return regions.remove(region.getCoordinates()) != null;
 	}
 
+	/**
+	 * Gets xtea repository.
+	 *
+	 * @return the xtea repository
+	 */
+	public XteaRepository getXteaRepository() {
+		return xteaRepository;
+	}
+
+	/**
+	 * Sets xtea repository.
+	 *
+	 * @param xteaRepository the xtea repository
+	 */
+	public void setXteaRepository(XteaRepository xteaRepository) {
+		this.xteaRepository = xteaRepository;
+	}
 }

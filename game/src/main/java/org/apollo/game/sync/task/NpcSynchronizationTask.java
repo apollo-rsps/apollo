@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apollo.game.message.impl.NpcSynchronizationMessage;
+import org.apollo.game.message.impl.encode.NpcSynchronizationMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionCoordinates;
@@ -103,11 +103,11 @@ public final class NpcSynchronizationTask extends SynchronizationTask {
 				added++;
 
 				npc.turnTo(npc.getFacingPosition());
-				segments.add(new AddNpcSegment(npc.getBlockSet(), npc.getIndex(), position, npc.getId()));
+				segments.add(new AddNpcSegment(npc.getBlockSet(), npc.getIndex(), position, npc.getId(), npc.getLastDirection()));
 			}
 		}
 
-		player.send(new NpcSynchronizationMessage(playerPosition, segments, originalCount));
+		player.send(new NpcSynchronizationMessage(playerPosition, segments, originalCount, player.getViewingDistance() > Player.DEFAULT_VIEWING_DISTANCE));
 	}
 
 }

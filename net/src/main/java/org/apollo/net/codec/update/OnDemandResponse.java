@@ -1,8 +1,7 @@
 package org.apollo.net.codec.update;
 
 import io.netty.buffer.ByteBuf;
-
-import org.apollo.cache.FileDescriptor;
+import org.apollo.net.codec.update.OnDemandRequest.Priority;
 
 /**
  * Represents a single 'on-demand' response.
@@ -16,33 +15,20 @@ public final class OnDemandResponse {
 	 */
 	private final ByteBuf chunkData;
 
-	/**
-	 * The chunk id.
-	 */
-	private final int chunkId;
-
-	/**
-	 * The file descriptor.
-	 */
-	private final FileDescriptor fileDescriptor;
-
-	/**
-	 * The file size.
-	 */
-	private final int fileSize;
+	private final int fs;
+	private final int folder;
+	private final Priority priority;
 
 	/**
 	 * Creates the 'on-demand' response.
 	 *
-	 * @param fileDescriptor The file descriptor.
-	 * @param fileSize The file size.
-	 * @param chunkId The chunk id.
+	 * @param fs        The file descriptor.
 	 * @param chunkData The chunk data.
 	 */
-	public OnDemandResponse(FileDescriptor fileDescriptor, int fileSize, int chunkId, ByteBuf chunkData) {
-		this.fileDescriptor = fileDescriptor;
-		this.fileSize = fileSize;
-		this.chunkId = chunkId;
+	public OnDemandResponse(int fs, int folder, Priority priority, ByteBuf chunkData) {
+		this.fs = fs;
+		this.folder = folder;
+		this.priority = priority;
 		this.chunkData = chunkData;
 	}
 
@@ -55,31 +41,15 @@ public final class OnDemandResponse {
 		return chunkData;
 	}
 
-	/**
-	 * Gets the chunk id.
-	 *
-	 * @return The chunk id.
-	 */
-	public int getChunkId() {
-		return chunkId;
+	public int getFs() {
+		return fs;
 	}
 
-	/**
-	 * Gets the file descriptor.
-	 *
-	 * @return The file descriptor.
-	 */
-	public FileDescriptor getFileDescriptor() {
-		return fileDescriptor;
+	public int getFolder() {
+		return folder;
 	}
 
-	/**
-	 * Gets the file size.
-	 *
-	 * @return The file size.
-	 */
-	public int getFileSize() {
-		return fileSize;
+	public Priority getPriority() {
+		return priority;
 	}
-
 }

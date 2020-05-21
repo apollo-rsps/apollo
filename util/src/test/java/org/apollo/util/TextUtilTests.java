@@ -24,20 +24,6 @@ public class TextUtilTests {
 	}
 
 	/**
-	 * Tests the {@link TextUtil#compress} and {@link TextUtil#decompress} methods.
-	 */
-	@Test
-	public void testCompression() {
-		String str = "hello, world!";
-
-		byte[] compressed = new byte[128];
-		int len = TextUtil.compress(str, compressed);
-		String uncompressed = TextUtil.decompress(compressed, len);
-
-		assertEquals(str, uncompressed);
-	}
-
-	/**
 	 * Tests the {@link TextUtil#filterInvalidCharacters(String)} method.
 	 */
 	@Test

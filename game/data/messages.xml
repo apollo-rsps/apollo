@@ -1,26 +1,41 @@
 <messages>
     <message>
-        <type>org.apollo.game.message.impl.ButtonMessage</type>
+        <type>org.apollo.game.message.impl.decode.ButtonMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.DialogueButtonHandler</handler>
             <handler>org.apollo.game.message.handler.BankButtonMessageHandler</handler>
+            <handler>org.apollo.game.message.handler.RemoveEquippedItemHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.PublicChatMessage</type>
+        <type>org.apollo.game.message.impl.decode.DisplayStatusMessage</type>
+        <chain>
+            <handler>org.apollo.game.message.handler.DisplayStatusMessageHandler</handler>
+        </chain>
+    </message>
+    <message>
+        <type>org.apollo.game.message.impl.decode.PublicChatMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.PublicChatVerificationHandler</handler>
             <handler>org.apollo.game.message.handler.PublicChatMessageHandler</handler>
         </chain>
     </message>
+
     <message>
-        <type>org.apollo.game.message.impl.ClosedInterfaceMessage</type>
+        <type>org.apollo.game.message.impl.decode.PrivacyOptionMessage</type>
+        <chain>
+            <handler>org.apollo.game.message.handler.PrivacyOptionMessageHandler</handler>
+        </chain>
+    </message>
+
+    <message>
+        <type>org.apollo.game.message.impl.decode.ClosedInterfaceMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ClosedInterfaceMessageHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.CommandMessage</type>
+        <type>org.apollo.game.message.impl.decode.CommandMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.CommandMessageHandler</handler>
         </chain>
@@ -38,65 +53,59 @@
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.ItemActionMessage</type>
-        <chain>
-            <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
-            <handler>org.apollo.game.message.handler.RemoveEquippedItemHandler</handler>
-            <handler>org.apollo.game.message.handler.BankMessageHandler</handler>
-        </chain>
-    </message>
-    <message>
-        <type>org.apollo.game.message.impl.ItemOnItemMessage</type>
+        <type>org.apollo.game.message.impl.decode.ItemOnItemMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
             <handler>org.apollo.game.message.handler.ItemOnItemVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.ItemOnObjectMessage</type>
+        <type>org.apollo.game.message.impl.decode.ItemOnObjectMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ItemOnObjectVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.ItemOptionMessage</type>
+        <type>org.apollo.game.message.impl.decode.ItemActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
             <handler>org.apollo.game.message.handler.EquipItemHandler</handler>
+            <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
+            <handler>org.apollo.game.message.handler.BankMessageHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.MagicOnItemMessage</type>
+        <type>org.apollo.game.message.impl.decode.MagicOnItemMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ItemVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.MagicOnMobMessage</type>
+        <type>org.apollo.game.message.impl.decode.MagicOnMobMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.MagicOnMobVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.NpcActionMessage</type>
+        <type>org.apollo.game.message.impl.decode.NpcActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.NpcActionVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.ObjectActionMessage</type>
+        <type>org.apollo.game.message.impl.decode.ObjectActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.ObjectActionVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.PlayerActionMessage</type>
+        <type>org.apollo.game.message.impl.decode.PlayerActionMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.PlayerActionVerificationHandler</handler>
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.PlayerDesignMessage</type>
+        <type>org.apollo.game.message.impl.decode.PlayerDesignMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.PlayerDesignVerificationHandler</handler>
             <handler>org.apollo.game.message.handler.PlayerDesignMessageHandler</handler>
@@ -109,7 +118,7 @@
         </chain>
     </message>
     <message>
-        <type>org.apollo.game.message.impl.WalkMessage</type>
+        <type>org.apollo.game.message.impl.decode.WalkMessage</type>
         <chain>
             <handler>org.apollo.game.message.handler.WalkMessageHandler</handler>
         </chain>

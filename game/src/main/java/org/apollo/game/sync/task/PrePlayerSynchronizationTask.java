@@ -1,18 +1,18 @@
 package org.apollo.game.sync.task;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.apollo.game.message.impl.ClearRegionMessage;
-import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
-import org.apollo.game.message.impl.RegionChangeMessage;
-import org.apollo.game.message.impl.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.UpdateZoneFullFollowsMessage;
+import org.apollo.game.message.impl.encode.UpdateZonePartialEnclosedMessage;
+import org.apollo.game.message.impl.encode.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.RebuildNormalMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.Player;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A {@link SynchronizationTask} which does pre-synchronization work for the specified {@link Player}.
@@ -42,12 +42,12 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	/**
 	 * Creates the {@link PrePlayerSynchronizationTask} for the specified {@link Player}.
 	 *
-	 * @param player The Player.
+	 * @param player  The Player.
 	 * @param encodes The Map containing Region encodes.
 	 * @param updates The {@link Map} containing {@link Region} updates.
 	 */
 	public PrePlayerSynchronizationTask(Player player, Map<RegionCoordinates, Set<RegionUpdateMessage>> encodes,
-	                                    Map<RegionCoordinates, Set<RegionUpdateMessage>> updates) {
+										Map<RegionCoordinates, Set<RegionUpdateMessage>> updates) {
 		this.player = player;
 		this.updates = updates;
 		this.encodes = encodes;
@@ -56,11 +56,15 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	@Override
 	public void run() {
 		Position old = player.getPosition();
+		player.setOldPosition(old);
+
 		player.getWalkingQueue().pulse();
 
 		boolean local = true;
 
-		if (player.isTeleporting()) {
+		var teleportPosition = player.getTeleportPosition();
+		if (teleportPosition != null) {
+			player.setPosition(player.getTeleportPosition());
 			player.resetViewingDistance();
 			local = false;
 		}
@@ -72,7 +76,9 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 			local = false;
 
 			player.setLastKnownRegion(position);
-			player.send(new RegionChangeMessage(position));
+			player.send(new RebuildNormalMessage(position, player.getIndex(), player.getUpdateInfo(),
+					player.getWorld().getPlayerRepository(),
+					player.getWorld().getRegionRepository().getXteaRepository(), true));
 		}
 
 		RegionRepository repository = player.getWorld().getRegionRepository();
@@ -102,37 +108,36 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 		int deltaX = current.getLocalX(last);
 		int deltaY = current.getLocalY(last);
 
-		return deltaX <= Position.MAX_DISTANCE || deltaX >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1
-			|| deltaY <= Position.MAX_DISTANCE || deltaY >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
+		return deltaX <= Position.MAX_DISTANCE || deltaX >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1 || deltaY <= Position.MAX_DISTANCE || deltaY >= Region.VIEWPORT_WIDTH - Position.MAX_DISTANCE - 1;
 	}
 
 	/**
 	 * Sends the updates for a {@link Region}
 	 *
-	 * @param position The {@link Position} of the last known region.
+	 * @param position    The {@link Position} of the last known region.
 	 * @param differences The {@link Set} of {@link RegionCoordinates} of Regions that changed.
-	 * @param full The {@link Set} of {@link RegionCoordinates} of Regions that require a full update.
+	 * @param full        The {@link Set} of {@link RegionCoordinates} of Regions that require a full update.
 	 */
 	private void sendUpdates(Position position, Set<RegionCoordinates> differences, Set<RegionCoordinates> full) {
 		RegionRepository repository = player.getWorld().getRegionRepository();
 		int height = position.getHeight();
 
 		for (RegionCoordinates coordinates : differences) {
-			Set<RegionUpdateMessage> messages = updates.computeIfAbsent(coordinates,
-				coords -> repository.get(coords).getUpdates(height));
+			Set<RegionUpdateMessage> messages = updates
+					.computeIfAbsent(coordinates, coords -> repository.get(coords).getUpdates(height));
 
 			if (!messages.isEmpty()) {
-				player.send(new GroupedRegionUpdateMessage(position, coordinates, messages));
+				player.send(new UpdateZonePartialEnclosedMessage(position, coordinates, messages));
 			}
 		}
 
 		for (RegionCoordinates coordinates : full) {
-			Set<RegionUpdateMessage> messages = encodes.computeIfAbsent(coordinates,
-				coords -> repository.get(coords).encode(height));
+			Set<RegionUpdateMessage> messages = encodes
+					.computeIfAbsent(coordinates, coords -> repository.get(coords).encode(height));
 
 			if (!messages.isEmpty()) {
-				player.send(new ClearRegionMessage(position, coordinates));
-				player.send(new GroupedRegionUpdateMessage(position, coordinates, messages));
+				player.send(new UpdateZoneFullFollowsMessage(position, coordinates));
+				player.send(new UpdateZonePartialEnclosedMessage(position, coordinates, messages));
 			}
 		}
 	}

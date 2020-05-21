@@ -1,9 +1,9 @@
 package org.apollo.game.plugin.testing.junit.api.interactions
 
-import org.apollo.game.message.impl.ItemOptionMessage
-import org.apollo.game.message.impl.NpcActionMessage
-import org.apollo.game.message.impl.ObjectActionMessage
-import org.apollo.game.message.impl.PlayerActionMessage
+import org.apollo.game.message.impl.decode.ItemActionMessage
+import org.apollo.game.message.impl.decode.NpcActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
+import org.apollo.game.message.impl.decode.PlayerActionMessage
 import org.apollo.game.model.Direction
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Entity
@@ -12,11 +12,12 @@ import org.apollo.game.model.entity.Player
 import org.apollo.game.model.entity.obj.GameObject
 
 /**
- * Send an [ItemOptionMessage] for the given [id], [option], [slot], and [interfaceId], simulating a
+ * Send an [ItemActionMessage] for the given [id], [option], [slot], and [interfaceId], simulating a
  * player interacting with an item.
  */
-fun Player.interactWithItem(id: Int, option: Int, slot: Int? = null, interfaceId: Int? = null) {
-    send(ItemOptionMessage(option, interfaceId ?: -1, id, slot ?: inventory.slotOf(id)))
+fun Player.interactWithItem(id: Int, option: Int, slot: Int? = null, interfaceId: Int? = null, componentId: Int? = null) {
+    send(ItemActionMessage(option, interfaceId ?: -1, componentId
+            ?: -1, id, slot ?: inventory.slotOf(id)))
 }
 
 /**
@@ -35,8 +36,8 @@ fun Player.interactWith(entity: Entity, option: Int = 1) {
     position = entity.position.step(1, Direction.NORTH)
 
     when (entity) {
-        is GameObject -> send(ObjectActionMessage(option, entity.id, entity.position))
-        is Npc -> send(NpcActionMessage(option, entity.index))
-        is Player -> send(PlayerActionMessage(option, entity.index))
+        is GameObject -> send(ObjectActionMessage(option, entity.id, entity.position, 0))
+        is Npc -> send(NpcActionMessage(option, entity.index, 0))
+        is Player -> send(PlayerActionMessage(option, entity.index, 0))
     }
 }

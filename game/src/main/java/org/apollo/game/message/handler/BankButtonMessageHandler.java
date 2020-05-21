@@ -1,6 +1,6 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.ButtonMessage;
+import org.apollo.game.message.impl.decode.ButtonMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 
@@ -32,9 +32,9 @@ public final class BankButtonMessageHandler extends MessageHandler<ButtonMessage
 
 	@Override
 	public void handle(Player player, ButtonMessage message) {
-		if (message.getWidgetId() == WITHDRAW_AS_ITEM) {
+		if (message.getComponentId() == WITHDRAW_AS_ITEM) {
 			player.setWithdrawingNotes(false);
-		} else if (message.getWidgetId() == WITHDRAW_AS_NOTE) {
+		} else if (message.getComponentId() == WITHDRAW_AS_NOTE) {
 			player.setWithdrawingNotes(true);
 		}
 	}

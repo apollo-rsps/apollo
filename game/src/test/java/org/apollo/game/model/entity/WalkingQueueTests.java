@@ -34,7 +34,7 @@ public class WalkingQueueTests {
 	}
 
 	private Player createFakePlayer(World world) {
-		PlayerCredentials credentials = new PlayerCredentials("test", "test", -1, -1, "0.0.0.0");
+		PlayerCredentials credentials = new PlayerCredentials("test", "test", -1, null, "0.0.0.0");
 		Player player = new Player(world, credentials, START_POSITION);
 
 		Region region = world.getRegionRepository().fromPosition(START_POSITION);

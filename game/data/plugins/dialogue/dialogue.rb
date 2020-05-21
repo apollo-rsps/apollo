@@ -360,7 +360,7 @@ class Dialogue
   end
 
   # Decodes the next dialogue interface from the hash, returning a proc.
-  def decode_next_dialogue(hash) 
+  def decode_next_dialogue(hash)
     hash.each_pair do |key, value|
       case key
         when :disabled then return ->(player) { }

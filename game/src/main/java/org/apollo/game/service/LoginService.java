@@ -88,7 +88,7 @@ public final class LoginService extends Service {
 	 * Submits a save request.
 	 *
 	 * @param session The session submitting this request.
-	 * @param player The player to save.
+	 * @param player  The player to save.
 	 */
 	public void submitSaveRequest(GameSession session, Player player) {
 		executor.submit(new PlayerSaverWorker(serializer, session, player));
@@ -97,8 +97,8 @@ public final class LoginService extends Service {
 	/**
 	 * Initialises the login service.
 	 *
-	 * @throws SAXException If there is an error parsing the XML file.
-	 * @throws IOException If there is an error accessing the file.
+	 * @throws SAXException                 If there is an error parsing the XML file.
+	 * @throws IOException                  If there is an error accessing the file.
 	 * @throws ReflectiveOperationException If the {@link PlayerSerializer} implementation could not be created.
 	 */
 	private void init() throws SAXException, IOException, ReflectiveOperationException {
@@ -136,9 +136,13 @@ public final class LoginService extends Service {
 		}
 
 		int[] clientCrcs = request.getArchiveCrcs();
-		int[] serverCrcs = context.getFileSystem().getCrcs();
-
-		return !Arrays.equals(clientCrcs, serverCrcs);
+		for (int index = 0; index < clientCrcs.length; index++) {
+			int crc = context.getFileSystem().getArchive(index).getCRC32();
+			if (index != 16 && crc != clientCrcs[index]) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -3,7 +3,7 @@ package org.apollo.plugin.locations.varrock
 import org.apollo.game.model.Direction
 import org.apollo.game.plugin.entity.spawn.spawnNpc
 
-spawnNpc("barbarian_woman", x = 3222, y = 3399)
+spawnNpc("barbarian_woman_3102", x = 3222, y = 3399)
 
 spawnNpc("bear", id = 106, x = 3289, y = 3351)
 
@@ -160,7 +160,7 @@ spawnNpc("apothecary", x = 3196, y = 3403)
 
 spawnNpc("captain_rovin", x = 3204, y = 3496, z = 2)
 
-spawnNpc("curator", x = 3256, y = 3447)
+spawnNpc("curator_haig_halen", x = 3256, y = 3447)
 
 spawnNpc("dimintheis", x = 3280, y = 3403)
 
@@ -174,7 +174,7 @@ spawnNpc("guidors_wife", id = 342, x = 3280, y = 3382)
 
 spawnNpc("guidor", x = 3284, y = 3381, facing = Direction.SOUTH)
 
-spawnNpc("guild_master", x = 3189, y = 3360)
+spawnNpc("guildmaster", x = 3189, y = 3360)
 
 spawnNpc("gypsy", x = 3203, y = 3423)
 
@@ -220,7 +220,7 @@ spawnNpc("bartender", x = 3226, y = 3400)
 
 spawnNpc("bartender", id = 1921, x = 3277, y = 3487)
 
-spawnNpc("fancy_dress_shop_owner", x = 3281, y = 3398)
+spawnNpc("asyff", x = 3281, y = 3398)
 
 spawnNpc("horvik", x = 3229, y = 3438)
 

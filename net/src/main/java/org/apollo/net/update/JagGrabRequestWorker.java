@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 
-import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.Cache;
 import org.apollo.net.codec.jaggrab.JagGrabRequest;
 import org.apollo.net.codec.jaggrab.JagGrabResponse;
 import org.apollo.net.update.resource.ResourceProvider;
@@ -28,7 +28,7 @@ public final class JagGrabRequestWorker extends RequestWorker<JagGrabRequest, Re
 	 * @param dispatcher The dispatcher.
 	 * @param fs The file system.
 	 */
-	public JagGrabRequestWorker(UpdateDispatcher dispatcher, IndexedFileSystem fs) {
+	public JagGrabRequestWorker(UpdateDispatcher dispatcher, Cache fs) {
 		super(dispatcher, new VirtualResourceProvider(fs));
 	}
 

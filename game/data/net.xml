@@ -1,7 +1,8 @@
 <net>
   <ports>
     <http>80</http>
-    <service>43594</service>
+    <game>43594</game>
+    <update>43594</update>
     <jaggrab>43595</jaggrab>
   </ports>
 </net>

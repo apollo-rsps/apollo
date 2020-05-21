@@ -20,9 +20,9 @@ public final class PlayerCredentials {
 	private String password;
 
 	/**
-	 * The computer's unique identifier.
+	 * The computer's hardware specs.
 	 */
-	private final int uid;
+	private final UserStats userStats;
 
 	/**
 	 * The player's username.
@@ -41,19 +41,18 @@ public final class PlayerCredentials {
 
 	/**
 	 * Creates a new {@link PlayerCredentials} object with the specified name, password and uid.
-	 *
-	 * @param username The player's username.
+	 *  @param username The player's username.
 	 * @param password The player's password.
 	 * @param usernameHash The hash of the player's username.
-	 * @param uid The computer's uid.
+	 * @param userStats The computer's uid.
 	 * @param hostAddress The Player's connecting host address.
 	 */
-	public PlayerCredentials(String username, String password, int usernameHash, int uid, String hostAddress) {
+	public PlayerCredentials(String username, String password, int usernameHash, UserStats userStats, String hostAddress) {
 		this.username = username;
-		encodedUsername = NameUtil.encodeBase37(username);
+		this.encodedUsername = NameUtil.encodeBase37(username);
 		this.password = password;
 		this.usernameHash = usernameHash;
-		this.uid = uid;
+		this.userStats = userStats;
 		this.hostAddress = hostAddress;
 	}
 
@@ -85,12 +84,12 @@ public final class PlayerCredentials {
 	}
 
 	/**
-	 * Gets the computer's uid.
+	 * Gets the computer's specs.
 	 *
-	 * @return The computer's uid.
+	 * @return The computer's specs.
 	 */
-	public int getUid() {
-		return uid;
+	public UserStats getUserStats() {
+		return userStats;
 	}
 
 	/**

@@ -2,6 +2,7 @@ package org.apollo.game.action;
 
 import org.apollo.game.model.Position;
 import org.apollo.game.model.entity.Mob;
+import org.apollo.game.model.entity.path.*;
 
 /**
  * An @{link Action} which fires when a distance requirement is met.
@@ -58,13 +59,18 @@ public abstract class DistancedAction<T extends Mob> extends Action<T> {
 	public final void execute() {
 		if (reached) { // Don't check again in case the player has moved away since it was reached
 			executeAction();
-			// TODO checking the walking queue size is a really cheap fix, and relies on the client not
-			// being edited... this class needs to be completely re-written.
-		} else if (mob.getPosition().isWithinDistance(position, distance) && mob.getWalkingQueue().size() == 0) {
-			reached = true;
-			setDelay(delay);
-			if (immediate) {
-				executeAction();
+		} else if (mob.getWalkingQueue().size() == 0) {
+			if (mob.getPosition().isWithinDistance(position, distance)) {
+				reached = true;
+				setDelay(delay);
+				if (immediate) {
+					executeAction();
+				}
+			} else {
+				var pathfinder = new AStarPathfindingAlgorithm(mob.getWorld().getCollisionManager(), new ChebyshevHeuristic());
+				var path = pathfinder.find(mob.getPosition(), position);
+
+				path.forEach(mob.getWalkingQueue()::addStep);
 			}
 		}
 	}

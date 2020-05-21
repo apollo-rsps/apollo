@@ -5,10 +5,10 @@ import Herb.Companion.isIdentified
 import Herb.Companion.isUnidentified
 import Ingredient.Companion.isIngredient
 import UnfinishedPotion.Companion.isUnfinished
-import org.apollo.game.message.impl.ItemOnItemMessage
-import org.apollo.game.message.impl.ItemOptionMessage
+import org.apollo.game.message.impl.decode.ItemOnItemMessage
+import org.apollo.game.message.impl.decode.ItemActionMessage
 
-on { ItemOptionMessage::class }
+on { ItemActionMessage::class }
     .where { option == IdentifyHerbAction.IDENTIFY_OPTION && id.isUnidentified() }
     .then { player ->
         val unidentified = Herb[id]!!

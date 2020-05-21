@@ -3,7 +3,7 @@ package org.apollo.plugin.locations.alKharid
 import org.apollo.game.plugin.shops.builder.shop
 
 shop("Al-Kharid General Store") {
-    operated by "Shop keeper"(524) and "Shop assistant"(525)
+    operated by "Shop keeper"(2817) and "Shop assistant"(2818)
     buys any items
 
     sell(5) of "Pot"

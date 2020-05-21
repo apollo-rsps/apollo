@@ -1,6 +1,6 @@
 package org.apollo.game.plugin.skills.fishing
 
-import org.apollo.game.message.impl.NpcActionMessage
+import org.apollo.game.message.impl.decode.NpcActionMessage
 
 // TODO: moving fishing spots, seaweed and caskets, evil bob
 

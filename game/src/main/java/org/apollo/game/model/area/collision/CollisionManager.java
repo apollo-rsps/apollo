@@ -65,11 +65,11 @@ public final class CollisionManager {
 			}
 		}
 
-		regions.getRegions().forEach(region -> {
+		regions.getRegions().parallelStream().forEach(region -> {
 			CollisionUpdate.Builder builder = new CollisionUpdate.Builder();
 			builder.type(CollisionUpdateType.ADDING);
 
-			blocked.get(region.getCoordinates()).forEach(tile -> {
+			for (var tile : blocked.get(region.getCoordinates())) {
 				int x = tile.getX(), y = tile.getY();
 				int height = tile.getHeight();
 
@@ -80,7 +80,7 @@ public final class CollisionManager {
 				if (height >= 0) {
 					builder.tile(new Position(x, y, height), false, Direction.NESW);
 				}
-			});
+			}
 
 			apply(builder.build());
 

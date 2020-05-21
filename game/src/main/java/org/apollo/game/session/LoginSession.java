@@ -1,10 +1,13 @@
 package org.apollo.game.session;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
 import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.apollo.ServerContext;
@@ -31,6 +34,11 @@ import org.apollo.util.security.IsaacRandomPair;
 public final class LoginSession extends Session {
 
 	/**
+	 * The secure random number generator.
+	 */
+	private static final SecureRandom RANDOM = new SecureRandom();
+
+	/**
 	 * The ServerContext.
 	 */
 	private final ServerContext context;
@@ -41,6 +49,11 @@ public final class LoginSession extends Session {
 	private LoginRequest request;
 
 	/**
+	 * The key assigned for this session.
+	 */
+	private long serverSessionKey = RANDOM.nextLong();
+
+	/**
 	 * Creates a login session for the specified channel.
 	 *
 	 * @param channel The channel.
@@ -49,6 +62,13 @@ public final class LoginSession extends Session {
 	public LoginSession(Channel channel, ServerContext context) {
 		super(channel);
 		this.context = context;
+		init();
+	}
+
+	private void init() {
+		ByteBuf buf = channel.alloc().buffer(Long.BYTES);
+		buf.writeLong(serverSessionKey);
+		channel.write(new LoginResponse(LoginConstants.STATUS_EXCHANGE_DATA, buf));
 	}
 
 	@Override
@@ -59,7 +79,7 @@ public final class LoginSession extends Session {
 	/**
 	 * Handles a response from the login service.
 	 *
-	 * @param request The request this response corresponds to.
+	 * @param request  The request this response corresponds to.
 	 * @param response The response.
 	 */
 	public void handlePlayerLoaderResponse(LoginRequest request, PlayerLoaderResponse response) {
@@ -87,9 +107,7 @@ public final class LoginSession extends Session {
 	 * @param status The failure status.
 	 */
 	public void sendLoginFailure(int status) {
-		boolean flagged = false;
-		LoginResponse response = new LoginResponse(status, 0, flagged);
-		channel.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+		channel.writeAndFlush(new LoginResponse(status)).addListener(ChannelFutureListener.CLOSE);
 	}
 
 	/**
@@ -105,20 +123,36 @@ public final class LoginSession extends Session {
 		channel.attr(ApolloHandler.SESSION_KEY).set(session);
 		player.setSession(session);
 
-		int rights = player.getPrivilegeLevel().toInteger();
-		channel.writeAndFlush(new LoginResponse(LoginConstants.STATUS_OK, rights, flagged));
+		final var payload = channel.alloc()
+				.buffer(Byte.BYTES * 2 + Integer.BYTES + Byte.BYTES * 2 + Short.BYTES + Byte.BYTES);
+		payload.writeByte(13);
+
+		boolean isTrusted = false;
+		payload.writeBoolean(isTrusted);
+		payload.writeInt(isTrusted ? randomPair.getEncodingRandom().nextInt() : 0);
+		payload.writeByte(player.getPrivilegeLevel().toInteger());
+		payload.writeBoolean(player.isMembers());
+		payload.writeShort(player.getIndex());
+		payload.writeBoolean(flagged); // flagged
+		channel.writeAndFlush(new LoginResponse(LoginConstants.STATUS_OK, payload));
 
 		Release release = context.getRelease();
 
-		channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
-		channel.pipeline().addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
+		try {
+			channel.pipeline().addFirst("messageEncoder", new GameMessageEncoder(release));
+			channel.pipeline()
+					.addBefore("messageEncoder", "gameEncoder", new GamePacketEncoder(randomPair.getEncodingRandom()));
 
-		channel.pipeline().addBefore("handler", "gameDecoder",
-				new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
-		channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
+			channel.pipeline().addAfter("gameEncoder", "gameDecoder",
+					new GamePacketDecoder(randomPair.getDecodingRandom(), context.getRelease()));
+			channel.pipeline().addAfter("gameDecoder", "messageDecoder", new GameMessageDecoder(release));
 
-		channel.pipeline().remove("loginDecoder");
-		channel.pipeline().remove("loginEncoder");
+			channel.pipeline().remove("loginDecoder");
+			channel.pipeline().remove("loginEncoder");
+		} catch (NoSuchElementException ex) {
+
+		}
+
 	}
 
 	/**
@@ -130,5 +164,9 @@ public final class LoginSession extends Session {
 	private void handleLoginRequest(LoginRequest request) throws IOException {
 		LoginService service = context.getLoginService();
 		service.submitLoadRequest(this, request);
+	}
+
+	public LoginRequest getRequest() {
+		return request;
 	}
 }

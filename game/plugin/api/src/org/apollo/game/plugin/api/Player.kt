@@ -25,7 +25,8 @@ val Player.thieving: SkillProxy get() = SkillProxy(skillSet, Skill.THIEVING)
 val Player.slayer: SkillProxy get() = SkillProxy(skillSet, Skill.SLAYER)
 val Player.farming: SkillProxy get() = SkillProxy(skillSet, Skill.FARMING)
 val Player.runecraft: SkillProxy get() = SkillProxy(skillSet, Skill.RUNECRAFT)
-
+val Player.construction: SkillProxy get() = SkillProxy(skillSet, Skill.CONSTRUCTION)
+val Player.hunter: SkillProxy get() = SkillProxy(skillSet, Skill.HUNTER)
 /**
  * A proxy class to allow
  */

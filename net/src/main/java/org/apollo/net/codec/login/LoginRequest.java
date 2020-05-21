@@ -18,7 +18,8 @@ public final class LoginRequest {
 	/**
 	 * The version denoting whether the client has been modified or not.
 	 */
-	private final int clientVersion;
+	private final long clientVersion;
+	private final int displayMode;
 
 	/**
 	 * The player's credentials.
@@ -43,11 +44,10 @@ public final class LoginRequest {
 	/**
 	 * The release number.
 	 */
-	private final int releaseNumber;
+	private final long releaseNumber;
 
 	/**
 	 * Creates a login request.
-	 *
 	 * @param credentials The player credentials.
 	 * @param randomPair The pair of random number generators.
 	 * @param lowMemory The low memory flag.
@@ -55,8 +55,10 @@ public final class LoginRequest {
 	 * @param releaseNumber The release number.
 	 * @param archiveCrcs The archive CRCs.
 	 * @param clientVersion The client version.
+	 * @param displayMode
 	 */
-	public LoginRequest(PlayerCredentials credentials, IsaacRandomPair randomPair, boolean lowMemory, boolean reconnecting, int releaseNumber, int[] archiveCrcs, int clientVersion) {
+	public LoginRequest(PlayerCredentials credentials, IsaacRandomPair randomPair, boolean lowMemory, boolean reconnecting, long releaseNumber, int[] archiveCrcs, long clientVersion,
+						int displayMode) {
 		this.credentials = credentials;
 		this.randomPair = randomPair;
 		this.lowMemory = lowMemory;
@@ -64,6 +66,7 @@ public final class LoginRequest {
 		this.releaseNumber = releaseNumber;
 		this.archiveCrcs = archiveCrcs;
 		this.clientVersion = clientVersion;
+		this.displayMode = displayMode;
 	}
 
 	/**
@@ -80,7 +83,7 @@ public final class LoginRequest {
 	 *
 	 * @return The client version.
 	 */
-	public int getClientVersion() {
+	public long getClientVersion() {
 		return clientVersion;
 	}
 
@@ -107,7 +110,7 @@ public final class LoginRequest {
 	 *
 	 * @return The release number.
 	 */
-	public int getReleaseNumber() {
+	public long getReleaseNumber() {
 		return releaseNumber;
 	}
 
@@ -129,4 +132,7 @@ public final class LoginRequest {
 		return reconnecting;
 	}
 
+	public int getDisplayMode() {
+		return displayMode;
+	}
 }

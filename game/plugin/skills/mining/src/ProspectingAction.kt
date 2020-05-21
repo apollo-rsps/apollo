@@ -1,7 +1,7 @@
 import java.util.Objects
 import org.apollo.game.action.ActionBlock
 import org.apollo.game.action.AsyncDistancedAction
-import org.apollo.game.message.impl.ObjectActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
 import org.apollo.game.model.Position
 import org.apollo.game.model.entity.Player
 import org.apollo.game.plugin.api.Definitions

@@ -10,50 +10,78 @@ import org.apollo.net.message.Message;
 public final class SendFriendMessage extends Message {
 
 	/**
-	 * The username of the friend.
+	 * The type Friend message component.
 	 */
-	private final String username;
+	public static final class FriendMessageComponent {
+		/**
+		 * The username of the friend.
+		 */
+		private final String username;
 
-	/**
-	 * The world id the friend is in.
-	 */
-	private final int world;
+		/**
+		 * The world id the friend is in.
+		 */
+		private final int world;
 
-	/**
-	 * Creates a new send friend message.
-	 *
-	 * @param username The username of the friend.
-	 * @param world The world the friend is in.
-	 */
-	public SendFriendMessage(String username, int world) {
-		this.username = username;
-		this.world = world;
+		/**
+		 * Creates a new send friend message.
+		 *
+		 * @param username The username of the friend.
+		 * @param world    The world the friend is in.
+		 */
+		public FriendMessageComponent(String username, int world) {
+			this.username = username;
+			this.world = world;
+		}
+
+		/**
+		 * Gets the username of the friend.
+		 *
+		 * @return The username.
+		 */
+		public String getUsername() {
+			return username;
+		}
+
+		/**
+		 * Gets the world id the friend is in.
+		 *
+		 * @return The world id.
+		 */
+		public int getWorld() {
+			return world;
+		}
+
+		/**
+		 * Gets the encoded world id to be sent to the client.
+		 *
+		 * @return The encoded world id.
+		 */
+		public int getEncodedWorld() {
+			return world;
+		}
 	}
 
 	/**
-	 * Gets the username of the friend.
-	 *
-	 * @return The username.
+	 * The components that build the message.
 	 */
-	public String getUsername() {
-		return username;
+	private final FriendMessageComponent[] components;
+
+	/**
+	 * Instantiates a new Send friend message.
+	 *
+	 * @param components the components
+	 */
+	public SendFriendMessage(FriendMessageComponent... components) {
+		this.components = components;
 	}
 
 	/**
-	 * Gets the world id the friend is in.
+	 * Get components friend message component [ ].
 	 *
-	 * @return The world id.
+	 * @return the friend message component [ ]
 	 */
-	public int getWorld() {
-		return world;
-	}
-
-	/**
-	 * Gets the encoded world id to be sent to the client.
-	 *
-	 * @return The encoded world id.
-	 */
-	public int getEncodedWorld() {
-		return world == 0 ? 0 : world + 9;
+	public FriendMessageComponent[] getComponents() {
+		return components;
 	}
 }

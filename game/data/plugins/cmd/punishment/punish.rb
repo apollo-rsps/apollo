@@ -48,6 +48,6 @@ def validate(player, on_player)
     player.send_message('You cannot perform this action on Administrators.')
     return false
   end
-  
+
   true
 end

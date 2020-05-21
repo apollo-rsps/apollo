@@ -5,12 +5,15 @@ import java.util.logging.Logger;
 
 import com.google.common.base.Preconditions;
 import org.apollo.Service;
-import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.Cache;
 import org.apollo.cache.decoder.ItemDefinitionDecoder;
 import org.apollo.cache.decoder.NpcDefinitionDecoder;
 import org.apollo.cache.decoder.ObjectDefinitionDecoder;
+import org.apollo.cache.decoder.rsenum.EnumDefinitionDecoder;
 import org.apollo.cache.map.MapIndexDecoder;
+import org.apollo.cache.map.XteaRepository;
 import org.apollo.game.command.CommandDispatcher;
+import org.apollo.game.fs.decoder.HuffmanCodecDecoder;
 import org.apollo.game.fs.decoder.SynchronousDecoder;
 import org.apollo.game.fs.decoder.WorldMapDecoder;
 import org.apollo.game.fs.decoder.WorldObjectsDecoder;
@@ -213,26 +216,30 @@ public final class World {
 	 * system.
 	 *
 	 * @param release The release number.
-	 * @param fs The file system.
+	 * @param cache The file system.
 	 * @param manager The plugin manager. TODO move this.
 	 * @throws Exception If there was a failure when loading plugins.
 	 */
-	public void init(int release, IndexedFileSystem fs, PluginManager manager) throws Exception {
+	public void init(int release, Cache cache, PluginManager manager) throws Exception {
 		releaseNumber = release;
 
+		regions.setXteaRepository(new XteaRepository(release));
+
 		SynchronousDecoder firstStageDecoder = new SynchronousDecoder(
-			new NpcDefinitionDecoder(fs),
-			new ItemDefinitionDecoder(fs),
-			new ObjectDefinitionDecoder(fs),
-			new MapIndexDecoder(fs),
+			new NpcDefinitionDecoder(cache),
+			new ItemDefinitionDecoder(cache),
+			new EnumDefinitionDecoder(cache),
+			new ObjectDefinitionDecoder(cache),
+			new MapIndexDecoder(cache, regions.getXteaRepository()),
 			EquipmentDefinitionParser.fromFile("data/equipment-" + release + "" + ".dat")
 		);
 
 		firstStageDecoder.block();
 
 		SynchronousDecoder secondStageDecoder = new SynchronousDecoder(
-			new WorldObjectsDecoder(fs, this, regions),
-			new WorldMapDecoder(fs, collisionManager)
+			new HuffmanCodecDecoder(cache),
+			new WorldObjectsDecoder(cache, this),
+			new WorldMapDecoder(collisionManager)
 		);
 
 		secondStageDecoder.block();

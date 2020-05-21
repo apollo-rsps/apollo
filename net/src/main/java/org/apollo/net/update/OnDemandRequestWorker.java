@@ -3,33 +3,26 @@ package org.apollo.net.update;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
-
-import java.io.IOException;
-
-import org.apollo.cache.FileDescriptor;
-import org.apollo.cache.IndexedFileSystem;
+import org.apollo.cache.Cache;
 import org.apollo.net.codec.update.OnDemandRequest;
 import org.apollo.net.codec.update.OnDemandResponse;
+
+import java.io.IOException;
 
 /**
  * A worker which services 'on-demand' requests.
  *
  * @author Graham
  */
-public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, IndexedFileSystem> {
-
-	/**
-	 * The maximum length of a chunk, in {@code byte}s.
-	 */
-	private static final int CHUNK_LENGTH = 500;
+public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, Cache> {
 
 	/**
 	 * Creates the 'on-demand' request worker.
 	 *
 	 * @param dispatcher The dispatcher.
-	 * @param fs The file system.
+	 * @param fs         The file system.
 	 */
-	public OnDemandRequestWorker(UpdateDispatcher dispatcher, IndexedFileSystem fs) {
+	public OnDemandRequestWorker(UpdateDispatcher dispatcher, Cache fs) {
 		super(dispatcher, fs);
 	}
 
@@ -39,16 +32,23 @@ public final class OnDemandRequestWorker extends RequestWorker<OnDemandRequest, 
 	}
 
 	@Override
-	protected void service(IndexedFileSystem fs, Channel channel, OnDemandRequest request) throws IOException {
-		FileDescriptor descriptor = request.getFileDescriptor();
-		ByteBuf buffer = Unpooled.wrappedBuffer(fs.getFile(descriptor));
-		int length = buffer.readableBytes();
+	protected void service(Cache cache, Channel channel, OnDemandRequest request) throws IOException {
+		final var fs = request.getFs();
+		final var folder = request.getFolder();
 
-		for (int chunk = 0; buffer.readableBytes() > 0; chunk++) {
-			int chunkSize = Math.min(buffer.readableBytes(), CHUNK_LENGTH);
-			OnDemandResponse response = new OnDemandResponse(descriptor, length, chunk, buffer.readBytes(chunkSize));
-			channel.writeAndFlush(response);
+		ByteBuf buf;
+		if (fs == 255 && folder == 255) {
+			buf = Unpooled.wrappedBuffer(cache.generateInformationStoreDescriptor(false).getBuffer());
+		} else {
+			final var store = fs == 255 ? cache.getMasterIndex() : cache.getIndex(fs);
+			if (store == null) {
+				return;
+			}
+			buf = Unpooled.wrappedBuffer(store.get(folder).getBuffer());
+			if (fs != 255) buf = buf.slice(0, buf.readableBytes() - 2);
 		}
-	}
 
+		OnDemandResponse response = new OnDemandResponse(fs, folder, request.getPriority(), buf);
+		channel.writeAndFlush(response);
+	}
 }

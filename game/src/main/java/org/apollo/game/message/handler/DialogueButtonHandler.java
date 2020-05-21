@@ -1,9 +1,9 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.ButtonMessage;
+import org.apollo.game.message.impl.decode.ButtonMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
-import org.apollo.game.model.inter.InterfaceType;
+import org.apollo.game.model.inter.ServerInterfaceType;
 
 /**
  * A {@link MessageHandler} which intercepts button clicks on dialogues, and forwards the message to the current
@@ -24,8 +24,8 @@ public final class DialogueButtonHandler extends MessageHandler<ButtonMessage> {
 
 	@Override
 	public void handle(Player player, ButtonMessage message) {
-		if (player.getInterfaceSet().contains(InterfaceType.DIALOGUE)) {
-			boolean terminate = player.getInterfaceSet().buttonClicked(message.getWidgetId());
+		if (player.getInterfaceSet().contains(ServerInterfaceType.DIALOGUE)) {
+			boolean terminate = player.getInterfaceSet().buttonClicked(message.getComponentId());
 
 			if (terminate) {
 				message.terminate();

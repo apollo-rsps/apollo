@@ -2,7 +2,7 @@ package org.apollo.game.message.handler;
 
 import org.apollo.cache.def.ItemDefinition;
 import org.apollo.cache.def.ObjectDefinition;
-import org.apollo.game.message.impl.ObjectActionMessage;
+import org.apollo.game.message.impl.decode.ObjectActionMessage;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.area.Region;
@@ -12,7 +12,6 @@ import org.apollo.game.model.entity.EntityType;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.obj.StaticGameObject;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -55,7 +54,7 @@ public final class ObjectActionVerificationHandlerTests {
 		when(region.getEntities(objectPosition, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT))
 				.thenReturn(entitySet);
 
-		ObjectActionMessage objectActionMessage = new ObjectActionMessage(1, 4151, objectPosition);
+		ObjectActionMessage objectActionMessage = new ObjectActionMessage(1, 4151, objectPosition, 0);
 		ObjectActionVerificationHandler objectActionVerificationHandler = new ObjectActionVerificationHandler(world);
 
 		objectActionVerificationHandler.handle(player, objectActionMessage);
@@ -81,7 +80,7 @@ public final class ObjectActionVerificationHandlerTests {
 		when(region.getEntities(objectPosition, EntityType.STATIC_OBJECT, EntityType.DYNAMIC_OBJECT))
 				.thenReturn(entitySet);
 
-		ObjectActionMessage objectActionMessage = new ObjectActionMessage(1, 4151, objectPosition);
+		ObjectActionMessage objectActionMessage = new ObjectActionMessage(1, 4151, objectPosition, 0);
 		ObjectActionVerificationHandler objectActionVerificationHandler = new ObjectActionVerificationHandler(world);
 
 		objectActionVerificationHandler.handle(player, objectActionMessage);

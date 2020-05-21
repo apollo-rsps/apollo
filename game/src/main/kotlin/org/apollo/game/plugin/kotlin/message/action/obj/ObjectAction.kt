@@ -2,7 +2,7 @@ package org.apollo.game.plugin.kotlin.message.action.obj
 
 import org.apollo.cache.def.ObjectDefinition
 import org.apollo.game.message.handler.MessageHandler
-import org.apollo.game.message.impl.ObjectActionMessage
+import org.apollo.game.message.impl.decode.ObjectActionMessage
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.EntityType
 import org.apollo.game.model.entity.Player

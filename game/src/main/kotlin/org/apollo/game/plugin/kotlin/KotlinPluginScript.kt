@@ -2,7 +2,7 @@ package org.apollo.game.plugin.kotlin
 
 import org.apollo.game.command.CommandListener
 import org.apollo.game.message.handler.MessageHandler
-import org.apollo.game.message.impl.ButtonMessage
+import org.apollo.game.message.impl.decode.ButtonMessage
 import org.apollo.game.model.World
 import org.apollo.game.model.entity.setting.PrivilegeLevel
 import org.apollo.game.model.event.Event
@@ -90,7 +90,7 @@ abstract class KotlinPluginScript(var world: World, val context: PluginContext) 
      */
     @Deprecated("Use new on(Type) listener")
     fun on_button(id: Int): KotlinPlayerHandlerProxyTrait<ButtonMessage> {
-        return on { ButtonMessage::class }.where { widgetId == id }
+        return on { ButtonMessage::class }.where { componentId == id }
     }
 
     fun start(callback: (World) -> Unit) {

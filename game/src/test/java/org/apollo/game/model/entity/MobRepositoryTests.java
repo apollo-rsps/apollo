@@ -16,7 +16,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * Tests the {@link MobRepository} class.
- * 
+ *
  * @author Ryley
  */
 @RunWith(PowerMockRunner.class)

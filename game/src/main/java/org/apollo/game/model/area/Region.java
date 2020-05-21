@@ -3,7 +3,7 @@ package org.apollo.game.model.area;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import org.apollo.game.message.impl.RegionUpdateMessage;
+import org.apollo.game.message.impl.encode.RegionUpdateMessage;
 import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.collision.CollisionMatrix;
@@ -245,6 +245,19 @@ public final class Region {
 	public Set<Entity> getEntities(Position position) {
 		Set<Entity> set = entities.get(position);
 		return (set == null) ? ImmutableSet.of() : ImmutableSet.copyOf(set);
+	}
+
+	/**
+	 * Gets a shallow copy of the {@link Set} of {@link Entity} objects of the specified type. The returned
+	 * type will be immutable.
+	 *
+	 * @param type The type of entity.
+	 * @return The Set. Will be immutable.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> Stream<T> getEntities(EntityType type) {
+		return (Stream<T>) entities.values().stream().flatMap(Collection::stream)
+				.filter(entity -> entity.getEntityType() == type);
 	}
 
 	/**

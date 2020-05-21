@@ -1,7 +1,7 @@
 package org.apollo.game.message.handler;
 
-import org.apollo.game.message.impl.CloseInterfaceMessage;
-import org.apollo.game.message.impl.PlayerDesignMessage;
+import org.apollo.game.message.impl.decode.PlayerDesignMessage;
+import org.apollo.game.message.impl.encode.CloseInterfaceMessage;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 

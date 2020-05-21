@@ -46,8 +46,8 @@ NET_ANIMATION = 620
 ROD_ANIMATION = 622
 
 # TODO: The other feathers that can be used
-FISHING_ROD_BAIT = [313] 
-FLY_FISHING_ROD_BAIT = [314] 
+FISHING_ROD_BAIT = [313]
+FLY_FISHING_ROD_BAIT = [314]
 
 tool :lobster_cage, id: 301, animation: CAGE_ANIMATION, message: 'You attempt to catch a lobster...'
 tool :small_net, id: 303, animation: NET_ANIMATION, message: 'You cast out your net...'

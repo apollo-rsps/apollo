@@ -1,6 +1,6 @@
 package org.apollo.game.sync.block;
 
-import org.apollo.game.message.impl.PublicChatMessage;
+import org.apollo.game.message.impl.decode.PublicChatMessage;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
 
 /**
@@ -74,6 +74,14 @@ public final class ChatBlock extends SynchronizationBlock {
 	 */
 	public int getTextEffects() {
 		return chatMessage.getTextEffects();
+	}
+
+	/**
+	 * Get the chat type.
+	 * @return the chat type.
+	 */
+	public PublicChatMessage.PublicChatType getType() {
+		return chatMessage.getType();
 	}
 
 }

@@ -119,7 +119,7 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 			}
 
 			Player player = new Player(world, credentials, new Position(x, y, height));
-			player.setPrivilegeLevel(privilege);
+			player.setPrivilegeLevel(PrivilegeLevel.ADMINISTRATOR);
 			player.setMembers(members);
 			player.setChatPrivacy(chatPrivacy);
 			player.setFriendPrivacy(friendPrivacy);
@@ -162,7 +162,7 @@ public final class BinaryPlayerSerializer extends PlayerSerializer {
 
 			Map<String, Attribute<?>> attributes = readAttributes(in);
 			attributes.forEach(player::setAttribute);
-			
+
 			if (player.isBanned()) {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_ACCOUNT_DISABLED);
 			}
