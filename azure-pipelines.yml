@@ -11,6 +11,16 @@ steps:
       path: $(GRADLE_USER_HOME)
     displayName: "Gradle: setup build cache"
 
+  - task: DownloadPackage@1
+    inputs:
+      packageType: 'upack'
+      feed: '/76852042-5a8d-4247-969f-47caba0cae08'
+      view: '56ddc552-069b-4fda-9122-46a634ec7e8a'
+      definition: '301d6f40-3540-4afb-abcb-cf9be945c859'
+      version: '1.0.0-377'
+      downloadPath: '$(Build.SourcesDirectory)/game/data/fs/377'
+    displayName: "Misc: download cache data"
+
   - task: SonarCloudPrepare@1
     inputs:
       SonarCloud: 'apollo-rsps-sonarcloud'
@@ -29,7 +39,7 @@ steps:
       jdkArchitectureOption: 'x64'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
-      tasks: 'check jacocoTestReport sonarqube'
+      tasks: 'check jacocoReport sonarqube'
 
   - script: |
       ./gradlew --stop
