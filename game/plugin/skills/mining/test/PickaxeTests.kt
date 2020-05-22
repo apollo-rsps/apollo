@@ -46,7 +46,7 @@ class PickaxeTests {
     @EnumSource(value = Pickaxe::class)
     fun `Pickaxes can be chosen from equipment as well as inventory`(pickaxe: Pickaxe) {
         player.skillSet.setCurrentLevel(Skill.MINING, pickaxe.level)
-        player.inventory.add(pickaxe.id)
+        player.equipment.add(pickaxe.id)
 
         assertEquals(pickaxe, Pickaxe.bestFor(player))
     }
