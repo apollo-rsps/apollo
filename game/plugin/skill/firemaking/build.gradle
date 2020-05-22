@@ -1,0 +1,11 @@
+plugin {
+    name = "firemaking_skill"
+    packageName = "org.apollo.game.plugin.skills.firemaking"
+    authors = [
+        "tlf30",
+        "lare96"
+    ]
+    dependencies = [
+            "util:lookup",
+    ]
+}
