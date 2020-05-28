@@ -22,7 +22,7 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
 
     NET_HARPOON(
         npc = 313,
-        first = Option.of(tool = FishingTool.BIG_NET, primary = MACKEREL, secondary = COD),
+        first = Option.of(tool = FishingTool.BIG_NET, primary = MACKEREL, secondary = COD, junk = arrayOf(SEAWEED, CASKET)),
         second = Option.of(tool = FishingTool.HARPOON, primary = BASS, secondary = SHARK)
     ),
 
@@ -77,10 +77,16 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
         /**
          * A [FishingSpot] [Option] that can provide a two different types of fish.
          */
-        private data class Pair(override val tool: FishingTool, val primary: Fish, val secondary: Fish) : Option() {
+        private data class Pair(override val tool: FishingTool, val primary: Fish, val secondary: Fish, val junk: Array<Fish>) : Option() {
             override val level = Math.min(primary.level, secondary.level)
 
             override fun sample(level: Int): Fish {
+                if (junk.isNotEmpty() && rand(100) < JUNK_WEIGHTING) {
+                    val valid = junk.filter { level >= it.level }
+                    if (valid.isNotEmpty()) {
+                        return valid[rand(valid.size)]
+                    }
+                }
                 return if (level < secondary.level || rand(100) < WEIGHTING) {
                     primary
                 } else {
@@ -93,6 +99,11 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
                  * The weighting factor that causes the lower-level fish to be returned more frequently.
                  */
                 private const val WEIGHTING = 70
+
+                /**
+                 * The weighting factor that causes a junk item to be fished more frequently.
+                 */
+                private const val JUNK_WEIGHTING = 5
             }
         }
 
@@ -101,9 +112,18 @@ enum class FishingSpot(val npc: Int, private val first: Option, private val seco
             fun of(tool: FishingTool, primary: Fish): Option = Single(tool, primary)
 
             fun of(tool: FishingTool, primary: Fish, secondary: Fish): Option {
-                return when {
-                    primary.level < secondary.level -> Pair(tool, primary, secondary)
-                    else -> Pair(tool, secondary, primary)
+                return if (primary.level < secondary.level) {
+                    Pair(tool, primary, secondary, emptyArray())
+                } else {
+                    Pair(tool, secondary, primary, emptyArray())
+                }
+            }
+
+            fun of(tool: FishingTool, primary: Fish, secondary: Fish, junk: Array<Fish>): Option {
+                return if (primary.level < secondary.level) {
+                    Pair(tool, primary, secondary, junk)
+                } else {
+                    Pair(tool, secondary, primary, junk)
                 }
             }
         }
