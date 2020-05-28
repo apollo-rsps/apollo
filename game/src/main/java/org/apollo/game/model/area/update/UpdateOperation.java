@@ -53,7 +53,7 @@ public abstract class UpdateOperation<E extends Entity> {
 	 * @return The RegionUpdateMessage.
 	 */
 	public final RegionUpdateMessage inverse() {
-		int offset = getPositionOffset(entity.getPosition());
+		int offset = region.getPositionOffset(entity);
 
 		switch (type) {
 			case ADD:
@@ -71,7 +71,7 @@ public abstract class UpdateOperation<E extends Entity> {
 	 * @return The Message.
 	 */
 	public final RegionUpdateMessage toMessage() {
-		int offset = getPositionOffset(entity.getPosition());
+		int offset = region.getPositionOffset(entity);
 
 		switch (type) {
 			case ADD:
@@ -98,22 +98,5 @@ public abstract class UpdateOperation<E extends Entity> {
 	 * @return The RegionUpdateMessage.
 	 */
 	protected abstract RegionUpdateMessage remove(int offset);
-
-	/**
-	 * Gets the position offset for the specified {@link Position}.
-	 *
-	 * @param position The Position.
-	 * @return The position offset.
-	 */
-	private final int getPositionOffset(Position position) {
-		RegionCoordinates coordinates = region.getCoordinates();
-		int dx = position.getX() - coordinates.getAbsoluteX();
-		int dy = position.getY() - coordinates.getAbsoluteY();
-
-		Preconditions.checkArgument(dx >= 0 && dx < Region.SIZE, position + " not in expected Region of " + region + ".");
-		Preconditions.checkArgument(dy >= 0 && dy < Region.SIZE, position + " not in expected Region of " + region + ".");
-
-		return dx << 4 | dy;
-	}
 
 }
