@@ -119,7 +119,7 @@ public final class ObjectDefinitionDecoder implements Runnable {
 			} else if (opcode == 60 || opcode >= 65 && opcode <= 68) {
 				data.getShort();
 			} else if (opcode == 69) {
-				data.get();
+				definition.setInteractionMask(data.get());
 			} else if (opcode >= 70 && opcode <= 72) {
 				data.getShort();
 			} else if (opcode == 73) {
