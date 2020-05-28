@@ -1,53 +1,6 @@
 package org.apollo.game.release.r377;
 
-import org.apollo.game.message.impl.ClearRegionMessage;
-import org.apollo.game.message.impl.CloseInterfaceMessage;
-import org.apollo.game.message.impl.ConfigMessage;
-import org.apollo.game.message.impl.DisplayCrossbonesMessage;
-import org.apollo.game.message.impl.DisplayTabInterfaceMessage;
-import org.apollo.game.message.impl.EnterAmountMessage;
-import org.apollo.game.message.impl.FlashTabInterfaceMessage;
-import org.apollo.game.message.impl.ForwardPrivateChatMessage;
-import org.apollo.game.message.impl.FriendServerStatusMessage;
-import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
-import org.apollo.game.message.impl.IdAssignmentMessage;
-import org.apollo.game.message.impl.IgnoreListMessage;
-import org.apollo.game.message.impl.LogoutMessage;
-import org.apollo.game.message.impl.MobHintIconMessage;
-import org.apollo.game.message.impl.NpcSynchronizationMessage;
-import org.apollo.game.message.impl.OpenDialogueInterfaceMessage;
-import org.apollo.game.message.impl.OpenDialogueOverlayMessage;
-import org.apollo.game.message.impl.OpenInterfaceMessage;
-import org.apollo.game.message.impl.OpenInterfaceSidebarMessage;
-import org.apollo.game.message.impl.OpenOverlayMessage;
-import org.apollo.game.message.impl.OpenSidebarMessage;
-import org.apollo.game.message.impl.PlayerSynchronizationMessage;
-import org.apollo.game.message.impl.PositionHintIconMessage;
-import org.apollo.game.message.impl.PrivacyOptionMessage;
-import org.apollo.game.message.impl.RegionChangeMessage;
-import org.apollo.game.message.impl.RemoveObjectMessage;
-import org.apollo.game.message.impl.RemoveTileItemMessage;
-import org.apollo.game.message.impl.SendFriendMessage;
-import org.apollo.game.message.impl.SendObjectMessage;
-import org.apollo.game.message.impl.SendProjectileMessage;
-import org.apollo.game.message.impl.SendPublicTileItemMessage;
-import org.apollo.game.message.impl.SendTileItemMessage;
-import org.apollo.game.message.impl.ServerChatMessage;
-import org.apollo.game.message.impl.SetPlayerActionMessage;
-import org.apollo.game.message.impl.SetUpdatedRegionMessage;
-import org.apollo.game.message.impl.SetWidgetItemModelMessage;
-import org.apollo.game.message.impl.SetWidgetModelAnimationMessage;
-import org.apollo.game.message.impl.SetWidgetNpcModelMessage;
-import org.apollo.game.message.impl.SetWidgetPlayerModelMessage;
-import org.apollo.game.message.impl.SetWidgetTextMessage;
-import org.apollo.game.message.impl.SetWidgetVisibilityMessage;
-import org.apollo.game.message.impl.SwitchTabInterfaceMessage;
-import org.apollo.game.message.impl.UpdateItemsMessage;
-import org.apollo.game.message.impl.UpdateRunEnergyMessage;
-import org.apollo.game.message.impl.UpdateSkillMessage;
-import org.apollo.game.message.impl.UpdateSlottedItemsMessage;
-import org.apollo.game.message.impl.UpdateTileItemMessage;
-import org.apollo.game.message.impl.UpdateWeightMessage;
+import org.apollo.game.message.impl.*;
 import org.apollo.net.meta.PacketMetaDataGroup;
 import org.apollo.net.release.Release;
 
@@ -226,6 +179,8 @@ public final class Release377 extends Release {
 		register(OpenSidebarMessage.class, new OpenSidebarMessageEncoder());
 		register(OpenOverlayMessage.class, new OpenOverlayMessageEncoder());
 		register(OpenDialogueOverlayMessage.class, new OpenDialogueOverlayMessageEncoder());
+
+		register(SendPlaySoundMessage.class, new SendPlaySoundMessageEncoder());
 	}
 
 }
