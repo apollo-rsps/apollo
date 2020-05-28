@@ -29,7 +29,7 @@ steps:
       jdkArchitectureOption: 'x64'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
-      tasks: 'check jacocoTestReport sonarqube'
+      tasks: 'check sonarqube'
 
   - script: |
       ./gradlew --stop
