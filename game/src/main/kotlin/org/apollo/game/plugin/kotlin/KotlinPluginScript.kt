@@ -20,16 +20,9 @@ abstract class KotlinPluginScript(var world: World, val context: PluginContext) 
 
     private var stopListener: (World) -> Unit = { _ -> }
 
-    fun <T : Any, C : ListenableContext, I : PredicateContext> on(
-        listenable: Listenable<T, C, I>,
-        callback: C.() -> Unit
-    ) {
-        registerListener(listenable, null, callback)
-    }
-
     internal fun <T : Any, C : ListenableContext, I : PredicateContext> registerListener(
         listenable: Listenable<T, C, I>,
-        predicateContext: I?,
+        predicateContext: I,
         callback: C.() -> Unit
     ) {
         // Smart-casting/type-inference is completely broken in this function in intelliJ, so assign to otherwise

@@ -1,0 +1,24 @@
+- name: Introduction
+  items:
+    - name: What is Apollo?
+      href: introduction/01-what-is-apollo.md
+- name: Getting Started
+  items:
+    - name: Setting up a development environment
+      href: getting-started/01-setting-up-environment.md
+
+    - name: Running the server
+      href: getting-started/02-running-apollo.md
+- name: Plugins
+  items:
+    - name: What is a plugin?
+      href: plugins/01-what-is-a-plugin.md
+
+    - name: Creating a plugin
+      href: plugins/02-creating-a-plugin.md
+
+    - name: Testing plugins
+      href: plugins/03-testing-a-plugin.md
+
+    - name: Sharing code with other plugins
+      href: plugins/04-sharing-plugin-code.md

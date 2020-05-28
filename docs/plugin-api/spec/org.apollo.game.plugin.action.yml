@@ -1,0 +1,21 @@
+### YamlMime:ManagedReference
+items:
+  - uid: "org.apollo.game.plugin.action"
+    id: "action"
+    children:
+      - "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction"
+    langs:
+      - "java"
+      - "kotlin"
+    name: "org.apollo.game.plugin.action"
+    nameWithType: "org.apollo.game.plugin.action"
+    fullName: "org.apollo.game.plugin.action"
+    type: "Namespace"
+    summary: "Contains action types that can be listened on by plugin scripts."
+    syntax:
+      content: "package org.apollo.game.plugin.action"
+references:
+  - uid: "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction"
+    name: "ObjectAction<T>"
+    nameWithType: "ObjectAction<T>"
+    fullName: "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction<T>"

@@ -1,0 +1,10 @@
+- name: Guide
+  href: guide/
+
+- name: Core API Documentation
+  href: api/
+  homepage: api/index.md
+
+- name: Plugin API Documentation
+  href: plugin-api/
+  homepage: plugin-api/index.md

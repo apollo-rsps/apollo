@@ -1,0 +1,13 @@
+apply plugin: "java"
+apply plugin: 'kotlin'
+apply from: "$rootDir/gradle/kotlin.gradle"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8'
+
+    compile 'org.jetbrains.dokka:dokka-fatjar:0.9.18'
+}

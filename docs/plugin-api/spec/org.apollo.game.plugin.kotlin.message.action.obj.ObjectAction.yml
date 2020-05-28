@@ -1,0 +1,53 @@
+### YamlMime:ManagedReference
+items:
+  - uid: "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction"
+    id: "ObjectAction"
+    parent: "org.apollo.game.plugin.action"
+    children:
+      - "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction.option"
+    langs:
+      - "java"
+      - "kotlin"
+    name: "ObjectAction<T>"
+    nameWithType: "ObjectAction<T>"
+    fullName: "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction<T>"
+    type: "Class"
+    package: "org.apollo.game.plugin.action"
+    summary: |
+      An object action is sent when a user interacts with a game object in the workd by using one of
+      the options presented when the context menu for the object is available.
+    syntax:
+      content: "class ObjectAction<T>"
+      typeParameters:
+        - id: "T"
+  - uid: "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction.option"
+    id: "mob"
+    parent: "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction"
+    langs:
+      - "java"
+    name: "mob"
+    nameWithType: "ObjectAction<T>.option"
+    fullName: "org.apollo.game.plugin.kotlin.message.action.obj.ObjectAction<T>.option"
+    type: "Field"
+    package: "org.apollo.game.plugin.action"
+    summary: "The option selected when performing the action."
+    syntax:
+      content: "val option: String"
+      return:
+        type: "String"
+references:
+  - uid: "int"
+    spec.java:
+      - uid: "int"
+        name: "int"
+        fullName: "int"
+  - uid: "boolean"
+    spec.java:
+      - uid: "boolean"
+        name: "boolean"
+        fullName: "boolean"
+  - uid: "T"
+    spec.java:
+      - uid: "T"
+        name: "T"
+        fullName: "T"

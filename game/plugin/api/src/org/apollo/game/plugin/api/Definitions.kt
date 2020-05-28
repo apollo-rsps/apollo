@@ -4,6 +4,8 @@ import java.lang.IllegalArgumentException
 import org.apollo.cache.def.ItemDefinition
 import org.apollo.cache.def.NpcDefinition
 import org.apollo.cache.def.ObjectDefinition
+import org.intellij.lang.annotations.Language
+import java.util.regex.Pattern
 
 /**
  * Provides plugins with access to item, npc, and object definitions
@@ -76,14 +78,18 @@ object Definitions {
         return findEntity(NpcDefinition::getDefinitions, NpcDefinition::getName, name)
     }
 
+    fun npcs(@Language("RegExp") pattern: String): Sequence<NpcDefinition> {
+        return findEntities(NpcDefinition::getDefinitions, NpcDefinition::getName, pattern)
+    }
+
     /**
      * The [Regex] used to match 'names' that have an id attached to the end.
      */
     private val ID_REGEX = Regex(".+_[0-9]+$")
 
-    private fun <T : Any> findEntity(
+    private inline fun <T : Any> findEntity(
         definitionsProvider: () -> Array<T>,
-        nameSupplier: T.() -> String,
+        crossinline nameSupplier: T.() -> String,
         name: String
     ): T? {
         val definitions = definitionsProvider()
@@ -98,7 +104,22 @@ object Definitions {
             return definitions[id]
         }
 
-        val normalizedName = name.replace('_', ' ')
-        return definitions.firstOrNull { it.nameSupplier().equals(normalizedName, ignoreCase = true) }
+        return findEntities(definitionsProvider, nameSupplier, name).firstOrNull()
+    }
+
+    private inline fun <T: Any> findEntities(
+        definitionsProvider: () -> Array<T>,
+        crossinline nameSupplier: T.() -> String,
+        regexp: String
+    ) : Sequence<T> {
+        val definitions = definitionsProvider().asSequence()
+        val pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE)
+
+        return definitions.filter {
+            val name = it.nameSupplier()
+            val matcher = pattern.matcher(name)
+
+            matcher.matches()
+        }
     }
 }

@@ -31,11 +31,6 @@ dependencies {
     testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: powermockVersion
     testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion
 
-    project(":game:plugin").subprojects { pluginProject ->
-         if (pluginProject.buildFile.exists()) {
-            runtimeClasspath pluginProject
-        }
-    }
 }
 
 applicationDistribution.from("$rootDir/data") {

@@ -1,47 +1,86 @@
-pool:
-  vmImage: 'ubuntu-latest'
-
 variables:
   GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
 
-steps:
-  - task: CacheBeta@0
-    inputs:
-      key: $(Agent.OS)
-      path: $(GRADLE_USER_HOME)
-    displayName: "Gradle: setup build cache"
+jobs:
+#- job: game_build
+#  timeoutInMinutes: 15
+#
+#  pool:
+#    vmImage: 'ubuntu-latest'
+#
+#  steps:
+#    - task: CacheBeta@0
+#      inputs:
+#        key: $(Agent.OS)
+#        path: $(GRADLE_USER_HOME)
+#      displayName: "Gradle: setup build cache"
+#
+#    - task: SonarCloudPrepare@1
+#      inputs:
+#        SonarCloud: 'apollo-rsps-sonarcloud'
+#        organization: 'apollo-rsps'
+#        scannerMode: 'Other'
+#      displayName: "SonarCloud: prepare analysis"
+#
+#    - task: Gradle@2
+#      displayName: "Gradle: build"
+#      inputs:
+#        workingDirectory: ''
+#        gradleWrapperFile: 'gradlew'
+#        gradleOptions: '-Xmx3072m -Dorg.gradle.parallel=true -Dorg.gradle.caching=true -Dsonar.host.url=https://sonarcloud.io'
+#        javaHomeOption: 'JDKVersion'
+#        jdkVersionOption: '1.11'
+#        jdkArchitectureOption: 'x64'
+#        publishJUnitResults: true
+#        testResultsFiles: '**/TEST-*.xml'
+#        tasks: 'check jacocoTestReport sonarqube'
+#
+#    - script: |
+#        ./gradlew --stop
+#      displayName: "Gradle: stop daemon"
+#
+#    - task: SonarCloudPublish@1
+#      inputs:
+#        pollingTimeoutSec: '300'
+#      displayName: "SonarCloud: publish quality gate"
+#
+#    - script: |
+#        bash <(curl -s https://codecov.io/bash) -t "${CODECOV_TOKEN}"
+#      env:
+#        CODECOV_TOKEN: $(CODECOV_TOKEN)
+#      displayName: "Codecov: publish coverage"
 
-  - task: SonarCloudPrepare@1
-    inputs:
-      SonarCloud: 'apollo-rsps-sonarcloud'
-      organization: 'apollo-rsps'
-      scannerMode: 'Other'
-    displayName: "SonarCloud: prepare analysis"
-
-  - task: Gradle@2
-    displayName: "Gradle: build"
-    inputs:
-      workingDirectory: ''
-      gradleWrapperFile: 'gradlew'
-      gradleOptions: '-Xmx3072m -Dorg.gradle.parallel=true -Dorg.gradle.caching=true -Dsonar.host.url=https://sonarcloud.io'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.8'
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: true
-      testResultsFiles: '**/TEST-*.xml'
-      tasks: 'check jacocoTestReport sonarqube'
-
-  - script: |
-      ./gradlew --stop
-    displayName: "Gradle: stop daemon"
-
-  - task: SonarCloudPublish@1
-    inputs:
-      pollingTimeoutSec: '300'
-    displayName: "SonarCloud: publish quality gate"
-
-  - script: |
-      bash <(curl -s https://codecov.io/bash) -t "${CODECOV_TOKEN}"
-    env:
-      CODECOV_TOKEN: $(CODECOV_TOKEN)
-    displayName: "Codecov: publish coverage"
+- job: docs_build
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+    - task: Gradle@2
+      displayName: "Gradle: generate API docs"
+      inputs:
+        workingDirectory: ''
+        gradleWrapperFile: 'gradlew'
+        gradleOptions: '-Xmx3072m -Dorg.gradle.parallel=true -Dorg.gradle.caching=true -Dsonar.host.url=https://sonarcloud.io'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        jdkArchitectureOption: 'x64'
+        tasks: 'generateApiDocs'
+    - task: CmdLine@1
+      displayName: 'Chocolatey: install DocFX'
+      inputs:
+        filename: choco
+        arguments: 'install docfx -y'
+    - task: CmdLine@1
+      displayName: 'DocFX: generate documentation'
+      inputs:
+        filename: docfx
+        arguments: docs/docfx.json
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: docs/_site
+        includeRootFolder: false
+        archiveFile: '$(Build.ArtifactStagingDirectory)/docs.zip'
+        replaceExistingArchive: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/docs.zip'
+        artifactName: 'docs.zip'

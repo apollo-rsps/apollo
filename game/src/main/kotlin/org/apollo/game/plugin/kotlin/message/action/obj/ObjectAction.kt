@@ -32,30 +32,6 @@ fun <T : InteractiveObject> KotlinPluginScript.on(
 }
 
 /**
- * Registers a listener for [ObjectActionMessage]s that occur on any of the given [InteractiveObject]s using the
- * given [option] (case-insensitive).
- *
- * ```
- * on(ObjectAction, option = "Open", objects = DOORS.toList()) {
- *     player.sendMessage("You open the door.")
- * }
- * ```
- */
-fun KotlinPluginScript.on(
-    listenable: ObjectAction.Companion,
-    option: String,
-    callback: ObjectAction<*>.() -> Unit
-) {
-    registerListener(listenable, ObjectActionPredicateContext(option, emptyList()), callback)
-}
-
-fun KotlinPluginScript.x() {
-    on(ObjectAction, "walk") {
-
-    }
-}
-
-/**
  * An interaction between a [Player] and an [interactive] [GameObject].
  */
 class ObjectAction<T : InteractiveObject?>( // TODO split into two classes, one with T and one without?
@@ -71,35 +47,31 @@ class ObjectAction<T : InteractiveObject?>( // TODO split into two classes, one 
 
         override fun createHandler(
             world: World,
-            predicateContext: ObjectActionPredicateContext<*>?,
+            predicateContext: ObjectActionPredicateContext<*>,
             callback: ObjectAction<*>.() -> Unit
         ): MessageHandler<ObjectActionMessage> {
-            return object : MessageHandler<ObjectActionMessage>(world) {
+            val objectMap = predicateContext.objects.associateBy(InteractiveObject::id)
 
-                override fun handle(player: Player, message: ObjectActionMessage) {
-                    val def = ObjectDefinition.lookup(message.id)
-                    val option = def.menuActions[message.option]
+            return handler(world) { player, message ->
+                val def = ObjectDefinition.lookup(message.id)
+                val option = def.menuActions[message.option]
 
-                    val target = world.regionRepository
-                        .fromPosition(message.position)
-                        .getEntities<GameObject>(message.position, EntityType.DYNAMIC_OBJECT, EntityType.STATIC_OBJECT)
-                        .find { it.definition == def }
-                        ?: return // Could happen if object was despawned this tick, before calling this handle function
+                val target = world.regionRepository
+                    .fromPosition(message.position)
+                    .getEntities<GameObject>(message.position, EntityType.DYNAMIC_OBJECT, EntityType.STATIC_OBJECT)
+                    .find { it.definition == def }
+                    ?: return@handler // Could happen if object was despawned this tick, before calling this handle function
 
-                    val context = when { // Evaluation-order matters here.
-                        predicateContext == null -> ObjectAction<InteractiveObject?>(player, option, target, null)
-                        !predicateContext.option.equals(option, ignoreCase = true) -> return
-                        predicateContext.objects.isEmpty() -> ObjectAction(player, option, target, null)
-                        predicateContext.objects.any { it.instanceOf(target) } -> {
-                            val interactive = predicateContext.objects.find { it.instanceOf(target) } ?: return
-                            ObjectAction(player, option, target, interactive)
-                        }
-                        else -> return
+                val context = when { // Evaluation-order matters here.
+                    !predicateContext.option.equals(option, ignoreCase = true) -> return@handler
+                    objectMap.isEmpty() -> ObjectAction(player, option, target, null)
+                    objectMap.containsKey(message.id) -> {
+                        ObjectAction(player, option, target, objectMap[message.id])
                     }
-
-                    context.callback()
+                    else -> return@handler
                 }
 
+                context.callback()
             }
         }
 
