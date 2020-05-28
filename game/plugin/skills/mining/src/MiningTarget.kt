@@ -6,6 +6,8 @@ import org.apollo.game.plugin.api.findObject
 import org.apollo.game.plugin.api.mining
 import org.apollo.game.plugin.api.replaceObject
 import org.apollo.game.plugin.skills.mining.Ore
+import org.apollo.game.plugin.skills.mining.PURE_ESSENCE
+import org.apollo.game.plugin.skills.mining.RUNE_ESSENCE
 
 data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore) {
 
@@ -35,13 +37,22 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
     /**
      * Get the normalized name of the [Ore] represented by this target.
      */
-    fun oreName() = Definitions.item(ore.id).name.toLowerCase()
+    fun oreName(mob: Player) = Definitions.item(oreReward(mob)).name.toLowerCase()
+
+    /**
+     * Get the item id for the [Ore].
+     */
+    fun oreReward(mob: Player): Int = when (ore) {
+        Ore.ESSENCE -> if (mob.isMembers && mob.mining.current >= 30) PURE_ESSENCE else RUNE_ESSENCE
+        else -> ore.id
+    }
 
     /**
      * Reward a [player] with experience and ore if they have the inventory capacity to take a new ore.
      */
     fun reward(player: Player): Boolean {
-        val hasInventorySpace = player.inventory.add(ore.id)
+        val itemId = oreReward(player)
+        val hasInventorySpace = player.inventory.add(itemId)
 
         if (hasInventorySpace) {
             player.mining.experience += ore.exp
@@ -54,5 +65,5 @@ data class MiningTarget(val objectId: Int, val position: Position, val ore: Ore)
      * Check if the [mob] has met the skill requirements to mine te [Ore] represented by
      * this [MiningTarget].
      */
-    fun skillRequirementsMet(mob: Player) = mob.mining.current < ore.level
+    fun skillRequirementsMet(mob: Player) = mob.mining.current >= ore.level
 }
