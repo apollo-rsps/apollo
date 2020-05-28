@@ -161,7 +161,95 @@ public enum Direction {
 	}
 
 	/**
-	 * Gets the opposite direction of the this direction.
+	 * Gets the direction that is clockwise of this direction.
+	 *
+	 * @return The clockwise direction.
+	 */
+	public Direction clockwise() {
+		switch (this) {
+			case NORTH:
+				return NORTH_EAST;
+			case SOUTH:
+				return SOUTH_WEST;
+			case EAST:
+				return SOUTH_EAST;
+			case WEST:
+				return NORTH_WEST;
+			case NORTH_WEST:
+				return NORTH;
+			case NORTH_EAST:
+				return EAST;
+			case SOUTH_EAST:
+				return SOUTH;
+			case SOUTH_WEST:
+				return WEST;
+		}
+
+		return NONE;
+	}
+
+	/**
+	 * Gets a direction that is clockwise of this direction, given the number of times to rotate.
+	 *
+	 * @param count The number of times to apply the rotation.
+	 * @return The rotated direction.
+	 */
+	public Direction clockwise(int count) {
+		Direction direction = this;
+
+		for (int index = 0; index < count; index++) {
+			direction = direction.clockwise();
+		}
+
+		return direction;
+	}
+
+	/**
+	 * Gets the direction that is counter-clockwise of this direction.
+	 *
+	 * @return The counter-clockwise direction.
+	 */
+	public Direction counterClockwise() {
+		switch (this) {
+			case NORTH:
+				return NORTH_WEST;
+			case SOUTH:
+				return SOUTH_EAST;
+			case EAST:
+				return NORTH_EAST;
+			case WEST:
+				return SOUTH_WEST;
+			case NORTH_WEST:
+				return WEST;
+			case NORTH_EAST:
+				return NORTH;
+			case SOUTH_EAST:
+				return EAST;
+			case SOUTH_WEST:
+				return SOUTH;
+		}
+
+		return NONE;
+	}
+
+	/**
+	 * Gets a direction that is counter-clockwise of this direction, given the number of times to rotate.
+	 *
+	 * @param count The number of times to apply the rotation.
+	 * @return The rotated direction.
+	 */
+	public Direction counterClockwise(int count) {
+		Direction direction = this;
+
+		for (int index = 0; index < count; index++) {
+			direction = direction.counterClockwise();
+		}
+
+		return direction;
+	}
+
+	/**
+	 * Gets the opposite direction of this direction.
 	 *
 	 * @return The opposite direction.
 	 */
