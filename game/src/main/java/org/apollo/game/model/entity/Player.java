@@ -1,13 +1,5 @@
 package org.apollo.game.model.entity;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import org.apollo.game.message.impl.ConfigMessage;
@@ -27,8 +19,8 @@ import org.apollo.game.model.entity.attr.Attribute;
 import org.apollo.game.model.entity.attr.AttributeDefinition;
 import org.apollo.game.model.entity.attr.AttributeMap;
 import org.apollo.game.model.entity.attr.AttributePersistence;
-import org.apollo.game.model.entity.attr.NumericalAttribute;
 import org.apollo.game.model.entity.attr.BooleanAttribute;
+import org.apollo.game.model.entity.attr.NumericalAttribute;
 import org.apollo.game.model.entity.obj.DynamicGameObject;
 import org.apollo.game.model.entity.setting.MembershipStatus;
 import org.apollo.game.model.entity.setting.PrivacyState;
@@ -56,6 +48,14 @@ import org.apollo.net.message.Message;
 import org.apollo.util.CollectionUtil;
 import org.apollo.util.security.PlayerCredentials;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * A {@link Mob} that a user is controlling.
  *
@@ -70,6 +70,11 @@ public final class Player extends Mob {
 	private static final int DEFAULT_VIEWING_DISTANCE = 15;
 
 	/**
+	 * The maximum run energy.
+	 */
+	private static final double MAXIMUM_RUN_ENERGY = 100;
+
+	/**
 	 * The current amount of appearance tickets.
 	 */
 	private static final AtomicInteger appearanceTicketCounter = new AtomicInteger(0);
@@ -79,7 +84,7 @@ public final class Player extends Mob {
 		AttributeMap.define("muted", AttributeDefinition.forBoolean(false, AttributePersistence.PERSISTENT));
 
 		AttributeMap.define("banned", AttributeDefinition.forBoolean(false, AttributePersistence.PERSISTENT));
-		AttributeMap.define("run_energy", AttributeDefinition.forInt(100, AttributePersistence.PERSISTENT));
+		AttributeMap.define("run_energy", AttributeDefinition.forDouble(MAXIMUM_RUN_ENERGY, AttributePersistence.PERSISTENT));
 	}
 
 	/**
@@ -468,8 +473,8 @@ public final class Player extends Mob {
 	 *
 	 * @return The run energy.
 	 */
-	public int getRunEnergy() {
-		Attribute<Integer> energy = attributes.get("run_energy");
+	public double getRunEnergy() {
+		Attribute<Double> energy = attributes.get("run_energy");
 		return energy.getValue();
 	}
 
@@ -893,9 +898,9 @@ public final class Player extends Mob {
 	 *
 	 * @param energy The energy.
 	 */
-	public void setRunEnergy(int energy) {
+	public void setRunEnergy(double energy) {
 		attributes.set("run_energy", new NumericalAttribute(energy));
-		send(new UpdateRunEnergyMessage(energy));
+		send(new UpdateRunEnergyMessage((int) energy));
 	}
 
 	/**
@@ -1035,4 +1040,30 @@ public final class Player extends Mob {
 		skillSet.addListener(new LevelUpSkillListener(this));
 	}
 
+	/**
+	 * Decrement run energy.
+	 *
+	 * @param weight the amount of weight to be taken into account when
+	 * determining how much run energy will be depleted.
+	 */
+	public void decrementRunEnergy(double weight) {
+		double decrement = (Math.min(weight, 64.0) / 100.0) + 0.64;
+		double outcome = Math.max(0.0, getRunEnergy() - decrement);
+		setRunEnergy(outcome);
+	}
+
+	/**
+	 * Increment run energy.
+	 *
+	 * @param agilityLevel the agility level used to determine how much to
+	 * increment the run energy by.
+	 */
+	public void incrementRunEnergy(int agilityLevel) {
+		double runEnergy = getRunEnergy();
+		if (runEnergy < MAXIMUM_RUN_ENERGY) {
+			double increment = (8.0 + (agilityLevel / 6.0)) / 100.0;
+			double outcome = Math.min(MAXIMUM_RUN_ENERGY, runEnergy + increment);
+			setRunEnergy(outcome);
+		}
+	}
 }

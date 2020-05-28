@@ -1,18 +1,20 @@
 package org.apollo.game.sync.task;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.apollo.game.message.impl.ClearRegionMessage;
 import org.apollo.game.message.impl.GroupedRegionUpdateMessage;
 import org.apollo.game.message.impl.RegionChangeMessage;
 import org.apollo.game.message.impl.RegionUpdateMessage;
+import org.apollo.game.model.Direction;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.area.Region;
 import org.apollo.game.model.area.RegionCoordinates;
 import org.apollo.game.model.area.RegionRepository;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.Skill;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A {@link SynchronizationTask} which does pre-synchronization work for the specified {@link Player}.
@@ -57,6 +59,15 @@ public final class PrePlayerSynchronizationTask extends SynchronizationTask {
 	public void run() {
 		Position old = player.getPosition();
 		player.getWalkingQueue().pulse();
+
+		if (player.getSecondDirection() != Direction.NONE) {
+			// TODO: implement weight depending on carried and worn items.
+			double weight = 0.0;
+			player.decrementRunEnergy(weight);
+		} else {
+			int agilityLevel = player.getSkillSet().getCurrentLevel(Skill.AGILITY);
+			player.incrementRunEnergy(agilityLevel);
+		}
 
 		boolean local = true;
 
