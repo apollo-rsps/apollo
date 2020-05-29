@@ -31,6 +31,7 @@ CREATE DOMAIN x_coord AS int CHECK (VALUE >= 0 AND VALUE <= 16384);
 CREATE DOMAIN y_coord AS int CHECK (VALUE >= 0 AND VALUE <= 16384);
 CREATE DOMAIN height_coord AS int CHECK (VALUE >= 0 AND VALUE <= 3);
 
+-- TODO: Position is a reserved postgres keyword; is location a good fit otherwise?
 CREATE TYPE location AS
 (
     x      x_coord,
