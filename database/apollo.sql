@@ -97,11 +97,11 @@ CREATE UNIQUE INDEX player_display_name_index ON player (display_name);
 
 CREATE TABLE appearance
 (
-    id        serial PRIMARY KEY,
     gender    gender            NOT NULL,
     styles    smallint ARRAY[7] NOT NULL,
     colours   smallint ARRAY[5] NOT NULL,
-    player_id integer references player (id)
+    player_id integer references player (id),
+    PRIMARY KEY (player_id)
 );
 
 CREATE TABLE item
@@ -111,7 +111,7 @@ CREATE TABLE item
     item_id      integer CHECK (item_id >= 0),
     quantity     integer CHECK (quantity >= 0),
     player_id    integer references player (id),
-    PRIMARY KEY (inventory_id, slot)
+    PRIMARY KEY (inventory_id, slot, player_id)
 );
 
 CREATE TABLE attribute
