@@ -1,8 +1,8 @@
 -- TODO: look into flyway-and liquibase to be able to get rid of these drops
 DROP PROCEDURE IF EXISTS create_account(p_email varchar, p_password varchar, p_rank rank);
 DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
-DROP PROCEDURE IF EXISTS create_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer, p_height integer);
-DROP PROCEDURE IF EXISTS create_appearance(p_display_name varchar);
+DROP PROCEDURE IF EXISTS create_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer, p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5]);
+DROP PROCEDURE IF EXISTS create_appearance(p_display_name varchar, p_gender gender, p_styles integer[7], p_colours integer[5]);
 DROP PROCEDURE IF EXISTS create_attribute(p_display_name varchar, p_name varchar, p_value integer);
 DROP PROCEDURE IF EXISTS create_item(p_display_name varchar, p_inv_id integer, p_slot integer, p_item_id integer, p_quantity integer);
 DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
@@ -126,14 +126,14 @@ CREATE TABLE stat
     PRIMARY KEY (player_id, skill, stat)
 );
 
-CREATE OR REPLACE PROCEDURE create_appearance(p_display_name varchar)
+CREATE OR REPLACE PROCEDURE create_appearance(p_display_name varchar, p_gender gender, p_styles integer[7],
+                                              p_colours integer[5])
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
     INSERT INTO appearance (gender, styles, colours, player_id)
-    VALUES ('male', '{ 0, 10, 18, 26, 33, 36, 42 }', '{ 0, 0, 0, 0, 0 }',
-            (SELECT id FROM player WHERE display_name = p_display_name));
+    VALUES (p_gender, p_styles, p_colours, (SELECT id FROM player WHERE display_name = p_display_name));
 
     COMMIT;
 END ;
@@ -151,7 +151,8 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_item(p_display_name varchar, p_inv_id integer, p_slot integer, p_item_id integer, p_quantity integer)
+CREATE OR REPLACE PROCEDURE create_item(p_display_name varchar, p_inv_id integer, p_slot integer, p_item_id integer,
+                                        p_quantity integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -200,7 +201,7 @@ END;
 $$;
 
 CREATE OR REPLACE PROCEDURE create_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer,
-                                              p_height integer)
+                                          p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5])
     LANGUAGE plpgsql
 AS
 $$
@@ -208,7 +209,7 @@ BEGIN
     INSERT INTO player (display_name, location, account_id)
     VALUES (p_display_name, ROW (p_x, p_y, p_height), (SELECT id FROM account WHERE email = p_email));
 
-    CALL create_appearance(p_display_name);
+    CALL create_appearance(p_display_name, p_gender, p_styles, p_colours);
 
     -- TODO: find a way to iterate through the possible values of an enum
     CALL create_stat('attack', 1, 0, p_display_name);
@@ -239,4 +240,5 @@ END;
 $$;
 
 CALL create_account('Sino@gmail.com', 'hello123', 'administrator');
-CALL create_player('Sino@gmail.com', 'Sino', 3254, 3420, 0);
+CALL create_player('Sino@gmail.com', 'Sino', 3254, 3420, 0, 'male', '{ 0, 10, 18, 26, 33, 36, 42 }',
+                   '{ 0, 0, 0, 0, 0 }');
