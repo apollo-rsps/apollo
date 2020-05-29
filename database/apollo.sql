@@ -1,31 +1,3 @@
--- TODO: look into flyway-and liquibase to be able to get rid of these drops
-DROP PROCEDURE IF EXISTS create_account(p_email varchar, p_password varchar, p_rank rank);
-DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text);
-DROP PROCEDURE IF EXISTS create_player(p_email varchar, p_display_name text, p_x integer, p_y integer, p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5]);
-DROP PROCEDURE IF EXISTS create_appearance(p_display_name text, p_gender gender, p_styles integer[7], p_colours integer[5]);
-DROP PROCEDURE IF EXISTS create_attribute(p_display_name text, p_name varchar, p_value integer);
-DROP PROCEDURE IF EXISTS create_item(p_display_name text, p_inv_id integer, p_slot integer, p_item_id integer, p_quantity integer);
-DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text);
-
-DROP TABLE IF EXISTS appearance;
-DROP TABLE IF EXISTS attribute;
-DROP TABLE IF EXISTS item;
-DROP TABLE IF EXISTS stat;
-DROP TABLE IF EXISTS player;
-DROP TABLE IF EXISTS account;
-
-DROP TYPE IF EXISTS title;
-DROP TYPE IF EXISTS location;
-DROP TYPE IF EXISTS gender;
-DROP TYPE IF EXISTS rank;
-DROP TYPE IF EXISTS skill;
-
-DROP DOMAIN IF EXISTS x_coord;
-DROP DOMAIN IF EXISTS y_coord;
-DROP DOMAIN IF EXISTS height_coord;
-
-DROP EXTENSION IF EXISTS citext;
-
 CREATE EXTENSION citext;
 
 CREATE TYPE rank AS ENUM ('player', 'moderator', 'administrator');
@@ -111,6 +83,7 @@ CREATE TABLE item
     slot         smallint CHECK (slot >= 0),
     item_id      integer CHECK (item_id >= 0),
     quantity     integer CHECK (quantity >= 0),
+    attributes   jsonb NOT NULL DEFAULT '{}',
     player_id    integer references player (id),
     PRIMARY KEY (inventory_id, slot, player_id)
 );
@@ -194,7 +167,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_player(p_email varchar, p_display_name text, p_x integer, p_y integer,
+CREATE OR REPLACE PROCEDURE create_player(p_email citext, p_display_name text, p_x integer, p_y integer,
                                           p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5],
                                           p_energy_units integer)
     LANGUAGE plpgsql
@@ -234,8 +207,67 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_skills(p_display_name varchar)
+    RETURNS table
+            (
+                skill      skill,
+                stat       smallint,
+                experience integer
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT s.skill, s.stat, s.experience
+        FROM stat AS s
+                 INNER JOIN player AS p
+                            ON p.id = s.player_id
+        WHERE p.display_name = p_display_name;
+END;
+$$
+    LANGUAGE PLPGSQL;
 
+CREATE OR REPLACE FUNCTION get_attributes(p_display_name varchar)
+    RETURNS table
+            (
+                name  varchar,
+                value integer
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT a.name, a.value
+        FROM attribute AS a
+                 INNER JOIN player AS p
+                            ON p.id = a.player_id
+        WHERE p.display_name = p_display_name;
+END;
+$$
+    LANGUAGE PLPGSQL;
 
-CALL create_account('Sino@gmail.com', 'hello123', 'administrator');
-CALL create_player('Sino@gmail.com', 'Sino', 3254, 3420, 0, 'male', '{ 0, 10, 18, 26, 33, 36, 42 }',
+CREATE OR REPLACE FUNCTION get_items(p_display_name varchar)
+    RETURNS table
+            (
+                slot           smallint,
+                item_id        integer,
+                quantity       integer,
+                attributes     jsonb,
+                inventory_type smallint
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT i.slot, i.item_id, i.quantity, i.attributes, i.inventory_id
+        FROM item AS i
+                 INNER JOIN player AS p
+                            ON p.id = i.player_id
+        WHERE p.display_name = p_display_name;
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+CALL create_account('Sino@gmail.com'::citext, 'hello123', 'administrator');
+CALL create_player('Sino@gmail.com'::citext, 'Sino', 3254, 3420, 0, 'male', '{ 0, 10, 18, 26, 33, 36, 42 }',
                    '{ 0, 0, 0, 0, 0 }', 10000);
