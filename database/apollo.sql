@@ -78,18 +78,18 @@ CREATE TYPE skill AS ENUM (
 CREATE TABLE account
 (
     id       serial PRIMARY KEY,
-    email    citext       NOT NULL,
-    password varchar(255) NOT NULL,
-    rank     rank         NOT NULL
+    email    citext NOT NULL,
+    password text   NOT NULL,
+    rank     rank   NOT NULL
 );
 
 CREATE TABLE player
 (
     id                   serial PRIMARY KEY,
-    display_name         varchar(15) NOT NULL,
-    location             location    NOT NULL,
-    title                title       NOT NULL DEFAULT ROW ('', '', ''),
-    games_room_skill_lvl smallint    NOT NULL DEFAULT 0,
+    display_name         text     NOT NULL,
+    location             location NOT NULL,
+    title                title    NOT NULL DEFAULT ROW ('', '', ''),
+    games_room_skill_lvl smallint NOT NULL DEFAULT 0,
     account_id           integer references account (id)
 );
 
