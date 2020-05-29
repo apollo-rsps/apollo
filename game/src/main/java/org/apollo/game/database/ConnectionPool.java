@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @author Sino
  */
 public final class ConnectionPool implements ConnectionSupplier {
-	public static ConnectionPool hikariPool(ConnectionConfig config) {
+	public static ConnectionPool createHikariPool(ConnectionConfig config) {
 		return create(createHikariDataSource(config));
 	}
 

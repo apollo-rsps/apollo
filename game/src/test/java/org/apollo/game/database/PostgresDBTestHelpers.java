@@ -12,7 +12,7 @@ public final class PostgresDBTestHelpers {
 	}
 
 	public static ConnectionSupplier newSupplier(PostgreSQLContainer container) {
-		return ConnectionPool.hikariPool(ConnectionConfig
+		return ConnectionPool.createHikariPool(ConnectionConfig
 				.builder()
 				.url("jdbc:postgresql://" + container.getHost() + ":" + container.getFirstMappedPort() + "/runescape")
 				.username("postgres")
