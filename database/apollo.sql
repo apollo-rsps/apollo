@@ -207,6 +207,47 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_player(p_display_name varchar)
+    RETURNS table
+            (
+                location             location,
+                title                title,
+                games_room_skill_lvl smallint,
+                energy_units         smallint
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT p.location, p.title, p.games_room_skill_lvl, p.energy_units
+        FROM player AS p
+        WHERE p.display_name = p_display_name
+        LIMIT 1;
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION get_appearance(p_display_name varchar)
+    RETURNS table
+            (
+                gender  gender,
+                styles  smallint[7],
+                colours smallint[5]
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT a.gender, a.styles, a.colours
+        FROM appearance AS a
+                 INNER JOIN player AS p
+                            ON p.id = a.player_id
+        WHERE p.display_name = p_display_name
+        LIMIT 1;
+END;
+$$
+    LANGUAGE PLPGSQL;
+
 CREATE OR REPLACE FUNCTION get_skills(p_display_name varchar)
     RETURNS table
             (
@@ -271,3 +312,7 @@ $$
 CALL create_account('Sino@gmail.com'::citext, 'hello123', 'administrator');
 CALL create_player('Sino@gmail.com'::citext, 'Sino', 3254, 3420, 0, 'male', '{ 0, 10, 18, 26, 33, 36, 42 }',
                    '{ 0, 0, 0, 0, 0 }', 10000);
+
+CALL create_account('Sfix@gmail.com'::citext, 'hello123', 'administrator');
+CALL create_player('Sfix@gmail.com'::citext, 'Sfix', 3222, 3222, 0, 'male', '{ 0, 10, 18, 26, 33, 36, 42 }',
+                   '{ 0, 0, 0, 0, 0 }', 0);
