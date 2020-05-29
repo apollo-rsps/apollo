@@ -290,11 +290,11 @@ $$
 CREATE OR REPLACE FUNCTION get_items(p_display_name varchar)
     RETURNS table
             (
-                slot           smallint,
-                item_id        integer,
-                quantity       integer,
-                attributes     jsonb,
-                inventory_type smallint
+                slot         smallint,
+                item_id      integer,
+                quantity     integer,
+                attributes   jsonb,
+                inventory_id smallint
             )
 AS
 $$
