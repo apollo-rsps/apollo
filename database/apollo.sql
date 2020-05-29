@@ -6,6 +6,7 @@ DROP PROCEDURE IF EXISTS create_new_appearance();
 DROP PROCEDURE IF EXISTS create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_owner varchar);
 
 DROP TABLE IF EXISTS appearance;
+DROP TABLE IF EXISTS attribute;
 DROP TABLE IF EXISTS item;
 DROP TABLE IF EXISTS stat;
 DROP TABLE IF EXISTS player;
@@ -104,6 +105,14 @@ CREATE TABLE item
     quantity     integer CHECK (quantity >= 0),
     player_id    integer references player (id),
     PRIMARY KEY (inventory_id, slot)
+);
+
+CREATE TABLE attribute
+(
+    name      varchar NOT NULL,
+    value     integer NOT NULL DEFAULT 0,
+    player_id integer references player (id),
+    PRIMARY KEY (player_id, name)
 );
 
 CREATE TABLE stat
