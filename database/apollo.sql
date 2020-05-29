@@ -77,11 +77,12 @@ CREATE TABLE account
 
 CREATE TABLE player
 (
-    id           serial PRIMARY KEY,
-    display_name VARCHAR(15) NOT NULL,
-    location     location    NOT NULL,
-    title        title       NOT NULL DEFAULT ROW('', '', ''),
-    account_id   integer references account (id)
+    id                   serial PRIMARY KEY,
+    display_name         VARCHAR(15) NOT NULL,
+    location             location    NOT NULL,
+    title                title       NOT NULL DEFAULT ROW ('', '', ''),
+    games_room_skill_lvl smallint    NOT NULL DEFAULT 0,
+    account_id           integer references account (id)
 );
 
 CREATE UNIQUE INDEX player_display_name_index ON player (display_name);
