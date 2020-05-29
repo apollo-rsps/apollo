@@ -1,9 +1,11 @@
 -- TODO: look into flyway-and liquibase to be able to get rid of these drops
-DROP PROCEDURE IF EXISTS create_new_account(p_email varchar, p_password varchar, p_rank rank);
-DROP PROCEDURE IF EXISTS create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
-DROP PROCEDURE IF EXISTS create_new_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer, p_height integer);
-DROP PROCEDURE IF EXISTS create_new_appearance();
-DROP PROCEDURE IF EXISTS create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
+DROP PROCEDURE IF EXISTS create_account(p_email varchar, p_password varchar, p_rank rank);
+DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
+DROP PROCEDURE IF EXISTS create_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer, p_height integer);
+DROP PROCEDURE IF EXISTS create_appearance(p_display_name varchar);
+DROP PROCEDURE IF EXISTS create_attribute(p_display_name varchar, p_name varchar, p_value integer);
+DROP PROCEDURE IF EXISTS create_item(p_display_name varchar, p_inv_id integer, p_slot integer, p_item_id integer, p_quantity integer);
+DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
 
 DROP TABLE IF EXISTS appearance;
 DROP TABLE IF EXISTS attribute;
@@ -124,7 +126,7 @@ CREATE TABLE stat
     PRIMARY KEY (player_id, skill, stat)
 );
 
-CREATE OR REPLACE PROCEDURE create_new_appearance(p_display_name varchar)
+CREATE OR REPLACE PROCEDURE create_appearance(p_display_name varchar)
     LANGUAGE plpgsql
 AS
 $$
@@ -137,7 +139,31 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar)
+CREATE OR REPLACE PROCEDURE create_attribute(p_display_name varchar, p_name varchar, p_value integer)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    INSERT INTO attribute (name, value, player_id)
+    VALUES (p_name, p_value, (SELECT id FROM player WHERE display_name = p_display_name));
+
+    COMMIT;
+END ;
+$$;
+
+CREATE OR REPLACE PROCEDURE create_item(p_display_name varchar, p_inv_id integer, p_slot integer, p_item_id integer, p_quantity integer)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    INSERT INTO item (inventory_id, slot, item_id, quantity, player_id)
+    VALUES (p_inv_id, p_slot, p_item_id, p_quantity, (SELECT id FROM player WHERE display_name = p_display_name));
+
+    COMMIT;
+END ;
+$$;
+
+CREATE OR REPLACE PROCEDURE create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar)
     LANGUAGE plpgsql
 AS
 $$
@@ -149,7 +175,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_new_account(p_email varchar, p_password varchar, p_rank rank)
+CREATE OR REPLACE PROCEDURE create_account(p_email varchar, p_password varchar, p_rank rank)
     LANGUAGE plpgsql
 AS
 $$
@@ -161,7 +187,19 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_new_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer,
+CREATE OR REPLACE PROCEDURE create_account(p_email varchar, p_password varchar, p_rank rank)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    INSERT INTO account (email, password, rank)
+    VALUES (p_email, p_password, p_rank);
+
+    COMMIT;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE create_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer,
                                               p_height integer)
     LANGUAGE plpgsql
 AS
@@ -170,35 +208,35 @@ BEGIN
     INSERT INTO player (display_name, location, account_id)
     VALUES (p_display_name, ROW (p_x, p_y, p_height), (SELECT id FROM account WHERE email = p_email));
 
-    CALL create_new_appearance(p_display_name);
+    CALL create_appearance(p_display_name);
 
     -- TODO: find a way to iterate through the possible values of an enum
-    CALL create_new_stat('attack', 1, 0, p_display_name);
-    CALL create_new_stat('strength', 1, 0, p_display_name);
-    CALL create_new_stat('defence', 1, 0, p_display_name);
-    CALL create_new_stat('hitpoints', 10, 1184, p_display_name);
-    CALL create_new_stat('ranged', 1, 0, p_display_name);
-    CALL create_new_stat('prayer', 1, 0, p_display_name);
-    CALL create_new_stat('magic', 1, 0, p_display_name);
-    CALL create_new_stat('cooking', 1, 0, p_display_name);
-    CALL create_new_stat('fishing', 1, 0, p_display_name);
-    CALL create_new_stat('woodcutting', 1, 0, p_display_name);
-    CALL create_new_stat('firemaking', 1, 0, p_display_name);
-    CALL create_new_stat('mining', 1, 0, p_display_name);
-    CALL create_new_stat('smithing', 1, 0, p_display_name);
-    CALL create_new_stat('agility', 1, 0, p_display_name);
-    CALL create_new_stat('herblore', 1, 0, p_display_name);
-    CALL create_new_stat('crafting', 1, 0, p_display_name);
-    CALL create_new_stat('fletching', 1, 0, p_display_name);
-    CALL create_new_stat('runecraft', 1, 0, p_display_name);
-    CALL create_new_stat('slayer', 1, 0, p_display_name);
-    CALL create_new_stat('farming', 1, 0, p_display_name);
-    CALL create_new_stat('hunter', 1, 0, p_display_name);
-    CALL create_new_stat('construction', 1, 0, p_display_name);
+    CALL create_stat('attack', 1, 0, p_display_name);
+    CALL create_stat('strength', 1, 0, p_display_name);
+    CALL create_stat('defence', 1, 0, p_display_name);
+    CALL create_stat('hitpoints', 10, 1184, p_display_name);
+    CALL create_stat('ranged', 1, 0, p_display_name);
+    CALL create_stat('prayer', 1, 0, p_display_name);
+    CALL create_stat('magic', 1, 0, p_display_name);
+    CALL create_stat('cooking', 1, 0, p_display_name);
+    CALL create_stat('fishing', 1, 0, p_display_name);
+    CALL create_stat('woodcutting', 1, 0, p_display_name);
+    CALL create_stat('firemaking', 1, 0, p_display_name);
+    CALL create_stat('mining', 1, 0, p_display_name);
+    CALL create_stat('smithing', 1, 0, p_display_name);
+    CALL create_stat('agility', 1, 0, p_display_name);
+    CALL create_stat('herblore', 1, 0, p_display_name);
+    CALL create_stat('crafting', 1, 0, p_display_name);
+    CALL create_stat('fletching', 1, 0, p_display_name);
+    CALL create_stat('runecraft', 1, 0, p_display_name);
+    CALL create_stat('slayer', 1, 0, p_display_name);
+    CALL create_stat('farming', 1, 0, p_display_name);
+    CALL create_stat('hunter', 1, 0, p_display_name);
+    CALL create_stat('construction', 1, 0, p_display_name);
 
     COMMIT;
 END;
 $$;
 
-CALL create_new_account('Sino@gmail.com', 'hello123', 'administrator');
-CALL create_new_player('Sino@gmail.com', 'Sino', 3254, 3420, 0);
+CALL create_account('Sino@gmail.com', 'hello123', 'administrator');
+CALL create_player('Sino@gmail.com', 'Sino', 3254, 3420, 0);
