@@ -1,9 +1,9 @@
 -- TODO: look into flyway-and liquibase to be able to get rid of these drops
 DROP PROCEDURE IF EXISTS create_new_account(p_email varchar, p_password varchar, p_rank rank);
-DROP PROCEDURE IF EXISTS create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_owner varchar);
+DROP PROCEDURE IF EXISTS create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
 DROP PROCEDURE IF EXISTS create_new_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer, p_height integer);
 DROP PROCEDURE IF EXISTS create_new_appearance();
-DROP PROCEDURE IF EXISTS create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_owner varchar);
+DROP PROCEDURE IF EXISTS create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
 
 DROP TABLE IF EXISTS appearance;
 DROP TABLE IF EXISTS attribute;
