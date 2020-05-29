@@ -1,0 +1,18 @@
+version: '3.0'
+volumes:
+  data:
+    driver: local
+
+services:
+  db:
+    container_name: db
+    build: .
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=apollo
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql/data
