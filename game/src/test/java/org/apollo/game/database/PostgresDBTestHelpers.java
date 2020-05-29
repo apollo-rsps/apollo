@@ -2,7 +2,7 @@ package org.apollo.game.database;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
-public final class DatabaseTestHelpers {
+public final class PostgresDBTestHelpers {
 	public static PostgreSQLContainer newContainer() {
 		return new PostgreSQLContainer<>("postgres:11-alpine")
 				.withDatabaseName("runescape")
@@ -14,14 +14,11 @@ public final class DatabaseTestHelpers {
 	public static ConnectionSupplier newSupplier(PostgreSQLContainer container) {
 		return ConnectionPool.hikariPool(ConnectionConfig
 				.builder()
-				.driver("postgresql")
-				.host(container.getHost())
-				.port(container.getFirstMappedPort())
+				.url("jdbc:postgresql://" + container.getHost() + ":" + container.getFirstMappedPort() + "/runescape")
 				.username("postgres")
 				.password("postgres")
-				.database("runescape")
 				.build());
 	}
 
-	private DatabaseTestHelpers() { }
+	private PostgresDBTestHelpers() { }
 }

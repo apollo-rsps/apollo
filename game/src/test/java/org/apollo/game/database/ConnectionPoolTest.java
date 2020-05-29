@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static org.apollo.game.database.DatabaseTestHelpers.newContainer;
-import static org.apollo.game.database.DatabaseTestHelpers.newSupplier;
+import static org.apollo.game.database.PostgresDBTestHelpers.newContainer;
+import static org.apollo.game.database.PostgresDBTestHelpers.newSupplier;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class ConnectionPoolTest {

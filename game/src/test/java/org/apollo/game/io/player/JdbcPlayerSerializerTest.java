@@ -8,8 +8,8 @@ import org.apollo.util.security.PlayerCredentials;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import static org.apollo.game.database.DatabaseTestHelpers.newContainer;
-import static org.apollo.game.database.DatabaseTestHelpers.newSupplier;
+import static org.apollo.game.database.PostgresDBTestHelpers.newContainer;
+import static org.apollo.game.database.PostgresDBTestHelpers.newSupplier;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class JdbcPlayerSerializerTest {

@@ -15,10 +15,6 @@ import java.sql.SQLException;
  * @author Sino
  */
 public final class ConnectionPool implements ConnectionSupplier {
-	private static String createURL(String driver, String host, int port, String databaseName) {
-		return "jdbc:" + driver + "://" + host + ":" + port + "/" + databaseName;
-	}
-
 	public static ConnectionPool hikariPool(ConnectionConfig config) {
 		return create(createHikariDataSource(config));
 	}
@@ -26,9 +22,7 @@ public final class ConnectionPool implements ConnectionSupplier {
 	private static HikariDataSource createHikariDataSource(ConnectionConfig config) {
 		HikariConfig hc = new HikariConfig();
 
-		String url = createURL(config.getDriver(), config.getHost(), config.getPort(), config.getDatabase());
-
-		hc.setJdbcUrl(url);
+		hc.setJdbcUrl(config.getUrl());
 		hc.setUsername(config.getUsername());
 		hc.setPassword(config.getPassword());
 		hc.setAutoCommit(true);
@@ -43,7 +37,7 @@ public final class ConnectionPool implements ConnectionSupplier {
 		return new ConnectionPool(dataSource);
 	}
 
-	private DataSource dataSource;
+	private final DataSource dataSource;
 
 	private ConnectionPool(DataSource dataSource) {
 		this.dataSource = dataSource;

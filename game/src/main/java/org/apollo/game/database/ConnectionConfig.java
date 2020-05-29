@@ -14,13 +14,7 @@ public final class ConnectionConfig {
 	private static final Duration DEFAULT_CONNECTION_TIMEOUT = Duration.ofSeconds(8);
 
 	public static class Builder {
-		private String driver;
-
-		private String host;
-
-		private int port;
-
-		private String database;
+		private String url;
 
 		private String username, password;
 
@@ -30,26 +24,8 @@ public final class ConnectionConfig {
 
 		private int maximumPoolSize = 1;
 
-		public Builder driver(String driver) {
-			this.driver = driver;
-
-			return this;
-		}
-
-		public Builder host(String host) {
-			this.host = host;
-
-			return this;
-		}
-
-		public Builder port(int port) {
-			this.port = port;
-
-			return this;
-		}
-
-		public Builder database(String database) {
-			this.database = database;
+		public Builder url(String url) {
+			this.url = url;
 
 			return this;
 		}
@@ -86,10 +62,7 @@ public final class ConnectionConfig {
 
 		public ConnectionConfig build() {
 			return new ConnectionConfig(
-					requireNonNull(driver),
-					requireNonNull(host),
-					port,
-					requireNonNull(database),
+					requireNonNull(url),
 					requireNonNull(username),
 					requireNonNull(password),
 					requireNonNull(timeout),
@@ -102,13 +75,7 @@ public final class ConnectionConfig {
 		return new Builder();
 	}
 
-	private final String driver;
-
-	private final String host;
-
-	private final int port;
-
-	private final String database;
+	private final String url;
 
 	private final String username, password;
 
@@ -118,11 +85,8 @@ public final class ConnectionConfig {
 
 	private final int maximumPoolSize;
 
-	private ConnectionConfig(String driver, String host, int port, String database, String username, String password, Duration timeout, Duration maxLifetime, int maximumPoolSize) {
-		this.driver = driver;
-		this.host = host;
-		this.port = port;
-		this.database = database;
+	private ConnectionConfig(String url, String username, String password, Duration timeout, Duration maxLifetime, int maximumPoolSize) {
+		this.url = url;
 		this.username = username;
 		this.password = password;
 		this.timeout = timeout;
@@ -130,20 +94,8 @@ public final class ConnectionConfig {
 		this.maximumPoolSize = maximumPoolSize;
 	}
 
-	public String getDriver() {
-		return driver;
-	}
-
-	public String getHost() {
-		return host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public String getDatabase() {
-		return database;
+	public String getUrl() {
+		return url;
 	}
 
 	public String getUsername() {
@@ -168,10 +120,7 @@ public final class ConnectionConfig {
 
 	@Override
 	public String toString() {
-		return "ConnectionConfig{driver = " + driver +
-				", host=" + host +
-				", port=" + port +
-				", database=" + database +
+		return "ConnectionConfig{url = " + url +
 				", username=" + username +
 				", password=" + password +
 				", timeout=" + timeout +
