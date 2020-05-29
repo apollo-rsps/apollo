@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS stat;
 DROP TABLE IF EXISTS player;
 DROP TABLE IF EXISTS account;
 
+DROP TYPE IF EXISTS title;
 DROP TYPE IF EXISTS location;
 DROP TYPE IF EXISTS gender;
 DROP TYPE IF EXISTS rank;
@@ -32,6 +33,13 @@ CREATE TYPE location AS
     x      x_coord,
     y      y_coord,
     height height_coord
+);
+
+CREATE TYPE title AS
+(
+    left_part   varchar,
+    center_part varchar,
+    right_part  varchar
 );
 
 CREATE TYPE skill AS ENUM (
@@ -72,6 +80,7 @@ CREATE TABLE player
     id           serial PRIMARY KEY,
     display_name VARCHAR(15) NOT NULL,
     location     location    NOT NULL,
+    title        title       NOT NULL DEFAULT ROW('', '', ''),
     account_id   integer references account (id)
 );
 
@@ -111,10 +120,11 @@ AS
 $$
 BEGIN
     INSERT INTO appearance (gender, styles, colours, player_id)
-    VALUES ('male', '{ 0, 10, 18, 26, 33, 36, 42 }', '{ 0, 0, 0, 0, 0 }', (SELECT id FROM player WHERE display_name = p_display_name));
+    VALUES ('male', '{ 0, 10, 18, 26, 33, 36, 42 }', '{ 0, 0, 0, 0, 0 }',
+            (SELECT id FROM player WHERE display_name = p_display_name));
 
     COMMIT;
-END;
+END ;
 $$;
 
 CREATE OR REPLACE PROCEDURE create_new_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar)
@@ -141,13 +151,14 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_new_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer, p_height integer)
+CREATE OR REPLACE PROCEDURE create_new_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer,
+                                              p_height integer)
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
     INSERT INTO player (display_name, location, account_id)
-    VALUES (p_display_name, ROW(p_x, p_y, p_height), (SELECT id FROM account WHERE email = p_email));
+    VALUES (p_display_name, ROW (p_x, p_y, p_height), (SELECT id FROM account WHERE email = p_email));
 
     CALL create_new_appearance(p_display_name);
 
