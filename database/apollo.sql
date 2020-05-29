@@ -1,11 +1,11 @@
 -- TODO: look into flyway-and liquibase to be able to get rid of these drops
 DROP PROCEDURE IF EXISTS create_account(p_email varchar, p_password varchar, p_rank rank);
-DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
-DROP PROCEDURE IF EXISTS create_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer, p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5]);
-DROP PROCEDURE IF EXISTS create_appearance(p_display_name varchar, p_gender gender, p_styles integer[7], p_colours integer[5]);
-DROP PROCEDURE IF EXISTS create_attribute(p_display_name varchar, p_name varchar, p_value integer);
-DROP PROCEDURE IF EXISTS create_item(p_display_name varchar, p_inv_id integer, p_slot integer, p_item_id integer, p_quantity integer);
-DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar);
+DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text);
+DROP PROCEDURE IF EXISTS create_player(p_email varchar, p_display_name text, p_x integer, p_y integer, p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5]);
+DROP PROCEDURE IF EXISTS create_appearance(p_display_name text, p_gender gender, p_styles integer[7], p_colours integer[5]);
+DROP PROCEDURE IF EXISTS create_attribute(p_display_name text, p_name varchar, p_value integer);
+DROP PROCEDURE IF EXISTS create_item(p_display_name text, p_inv_id integer, p_slot integer, p_item_id integer, p_quantity integer);
+DROP PROCEDURE IF EXISTS create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text);
 
 DROP TABLE IF EXISTS appearance;
 DROP TABLE IF EXISTS attribute;
@@ -45,9 +45,9 @@ CREATE TYPE location AS
 
 CREATE TYPE title AS
 (
-    left_part   varchar,
-    center_part varchar,
-    right_part  varchar
+    left_part   text,
+    center_part text,
+    right_part  text
 );
 
 CREATE TYPE skill AS ENUM (
@@ -116,7 +116,7 @@ CREATE TABLE item
 
 CREATE TABLE attribute
 (
-    name      varchar NOT NULL,
+    name      text    NOT NULL,
     value     integer NOT NULL DEFAULT 0,
     player_id integer references player (id),
     PRIMARY KEY (player_id, name)
@@ -131,7 +131,7 @@ CREATE TABLE stat
     PRIMARY KEY (player_id, skill, stat)
 );
 
-CREATE OR REPLACE PROCEDURE create_appearance(p_display_name varchar, p_gender gender, p_styles integer[7],
+CREATE OR REPLACE PROCEDURE create_appearance(p_display_name text, p_gender gender, p_styles integer[7],
                                               p_colours integer[5])
     LANGUAGE plpgsql
 AS
@@ -144,7 +144,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_attribute(p_display_name varchar, p_name varchar, p_value integer)
+CREATE OR REPLACE PROCEDURE create_attribute(p_display_name text, p_name varchar, p_value integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -156,7 +156,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_item(p_display_name varchar, p_inv_id integer, p_slot integer, p_item_id integer,
+CREATE OR REPLACE PROCEDURE create_item(p_display_name text, p_inv_id integer, p_slot integer, p_item_id integer,
                                         p_quantity integer)
     LANGUAGE plpgsql
 AS
@@ -169,7 +169,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name varchar)
+CREATE OR REPLACE PROCEDURE create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text)
     LANGUAGE plpgsql
 AS
 $$
@@ -205,7 +205,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_player(p_email varchar, p_display_name varchar, p_x integer, p_y integer,
+CREATE OR REPLACE PROCEDURE create_player(p_email varchar, p_display_name text, p_x integer, p_y integer,
                                           p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5])
     LANGUAGE plpgsql
 AS
