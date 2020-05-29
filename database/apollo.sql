@@ -193,18 +193,6 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_account(p_email varchar, p_password varchar, p_rank rank)
-    LANGUAGE plpgsql
-AS
-$$
-BEGIN
-    INSERT INTO account (email, password, rank)
-    VALUES (p_email, p_password, p_rank);
-
-    COMMIT;
-END;
-$$;
-
 CREATE OR REPLACE PROCEDURE create_player(p_email varchar, p_display_name text, p_x integer, p_y integer,
                                           p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5])
     LANGUAGE plpgsql
