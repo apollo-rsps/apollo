@@ -24,6 +24,10 @@ DROP DOMAIN IF EXISTS x_coord;
 DROP DOMAIN IF EXISTS y_coord;
 DROP DOMAIN IF EXISTS height_coord;
 
+DROP EXTENSION IF EXISTS citext;
+
+CREATE EXTENSION citext;
+
 CREATE TYPE rank AS ENUM ('player', 'moderator', 'administrator');
 CREATE TYPE gender AS ENUM ('male', 'female');
 
@@ -74,15 +78,15 @@ CREATE TYPE skill AS ENUM (
 CREATE TABLE account
 (
     id       serial PRIMARY KEY,
-    email    VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    email    citext       NOT NULL,
+    password varchar(255) NOT NULL,
     rank     rank         NOT NULL
 );
 
 CREATE TABLE player
 (
     id                   serial PRIMARY KEY,
-    display_name         VARCHAR(15) NOT NULL,
+    display_name         varchar(15) NOT NULL,
     location             location    NOT NULL,
     title                title       NOT NULL DEFAULT ROW ('', '', ''),
     games_room_skill_lvl smallint    NOT NULL DEFAULT 0,
