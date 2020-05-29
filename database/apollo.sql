@@ -90,6 +90,7 @@ CREATE TABLE player
     location             location NOT NULL,
     title                title    NOT NULL DEFAULT ROW ('', '', ''),
     games_room_skill_lvl smallint NOT NULL DEFAULT 0,
+    energy_units         smallint NOT NULL CHECK (energy_units >= 0 AND energy_units <= 10000),
     account_id           integer references account (id)
 );
 
@@ -194,13 +195,14 @@ END;
 $$;
 
 CREATE OR REPLACE PROCEDURE create_player(p_email varchar, p_display_name text, p_x integer, p_y integer,
-                                          p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5])
+                                          p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5],
+                                          p_energy_units integer)
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    INSERT INTO player (display_name, location, account_id)
-    VALUES (p_display_name, ROW (p_x, p_y, p_height), (SELECT id FROM account WHERE email = p_email));
+    INSERT INTO player (display_name, location, energy_units, account_id)
+    VALUES (p_display_name, ROW (p_x, p_y, p_height), p_energy_units, (SELECT id FROM account WHERE email = p_email));
 
     CALL create_appearance(p_display_name, p_gender, p_styles, p_colours);
 
@@ -232,6 +234,8 @@ BEGIN
 END;
 $$;
 
+
+
 CALL create_account('Sino@gmail.com', 'hello123', 'administrator');
 CALL create_player('Sino@gmail.com', 'Sino', 3254, 3420, 0, 'male', '{ 0, 10, 18, 26, 33, 36, 42 }',
-                   '{ 0, 0, 0, 0, 0 }');
+                   '{ 0, 0, 0, 0, 0 }', 10000);
