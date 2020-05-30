@@ -268,29 +268,48 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 
 			player.setAppearance(requireNonNull(getAppearance(connection, credentials.getUsername())));
 
-			ImmutableList<SlottedInventoryItem> items = getItems(connection, credentials.getUsername());
-			for (SlottedInventoryItem sii : items) {
-				// TODO add dynamic support for different types of inventories relying on config id's
-				if (sii.getInventoryId() != ITEM_BAG_ID) {
-					continue;
-				}
-
-				player.getInventory().set(sii.getItem().getSlot(), sii.getItem().getItem());
-			}
-
-			ImmutableList<Skill> skills = getStats(connection, credentials.getUsername());
-
-			int skillCount = Skill.getCount(); // TODO database currently supports hunter and construction as well and 317 doesn't
-			for (int i = 0; i < skillCount; i++) {
-				player.getSkillSet().setSkill(i, skills.get(i));
-			}
-
-			ImmutableMap<String, Attribute<?>> attributes = getAttributes(connection, credentials.getUsername());
-			for (String name : attributes.keySet()) {
-				player.setAttribute(name, attributes.get(name));
-			}
+			loadItemsIntoPlayer(connection, credentials.getUsername(), player);
+			loadStatsIntoPlayer(connection, credentials.getUsername(), player);
+			loadAttributesIntoPlayer(connection, credentials.getUsername(), player);
 
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
+		}
+	}
+
+	private void loadItemsIntoPlayer(Connection connection, String displayName, Player player) throws SQLException {
+		ImmutableList<SlottedInventoryItem> items = getItems(connection, displayName);
+		for (SlottedInventoryItem sii : items) {
+			Inventory inventory;
+			if (sii.getInventoryId() == ITEM_BAG_ID) {
+				inventory = player.getInventory();
+			} else if (sii.getInventoryId() == WORN_EQUIPMENT_ID) {
+				inventory = player.getEquipment();
+			} else if (sii.getInventoryId() == BANK_ID) {
+				inventory = player.getBank();
+			} else {
+				// TODO add dynamic support for different types of inventories
+				//  relying on inventory config id's
+				continue;
+			}
+
+			inventory.set(sii.getItem().getSlot(), sii.getItem().getItem());
+		}
+	}
+
+	private void loadStatsIntoPlayer(Connection connection, String displayName, Player player) throws SQLException {
+		ImmutableList<Skill> skills = getStats(connection, displayName);
+
+		// TODO database currently supports hunter and construction as well and 317 doesn't
+		int skillCount = Skill.getCount();
+		for (int i = 0; i < skillCount; i++) {
+			player.getSkillSet().setSkill(i, skills.get(i));
+		}
+	}
+
+	private void loadAttributesIntoPlayer(Connection connection, String displayName, Player player) throws SQLException {
+		ImmutableMap<String, Attribute<?>> attributes = getAttributes(connection, displayName);
+		for (String name : attributes.keySet()) {
+			player.setAttribute(name, attributes.get(name));
 		}
 	}
 
