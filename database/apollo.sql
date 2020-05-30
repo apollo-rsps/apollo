@@ -3,6 +3,8 @@ CREATE EXTENSION citext;
 CREATE TYPE rank AS ENUM ('player', 'moderator', 'administrator');
 CREATE TYPE gender AS ENUM ('male', 'female');
 
+CREATE TYPE attribute_type AS ENUM ('long', 'boolean', 'string', 'double');
+
 CREATE TYPE skill AS ENUM (
     'attack',
     'strength',
@@ -82,8 +84,9 @@ CREATE TABLE item
 
 CREATE TABLE attribute
 (
-    name      text    NOT NULL,
-    value     integer NOT NULL DEFAULT 0,
+    name      text           NOT NULL,
+    attr_type attribute_type NOT NULL,
+    value     text          NOT NULL,
     player_id integer references player (id),
     PRIMARY KEY (player_id, name)
 );
@@ -122,13 +125,13 @@ BEGIN
 END ;
 $$;
 
-CREATE PROCEDURE create_attribute(p_display_name text, p_name varchar, p_value integer)
+CREATE PROCEDURE create_attribute(p_display_name text, p_attr_type attribute_type, p_name varchar, p_value text)
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    INSERT INTO attribute (name, value, player_id)
-    VALUES (p_name, p_value, (SELECT id FROM player WHERE display_name = p_display_name));
+    INSERT INTO attribute (attr_type, name, value, player_id)
+    VALUES (p_attr_type, p_name, p_value, (SELECT id FROM player WHERE display_name = p_display_name));
 
     COMMIT;
 END ;
@@ -276,13 +279,13 @@ BEGIN
 END;
 $$;
 
-CREATE PROCEDURE set_attribute(p_display_name text, p_name varchar, p_value integer)
+CREATE PROCEDURE set_attribute(p_display_name text, p_attr_type attribute_type, p_name varchar, p_value text)
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    INSERT INTO attribute (name, value, player_id)
-    VALUES (p_name, p_value, (SELECT id FROM player WHERE display_name = p_display_name))
+    INSERT INTO attribute (attr_type, name, value, player_id)
+    VALUES (p_attr_type, p_name, p_value, (SELECT id FROM player WHERE display_name = p_display_name))
     ON CONFLICT (player_id, name) DO UPDATE SET value = p_value;
 
     COMMIT;
@@ -409,14 +412,15 @@ $$
 CREATE FUNCTION get_attributes(p_display_name text)
     RETURNS table
             (
-                name  text,
-                value integer
+                attr_type attribute_type,
+                name      text,
+                value     text
             )
 AS
 $$
 BEGIN
     RETURN QUERY
-        SELECT a.name, a.value
+        SELECT a.attr_type, a.name, a.value
         FROM attribute AS a
                  INNER JOIN player AS p
                             ON p.id = a.player_id

@@ -15,7 +15,7 @@ import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.game.model.entity.Skill;
 import org.apollo.game.model.entity.SkillSet;
-import org.apollo.game.model.entity.attr.NumericalAttribute;
+import org.apollo.game.model.entity.attr.*;
 import org.apollo.game.model.entity.setting.Gender;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
 import org.apollo.game.model.inv.Inventory;
@@ -25,6 +25,7 @@ import org.apollo.util.security.PlayerCredentials;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 
@@ -75,6 +76,17 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			.build();
 
 	/**
+	 * Maps {@link AttributeType}s to the enum value that is known by the
+	 * database and back.
+	 */
+	private static final ImmutableBiMap<AttributeType, String> ATTRIBUTE_TYPE_ENUMS = ImmutableBiMap.<AttributeType, String>builder()
+			.put(AttributeType.STRING, "string")
+			.put(AttributeType.BOOLEAN, "boolean")
+			.put(AttributeType.DOUBLE, "double")
+			.put(AttributeType.LONG, "long")
+			.build();
+
+	/**
 	 * The associated queries that are ran by this serializer.
 	 */
 	private static final String
@@ -82,12 +94,13 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			GET_PLAYER_QUERY = "SELECT last_login, x, y, height, games_room_skill_lvl, energy_units FROM get_player(?::text)",
 			GET_APPEARANCE_QUERY = "SELECT gender, styles, colours FROM get_appearance(?::text)",
 			GET_ITEMS_QUERY = "SELECT inventory_id, slot, item_id, quantity FROM get_items(?::text)",
-			GET_ATTRIBUTES_QUERY = "SELECT name, value FROM get_attributes(?::text);",
+			GET_ATTRIBUTES_QUERY = "SELECT attr_type, name, value FROM get_attributes(?::text);",
 			GET_STATS_QUERY = "SELECT skill, stat, experience FROM get_skills(?::text)",
 			SET_ACCOUNT_QUERY = "CALL set_account(?::citext, ?::rank)",
 			SET_PLAYER_QUERY = "CALL set_player(?::citext, ?::text, ?, ?, ?, ?, ?, ?)",
 			SET_APPEARANCE_QUERY = "CALL set_appearance(?::text, ?::gender, ?, ?)",
 			SET_STAT_QUERY = "CALL set_stat(?::skill, ?, ?, ?::text)",
+			SET_ATTRIBUTE_QUERY = "CALL set_attribute(?::text, ?::attribute_type, ?::varchar, ?::text)",
 			SET_ITEM_QUERY = "CALL set_item(?::text, ?, ?, ?, ?)",
 			DELETE_ITEM_QUERY = "CALL delete_item(?::text, ?, ?)";
 
@@ -140,6 +153,8 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			putInventory(connection, displayName, ITEM_BAG_ID, player.getInventory());
 			putInventory(connection, displayName, WORN_EQUIPMENT_ID, player.getEquipment());
 			putInventory(connection, displayName, BANK_ID, player.getBank());
+
+			putAttributes(connection, displayName, player.getAttributes());
 		}
 	}
 
@@ -184,6 +199,20 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 				stmt.setInt(2, skill.getCurrentLevel());
 				stmt.setInt(3, (int) skill.getExperience());
 				stmt.setString(4, displayName);
+				stmt.execute();
+			}
+		}
+	}
+
+	private void putAttributes(Connection connection, String displayName, Map<String, Attribute<?>> attributes) throws SQLException {
+		for (String key : attributes.keySet()) {
+			Attribute<?> attribute = attributes.get(key);
+
+			try (PreparedStatement stmt = connection.prepareStatement(SET_ATTRIBUTE_QUERY)) {
+				stmt.setString(1, displayName);
+				stmt.setString(2, requireNonNull(ATTRIBUTE_TYPE_ENUMS.get(attribute.getType())));
+				stmt.setString(3, key);
+				stmt.setString(4, String.valueOf(attribute.getValue()));
 				stmt.execute();
 			}
 		}
@@ -256,10 +285,9 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 				player.getSkillSet().setSkill(i, skills.get(i));
 			}
 
-			// TODO add support for boolean and string attributes
-			ImmutableMap<String, Integer> attributes = getAttributes(connection, credentials.getUsername());
+			ImmutableMap<String, Attribute<?>> attributes = getAttributes(connection, credentials.getUsername());
 			for (String name : attributes.keySet()) {
-				player.setAttribute(name, new NumericalAttribute(attributes.get(name)));
+				player.setAttribute(name, attributes.get(name));
 			}
 
 			return new PlayerLoaderResponse(LoginConstants.STATUS_OK, player);
@@ -361,18 +389,33 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 		}
 	}
 
-	private ImmutableMap<String, Integer> getAttributes(Connection connection, String displayName) throws SQLException {
+	private ImmutableMap<String, Attribute<?>> getAttributes(Connection connection, String displayName) throws SQLException {
 		try (PreparedStatement stmt = connection.prepareStatement(GET_ATTRIBUTES_QUERY)) {
 			stmt.setString(1, displayName);
 
-			ImmutableMap.Builder<String, Integer> bldr = ImmutableMap.builder();
+			ImmutableMap.Builder<String, Attribute<?>> bldr = ImmutableMap.builder();
 
 			ResultSet results = stmt.executeQuery();
 			while (results.next()) {
-				String name = results.getString("name");
-				int value = results.getInt("value");
+				AttributeType type = requireNonNull(ATTRIBUTE_TYPE_ENUMS.inverse().get(results.getString("attr_type")));
 
-				bldr.put(name, value);
+				String name = results.getString("name");
+				String value = results.getString("value");
+
+				Attribute<?> attribute;
+				if (type == AttributeType.BOOLEAN) {
+					attribute = new BooleanAttribute(Boolean.parseBoolean(value));
+				} else if (type == AttributeType.DOUBLE) {
+					attribute = new NumericalAttribute(Double.parseDouble(value));
+				} else if (type == AttributeType.LONG) {
+					attribute = new NumericalAttribute(Long.parseLong(value));
+				} else if (type == AttributeType.STRING) {
+					attribute = new StringAttribute(value);
+				} else {
+					throw new RuntimeException("Unsupported attribute type of " + type);
+				}
+
+				bldr.put(name, attribute);
 			}
 
 			return bldr.build();

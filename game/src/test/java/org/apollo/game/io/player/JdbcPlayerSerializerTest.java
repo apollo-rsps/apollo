@@ -1,21 +1,29 @@
 package org.apollo.game.io.player;
 
-import org.apollo.cache.def.ItemDefinition;
 import org.apollo.game.database.ConnectionConfig;
 import org.apollo.game.database.ConnectionPool;
 import org.apollo.game.database.ConnectionSupplier;
-import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
+import org.apollo.game.model.entity.attr.*;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.util.security.PlayerCredentials;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public final class JdbcPlayerSerializerTest {
 	// TODO use TestContainers - each container should somehow run the apollo.sql script
+
+	@BeforeAll
+	public static void setup() {
+		AttributeMap.define("my_double", new AttributeDefinition<>(0D, AttributePersistence.TRANSIENT, AttributeType.DOUBLE));
+		AttributeMap.define("my_long", new AttributeDefinition<>(0L, AttributePersistence.TRANSIENT, AttributeType.LONG));
+		AttributeMap.define("my_bool", new AttributeDefinition<>(false, AttributePersistence.TRANSIENT, AttributeType.BOOLEAN));
+		AttributeMap.define("my_string", new AttributeDefinition<>("", AttributePersistence.TRANSIENT, AttributeType.STRING));
+	}
 
 	@Test
 	public void serializerShouldDeserializeAPlayerFromTheDatabase() throws Exception {
@@ -92,6 +100,11 @@ public final class JdbcPlayerSerializerTest {
 
 		PlayerCredentials credentials = new PlayerCredentials("Sino", "hello123", 0, 0, "");
 		Player player = new Player(world, credentials, new Position(3093, 3493, 0));
+
+		player.setAttribute("my_double", new NumericalAttribute(1.0D));
+		player.setAttribute("my_long", new NumericalAttribute(500L));
+		player.setAttribute("my_bool", new BooleanAttribute(true));
+		player.setAttribute("my_string", new StringAttribute("Hello World"));
 
 		serializer.savePlayer(player);
 
