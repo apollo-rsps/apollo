@@ -47,8 +47,6 @@ CREATE TABLE player
     x                    smallint NOT NULL CHECK (x >= 0 AND x <= 16384),
     y                    smallint NOT NULL CHECK (y >= 0 AND y <= 16384),
     height               smallint NOT NULL CHECK (height >= 0 AND height <= 3),
-    games_room_skill_lvl smallint NOT NULL DEFAULT 0,
-    energy_units         smallint NOT NULL CHECK (energy_units >= 0 AND energy_units <= 10000),
     account_id           integer references account (id)
 );
 
@@ -175,21 +173,20 @@ END;
 $$;
 
 CREATE PROCEDURE create_player(p_email citext, p_display_name text, p_x integer, p_y integer,
-                               p_height integer, p_energy_units integer)
+                               p_height integer)
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    INSERT INTO player (display_name, x, y, height, energy_units, account_id)
-    VALUES (p_display_name, p_x, p_y, p_height, p_energy_units, (SELECT id FROM account WHERE email = p_email));
+    INSERT INTO player (display_name, x, y, height, account_id)
+    VALUES (p_display_name, p_x, p_y, p_height, (SELECT id FROM account WHERE email = p_email));
 
     COMMIT;
 END;
 $$;
 
 CREATE PROCEDURE set_player(p_email citext, p_display_name text, p_last_login timestamp, p_x integer,
-                            p_y integer, p_height integer, p_energy_units integer,
-                            p_games_room_skill_lvl integer)
+                            p_y integer, p_height integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -199,9 +196,7 @@ BEGIN
         last_login           = p_last_login,
         x                    = p_x,
         y                    = p_y,
-        height               = p_height,
-        energy_units         = p_energy_units,
-        games_room_skill_lvl = p_games_room_skill_lvl
+        height               = p_height
     WHERE p.account_id = (SELECT id FROM account WHERE email = p_email);
 
     COMMIT;
@@ -331,15 +326,13 @@ CREATE FUNCTION get_player(p_display_name text)
                 last_login           timestamp,
                 x                    smallint,
                 y                    smallint,
-                height               smallint,
-                games_room_skill_lvl smallint,
-                energy_units         smallint
+                height               smallint
             )
 AS
 $$
 BEGIN
     RETURN QUERY
-        SELECT p.last_login, p.x, p.y, p.height, p.games_room_skill_lvl, p.energy_units
+        SELECT p.last_login, p.x, p.y, p.height
         FROM player AS p
         WHERE p.display_name = p_display_name
         LIMIT 1;
@@ -452,11 +445,11 @@ $$
 
 CALL create_account('Sino'::citext, '$s0$e0801$U7iSxE4PoOGAg3wUkJkC2w==$WGCDBrNsBNosBEG8Uucz0YWZMv+T4NBJnQZRhcLCr6s=',
                     'administrator');
-CALL create_player('Sino'::citext, 'Sino', 3254, 3420, 0, 100);
+CALL create_player('Sino'::citext, 'Sino', 3254, 3420, 0);
 
 CALL create_account('Sfix'::citext, '$s0$e0801$U7iSxE4PoOGAg3wUkJkC2w==$WGCDBrNsBNosBEG8Uucz0YWZMv+T4NBJnQZRhcLCr6s=',
                     'administrator');
-CALL create_player('Sfix'::citext, 'Sfix', 3222, 3222, 0, 0);
+CALL create_player('Sfix'::citext, 'Sfix', 3222, 3222, 0);
 
 CALL create_title('Sino', '', '', '');
 CALL create_title('Sfix', '', '', '');

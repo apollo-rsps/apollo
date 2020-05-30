@@ -91,13 +91,13 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	 */
 	private static final String
 			GET_ACCOUNT_QUERY = "SELECT password_hash, rank FROM get_account(?::text)",
-			GET_PLAYER_QUERY = "SELECT last_login, x, y, height, games_room_skill_lvl, energy_units FROM get_player(?::text)",
+			GET_PLAYER_QUERY = "SELECT last_login, x, y, height FROM get_player(?::text)",
 			GET_APPEARANCE_QUERY = "SELECT gender, styles, colours FROM get_appearance(?::text)",
 			GET_ITEMS_QUERY = "SELECT inventory_id, slot, item_id, quantity FROM get_items(?::text)",
 			GET_ATTRIBUTES_QUERY = "SELECT attr_type, name, value FROM get_attributes(?::text);",
 			GET_STATS_QUERY = "SELECT skill, stat, experience FROM get_skills(?::text)",
 			SET_ACCOUNT_QUERY = "CALL set_account(?::citext, ?::rank)",
-			SET_PLAYER_QUERY = "CALL set_player(?::citext, ?::text, ?, ?, ?, ?, ?, ?)",
+			SET_PLAYER_QUERY = "CALL set_player(?::citext, ?::text, ?, ?, ?, ?)",
 			SET_APPEARANCE_QUERY = "CALL set_appearance(?::text, ?::gender, ?, ?)",
 			SET_STAT_QUERY = "CALL set_stat(?::skill, ?, ?, ?::text)",
 			SET_ATTRIBUTE_QUERY = "CALL set_attribute(?::text, ?::attribute_type, ?::varchar, ?::text)",
@@ -174,8 +174,6 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			stmt.setInt(4, player.getPosition().getX());
 			stmt.setInt(5, player.getPosition().getY());
 			stmt.setInt(6, player.getPosition().getHeight());
-			stmt.setInt(7, (int) player.getRunEnergy());
-			stmt.setInt(8, 0); // TODO games room skill lvl
 			stmt.execute();
 		}
 	}
@@ -266,6 +264,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_COULD_NOT_COMPLETE);
 			}
 
+			player.setPrivilegeLevel(account.getRank());
 			player.setAppearance(requireNonNull(getAppearance(connection, credentials.getUsername())));
 
 			loadItemsIntoPlayer(connection, credentials.getUsername(), player);
@@ -349,11 +348,6 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 
 			Position position = new Position(x, y, height);
 			Player plr = new Player(world, credentials, position);
-
-			int energyUnits = results.getShort("energy_units");
-			int gamesRoomSkillLvl = results.getShort("games_room_skill_lvl"); // TODO insert into player state
-
-			plr.setRunEnergy(energyUnits);
 
 			return plr;
 		}
