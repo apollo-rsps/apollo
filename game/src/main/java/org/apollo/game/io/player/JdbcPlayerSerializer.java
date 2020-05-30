@@ -36,7 +36,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	 * The associated queries that are ran by this serializer.
 	 */
 	private static final String
-			ACCOUNT_FETCH_QUERY = "SELECT password_hash, rank FROM get_account(?::text)",
+			GET_ACCOUNT_QUERY = "SELECT password_hash, rank FROM get_account(?::text)",
 			GET_PLAYER_QUERY = "SELECT last_login, x, y, height, games_room_skill_lvl, energy_units FROM get_player(?::text)",
 			GET_APPEARANCE_QUERY = "SELECT gender, styles, colours FROM get_appearance(?::text)",
 			GET_ITEMS_QUERY = "SELECT inventory_id, slot, item_id, quantity FROM get_items(?::text)",
@@ -130,7 +130,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	}
 
 	private Account getAccount(Connection connection, String email) throws SQLException {
-		try (PreparedStatement stmt = connection.prepareStatement(ACCOUNT_FETCH_QUERY)) {
+		try (PreparedStatement stmt = connection.prepareStatement(GET_ACCOUNT_QUERY)) {
 			stmt.setString(1, email);
 
 			ResultSet results = stmt.executeQuery();
