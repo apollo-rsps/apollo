@@ -49,10 +49,10 @@ CREATE TYPE skill AS ENUM (
 
 CREATE TABLE account
 (
-    id       serial PRIMARY KEY,
-    email    citext NOT NULL,
-    password text   NOT NULL,
-    rank     rank   NOT NULL
+    id            serial PRIMARY KEY,
+    email         citext NOT NULL,
+    password_hash text   NOT NULL,
+    rank          rank   NOT NULL
 );
 
 CREATE TABLE player
@@ -83,7 +83,6 @@ CREATE TABLE item
     slot         smallint CHECK (slot >= 0),
     item_id      integer CHECK (item_id >= 0),
     quantity     integer CHECK (quantity >= 0),
-    attributes   jsonb NOT NULL DEFAULT '{}',
     player_id    integer references player (id),
     PRIMARY KEY (inventory_id, slot, player_id)
 );
@@ -155,13 +154,13 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_account(p_email varchar, p_password varchar, p_rank rank)
+CREATE OR REPLACE PROCEDURE create_account(p_email varchar, p_password_hash varchar, p_rank rank)
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    INSERT INTO account (email, password, rank)
-    VALUES (p_email, p_password, p_rank);
+    INSERT INTO account (email, password_hash, rank)
+    VALUES (p_email, p_password_hash, p_rank);
 
     COMMIT;
 END;
@@ -206,6 +205,25 @@ BEGIN
     COMMIT;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION get_account(p_email varchar)
+    RETURNS table
+            (
+                email         citext,
+                password_hash text,
+                rank          rank
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT a.password_hash, a.rank
+        FROM account AS a
+        WHERE a.email = p_email
+        LIMIT 1;
+END;
+$$
+    LANGUAGE PLPGSQL;
 
 CREATE OR REPLACE FUNCTION get_player(p_display_name varchar)
     RETURNS table
@@ -293,14 +311,13 @@ CREATE OR REPLACE FUNCTION get_items(p_display_name varchar)
                 slot         smallint,
                 item_id      integer,
                 quantity     integer,
-                attributes   jsonb,
                 inventory_id smallint
             )
 AS
 $$
 BEGIN
     RETURN QUERY
-        SELECT i.slot, i.item_id, i.quantity, i.attributes, i.inventory_id
+        SELECT i.slot, i.item_id, i.quantity, i.inventory_id
         FROM item AS i
                  INNER JOIN player AS p
                             ON p.id = i.player_id
