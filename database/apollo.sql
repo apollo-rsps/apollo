@@ -183,7 +183,6 @@ $$;
 CREATE OR REPLACE FUNCTION get_account(p_email varchar)
     RETURNS table
             (
-                email         citext,
                 password_hash text,
                 rank          rank
             )
