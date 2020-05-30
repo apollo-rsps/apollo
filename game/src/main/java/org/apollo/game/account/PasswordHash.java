@@ -3,18 +3,18 @@ package org.apollo.game.account;
 import java.util.Objects;
 
 /**
- * A password secret that that grants access to an account and should
- * therefore only be known by the owner of the account.
+ * The hash value of a password secret that that grants access to an
+ * account and should therefore only be known by the owner of the account.
  * @author Sino
  */
-public final class Password {
-	public static Password of(String value) {
-		return new Password(value);
+public final class PasswordHash {
+	public static PasswordHash of(String value) {
+		return new PasswordHash(value);
 	}
 
 	private final String value;
 
-	private Password(String value) {
+	private PasswordHash(String value) {
 		this.value = value;
 	}
 
@@ -26,7 +26,7 @@ public final class Password {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Password email = (Password) o;
+		PasswordHash email = (PasswordHash) o;
 		return Objects.equals(value, email.value);
 	}
 
