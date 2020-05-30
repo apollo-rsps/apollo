@@ -3,18 +3,6 @@ CREATE EXTENSION citext;
 CREATE TYPE rank AS ENUM ('player', 'moderator', 'administrator');
 CREATE TYPE gender AS ENUM ('male', 'female');
 
-CREATE DOMAIN x_coord AS int CHECK (VALUE >= 0 AND VALUE <= 16384);
-CREATE DOMAIN y_coord AS int CHECK (VALUE >= 0 AND VALUE <= 16384);
-CREATE DOMAIN height_coord AS int CHECK (VALUE >= 0 AND VALUE <= 3);
-
--- TODO: Position is a reserved postgres keyword; is location a good fit otherwise?
-CREATE TYPE location AS
-(
-    x      x_coord,
-    y      y_coord,
-    height height_coord
-);
-
 CREATE TYPE skill AS ENUM (
     'attack',
     'strength',
@@ -53,7 +41,9 @@ CREATE TABLE player
     id                   serial PRIMARY KEY,
     display_name         text     NOT NULL,
     last_login           timestamp,
-    location             location NOT NULL,
+    x                    smallint NOT NULL CHECK (x >= 0 AND x <= 16384),
+    y                    smallint NOT NULL CHECK (y >= 0 AND y <= 16384),
+    height               smallint NOT NULL CHECK (height >= 0 AND height <= 3),
     games_room_skill_lvl smallint NOT NULL DEFAULT 0,
     energy_units         smallint NOT NULL CHECK (energy_units >= 0 AND energy_units <= 10000),
     account_id           integer references account (id)
@@ -106,8 +96,8 @@ CREATE TABLE stat
     PRIMARY KEY (player_id, skill, stat)
 );
 
-CREATE OR REPLACE PROCEDURE create_appearance(p_display_name text, p_gender gender, p_styles integer[7],
-                                              p_colours integer[5])
+CREATE PROCEDURE create_appearance(p_display_name text, p_gender gender, p_styles integer[7],
+                                   p_colours integer[5])
     LANGUAGE plpgsql
 AS
 $$
@@ -119,7 +109,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_title(p_display_name text, p_left_part text, p_center_part text, p_right_part text)
+CREATE PROCEDURE create_title(p_display_name text, p_left_part text, p_center_part text, p_right_part text)
     LANGUAGE plpgsql
 AS
 $$
@@ -131,7 +121,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_attribute(p_display_name text, p_name varchar, p_value integer)
+CREATE PROCEDURE create_attribute(p_display_name text, p_name varchar, p_value integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -143,8 +133,8 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_item(p_display_name text, p_inv_id integer, p_slot integer, p_item_id integer,
-                                        p_quantity integer)
+CREATE PROCEDURE create_item(p_display_name text, p_inv_id integer, p_slot integer, p_item_id integer,
+                             p_quantity integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -156,7 +146,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text)
+CREATE PROCEDURE create_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text)
     LANGUAGE plpgsql
 AS
 $$
@@ -168,7 +158,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_account(p_email varchar, p_password_hash varchar, p_rank rank)
+CREATE PROCEDURE create_account(p_email varchar, p_password_hash varchar, p_rank rank)
     LANGUAGE plpgsql
 AS
 $$
@@ -180,22 +170,22 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE create_player(p_email citext, p_display_name text, p_x integer, p_y integer,
-                                          p_height integer, p_energy_units integer)
+CREATE PROCEDURE create_player(p_email citext, p_display_name text, p_x integer, p_y integer,
+                               p_height integer, p_energy_units integer)
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    INSERT INTO player (display_name, location, energy_units, account_id)
-    VALUES (p_display_name, ROW (p_x, p_y, p_height), p_energy_units, (SELECT id FROM account WHERE email = p_email));
+    INSERT INTO player (display_name, x, y, height, energy_units, account_id)
+    VALUES (p_display_name, p_x, p_y, p_height, p_energy_units, (SELECT id FROM account WHERE email = p_email));
 
     COMMIT;
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE set_player(p_email citext, p_display_name text, p_last_login timestamp, p_x integer,
-                                       p_y integer, p_height integer, p_energy_units integer,
-                                       p_games_room_skill_lvl integer)
+CREATE PROCEDURE set_player(p_email citext, p_display_name text, p_last_login timestamp, p_x integer,
+                            p_y integer, p_height integer, p_energy_units integer,
+                            p_games_room_skill_lvl integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -203,7 +193,9 @@ BEGIN
     UPDATE player AS p
     SET display_name         = p_display_name,
         last_login           = p_last_login,
-        location             = ROW (p_x, p_y, p_height),
+        x                    = p_x,
+        y                    = p_y,
+        height               = p_height,
         energy_units         = p_energy_units,
         games_room_skill_lvl = p_games_room_skill_lvl
     WHERE p.account_id = (SELECT id FROM account WHERE email = p_email);
@@ -212,8 +204,8 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE set_appearance(p_display_name text, p_gender gender, p_styles integer[7],
-                                           p_colours integer[5])
+CREATE PROCEDURE set_appearance(p_display_name text, p_gender gender, p_styles integer[7],
+                                p_colours integer[5])
     LANGUAGE plpgsql
 AS
 $$
@@ -228,7 +220,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE set_title(p_display_name text, p_left_part text, p_center_part text, p_right_part text)
+CREATE PROCEDURE set_title(p_display_name text, p_left_part text, p_center_part text, p_right_part text)
     LANGUAGE plpgsql
 AS
 $$
@@ -243,8 +235,8 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE set_item(p_display_name text, p_inv_id integer, p_slot integer, p_item_id integer,
-                                     p_quantity integer)
+CREATE PROCEDURE set_item(p_display_name text, p_inv_id integer, p_slot integer, p_item_id integer,
+                          p_quantity integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -257,7 +249,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE set_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text)
+CREATE PROCEDURE set_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text)
     LANGUAGE plpgsql
 AS
 $$
@@ -270,7 +262,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE set_attribute(p_display_name text, p_name varchar, p_value integer)
+CREATE PROCEDURE set_attribute(p_display_name text, p_name varchar, p_value integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -283,7 +275,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE PROCEDURE delete_item(p_display_name text, p_inv_id integer, p_slot integer)
+CREATE PROCEDURE delete_item(p_display_name text, p_inv_id integer, p_slot integer)
     LANGUAGE plpgsql
 AS
 $$
@@ -298,7 +290,7 @@ BEGIN
 END ;
 $$;
 
-CREATE OR REPLACE FUNCTION get_account(p_email varchar)
+CREATE FUNCTION get_account(p_email text)
     RETURNS table
             (
                 password_hash text,
@@ -316,11 +308,13 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION get_player(p_display_name varchar)
+CREATE FUNCTION get_player(p_display_name text)
     RETURNS table
             (
                 last_login           timestamp,
-                location             location,
+                x                    smallint,
+                y                    smallint,
+                height               smallint,
                 games_room_skill_lvl smallint,
                 energy_units         smallint
             )
@@ -328,7 +322,7 @@ AS
 $$
 BEGIN
     RETURN QUERY
-        SELECT p.location, p.games_room_skill_lvl, p.energy_units
+        SELECT p.last_login, p.x, p.y, p.height, p.games_room_skill_lvl, p.energy_units
         FROM player AS p
         WHERE p.display_name = p_display_name
         LIMIT 1;
@@ -336,7 +330,7 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION get_appearance(p_display_name varchar)
+CREATE FUNCTION get_appearance(p_display_name text)
     RETURNS table
             (
                 gender  gender,
@@ -357,7 +351,7 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION get_title(p_display_name varchar)
+CREATE FUNCTION get_title(p_display_name varchar)
     RETURNS table
             (
                 left_part   text,
@@ -378,7 +372,7 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION get_skills(p_display_name varchar)
+CREATE FUNCTION get_skills(p_display_name text)
     RETURNS table
             (
                 skill      skill,
@@ -398,10 +392,10 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION get_attributes(p_display_name varchar)
+CREATE FUNCTION get_attributes(p_display_name text)
     RETURNS table
             (
-                name  varchar,
+                name  text,
                 value integer
             )
 AS
@@ -417,7 +411,7 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION get_items(p_display_name varchar)
+CREATE FUNCTION get_items(p_display_name text)
     RETURNS table
             (
                 slot         smallint,
@@ -438,8 +432,60 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CALL create_account('Sino@gmail.com'::citext, 'hello123', 'administrator');
-CALL create_player('Sino@gmail.com'::citext, 'Sino', 3254, 3420, 0, 10000);
+CALL create_account('Sino'::citext, '$s0$e0801$U7iSxE4PoOGAg3wUkJkC2w==$WGCDBrNsBNosBEG8Uucz0YWZMv+T4NBJnQZRhcLCr6s=', 'administrator');
+CALL create_player('Sino'::citext, 'Sino', 3254, 3420, 0, 10000);
 
-CALL create_account('Sfix@gmail.com'::citext, 'hello123', 'administrator');
-CALL create_player('Sfix@gmail.com'::citext, 'Sfix', 3222, 3222, 0, 0);
+CALL create_account('Sfix'::citext, '$s0$e0801$U7iSxE4PoOGAg3wUkJkC2w==$WGCDBrNsBNosBEG8Uucz0YWZMv+T4NBJnQZRhcLCr6s=', 'administrator');
+CALL create_player('Sfix'::citext, 'Sfix', 3222, 3222, 0, 0);
+
+CALL create_title('Sino', '', '', '');
+CALL create_title('Sfix', '', '', '');
+
+CALL create_appearance('Sino', 'male', '{ 0, 10, 18, 26, 33, 36, 42 }', '{ 0, 0, 0, 0, 0 }');
+CALL create_appearance('Sfix', 'male', '{ 0, 10, 18, 26, 33, 36, 42 }', '{ 0, 0, 0, 0, 0 }');
+
+CALL create_stat('attack', 1, 0, 'Sino');
+CALL create_stat('strength', 1, 0, 'Sino');
+CALL create_stat('defence', 1, 0, 'Sino');
+CALL create_stat('hitpoints', 10, 1183, 'Sino');
+CALL create_stat('ranged', 1, 0, 'Sino');
+CALL create_stat('prayer', 1, 0, 'Sino');
+CALL create_stat('magic', 1, 0, 'Sino');
+CALL create_stat('cooking', 1, 0, 'Sino');
+CALL create_stat('fishing', 1, 0, 'Sino');
+CALL create_stat('woodcutting', 1, 0, 'Sino');
+CALL create_stat('firemaking', 1, 0, 'Sino');
+CALL create_stat('mining', 1, 0, 'Sino');
+CALL create_stat('smithing', 1, 0, 'Sino');
+CALL create_stat('agility', 1, 0, 'Sino');
+CALL create_stat('herblore', 1, 0, 'Sino');
+CALL create_stat('crafting', 1, 0, 'Sino');
+CALL create_stat('fletching', 1, 0, 'Sino');
+CALL create_stat('runecraft', 1, 0, 'Sino');
+CALL create_stat('slayer', 1, 0, 'Sino');
+CALL create_stat('farming', 1, 0, 'Sino');
+CALL create_stat('hunter', 1, 0, 'Sino');
+CALL create_stat('construction', 1, 0, 'Sino');
+
+CALL create_stat('attack', 1, 0, 'Sfix');
+CALL create_stat('strength', 1, 0, 'Sfix');
+CALL create_stat('defence', 1, 0, 'Sfix');
+CALL create_stat('hitpoints', 10, 1183, 'Sfix');
+CALL create_stat('ranged', 1, 0, 'Sfix');
+CALL create_stat('prayer', 1, 0, 'Sfix');
+CALL create_stat('magic', 1, 0, 'Sfix');
+CALL create_stat('cooking', 1, 0, 'Sfix');
+CALL create_stat('fishing', 1, 0, 'Sfix');
+CALL create_stat('woodcutting', 1, 0, 'Sfix');
+CALL create_stat('firemaking', 1, 0, 'Sfix');
+CALL create_stat('mining', 1, 0, 'Sfix');
+CALL create_stat('smithing', 1, 0, 'Sfix');
+CALL create_stat('agility', 1, 0, 'Sfix');
+CALL create_stat('herblore', 1, 0, 'Sfix');
+CALL create_stat('crafting', 1, 0, 'Sfix');
+CALL create_stat('fletching', 1, 0, 'Sfix');
+CALL create_stat('runecraft', 1, 0, 'Sfix');
+CALL create_stat('slayer', 1, 0, 'Sfix');
+CALL create_stat('farming', 1, 0, 'Sfix');
+CALL create_stat('hunter', 1, 0, 'Sfix');
+CALL create_stat('construction', 1, 0, 'Sfix');
