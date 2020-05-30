@@ -59,6 +59,7 @@ CREATE TABLE player
 (
     id                   serial PRIMARY KEY,
     display_name         text     NOT NULL,
+    last_login           timestamp,
     location             location NOT NULL,
     title                title    NOT NULL DEFAULT ROW ('', '', ''),
     games_room_skill_lvl smallint NOT NULL DEFAULT 0,
@@ -167,40 +168,13 @@ END;
 $$;
 
 CREATE OR REPLACE PROCEDURE create_player(p_email citext, p_display_name text, p_x integer, p_y integer,
-                                          p_height integer, p_gender gender, p_styles integer[7], p_colours integer[5],
-                                          p_energy_units integer)
+                                          p_height integer, p_energy_units integer)
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
     INSERT INTO player (display_name, location, energy_units, account_id)
     VALUES (p_display_name, ROW (p_x, p_y, p_height), p_energy_units, (SELECT id FROM account WHERE email = p_email));
-
-    CALL create_appearance(p_display_name, p_gender, p_styles, p_colours);
-
-    -- TODO: find a way to iterate through the possible values of an enum
-    CALL create_stat('attack', 1, 0, p_display_name);
-    CALL create_stat('strength', 1, 0, p_display_name);
-    CALL create_stat('defence', 1, 0, p_display_name);
-    CALL create_stat('hitpoints', 10, 1184, p_display_name);
-    CALL create_stat('ranged', 1, 0, p_display_name);
-    CALL create_stat('prayer', 1, 0, p_display_name);
-    CALL create_stat('magic', 1, 0, p_display_name);
-    CALL create_stat('cooking', 1, 0, p_display_name);
-    CALL create_stat('fishing', 1, 0, p_display_name);
-    CALL create_stat('woodcutting', 1, 0, p_display_name);
-    CALL create_stat('firemaking', 1, 0, p_display_name);
-    CALL create_stat('mining', 1, 0, p_display_name);
-    CALL create_stat('smithing', 1, 0, p_display_name);
-    CALL create_stat('agility', 1, 0, p_display_name);
-    CALL create_stat('herblore', 1, 0, p_display_name);
-    CALL create_stat('crafting', 1, 0, p_display_name);
-    CALL create_stat('fletching', 1, 0, p_display_name);
-    CALL create_stat('runecraft', 1, 0, p_display_name);
-    CALL create_stat('slayer', 1, 0, p_display_name);
-    CALL create_stat('farming', 1, 0, p_display_name);
-    CALL create_stat('hunter', 1, 0, p_display_name);
-    CALL create_stat('construction', 1, 0, p_display_name);
 
     COMMIT;
 END;
@@ -228,6 +202,7 @@ $$
 CREATE OR REPLACE FUNCTION get_player(p_display_name varchar)
     RETURNS table
             (
+                last_login           timestamp,
                 location             location,
                 title                title,
                 games_room_skill_lvl smallint,
@@ -327,9 +302,7 @@ $$
     LANGUAGE PLPGSQL;
 
 CALL create_account('Sino@gmail.com'::citext, 'hello123', 'administrator');
-CALL create_player('Sino@gmail.com'::citext, 'Sino', 3254, 3420, 0, 'male', '{ 0, 10, 18, 26, 33, 36, 42 }',
-                   '{ 0, 0, 0, 0, 0 }', 10000);
+CALL create_player('Sino@gmail.com'::citext, 'Sino', 3254, 3420, 0, 10000);
 
 CALL create_account('Sfix@gmail.com'::citext, 'hello123', 'administrator');
-CALL create_player('Sfix@gmail.com'::citext, 'Sfix', 3222, 3222, 0, 'male', '{ 0, 10, 18, 26, 33, 36, 42 }',
-                   '{ 0, 0, 0, 0, 0 }', 0);
+CALL create_player('Sfix@gmail.com'::citext, 'Sfix', 3222, 3222, 0, 0);
