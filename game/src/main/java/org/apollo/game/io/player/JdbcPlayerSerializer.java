@@ -1,5 +1,6 @@
 package org.apollo.game.io.player;
 
+import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.lambdaworks.crypto.SCryptUtil;
@@ -17,11 +18,13 @@ import org.apollo.game.model.entity.SkillSet;
 import org.apollo.game.model.entity.attr.NumericalAttribute;
 import org.apollo.game.model.entity.setting.Gender;
 import org.apollo.game.model.entity.setting.PrivilegeLevel;
+import org.apollo.game.model.inv.Inventory;
 import org.apollo.game.model.inv.SlottedItem;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.util.security.PlayerCredentials;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 
 import static java.util.Objects.requireNonNull;
 
@@ -31,7 +34,46 @@ import static java.util.Objects.requireNonNull;
  * @author Major
  * @author Sino
  */
+// TODO optimize use of collections to avoid boxing by using fastutil
 public final class JdbcPlayerSerializer extends PlayerSerializer {
+	/**
+	 * Maps skill id to the enum value that is known by the database
+	 * and back.
+	 */
+	private static final ImmutableBiMap<Integer, String> SKILL_ENUMS = ImmutableBiMap.<Integer, String>builder()
+			.put(Skill.ATTACK, "attack")
+			.put(Skill.STRENGTH, "strength")
+			.put(Skill.DEFENCE, "defence")
+			.put(Skill.HITPOINTS, "hitpoints")
+			.put(Skill.RANGED, "ranged")
+			.put(Skill.PRAYER, "prayer")
+			.put(Skill.MAGIC, "magic")
+			.put(Skill.COOKING, "cooking")
+			.put(Skill.FISHING, "fishing")
+			.put(Skill.WOODCUTTING, "woodcutting")
+			.put(Skill.FIREMAKING, "firemaking")
+			.put(Skill.FLETCHING, "fletching")
+			.put(Skill.FARMING, "farming")
+			.put(Skill.SLAYER, "slayer")
+			.put(Skill.AGILITY, "agility")
+			.put(Skill.CRAFTING, "crafting")
+			.put(Skill.HERBLORE, "herblore")
+			.put(Skill.THIEVING, "thieving")
+			.put(Skill.MINING, "mining")
+			.put(Skill.SMITHING, "smithing")
+			.put(Skill.RUNECRAFT, "runecraft")
+			.build();
+
+	/**
+	 * Maps {@link PrivilegeLevel} to the enum value that is known by the
+	 * database and back.
+	 */
+	private static final ImmutableBiMap<PrivilegeLevel, String> RANK_ENUMS = ImmutableBiMap.<PrivilegeLevel, String>builder()
+			.put(PrivilegeLevel.STANDARD, "player")
+			.put(PrivilegeLevel.MODERATOR, "moderator")
+			.put(PrivilegeLevel.ADMINISTRATOR, "administrator")
+			.build();
+
 	/**
 	 * The associated queries that are ran by this serializer.
 	 */
@@ -41,12 +83,20 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			GET_APPEARANCE_QUERY = "SELECT gender, styles, colours FROM get_appearance(?::text)",
 			GET_ITEMS_QUERY = "SELECT inventory_id, slot, item_id, quantity FROM get_items(?::text)",
 			GET_ATTRIBUTES_QUERY = "SELECT name, value FROM get_attributes(?::text);",
-			GET_STATS_QUERY = "SELECT skill, stat, experience FROM get_skills(?::text)";
+			GET_STATS_QUERY = "SELECT skill, stat, experience FROM get_skills(?::text)",
+			SET_ACCOUNT_QUERY = "CALL set_account(?::citext, ?::rank)",
+			SET_PLAYER_QUERY = "CALL set_player(?::citext, ?::text, ?, ?, ?, ?, ?, ?)",
+			SET_APPEARANCE_QUERY = "CALL set_appearance(?::text, ?::gender, ?, ?)",
+			SET_STAT_QUERY = "CALL set_stat(?::skill, ?, ?, ?::text)",
+			SET_ITEM_QUERY = "CALL set_item(?::text, ?, ?, ?, ?)",
+			DELETE_ITEM_QUERY = "CALL delete_item(?::text, ?, ?)";
 
 	/**
-	 * The config id of the item bag inventory.
+	 * The config id's of known inventories.
 	 */
-	private static final int ITEM_BAG_ID = 93;
+	private static final int ITEM_BAG_ID = 93,
+			WORN_EQUIPMENT_ID = 94,
+			BANK_ID = 95;
 
 	/**
 	 * A factory method to construct a new {@link JdbcPlayerSerializer}.
@@ -79,7 +129,94 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	@Override
 	public void savePlayer(Player player) throws Exception {
 		try (Connection connection = connections.get()) {
-			// TODO
+			Email email = Email.of(player.getCredentials().getUsername());
+			String displayName = player.getCredentials().getUsername();
+
+			putRank(connection, email, player.getPrivilegeLevel());
+			putPlayer(connection, email, player);
+			putAppearance(connection, displayName, player.getAppearance());
+			putStats(connection, displayName, player.getSkillSet());
+
+			putInventory(connection, displayName, ITEM_BAG_ID, player.getInventory());
+			putInventory(connection, displayName, WORN_EQUIPMENT_ID, player.getEquipment());
+			putInventory(connection, displayName, BANK_ID, player.getBank());
+		}
+	}
+
+	private void putRank(Connection connection, Email email, PrivilegeLevel rank) throws SQLException {
+		try (PreparedStatement stmt = connection.prepareStatement(SET_ACCOUNT_QUERY)) {
+			stmt.setString(1, email.getValue());
+			stmt.setString(2, requireNonNull(RANK_ENUMS.get(rank)));
+			stmt.execute();
+		}
+	}
+
+	private void putPlayer(Connection connection, Email email, Player player) throws SQLException {
+		try (PreparedStatement stmt = connection.prepareStatement(SET_PLAYER_QUERY)) {
+			stmt.setString(1, email.getValue());
+			stmt.setString(2, player.getCredentials().getUsername());
+			stmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+			stmt.setInt(4, player.getPosition().getX());
+			stmt.setInt(5, player.getPosition().getY());
+			stmt.setInt(6, player.getPosition().getHeight());
+			stmt.setInt(7, (int) player.getRunEnergy());
+			stmt.setInt(8, 0); // TODO games room skill lvl
+			stmt.execute();
+		}
+	}
+
+	private void putAppearance(Connection connection, String displayName, Appearance appearance) throws SQLException {
+		try (PreparedStatement stmt = connection.prepareStatement(SET_APPEARANCE_QUERY)) {
+			stmt.setString(1, displayName);
+			stmt.setString(2, appearance.getGender().name().toLowerCase());
+			stmt.setObject(3, appearance.getStyle());
+			stmt.setObject(4, appearance.getColors());
+			stmt.execute();
+		}
+	}
+
+	private void putStats(Connection connection, String displayName, SkillSet skills) throws SQLException {
+		for (int i = 0; i < Skill.getCount(); i++) {
+			Skill skill = skills.getSkill(i);
+
+			try (PreparedStatement stmt = connection.prepareStatement(SET_STAT_QUERY)) {
+				stmt.setString(1, requireNonNull(SKILL_ENUMS.get(i)));
+				stmt.setInt(2, skill.getCurrentLevel());
+				stmt.setInt(3, (int) skill.getExperience());
+				stmt.setString(4, displayName);
+				stmt.execute();
+			}
+		}
+	}
+
+	private void putInventory(Connection connection, String displayName, int inventoryId, Inventory inventory) throws SQLException {
+		for (int i = 0; i < inventory.capacity(); i++) {
+			Item item = inventory.get(i);
+			if (item == null) {
+				deleteItem(connection, displayName, inventoryId, i);
+			} else {
+				putItem(connection, displayName, inventoryId, i, item);
+			}
+		}
+	}
+
+	private void putItem(Connection connection, String displayName, int inventoryId, int slot, Item item) throws SQLException {
+		try (PreparedStatement stmt = connection.prepareStatement(SET_ITEM_QUERY)) {
+			stmt.setString(1, displayName);
+			stmt.setInt(2, inventoryId);
+			stmt.setInt(3, slot);
+			stmt.setInt(4, item.getId());
+			stmt.setInt(5, item.getAmount());
+			stmt.execute();
+		}
+	}
+
+	private void deleteItem(Connection connection, String displayName, int inventoryId, int slot) throws SQLException {
+		try (PreparedStatement stmt = connection.prepareStatement(DELETE_ITEM_QUERY)) {
+			stmt.setString(1, displayName);
+			stmt.setInt(2, inventoryId);
+			stmt.setInt(3, slot);
+			stmt.execute();
 		}
 	}
 
@@ -139,7 +276,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			}
 
 			PasswordHash passwordHash = PasswordHash.of(results.getString("password_hash"));
-			PrivilegeLevel rank = toRank(results.getString("rank"));
+			PrivilegeLevel rank = requireNonNull(RANK_ENUMS.inverse().get(results.getString("rank")));
 
 			return Account.of(Email.of(email), passwordHash, rank);
 		}
@@ -169,7 +306,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			int energyUnits = results.getShort("energy_units");
 			int gamesRoomSkillLvl = results.getShort("games_room_skill_lvl"); // TODO insert into player state
 
-			plr.setRunEnergy(energyUnits / 100); // TODO use a static converter function to calculate this
+			plr.setRunEnergy(energyUnits);
 
 			return plr;
 		}
@@ -224,7 +361,6 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 		}
 	}
 
-	// TODO use fastutil's Object2IntMap instead
 	private ImmutableMap<String, Integer> getAttributes(Connection connection, String displayName) throws SQLException {
 		try (PreparedStatement stmt = connection.prepareStatement(GET_ATTRIBUTES_QUERY)) {
 			stmt.setString(1, displayName);
@@ -262,23 +398,6 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			}
 
 			return bldr.build();
-		}
-	}
-
-	// TODO consider a map?
-	private PrivilegeLevel toRank(String value) {
-		switch (value) {
-			case "player":
-				return PrivilegeLevel.STANDARD;
-
-			case "moderator":
-				return PrivilegeLevel.MODERATOR;
-
-			case "administrator":
-				return PrivilegeLevel.ADMINISTRATOR;
-
-			default:
-				throw new IllegalArgumentException("Unsupported rank ENUM type of value " + value);
 		}
 	}
 }

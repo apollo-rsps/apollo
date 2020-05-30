@@ -1,19 +1,17 @@
 package org.apollo.game.io.player;
 
-import com.lambdaworks.crypto.SCryptUtil;
+import org.apollo.cache.def.ItemDefinition;
 import org.apollo.game.database.ConnectionConfig;
 import org.apollo.game.database.ConnectionPool;
 import org.apollo.game.database.ConnectionSupplier;
+import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.util.security.PlayerCredentials;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.PostgreSQLContainer;
 
-import static org.apollo.game.database.PostgresDBTestHelpers.newContainer;
-import static org.apollo.game.database.PostgresDBTestHelpers.newSupplier;
 import static org.junit.jupiter.api.Assertions.*;
 
 public final class JdbcPlayerSerializerTest {
@@ -92,9 +90,17 @@ public final class JdbcPlayerSerializerTest {
 
 		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, supplier);
 
-		PlayerCredentials credentials = new PlayerCredentials("Sino", "Hello123", 0, 0, "");
-		Player player = new Player(world, credentials, new Position(3222, 3222, 0));
+		PlayerCredentials credentials = new PlayerCredentials("Sino", "hello123", 0, 0, "");
+		Player player = new Player(world, credentials, new Position(3093, 3493, 0));
 
 		serializer.savePlayer(player);
+
+		PlayerLoaderResponse response = serializer.loadPlayer(credentials);
+		assertEquals(LoginConstants.STATUS_OK, response.getStatus());
+
+		Position pos = response.getPlayer().get().getPosition();
+		assertEquals(player.getPosition().getX(), pos.getX());
+		assertEquals(player.getPosition().getY(), pos.getY());
+		assertEquals(player.getPosition().getHeight(), pos.getHeight());
 	}
 }
