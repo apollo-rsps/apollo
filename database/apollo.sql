@@ -19,6 +19,7 @@ CREATE TYPE skill AS ENUM (
     'smithing',
     'agility',
     'herblore',
+    'thieving',
     'crafting',
     'fletching',
     'runecraft',
@@ -199,6 +200,19 @@ BEGIN
         energy_units         = p_energy_units,
         games_room_skill_lvl = p_games_room_skill_lvl
     WHERE p.account_id = (SELECT id FROM account WHERE email = p_email);
+
+    COMMIT;
+END;
+$$;
+
+CREATE PROCEDURE set_account(p_email citext, p_rank rank)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    UPDATE account AS a
+    SET rank = p_rank
+    WHERE email = p_email;
 
     COMMIT;
 END;
@@ -432,10 +446,12 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-CALL create_account('Sino'::citext, '$s0$e0801$U7iSxE4PoOGAg3wUkJkC2w==$WGCDBrNsBNosBEG8Uucz0YWZMv+T4NBJnQZRhcLCr6s=', 'administrator');
-CALL create_player('Sino'::citext, 'Sino', 3254, 3420, 0, 10000);
+CALL create_account('Sino'::citext, '$s0$e0801$U7iSxE4PoOGAg3wUkJkC2w==$WGCDBrNsBNosBEG8Uucz0YWZMv+T4NBJnQZRhcLCr6s=',
+                    'administrator');
+CALL create_player('Sino'::citext, 'Sino', 3254, 3420, 0, 100);
 
-CALL create_account('Sfix'::citext, '$s0$e0801$U7iSxE4PoOGAg3wUkJkC2w==$WGCDBrNsBNosBEG8Uucz0YWZMv+T4NBJnQZRhcLCr6s=', 'administrator');
+CALL create_account('Sfix'::citext, '$s0$e0801$U7iSxE4PoOGAg3wUkJkC2w==$WGCDBrNsBNosBEG8Uucz0YWZMv+T4NBJnQZRhcLCr6s=',
+                    'administrator');
 CALL create_player('Sfix'::citext, 'Sfix', 3222, 3222, 0, 0);
 
 CALL create_title('Sino', '', '', '');
@@ -457,6 +473,7 @@ CALL create_stat('woodcutting', 1, 0, 'Sino');
 CALL create_stat('firemaking', 1, 0, 'Sino');
 CALL create_stat('mining', 1, 0, 'Sino');
 CALL create_stat('smithing', 1, 0, 'Sino');
+CALL create_stat('thieving', 1, 0, 'Sino');
 CALL create_stat('agility', 1, 0, 'Sino');
 CALL create_stat('herblore', 1, 0, 'Sino');
 CALL create_stat('crafting', 1, 0, 'Sino');
@@ -480,6 +497,7 @@ CALL create_stat('woodcutting', 1, 0, 'Sfix');
 CALL create_stat('firemaking', 1, 0, 'Sfix');
 CALL create_stat('mining', 1, 0, 'Sfix');
 CALL create_stat('smithing', 1, 0, 'Sfix');
+CALL create_stat('thieving', 1, 0, 'Sfix');
 CALL create_stat('agility', 1, 0, 'Sfix');
 CALL create_stat('herblore', 1, 0, 'Sfix');
 CALL create_stat('crafting', 1, 0, 'Sfix');
