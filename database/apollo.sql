@@ -15,13 +15,6 @@ CREATE TYPE location AS
     height height_coord
 );
 
-CREATE TYPE title AS
-(
-    left_part   text,
-    center_part text,
-    right_part  text
-);
-
 CREATE TYPE skill AS ENUM (
     'attack',
     'strength',
@@ -61,7 +54,6 @@ CREATE TABLE player
     display_name         text     NOT NULL,
     last_login           timestamp,
     location             location NOT NULL,
-    title                title    NOT NULL DEFAULT ROW ('', '', ''),
     games_room_skill_lvl smallint NOT NULL DEFAULT 0,
     energy_units         smallint NOT NULL CHECK (energy_units >= 0 AND energy_units <= 10000),
     account_id           integer references account (id)
@@ -75,6 +67,15 @@ CREATE TABLE appearance
     styles    smallint ARRAY[7] NOT NULL,
     colours   smallint ARRAY[5] NOT NULL,
     player_id integer references player (id),
+    PRIMARY KEY (player_id)
+);
+
+CREATE TABLE title
+(
+    left_part   text,
+    center_part text,
+    right_part  text,
+    player_id   integer references player (id),
     PRIMARY KEY (player_id)
 );
 
@@ -113,6 +114,18 @@ $$
 BEGIN
     INSERT INTO appearance (gender, styles, colours, player_id)
     VALUES (p_gender, p_styles, p_colours, (SELECT id FROM player WHERE display_name = p_display_name));
+
+    COMMIT;
+END ;
+$$;
+
+CREATE OR REPLACE PROCEDURE create_title(p_display_name text, p_left_part text, p_center_part text, p_right_part text)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    INSERT INTO title (left_part, center_part, right_part, player_id)
+    VALUES (p_left_part, p_center_part, p_right_part, (SELECT id FROM player WHERE display_name = p_display_name));
 
     COMMIT;
 END ;
@@ -180,6 +193,111 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE PROCEDURE set_player(p_email citext, p_display_name text, p_last_login timestamp, p_x integer,
+                                       p_y integer, p_height integer, p_energy_units integer,
+                                       p_games_room_skill_lvl integer)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    UPDATE player AS p
+    SET display_name         = p_display_name,
+        last_login           = p_last_login,
+        location             = ROW (p_x, p_y, p_height),
+        energy_units         = p_energy_units,
+        games_room_skill_lvl = p_games_room_skill_lvl
+    WHERE p.account_id = (SELECT id FROM account WHERE email = p_email);
+
+    COMMIT;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE set_appearance(p_display_name text, p_gender gender, p_styles integer[7],
+                                           p_colours integer[5])
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    UPDATE appearance AS a
+    SET gender  = p_gender,
+        styles  = p_styles,
+        colours = p_colours
+    WHERE a.player_id = (SELECT id FROM player WHERE display_name = p_display_name);
+
+    COMMIT;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE set_title(p_display_name text, p_left_part text, p_center_part text, p_right_part text)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    UPDATE title
+    SET left_part   = p_left_part,
+        center_part = p_center_part,
+        right_part  = p_right_part
+    WHERE player_id = (SELECT id FROM player WHERE display_name = p_display_name);
+
+    COMMIT;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE set_item(p_display_name text, p_inv_id integer, p_slot integer, p_item_id integer,
+                                     p_quantity integer)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    INSERT INTO item (inventory_id, slot, item_id, quantity, player_id)
+    VALUES (p_inv_id, p_slot, p_item_id, p_quantity, (SELECT id FROM player WHERE display_name = p_display_name))
+    ON CONFLICT (inventory_id, slot, player_id) DO UPDATE SET item_id = p_item_id, quantity = p_quantity;
+
+    COMMIT;
+END ;
+$$;
+
+CREATE OR REPLACE PROCEDURE set_stat(p_skill skill, p_stat integer, p_experience integer, p_display_name text)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    INSERT INTO stat (skill, stat, experience, player_id)
+    VALUES (p_skill, p_stat, p_experience, (SELECT id FROM player WHERE display_name = p_display_name))
+    ON CONFLICT (player_id, skill, stat) DO UPDATE SET stat = p_stat, experience = p_experience;
+
+    COMMIT;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE set_attribute(p_display_name text, p_name varchar, p_value integer)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    INSERT INTO attribute (name, value, player_id)
+    VALUES (p_name, p_value, (SELECT id FROM player WHERE display_name = p_display_name))
+    ON CONFLICT (player_id, name) DO UPDATE SET value = p_value;
+
+    COMMIT;
+END ;
+$$;
+
+CREATE OR REPLACE PROCEDURE delete_item(p_display_name text, p_inv_id integer, p_slot integer)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    DELETE
+    FROM item
+    WHERE inventory_id = p_inv_id
+      AND slot = p_slot
+      AND player_id = (SELECT id FROM player WHERE display_name = p_display_name);
+
+    COMMIT;
+END ;
+$$;
+
 CREATE OR REPLACE FUNCTION get_account(p_email varchar)
     RETURNS table
             (
@@ -203,7 +321,6 @@ CREATE OR REPLACE FUNCTION get_player(p_display_name varchar)
             (
                 last_login           timestamp,
                 location             location,
-                title                title,
                 games_room_skill_lvl smallint,
                 energy_units         smallint
             )
@@ -211,7 +328,7 @@ AS
 $$
 BEGIN
     RETURN QUERY
-        SELECT p.location, p.title, p.games_room_skill_lvl, p.energy_units
+        SELECT p.location, p.games_room_skill_lvl, p.energy_units
         FROM player AS p
         WHERE p.display_name = p_display_name
         LIMIT 1;
@@ -234,6 +351,27 @@ BEGIN
         FROM appearance AS a
                  INNER JOIN player AS p
                             ON p.id = a.player_id
+        WHERE p.display_name = p_display_name
+        LIMIT 1;
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION get_title(p_display_name varchar)
+    RETURNS table
+            (
+                left_part   text,
+                center_part text,
+                right_part  text
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT t.left_part, t.center_part, t.right_part
+        FROM title AS t
+                 INNER JOIN player AS p
+                            ON p.id = t.player_id
         WHERE p.display_name = p_display_name
         LIMIT 1;
 END;
