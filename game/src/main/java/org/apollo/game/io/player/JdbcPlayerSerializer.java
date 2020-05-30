@@ -204,6 +204,11 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 
 	private void putAttributes(Connection connection, String displayName, Map<String, Attribute<?>> attributes) throws SQLException {
 		for (String key : attributes.keySet()) {
+			AttributeDefinition<?> definition = AttributeMap.getDefinition(key);
+			if (definition.getPersistence() == AttributePersistence.TRANSIENT) {
+				continue;
+			}
+
 			Attribute<?> attribute = attributes.get(key);
 
 			try (PreparedStatement stmt = connection.prepareStatement(SET_ATTRIBUTE_QUERY)) {
