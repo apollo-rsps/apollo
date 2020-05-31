@@ -260,9 +260,14 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_INVALID_CREDENTIALS);
 			}
 
-			if (!SCryptUtil.check(credentials.getPassword(), account.getPasswordHash().getValue())) {
+			String passwordInput = credentials.getPassword();
+			String passwordHash = account.getPasswordHash().getValue();
+
+			if (!SCryptUtil.check(passwordInput, passwordHash)) {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_INVALID_CREDENTIALS);
 			}
+
+			credentials.setPassword(passwordHash);
 
 			Player player = getPlayer(connection, credentials);
 			if (player == null) {
@@ -296,7 +301,13 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 				continue;
 			}
 
-			inventory.set(sii.getItem().getSlot(), sii.getItem().getItem());
+			inventory.stopFiringEvents();
+
+			try {
+				inventory.set(sii.getItem().getSlot(), sii.getItem().getItem());
+			} finally {
+				inventory.startFiringEvents();
+			}
 		}
 	}
 
@@ -304,9 +315,14 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 		ImmutableList<Skill> skills = getStats(connection, displayName);
 
 		// TODO database currently supports hunter and construction as well and 317 doesn't
-		int skillCount = Skill.getCount();
-		for (int i = 0; i < skillCount; i++) {
-			player.getSkillSet().setSkill(i, skills.get(i));
+		player.getSkillSet().stopFiringEvents();
+		try {
+			for (int i = 0; i < Skill.getCount(); i++) {
+				player.getSkillSet().setSkill(i, skills.get(i));
+			}
+		} finally {
+			player.getSkillSet().calculateCombatLevel();
+			player.getSkillSet().startFiringEvents();
 		}
 	}
 
