@@ -5,9 +5,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.lambdaworks.crypto.SCryptUtil;
 import org.apollo.game.account.Account;
-import org.apollo.game.account.Email;
-import org.apollo.game.account.PasswordHash;
-import org.apollo.game.database.ConnectionSupplier;
 import org.apollo.game.model.Appearance;
 import org.apollo.game.model.Item;
 import org.apollo.game.model.Position;
@@ -23,6 +20,7 @@ import org.apollo.game.model.inv.SlottedItem;
 import org.apollo.net.codec.login.LoginConstants;
 import org.apollo.util.security.PlayerCredentials;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -35,7 +33,6 @@ import static java.util.Objects.requireNonNull;
  * @author Major
  * @author Sino
  */
-// TODO optimize use of collections to avoid boxing by using fastutil
 public final class JdbcPlayerSerializer extends PlayerSerializer {
 	/**
 	 * Maps skill id to the enum value that is known by the database
@@ -114,35 +111,36 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	/**
 	 * A factory method to construct a new {@link JdbcPlayerSerializer}.
 	 *
-	 * @param world       The game world to feed to {@link Player} instances.
-	 * @param connections The supplier of database connections.
+	 * @param world      The game world to feed to {@link Player} instances.
+	 * @param dataSource The source to get information from and to put
+	 *                   information into.
 	 * @return The {@link JdbcPlayerSerializer}.
 	 */
-	public static JdbcPlayerSerializer create(World world, ConnectionSupplier connections) {
-		return new JdbcPlayerSerializer(world, connections);
+	public static JdbcPlayerSerializer create(World world, DataSource dataSource) {
+		return new JdbcPlayerSerializer(world, dataSource);
 	}
 
 	/**
 	 * Supplies this serializer with database connections.
 	 */
-	private final ConnectionSupplier connections;
+	private final DataSource dataSource;
 
 	/**
 	 * Creates the {@link JdbcPlayerSerializer}.
 	 *
-	 * @param world       The {@link World} to place the {@link Player}s in.
-	 * @param connections The supplier of database connections.
+	 * @param world      The {@link World} to place the {@link Player}s in.
+	 * @param dataSource The supplier of database connections.
 	 */
-	private JdbcPlayerSerializer(World world, ConnectionSupplier connections) {
+	private JdbcPlayerSerializer(World world, DataSource dataSource) {
 		super(world);
 
-		this.connections = connections;
+		this.dataSource = dataSource;
 	}
 
 	@Override
 	public void savePlayer(Player player) throws Exception {
-		try (Connection connection = connections.get()) {
-			Email email = Email.of(player.getCredentials().getUsername());
+		try (Connection connection = dataSource.getConnection()) {
+			String email = player.getCredentials().getUsername();
 			String displayName = player.getCredentials().getUsername();
 
 			putRank(connection, email, player.getPrivilegeLevel());
@@ -158,17 +156,17 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 		}
 	}
 
-	private void putRank(Connection connection, Email email, PrivilegeLevel rank) throws SQLException {
+	private void putRank(Connection connection, String email, PrivilegeLevel rank) throws SQLException {
 		try (PreparedStatement stmt = connection.prepareStatement(SET_ACCOUNT_QUERY)) {
-			stmt.setString(1, email.getValue());
+			stmt.setString(1, email);
 			stmt.setString(2, requireNonNull(RANK_ENUMS.get(rank)));
 			stmt.execute();
 		}
 	}
 
-	private void putPlayer(Connection connection, Email email, Player player) throws SQLException {
+	private void putPlayer(Connection connection, String email, Player player) throws SQLException {
 		try (PreparedStatement stmt = connection.prepareStatement(SET_PLAYER_QUERY)) {
-			stmt.setString(1, email.getValue());
+			stmt.setString(1, email);
 			stmt.setString(2, player.getCredentials().getUsername());
 			stmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
 			stmt.setInt(4, player.getPosition().getX());
@@ -254,14 +252,14 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 
 	@Override
 	public PlayerLoaderResponse loadPlayer(PlayerCredentials credentials) throws Exception {
-		try (Connection connection = connections.get()) {
+		try (Connection connection = dataSource.getConnection()) {
 			Account account = getAccount(connection, credentials.getUsername());
 			if (account == null) {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_INVALID_CREDENTIALS);
 			}
 
 			String passwordInput = credentials.getPassword();
-			String passwordHash = account.getPasswordHash().getValue();
+			String passwordHash = account.getPasswordHash();
 
 			if (!SCryptUtil.check(passwordInput, passwordHash)) {
 				return new PlayerLoaderResponse(LoginConstants.STATUS_INVALID_CREDENTIALS);
@@ -342,10 +340,10 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 				return null;
 			}
 
-			PasswordHash passwordHash = PasswordHash.of(results.getString("password_hash"));
+			String passwordHash = results.getString("password_hash");
 			PrivilegeLevel rank = requireNonNull(RANK_ENUMS.inverse().get(results.getString("rank")));
 
-			return Account.of(Email.of(email), passwordHash, rank);
+			return Account.of(email, passwordHash, rank);
 		}
 	}
 
