@@ -32,8 +32,6 @@ dependencies {
     testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: powermockVersion
     testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: powermockVersion
     testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion
-    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: testContainersVersion
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: testContainersVersion
 
     project(":game:plugin").subprojects { pluginProject ->
          if (pluginProject.buildFile.exists()) {
