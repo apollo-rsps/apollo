@@ -1,11 +1,13 @@
 package org.apollo.game.io.player;
 
+import com.google.common.base.MoreObjects;
 import org.apollo.game.model.inv.SlottedItem;
 
 /**
  * A temporary-and intermediary data access object that holds information
  * about an item inside a specific inventory's slot, to insert into a player's
  * inventory.
+ *
  * @author Sino
  */
 final class SlottedInventoryItem {
@@ -28,6 +30,9 @@ final class SlottedInventoryItem {
 
 	@Override
 	public String toString() {
-		return "SlottedInventoryItem{inventoryId=" + inventoryId + ", item=" + item + "}";
+		return MoreObjects.toStringHelper(this)
+				.add("inventoryId", inventoryId)
+				.add("item", item)
+				.toString();
 	}
 }
