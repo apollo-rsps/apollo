@@ -7,27 +7,27 @@ import org.apollo.game.model.entity.setting.PrivilegeLevel;
  * @author Sino
  */
 public final class Account {
-	public static Account of(Email email, PasswordHash passwordHash, PrivilegeLevel rank) {
+	public static Account of(String email, String passwordHash, PrivilegeLevel rank) {
 		return new Account(email, passwordHash, rank);
 	}
 
-	private final Email email;
+	private final String email;
 
-	private final PasswordHash passwordHash;
+	private final String passwordHash;
 
 	private final PrivilegeLevel rank;
 
-	private Account(Email email, PasswordHash passwordHash, PrivilegeLevel rank) {
+	private Account(String email, String passwordHash, PrivilegeLevel rank) {
 		this.email = email;
 		this.passwordHash = passwordHash;
 		this.rank = rank;
 	}
 
-	public Email getEmail() {
+	public String getEmail() {
 		return email;
 	}
 
-	public PasswordHash getPasswordHash() {
+	public String getPasswordHash() {
 		return passwordHash;
 	}
 
