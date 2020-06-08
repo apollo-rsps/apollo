@@ -121,7 +121,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	}
 
 	/**
-	 * Supplies this serializer with database connections.
+	 * The source to get information from and to put information into.
 	 */
 	private final DataSource dataSource;
 
@@ -129,7 +129,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	 * Creates the {@link JdbcPlayerSerializer}.
 	 *
 	 * @param world      The {@link World} to place the {@link Player}s in.
-	 * @param dataSource The supplier of database connections.
+	 * @param dataSource The source to get information from and to put information into.
 	 */
 	private JdbcPlayerSerializer(World world, DataSource dataSource) {
 		super(world);
