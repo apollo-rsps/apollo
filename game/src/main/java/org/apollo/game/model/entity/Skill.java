@@ -133,7 +133,7 @@ public final class Skill {
 	 * Returns the amount of currently supported skill types.
 	 * @return The amount of currently supported skill types.
 	 */
-	public static int getCount() {
+	public static int count() {
 		return SKILL_NAMES.length;
 	}
 

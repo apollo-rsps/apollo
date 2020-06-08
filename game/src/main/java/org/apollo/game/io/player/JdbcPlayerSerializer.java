@@ -187,7 +187,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	}
 
 	private void putStats(Connection connection, String displayName, SkillSet skills) throws SQLException {
-		for (int i = 0; i < Skill.getCount(); i++) {
+		for (int i = 0; i < Skill.count(); i++) {
 			Skill skill = skills.getSkill(i);
 
 			try (PreparedStatement stmt = connection.prepareStatement(SET_STAT_QUERY)) {
@@ -315,7 +315,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 		// TODO database currently supports hunter and construction as well and 317 doesn't
 		player.getSkillSet().stopFiringEvents();
 		try {
-			for (int i = 0; i < Skill.getCount(); i++) {
+			for (int i = 0; i < Skill.count(); i++) {
 				player.getSkillSet().setSkill(i, skills.get(i));
 			}
 		} finally {
