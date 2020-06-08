@@ -3,7 +3,6 @@ import java.nio.file.Path
 
 rootProject.name = 'org.apollo'
 include ':cache'
-include ':database'
 include ':game'
 include ':game:plugin'
 include ':game:plugin-detekt-rules'
