@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
+import static org.apollo.game.io.player.ApolloQueriesKt.*;
 
 /**
  * A {@link PlayerSerializer} that utilises {@code JDBC} to communicate with an SQL database containing player data.
@@ -87,12 +88,6 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 	 * The associated queries that are ran by this serializer.
 	 */
 	private static final String
-			GET_ACCOUNT_QUERY = "SELECT password_hash, rank FROM get_account(?::text)",
-			GET_PLAYER_QUERY = "SELECT last_login, x, y, height FROM get_player(?::text)",
-			GET_APPEARANCE_QUERY = "SELECT gender, styles, colours FROM get_appearance(?::text)",
-			GET_ITEMS_QUERY = "SELECT inventory_id, slot, item_id, quantity FROM get_items(?::text)",
-			GET_ATTRIBUTES_QUERY = "SELECT attr_type, name, value FROM get_attributes(?::text);",
-			GET_STATS_QUERY = "SELECT skill, stat, experience FROM get_skills(?::text)",
 			SET_ACCOUNT_QUERY = "CALL set_account(?::citext, ?::rank)",
 			SET_PLAYER_QUERY = "CALL set_player(?::citext, ?::text, ?, ?, ?, ?)",
 			SET_APPEARANCE_QUERY = "CALL set_appearance(?::text, ?::gender, ?, ?)",
@@ -139,11 +134,17 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 
 	@Override
 	public void savePlayer(Player player) throws Exception {
-		try (Connection connection = dataSource.getConnection()) {
+		Connection connection = null;
+		Savepoint savepoint = null;
+
+		try {
+			connection = dataSource.getConnection();
+			connection.setAutoCommit(false);
+
+			savepoint = connection.setSavepoint();
+
 			String email = player.getCredentials().getUsername();
 			String displayName = player.getCredentials().getUsername();
-
-			connection.setAutoCommit(false);
 
 			putRank(connection, email, player.getPrivilegeLevel());
 			putPlayer(connection, email, player);
@@ -158,6 +159,9 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 
 			connection.commit();
 			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connection.rollback(savepoint);
 		}
 	}
 
@@ -165,7 +169,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 		try (PreparedStatement stmt = connection.prepareStatement(SET_ACCOUNT_QUERY)) {
 			stmt.setString(1, email);
 			stmt.setString(2, requireNonNull(RANK_ENUMS.get(rank)));
-			stmt.execute();
+			stmt.executeUpdate();
 		}
 	}
 
@@ -177,7 +181,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			stmt.setInt(4, player.getPosition().getX());
 			stmt.setInt(5, player.getPosition().getY());
 			stmt.setInt(6, player.getPosition().getHeight());
-			stmt.execute();
+			stmt.executeUpdate();
 		}
 	}
 
@@ -200,7 +204,7 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 				stmt.setInt(2, skill.getCurrentLevel());
 				stmt.setInt(3, (int) skill.getExperience());
 				stmt.setString(4, displayName);
-				stmt.execute();
+				stmt.executeUpdate();
 			}
 		}
 	}
