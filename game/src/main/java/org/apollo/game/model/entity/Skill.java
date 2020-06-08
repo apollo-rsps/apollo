@@ -130,6 +130,14 @@ public final class Skill {
 	}
 
 	/**
+	 * Returns the amount of currently supported skill types.
+	 * @return The amount of currently supported skill types.
+	 */
+	public static int count() {
+		return SKILL_NAMES.length;
+	}
+
+	/**
 	 * Whether the skill affects the combat level or not.
 	 *
 	 * @param skill The id of the skill.

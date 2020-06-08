@@ -16,6 +16,8 @@ dependencies {
     compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: kotlinxCoroutinesVersion
     compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: kotlinxCoroutinesVersion
 
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '3.4.5'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.12'
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
     implementation group: 'io.github.classgraph', name: 'classgraph', version: classGraphVersion
     implementation group: 'com.lambdaworks', name: 'scrypt', version: scryptVersion
