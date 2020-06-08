@@ -1,8 +1,7 @@
 package org.apollo.game.io.player;
 
-import org.apollo.game.database.ConnectionConfig;
-import org.apollo.game.database.ConnectionPool;
-import org.apollo.game.database.ConnectionSupplier;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apollo.game.model.Position;
 import org.apollo.game.model.World;
 import org.apollo.game.model.entity.Player;
@@ -12,31 +11,36 @@ import org.apollo.util.security.PlayerCredentials;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javax.sql.DataSource;
+
+import static org.apollo.game.model.entity.attr.AttributeMap.define;
 import static org.junit.jupiter.api.Assertions.*;
 
 public final class JdbcPlayerSerializerTest {
-	// TODO use TestContainers - each container should somehow run the apollo.sql script
+	private static HikariConfig config;
 
 	@BeforeAll
 	public static void setup() {
-		AttributeMap.define("my_double", new AttributeDefinition<>(0D, AttributePersistence.TRANSIENT, AttributeType.DOUBLE));
-		AttributeMap.define("my_long", new AttributeDefinition<>(0L, AttributePersistence.TRANSIENT, AttributeType.LONG));
-		AttributeMap.define("my_bool", new AttributeDefinition<>(false, AttributePersistence.TRANSIENT, AttributeType.BOOLEAN));
-		AttributeMap.define("my_string", new AttributeDefinition<>("", AttributePersistence.TRANSIENT, AttributeType.STRING));
+		String jdbcURL = System.getenv("POSTGRES_JDBC_URL");
+
+		assertNotNull(jdbcURL);
+		assertTrue(jdbcURL.length() > 0);
+
+		config = new HikariConfig();
+		config.setJdbcUrl(jdbcURL);
+
+		define("my_double", new AttributeDefinition<>(0D, AttributePersistence.PERSISTENT, AttributeType.DOUBLE));
+		define("my_long", new AttributeDefinition<>(0L, AttributePersistence.PERSISTENT, AttributeType.LONG));
+		define("my_bool", new AttributeDefinition<>(false, AttributePersistence.PERSISTENT, AttributeType.BOOLEAN));
+		define("my_string", new AttributeDefinition<>("", AttributePersistence.PERSISTENT, AttributeType.STRING));
 	}
 
 	@Test
 	public void serializerShouldDeserializeAPlayerFromTheDatabase() throws Exception {
 		World world = new World();
 
-		ConnectionSupplier supplier = ConnectionPool.createHikariPool(ConnectionConfig
-				.builder()
-				.url("jdbc:postgresql://localhost:5432/apollo")
-				.username("postgres")
-				.password("postgres")
-				.build());
-
-		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, supplier);
+		DataSource dataSource = new HikariDataSource(config);
+		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, dataSource);
 
 		PlayerCredentials credentials = new PlayerCredentials("Sino", "hello123", 0, 0, "");
 		PlayerLoaderResponse response = serializer.loadPlayer(credentials);
@@ -49,14 +53,8 @@ public final class JdbcPlayerSerializerTest {
 	public void serializerShouldReturnInvalidCredentialsIfPasswordsMismatch() throws Exception {
 		World world = new World();
 
-		ConnectionSupplier supplier = ConnectionPool.createHikariPool(ConnectionConfig
-				.builder()
-				.url("jdbc:postgresql://localhost:5432/apollo")
-				.username("postgres")
-				.password("postgres")
-				.build());
-
-		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, supplier);
+		DataSource dataSource = new HikariDataSource(config);
+		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, dataSource);
 
 		PlayerCredentials credentials = new PlayerCredentials("Sino", "hello321", 0, 0, "");
 		PlayerLoaderResponse response = serializer.loadPlayer(credentials);
@@ -69,14 +67,8 @@ public final class JdbcPlayerSerializerTest {
 	public void serializerShouldReturnInvalidCredentialsIfAccountDoesntExistInTheDatabase() throws Exception {
 		World world = new World();
 
-		ConnectionSupplier supplier = ConnectionPool.createHikariPool(ConnectionConfig
-				.builder()
-				.url("jdbc:postgresql://localhost:5432/apollo")
-				.username("postgres")
-				.password("postgres")
-				.build());
-
-		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, supplier);
+		DataSource dataSource = new HikariDataSource(config);
+		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, dataSource);
 
 		PlayerCredentials credentials = new PlayerCredentials("Sini", "Hello123", 0, 0, "");
 		PlayerLoaderResponse response = serializer.loadPlayer(credentials);
@@ -89,14 +81,8 @@ public final class JdbcPlayerSerializerTest {
 	public void serializerShouldSerializeAPlayerIntoTheDatabase() throws Exception {
 		World world = new World();
 
-		ConnectionSupplier supplier = ConnectionPool.createHikariPool(ConnectionConfig
-				.builder()
-				.url("jdbc:postgresql://localhost:5432/apollo")
-				.username("postgres")
-				.password("postgres")
-				.build());
-
-		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, supplier);
+		DataSource dataSource = new HikariDataSource(config);
+		JdbcPlayerSerializer serializer = JdbcPlayerSerializer.create(world, dataSource);
 
 		PlayerCredentials credentials = new PlayerCredentials("Sino", "hello123", 0, 0, "");
 		Player player = new Player(world, credentials, new Position(3093, 3493, 0));
