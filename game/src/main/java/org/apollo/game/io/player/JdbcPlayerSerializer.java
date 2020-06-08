@@ -143,6 +143,8 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			String email = player.getCredentials().getUsername();
 			String displayName = player.getCredentials().getUsername();
 
+			connection.setAutoCommit(false);
+
 			putRank(connection, email, player.getPrivilegeLevel());
 			putPlayer(connection, email, player);
 			putAppearance(connection, displayName, player.getAppearance());
@@ -153,6 +155,9 @@ public final class JdbcPlayerSerializer extends PlayerSerializer {
 			putInventory(connection, displayName, BANK_ID, player.getBank());
 
 			putAttributes(connection, displayName, player.getAttributes());
+
+			connection.commit();
+			connection.setAutoCommit(true);
 		}
 	}
 
