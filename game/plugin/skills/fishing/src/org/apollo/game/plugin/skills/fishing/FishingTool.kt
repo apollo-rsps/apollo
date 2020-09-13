@@ -17,8 +17,8 @@ enum class FishingTool(
     SMALL_NET("You cast out your net...", id = 303, animation = 620),
     BIG_NET("You cast out your net...", id = 305, animation = 620),
     HARPOON("You start harpooning fish...", id = 311, animation = 618),
-    FISHING_ROD("You attempt to catch a fish...", id = 307, animation = 622, bait = 313, baitName = "feathers"),
-    FLY_FISHING_ROD("You attempt to catch a fish...", id = 309, animation = 622, bait = 314, baitName = "fishing bait");
+    FISHING_ROD("You attempt to catch a fish...", id = 307, animation = 622, bait = 314, baitName = "fishing bait"),
+    FLY_FISHING_ROD("You attempt to catch a fish...", id = 309, animation = 622, bait = 313, baitName = "feathers");
 
     /**
      * The [Animation] played when fishing with this tool.
