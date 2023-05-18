@@ -4,7 +4,7 @@ Apollo is a high-performance, modular RuneScape emulator with a collection of ut
 
 ### Developer information
 
-Most discussion related to the development of Apollo happens on our [Slack team](https://join.slack.com/t/apollo-rsps/shared_invite/enQtMjQ0NTYwNzkwMjExLTI5NGVmOWZjZGRkYzY4NjM1MjgxNjYyYmEyZWQxMzcxZTA5NDM1MGJkNmRkMjc2ZDQ2NjUwMjAzOGI1NjY1Zjk). If you have a problem and can't get in touch with anyone, create a GitHub issue. If making a pull request, please make sure all tests are still passing after making your changes, and that your code style is consistent with the rest of Apollo.
+Most discussion related to the development of Apollo happens on our [Discord](https://discord.gg/Fuft67P). If you have a problem and can't get in touch with anyone, create a GitHub issue. If making a pull request, please make sure all tests are still passing after making your changes, and that your code style is consistent with the rest of Apollo.
 
 ### Getting started
 
